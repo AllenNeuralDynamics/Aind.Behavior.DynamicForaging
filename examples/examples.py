@@ -7,30 +7,7 @@ from aind_behavior_services import db_utils as db
 from aind_behavior_services.session import AindBehaviorSessionModel
 from DataSchemas.aind_behavior_dynamic_foraging.task_logic import (
     AindDynamicForagingTaskParameters,
-    NumericalUpdater,
     AindDynamicForagingTaskLogic,
-    NumericalUpdaterParameters,
-    NumericalUpdaterOperation,
-    OperationControl,
-    AudioControl,
-    PositionControl,
-    Vector3,
-    OperantLogic,
-    PatchRewardFunction,
-    ConstantFunction,
-    LinearFunction,
-    DepletionRule,
-    PatchStatistics,
-    RewardSpecification,
-    EnvironmentStatistics,
-    BlockStructure,
-    Block,
-    ForagingSettings,
-    BlockEndConditionChoiceRatioBias,
-    BlockEndConditionDuration,
-    BlockEndConditionChoice,
-    BlockEndConditionReward,
-    BlockEndConditionFinishRatio
 )
 from DataSchemas.aind_behavior_dynamic_foraging.rig import AindDynamicForagingRig
 
@@ -58,115 +35,66 @@ def mock_rig() -> AindDynamicForagingRig:
 def mock_task_logic() -> AindDynamicForagingTaskLogic:
     """Generates a mock AindVrForagingTaskLogic model"""
 
-    def NumericalUpdaterParametersHelper(initial_value, increment, decrement, minimum, maximum):
-        return NumericalUpdaterParameters(
-            initial_value=initial_value, increment=increment, decrement=decrement, minimum=minimum, maximum=maximum
-        )
-
-    updaters = {
-        "RewardDelayOffset": NumericalUpdater(
-            operation=NumericalUpdaterOperation.OFFSET,
-            parameters=NumericalUpdaterParametersHelper(0, 0.005, 0, 0, 0.2),
-        ),
-        "MaximumIgnoredTrialsThreshold": NumericalUpdater(
-            operation=NumericalUpdaterOperation.OFFSET,
-            parameters=NumericalUpdaterParametersHelper(0, 0.8, 0, 0, 30)
-        )
-    }
-
-    operation_control = OperationControl(
-        audio_control=AudioControl(),
-        position_control=PositionControl(
-            gain=Vector3(x=1, y=1, z=1),
-            initial_position=Vector3(x=0, y=2.56, z=0),
-            frequency_filter_cutoff=5,
-            velocity_threshold=40,
-        ),
-    )
-
-    def OperantLogicHelper(stop_duration: float = 0.2, is_operant: bool = False):
-        return OperantLogic(
-            is_operant=is_operant,
-            stop_duration=stop_duration,
-            time_to_collect_reward=1000000,
-            grace_distance_threshold=10,
-        )
-
-    def ExponentialDistributionHelper(rate=1, minimum=0, maximum=1000):
-        return distributions.ExponentialDistribution(
-            distribution_parameters=distributions.ExponentialDistributionParameters(rate=rate),
-            truncation_parameters=distributions.TruncationParameters(min=minimum, max=maximum, is_truncated=True),
-            scaling_parameters=distributions.ScalingParameters(scale=1.0, offset=0.0),
-        )
-
-    reward_function = PatchRewardFunction(
-        amount=ConstantFunction(value=1),
-        probability=ConstantFunction(value=1),
-        available=LinearFunction(a=-1, b=5),
-        depletion_rule=DepletionRule.ON_CHOICE,
-    )
-
-    patch1 = PatchStatistics(
-        label="Amyl Acetate",
-        state_index=0,
-        reward_specification=RewardSpecification(
-            reward_function=reward_function,
-            operant_logic=OperantLogicHelper(),
-            delay=ExponentialDistributionHelper(1, 0, 10),
-        ),
-    )
-
-    patch2 = PatchStatistics(
-        label="Alpha-pinene",
-        state_index=1,
-        reward_specification=RewardSpecification(
-            reward_function=reward_function,
-            operant_logic=OperantLogicHelper(),
-            delay=ExponentialDistributionHelper(1, 0, 10),
-        ),
-    )
-
-    environment_statistics = EnvironmentStatistics(
-        patches=[patch1, patch2]
-    )
-
-    warm_up_block = Block(
-        environment_statistics=environment_statistics,
-        end_conditions=[
-            BlockEndConditionChoiceRatioBias(
-                value=distributions.Scalar(
-                    distribution_parameters=0.1
-                )
-            ),
-            BlockEndConditionFinishRatio(
-                value=distributions.Scalar(
-                    distribution_parameters=0.8
-                )
-            ),
-            BlockEndConditionChoice(
-                value=distributions.Scalar(
-                    distribution_parameters=60
-                )
-            )
-        ]
-    )
-
-    experimental_block = Block(
-        environment_statistics=environment_statistics,
-        end_conditions=[BlockEndConditionDuration(
-            value=distributions
-        )]
-    )
     return AindDynamicForagingTaskLogic(
         task_parameters=AindDynamicForagingTaskParameters(
-            rng_seed=None,
-            updaters=updaters,
-            environment=BlockStructure(
-                blocks=[warm_up_block, ],
-                sampling_mode="Random",
-            ),
-            task_mode_settings=ForagingSettings(),
-            operation_control=operation_control,
+            BaseRewardSum=.8,
+            RewardFamily=1,
+            RewardPairsN=1,
+
+            UncoupledReward="0.1,0.3,0.7",
+            Randomness='Exponential',
+
+            # Block length
+            BlockMin=0,
+            BlockMax=60,
+            BlockBeta=20,
+            BlockMinReward=0,
+
+            # Delay period
+            DelayMin=0,
+            DelayMax=1,
+            DelayBeta=1,
+
+            # Reward delay
+            RewardDelay=0,
+
+            # Auto water
+            AutoReward=True,
+            AutoWaterType="Natural",
+            Multiplier=0,
+            Unrewarded=200,
+            Ignored=120,
+
+            # ITI
+            ITIMin=1,
+            ITIMax=8,
+            ITIBeta=2,
+            ITIIncrease=0,
+
+            # Response time
+            ResponseTime=1,
+            RewardConsumeTime=3,
+            StopIgnores=32,
+
+            # Auto block
+            AdvancedBlockAuto='off',
+            SwitchThr=.5,
+            PointsInARow=5,
+
+            # Auto stop
+            MaxTrial=1000,
+            MaxTime=120,
+
+            # Reward size
+            RightValue_volume=3,
+            LeftValue_volume=3,
+
+            # Warmup
+            warmup='off',
+            warm_min_trial=60,
+            warm_max_choice_ratio_bias=.1,
+            warm_min_finish_ratio=.8,
+            warm_windowsize=20
         )
     )
 
