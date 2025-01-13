@@ -218,18 +218,24 @@ class _BlockEndConditionBase(BaseModel):
 class BlockEndConditionDuration(_BlockEndConditionBase):
     condition_type: Literal["Duration"] = "Duration"
     value: distributions.Distribution = Field(..., description="Time after which the block ends.")
-
+    minimum: Optional[float] = Field(default=None, description="Minimum time of block before ending")
 
 class BlockEndConditionChoice(_BlockEndConditionBase):
     condition_type: Literal["Choice"] = "Choice"
     value: distributions.Distribution = Field(..., description="Number of choices after which the block ends.")
 
-
 class BlockEndConditionReward(_BlockEndConditionBase):
     condition_type: Literal["Reward"] = "Reward"
     value: distributions.Distribution = Field(..., description="Number of rewards after which the block ends.")
+    minimum: Optional[float] = Field(default=None, description="Minimum reward of block before ending.")
 
+class BlockEndConditionChoiceRatioBias(_BlockEndConditionBase):
+    condition_type: Literal["Reward"] = "ChoiceRatioBias"
+    value: distributions.Distribution = Field(..., description="Choice ratio bias value after which the block ends.")
 
+class BlockEndConditionFinishRatio(_BlockEndConditionBase):
+    condition_type: Literal["Reward"] = "FinishRatio"
+    value: distributions.Distribution = Field(..., description="Finish ratio value after which the block ends.")
 
 class BlockEndCondition(RootModel):
     root: Annotated[
@@ -237,6 +243,8 @@ class BlockEndCondition(RootModel):
             BlockEndConditionDuration,
             BlockEndConditionChoice,
             BlockEndConditionReward,
+            BlockEndConditionChoiceRatioBias,
+            BlockEndConditionFinishRatio
         ],
         Field(discriminator="condition_type"),
     ]

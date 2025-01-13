@@ -25,9 +25,15 @@ from DataSchemas.aind_behavior_dynamic_foraging.task_logic import (
     EnvironmentStatistics,
     BlockStructure,
     Block,
-    ForagingSettings
+    ForagingSettings,
+    BlockEndConditionChoiceRatioBias,
+    BlockEndConditionDuration,
+    BlockEndConditionChoice,
+    BlockEndConditionReward,
+    BlockEndConditionFinishRatio
 )
 from DataSchemas.aind_behavior_dynamic_foraging.rig import AindDynamicForagingRig
+
 
 def mock_session() -> AindBehaviorSessionModel:
     """Generates a mock AindBehaviorSessionModel model"""
@@ -61,6 +67,10 @@ def mock_task_logic() -> AindDynamicForagingTaskLogic:
         "RewardDelayOffset": NumericalUpdater(
             operation=NumericalUpdaterOperation.OFFSET,
             parameters=NumericalUpdaterParametersHelper(0, 0.005, 0, 0, 0.2),
+        ),
+        "MaximumIgnoredTrialsThreshold": NumericalUpdater(
+            operation=NumericalUpdaterOperation.OFFSET,
+            parameters=NumericalUpdaterParametersHelper(0, 0.8, 0, 0, 30)
         )
     }
 
@@ -120,14 +130,39 @@ def mock_task_logic() -> AindDynamicForagingTaskLogic:
         patches=[patch1, patch2]
     )
 
-    warm_up_block
+    warm_up_block = Block(
+        environment_statistics=environment_statistics,
+        end_conditions=[
+            BlockEndConditionChoiceRatioBias(
+                value=distributions.Scalar(
+                    distribution_parameters=0.1
+                )
+            ),
+            BlockEndConditionFinishRatio(
+                value=distributions.Scalar(
+                    distribution_parameters=0.8
+                )
+            ),
+            BlockEndConditionChoice(
+                value=distributions.Scalar(
+                    distribution_parameters=60
+                )
+            )
+        ]
+    )
 
+    experimental_block = Block(
+        environment_statistics=environment_statistics,
+        end_conditions=[BlockEndConditionDuration(
+            value=distributions
+        )]
+    )
     return AindDynamicForagingTaskLogic(
         task_parameters=AindDynamicForagingTaskParameters(
             rng_seed=None,
             updaters=updaters,
             environment=BlockStructure(
-                blocks=[Block(environment_statistics=environment_statistics, end_conditions=[])],
+                blocks=[warm_up_block, ],
                 sampling_mode="Random",
             ),
             task_mode_settings=ForagingSettings(),
