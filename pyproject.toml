@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aind-behavior-dynamic-foraging"
+description = "A library that defines AIND data schema for the Aind Behavior Dynamic Foraging experiment."
+authors = [ {name = "Micah Woodard", email = "micah.woodard@alleninstitute.org"},
+            {name = "Bruno Cruz", email = "bruno.cruz@alleninstitute.org"}]
+license = {text = "MIT"}
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+]
+readme = "README.md"
+dynamic = ["version"]
+
+dependencies = [
+  "aind_behavior_services>=0.8, <0.9",
+]
+
+[project.optional-dependencies]
+
+launcher = ["aind_behavior_experiment_launcher[aind-services]>=0.2.0"]
