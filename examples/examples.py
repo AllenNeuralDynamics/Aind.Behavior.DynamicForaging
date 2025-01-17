@@ -37,57 +37,57 @@ def mock_task_logic() -> AindDynamicForagingTaskLogic:
 
     return AindDynamicForagingTaskLogic(
         task_parameters=AindDynamicForagingTaskParameters(
-            BaseRewardSum=.8,
-            RewardFamily=1,
-            RewardPairsN=1,
+            base_reward_sum=.8,
+            reward_family=1,
+            reward_pairs_n=1,
 
-            UncoupledReward="0.1,0.3,0.7",
-            Randomness='Exponential',
+            uncoupled_reward="0.1,0.3,0.7",
+            randomness='Exponential',
 
             # Block length
-            BlockMin=0,
-            BlockMax=60,
-            BlockBeta=20,
-            BlockMinReward=0,
+            block_min=0,
+            block_max=60,
+            block_beta=20,
+            block_min_reward=0,
 
             # Delay period
-            DelayMin=0,
-            DelayMax=1,
-            DelayBeta=1,
+            delay_min=0,
+            delay_max=1,
+            delay_beta=1,
 
             # Reward delay
-            RewardDelay=0,
+            reward_delay=0,
 
             # Auto water
-            AutoReward=True,
-            AutoWaterType="Natural",
-            Multiplier=0,
-            Unrewarded=200,
-            Ignored=120,
+            auto_reward=True,
+            auto_water_type="Natural",
+            multiplier=0,
+            unrewarded=200,
+            ignored=120,
 
             # ITI
-            ITIMin=1,
-            ITIMax=8,
-            ITIBeta=2,
-            ITIIncrease=0,
+            iti_min=1,
+            iti_max=8,
+            iti_beta=2,
+            iti_increase=0,
 
             # Response time
-            ResponseTime=1,
-            RewardConsumeTime=3,
-            StopIgnores=32,
+            response_time=1,
+            reward_consume_time=3,
+            stop_ignores=32,
 
             # Auto block
-            AdvancedBlockAuto='off',
-            SwitchThr=.5,
-            PointsInARow=5,
+            advanced_block_auto='off',
+            switch_thr=.5,
+            points_in_a_row=5,
 
             # Auto stop
-            MaxTrial=1000,
-            MaxTime=120,
+            max_trial=1000,
+            max_time=120,
 
             # Reward size
-            RightValue_volume=3,
-            LeftValue_volume=3,
+            right_value_volume=3,
+            left_value_volume=3,
 
             # Warmup
             warmup='off',

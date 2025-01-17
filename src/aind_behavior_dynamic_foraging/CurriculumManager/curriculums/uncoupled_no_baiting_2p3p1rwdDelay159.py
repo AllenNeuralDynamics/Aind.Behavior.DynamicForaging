@@ -1,474 +1,562 @@
-'''
-Curriculum for Dynamic Foraging - Uncoupled without Baiting
-Adopted from "draft 2, began using 10/17/23"
-https://alleninstitute-my.sharepoint.com/:w:/g/personal/katrina_nguyen_alleninstitute_org/EUGu5FS565pLuHhqFYT9yfEBjF7tIDGVEmbwnmcCYJBoWw?e=wD8fX9
+from aind_behavior_curriculum import (
+    Curriculum,
+    Stage,
+    StageTransition,
 
-Run the code to generate the curriculum.json and graphs
-Added reward delay and shortened no-lick delay to take care of introduction of extra ITI when early licking
-
-'''
-
-#%%
-from aind_auto_train.curriculum_manager import LOCAL_SAVED_CURRICULUM_ROOT
-from aind_auto_train.schema.curriculum import (
-    DynamicForagingCurriculum, StageTransitions, TransitionRule,
-    Decision
-)
-from aind_auto_train.schema.task import (
-    Task, TrainingStage, DynamicForagingParas,
-    AutoWaterMode, AdvancedBlockMode
-)
-from aind_auto_train import setup_logging
-setup_logging()
-
-# Note this could be any string, not necessarily one of the Task enums
-curriculum_name = Task.C0B0
-curriculum_version = "2.3.1rwdDelay159"
-curriculum_description = '''2024-08-16 max_len = 75 mins; decrease finished trial criterion'''
-
-task_url = "https://github.com/AllenNeuralDynamics/dynamic-foraging-task"
-task_schema_version = "1.1.0"
-
-# --- Parameters ---
-# Stage 1 with warmup (classical Stage 1.1 + 1.2)
-
-paras_stage_1_warmup = DynamicForagingParas(
-    # Metainfo
-    training_stage=TrainingStage.STAGE_1_WARMUP,
-    description="Warmup, followed by legendary Coupled Baiting Stage 1.2 (block = [10, 30, 10], p_sum = 0.8, p_ratio = [1:0])",
-
-    # -- Essentials --
-    # Warmup ON
-    warmup='on',
-    warm_min_trial=50,
-    warm_max_choice_ratio_bias=0.1,
-    warm_min_finish_ratio=0.8,
-    warm_windowsize=20,
-
-    # First session is ** coupled baiting **
-    task_url=task_url,
-    task_schema_version=task_schema_version,
-    task=Task.C1B1,
-
-    # p_sum = 0.8, p_ratio = [1:0]
-    BaseRewardSum=0.8,
-    RewardFamily=3,
-    RewardPairsN=1,
-
-    # block = [10, 30, 10]
-    BlockMin=10,
-    BlockMax=30,
-    BlockBeta=10,
-    BlockMinReward=0,
-
-    ITIMin=1,
-    ITIMax=7,
-    ITIBeta=3,
-
-    # Add a (fixed) small delay period at the beginning  # TODO: automate delay period
-    DelayMin=0, # almost turned off no lick window
-    DelayMax=0,
-    DelayBeta=0,
-
-    # Reward size and reward delay
-    RewardDelay=0.1,
-    RightValue_volume=4.0,
-    LeftValue_volume=4.0,
-
-    # -- Within session automation --
-    # Auto water
-    AutoReward=True,
-    AutoWaterType=AutoWaterMode.NATURAL,
-    Unrewarded=3,
-    Ignored=3,
-    Multiplier=0.5,
-
-    # Auto block
-    AdvancedBlockAuto=AdvancedBlockMode.NOW,
-    SwitchThr=0.5,
-    PointsInARow=5,
-
-    # Auto stop; set StopIgnores to a large number at the beginning
-    MaxTrial=1000,
-    MaxTime=75,
-    StopIgnores=20000,
-
-    # -- Miscs --
-    ResponseTime=5.0,  # Very long response time at the beginning
-    RewardConsumeTime=1.0,  # Shorter RewardConsumeTime to increase the number of trials
-    UncoupledReward="",  # Only valid in uncoupled task
 )
 
-transition_from_stage_1_warmup = StageTransitions(
-    from_stage=TrainingStage.STAGE_1_WARMUP,
-    transition_rules=[
-        TransitionRule(
-            decision=Decision.PROGRESS,
-            to_stage=TrainingStage.STAGE_2,
-            condition_description="Finished trials >= 200 and efficiency >= 0.6",
-            condition="""lambda metrics:
-                        metrics.finished_trials[-1] >= 200
-                        and
-                        metrics.foraging_efficiency[-1] >= 0.6
-                        """,
-        ),
-        TransitionRule(
-            decision=Decision.PROGRESS,
-            to_stage=TrainingStage.STAGE_1,
-            condition_description="After the first session",
-            condition="""lambda metrics:
-                        metrics.session_at_current_stage >= 1
-                        """,
+from aind_behavior_dynamic_foraging import (
+    AindDynamicForagingTaskParameters,
+    AutoWaterMode,
+    AdvancedBlockMode,
+    AindDynamicForagingTaskLogic,
+    DynamicForagingMetrics
+)
+
+from typing import List, Literal
+import numpy as np
+
+# --- Stages  ---
+s_stage_1_warmup = Stage(
+    name="stage_1_warmup",
+    task=AindDynamicForagingTaskLogic(
+        task_parameters=AindDynamicForagingTaskParameters(
+
+            # Warmup OFF
+            warmup='on',
+            warm_min_trial=50,
+            warm_max_choice_ratio_bias=0.1,
+            warm_min_finish_ratio=0.8,
+            warm_windowsize=20,
+
+            # p_sum = 0.8, p_ratio = [1:0]
+            base_reward_sum=0.8,
+            reward_family=3,
+            reward_paird_n=1,
+
+            # block = [10, 20, 5]
+            block_min=10,
+            block_max=30,
+            block_beta=10,
+            block_min_reward=0,
+
+            # Small ITI at the beginning to better engage the animal
+            iti_min=1,
+            iti_max=7,
+            iti_beta=3,
+
+            # Add a (fixed) small delay period at the beginning  # TODO: automate delay period
+            delay_min=0,
+            delay_max=0,
+            delay_beta=0,
+
+            # Reward size and reward delay
+            reward_delay=0.1,
+            right_value_volume=4.0,
+            left_value_volume=4.0,
+
+            # -- Within session automation --
+            # Auto water
+            auto_reward=True,
+            auto_water_type=AutoWaterMode.NATURAL,
+            unrewarded=3,
+            ignored=3,
+            multiplier=0.5,
+
+            # Auto block
+            advanced_block_auto=AdvancedBlockMode.NOW,
+            switch_thr=0.5,
+            points_in_a_row=5,
+
+            # Auto stop; set stop_ignores to a large number at the beginning
+            max_trial=1000,
+            Max_time=75,
+            stop_ignores=20000,
+
+            # -- Miscs --
+            response_time=5,
+            reward_consume_time=1,  # Very long response time at the beginning
+            uncoupled_reward="",  # Only valid in uncoupled task
         )
-
-    ]
+    )
 )
 
-# Stage 1 without warmup (classical 1.2)
-paras_stage_1 = DynamicForagingParas(
-    **{
-        **paras_stage_1_warmup.model_dump(),
-        **dict(
-            training_stage=TrainingStage.STAGE_1,
-            description="Phase B in Han's slides (block = [10, 30, 10], p_sum = 0.8, p_ratio = [1:0])",
+s_stage_1 = Stage(
+    name="stage_1",
+    task=AindDynamicForagingTaskLogic(
+        task_parameters=AindDynamicForagingTaskParameters(
 
-            # -- Essentials --
-            # Turn off Warmup from now on
+            # Warmup OFF
             warmup='off',
+            warm_min_trial=50,
+            warm_max_choice_ratio_bias=0.1,
+            warm_min_finish_ratio=0.8,
+            warm_windowsize=20,
 
-            Unrewarded=5,
-            Ignored=5,
-            
-            # Decrease water size to 2.0 from now on
-            RightValue_volume=2.0,
-            LeftValue_volume=2.0,
-        )
-    }
-)
+            # p_sum = 0.8, p_ratio = [1:0]
+            base_reward_sum=0.8,
+            reward_family=3,
+            reward_paird_n=1,
 
-transition_from_stage_1 = StageTransitions(
-    from_stage=TrainingStage.STAGE_1,
-    transition_rules=[
-        TransitionRule(
-            decision=Decision.PROGRESS,
-            to_stage=TrainingStage.STAGE_2,
-            condition_description="Finished trials >= 200 and efficiency >= 0.6",
-            condition="""lambda metrics:
-                        metrics.finished_trials[-1] >= 200
-                        and
-                        metrics.foraging_efficiency[-1] >= 0.6
-                        """,
-        )
-    ]
-)
+            # block = [10, 20, 5]
+            block_min=10,
+            block_max=30,
+            block_beta=10,
+            block_min_reward=0,
 
-paras_stage_2 = DynamicForagingParas(
-    **{
-        **paras_stage_1.model_dump(),
-        **dict(
-            training_stage=TrainingStage.STAGE_2,
-            description="Coupled without baiting (block = [20, 35, 10], p_sum = 0.8, p_ratio = [8:1])",
+            # Small ITI at the beginning to better engage the animal
+            iti_min=1,
+            iti_max=7,
+            iti_beta=3,
 
-            # --- Only include changes compared to stage_1 ---
-            # -- Essentials --
+            # Add a (fixed) small delay period at the beginning  # TODO: automate delay period
+            delay_min=0,
+            delay_max=0,
+            delay_beta=0,
 
-            # Coupled no baiting
-            task=Task.C1B0,
-
-            # p_ratio [1:0] -> [8:1]
-            RewardFamily=1,
-            RewardPairsN=1,
-            
-            # Decrease autowater
-            Unrewarded=7,
-            Ignored=7,
-
-            # block length [10, 30, 10] --> [20, 35, 20]
-            BlockMin=20,
-            BlockMax=35,
-            BlockBeta=10,
-
-            # ITI [1, 7, 3] --> [1, 10, 3]
-            ITIMax=10,
-            
-            # Delay 0 --> 0.25
-            DelayMin=0.25,
-            DelayMax=0.25,
-
-            StopIgnores=25,
+            # Reward size and reward delay
+            reward_delay=0.1,
+            right_value_volume=2.0,
+            left_value_volume=2.0,
 
             # -- Within session automation --
-            # Miscs
-            ResponseTime=1.5,  # Decrease response time: 5 --> 1.5
+            # Auto water
+            auto_reward=True,
+            auto_water_type=AutoWaterMode.NATURAL,
+            unrewarded=5,
+            ignored=5,
+            multiplier=0.5,
+
+            # Auto block
+            advanced_block_auto=AdvancedBlockMode.NOW,
+            switch_thr=0.5,
+            points_in_a_row=5,
+
+            # Auto stop; set stop_ignores to a large number at the beginning
+            max_trial=1000,
+            Max_time=75,
+            stop_ignores=20000,
+
+            # -- Miscs --
+            response_time=5,
+            reward_consume_time=1,  # Very long response time at the beginning
+            uncoupled_reward="",  # Only valid in uncoupled task
         )
-    }
+    )
 )
 
-transition_from_stage_2 = StageTransitions(
-    from_stage=TrainingStage.STAGE_2,
-    transition_rules=[
-        TransitionRule(
-            decision=Decision.PROGRESS,
-            to_stage=TrainingStage.STAGE_3,
-            condition_description="Stay for >= 3 days",
-            condition="""lambda metrics:
-                        metrics.session_at_current_stage >= 3
-                        """,
-        ),
-        TransitionRule(
-            decision=Decision.ROLLBACK,
-            to_stage=TrainingStage.STAGE_1,
-            condition_description="Finished trials < 200 or efficiency < 0.55",
-            condition="""lambda metrics:
-                        metrics.finished_trials[-1] < 200
-                        or
-                        metrics.foraging_efficiency[-1] < 0.55
-                        """,
-        ),
-    ]
-)
+s_stage_2 = Stage(
+    name="stage_2",
+    task=AindDynamicForagingTaskLogic(
+        task_parameters=AindDynamicForagingTaskParameters(
 
+            # Warmup OFF
+            warmup='off',
+            warm_min_trial=50,
+            warm_max_choice_ratio_bias=0.1,
+            warm_min_finish_ratio=0.8,
+            warm_windowsize=20,
 
-paras_stage_3 = DynamicForagingParas(
-    **{
-        **paras_stage_2.model_dump(),
-        **dict(
-            training_stage=TrainingStage.STAGE_3,
-            description="Coupled without baiting (block = [20, 35, 10], p_sum = 0.8, p_ratio = [8:1]), turn on no lick window",
+            # p_sum = 0.8, p_ratio = [1:0]
+            base_reward_sum=0.8,
+            reward_family=1,
+            reward_paird_n=1,
 
-            # --- Only include changes compared to stage_1 ---
-            # -- Essentials --
+            # block = [10, 20, 5]
+            block_min=20,
+            block_max=35,
+            block_beta=10,
+            block_min_reward=0,
 
-            # Coupled no baiting
-            task=Task.C1B0,
+            # Small ITI at the beginning to better engage the animal
+            iti_min=1,
+            iti_max=10,
+            iti_beta=3,
 
-            # p_ratio [1:0] -> [8:1]
-            RewardFamily=1,
-            RewardPairsN=1,
-            
-            # Decrease autowater
-            Unrewarded=10,
-            Ignored=10,
+            # Add a (fixed) small delay period at the beginning  # TODO: automate delay period
+            delay_min=0.25,
+            delay_max=0.25,
+            delay_beta=0,
 
-            # block length [10, 30, 10] --> [20, 35, 20]
-            BlockMin=20,
-            BlockMax=35,
-            BlockBeta=10,
-
-            # ITI [1, 7, 3] --> [1, 10, 3]
-            ITIMax=10,
-            
-            # Delay 0.5 --> 1.0
-            DelayMin=1.0,
-            DelayMax=1.0,
+            # Reward size and reward delay
+            reward_delay=0.1,
+            right_value_volume=2.0,
+            left_value_volume=2.0,
 
             # -- Within session automation --
-            # Miscs
-            ResponseTime=1.5,  # Decrease response time: 5 --> 1.5
+            # Auto water
+            auto_reward=True,
+            auto_water_type=AutoWaterMode.NATURAL,
+            unrewarded=7,
+            ignored=7,
+            multiplier=0.5,
+
+            # Auto block
+            advanced_block_auto=AdvancedBlockMode.NOW,
+            switch_thr=0.5,
+            points_in_a_row=5,
+
+            # Auto stop; set stop_ignores to a large number at the beginning
+            max_trial=1000,
+            Max_time=75,
+            stop_ignores=25,
+
+            # -- Miscs --
+            response_time=1.5,
+            reward_consume_time=1,  # Very long response time at the beginning
+            uncoupled_reward="",  # Only valid in uncoupled task
         )
-    }
+    )
 )
 
-transition_from_stage_3 = StageTransitions(
-    from_stage=TrainingStage.STAGE_3,
-    transition_rules=[
-        TransitionRule(
-            decision=Decision.PROGRESS,
-            to_stage=TrainingStage.STAGE_4,
-            condition_description="Finished trials >= 300 and efficiency >= 0.65 and stay for >= 3 days",
-            condition="""lambda metrics:
-                        metrics.finished_trials[-1] >= 300
-                        and
-                        metrics.foraging_efficiency[-1] >= 0.65
-                        and
-                        metrics.session_at_current_stage >= 3
-                        """,
-        ),
-        TransitionRule(
-            decision=Decision.ROLLBACK,
-            to_stage=TrainingStage.STAGE_2,
-            condition_description="Finished trials < 250 or efficiency < 0.50 after stay for >= 3 days",
-            condition="""lambda metrics:
-                        (metrics.finished_trials[-1] < 250
-                        or
-                        metrics.foraging_efficiency[-1] < 0.50)
-                        and
-                        metrics.session_at_current_stage >= 3
-                        """,
-        ),
-    ]
-)
+s_stage_3 = Stage(
+    name="stage_3",
+    task=AindDynamicForagingTaskLogic(
+        task_parameters=AindDynamicForagingTaskParameters(
 
-paras_stage_4 = DynamicForagingParas(
-    **{
-        **paras_stage_3.model_dump(),
-        **dict(
-            training_stage=TrainingStage.STAGE_4,
-            description="Switch to uncoupled; p_rew = [0.1, 0.4, 0.7] or [0.1, 0.5, 0.9]; turn on auto water for 1 days",
+            # Warmup OFF
+            warmup='off',
+            warm_min_trial=50,
+            warm_max_choice_ratio_bias=0.1,
+            warm_min_finish_ratio=0.8,
+            warm_windowsize=20,
 
-            # -- Essentials --
-            # Uncoupled no baiting
-            task=Task.C0B0,
-            UncoupledReward="0.1, 0.5, 0.9",
-            
-            # reward delay
-            RewardDelay=0.15, # increased from 100ms
+            # p_sum = 0.8, p_ratio = [1:0]
+            base_reward_sum=0.8,
+            reward_family=1,
+            reward_paird_n=1,
 
-            # Final block length for uncoupled task
-            BlockMin=20,
-            BlockMax=35,
-            BlockBeta=10,
+            # block = [10, 20, 5]
+            block_min=20,
+            block_max=35,
+            block_beta=10,
+            block_min_reward=0,
 
-            # ITI [1, 10, 3] --> [1, 15, 3]
-            ITIMax=15,
+            # Small ITI at the beginning to better engage the animal
+            iti_min=1,
+            iti_max=10,
+            iti_beta=3,
 
-            # Turn on auto water for the first day after switching to uncoupled task
-            AutoReward=True,
-            Unrewarded=10,  # almost turned off
-            Ignored=10,  # almost turned off
+            # Add a (fixed) small delay period at the beginning  # TODO: automate delay period
+            delay_min=1,
+            delay_max=1,
+            delay_beta=0,
 
-            # Turn off auto block
-            AdvancedBlockAuto=AdvancedBlockMode.OFF,  # Turn off auto block
-            
-            # Miscs
-            ResponseTime=1.5,
+            # Reward size and reward delay
+            reward_delay=0.1,
+            right_value_volume=2.0,
+            left_value_volume=2.0,
+
+            # -- Within session automation --
+            # Auto water
+            auto_reward=True,
+            auto_water_type=AutoWaterMode.NATURAL,
+            unrewarded=10,
+            ignored=10,
+            multiplier=0.5,
+
+            # Auto block
+            advanced_block_auto=AdvancedBlockMode.NOW,
+            switch_thr=0.5,
+            points_in_a_row=5,
+
+            # Auto stop; set stop_ignores to a large number at the beginning
+            max_trial=1000,
+            Max_time=75,
+            stop_ignores=25,
+
+            # -- Miscs --
+            response_time=1.5,
+            reward_consume_time=1,  # Very long response time at the beginning
+            uncoupled_reward="",  # Only valid in uncoupled task
         )
-    }
+    )
 )
 
-transition_from_stage_4 = StageTransitions(
-    from_stage=TrainingStage.STAGE_4,
-    transition_rules=[
-        TransitionRule(
-            decision=Decision.PROGRESS,
-            to_stage=TrainingStage.STAGE_FINAL,
-            condition_description="Just stay for 2 days",
-            condition="""lambda metrics:
-                                metrics.session_at_current_stage >= 2
-                                """,
-        ),
-        # Once we reach here (C0B0), maybe we should not roll back to C1B0 or C1B1 anymore?
-    ]
-)
+s_stage_4 = Stage(
+    name="stage_4",
+    task=AindDynamicForagingTaskLogic(
+        task_parameters=AindDynamicForagingTaskParameters(
 
-paras_stage_final = DynamicForagingParas(
-    **{
-        **paras_stage_4.model_dump(),
-        **dict(
-            training_stage=TrainingStage.STAGE_FINAL,
-            description="Uncoupled without baiting; p_rew = [0.1, 0.5, 0.9]; turn off auto water",
+            # Warmup OFF
+            warmup='off',
+            warm_min_trial=50,
+            warm_max_choice_ratio_bias=0.1,
+            warm_min_finish_ratio=0.8,
+            warm_windowsize=20,
 
-            # Essentials
-            # Uncoupled no baiting
-            task=Task.C0B0,
-            UncoupledReward="0.1, 0.5, 0.9",
+            # p_sum = 0.8, p_ratio = [1:0]
+            base_reward_sum=0.8,
+            reward_family=1,
+            reward_paird_n=1,
 
-            BlockMin=20,
-            BlockMax=35,
-            BlockBeta=10,
-            BlockMinReward=0,
+            # block = [10, 20, 5]
+            block_min=20,
+            block_max=35,
+            block_beta=10,
+            block_min_reward=0,
 
-            ITIMin=2.0,
-            ITIMax=15.0,
-            ITIBeta=3.0,
+            # Small ITI at the beginning to better engage the animal
+            iti_min=1,
+            iti_max=15,
+            iti_beta=3,
 
-            DelayMin=1.0,
-            DelayMax=1.0,
-            DelayBeta=0.0,
+            # Add a (fixed) small delay period at the beginning  # TODO: automate delay period
+            delay_min=1,
+            delay_max=1,
+            delay_beta=0,
 
-            RewardDelay=0.2,
+            # Reward size and reward delay
+            reward_delay=0.15,
+            right_value_volume=2.0,
+            left_value_volume=2.0,
 
-            # Within session automation
-            AutoReward=False,  # Turn off auto water
-            AdvancedBlockAuto=AdvancedBlockMode.OFF,  # Turn off auto block
+            # -- Within session automation --
+            # Auto water
+            auto_reward=True,
+            auto_water_type=AutoWaterMode.NATURAL,
+            unrewarded=10,
+            ignored=10,
+            multiplier=0.5,
 
-            MaxTrial=1000,
-            MaxTime=75,
-            StopIgnores=25,
+            # Auto block
+            advanced_block_auto=AdvancedBlockMode.OFF,
+            switch_thr=0.5,
+            points_in_a_row=5,
 
-            # Miscs
-            ResponseTime=1.5,
-            RewardConsumeTime=1.0,
+            # Auto stop; set stop_ignores to a large number at the beginning
+            max_trial=1000,
+            Max_time=75,
+            stop_ignores=25,
+
+            # -- Miscs --
+            response_time=1.5,
+            reward_consume_time=1,  # Very long response time at the beginning
+            uncoupled_reward="0.1, 0.5, 0.9",  # Only valid in uncoupled task
         )
-    }
+    )
 )
 
-transition_from_stage_final = StageTransitions(
-    from_stage=TrainingStage.STAGE_FINAL,
-    transition_rules=[
-        TransitionRule(
-            # For graduation, obviously we need more requirements.
-            decision=Decision.PROGRESS,
-            to_stage=TrainingStage.GRADUATED,
-            condition_description=("For recent 5 sessions,"
-                                   "mean finished trials >= 400 and mean efficiency >= 0.65 "
-                                   "and total sessions >= 10 and sessions at final >= 5"),
-            condition="""lambda metrics:
-                        metrics.session_total >= 10 
-                        and
-                        metrics.session_at_current_stage >= 5
-                        and 
-                        np.mean(metrics.finished_trials[-5:]) >= 400
-                        and
-                        np.mean(metrics.foraging_efficiency[-5:]) >= 0.65
-                        """,
-        ),
-        TransitionRule(
-            decision=Decision.ROLLBACK,
-            to_stage=TrainingStage.STAGE_4,  # Back to C0B0 with auto water
-            condition_description="For recent 5 sessions, mean finished trials < 250 or efficiency < 0.6",
-            condition="""lambda metrics:
-                        np.mean(metrics.finished_trials[-5:]) < 250
-                        or
-                        np.mean(metrics.foraging_efficiency[-5:]) < 0.60
-                        """,
-        ),
-    ]
+s_final = Stage(
+    name="final",
+    task=AindDynamicForagingTaskLogic(
+        task_parameters=AindDynamicForagingTaskParameters(
+
+            # Warmup OFF
+            warmup='off',
+            warm_min_trial=50,
+            warm_max_choice_ratio_bias=0.1,
+            warm_min_finish_ratio=0.8,
+            warm_windowsize=20,
+
+            # p_sum = 0.8, p_ratio = [1:0]
+            base_reward_sum=0.8,
+            reward_family=1,
+            reward_paird_n=1,
+
+            # block = [10, 20, 5]
+            block_min=20,
+            block_max=35,
+            block_beta=10,
+            block_min_reward=0,
+
+            # Small ITI at the beginning to better engage the animal
+            iti_min=2,
+            iti_max=15,
+            iti_beta=3,
+
+            # Add a (fixed) small delay period at the beginning  # TODO: automate delay period
+            delay_min=1,
+            delay_max=1,
+            delay_beta=0,
+
+            # Reward size and reward delay
+            reward_delay=0.2,
+            right_value_volume=2.0,
+            left_value_volume=2.0,
+
+            # -- Within session automation --
+            # Auto water
+            auto_reward=False,
+            auto_water_type=AutoWaterMode.NATURAL,
+            unrewarded=10,
+            ignored=10,
+            multiplier=0.5,
+
+            # Auto block
+            advanced_block_auto=AdvancedBlockMode.OFF,
+            switch_thr=0.5,
+            points_in_a_row=5,
+
+            # Auto stop; set stop_ignores to a large number at the beginning
+            max_trial=1000,
+            Max_time=75,
+            stop_ignores=25,
+
+            # -- Miscs --
+            response_time=1.5,
+            reward_consume_time=1,  # Very long response time at the beginning
+            uncoupled_reward="0.1, 0.5, 0.9",  # Only valid in uncoupled task
+        )
+    )
 )
+
+# graduated same is identical to final but an absorbing state
+s_graduated = Stage(
+    name="final",
+    task=AindDynamicForagingTaskLogic(
+        task_parameters=AindDynamicForagingTaskParameters(
+
+            # Warmup OFF
+            warmup='off',
+            warm_min_trial=50,
+            warm_max_choice_ratio_bias=0.1,
+            warm_min_finish_ratio=0.8,
+            warm_windowsize=20,
+
+            # p_sum = 0.8, p_ratio = [1:0]
+            base_reward_sum=0.8,
+            reward_family=1,
+            reward_paird_n=1,
+
+            # block = [10, 20, 5]
+            block_min=20,
+            block_max=35,
+            block_beta=10,
+            block_min_reward=0,
+
+            # Small ITI at the beginning to better engage the animal
+            iti_min=2,
+            iti_max=15,
+            iti_beta=3,
+
+            # Add a (fixed) small delay period at the beginning  # TODO: automate delay period
+            delay_min=1,
+            delay_max=1,
+            delay_beta=0,
+
+            # Reward size and reward delay
+            reward_delay=0.2,
+            right_value_volume=2.0,
+            left_value_volume=2.0,
+
+            # -- Within session automation --
+            # Auto water
+            auto_reward=False,
+            auto_water_type=AutoWaterMode.NATURAL,
+            unrewarded=10,
+            ignored=10,
+            multiplier=0.5,
+
+            # Auto block
+            advanced_block_auto=AdvancedBlockMode.OFF,
+            switch_thr=0.5,
+            points_in_a_row=5,
+
+            # Auto stop; set stop_ignores to a large number at the beginning
+            max_trial=1000,
+            Max_time=75,
+            stop_ignores=25,
+
+            # -- Miscs --
+            response_time=1.5,
+            reward_consume_time=1,  # Very long response time at the beginning
+            uncoupled_reward="0.1, 0.5, 0.9",  # Only valid in uncoupled task
+        )
+    )
+)
+
+
+# --- STAGE TRANSITIONS ---
+
+# warmup
+@StageTransition
+def st_stage_1_warmup_to_stage_1(metrics: DynamicForagingMetrics) -> bool:
+    return metrics.session_at_current_stage >= 1
+
+
+@StageTransition
+def st_stage_1_warmup_to_stage_2(metrics: DynamicForagingMetrics) -> bool:
+    return metrics.foraging_efficiency[-1] >= 0.6 and metrics.finished_trials[-1] >= 200
+
+
+# stage 1
+@StageTransition
+def st_stage_1_to_stage_2(metrics: DynamicForagingMetrics) -> bool:
+    return metrics.foraging_efficiency[-1] >= 0.6 and metrics.finished_trials[-1] >= 200
+
+
+# stage 2
+@StageTransition
+def st_stage_2_to_stage_3(metrics: DynamicForagingMetrics) -> bool:
+    return metrics.session_at_current_stage >= 3
+
+
+@StageTransition
+def st_stage_2_to_stage_1(metrics: DynamicForagingMetrics) -> bool:
+    return metrics.foraging_efficiency[-1] < 0.55 or metrics.finished_trials[-1] < 200
+
+
+# stage 3
+@StageTransition
+def st_stage_3_to_stage_4(metrics: DynamicForagingMetrics) -> bool:
+    return metrics.finished_trials[-1] >= 300 and \
+           metrics.foraging_efficiency[-1] >= 0.65 and \
+           metrics.session_at_current_stage >= 3
+
+@StageTransition
+def st_stage_3_to_stage_2(metrics: DynamicForagingMetrics) -> bool:
+    return (metrics.finished_trials[-1] < 250 or metrics.foraging_efficiency[-1] < 0.50) and \
+           metrics.session_at_current_stage >= 3
+
+@StageTransition
+def st_stage_4_to_final(metrics: DynamicForagingMetrics) -> bool:
+    return metrics.session_at_current_stage >= 2
+
+# stage final
+@StageTransition
+def st_final_to_graduated(metrics: DynamicForagingMetrics) -> bool:
+    return metrics.session_total >= 10 and \
+           metrics.session_at_current_stage >= 5 and \
+           np.mean(metrics.finished_trials[-5:]) >= 400 and \
+           np.mean(metrics.foraging_efficiency[-5:]) >= 0.65
+
+
+@StageTransition
+def st_final_to_stage_4(metrics: DynamicForagingMetrics) -> bool:
+    return np.mean(metrics.finished_trials[-5:]) < 250 or np.mean(metrics.foraging_efficiency[-5:]) < 0.60
+
 
 # --- Curriculum ---
-# %%
-curriculum = DynamicForagingCurriculum(
-    curriculum_name=curriculum_name,
-    curriculum_version=curriculum_version,
-    curriculum_description=curriculum_description,
+class UncoupledNoBaiting2p3p1RewardDelayCurriculum(Curriculum):
+    name: Literal["Uncoupled No Baiting 2p3p1 Reward Delay Curriculum"] = \
+        "Uncoupled No Baiting 2p3p1 Reward Delay Curriculum"
 
-    parameters={
-        TrainingStage.STAGE_1_WARMUP: paras_stage_1_warmup,
-        TrainingStage.STAGE_1: paras_stage_1,
-        TrainingStage.STAGE_2: paras_stage_2,
-        TrainingStage.STAGE_3: paras_stage_3,
-        TrainingStage.STAGE_4: paras_stage_4,
-        TrainingStage.STAGE_FINAL: paras_stage_final,
-        TrainingStage.GRADUATED: paras_stage_final,        
-    },
 
-    curriculum={
-        TrainingStage.STAGE_1_WARMUP: transition_from_stage_1_warmup,
-        TrainingStage.STAGE_1: transition_from_stage_1,
-        TrainingStage.STAGE_2: transition_from_stage_2,
-        TrainingStage.STAGE_3: transition_from_stage_3,
-        TrainingStage.STAGE_4: transition_from_stage_4,
-        TrainingStage.STAGE_FINAL: transition_from_stage_final,
-    },
+def construct_coupled_baiting_1p0_curriculum() -> UncoupledNoBaiting2p3p1RewardDelayCurriculum:
 
-)
+    cb_curriculum = UncoupledNoBaiting2p3p1RewardDelayCurriculum(
+        name="Uncoupled No Baiting 2p3p1 Reward Delay Curriculum")
 
-# %%
-if __name__ == '__main__':
-    #%%
-    import os
+    # add stages
+    cb_curriculum.add_stage(s_stage_1_warmup)
+    cb_curriculum.add_stage(s_stage_1)
+    cb_curriculum.add_stage(s_stage_2)
+    cb_curriculum.add_stage(s_stage_3)
+    cb_curriculum.add_stage(s_final)
+    cb_curriculum.add_stage(s_graduated)
 
-    curriculum_path = LOCAL_SAVED_CURRICULUM_ROOT
-    os.makedirs(curriculum_path, exist_ok=True)
+    # add stage transitions
+    cb_curriculum.add_stage_transition(s_stage_1_warmup, s_stage_1, st_stage_1_warmup_to_stage_1)
+    cb_curriculum.add_stage_transition(s_stage_1_warmup, s_stage_2, st_stage_1_warmup_to_stage_2)
+    cb_curriculum.add_stage_transition(s_stage_1, s_stage_2, st_stage_1_to_stage_2)
+    cb_curriculum.add_stage_transition(s_stage_2, s_stage_3, st_stage_2_to_stage_3)
+    cb_curriculum.add_stage_transition(s_stage_2, s_stage_1, st_stage_2_to_stage_1)
+    cb_curriculum.add_stage_transition(s_stage_3, s_stage_4, st_stage_3_to_stage_4)
+    cb_curriculum.add_stage_transition(s_stage_3, s_stage_2, st_stage_3_to_stage_2)
+    cb_curriculum.add_stage_transition(s_stage_4, s_final, st_stage_4_to_final)
+    cb_curriculum.add_stage_transition(s_final, s_graduated, st_final_to_graduated)
+    cb_curriculum.add_stage_transition(s_final, s_stage_4, st_final_to_stage_4)
 
-    # Save curriculum json and diagrams
-    curriculum.save_to_json(path=curriculum_path)
-    curriculum.diagram_rules(path=curriculum_path,
-                             render_file_format='svg')
-    #%%
-    curriculum.diagram_paras(path=curriculum_path,
-                                render_file_format='svg',
-                                fontsize=12)
+    return cb_curriculum
 
-# %%
