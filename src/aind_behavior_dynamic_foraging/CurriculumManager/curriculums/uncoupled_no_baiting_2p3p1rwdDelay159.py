@@ -22,7 +22,7 @@ s_stage_1_warmup = Stage(
     task=AindDynamicForagingTaskLogic(
         task_parameters=AindDynamicForagingTaskParameters(
 
-            # Warmup OFF
+            # Warmup ON
             warmup='on',
             warm_min_trial=50,
             warm_max_choice_ratio_bias=0.1,
@@ -34,7 +34,7 @@ s_stage_1_warmup = Stage(
             reward_family=3,
             reward_paird_n=1,
 
-            # block = [10, 20, 5]
+            # block = [10, 30, 10]
             block_min=10,
             block_max=30,
             block_beta=10,
@@ -74,8 +74,8 @@ s_stage_1_warmup = Stage(
             stop_ignores=20000,
 
             # -- Miscs --
-            response_time=5,
-            reward_consume_time=1,  # Very long response time at the beginning
+            response_time=5,    # Very long response time at the beginning
+            reward_consume_time=1,  # Shorter RewardConsumeTime to increase the number of trials
             uncoupled_reward="",  # Only valid in uncoupled task
         )
     )
@@ -98,7 +98,7 @@ s_stage_1 = Stage(
             reward_family=3,
             reward_paird_n=1,
 
-            # block = [10, 20, 5]
+            # block = [10, 30, 10]
             block_min=10,
             block_max=30,
             block_beta=10,
@@ -139,7 +139,7 @@ s_stage_1 = Stage(
 
             # -- Miscs --
             response_time=5,
-            reward_consume_time=1,  # Very long response time at the beginning
+            reward_consume_time=1,
             uncoupled_reward="",  # Only valid in uncoupled task
         )
     )
@@ -157,23 +157,23 @@ s_stage_2 = Stage(
             warm_min_finish_ratio=0.8,
             warm_windowsize=20,
 
-            # p_sum = 0.8, p_ratio = [1:0]
+            # p_ratio [1:0] -> [8:1]
             base_reward_sum=0.8,
             reward_family=1,
             reward_paird_n=1,
 
-            # block = [10, 20, 5]
+            # block length [10, 30, 10] --> [20, 35, 20]
             block_min=20,
             block_max=35,
             block_beta=10,
             block_min_reward=0,
 
-            # Small ITI at the beginning to better engage the animal
+            # ITI [1, 7, 3] --> [1, 10, 3]
             iti_min=1,
             iti_max=10,
             iti_beta=3,
 
-            # Add a (fixed) small delay period at the beginning  # TODO: automate delay period
+            # Delay 0 --> 0.25
             delay_min=0.25,
             delay_max=0.25,
             delay_beta=0,
@@ -196,14 +196,14 @@ s_stage_2 = Stage(
             switch_thr=0.5,
             points_in_a_row=5,
 
-            # Auto stop; set stop_ignores to a large number at the beginning
+            # Auto stop
             max_trial=1000,
             Max_time=75,
             stop_ignores=25,
 
             # -- Miscs --
-            response_time=1.5,
-            reward_consume_time=1,  # Very long response time at the beginning
+            response_time=1.5,  # Decrease response time: 5 --> 1.5
+            reward_consume_time=1,
             uncoupled_reward="",  # Only valid in uncoupled task
         )
     )
@@ -221,23 +221,23 @@ s_stage_3 = Stage(
             warm_min_finish_ratio=0.8,
             warm_windowsize=20,
 
-            # p_sum = 0.8, p_ratio = [1:0]
+            # p_ratio [1:0] -> [8:1]
             base_reward_sum=0.8,
             reward_family=1,
             reward_paird_n=1,
 
-            # block = [10, 20, 5]
+            # block length [10, 30, 10] --> [20, 35, 20]
             block_min=20,
             block_max=35,
             block_beta=10,
             block_min_reward=0,
 
-            # Small ITI at the beginning to better engage the animal
+            # ITI [1, 7, 3] --> [1, 10, 3]
             iti_min=1,
             iti_max=10,
             iti_beta=3,
 
-            # Add a (fixed) small delay period at the beginning  # TODO: automate delay period
+            # Delay 0.5 --> 1.0
             delay_min=1,
             delay_max=1,
             delay_beta=0,
@@ -260,14 +260,14 @@ s_stage_3 = Stage(
             switch_thr=0.5,
             points_in_a_row=5,
 
-            # Auto stop; set stop_ignores to a large number at the beginning
+            # Auto stop
             max_trial=1000,
             Max_time=75,
             stop_ignores=25,
 
             # -- Miscs --
-            response_time=1.5,
-            reward_consume_time=1,  # Very long response time at the beginning
+            response_time=1.5,  # Decrease response time: 5 --> 1.5
+            reward_consume_time=1,
             uncoupled_reward="",  # Only valid in uncoupled task
         )
     )
@@ -285,23 +285,21 @@ s_stage_4 = Stage(
             warm_min_finish_ratio=0.8,
             warm_windowsize=20,
 
-            # p_sum = 0.8, p_ratio = [1:0]
             base_reward_sum=0.8,
             reward_family=1,
             reward_paird_n=1,
 
-            # block = [10, 20, 5]
+            # Final block length for uncoupled task
             block_min=20,
             block_max=35,
             block_beta=10,
             block_min_reward=0,
 
-            # Small ITI at the beginning to better engage the animal
+            # ITI [1, 10, 3] --> [1, 15, 3]
             iti_min=1,
             iti_max=15,
             iti_beta=3,
 
-            # Add a (fixed) small delay period at the beginning  # TODO: automate delay period
             delay_min=1,
             delay_max=1,
             delay_beta=0,
@@ -320,18 +318,18 @@ s_stage_4 = Stage(
             multiplier=0.5,
 
             # Auto block
-            advanced_block_auto=AdvancedBlockMode.OFF,
+            advanced_block_auto=AdvancedBlockMode.OFF,   # Turn off auto block
             switch_thr=0.5,
             points_in_a_row=5,
 
-            # Auto stop; set stop_ignores to a large number at the beginning
+            # Auto stop
             max_trial=1000,
             Max_time=75,
             stop_ignores=25,
 
             # -- Miscs --
             response_time=1.5,
-            reward_consume_time=1,  # Very long response time at the beginning
+            reward_consume_time=1,
             uncoupled_reward="0.1, 0.5, 0.9",  # Only valid in uncoupled task
         )
     )
@@ -349,28 +347,23 @@ s_final = Stage(
             warm_min_finish_ratio=0.8,
             warm_windowsize=20,
 
-            # p_sum = 0.8, p_ratio = [1:0]
             base_reward_sum=0.8,
             reward_family=1,
             reward_paird_n=1,
 
-            # block = [10, 20, 5]
             block_min=20,
             block_max=35,
             block_beta=10,
             block_min_reward=0,
 
-            # Small ITI at the beginning to better engage the animal
             iti_min=2,
             iti_max=15,
             iti_beta=3,
 
-            # Add a (fixed) small delay period at the beginning  # TODO: automate delay period
             delay_min=1,
             delay_max=1,
             delay_beta=0,
 
-            # Reward size and reward delay
             reward_delay=0.2,
             right_value_volume=2.0,
             left_value_volume=2.0,
@@ -388,14 +381,13 @@ s_final = Stage(
             switch_thr=0.5,
             points_in_a_row=5,
 
-            # Auto stop; set stop_ignores to a large number at the beginning
             max_trial=1000,
             Max_time=75,
             stop_ignores=25,
 
             # -- Miscs --
             response_time=1.5,
-            reward_consume_time=1,  # Very long response time at the beginning
+            reward_consume_time=1,
             uncoupled_reward="0.1, 0.5, 0.9",  # Only valid in uncoupled task
         )
     )
@@ -414,28 +406,23 @@ s_graduated = Stage(
             warm_min_finish_ratio=0.8,
             warm_windowsize=20,
 
-            # p_sum = 0.8, p_ratio = [1:0]
             base_reward_sum=0.8,
             reward_family=1,
             reward_paird_n=1,
 
-            # block = [10, 20, 5]
             block_min=20,
             block_max=35,
             block_beta=10,
             block_min_reward=0,
 
-            # Small ITI at the beginning to better engage the animal
             iti_min=2,
             iti_max=15,
             iti_beta=3,
 
-            # Add a (fixed) small delay period at the beginning  # TODO: automate delay period
             delay_min=1,
             delay_max=1,
             delay_beta=0,
 
-            # Reward size and reward delay
             reward_delay=0.2,
             right_value_volume=2.0,
             left_value_volume=2.0,
@@ -453,14 +440,13 @@ s_graduated = Stage(
             switch_thr=0.5,
             points_in_a_row=5,
 
-            # Auto stop; set stop_ignores to a large number at the beginning
             max_trial=1000,
             Max_time=75,
             stop_ignores=25,
 
             # -- Miscs --
             response_time=1.5,
-            reward_consume_time=1,  # Very long response time at the beginning
+            reward_consume_time=1,
             uncoupled_reward="0.1, 0.5, 0.9",  # Only valid in uncoupled task
         )
     )
@@ -547,14 +533,20 @@ def construct_coupled_baiting_1p0_curriculum() -> UncoupledNoBaiting2p3p1RewardD
     cb_curriculum.add_stage(s_graduated)
 
     # add stage transitions
+    #   warmup
     cb_curriculum.add_stage_transition(s_stage_1_warmup, s_stage_1, st_stage_1_warmup_to_stage_1)
     cb_curriculum.add_stage_transition(s_stage_1_warmup, s_stage_2, st_stage_1_warmup_to_stage_2)
+    # stage 1
     cb_curriculum.add_stage_transition(s_stage_1, s_stage_2, st_stage_1_to_stage_2)
+    # stage 2
     cb_curriculum.add_stage_transition(s_stage_2, s_stage_3, st_stage_2_to_stage_3)
     cb_curriculum.add_stage_transition(s_stage_2, s_stage_1, st_stage_2_to_stage_1)
+    # stage 3
     cb_curriculum.add_stage_transition(s_stage_3, s_stage_4, st_stage_3_to_stage_4)
     cb_curriculum.add_stage_transition(s_stage_3, s_stage_2, st_stage_3_to_stage_2)
+    # stage 4
     cb_curriculum.add_stage_transition(s_stage_4, s_final, st_stage_4_to_final)
+    # final
     cb_curriculum.add_stage_transition(s_final, s_graduated, st_final_to_graduated)
     cb_curriculum.add_stage_transition(s_final, s_stage_4, st_final_to_stage_4)
 
