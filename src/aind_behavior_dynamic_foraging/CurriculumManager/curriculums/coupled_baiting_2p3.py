@@ -71,7 +71,8 @@ s_stage_1_warmup = Stage(
             # Auto stop; set stop_ignores to a large number at the beginning
             max_trial=1000,
             Max_time=75,
-            stop_ignores=20000,
+            auto_stop_ignore_win=20000,
+            auto_stop_ignore_ratio_threshold=1,
 
             # -- Miscs --
             response_time=5,    # Very long response time at the beginning
@@ -135,7 +136,8 @@ s_stage_1 = Stage(
             # Auto stop; set stop_ignores to a large number at the beginning
             max_trial=1000,
             Max_time=75,
-            stop_ignores=20000,
+            auto_stop_ignore_win=20000,
+            auto_stop_ignore_ratio_threshold=1,
 
             # -- Miscs --
             response_time=5,
@@ -199,7 +201,8 @@ s_stage_2 = Stage(
             # Auto stop
             max_trial=1000,
             Max_time=75,
-            stop_ignores=25,
+            auto_stop_ignore_win=30,
+            auto_stop_ignore_ratio_threshold=.83,
 
             # -- Miscs --
             response_time=3,
@@ -263,7 +266,8 @@ s_stage_3 = Stage(
             # Auto stop
             max_trial=1000,
             Max_time=75,
-            stop_ignores=25,
+            auto_stop_ignore_win=30,
+            auto_stop_ignore_ratio_threshold=.83,
 
             # -- Miscs --
             response_time=2,
@@ -323,10 +327,11 @@ s_final = Stage(
             switch_thr=0.6,
             points_in_a_row=25,
 
-            # Auto stop; set stop_ignores to a large number at the beginning
+            # Auto stop
             max_trial=1000,
             Max_time=75,
-            stop_ignores=25,
+            auto_stop_ignore_win=30,
+            auto_stop_ignore_ratio_threshold=.83,
 
             # -- Miscs --
             response_time=1,
@@ -387,10 +392,11 @@ s_graduated = Stage(
             switch_thr=0.6,
             points_in_a_row=25,
 
-            # Auto stop; set stop_ignores to a large number at the beginning
+            # Auto stop
             max_trial=1000,
             Max_time=75,
-            stop_ignores=25,
+            auto_stop_ignore_win=30,
+            auto_stop_ignore_ratio_threshold=.83,
 
             # -- Miscs --
             response_time=1,

@@ -74,7 +74,8 @@ def mock_task_logic() -> AindDynamicForagingTaskLogic:
             # Response time
             response_time=1,
             reward_consume_time=3,
-            stop_ignores=32,
+            auto_stop_ignore_win=30,
+            auto_stop_ignore_ratio_threshold=.83,
 
             # Auto block
             advanced_block_auto='off',

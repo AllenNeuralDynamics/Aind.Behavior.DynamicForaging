@@ -66,7 +66,9 @@ class AindDynamicForagingTaskParameters(TaskParameters):
     response_time: float = Field(..., title="Response time")
     reward_consume_time: float = Field(..., title="Reward consume time",
                                      description="Time of the no-lick period before trial end")
-    stop_ignores: int = Field(..., title="Number of ignored trials before stop")
+
+    auto_stop_ignore_win: int = Field(..., title="Window of trials to check ignored responses")
+    auto_stop_ignore_ratio_threshold: float = Field(..., title="Threshold for acceptable ignored trials within window.")
 
     # Auto block
     advanced_block_auto: AdvancedBlockMode = Field(..., title="Auto block mode")
