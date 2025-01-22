@@ -48,7 +48,7 @@ try:
     )
 except:     # use resource curriculums if error using s3
 
-    from mock_curriculum_manager import MockCurriculumManager
+    from tests.mock_curriculum_manager import MockCurriculumManager
     CURRICULUM_MANAGER = MockCurriculumManager()
 
 class TestCurriculums(unittest.TestCase):
