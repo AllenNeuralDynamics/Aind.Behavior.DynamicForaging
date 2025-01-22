@@ -1109,7 +1109,7 @@ class TestCurriculums(unittest.TestCase):
                               old_curriculum=old_curriculum,
                               new_curriculum=new_curriculum,
                               old_stage=TrainingStage.STAGE_2,
-                              new_stage=ucb_stage_2,
+                              new_stage=uc_stage_2,
                               old_next_stage=TrainingStage.STAGE_2,
                               new_next_stage=uc_stage_2)
 
@@ -1413,8 +1413,8 @@ class TestCurriculums(unittest.TestCase):
                               new_curriculum=new_curriculum,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=uc_final,
-                              old_next_stage=TrainingStage.STAGE_3,
-                              new_next_stage=uc_stage_3)
+                              old_next_stage=TrainingStage.STAGE_4,
+                              new_next_stage=uc_stage_4)
 
         # test final de-transition below foraging efficiency
         final_detransition = DynamicForagingMetrics(
@@ -1428,8 +1428,8 @@ class TestCurriculums(unittest.TestCase):
                               new_curriculum=new_curriculum,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=uc_final,
-                              old_next_stage=TrainingStage.STAGE_3,
-                              new_next_stage=uc_stage_3)
+                              old_next_stage=TrainingStage.STAGE_4,
+                              new_next_stage=uc_stage_4)
 
         # test final de-transition below finished trials
         final_detransition = DynamicForagingMetrics(
@@ -1443,8 +1443,8 @@ class TestCurriculums(unittest.TestCase):
                               new_curriculum=new_curriculum,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=uc_final,
-                              old_next_stage=TrainingStage.STAGE_3,
-                              new_next_stage=uc_stage_3)
+                              old_next_stage=TrainingStage.STAGE_4,
+                              new_next_stage=uc_stage_4)
 
     def compare_decision(self, metrics: DynamicForagingMetrics,
                          old_curriculum: AutoTrainCurriculum,
