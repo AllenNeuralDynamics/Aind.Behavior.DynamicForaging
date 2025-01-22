@@ -2,7 +2,7 @@ from aind_behavior_curriculum import (
     Curriculum,
     Stage,
     StageTransition,
-
+    create_curriculum
 )
 
 from aind_behavior_dynamic_foraging import (
@@ -15,6 +15,8 @@ from aind_behavior_dynamic_foraging import (
 
 from typing import List, Literal
 import numpy as np
+
+__version__ = "0.2.3"
 
 # --- Stages  ---
 s_stage_1_warmup = Stage(
@@ -32,7 +34,7 @@ s_stage_1_warmup = Stage(
             # p_sum = 0.8, p_ratio = [1:0]
             base_reward_sum=0.8,
             reward_family=3,
-            reward_paird_n=1,
+            reward_pairs_n=1,
 
             # block = [10, 30, 10]
             block_min=10,
@@ -70,7 +72,7 @@ s_stage_1_warmup = Stage(
 
             # Auto stop; set stop_ignores to a large number at the beginning
             max_trial=1000,
-            Max_time=75,
+            max_time=75,
             auto_stop_ignore_win=20000,
             auto_stop_ignore_ratio_threshold=1,
 
@@ -97,7 +99,7 @@ s_stage_1 = Stage(
             # p_sum = 0.8, p_ratio = [1:0]
             base_reward_sum=0.8,
             reward_family=3,
-            reward_paird_n=1,
+            reward_pairs_n=1,
 
             # block = [10, 30, 10]
             block_min=10,
@@ -135,7 +137,7 @@ s_stage_1 = Stage(
 
             # Auto stop; set stop_ignores to a large number at the beginning
             max_trial=1000,
-            Max_time=75,
+            max_time=75,
             auto_stop_ignore_win=20000,
             auto_stop_ignore_ratio_threshold=1,
 
@@ -162,7 +164,7 @@ s_stage_2 = Stage(
             # p_ratio [1:0] -> [8:1]
             base_reward_sum=0.8,
             reward_family=1,
-            reward_paird_n=1,
+            reward_pairs_n=1,
 
             # block length [10, 30, 10] --> [20, 35, 20]
             block_min=20,
@@ -200,7 +202,7 @@ s_stage_2 = Stage(
 
             # Auto stop
             max_trial=1000,
-            Max_time=75,
+            max_time=75,
             auto_stop_ignore_win=30,
             auto_stop_ignore_ratio_threshold=.83,
 
@@ -227,7 +229,7 @@ s_stage_3 = Stage(
             # p_ratio [1:0] -> [8:1]
             base_reward_sum=0.8,
             reward_family=1,
-            reward_paird_n=1,
+            reward_pairs_n=1,
 
             # block length [10, 30, 10] --> [20, 35, 20]
             block_min=20,
@@ -265,7 +267,7 @@ s_stage_3 = Stage(
 
             # Auto stop
             max_trial=1000,
-            Max_time=75,
+            max_time=75,
             auto_stop_ignore_win=30,
             auto_stop_ignore_ratio_threshold=.83,
 
@@ -291,7 +293,7 @@ s_stage_4 = Stage(
 
             base_reward_sum=0.8,
             reward_family=1,
-            reward_paird_n=1,
+            reward_pairs_n=1,
 
             # Final block length for uncoupled task
             block_min=20,
@@ -328,7 +330,7 @@ s_stage_4 = Stage(
 
             # Auto stop
             max_trial=1000,
-            Max_time=75,
+            max_time=75,
             auto_stop_ignore_win=30,
             auto_stop_ignore_ratio_threshold=.83,
 
@@ -354,7 +356,7 @@ s_final = Stage(
 
             base_reward_sum=0.8,
             reward_family=1,
-            reward_paird_n=1,
+            reward_pairs_n=1,
 
             block_min=20,
             block_max=35,
@@ -387,7 +389,7 @@ s_final = Stage(
             points_in_a_row=5,
 
             max_trial=1000,
-            Max_time=75,
+            max_time=75,
             auto_stop_ignore_win=30,
             auto_stop_ignore_ratio_threshold=.83,
 
@@ -401,7 +403,7 @@ s_final = Stage(
 
 # graduated same is identical to final but an absorbing state
 s_graduated = Stage(
-    name="final",
+    name="graduated",
     task=AindDynamicForagingTaskLogic(
         task_parameters=AindDynamicForagingTaskParameters(
 
@@ -414,7 +416,7 @@ s_graduated = Stage(
 
             base_reward_sum=0.8,
             reward_family=1,
-            reward_paird_n=1,
+            reward_pairs_n=1,
 
             block_min=20,
             block_max=35,
@@ -447,7 +449,7 @@ s_graduated = Stage(
             points_in_a_row=5,
 
             max_trial=1000,
-            Max_time=75,
+            max_time=75,
             auto_stop_ignore_win=30,
             auto_stop_ignore_ratio_threshold=.83,
 
@@ -526,10 +528,11 @@ class UncoupledNoBaiting2p3p1RewardDelayCurriculum(Curriculum):
         "Uncoupled No Baiting 2p3p1 Reward Delay Curriculum"
 
 
-def construct_coupled_baiting_1p0_curriculum() -> UncoupledNoBaiting2p3p1RewardDelayCurriculum:
+def construct_uncoupled_no_baiting_2p3p1_reward_delay_curriculum() -> UncoupledNoBaiting2p3p1RewardDelayCurriculum:
 
-    cb_curriculum = UncoupledNoBaiting2p3p1RewardDelayCurriculum(
-        name="Uncoupled No Baiting 2p3p1 Reward Delay Curriculum")
+    cb_curriculum = create_curriculum("UncoupledNoBaiting2p3p1RewardDelayCurriculum",
+                                      __version__,
+                                      [AindDynamicForagingTaskLogic])()
 
     # add stages
     cb_curriculum.add_stage(s_stage_1_warmup)
@@ -541,8 +544,8 @@ def construct_coupled_baiting_1p0_curriculum() -> UncoupledNoBaiting2p3p1RewardD
 
     # add stage transitions
     #   warmup
-    cb_curriculum.add_stage_transition(s_stage_1_warmup, s_stage_1, st_stage_1_warmup_to_stage_1)
     cb_curriculum.add_stage_transition(s_stage_1_warmup, s_stage_2, st_stage_1_warmup_to_stage_2)
+    cb_curriculum.add_stage_transition(s_stage_1_warmup, s_stage_1, st_stage_1_warmup_to_stage_1)
     # stage 1
     cb_curriculum.add_stage_transition(s_stage_1, s_stage_2, st_stage_1_to_stage_2)
     # stage 2
