@@ -38,14 +38,18 @@ from aind_behavior_curriculum import (
     Curriculum as AINDCurriculum
 )
 
-CURRICULUM_MANAGER = CurriculumManager(
-    saved_curriculums_on_s3=dict(
-        bucket='aind-behavior-data',
-        root='foraging_auto_training/saved_curriculums/'
-    ),
-    saved_curriculums_local='/root/capsule/scratch/tmp/'
-)
+try:
+    CURRICULUM_MANAGER = CurriculumManager(
+        saved_curriculums_on_s3=dict(
+            bucket='aind-behavior-data',
+            root='foraging_auto_training/saved_curriculums/'
+        ),
+        saved_curriculums_local='/root/capsule/scratch/tmp/'
+    )
+except:     # use resource curriculums if error using s3
 
+    from mock_curriculum_manager import MockCurriculumManager
+    CURRICULUM_MANAGER = MockCurriculumManager()
 
 class TestCurriculums(unittest.TestCase):
     """ Testing aind-behavior-curriculum against aind-auto-train"""
