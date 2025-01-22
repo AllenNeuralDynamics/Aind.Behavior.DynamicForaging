@@ -19,6 +19,7 @@ dynamic = ["version"]
 
 dependencies = [
   "aind_behavior_services>=0.8, <0.9",
+    "aind-slims-api@git+https://github.com/AllenNeuralDynamics/aind-slims-api@main"
 ]
 
 [project.optional-dependencies]

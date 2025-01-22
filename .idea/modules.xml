@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Aind.Behavior.DynamicForaging.iml" filepath="$PROJECT_DIR$/.idea/Aind.Behavior.DynamicForaging.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../aind-behavior-curriculum/.idea/aind-behavior-curriculum.iml" filepath="$PROJECT_DIR$/../aind-behavior-curriculum/.idea/aind-behavior-curriculum.iml" />
       <module fileurl="file://$PROJECT_DIR$/../aind-foraging-behavior-bonsai-automatic-training/.idea/aind-foraging-behavior-bonsai-automatic-training.iml" filepath="$PROJECT_DIR$/../aind-foraging-behavior-bonsai-automatic-training/.idea/aind-foraging-behavior-bonsai-automatic-training.iml" />
       <module fileurl="file://$PROJECT_DIR$/../dynamic-foraging-task/.idea/dynamic-foraging-task.iml" filepath="$PROJECT_DIR$/../dynamic-foraging-task/.idea/dynamic-foraging-task.iml" />
     </modules>
