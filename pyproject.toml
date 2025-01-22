@@ -16,7 +16,7 @@ dynamic = ["version"]
 dependencies = [
     "aind_behavior_services>=0.8, <0.9",
     "aind-auto-train@git+https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training.git@main",
-    "aind-behavior-curriculum",
+    "aind-behavior-curriculum @ git+https://github.com/AllenNeuralDynamics/aind-behavior-curriculum@759a8065a34dd279695c0f0bd33eda7654b0c489",
     "coverage"
 ]
 
