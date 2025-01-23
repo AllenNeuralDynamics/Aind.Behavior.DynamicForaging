@@ -9,6 +9,7 @@ import logging
 import os
 from aind_data_access_api.document_db import MetadataDbClient
 from aind_behavior_dynamic_foraging import DynamicForagingMetrics
+from datetime import datetime
 
 
 class DynamicForagingTrainerServer(TrainerServer):
@@ -109,14 +110,36 @@ class DynamicForagingTrainerServer(TrainerServer):
 
     def write_data(
             self,
-            subject_id: int,
+            subject_id: str,
             curriculum: Curriculum,
             trainer_state: TrainerState,
     ) -> None:
         """
-        Add to proxy database.
-        """
-        MICE_CURRICULUMS[subject_id] = curriculum
-        MICE_SUBJECT_HISTORY[subject_id].append(trainer_state)
+        Write SlimsBehaviorSession to slims and add a TrainerState attachment
 
-        self.subject_history[subject_id].append(trainer_state)
+        :param subject_id: subject id of mouse to use to query docDB and Slims
+        :param curriculum: curriculum for next session
+        :param trainer_state: trainer state for next session
+        :experimenters: list of experimenters who ran session
+        """
+
+        mouse = self.slims_client.fetch_model(models.SlimsMouseContent, barcode=subject_id)
+
+        # add session to slims
+        added_session = self.slims_client.add_model(
+            models.SlimsBehaviorSession(
+                mouse_pk=mouse.pk,
+                task_stage=trainer_state.stage.name,
+                task=curriculum.name,
+                task_schema_version=curriculum.version,
+                is_curriculum_suggestion=True,
+                date=datetime.now(),
+            )
+        )
+
+        # add trainer_state as an attachment
+        self.slims_client.add_attachment_content(
+            record=added_session,
+            name="TrainerState",
+            content=trainer_state.model_dump_json()
+        )
