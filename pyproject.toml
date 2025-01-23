@@ -1,7 +1,3 @@
-[build-system]
-requires = ["setuptools", "setuptools-scm"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "aind-behavior-dynamic-foraging"
 description = "A library that defines AIND data schema for the Aind Behavior Dynamic Foraging experiment."
@@ -18,10 +14,13 @@ readme = "README.md"
 dynamic = ["version"]
 
 dependencies = [
-  "aind_behavior_services>=0.8, <0.9",
-    "aind-slims-api@git+https://github.com/AllenNeuralDynamics/aind-slims-api@main"
+    "aind_behavior_services",
+    "aind-auto-train@git+https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training.git@main",
+    "aind-behavior-curriculum @ git+https://github.com/AllenNeuralDynamics/aind-behavior-curriculum@main",
+    "coverage",
+    "aind-slims-api@git+https://github.com/AllenNeuralDynamics/aind-slims-api@main",
+    "aind_data_access_api",
+    "pymongo"
 ]
 
-[project.optional-dependencies]
 
-launcher = ["aind_behavior_experiment_launcher[aind-services]>=0.2.0"]

@@ -1,6 +1,5 @@
-from aind_behavior_curriculum import (
-    Metrics
-)
+from aind_behavior_curriculum import Metrics
+
 
 from typing import List
 
