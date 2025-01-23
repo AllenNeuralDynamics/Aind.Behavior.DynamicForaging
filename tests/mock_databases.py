@@ -85,9 +85,9 @@ class MockSlimsClient(Mock):
         content.json = lambda: data
         return content
 
-    def add_model(self, *args, **kwargs):
+    def add_model(self, model: SlimsBehaviorSession, *args, **kwargs):
         """
-        Mock adding model to slims
+        Mock adding SlimsBehaviorSession model to slims
         """
 
     def add_attachment_content(self, *args, **kwargs):

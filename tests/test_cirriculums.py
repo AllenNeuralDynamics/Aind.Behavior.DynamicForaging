@@ -37,6 +37,7 @@ from aind_behavior_curriculum import (
     Stage,
     Curriculum as AINDCurriculum
 )
+from tests.mock_databases import MockCurriculumManager
 
 try:
     CURRICULUM_MANAGER = CurriculumManager(
@@ -53,6 +54,24 @@ except:     # use resource curriculums if error using s3
 
 class TestCurriculums(unittest.TestCase):
     """ Testing aind-behavior-curriculum against aind-auto-train"""
+
+    curriculum_manager: CurriculumManager or MockCurriculumManager
+
+    def setUp(self) -> None:
+        """
+        Create curriculum manager
+        """
+
+        try:
+            self.curriculum_manager = CurriculumManager(
+                saved_curriculums_on_s3=dict(
+                    bucket='aind-behavior-data',
+                    root='foraging_auto_training/saved_curriculums/'
+                ),
+                saved_curriculums_local='/root/capsule/scratch/tmp/'
+            )
+        except:  # use resource curriculums if error using s3
+            self.curriculum_manager = MockCurriculumManager()
 
     def test_coupled_baiting(self):
         """
