@@ -25,6 +25,7 @@ class AutoWaterMode(str, Enum):
 
 class AindDynamicForagingTaskParameters(TaskParameters):
     # --- Critical training parameters ---
+    name:  Literal["Aind Dynamic Foraging Task Parameters"] = "Aind Dynamic Foraging Task Parameters"
     # Reward probability
     base_reward_sum: float = Field(..., title="Sum of p_reward")
     reward_family: int = Field(..., title="Reward family")  # Should be explicit here
