@@ -4,7 +4,7 @@ from aind_auto_train.schema.task import DynamicForagingMetrics, TrainingStage, D
 from aind_auto_train.schema.curriculum import Curriculum as AutoTrainCurriculum
 
 from aind_behavior_dynamic_foraging.CurriculumManager.curriculums.coupled_baiting_2p3 import (
-    construct_coupled_baiting_1p0_curriculum,
+    construct_coupled_baiting_2p3_curriculum,
     s_stage_1_warmup as cb_stage_1_warmup,
     s_stage_1 as cb_stage_1,
     s_stage_2 as cb_stage_2,
@@ -48,7 +48,7 @@ try:
     )
 except:     # use resource curriculums if error using s3
 
-    from tests.mock_curriculum_manager import MockCurriculumManager
+    from tests.mock_databases import MockCurriculumManager
     CURRICULUM_MANAGER = MockCurriculumManager()
 
 class TestCurriculums(unittest.TestCase):
@@ -66,7 +66,7 @@ class TestCurriculums(unittest.TestCase):
         )
         old_curriculum = coupled_baiting['curriculum']
 
-        new_curriculum = construct_coupled_baiting_1p0_curriculum()
+        new_curriculum = construct_coupled_baiting_2p3_curriculum()
 
         # --WARMUP--
 

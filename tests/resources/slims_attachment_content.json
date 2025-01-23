@@ -1,0 +1,468 @@
+{
+ "curriculum": {
+  "pkg_location": "aind_behavior_curriculum.curriculum.ModelMetaclass",
+  "name": "CoupledBaiting2p3Curriculum",
+  "version": "0.2.3",
+  "graph": {
+   "nodes": {
+    "0": {
+     "name": "stage_1_warmup",
+     "task": {
+      "name": "AindDynamicForaging",
+      "description": "",
+      "task_parameters": {
+       "rng_seed": null,
+       "aind_behavior_services_pkg_version": "0.9.0",
+       "name": "Aind Dynamic Foraging Task Parameters",
+       "base_reward_sum": 0.8,
+       "reward_family": 3,
+       "reward_pairs_n": 1,
+       "uncoupled_reward": "",
+       "randomness": "Exponential",
+       "block_min": 10,
+       "block_max": 20,
+       "block_beta": 5,
+       "block_min_reward": 0,
+       "delay_min": 0.1,
+       "delay_max": 0.1,
+       "delay_beta": 0.0,
+       "reward_delay": 0.0,
+       "auto_reward": true,
+       "auto_water_type": "Natural",
+       "multiplier": 0.5,
+       "unrewarded": 3,
+       "ignored": 3,
+       "iti_min": 1.0,
+       "iti_max": 7.0,
+       "iti_beta": 3.0,
+       "iti_increase": 0.0,
+       "response_time": 5.0,
+       "reward_consume_time": 1.0,
+       "auto_stop_ignore_win": 20000,
+       "auto_stop_ignore_ratio_threshold": 1.0,
+       "advanced_block_auto": "now",
+       "switch_thr": 0.5,
+       "points_in_a_row": 5,
+       "max_trial": 1000,
+       "max_time": 75,
+       "right_value_volume": 4.0,
+       "left_value_volume": 4.0,
+       "warmup": "on",
+       "warm_min_trial": 50,
+       "warm_max_choice_ratio_bias": 0.1,
+       "warm_min_finish_ratio": 0.8,
+       "warm_windowsize": 20
+      },
+      "version": "0.0.0",
+      "stage_name": null
+     },
+     "graph": {
+      "nodes": {},
+      "graph": {}
+     },
+     "start_policies": [],
+     "metrics_provider": null
+    },
+    "1": {
+     "name": "stage_1",
+     "task": {
+      "name": "AindDynamicForaging",
+      "description": "",
+      "task_parameters": {
+       "rng_seed": null,
+       "aind_behavior_services_pkg_version": "0.9.0",
+       "name": "Aind Dynamic Foraging Task Parameters",
+       "base_reward_sum": 0.8,
+       "reward_family": 3,
+       "reward_pairs_n": 1,
+       "uncoupled_reward": "",
+       "randomness": "Exponential",
+       "block_min": 10,
+       "block_max": 20,
+       "block_beta": 5,
+       "block_min_reward": 0,
+       "delay_min": 0.1,
+       "delay_max": 0.1,
+       "delay_beta": 0.0,
+       "reward_delay": 0.0,
+       "auto_reward": true,
+       "auto_water_type": "Natural",
+       "multiplier": 0.5,
+       "unrewarded": 5,
+       "ignored": 5,
+       "iti_min": 1.0,
+       "iti_max": 7.0,
+       "iti_beta": 3.0,
+       "iti_increase": 0.0,
+       "response_time": 5.0,
+       "reward_consume_time": 1.0,
+       "auto_stop_ignore_win": 20000,
+       "auto_stop_ignore_ratio_threshold": 1.0,
+       "advanced_block_auto": "now",
+       "switch_thr": 0.5,
+       "points_in_a_row": 5,
+       "max_trial": 1000,
+       "max_time": 75,
+       "right_value_volume": 2.0,
+       "left_value_volume": 2.0,
+       "warmup": "off",
+       "warm_min_trial": 50,
+       "warm_max_choice_ratio_bias": 0.1,
+       "warm_min_finish_ratio": 0.8,
+       "warm_windowsize": 20
+      },
+      "version": "0.0.0",
+      "stage_name": null
+     },
+     "graph": {
+      "nodes": {},
+      "graph": {}
+     },
+     "start_policies": [],
+     "metrics_provider": null
+    },
+    "2": {
+     "name": "stage_2",
+     "task": {
+      "name": "AindDynamicForaging",
+      "description": "",
+      "task_parameters": {
+       "rng_seed": null,
+       "aind_behavior_services_pkg_version": "0.9.0",
+       "name": "Aind Dynamic Foraging Task Parameters",
+       "base_reward_sum": 0.6,
+       "reward_family": 1,
+       "reward_pairs_n": 1,
+       "uncoupled_reward": "",
+       "randomness": "Exponential",
+       "block_min": 10,
+       "block_max": 40,
+       "block_beta": 10,
+       "block_min_reward": 0,
+       "delay_min": 0.3,
+       "delay_max": 0.3,
+       "delay_beta": 0.0,
+       "reward_delay": 0.0,
+       "auto_reward": true,
+       "auto_water_type": "Natural",
+       "multiplier": 0.5,
+       "unrewarded": 7,
+       "ignored": 7,
+       "iti_min": 1.0,
+       "iti_max": 10.0,
+       "iti_beta": 3.0,
+       "iti_increase": 0.0,
+       "response_time": 3.0,
+       "reward_consume_time": 1.0,
+       "auto_stop_ignore_win": 30,
+       "auto_stop_ignore_ratio_threshold": 0.83,
+       "advanced_block_auto": "now",
+       "switch_thr": 0.6,
+       "points_in_a_row": 5,
+       "max_trial": 1000,
+       "max_time": 75,
+       "right_value_volume": 2.0,
+       "left_value_volume": 2.0,
+       "warmup": "off",
+       "warm_min_trial": 50,
+       "warm_max_choice_ratio_bias": 0.1,
+       "warm_min_finish_ratio": 0.8,
+       "warm_windowsize": 20
+      },
+      "version": "0.0.0",
+      "stage_name": null
+     },
+     "graph": {
+      "nodes": {},
+      "graph": {}
+     },
+     "start_policies": [],
+     "metrics_provider": null
+    },
+    "3": {
+     "name": "stage_3",
+     "task": {
+      "name": "AindDynamicForaging",
+      "description": "",
+      "task_parameters": {
+       "rng_seed": null,
+       "aind_behavior_services_pkg_version": "0.9.0",
+       "name": "Aind Dynamic Foraging Task Parameters",
+       "base_reward_sum": 0.45,
+       "reward_family": 1,
+       "reward_pairs_n": 1,
+       "uncoupled_reward": "",
+       "randomness": "Exponential",
+       "block_min": 20,
+       "block_max": 60,
+       "block_beta": 20,
+       "block_min_reward": 0,
+       "delay_min": 0.5,
+       "delay_max": 0.5,
+       "delay_beta": 0.0,
+       "reward_delay": 0.0,
+       "auto_reward": true,
+       "auto_water_type": "Natural",
+       "multiplier": 0.5,
+       "unrewarded": 10,
+       "ignored": 10,
+       "iti_min": 1.0,
+       "iti_max": 15.0,
+       "iti_beta": 3.0,
+       "iti_increase": 0.0,
+       "response_time": 2.0,
+       "reward_consume_time": 1.0,
+       "auto_stop_ignore_win": 30,
+       "auto_stop_ignore_ratio_threshold": 0.83,
+       "advanced_block_auto": "now",
+       "switch_thr": 0.6,
+       "points_in_a_row": 5,
+       "max_trial": 1000,
+       "max_time": 75,
+       "right_value_volume": 2.0,
+       "left_value_volume": 2.0,
+       "warmup": "off",
+       "warm_min_trial": 50,
+       "warm_max_choice_ratio_bias": 0.1,
+       "warm_min_finish_ratio": 0.8,
+       "warm_windowsize": 20
+      },
+      "version": "0.0.0",
+      "stage_name": null
+     },
+     "graph": {
+      "nodes": {},
+      "graph": {}
+     },
+     "start_policies": [],
+     "metrics_provider": null
+    },
+    "4": {
+     "name": "final",
+     "task": {
+      "name": "AindDynamicForaging",
+      "description": "",
+      "task_parameters": {
+       "rng_seed": null,
+       "aind_behavior_services_pkg_version": "0.9.0",
+       "name": "Aind Dynamic Foraging Task Parameters",
+       "base_reward_sum": 0.45,
+       "reward_family": 1,
+       "reward_pairs_n": 4,
+       "uncoupled_reward": "",
+       "randomness": "Exponential",
+       "block_min": 20,
+       "block_max": 60,
+       "block_beta": 20,
+       "block_min_reward": 0,
+       "delay_min": 1.0,
+       "delay_max": 1.0,
+       "delay_beta": 0.0,
+       "reward_delay": 0.0,
+       "auto_reward": false,
+       "auto_water_type": "Natural",
+       "multiplier": 0.5,
+       "unrewarded": 10,
+       "ignored": 10,
+       "iti_min": 1.0,
+       "iti_max": 30.0,
+       "iti_beta": 3.0,
+       "iti_increase": 0.0,
+       "response_time": 1.0,
+       "reward_consume_time": 3.0,
+       "auto_stop_ignore_win": 30,
+       "auto_stop_ignore_ratio_threshold": 0.83,
+       "advanced_block_auto": "off",
+       "switch_thr": 0.6,
+       "points_in_a_row": 5,
+       "max_trial": 1000,
+       "max_time": 75,
+       "right_value_volume": 2.0,
+       "left_value_volume": 2.0,
+       "warmup": "off",
+       "warm_min_trial": 50,
+       "warm_max_choice_ratio_bias": 0.1,
+       "warm_min_finish_ratio": 0.8,
+       "warm_windowsize": 20
+      },
+      "version": "0.0.0",
+      "stage_name": null
+     },
+     "graph": {
+      "nodes": {},
+      "graph": {}
+     },
+     "start_policies": [],
+     "metrics_provider": null
+    },
+    "5": {
+     "name": "graduated",
+     "task": {
+      "name": "AindDynamicForaging",
+      "description": "",
+      "task_parameters": {
+       "rng_seed": null,
+       "aind_behavior_services_pkg_version": "0.9.0",
+       "name": "Aind Dynamic Foraging Task Parameters",
+       "base_reward_sum": 0.45,
+       "reward_family": 1,
+       "reward_pairs_n": 4,
+       "uncoupled_reward": "",
+       "randomness": "Exponential",
+       "block_min": 20,
+       "block_max": 60,
+       "block_beta": 20,
+       "block_min_reward": 0,
+       "delay_min": 1.0,
+       "delay_max": 1.0,
+       "delay_beta": 0.0,
+       "reward_delay": 0.0,
+       "auto_reward": false,
+       "auto_water_type": "Natural",
+       "multiplier": 0.5,
+       "unrewarded": 10,
+       "ignored": 10,
+       "iti_min": 1.0,
+       "iti_max": 30.0,
+       "iti_beta": 3.0,
+       "iti_increase": 0.0,
+       "response_time": 1.0,
+       "reward_consume_time": 3.0,
+       "auto_stop_ignore_win": 30,
+       "auto_stop_ignore_ratio_threshold": 0.83,
+       "advanced_block_auto": "off",
+       "switch_thr": 0.6,
+       "points_in_a_row": 5,
+       "max_trial": 1000,
+       "max_time": 75,
+       "right_value_volume": 2.0,
+       "left_value_volume": 2.0,
+       "warmup": "off",
+       "warm_min_trial": 50,
+       "warm_max_choice_ratio_bias": 0.1,
+       "warm_min_finish_ratio": 0.8,
+       "warm_windowsize": 20
+      },
+      "version": "0.0.0",
+      "stage_name": null
+     },
+     "graph": {
+      "nodes": {},
+      "graph": {}
+     },
+     "start_policies": [],
+     "metrics_provider": null
+    }
+   },
+   "graph": {
+    "0": [
+     [
+      "aind_behavior_dynamic_foraging.CurriculumManager.curriculums.coupled_baiting_2p3.st_stage_1_warmup_to_stage_2",
+      2
+     ],
+     [
+      "aind_behavior_dynamic_foraging.CurriculumManager.curriculums.coupled_baiting_2p3.st_stage_1_warmup_to_stage_1",
+      1
+     ]
+    ],
+    "1": [
+     [
+      "aind_behavior_dynamic_foraging.CurriculumManager.curriculums.coupled_baiting_2p3.st_stage_1_to_stage_2",
+      2
+     ]
+    ],
+    "2": [
+     [
+      "aind_behavior_dynamic_foraging.CurriculumManager.curriculums.coupled_baiting_2p3.st_stage_2_to_stage_3",
+      3
+     ],
+     [
+      "aind_behavior_dynamic_foraging.CurriculumManager.curriculums.coupled_baiting_2p3.st_stage_2_to_stage_1",
+      1
+     ]
+    ],
+    "3": [
+     [
+      "aind_behavior_dynamic_foraging.CurriculumManager.curriculums.coupled_baiting_2p3.st_stage_3_to_final",
+      4
+     ],
+     [
+      "aind_behavior_dynamic_foraging.CurriculumManager.curriculums.coupled_baiting_2p3.st_stage_3_to_stage_2",
+      2
+     ]
+    ],
+    "4": [
+     [
+      "aind_behavior_dynamic_foraging.CurriculumManager.curriculums.coupled_baiting_2p3.st_final_to_graduated",
+      5
+     ],
+     [
+      "aind_behavior_dynamic_foraging.CurriculumManager.curriculums.coupled_baiting_2p3.st_final_to_stage_3",
+      3
+     ]
+    ],
+    "5": []
+   }
+  }
+ },
+ "stage": {
+  "name": "stage_1",
+  "task": {
+   "name": "AindDynamicForaging",
+   "description": "",
+   "task_parameters": {
+    "rng_seed": null,
+    "aind_behavior_services_pkg_version": "0.9.0",
+    "name": "Aind Dynamic Foraging Task Parameters",
+    "base_reward_sum": 0.8,
+    "reward_family": 3,
+    "reward_pairs_n": 1,
+    "uncoupled_reward": "",
+    "randomness": "Exponential",
+    "block_min": 10,
+    "block_max": 20,
+    "block_beta": 5,
+    "block_min_reward": 0,
+    "delay_min": 0.1,
+    "delay_max": 0.1,
+    "delay_beta": 0.0,
+    "reward_delay": 0.0,
+    "auto_reward": true,
+    "auto_water_type": "Natural",
+    "multiplier": 0.5,
+    "unrewarded": 5,
+    "ignored": 5,
+    "iti_min": 1.0,
+    "iti_max": 7.0,
+    "iti_beta": 3.0,
+    "iti_increase": 0.0,
+    "response_time": 5.0,
+    "reward_consume_time": 1.0,
+    "auto_stop_ignore_win": 20000,
+    "auto_stop_ignore_ratio_threshold": 1.0,
+    "advanced_block_auto": "now",
+    "switch_thr": 0.5,
+    "points_in_a_row": 5,
+    "max_trial": 1000,
+    "max_time": 75,
+    "right_value_volume": 2.0,
+    "left_value_volume": 2.0,
+    "warmup": "off",
+    "warm_min_trial": 50,
+    "warm_max_choice_ratio_bias": 0.1,
+    "warm_min_finish_ratio": 0.8,
+    "warm_windowsize": 20
+   },
+   "version": "0.0.0",
+   "stage_name": null
+  },
+  "graph": {
+   "nodes": {},
+   "graph": {}
+  },
+  "start_policies": [],
+  "metrics_provider": null
+ },
+ "is_on_curriculum": true,
+ "active_policies": []
+}
