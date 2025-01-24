@@ -89,7 +89,7 @@ class DynamicForagingTrainerServer(TrainerServer):
             filter_query={"name": {"$regex": f"^behavior_{subject_id}"}},
         )
         session_total = len(sessions)
-        sessions = [session['session']['session_start_time'] for session in sessions]   # sort out none types
+        sessions = [session for session in sessions if session['session'] is not None]   # sort out none types
         sessions.sort(key=lambda session: session['session']['session_start_time'])     # sort based on time
         epochs = [session['session']['stimulus_epochs'][0] for session in sessions]
         finished_trials = [epoch['trials_finished'] for epoch in epochs]
