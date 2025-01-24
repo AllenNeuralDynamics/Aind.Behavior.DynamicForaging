@@ -85,12 +85,13 @@ class DynamicForagingTrainerServer(TrainerServer):
         curriculum = trainer_state.curriculum
 
         # populate metrics
-        sessions = self.docdb_client.retrieve_docdb_records(filter_query={
-            "name": {"$regex": f"^behavior_{subject_id}"}
-        })
-
+        sessions = self.docdb_client.retrieve_docdb_records(
+            filter_query={"name": {"$regex": f"^behavior_{subject_id}"}},
+        )
         session_total = len(sessions)
-        epochs = [session['session']['stimulus_epochs'][0] for session in sessions if session['session'] is not None]
+        sessions = [session['session']['session_start_time'] for session in sessions]   # sort out none types
+        sessions.sort(key=lambda session: session['session']['session_start_time'])     # sort based on time
+        epochs = [session['session']['stimulus_epochs'][0] for session in sessions]
         finished_trials = [epoch['trials_finished'] for epoch in epochs]
         foraging_efficiency = [epoch['output_parameters']['performance']['foraging_efficiency'] for epoch in epochs]
 

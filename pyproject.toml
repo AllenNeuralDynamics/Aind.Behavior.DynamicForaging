@@ -19,7 +19,7 @@ dependencies = [
     "aind-behavior-curriculum @ git+https://github.com/AllenNeuralDynamics/aind-behavior-curriculum@main",
     "coverage",
     "aind-slims-api@git+https://github.com/AllenNeuralDynamics/aind-slims-api@main",
-    "aind_data_access_api",
+    "aind_data_access_api==0.17.1",
     "pymongo"
 ]
 
