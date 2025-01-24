@@ -2,8 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../aind-behavior-curriculum" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../aind-foraging-behavior-bonsai-automatic-training" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../dynamic-foraging-task" vcs="Git" />
   </component>
 </project>
