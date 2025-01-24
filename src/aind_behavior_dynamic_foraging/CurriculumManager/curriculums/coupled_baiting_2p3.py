@@ -463,7 +463,6 @@ def st_final_to_graduated(metrics: DynamicForagingMetrics) -> bool:
 def st_final_to_stage_3(metrics: DynamicForagingMetrics) -> bool:
     return np.mean(metrics.foraging_efficiency[-5:]) < 0.60 or np.mean(metrics.finished_trials[-5:]) < 300
 
-
 # --- Curriculum ---
 def construct_coupled_baiting_1p0_curriculum() -> Curriculum:
     cb_curriculum = create_curriculum("CoupledBaiting2p3Curriculum", __version__, [AindDynamicForagingTaskLogic])()
