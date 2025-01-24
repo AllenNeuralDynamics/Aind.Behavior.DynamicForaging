@@ -522,7 +522,7 @@ def st_final_to_stage_4(metrics: DynamicForagingMetrics) -> bool:
     return np.mean(metrics.finished_trials[-5:]) < 250 or np.mean(metrics.foraging_efficiency[-5:]) < 0.60
 
 # --Curriculum--
-def construct_uncoupled_no_baiting_2p3p1_reward_delay_curriculum() -> UncoupledNoBaiting2p3p1RewardDelayCurriculum:
+def construct_uncoupled_no_baiting_2p3p1_reward_delay_curriculum() -> Curriculum:
 
     cb_curriculum = create_curriculum("UncoupledNoBaiting2p3p1RewardDelayCurriculum",
                                       __version__,
