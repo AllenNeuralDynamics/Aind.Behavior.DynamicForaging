@@ -86,7 +86,9 @@ class DynamicForagingTrainerServer(TrainerServer):
 
         # populate metrics
         sessions = self.docdb_client.retrieve_docdb_records(
-            filter_query={"name": {"$regex": f"^behavior_{subject_id}"}},
+            filter_query={"name": {"$regex": f"^behavior_{subject_id}"},
+                          "$not": {"$regex": ".*processed.*"}
+                          },
         )
         session_total = len(sessions)
         sessions = [session for session in sessions if session['session'] is not None]   # sort out none types
