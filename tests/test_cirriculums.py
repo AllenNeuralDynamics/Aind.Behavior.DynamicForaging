@@ -39,19 +39,6 @@ from aind_behavior_curriculum import (
 )
 from tests.mock_databases import MockCurriculumManager
 
-try:
-    CURRICULUM_MANAGER = CurriculumManager(
-        saved_curriculums_on_s3=dict(
-            bucket='aind-behavior-data',
-            root='foraging_auto_training/saved_curriculums/'
-        ),
-        saved_curriculums_local='/root/capsule/scratch/tmp/'
-    )
-except:     # use resource curriculums if error using s3
-
-    from tests.mock_databases import MockCurriculumManager
-    CURRICULUM_MANAGER = MockCurriculumManager()
-
 class TestCurriculums(unittest.TestCase):
     """ Testing aind-behavior-curriculum against aind-auto-train"""
 
@@ -72,13 +59,13 @@ class TestCurriculums(unittest.TestCase):
             )
         except:  # use resource curriculums if error using s3
             self.curriculum_manager = MockCurriculumManager()
-
+        
     def test_coupled_baiting(self):
         """
         Test coupled baiting task
         """
 
-        coupled_baiting = CURRICULUM_MANAGER.get_curriculum(
+        coupled_baiting = self.curriculum_manager.get_curriculum(
             curriculum_name='Coupled Baiting',
             curriculum_version='2.3',
             curriculum_schema_version='1.0',
@@ -563,7 +550,7 @@ class TestCurriculums(unittest.TestCase):
         Test uncoupled baiting task
         """
 
-        uncoupled_baiting = CURRICULUM_MANAGER.get_curriculum(
+        uncoupled_baiting = self.curriculum_manager.get_curriculum(
             curriculum_name='Uncoupled Baiting',
             curriculum_version='2.3',
             curriculum_schema_version='1.0',
@@ -988,7 +975,7 @@ class TestCurriculums(unittest.TestCase):
         Test uncoupled no baiting task
         """
 
-        uncoupled_baiting = CURRICULUM_MANAGER.get_curriculum(
+        uncoupled_baiting = self.curriculum_manager.get_curriculum(
             curriculum_name='Uncoupled Without Baiting',
             curriculum_version='2.3.1rwdDelay159',
             curriculum_schema_version='1.0',
