@@ -7,13 +7,14 @@ from aind_behavior_curriculum import (
 import aind_slims_api as slims
 import logging
 import os
-from aind_data_access_api.document_db import MetadataDbClient
+import aind_data_access_api.document_db
 from aind_behavior_dynamic_foraging import DynamicForagingMetrics
 from datetime import datetime
 
 
 class DynamicForagingTrainerServer(TrainerServer):
-    def __init__(self, slims_client: slims.SlimsClient = None, docdb_client: MetadataDbClient = None) -> None:
+    def __init__(self, slims_client: slims.SlimsClient = None,
+                 docdb_client: aind_data_access_api.document_db.MetadataDbClient = None) -> None:
         """
         Dynamic Foraging Trainer that loads data from Slims and DocDB and writes trainer state to Slims
 
@@ -26,7 +27,7 @@ class DynamicForagingTrainerServer(TrainerServer):
         self.slims_client = slims_client if slims_client else self._connect_to_slims()
         self._check_slims_access()
 
-        self.docdb_client = docdb_client if docdb_client else MetadataDbClient(
+        self.docdb_client = docdb_client if docdb_client else aind_data_access_api.document_db.MetadataDbClient(
             host='api.allenneuraldynamics.org',
             database='metadata_index',
             collection='data_assets'

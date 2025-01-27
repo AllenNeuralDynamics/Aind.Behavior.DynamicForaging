@@ -59,7 +59,7 @@ class TestCurriculums(unittest.TestCase):
             )
         except:  # use resource curriculums if error using s3
             self.curriculum_manager = MockCurriculumManager()
-        
+
     def test_coupled_baiting(self):
         """
         Test coupled baiting task

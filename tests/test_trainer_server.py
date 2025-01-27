@@ -52,6 +52,15 @@ class TestTrainerServer(unittest.TestCase):
 
         self.assertEqual(expected_exception, str(context.exception))
 
+    def test_internal_docdb_client(self):
+        """
+        Test creating of docdb client within class
+        """
+
+        # mock docdb client for
+        with mock.patch('aind_data_access_api.document_db.MetadataDbClient', autospec=True) as MockDocDBClient:
+            trainer_server = DynamicForagingTrainerServer(slims_client=self.slims_client)
+
 
     def test_load_data(self):
         """
