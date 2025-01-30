@@ -29,7 +29,7 @@ class Ephys(_NeuralExperimentTypeBase):
     experiment_type: Literal["Ephys"] = "Ephys"
     # more parameters to define experiment
     # probes -> list of class that defines probes
-    
+
 class Behavior(_NeuralExperimentTypeBase):
     experiment_type: Literal["Behavior"] = "Behavior"
     # more parameters to define experiment if any
