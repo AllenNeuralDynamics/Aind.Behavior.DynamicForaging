@@ -16,20 +16,23 @@ class _NeuralExperimentTypeBase(BaseModel):
 class Fiber_Photometry(_NeuralExperimentTypeBase):
     experiment_type: Literal["Fiber_Photometry"] = "Fiber_Photometry"
     # more parameters to define experiment
-
+    # mode
+    # recording type
+    # baseline time
 
 class Optogenetics(_NeuralExperimentTypeBase):
     experiment_type: Literal["Optogenetics"] = "Optogenetics"
     # more parameters to define experiment
-
+    # laser -> list of class that defines lasers
 
 class Ephys(_NeuralExperimentTypeBase):
     experiment_type: Literal["Ephys"] = "Ephys"
     # more parameters to define experiment
-
+    # probes -> list of class that defines probes
+    
 class Behavior(_NeuralExperimentTypeBase):
     experiment_type: Literal["Behavior"] = "Behavior"
-    # more parameters to define experiment
+    # more parameters to define experiment if any
 
 class NeuralExperimentTypes(RootModel):
     root: Annotated[
