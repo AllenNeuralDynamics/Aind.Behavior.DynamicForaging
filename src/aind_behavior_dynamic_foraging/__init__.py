@@ -13,11 +13,14 @@ from .DataSchemas.task_logic import (
     AindDynamicForagingTaskLogic
 )
 from .CurriculumManager.metrics import DynamicForagingMetrics
+from .CurriculumManager.trainer import DynamicForagingTrainerServer
 
 __all__ = [
     "AindDynamicForagingTaskParameters",
     "AutoWaterMode",
     "AdvancedBlockMode",
     "AindDynamicForagingTaskLogic",
-    "DynamicForagingMetrics"
+    "DynamicForagingMetrics",
+    "DynamicForagingTrainerServer"
+
 ]
