@@ -6,9 +6,9 @@ from aind_behavior_curriculum import (
 )
 
 from aind_behavior_dynamic_foraging import (
+    BehaviorParameters,
     AindDynamicForagingTaskParameters,
     AutoWaterMode,
-    AdvancedBlockMode,
     AindDynamicForagingTaskLogic,
     DynamicForagingMetrics
 )
@@ -21,7 +21,7 @@ __version__ = "0.2.3"
 # --- Stages  ---
 s_stage_1_warmup = Stage(
     name="stage_1_warmup",
-    task=AindDynamicForagingTaskLogic(
+    task=BehaviorParameters(
         task_parameters=AindDynamicForagingTaskParameters(
 
             # Warmup ON

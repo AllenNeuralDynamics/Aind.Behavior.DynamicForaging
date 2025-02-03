@@ -12,7 +12,7 @@ from aind_behavior_dynamic_foraging.DataSchemas.ephys import Ephys
 __version__ = "0.1.0"
 
 
-class NeuralExperimentTypes(RootModel):
+class PhysiologyExperimentTypes(RootModel):
     root: Union[
         Fiber_Photometry,
         Optogenetics,
@@ -53,6 +53,7 @@ class AutoWater(BaseModel):
     unrewarded: int = Field(default=200, title="Number of unrewarded trials before auto water")
     ignored: int = Field(default=100, title="Number of ignored trials before auto water")
     include_reward: bool = Field(default=False, description="Include auto water in total rewards.")
+
 
 class InterTrialInterval(BaseModel):
     min: float = Field(default=1, title="ITI (min)")
@@ -96,9 +97,7 @@ class Warmup(BaseModel):
     windowsize: int = Field(default=20, title="Warmup finish criteria: window size to compute the bias and ratio")
 
 
-class AindDynamicForagingTaskParameters(TaskParameters):
-    neural_experiments: List[NeuralExperimentTypes] = Field(default=[],
-                                                            description="List of modalities included in session.")
+class BehaviorParameters(BaseModel):
     block_parameters: BlockParameters = Field(default=BlockParameters(),
                                               description="Parameters describing block conditions.")
     reward_probability: RewardProbability = Field(default=RewardProbability(),
@@ -119,6 +118,14 @@ class AindDynamicForagingTaskParameters(TaskParameters):
     warmup: Optional[Warmup] = Field(default=None, description="Parameters describing warmup.")
     no_response_trial_addition: bool = Field(default=True,
                                              description="Add one trial to the block length on both lickspouts.")
+
+
+class AindDynamicForagingTaskParameters(TaskParameters):
+    physiology_experiment_types: List[PhysiologyExperimentTypes] = Field(default=[],
+                                                                         description="List of modalities included in "
+                                                                                     "session.")
+    behavior_parameters: BehaviorParameters = Field(..., description="Behavior parameters for session")
+
 
 class AindDynamicForagingTaskLogic(AindBehaviorTaskLogicModel):
     version: Literal[__version__] = __version__
