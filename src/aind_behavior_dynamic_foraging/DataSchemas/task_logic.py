@@ -1,49 +1,25 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Annotated, Dict, List, Literal, Optional, Self, Union
-from pydantic import BaseModel, Field, NonNegativeFloat, RootModel, model_validator
+from typing import Annotated, List, Literal, Union
+from pydantic import BaseModel, Field, RootModel
+
 
 from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel, TaskParameters
-from pydantic import Field
+from aind_behavior_dynamic_foraging.DataSchemas.fiber_photometry import Fiber_Photometry
+from aind_behavior_dynamic_foraging.DataSchemas.optogenetics import Optogenetics
+from aind_behavior_dynamic_foraging.DataSchemas.ephys import Ephys
+
 
 __version__ = "0.1.0"
 
-class _NeuralExperimentTypeBase(BaseModel):
-    experiment_type: str
-
-
-class Fiber_Photometry(_NeuralExperimentTypeBase):
-    experiment_type: Literal["Fiber_Photometry"] = "Fiber_Photometry"
-    # more parameters to define experiment
-    # mode
-    # recording type
-    # baseline time
-
-class Optogenetics(_NeuralExperimentTypeBase):
-    experiment_type: Literal["Optogenetics"] = "Optogenetics"
-    # more parameters to define experiment
-    # laser -> list of class that defines lasers
-
-class Ephys(_NeuralExperimentTypeBase):
-    experiment_type: Literal["Ephys"] = "Ephys"
-    # more parameters to define experiment
-    # probes -> list of class that defines probes
-
-class Behavior(_NeuralExperimentTypeBase):
-    experiment_type: Literal["Behavior"] = "Behavior"
-    # more parameters to define experiment if any
-
 class NeuralExperimentTypes(RootModel):
-    root: Annotated[
-        Union[
-            Behavior,
+    root: Union[
             Fiber_Photometry,
             Optogenetics,
             Ephys,
-    ],
-        Field(discriminator="experiment_type"),
     ]
+
 
 class BlockParameters(BaseModel):
     # Block length
