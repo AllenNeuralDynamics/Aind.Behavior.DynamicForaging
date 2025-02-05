@@ -5,19 +5,11 @@ from typing import Annotated, List, Literal, Union, Optional
 from pydantic import BaseModel, Field, RootModel
 
 from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel, TaskParameters
-from aind_behavior_dynamic_foraging.DataSchemas.fiber_photometry import Fiber_Photometry
+from aind_behavior_dynamic_foraging.DataSchemas.fiber_photometry import FiberPhotometry
 from aind_behavior_dynamic_foraging.DataSchemas.optogenetics import Optogenetics
 from aind_behavior_dynamic_foraging.DataSchemas.ephys import Ephys
 
 __version__ = "0.1.0"
-
-
-class PhysiologyExperimentTypes(RootModel):
-    root: Union[
-        Fiber_Photometry,
-        Optogenetics,
-        Ephys,
-    ]
 
 
 class BlockParameters(BaseModel):
@@ -97,18 +89,18 @@ class Warmup(BaseModel):
     windowsize: int = Field(default=20, title="Warmup finish criteria: window size to compute the bias and ratio")
 
 
-class BehaviorParameters(BaseModel):
+class AindDynamicForagingTaskParameters(TaskParameters):
     block_parameters: BlockParameters = Field(default=BlockParameters(),
                                               description="Parameters describing block conditions.")
     reward_probability: RewardProbability = Field(default=RewardProbability(),
                                                   description="Parameters describing reward_probability.")
-    uncoupled_reward: list[float] = Field(default=[0.1, 0.3, 0.7], title="Uncoupled reward", min_length=3,
-                                          max_length=3)  # For uncoupled tasks only
+    uncoupled_reward: Optional[list[float]] = Field(default=[0.1, 0.3, 0.7], title="Uncoupled reward", min_length=3,
+                                                    max_length=3)  # For uncoupled tasks only
     randomness: Literal["Exponential", "Even"] = Field(default="Exponential", title="Randomness mode")
     delay_period: DelayPeriod = Field(default=DelayPeriod(), description="Parameters describing delay period.")
     reward_delay: float = Field(default=0, title="Reward delay (sec)")
     auto_water: Optional[AutoWater] = Field(default=None, description="Parameters describing auto water.")
-    inter_trial_interval: InterTrialInterval = Field(default=InterTrialInterval(),
+    inter_trial_interval: InterTrialInterval = Field(default_factory=InterTrialInterval, validate_default=True,
                                                      description="Parameters describing iti.")
     response_time: ResponseTime = Field(default=ResponseTime(), description="Parameters describing response time.")
     auto_stop: AutoStop = Field(default=AutoStop(), description="Parameters describing auto stop.")
@@ -118,13 +110,6 @@ class BehaviorParameters(BaseModel):
     warmup: Optional[Warmup] = Field(default=None, description="Parameters describing warmup.")
     no_response_trial_addition: bool = Field(default=True,
                                              description="Add one trial to the block length on both lickspouts.")
-
-
-class AindDynamicForagingTaskParameters(TaskParameters):
-    physiology_experiment_types: List[PhysiologyExperimentTypes] = Field(default=[],
-                                                                         description="List of modalities included in "
-                                                                                     "session.")
-    behavior_parameters: BehaviorParameters = Field(..., description="Behavior parameters for session")
 
 
 class AindDynamicForagingTaskLogic(AindBehaviorTaskLogicModel):

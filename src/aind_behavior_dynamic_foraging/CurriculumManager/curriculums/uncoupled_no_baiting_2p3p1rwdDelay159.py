@@ -4,463 +4,413 @@ from aind_behavior_curriculum import (
     StageTransition,
     create_curriculum
 )
-
-from aind_behavior_dynamic_foraging import (
-    AindDynamicForagingTaskParameters,
-    AutoWaterMode,
-    AdvancedBlockMode,
+from aind_behavior_dynamic_foraging import DynamicForagingMetrics
+from aind_behavior_dynamic_foraging.DataSchemas.task_logic import (
     AindDynamicForagingTaskLogic,
-    DynamicForagingMetrics
+    AindDynamicForagingTaskParameters,
+    BlockParameters,
+    RewardProbability,
+    DelayPeriod,
+    AutoWaterMode,
+    AutoWater,
+    InterTrialInterval,
+    ResponseTime,
+    AutoStop,
+    AutoBlock,
+    RewardSize,
+    Warmup
 )
 
-from typing import List, Literal
 import numpy as np
 
 __version__ = "0.2.3"
 
-# --- Stages  ---
+# --- Stages ---
+
+# Stage 1: Warmup ON
 s_stage_1_warmup = Stage(
     name="stage_1_warmup",
     task=AindDynamicForagingTaskLogic(
         task_parameters=AindDynamicForagingTaskParameters(
-
             # Warmup ON
-            warmup='on',
-            warm_min_trial=50,
-            warm_max_choice_ratio_bias=0.1,
-            warm_min_finish_ratio=0.8,
-            warm_windowsize=20,
-
-            # p_sum = 0.8, p_ratio = [1:0]
-            base_reward_sum=0.8,
-            reward_family=3,
-            reward_pairs_n=1,
-
-            # block = [10, 30, 10]
-            block_min=10,
-            block_max=30,
-            block_beta=10,
-            block_min_reward=0,
-
-            # Small ITI at the beginning to better engage the animal
-            iti_min=1,
-            iti_max=7,
-            iti_beta=3,
-
-            # Add a (fixed) small delay period at the beginning  # TODO: automate delay period
-            delay_min=0,
-            delay_max=0,
-            delay_beta=0,
-
-            # Reward size and reward delay
+            warmup=Warmup(
+                min_trial=50,
+                max_choice_ratio_bias=0.1,
+                min_finish_ratio=0.8,
+                windowsize=20
+            ),
+            reward_probability=RewardProbability(
+                base_reward_sum=0.8,
+                family=3,
+                pairs_n=1
+            ),
+            block_parameters=BlockParameters(
+                min=10,
+                max=30,
+                beta=10,
+                min_reward=0
+            ),
+            inter_trial_interval=InterTrialInterval(
+                min=1,
+                max=7,
+                beta=3
+            ),
+            delay_period=DelayPeriod(
+                min=0,
+                max=0,
+                beta=0
+            ),
             reward_delay=0.1,
-            right_value_volume=4.0,
-            left_value_volume=4.0,
-
-            # -- Within session automation --
-            # Auto water
-            auto_reward=True,
-            auto_water_type=AutoWaterMode.NATURAL,
-            unrewarded=3,
-            ignored=3,
-            multiplier=0.5,
-
-            # Auto block
-            advanced_block_auto=AdvancedBlockMode.NOW,
-            switch_thr=0.5,
-            points_in_a_row=5,
-
-            # Auto stop; set stop_ignores to a large number at the beginning
-            max_trial=1000,
-            max_time=75,
-            auto_stop_ignore_win=20000,
-            auto_stop_ignore_ratio_threshold=1,
-
-            # -- Miscs --
-            response_time=5,    # Very long response time at the beginning
-            reward_consume_time=1,  # Shorter RewardConsumeTime to increase the number of trials
-            uncoupled_reward="",  # Only valid in uncoupled task
+            reward_size=RewardSize(
+                right_value_volume=4.0,
+                left_value_volume=4.0
+            ),
+            auto_water=AutoWater(
+                auto_water_type=AutoWaterMode.NATURAL,
+                multiplier=0.5,
+                unrewarded=3,
+                ignored=3,
+            ),
+            auto_block=AutoBlock(
+                advanced_block_auto="now",
+                switch_thr=0.5,
+                points_in_a_row=5
+            ),
+            auto_stop=AutoStop(
+                ignore_win=20000,
+                ignore_ratio_threshold=1,
+                max_trial=1000,
+                max_time=75,
+                min_time=30
+            ),
+            response_time=ResponseTime(
+                response_time=5,
+                reward_consume_time=1
+            ),
+            uncoupled_reward=None
         )
     )
 )
 
+# Stage 1: Warmup OFF
 s_stage_1 = Stage(
     name="stage_1",
     task=AindDynamicForagingTaskLogic(
         task_parameters=AindDynamicForagingTaskParameters(
-
-            # Warmup OFF
-            warmup='off',
-            warm_min_trial=50,
-            warm_max_choice_ratio_bias=0.1,
-            warm_min_finish_ratio=0.8,
-            warm_windowsize=20,
-
-            # p_sum = 0.8, p_ratio = [1:0]
-            base_reward_sum=0.8,
-            reward_family=3,
-            reward_pairs_n=1,
-
-            # block = [10, 30, 10]
-            block_min=10,
-            block_max=30,
-            block_beta=10,
-            block_min_reward=0,
-
-            # Small ITI at the beginning to better engage the animal
-            iti_min=1,
-            iti_max=7,
-            iti_beta=3,
-
-            # Add a (fixed) small delay period at the beginning  # TODO: automate delay period
-            delay_min=0,
-            delay_max=0,
-            delay_beta=0,
-
-            # Reward size and reward delay
+            reward_probability=RewardProbability(
+                base_reward_sum=0.8,
+                family=3,
+                pairs_n=1
+            ),
+            block_parameters=BlockParameters(
+                min=10,
+                max=30,
+                beta=10,
+                min_reward=0
+            ),
+            inter_trial_interval=InterTrialInterval(
+                min=1,
+                max=7,
+                beta=3
+            ),
+            delay_period=DelayPeriod(
+                min=0,
+                max=0,
+                beta=0
+            ),
             reward_delay=0.1,
-            right_value_volume=2.0,
-            left_value_volume=2.0,
-
-            # -- Within session automation --
-            # Auto water
-            auto_reward=True,
-            auto_water_type=AutoWaterMode.NATURAL,
-            unrewarded=5,
-            ignored=5,
-            multiplier=0.5,
-
-            # Auto block
-            advanced_block_auto=AdvancedBlockMode.NOW,
-            switch_thr=0.5,
-            points_in_a_row=5,
-
-            # Auto stop; set stop_ignores to a large number at the beginning
-            max_trial=1000,
-            max_time=75,
-            auto_stop_ignore_win=20000,
-            auto_stop_ignore_ratio_threshold=1,
-
-            # -- Miscs --
-            response_time=5,
-            reward_consume_time=1,
-            uncoupled_reward="",  # Only valid in uncoupled task
+            reward_size=RewardSize(
+                right_value_volume=2.0,
+                left_value_volume=2.0
+            ),
+            auto_water=AutoWater(
+                auto_water_type=AutoWaterMode.NATURAL,
+                multiplier=0.5,
+                unrewarded=5,
+                ignored=5,
+            ),
+            auto_block=AutoBlock(
+                advanced_block_auto="now",
+                switch_thr=0.5,
+                points_in_a_row=5
+            ),
+            auto_stop=AutoStop(
+                ignore_win=20000,
+                ignore_ratio_threshold=1,
+                max_trial=1000,
+                max_time=75,
+                min_time=30
+            ),
+            response_time=ResponseTime(
+                response_time=5,
+                reward_consume_time=1
+            ),
+            uncoupled_reward=None
         )
     )
 )
 
+# Stage 2: Adjustments
 s_stage_2 = Stage(
     name="stage_2",
     task=AindDynamicForagingTaskLogic(
         task_parameters=AindDynamicForagingTaskParameters(
-
-            # Warmup OFF
-            warmup='off',
-            warm_min_trial=50,
-            warm_max_choice_ratio_bias=0.1,
-            warm_min_finish_ratio=0.8,
-            warm_windowsize=20,
-
-            # p_ratio [1:0] -> [8:1]
-            base_reward_sum=0.8,
-            reward_family=1,
-            reward_pairs_n=1,
-
-            # block length [10, 30, 10] --> [20, 35, 20]
-            block_min=20,
-            block_max=35,
-            block_beta=10,
-            block_min_reward=0,
-
-            # ITI [1, 7, 3] --> [1, 10, 3]
-            iti_min=1,
-            iti_max=10,
-            iti_beta=3,
-
-            # Delay 0 --> 0.25
-            delay_min=0.25,
-            delay_max=0.25,
-            delay_beta=0,
-
-            # Reward size and reward delay
+            reward_probability=RewardProbability(
+                base_reward_sum=0.8,
+                family=1,
+                pairs_n=1
+            ),
+            block_parameters=BlockParameters(
+                min=20,
+                max=35,
+                beta=10,
+                min_reward=0
+            ),
+            inter_trial_interval=InterTrialInterval(
+                min=1,
+                max=10,
+                beta=3
+            ),
+            delay_period=DelayPeriod(
+                min=0.25,
+                max=0.25,
+                beta=0
+            ),
             reward_delay=0.1,
-            right_value_volume=2.0,
-            left_value_volume=2.0,
-
-            # -- Within session automation --
-            # Auto water
-            auto_reward=True,
-            auto_water_type=AutoWaterMode.NATURAL,
-            unrewarded=7,
-            ignored=7,
-            multiplier=0.5,
-
-            # Auto block
-            advanced_block_auto=AdvancedBlockMode.NOW,
-            switch_thr=0.5,
-            points_in_a_row=5,
-
-            # Auto stop
-            max_trial=1000,
-            max_time=75,
-            auto_stop_ignore_win=30,
-            auto_stop_ignore_ratio_threshold=.83,
-
-            # -- Miscs --
-            response_time=1.5,  # Decrease response time: 5 --> 1.5
-            reward_consume_time=1,
-            uncoupled_reward="",  # Only valid in uncoupled task
+            reward_size=RewardSize(
+                right_value_volume=2.0,
+                left_value_volume=2.0
+            ),
+            auto_water=AutoWater(
+                auto_water_type=AutoWaterMode.NATURAL,
+                multiplier=0.5,
+                unrewarded=7,
+                ignored=7,
+            ),
+            auto_block=AutoBlock(
+                advanced_block_auto="now",
+                switch_thr=0.5,
+                points_in_a_row=5
+            ),
+            auto_stop=AutoStop(
+                ignore_win=30,
+                ignore_ratio_threshold=0.83,
+                max_trial=1000,
+                max_time=75,
+                min_time=30
+            ),
+            response_time=ResponseTime(
+                response_time=1.5,
+                reward_consume_time=1
+            ),
+            uncoupled_reward=None
         )
     )
 )
 
+# Stage 3: Further adjustments
 s_stage_3 = Stage(
     name="stage_3",
     task=AindDynamicForagingTaskLogic(
         task_parameters=AindDynamicForagingTaskParameters(
-
-            # Warmup OFF
-            warmup='off',
-            warm_min_trial=50,
-            warm_max_choice_ratio_bias=0.1,
-            warm_min_finish_ratio=0.8,
-            warm_windowsize=20,
-
-            # p_ratio [1:0] -> [8:1]
-            base_reward_sum=0.8,
-            reward_family=1,
-            reward_pairs_n=1,
-
-            # block length [10, 30, 10] --> [20, 35, 20]
-            block_min=20,
-            block_max=35,
-            block_beta=10,
-            block_min_reward=0,
-
-            # ITI [1, 7, 3] --> [1, 10, 3]
-            iti_min=1,
-            iti_max=10,
-            iti_beta=3,
-
-            # Delay 0.5 --> 1.0
-            delay_min=1,
-            delay_max=1,
-            delay_beta=0,
-
-            # Reward size and reward delay
+            reward_probability=RewardProbability(
+                base_reward_sum=0.8,
+                family=1,
+                pairs_n=1
+            ),
+            block_parameters=BlockParameters(
+                min=20,
+                max=35,
+                beta=10,
+                min_reward=0
+            ),
+            inter_trial_interval=InterTrialInterval(
+                min=1,
+                max=10,
+                beta=3
+            ),
+            delay_period=DelayPeriod(
+                min=1,
+                max=1,
+                beta=0
+            ),
             reward_delay=0.1,
-            right_value_volume=2.0,
-            left_value_volume=2.0,
-
-            # -- Within session automation --
-            # Auto water
-            auto_reward=True,
-            auto_water_type=AutoWaterMode.NATURAL,
-            unrewarded=10,
-            ignored=10,
-            multiplier=0.5,
-
-            # Auto block
-            advanced_block_auto=AdvancedBlockMode.NOW,
-            switch_thr=0.5,
-            points_in_a_row=5,
-
-            # Auto stop
-            max_trial=1000,
-            max_time=75,
-            auto_stop_ignore_win=30,
-            auto_stop_ignore_ratio_threshold=.83,
-
-            # -- Miscs --
-            response_time=1.5,  # Decrease response time: 5 --> 1.5
-            reward_consume_time=1,
-            uncoupled_reward="",  # Only valid in uncoupled task
+            reward_size=RewardSize(
+                right_value_volume=2.0,
+                left_value_volume=2.0
+            ),
+            auto_water=AutoWater(
+                auto_water_type=AutoWaterMode.NATURAL,
+                multiplier=0.5,
+                unrewarded=10,
+                ignored=10,
+            ),
+            auto_block=AutoBlock(
+                advanced_block_auto="now",
+                switch_thr=0.5,
+                points_in_a_row=5
+            ),
+            auto_stop=AutoStop(
+                ignore_win=30,
+                ignore_ratio_threshold=0.83,
+                max_trial=1000,
+                max_time=75,
+                min_time=30
+            ),
+            response_time=ResponseTime(
+                response_time=1.5,
+                reward_consume_time=1
+            ),
+            uncoupled_reward=None
         )
     )
 )
 
+# Stage 4: Further adjustments with increased delay
 s_stage_4 = Stage(
     name="stage_4",
     task=AindDynamicForagingTaskLogic(
         task_parameters=AindDynamicForagingTaskParameters(
-
-            # Warmup OFF
-            warmup='off',
-            warm_min_trial=50,
-            warm_max_choice_ratio_bias=0.1,
-            warm_min_finish_ratio=0.8,
-            warm_windowsize=20,
-
-            base_reward_sum=0.8,
-            reward_family=1,
-            reward_pairs_n=1,
-
-            # Final block length for uncoupled task
-            block_min=20,
-            block_max=35,
-            block_beta=10,
-            block_min_reward=0,
-
-            # ITI [1, 10, 3] --> [1, 15, 3]
-            iti_min=1,
-            iti_max=15,
-            iti_beta=3,
-
-            delay_min=1,
-            delay_max=1,
-            delay_beta=0,
-
-            # Reward size and reward delay
+            reward_probability=RewardProbability(
+                base_reward_sum=0.8,
+                family=1,
+                pairs_n=1
+            ),
+            block_parameters=BlockParameters(
+                min=20,
+                max=35,
+                beta=10,
+                min_reward=0
+            ),
+            inter_trial_interval=InterTrialInterval(
+                min=1,
+                max=15,
+                beta=3
+            ),
+            delay_period=DelayPeriod(
+                min=1,
+                max=1,
+                beta=0
+            ),
             reward_delay=0.15,
-            right_value_volume=2.0,
-            left_value_volume=2.0,
-
-            # -- Within session automation --
-            # Auto water
-            auto_reward=True,
-            auto_water_type=AutoWaterMode.NATURAL,
-            unrewarded=10,
-            ignored=10,
-            multiplier=0.5,
-
-            # Auto block
-            advanced_block_auto=AdvancedBlockMode.OFF,   # Turn off auto block
-            switch_thr=0.5,
-            points_in_a_row=5,
-
-            # Auto stop
-            max_trial=1000,
-            max_time=75,
-            auto_stop_ignore_win=30,
-            auto_stop_ignore_ratio_threshold=.83,
-
-            # -- Miscs --
-            response_time=1.5,
-            reward_consume_time=1,
-            uncoupled_reward="0.1, 0.5, 0.9",  # Only valid in uncoupled task
+            reward_size=RewardSize(
+                right_value_volume=2.0,
+                left_value_volume=2.0
+            ),
+            auto_water=AutoWater(
+                auto_water_type=AutoWaterMode.NATURAL,
+                multiplier=0.5,
+                unrewarded=10,
+                ignored=10,
+            ),
+            auto_stop=AutoStop(
+                ignore_win=30,
+                ignore_ratio_threshold=0.83,
+                max_trial=1000,
+                max_time=75,
+                min_time=30
+            ),
+            response_time=ResponseTime(
+                response_time=1.5,
+                reward_consume_time=1
+            ),
+            uncoupled_reward=[0.1, 0.5, 0.9]
         )
     )
 )
 
+# Final Stage
 s_final = Stage(
     name="final",
     task=AindDynamicForagingTaskLogic(
         task_parameters=AindDynamicForagingTaskParameters(
-
-            # Warmup OFF
-            warmup='off',
-            warm_min_trial=50,
-            warm_max_choice_ratio_bias=0.1,
-            warm_min_finish_ratio=0.8,
-            warm_windowsize=20,
-
-            base_reward_sum=0.8,
-            reward_family=1,
-            reward_pairs_n=1,
-
-            block_min=20,
-            block_max=35,
-            block_beta=10,
-            block_min_reward=0,
-
-            iti_min=2,
-            iti_max=15,
-            iti_beta=3,
-
-            delay_min=1,
-            delay_max=1,
-            delay_beta=0,
-
+            reward_probability=RewardProbability(
+                base_reward_sum=0.8,
+                family=1,
+                pairs_n=1
+            ),
+            block_parameters=BlockParameters(
+                min=20,
+                max=35,
+                beta=10,
+                min_reward=0
+            ),
+            inter_trial_interval=InterTrialInterval(
+                min=2,
+                max=15,
+                beta=3
+            ),
+            delay_period=DelayPeriod(
+                min=1,
+                max=1,
+                beta=0
+            ),
             reward_delay=0.2,
-            right_value_volume=2.0,
-            left_value_volume=2.0,
-
-            # -- Within session automation --
-            # Auto water
-            auto_reward=False,
-            auto_water_type=AutoWaterMode.NATURAL,
-            unrewarded=10,
-            ignored=10,
-            multiplier=0.5,
-
-            # Auto block
-            advanced_block_auto=AdvancedBlockMode.OFF,
-            switch_thr=0.5,
-            points_in_a_row=5,
-
-            max_trial=1000,
-            max_time=75,
-            auto_stop_ignore_win=30,
-            auto_stop_ignore_ratio_threshold=.83,
-
-            # -- Miscs --
-            response_time=1.5,
-            reward_consume_time=1,
-            uncoupled_reward="0.1, 0.5, 0.9",  # Only valid in uncoupled task
+            reward_size=RewardSize(
+                right_value_volume=2.0,
+                left_value_volume=2.0
+            ),
+            auto_stop=AutoStop(
+                ignore_win=30,
+                ignore_ratio_threshold=0.83,
+                max_trial=1000,
+                max_time=75,
+                min_time=30
+            ),
+            response_time=ResponseTime(
+                response_time=1.5,
+                reward_consume_time=1
+            ),
+            uncoupled_reward=[0.1, 0.5, 0.9]
         )
     )
 )
 
-# graduated same is identical to final but an absorbing state
 s_graduated = Stage(
     name="graduated",
     task=AindDynamicForagingTaskLogic(
         task_parameters=AindDynamicForagingTaskParameters(
-
-            # Warmup OFF
-            warmup='off',
-            warm_min_trial=50,
-            warm_max_choice_ratio_bias=0.1,
-            warm_min_finish_ratio=0.8,
-            warm_windowsize=20,
-
-            base_reward_sum=0.8,
-            reward_family=1,
-            reward_pairs_n=1,
-
-            block_min=20,
-            block_max=35,
-            block_beta=10,
-            block_min_reward=0,
-
-            iti_min=2,
-            iti_max=15,
-            iti_beta=3,
-
-            delay_min=1,
-            delay_max=1,
-            delay_beta=0,
-
+            reward_probability=RewardProbability(
+                base_reward_sum=0.8,
+                family=1,
+                pairs_n=1
+            ),
+            block_parameters=BlockParameters(
+                min=20,
+                max=35,
+                beta=10,
+                min_reward=0
+            ),
+            inter_trial_interval=InterTrialInterval(
+                min=2,
+                max=15,
+                beta=3
+            ),
+            delay_period=DelayPeriod(
+                min=1,
+                max=1,
+                beta=0
+            ),
             reward_delay=0.2,
-            right_value_volume=2.0,
-            left_value_volume=2.0,
-
-            # -- Within session automation --
-            # Auto water
-            auto_reward=False,
-            auto_water_type=AutoWaterMode.NATURAL,
-            unrewarded=10,
-            ignored=10,
-            multiplier=0.5,
-
-            # Auto block
-            advanced_block_auto=AdvancedBlockMode.OFF,
-            switch_thr=0.5,
-            points_in_a_row=5,
-
-            max_trial=1000,
-            max_time=75,
-            auto_stop_ignore_win=30,
-            auto_stop_ignore_ratio_threshold=.83,
-
-            # -- Miscs --
-            response_time=1.5,
-            reward_consume_time=1,
-            uncoupled_reward="0.1, 0.5, 0.9",  # Only valid in uncoupled task
+            reward_size=RewardSize(
+                right_value_volume=2.0,
+                left_value_volume=2.0
+            ),
+            auto_stop=AutoStop(
+                ignore_win=30,
+                ignore_ratio_threshold=0.83,
+                max_trial=1000,
+                max_time=75,
+                min_time=30
+            ),
+            response_time=ResponseTime(
+                response_time=1.5,
+                reward_consume_time=1
+            ),
+            uncoupled_reward=[0.1, 0.5, 0.9]
         )
     )
 )
-
 
 # --- STAGE TRANSITIONS ---
 

@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field, NonNegativeFloat, RootModel, model_validator
 from typing import Annotated, Dict, List, Literal, Optional, Self, Union
+from typing_extensions import TypeAliasType
 
 CONDITION_TYPES = Literal["Right choice", "Left reward", "Right reward", "Left no reward", "Right no reward"]
 INTERVAL_CONDITION_TYPES = Literal[
@@ -17,7 +18,7 @@ INTERVAL_CONDITION_TYPES = Literal[
 
 class LaserBaseClass(BaseModel):
     name: str = Field(..., description="Name of laser")
-    power: List[0, 1, 1.5, 2, 2.5, 3] = Field(default=1, description="Power of laser in mW")
+    power: Literal[0, 1, 1.5, 2, 2.5, 3] = Field(default=1, description="Power of laser in mW")
 
 
 class LaserOne(LaserBaseClass):
@@ -26,6 +27,10 @@ class LaserOne(LaserBaseClass):
 
 class LaserTwo(LaserBaseClass):
     name: Literal["LaserTwo"] = "LaserTwo"
+
+
+AvailableLaserTypes = TypeAliasType("AvailableLaserTypes",
+                                    Annotated[Union[LaserOne, LaserTwo], Field(discriminator="name")], )
 
 
 class AvailableLaserTypes(RootModel):
@@ -37,7 +42,7 @@ class AvailableLaserTypes(RootModel):
 
 class IntervalConditions(BaseModel):
     condition: INTERVAL_CONDITION_TYPES = Field(..., description="Condition for interval")
-    offset = float = Field(..., description="Offset in seconds.")
+    offset: float = Field(..., description="Offset in seconds.")
 
 
 class _ProtocolBaseType(BaseModel):
@@ -76,7 +81,8 @@ class LaserColors(BaseModel):
 class SessionControl(BaseModel):
     session_fraction: float = Field(default=.5, description="Fraction of session that will be optogenetic.", ge=0, le=1)
     optogenetic_start: bool = Field(default=True, description="If first trial will be opotgentic")
-    alternating_sessions: bool = Field(default=True, description="Alternate if optogenetics is used session by session.")
+    alternating_sessions: bool = Field(default=True,
+                                       description="Alternate if optogenetics is used session by session.")
 
 
 class Optogenetics(BaseModel):

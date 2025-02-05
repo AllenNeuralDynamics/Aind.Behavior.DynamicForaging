@@ -10,7 +10,6 @@ from .DataSchemas.task_logic import (
     AindDynamicForagingTaskParameters,
     AutoWaterMode,
     AindDynamicForagingTaskLogic,
-    BehaviorParameters
 )
 from .CurriculumManager.metrics import DynamicForagingMetrics
 
@@ -19,5 +18,4 @@ __all__ = [
     "AutoWaterMode",
     "AindDynamicForagingTaskLogic",
     "DynamicForagingMetrics",
-    "BehaviorParameters"
 ]
