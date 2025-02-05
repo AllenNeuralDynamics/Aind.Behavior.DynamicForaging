@@ -4,7 +4,7 @@ from aind_auto_train.schema.task import DynamicForagingMetrics, TrainingStage, D
 from aind_auto_train.schema.curriculum import Curriculum as AutoTrainCurriculum
 
 from aind_behavior_dynamic_foraging.CurriculumManager.curriculums.coupled_baiting_2p3 import (
-    construct_coupled_baiting_1p0_curriculum,
+    construct_coupled_baiting_2p3_curriculum,
     s_stage_1_warmup as cb_stage_1_warmup,
     s_stage_1 as cb_stage_1,
     s_stage_2 as cb_stage_2,
@@ -37,36 +37,42 @@ from aind_behavior_curriculum import (
     Stage,
     Curriculum as AINDCurriculum
 )
-
-try:
-    CURRICULUM_MANAGER = CurriculumManager(
-        saved_curriculums_on_s3=dict(
-            bucket='aind-behavior-data',
-            root='foraging_auto_training/saved_curriculums/'
-        ),
-        saved_curriculums_local='/root/capsule/scratch/tmp/'
-    )
-except:     # use resource curriculums if error using s3
-
-    from tests.mock_curriculum_manager import MockCurriculumManager
-    CURRICULUM_MANAGER = MockCurriculumManager()
+from tests.mock_databases import MockCurriculumManager
 
 class TestCurriculums(unittest.TestCase):
     """ Testing aind-behavior-curriculum against aind-auto-train"""
+
+    curriculum_manager: CurriculumManager or MockCurriculumManager
+
+    def setUp(self) -> None:
+        """
+        Create curriculum manager
+        """
+
+        try:
+            self.curriculum_manager = CurriculumManager(
+                saved_curriculums_on_s3=dict(
+                    bucket='aind-behavior-data',
+                    root='foraging_auto_training/saved_curriculums/'
+                ),
+                saved_curriculums_local='/root/capsule/scratch/tmp/'
+            )
+        except:  # use resource curriculums if error using s3
+            self.curriculum_manager = MockCurriculumManager()
 
     def test_coupled_baiting(self):
         """
         Test coupled baiting task
         """
 
-        coupled_baiting = CURRICULUM_MANAGER.get_curriculum(
+        coupled_baiting = self.curriculum_manager.get_curriculum(
             curriculum_name='Coupled Baiting',
             curriculum_version='2.3',
             curriculum_schema_version='1.0',
         )
         old_curriculum = coupled_baiting['curriculum']
 
-        new_curriculum = construct_coupled_baiting_1p0_curriculum()
+        new_curriculum = construct_coupled_baiting_2p3_curriculum()
 
         # --WARMUP--
 
@@ -544,7 +550,7 @@ class TestCurriculums(unittest.TestCase):
         Test uncoupled baiting task
         """
 
-        uncoupled_baiting = CURRICULUM_MANAGER.get_curriculum(
+        uncoupled_baiting = self.curriculum_manager.get_curriculum(
             curriculum_name='Uncoupled Baiting',
             curriculum_version='2.3',
             curriculum_schema_version='1.0',
@@ -969,7 +975,7 @@ class TestCurriculums(unittest.TestCase):
         Test uncoupled no baiting task
         """
 
-        uncoupled_baiting = CURRICULUM_MANAGER.get_curriculum(
+        uncoupled_baiting = self.curriculum_manager.get_curriculum(
             curriculum_name='Uncoupled Without Baiting',
             curriculum_version='2.3.1rwdDelay159',
             curriculum_schema_version='1.0',

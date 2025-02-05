@@ -327,7 +327,8 @@ def st_final_to_stage_3(metrics: DynamicForagingMetrics) -> bool:
 
 
 # --- Curriculum ---
-def construct_coupled_baiting_1p0_curriculum() -> Curriculum:
+
+def construct_coupled_baiting_2p3_curriculum() -> Curriculum:
     cb_curriculum = create_curriculum("CoupledBaiting2p3Curriculum", __version__, [AindDynamicForagingTaskLogic])()
     # add stages
     cb_curriculum.add_stage(s_stage_1_warmup)
