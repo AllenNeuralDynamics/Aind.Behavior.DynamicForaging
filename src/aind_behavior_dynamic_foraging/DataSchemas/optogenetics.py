@@ -2,8 +2,8 @@ from pydantic import BaseModel, Field, NonNegativeFloat, RootModel, model_valida
 from typing import Annotated, Dict, List, Literal, Optional, Self, Union
 from typing_extensions import TypeAliasType
 
-CONDITION_TYPES = Literal["Right choice", "Left reward", "Right reward", "Left no reward", "Right no reward"]
-INTERVAL_CONDITION_TYPES = Literal[
+PULSE_CONDITIONS = Literal["Right choice", "Left reward", "Right reward", "Left no reward", "Right no reward"]
+INTERVAL_CONDITIONS = Literal[
     "Trial start",
     "Go cue",
     "Reward outcome",
@@ -14,34 +14,29 @@ INTERVAL_CONDITION_TYPES = Literal[
     "Left no reward",
     "Right no reward"
 ]
+COLORS = Literal['Blue', 'Red', 'Green', 'Orange']
+
+POWERS = Literal[0, 1, 1.5, 2, 2.5, 3]
+
+class LocationBaseClass(BaseModel):
+    name: str = Field(..., description="Name of location")
+    power: POWERS = Field(default=1, description="Power of laser in mW")
 
 
-class LaserBaseClass(BaseModel):
-    name: str = Field(..., description="Name of laser")
-    power: Literal[0, 1, 1.5, 2, 2.5, 3] = Field(default=1, description="Power of laser in mW")
+class LocationOne(LocationBaseClass):
+    name: Literal["LocationOne"] = "LocationOne"
 
 
-class LaserOne(LaserBaseClass):
-    name: Literal["LaserOne"] = "LaserOne"
+class LocationTwo(LocationBaseClass):
+    name: Literal["LocationTwo"] = "LocationTwo"
 
 
-class LaserTwo(LaserBaseClass):
-    name: Literal["LaserTwo"] = "LaserTwo"
-
-
-AvailableLaserTypes = TypeAliasType("AvailableLaserTypes",
-                                    Annotated[Union[LaserOne, LaserTwo], Field(discriminator="name")], )
-
-
-class AvailableLaserTypes(RootModel):
-    root: Union[
-        LaserOne,
-        LaserTwo,
-    ]
+AvailableLocations = TypeAliasType("AvailableLocations",
+                                   Annotated[Union[LocationOne, LocationTwo], Field(discriminator="name")], )
 
 
 class IntervalConditions(BaseModel):
-    condition: INTERVAL_CONDITION_TYPES = Field(..., description="Condition for interval")
+    interval_condition: INTERVAL_CONDITIONS = Field(..., description="Condition for interval")
     offset: float = Field(..., description="Offset in seconds.")
 
 
@@ -51,12 +46,12 @@ class _ProtocolBaseType(BaseModel):
 
 class SineProtocol(_ProtocolBaseType):
     name: Literal['Sine'] = 'Sine'
-    frequency: float = Field(default=40, description="Frequency of sine wave.")
+    frequency: float = Field(default=40.0, description="Frequency of sine wave.")
 
 
 class PulseProtocol(_ProtocolBaseType):
     name: Literal['Pulse'] = 'Pulse'
-    frequency: float = Field(default=40, description="Frequency of pulse.")
+    frequency: float = Field(default=40.0, description="Frequency of pulse.")
     duration: float = Field(default=.002, description="Duration of pulse in seconds")
 
 
@@ -66,16 +61,40 @@ class ConstantProtocol(_ProtocolBaseType):
 
 
 class LaserColors(BaseModel):
-    color: Literal['Blue', 'Red', 'Green', 'Orange'] = Field(..., description="Color of laser.")
-    location: list[AvailableLaserTypes] = Field(default=[LaserOne(), LaserTwo()], description="List of lasers to use.")
+    name: str = Field(..., description="Name of Laser.")
+    color: COLORS = Field(..., description="Color of laser.")
+    location: list[AvailableLocations] = Field(default=[LocationOne(), LocationTwo()],
+                                               description="List of lasers to use.")
     probability: float = Field(default=.25, title="Probability", ge=0, le=1)
-    duration: float = Field(default=5, description="Duration of laser in seconds.", ge=0)
-    condition: Optional[CONDITION_TYPES] = Field(default=None, description="Condition of laser.")
-    condition_probability: float = Field(default=1, title="Condition Probability", ge=0, le=1)
+    duration: float = Field(default=5.0, description="Duration of laser in seconds.", ge=0)
+    pulse_condition: Optional[PULSE_CONDITIONS] = Field(default=None, description="Condition of laser.")
+    condition_probability: float = Field(default=1.0, title="Condition Probability", ge=0, le=1)
     start: Optional[IntervalConditions] = Field(default=None, description="Start condition of laser")
     end: Optional[IntervalConditions] = Field(default=None, description="End condition of laser")
     protocol: Union[SineProtocol, PulseProtocol, ConstantProtocol] = Field(default=SineProtocol(),
                                                                            description="Protocol for laser.")
+
+
+class LaserColorOne(LaserColors):
+    name: Literal["LaserColorOne"] = "LaserColorOne"
+
+
+class LaserColorTwo(LaserColors):
+    name: Literal["LaserColorTwo"] = "LaserColorTwo"
+
+
+class LaserColorThree(LaserColors):
+    name: Literal["LaserColorThree"] = "LaserColorThree"
+
+
+class LaserColorFour(LaserColors):
+    name: Literal["LaserColorFour"] = "LaserColorFour"
+
+
+AvailableLaserColors = TypeAliasType("AvailableLaserColors",
+                                     Annotated[
+                                         Union[LaserColorOne, LaserColorTwo, LaserColorThree, LaserColorFour], Field(
+                                             discriminator="name")], )
 
 
 class SessionControl(BaseModel):
@@ -87,7 +106,9 @@ class SessionControl(BaseModel):
 
 class Optogenetics(BaseModel):
     experiment_type: Literal["Optogenetics"] = "Optogenetics"
-    laser_colors: list[LaserColors] = Field(default=[], description="List of lasers used in experiment.")
+    laser_colors: list[AvailableLaserColors] = Field(default=[],
+                                                     description="List of lasers used in experiment.",
+                                                     max_length=4)
     session_control: Optional[SessionControl] = Field(default=None,
                                                       description="Field defining session wide parameters.")
     minimum_trial_interval: int = Field(default=10, description="Minimum trial count between two opto trials.")

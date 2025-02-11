@@ -11,6 +11,7 @@ from aind_behavior_dynamic_foraging.DataSchemas.ephys import Ephys
 
 __version__ = "0.1.0"
 
+advanced_block_autos = ["now", "once"]
 
 class BlockParameters(BaseModel):
     # Block length

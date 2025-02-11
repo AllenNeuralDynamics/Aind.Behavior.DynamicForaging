@@ -127,4 +127,6 @@ def main(path_seed: str = "./local/{schema}.json"):
 
 
 if __name__ == "__main__":
+    from pprint import pprint
+    pprint(AindDynamicForagingTaskLogic.model_fields)
     main()
