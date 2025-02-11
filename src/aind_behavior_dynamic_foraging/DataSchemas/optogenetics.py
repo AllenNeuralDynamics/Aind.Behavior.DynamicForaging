@@ -16,11 +16,11 @@ INTERVAL_CONDITIONS = Literal[
 ]
 COLORS = Literal['Blue', 'Red', 'Green', 'Orange']
 
-POWERS = Literal[0, 1, 1.5, 2, 2.5, 3]
+POWERS = Literal[0.0, 1.0, 1.5, 2.0, 2.5, 3.0]
 
 class LocationBaseClass(BaseModel):
     name: str = Field(..., description="Name of location")
-    power: POWERS = Field(default=1, description="Power of laser in mW")
+    power: POWERS = Field(default=1.0, description="Power of laser in mW")
 
 
 class LocationOne(LocationBaseClass):
