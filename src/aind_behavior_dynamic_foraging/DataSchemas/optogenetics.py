@@ -90,10 +90,21 @@ class LaserColorThree(LaserColors):
 class LaserColorFour(LaserColors):
     name: Literal["LaserColorFour"] = "LaserColorFour"
 
+class LaserColorFive(LaserColors):
+    name: Literal["LaserColorFive"] = "LaserColorFive"
+
+class LaserColorSix(LaserColors):
+    name: Literal["LaserColorSix"] = "LaserColorSix"
+
 
 AvailableLaserColors = TypeAliasType("AvailableLaserColors",
                                      Annotated[
-                                         Union[LaserColorOne, LaserColorTwo, LaserColorThree, LaserColorFour], Field(
+                                         Union[LaserColorOne,
+                                               LaserColorTwo,
+                                               LaserColorThree,
+                                               LaserColorFour,
+                                               LaserColorFive,
+                                               LaserColorSix], Field(
                                              discriminator="name")], )
 
 

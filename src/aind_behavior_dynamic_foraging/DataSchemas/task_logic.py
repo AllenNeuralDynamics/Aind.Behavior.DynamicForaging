@@ -1,17 +1,16 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Annotated, List, Literal, Union, Optional
-from pydantic import BaseModel, Field, RootModel
+from typing import Literal, Optional
+from pydantic import BaseModel, Field, model_validator
 
 from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel, TaskParameters
-from aind_behavior_dynamic_foraging.DataSchemas.fiber_photometry import FiberPhotometry
-from aind_behavior_dynamic_foraging.DataSchemas.optogenetics import Optogenetics
-from aind_behavior_dynamic_foraging.DataSchemas.ephys import Ephys
+
 
 __version__ = "0.1.0"
 
 advanced_block_autos = ["now", "once"]
+RANDOMNESSES = Literal["Exponential", "Even"]
 
 class BlockParameters(BaseModel):
     # Block length
@@ -89,6 +88,10 @@ class Warmup(BaseModel):
     min_finish_ratio: float = Field(default=0.8, title="Warmup finish criteria: minimal finish ratio")
     windowsize: int = Field(default=20, title="Warmup finish criteria: window size to compute the bias and ratio")
 
+class RewardN(BaseModel):
+    min_reward: int = Field(default=60, description="The minimum reward amount to enter the next block.")
+    initial_inactive_trials: int = Field(default=2, description="Initial N trials of the active side where no "
+                                                                 "bait will be be given.")
 
 class AindDynamicForagingTaskParameters(TaskParameters):
     block_parameters: BlockParameters = Field(default=BlockParameters(),
@@ -97,7 +100,7 @@ class AindDynamicForagingTaskParameters(TaskParameters):
                                                   description="Parameters describing reward_probability.")
     uncoupled_reward: Optional[list[float]] = Field(default=[0.1, 0.3, 0.7], title="Uncoupled reward", min_length=3,
                                                     max_length=3)  # For uncoupled tasks only
-    randomness: Literal["Exponential", "Even"] = Field(default="Exponential", title="Randomness mode")
+    randomness: RANDOMNESSES = Field(default="Exponential", title="Randomness mode")
     delay_period: DelayPeriod = Field(default=DelayPeriod(), description="Parameters describing delay period.")
     reward_delay: float = Field(default=0, title="Reward delay (sec)")
     auto_water: Optional[AutoWater] = Field(default=None, description="Parameters describing auto water.")
@@ -111,6 +114,7 @@ class AindDynamicForagingTaskParameters(TaskParameters):
     warmup: Optional[Warmup] = Field(default=None, description="Parameters describing warmup.")
     no_response_trial_addition: bool = Field(default=True,
                                              description="Add one trial to the block length on both lickspouts.")
+    reward_n: Optional[RewardN] = Field(default=RewardN())
 
 
 class AindDynamicForagingTaskLogic(AindBehaviorTaskLogicModel):
@@ -118,3 +122,14 @@ class AindDynamicForagingTaskLogic(AindBehaviorTaskLogicModel):
     name: Literal["AindDynamicForaging"] = Field(default="AindDynamicForaging", description="Name of the task logic",
                                                  frozen=True)
     task_parameters: AindDynamicForagingTaskParameters = Field(..., description="Parameters of the task logic")
+
+    # @model_validator(mode="after")
+    # def _reward_n_and_uncouple_check(self):
+    #     """Check that reward_n and uncouple_reward do not both exist"""
+    #     has_reward_n = self.task_parameters.reward_n is not None
+    #     has_uncoupled_reward = self.task_parameters.uncoupled_reward is not None
+    #
+    #     if has_reward_n and has_uncoupled_reward:
+    #         raise ValueError("Invalid task with both reward_n and uncoupled_reward defined.")
+    #
+    #     return self
