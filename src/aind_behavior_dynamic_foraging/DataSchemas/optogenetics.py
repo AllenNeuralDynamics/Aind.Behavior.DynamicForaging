@@ -36,8 +36,8 @@ AvailableLocations = TypeAliasType("AvailableLocations",
 
 
 class IntervalConditions(BaseModel):
-    interval_condition: INTERVAL_CONDITIONS = Field(..., description="Condition for interval")
-    offset: float = Field(..., description="Offset in seconds.")
+    interval_condition: INTERVAL_CONDITIONS = Field(default="Trial start", description="Condition for interval")
+    offset: float = Field(default=0, description="Offset in seconds.")
 
 
 class _ProtocolBaseType(BaseModel):
@@ -47,7 +47,7 @@ class _ProtocolBaseType(BaseModel):
 class SineProtocol(_ProtocolBaseType):
     name: Literal['Sine'] = 'Sine'
     frequency: float = Field(default=40.0, description="Frequency of sine wave.")
-
+    ramp_down: float = Field(default=1, description="Ramp down of laser in seconds.")
 
 class PulseProtocol(_ProtocolBaseType):
     name: Literal['Pulse'] = 'Pulse'
@@ -119,7 +119,8 @@ class Optogenetics(BaseModel):
     experiment_type: Literal["Optogenetics"] = "Optogenetics"
     laser_colors: list[AvailableLaserColors] = Field(default=[],
                                                      description="List of lasers used in experiment.",
-                                                     max_length=4)
+                                                     max_length=6)
     session_control: Optional[SessionControl] = Field(default=None,
                                                       description="Field defining session wide parameters.")
     minimum_trial_interval: int = Field(default=10, description="Minimum trial count between two opto trials.")
+    sample_frequency: int = Field(defualt=5000, description="Sample frequency of wave")
