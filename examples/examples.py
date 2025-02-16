@@ -34,10 +34,6 @@ def mock_session() -> AindBehaviorSessionModel:
     )
 
 
-# def mock_rig() -> AindDynamicForagingRig:
-#     """Generates a mock AindVrForagingRig model"""
-
-
 def mock_task_logic() -> AindDynamicForagingTaskLogic:
     """Generates a mock AindVrForagingTaskLogic model"""
 
@@ -113,7 +109,6 @@ def mock_subject_database() -> db.SubjectDataBase:
 
 def main(path_seed: str = "./local/{schema}.json"):
     example_session = mock_session()
-    #example_rig = mock_rig()
     example_task_logic = mock_task_logic()
     example_database = mock_subject_database()
 
