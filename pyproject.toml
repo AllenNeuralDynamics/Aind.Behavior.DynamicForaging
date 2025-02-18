@@ -3,6 +3,7 @@ name = "aind-behavior-dynamic-foraging"
 description = "A library that defines AIND data schema for the Aind Behavior Dynamic Foraging experiment."
 authors = [ {name = "Micah Woodard", email = "micah.woodard@alleninstitute.org"},
             {name = "Bruno Cruz", email = "bruno.cruz@alleninstitute.org"}]
+
 license = {text = "MIT"}
 requires-python = ">=3.11"
 classifiers = [
@@ -23,4 +24,7 @@ dependencies = [
     "pymongo"
 ]
 
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
 
