@@ -505,4 +505,3 @@ def construct_uncoupled_no_baiting_2p3p1_reward_delay_curriculum() -> Curriculum
     cb_curriculum.add_stage_transition(s_final, s_stage_4, st_final_to_stage_4)
 
     return cb_curriculum
-
