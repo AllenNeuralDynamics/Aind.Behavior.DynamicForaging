@@ -21,8 +21,8 @@ from aind_behavior_dynamic_foraging.CurriculumManager.curriculums.uncoupled_bait
     s_final as ucb_final,
     s_graduated as ucb_graduated
 )
-from aind_behavior_dynamic_foraging.CurriculumManager.curriculums.uncoupled_no_baiting_2p3p1rwdDelay159 import (
-    construct_uncoupled_no_baiting_2p3p1_reward_delay_curriculum,
+from aind_behavior_dynamic_foraging.CurriculumManager.curriculums.uncoupled_no_baiting_2p3 import (
+    construct_uncoupled_no_baiting_2p3_curriculum,
     s_stage_1_warmup as uc_stage_1_warmup,
     s_stage_1 as uc_stage_1,
     s_stage_2 as uc_stage_2,
@@ -982,7 +982,7 @@ class TestCurriculums(unittest.TestCase):
         )
         old_curriculum = uncoupled_baiting['curriculum']
 
-        new_curriculum = construct_uncoupled_no_baiting_2p3p1_reward_delay_curriculum()
+        new_curriculum = construct_uncoupled_no_baiting_2p3_curriculum()
 
         # --WARMUP--
 
@@ -1482,7 +1482,6 @@ class TestCurriculums(unittest.TestCase):
                                                                      curriculum=new_curriculum,
                                                                      is_on_curriculum=True),
                                                         metrics)
-
         # check that both curriculums reach the same decision
         self.assertEqual(old_decision[1], old_next_stage)
         self.assertEqual(new_decision.stage.name, new_next_stage.name)
@@ -1498,60 +1497,75 @@ class TestCurriculums(unittest.TestCase):
         """
 
         # check warmup parameters
-        self.assertEqual(old_logic.warmup, new_logic.warmup)
-        self.assertEqual(old_logic.warm_min_trial, new_logic.warm_min_trial)
-        self.assertEqual(old_logic.warm_max_choice_ratio_bias, new_logic.warm_max_choice_ratio_bias)
-        self.assertEqual(old_logic.warm_min_finish_ratio, new_logic.warm_min_finish_ratio)
-        self.assertEqual(old_logic.warm_windowsize, new_logic.warm_windowsize)
+        if old_logic.warmup == "on":
+            self.assertTrue(new_logic.warmup is not None)
+            self.assertEqual(old_logic.warm_min_trial, new_logic.warmup.min_trial)
+            self.assertEqual(old_logic.warm_max_choice_ratio_bias, new_logic.warmup.max_choice_ratio_bias)
+            self.assertEqual(old_logic.warm_min_finish_ratio, new_logic.warmup.min_finish_ratio)
+            self.assertEqual(old_logic.warm_windowsize, new_logic.warmup.windowsize)
+        else:
+            self.assertTrue(new_logic.warmup is None)
 
         # check reward statistic parameters
-        self.assertEqual(old_logic.BaseRewardSum, new_logic.base_reward_sum)
-        self.assertEqual(old_logic.RewardFamily, new_logic.reward_family)
-        self.assertEqual(old_logic.RewardPairsN, new_logic.reward_pairs_n)
+        self.assertEqual(old_logic.BaseRewardSum, new_logic.reward_probability.base_reward_sum)
+        self.assertEqual(old_logic.RewardFamily, new_logic.reward_probability.family)
+        self.assertEqual(old_logic.RewardPairsN, new_logic.reward_probability.pairs_n)
 
         # check block parameters
-        self.assertEqual(old_logic.BlockMin, new_logic.block_min)
-        self.assertEqual(old_logic.BlockMax, new_logic.block_max)
-        self.assertEqual(old_logic.BlockBeta, new_logic.block_beta)
-        self.assertEqual(old_logic.BlockMinReward, new_logic.block_min_reward)
+        self.assertEqual(old_logic.BlockMin, new_logic.block_parameters.min)
+        self.assertEqual(old_logic.BlockMax, new_logic.block_parameters.max)
+        self.assertEqual(old_logic.BlockBeta, new_logic.block_parameters.beta)
+        self.assertEqual(old_logic.BlockMinReward, new_logic.block_parameters.min_reward)
 
         # check iti parameters
-        self.assertEqual(old_logic.ITIMin, new_logic.iti_min)
-        self.assertEqual(old_logic.ITIMax, new_logic.iti_max)
-        self.assertEqual(old_logic.ITIBeta, new_logic.iti_beta)
+        self.assertEqual(old_logic.ITIMin, new_logic.inter_trial_interval.min)
+        self.assertEqual(old_logic.ITIMax, new_logic.inter_trial_interval.max)
+        self.assertEqual(old_logic.ITIBeta, new_logic.inter_trial_interval.beta)
 
         # check delay parameters
-        self.assertEqual(old_logic.DelayMin, new_logic.delay_min)
-        self.assertEqual(old_logic.DelayMax, new_logic.delay_max)
-        self.assertEqual(old_logic.DelayBeta, new_logic.delay_beta)
+        self.assertEqual(old_logic.DelayMin, new_logic.delay_period.min)
+        self.assertEqual(old_logic.DelayMax, new_logic.delay_period.max)
+        self.assertEqual(old_logic.DelayBeta, new_logic.delay_period.beta)
 
         # check reward size and reward delay parameters
         self.assertEqual(old_logic.RewardDelay, new_logic.reward_delay)
-        self.assertEqual(old_logic.RightValue_volume, new_logic.right_value_volume)
-        self.assertEqual(old_logic.LeftValue_volume, new_logic.left_value_volume)
+        self.assertEqual(old_logic.RightValue_volume, new_logic.reward_size.right_value_volume)
+        self.assertEqual(old_logic.LeftValue_volume, new_logic.reward_size.left_value_volume)
 
         # check auto water parameters
-        self.assertEqual(old_logic.AutoReward, new_logic.auto_reward)
-        self.assertEqual(old_logic.AutoWaterType, new_logic.auto_water_type)
-        self.assertEqual(old_logic.Unrewarded, new_logic.unrewarded)
-        self.assertEqual(old_logic.Ignored, new_logic.ignored)
-        self.assertEqual(old_logic.Multiplier, new_logic.multiplier)
+        if old_logic.AutoReward:
+            self.assertTrue(new_logic.auto_water is not None)
+            self.assertEqual(old_logic.AutoWaterType, new_logic.auto_water.auto_water_type)
+            self.assertEqual(old_logic.Unrewarded, new_logic.auto_water.unrewarded)
+            self.assertEqual(old_logic.Ignored, new_logic.auto_water.ignored)
+            self.assertEqual(old_logic.Multiplier, new_logic.auto_water.multiplier)
+        else:
+            self.assertTrue(new_logic.auto_water is None)
 
         # check auto block parameters
-        self.assertEqual(old_logic.AdvancedBlockAuto, new_logic.advanced_block_auto)
-        self.assertEqual(old_logic.SwitchThr, new_logic.switch_thr)
-        self.assertEqual(old_logic.PointsInARow, new_logic.points_in_a_row)
+        if old_logic.AdvancedBlockAuto != 'off':
+            self.assertTrue(new_logic.auto_block is not None)
+            self.assertEqual(old_logic.SwitchThr, new_logic.auto_block.switch_thr)
+            self.assertEqual(old_logic.PointsInARow, new_logic.auto_block.points_in_a_row)
+        else:
+            self.assertTrue(new_logic.auto_block is None)
 
         # check auto stop parameters
-        self.assertEqual(old_logic.MaxTrial, new_logic.max_trial)
-        self.assertEqual(old_logic.MaxTime, new_logic.max_time)
-        self.assertEqual(old_logic.StopIgnores, round(new_logic.auto_stop_ignore_win *
-                                                      new_logic.auto_stop_ignore_ratio_threshold))
+        self.assertEqual(old_logic.MaxTrial, new_logic.auto_stop.max_trial)
+        self.assertEqual(old_logic.MaxTime, new_logic.auto_stop.max_time)
+        self.assertEqual(old_logic.StopIgnores, round(new_logic.auto_stop.ignore_win *
+                                                      new_logic.auto_stop.ignore_ratio_threshold))
 
         # check miscellaneous parameters
-        self.assertEqual(old_logic.ResponseTime, new_logic.response_time)
-        self.assertEqual(old_logic.RewardConsumeTime, new_logic.reward_consume_time)
-        self.assertEqual(old_logic.UncoupledReward, new_logic.uncoupled_reward)
+        self.assertEqual(old_logic.ResponseTime, new_logic.response_time.response_time)
+        self.assertEqual(old_logic.RewardConsumeTime, new_logic.response_time.reward_consume_time)
+
+        # check uncouple reward
+        if old_logic.UncoupledReward != "":
+            self.assertEqual([float(x) for x in old_logic.UncoupledReward.split(",")],
+                             new_logic.uncoupled_reward)
+        else:
+            self.assertTrue(new_logic.uncoupled_reward is None)
 
 
 if __name__ == "__main__":

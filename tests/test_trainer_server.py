@@ -5,7 +5,6 @@ from aind_behavior_dynamic_foraging.CurriculumManager.curriculums.coupled_baitin
     construct_coupled_baiting_2p3_curriculum
 from unittest import mock
 import os
-from slims.internal import Record
 
 class TestTrainerServer(unittest.TestCase):
     """ Testing TrainerServer model"""

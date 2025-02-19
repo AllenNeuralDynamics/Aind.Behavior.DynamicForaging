@@ -9,8 +9,7 @@ __version__ = "0.0.0"
 from .DataSchemas.task_logic import (
     AindDynamicForagingTaskParameters,
     AutoWaterMode,
-    AdvancedBlockMode,
-    AindDynamicForagingTaskLogic
+    AindDynamicForagingTaskLogic,
 )
 from .CurriculumManager.metrics import DynamicForagingMetrics
 from .CurriculumManager.trainer import DynamicForagingTrainerServer
@@ -18,7 +17,6 @@ from .CurriculumManager.trainer import DynamicForagingTrainerServer
 __all__ = [
     "AindDynamicForagingTaskParameters",
     "AutoWaterMode",
-    "AdvancedBlockMode",
     "AindDynamicForagingTaskLogic",
     "DynamicForagingMetrics",
     "DynamicForagingTrainerServer"
