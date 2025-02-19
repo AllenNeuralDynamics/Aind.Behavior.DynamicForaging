@@ -21,8 +21,8 @@ from aind_behavior_dynamic_foraging.CurriculumManager.curriculums.uncoupled_bait
     s_final as ucb_final,
     s_graduated as ucb_graduated
 )
-from aind_behavior_dynamic_foraging.CurriculumManager.curriculums.uncoupled_no_baiting import (
-    construct_uncoupled_no_baiting_curriculum,
+from aind_behavior_dynamic_foraging.CurriculumManager.curriculums.uncoupled_no_baiting_2p3 import (
+    construct_uncoupled_no_baiting_2p3_curriculum,
     s_stage_1_warmup as uc_stage_1_warmup,
     s_stage_1 as uc_stage_1,
     s_stage_2 as uc_stage_2,
@@ -982,7 +982,7 @@ class TestCurriculums(unittest.TestCase):
         )
         old_curriculum = uncoupled_baiting['curriculum']
 
-        new_curriculum = construct_uncoupled_no_baiting_curriculum()
+        new_curriculum = construct_uncoupled_no_baiting_2p3_curriculum()
 
         # --WARMUP--
 
