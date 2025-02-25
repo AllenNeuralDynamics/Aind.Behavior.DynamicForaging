@@ -121,6 +121,19 @@ class DynamicForagingTrainerServer(TrainerServer):
 
         return curriculum, trainer_state, metrics
 
+    def session_attachments(self, subject_id: str) -> list[slims.models.SlimsAttachment]:
+        """
+        Query and return fetch_attachments for last session of mouse
+        :param subject_id:
+        :return: list of slims attachments
+        """
+
+        mouse = self.slims_client.fetch_model(slims.models.SlimsMouseContent, barcode=subject_id)
+        last_session = self.slims_client.fetch_models(slims.models.behavior_session.SlimsBehaviorSession,
+                                                      mouse_pk=mouse.pk, start=0, end=1)
+       
+        return self.slims_client.fetch_attachments(last_session[0])
+
     def write_data(
             self,
             subject_id: str,
