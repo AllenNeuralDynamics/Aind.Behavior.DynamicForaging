@@ -9,7 +9,7 @@ from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel, TaskPa
 
 __version__ = "0.1.0"
 
-advanced_block_autos = ["now", "once"]
+advanced_block_autos = Literal["now", "once"]
 RANDOMNESSES = Literal["Exponential", "Even"]
 
 class BlockParameters(BaseModel):
