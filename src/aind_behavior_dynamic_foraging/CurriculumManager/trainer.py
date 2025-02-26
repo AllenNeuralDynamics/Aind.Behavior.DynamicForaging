@@ -128,7 +128,7 @@ class DynamicForagingTrainerServer(TrainerServer):
 
         mouse = self.slims_client.fetch_model(slims.models.SlimsMouseContent, barcode=subject_id)
         last_session = self.slims_client.fetch_models(slims.models.behavior_session.SlimsBehaviorSession,
-                                                      mouse_pk=mouse.pk, start=0, end=1)
+                                                      mouse_pk=mouse.pk)[-1]
        
         return self.slims_client.fetch_attachments(last_session[0])
 
