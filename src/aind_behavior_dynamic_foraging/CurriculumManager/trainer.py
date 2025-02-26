@@ -130,7 +130,7 @@ class DynamicForagingTrainerServer(TrainerServer):
         last_session = self.slims_client.fetch_models(slims.models.behavior_session.SlimsBehaviorSession,
                                                       mouse_pk=mouse.pk)[-1]
        
-        return self.slims_client.fetch_attachments(last_session[0])
+        return self.slims_client.fetch_attachments(last_session)
 
     def write_data(
             self,
