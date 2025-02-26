@@ -83,7 +83,9 @@ class DynamicForagingTrainerServer(TrainerServer):
         sessions = self.slims_client.fetch_models(slims.models.behavior_session.SlimsBehaviorSession,
                                                       mouse_pk=mouse.pk)
         curriculum_attachments = self.slims_client.fetch_attachments(sessions[-1])
-        response = self.slims_client.fetch_attachment_content(curriculum_attachments[0]).json()
+        response = [self.slims_client.fetch_attachment_content(attach).json() for attach in curriculum_attachments
+                    if attach.name == "TrainerState"][0]
+
         # format response for valid TrainerState
         graph = {int(k): [tuple(transition) for transition in v] for k, v in
                  response['curriculum']['graph']['graph'].items()}
