@@ -140,7 +140,7 @@ class DynamicForagingTrainerServer(TrainerServer):
             curriculum: Curriculum,
             trainer_state: TrainerState,
     ) -> slims.models.SlimsBehaviorSession:
-:
+
         """
         Write SlimsBehaviorSession to slims and add a TrainerState attachment
 
