@@ -10,7 +10,18 @@ import os
 import aind_data_access_api.document_db
 from aind_behavior_dynamic_foraging import DynamicForagingMetrics
 from datetime import datetime
+from typing import Union
+from aind_behavior_dynamic_foraging.CurriculumManager.curriculums.coupled_baiting_2p3 import construct_coupled_baiting_2p3_curriculum
+from aind_behavior_dynamic_foraging.CurriculumManager.curriculums.uncoupled_baiting_2p3 import construct_uncoupled_baiting_2p3_curriculum
+from aind_behavior_dynamic_foraging.CurriculumManager.curriculums.uncoupled_no_baiting_2p3 import construct_uncoupled_no_baiting_2p3_curriculum
+from pydantic import Field, BaseModel
 
+class DynamicForagingTrainerState(TrainerState):
+    curriculum: Union[dict, BaseModel] = Field(
+        ...,
+        validate_default=True,
+        description="The curriculum used by the trainer",
+    )
 
 class DynamicForagingTrainerServer(TrainerServer):
     def __init__(self, slims_client: slims.SlimsClient = None,
@@ -92,7 +103,8 @@ class DynamicForagingTrainerServer(TrainerServer):
         nodes = {int(k): v for k, v in response['curriculum']['graph']['nodes'].items()}
         response['curriculum']['graph'] = {'graph': graph, 'nodes': nodes}
 
-        trainer_state = TrainerState(**response)
+        print(response)
+        trainer_state = DynamicForagingTrainerState(**response)
         curriculum = trainer_state.curriculum
 
         # populate metrics
