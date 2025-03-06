@@ -1,4 +1,5 @@
 from aind_behavior_curriculum import (
+create_curriculum,
     Curriculum,
     Metrics,
     TrainerServer,
@@ -8,8 +9,13 @@ import aind_slims_api as slims
 import logging
 import os
 import aind_data_access_api.document_db
-from aind_behavior_dynamic_foraging import DynamicForagingMetrics
+from aind_behavior_dynamic_foraging import DynamicForagingMetrics, AindDynamicForagingTaskLogic
+from pydantic import Field
 from datetime import datetime
+class DynamicForagingTrainerState(TrainerState):
+    curriculum: create_curriculum("CoupledBaiting2p3Curriculum", "0.2.3", [AindDynamicForagingTaskLogic])() or \
+                create_curriculum("UnCoupledBaiting2p3Curriculum", "0.2.3", [AindDynamicForagingTaskLogic])() or \
+                create_curriculum("UncoupledNoBaiting2p3p1RewardDelayCurriculum", "0.2.3", [AindDynamicForagingTaskLogic])() = Field()
 
 class DynamicForagingTrainerServer(TrainerServer):
     def __init__(self, slims_client: slims.SlimsClient = None,
@@ -91,7 +97,7 @@ class DynamicForagingTrainerServer(TrainerServer):
         nodes = {int(k): v for k, v in response['curriculum']['graph']['nodes'].items()}
         response['curriculum']['graph'] = {'graph': graph, 'nodes': nodes}
 
-        trainer_state = TrainerState(**response)
+        trainer_state = DynamicForagingTrainerState(**response)
         curriculum = trainer_state.curriculum
 
         # populate metrics
