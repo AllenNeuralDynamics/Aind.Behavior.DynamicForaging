@@ -98,6 +98,7 @@ class DynamicForagingTrainerServer(TrainerServer):
         response['curriculum']['graph'] = {'graph': graph, 'nodes': nodes}
 
         trainer_state = DynamicForagingTrainerState(**response)
+        trainer_state.stage.task = AindDynamicForagingTaskLogic(**trainer_state.stage.task.model_dump())
         curriculum = trainer_state.curriculum
 
         # populate metrics
