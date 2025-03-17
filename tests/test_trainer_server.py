@@ -67,7 +67,7 @@ class TestTrainerServer(unittest.TestCase):
         """
 
         # test load data
-        curriculum, trainer_state, metrics = self.trainer_server.load_data('00000001')
+        curriculum, trainer_state, metrics, attachments = self.trainer_server.load_data('00000001')
 
         # check curriculum returned
         expected_curriculum = construct_coupled_baiting_2p3_curriculum()
@@ -88,10 +88,11 @@ class TestTrainerServer(unittest.TestCase):
         Test that server can correctly write data
         """
 
-        curriculum, trainer_state, metrics = self.trainer_server.load_data('00000001')
+        curriculum, trainer_state, metrics, attachments = self.trainer_server.load_data('00000001')
 
         # test write data
         self.trainer_server.write_data(
             subject_id='00000001',
             curriculum=curriculum,
+            metrics=metrics,
             trainer_state=trainer_state)
