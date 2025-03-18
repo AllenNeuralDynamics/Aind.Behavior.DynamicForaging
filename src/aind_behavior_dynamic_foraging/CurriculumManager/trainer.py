@@ -78,19 +78,23 @@ class DynamicForagingTrainerServer:
 
         self.log.debug('Successfully read from Slims.')
 
-    def load_data(self, subject_id: str) -> tuple[Curriculum, TrainerState, Metrics, slims.models.SlimsAttachment]:
+    def load_data(self, subject_id: str) -> tuple[Curriculum,
+                                                  TrainerState,
+                                                  Metrics,
+                                                  slims.models.SlimsAttachment,
+                                                  slims.models.behavior_session.SlimsBehaviorSession]:
         """
         Read TrainerState of session from Slims and Metrics from DocDB
 
         :param subject_id: subject id of mouse to use to query docDB and Slims
-        :returns: tuple of Curriculum, TrainerState, and Metrics of session
+        :returns: tuple of Curriculum, TrainerState, Metrics, attachments, and last session in slims
         """
 
         # grab trainer state from slims
         mouse = self.slims_client.fetch_model(slims.models.SlimsMouseContent, barcode=subject_id)
-        sessions = self.slims_client.fetch_models(slims.models.behavior_session.SlimsBehaviorSession,
+        slims_sessions = self.slims_client.fetch_models(slims.models.behavior_session.SlimsBehaviorSession,
                                                   mouse_pk=mouse.pk)
-        curriculum_attachments = self.slims_client.fetch_attachments(sessions[-1])
+        curriculum_attachments = self.slims_client.fetch_attachments(slims_sessions[-1])
         # get most recently added TrainerState
         response = [self.slims_client.fetch_attachment_content(attach).json() for attach in curriculum_attachments
                     if attach.name == "TrainerState"][0]
@@ -129,7 +133,7 @@ class DynamicForagingTrainerServer:
             session_at_current_stage=session_at_current_stage
         )
 
-        return curriculum, trainer_state, metrics, curriculum_attachments
+        return curriculum, trainer_state, metrics, curriculum_attachments, slims_sessions[-1]
 
     def write_data(
             self,
