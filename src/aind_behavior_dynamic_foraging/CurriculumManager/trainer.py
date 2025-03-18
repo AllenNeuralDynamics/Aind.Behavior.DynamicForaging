@@ -93,7 +93,7 @@ class DynamicForagingTrainerServer:
         curriculum_attachments = self.slims_client.fetch_attachments(sessions[-1])
         # get most recently added TrainerState
         response = [self.slims_client.fetch_attachment_content(attach).json() for attach in curriculum_attachments
-                         if attach.name == "TrainerState"][0]
+                    if attach.name == "TrainerState"][0]
 
         # format response for valid TrainerState
         graph = {int(k): [tuple(transition) for transition in v] for k, v in
@@ -131,7 +131,6 @@ class DynamicForagingTrainerServer:
 
         return curriculum, trainer_state, metrics, curriculum_attachments
 
-
     def write_data(
             self,
             subject_id: str,
@@ -155,12 +154,13 @@ class DynamicForagingTrainerServer:
         :experimenters: list of experimenters who ran session
         """
 
-        logging.info("Generating next session stage.")
+        self.log.info("Generating next session stage.")
         next_trainer_state = Trainer(curriculum).evaluate(trainer_state=trainer_state,
                                                           metrics=metrics)
 
         mouse = self.slims_client.fetch_model(slims.models.SlimsMouseContent, barcode=subject_id)
 
+        self.log.info("Writing next session to slims.")
         # create session
         added_session = self.slims_client.add_model(
             slims.models.SlimsBehaviorSession(
@@ -180,4 +180,4 @@ class DynamicForagingTrainerServer:
             content=next_trainer_state.model_dump_json()
         )
 
-        return added_session
+        return added_session, next_trainer_state
