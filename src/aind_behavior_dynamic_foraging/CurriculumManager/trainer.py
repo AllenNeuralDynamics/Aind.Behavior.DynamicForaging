@@ -138,7 +138,6 @@ class DynamicForagingTrainerServer:
     def write_data(
             self,
             subject_id: str,
-            metrics: Metrics,
             curriculum: Curriculum,
             trainer_state: TrainerState,
             date: datetime = datetime.now(),
@@ -151,16 +150,12 @@ class DynamicForagingTrainerServer:
 
         :param on_curriculum: if mouse is on curriculum
         :param date: date of acquisitions
-        :param metrics: metrics from completed session
         :param subject_id: subject id of mouse to use to query docDB and Slims
         :param curriculum: curriculum for next session
         :param trainer_state: trainer state for next session
         :experimenters: list of experimenters who ran session
         """
 
-        self.log.info("Generating next session stage.")
-        next_trainer_state = Trainer(curriculum).evaluate(trainer_state=trainer_state,
-                                                          metrics=metrics)
 
         mouse = self.slims_client.fetch_model(slims.models.SlimsMouseContent, barcode=subject_id)
 
@@ -181,7 +176,7 @@ class DynamicForagingTrainerServer:
         self.slims_client.add_attachment_content(
             record=added_session,
             name="TrainerState",
-            content=next_trainer_state.model_dump_json()
+            content=trainer_state.model_dump_json()
         )
 
-        return added_session, next_trainer_state
+        return added_session

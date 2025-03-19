@@ -94,5 +94,4 @@ class TestTrainerServer(unittest.TestCase):
         self.trainer_server.write_data(
             subject_id='00000001',
             curriculum=curriculum,
-            metrics=metrics,
             trainer_state=trainer_state)
