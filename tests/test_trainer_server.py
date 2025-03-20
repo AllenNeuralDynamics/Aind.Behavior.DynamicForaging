@@ -5,7 +5,6 @@ from aind_behavior_dynamic_foraging.CurriculumManager.curriculums.coupled_baitin
     construct_coupled_baiting_2p3_curriculum
 from unittest import mock
 import os
-from slims.internal import Record
 
 class TestTrainerServer(unittest.TestCase):
     """ Testing TrainerServer model"""
@@ -68,7 +67,7 @@ class TestTrainerServer(unittest.TestCase):
         """
 
         # test load data
-        curriculum, trainer_state, metrics = self.trainer_server.load_data('00000001')
+        curriculum, trainer_state, metrics, attachments, session = self.trainer_server.load_data('00000001')
 
         # check curriculum returned
         expected_curriculum = construct_coupled_baiting_2p3_curriculum()
@@ -89,7 +88,7 @@ class TestTrainerServer(unittest.TestCase):
         Test that server can correctly write data
         """
 
-        curriculum, trainer_state, metrics = self.trainer_server.load_data('00000001')
+        curriculum, trainer_state, metrics, attachments, session = self.trainer_server.load_data('00000001')
 
         # test write data
         self.trainer_server.write_data(
