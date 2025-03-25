@@ -81,8 +81,7 @@ class DynamicForagingTrainerServer:
     def load_data(self, subject_id: str) -> tuple[Curriculum,
                                                   TrainerState,
                                                   Metrics,
-                                                  slims.models.SlimsAttachment,
-                                                  slims.models.behavior_session.SlimsBehaviorSession]:
+                                                  [slims.models.SlimsAttachment]]:
         """
         Read TrainerState of session from Slims and Metrics from DocDB
 
@@ -94,46 +93,52 @@ class DynamicForagingTrainerServer:
         mouse = self.slims_client.fetch_model(slims.models.SlimsMouseContent, barcode=subject_id)
         slims_sessions = self.slims_client.fetch_models(slims.models.behavior_session.SlimsBehaviorSession,
                                                   mouse_pk=mouse.pk)
-        curriculum_attachments = self.slims_client.fetch_attachments(slims_sessions[-1])
-        # get most recently added TrainerState
-        response = [self.slims_client.fetch_attachment_content(attach).json() for attach in curriculum_attachments
-                    if attach.name == "TrainerState"][0]
+        if slims_sessions != []:
+            curriculum_attachments = self.slims_client.fetch_attachments(slims_sessions[-1])
+            # get most recently added TrainerState
+            response = [self.slims_client.fetch_attachment_content(attach).json() for attach in curriculum_attachments
+                        if attach.name == "TrainerState"][0]
 
-        # format response for valid TrainerState
-        graph = {int(k): [tuple(transition) for transition in v] for k, v in
-                 response['curriculum']['graph']['graph'].items()}
-        nodes = {int(k): v for k, v in response['curriculum']['graph']['nodes'].items()}
-        response['curriculum']['graph'] = {'graph': graph, 'nodes': nodes}
+            # format response for valid TrainerState
+            graph = {int(k): [tuple(transition) for transition in v] for k, v in
+                     response['curriculum']['graph']['graph'].items()}
+            nodes = {int(k): v for k, v in response['curriculum']['graph']['nodes'].items()}
+            response['curriculum']['graph'] = {'graph': graph, 'nodes': nodes}
 
-        trainer_state = DynamicForagingTrainerState(**response)
-        trainer_state.stage.task = AindDynamicForagingTaskLogic(**trainer_state.stage.task.model_dump())
-        curriculum = trainer_state.curriculum
+            trainer_state = DynamicForagingTrainerState(**response)
+            trainer_state.stage.task = AindDynamicForagingTaskLogic(**trainer_state.stage.task.model_dump())
+            curriculum = trainer_state.curriculum
 
-        # populate metrics
-        sessions = self.docdb_client.retrieve_docdb_records(
-            filter_query={"name": {"$regex": f"^behavior_{subject_id}(?!.*processed).*"}}
-        )
-        session_total = len(sessions)
-        sessions = [session for session in sessions if session['session'] is not None]  # sort out none types
-        sessions.sort(key=lambda session: session['session']['session_start_time'])  # sort based on time
-        epochs = [session['session']['stimulus_epochs'][0] for session in sessions]
-        finished_trials = [epoch['trials_finished'] for epoch in epochs]
-        foraging_efficiency = [epoch['output_parameters']['performance']['foraging_efficiency'] for epoch in epochs]
+            # populate metrics
+            sessions = self.docdb_client.retrieve_docdb_records(
+                filter_query={"name": {"$regex": f"^behavior_{subject_id}(?!.*processed).*"}}
+            )
+            session_total = len(sessions)
+            sessions = [session for session in sessions if session['session'] is not None]  # sort out none types
+            sessions.sort(key=lambda session: session['session']['session_start_time'])  # sort based on time
+            epochs = [session['session']['stimulus_epochs'][0] for session in sessions]
+            finished_trials = [epoch['trials_finished'] for epoch in epochs]
+            foraging_efficiency = [epoch['output_parameters']['performance']['foraging_efficiency'] for epoch in epochs]
 
-        # query slims for sessions to determine how many sessions at current stage
-        slims_session = self.slims_client.fetch_models(slims.models.behavior_session.SlimsBehaviorSession,
-                                                       mouse_pk=mouse.pk)
-        current_stage = trainer_state.stage.name
-        session_at_current_stage = len([session for session in slims_session if session.task_stage == current_stage])
 
-        metrics = DynamicForagingMetrics(
-            foraging_efficiency=foraging_efficiency,
-            finished_trials=finished_trials,
-            session_total=session_total,
-            session_at_current_stage=session_at_current_stage
-        )
+            current_stage = trainer_state.stage.name
+            session_at_current_stage = len([sess for sess in slims_sessions if sess.task_stage == current_stage])
 
-        return curriculum, trainer_state, metrics, curriculum_attachments, slims_sessions[-1]
+            metrics = DynamicForagingMetrics(
+                foraging_efficiency=foraging_efficiency,
+                finished_trials=finished_trials,
+                session_total=session_total,
+                session_at_current_stage=session_at_current_stage
+            )
+
+        else:
+            curriculum = None
+            trainer_state = None
+            metrics = None
+            curriculum_attachments = []
+            slims_sessions = []
+
+        return curriculum, trainer_state, metrics, curriculum_attachments
 
     def write_data(
             self,
