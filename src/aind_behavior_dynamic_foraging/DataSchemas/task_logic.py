@@ -59,17 +59,6 @@ class ResponseTime(BaseModel):
     reward_consume_time: float = Field(default=3.0, title="Reward consume time",
                                        description="Time of the no-lick period before trial end")
 
-
-class AutoStop(BaseModel):
-    ignore_win: int = Field(default=30, title="Window of trials to check ignored responses")
-    ignore_ratio_threshold: float = Field(default=.8,
-                                          title="Threshold for acceptable ignored trials within window.",
-                                          ge=0, le=1)
-    max_trial: int = Field(default=1000, title="Maximal number of trials")
-    max_time: int = Field(default=120, title="Maximal session time (min)")
-    min_time: int = Field(default=30, title="Minimum session time (min)")
-
-
 class AutoBlock(BaseModel):
     advanced_block_auto: Literal["now", "once"] = Field(default="now", title="Auto block mode")
     switch_thr: float = Field(default=.5, title="Switch threshold for auto block")
@@ -107,7 +96,6 @@ class AindDynamicForagingTaskParameters(TaskParameters):
     inter_trial_interval: InterTrialInterval = Field(default_factory=InterTrialInterval, validate_default=True,
                                                      description="Parameters describing iti.")
     response_time: ResponseTime = Field(default=ResponseTime(), description="Parameters describing response time.")
-    auto_stop: AutoStop = Field(default=AutoStop(), description="Parameters describing auto stop.")
     auto_block: Optional[AutoBlock] = Field(default=None,
                                             description="Parameters describing auto advancement to next block.")
     reward_size: RewardSize = Field(default=RewardSize(), description="Parameters describing reward size.")

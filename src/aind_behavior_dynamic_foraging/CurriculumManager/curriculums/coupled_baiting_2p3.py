@@ -19,7 +19,6 @@ from aind_behavior_dynamic_foraging.DataSchemas.task_logic import (
     AutoWater,
     InterTrialInterval,
     ResponseTime,
-    AutoStop,
     AutoBlock,
     RewardSize,
     Warmup
@@ -80,12 +79,6 @@ s_stage_1_warmup = Stage(
                 advanced_block_auto="now",
                 switch_thr=0.5,
                 points_in_a_row=5),
-            auto_stop=AutoStop(
-                min_time=30,
-                max_trial=1000,
-                max_time=75,
-                ignore_win=20000,  # set stop_ignores to a large number at the beginning
-                ignore_ratio_threshold=1),
             response_time=ResponseTime(
                 response_time=5,  # Very long response time at the beginning
                 reward_consume_time=1),  # Shorter RewardConsumeTime to increase the number of trials
@@ -123,9 +116,6 @@ s_stage_1 = Stage(
                 switch_thr=0.5,
                 points_in_a_row=5),
 
-            # Auto stop parameters
-            auto_stop=AutoStop(max_trial=1000, max_time=75, ignore_win=20000, ignore_ratio_threshold=1),
-
             # Response time and reward consume time
             response_time=ResponseTime(response_time=5, reward_consume_time=1),
             uncoupled_reward=None
@@ -160,9 +150,6 @@ s_stage_2 = Stage(
                 advanced_block_auto="now",
                 switch_thr=0.6,
                 points_in_a_row=5),
-
-            # Auto stop parameters
-            auto_stop=AutoStop(max_trial=1000, max_time=75, ignore_win=30, ignore_ratio_threshold=0.83),
 
             # Response time and reward consume time
             response_time=ResponseTime(response_time=3, reward_consume_time=1),
@@ -199,9 +186,6 @@ s_stage_3 = Stage(
                 switch_thr=0.6,
                 points_in_a_row=5),
 
-            # Auto stop parameters
-            auto_stop=AutoStop(max_trial=1000, max_time=75, ignore_win=30, ignore_ratio_threshold=0.83),
-
             # Response time and reward consume time
             response_time=ResponseTime(response_time=2, reward_consume_time=1),
             uncoupled_reward=None
@@ -230,9 +214,6 @@ s_final = Stage(
             reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
             reward_delay=0.0,
 
-            # Auto stop parameters
-            auto_stop=AutoStop(max_trial=1000, max_time=75, ignore_win=30, ignore_ratio_threshold=0.83),
-
             # Response time and reward consume time
             response_time=ResponseTime(response_time=1, reward_consume_time=3),
             uncoupled_reward=None
@@ -259,9 +240,6 @@ s_graduated = Stage(
             # Reward size and delay
             reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
             reward_delay=0.0,
-
-            # Auto stop parameters
-            auto_stop=AutoStop(max_trial=1000, max_time=75, ignore_win=30, ignore_ratio_threshold=0.83),
 
             # Response time and reward consume time
             response_time=ResponseTime(response_time=1, reward_consume_time=3),
