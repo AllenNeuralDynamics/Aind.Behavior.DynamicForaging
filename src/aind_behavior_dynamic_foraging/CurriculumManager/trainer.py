@@ -81,7 +81,9 @@ class DynamicForagingTrainerServer:
     def load_data(self, subject_id: str) -> tuple[Curriculum,
                                                   TrainerState,
                                                   Metrics,
-                                                  [slims.models.SlimsAttachment]]:
+                                                  [slims.models.SlimsAttachment],
+                                                  slims.models.behavior_session.SlimsBehaviorSession
+    ]:
         """
         Read TrainerState of session from Slims and Metrics from DocDB
 
@@ -136,9 +138,9 @@ class DynamicForagingTrainerServer:
             trainer_state = None
             metrics = None
             curriculum_attachments = []
-            slims_sessions = []
+            slims_sessions = None
 
-        return curriculum, trainer_state, metrics, curriculum_attachments
+        return curriculum, trainer_state, metrics, curriculum_attachments, slims_sessions
 
     def write_data(
             self,
