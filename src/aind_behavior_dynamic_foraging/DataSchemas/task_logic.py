@@ -11,6 +11,7 @@ __version__ = "0.1.0"
 
 advanced_block_autos = Literal["now", "once"]
 RANDOMNESSES = Literal["Exponential", "Even"]
+AUTO_WATER_MODES = Literal["Natural", "Both", "High pro"]
 
 class BlockParameters(BaseModel):
     # Block length
@@ -31,16 +32,8 @@ class DelayPeriod(BaseModel):
     max: float = Field(default=1.0, title="Delay period (max) ")
     beta: float = Field(default=1.0, title="Delay period (beta)")
 
-
-class AutoWaterMode(str, Enum):
-    """Modes for auto water """
-    NATURAL = "Natural"
-    BOTH = "Both"
-    HIGH_PRO = "High pro"
-
-
 class AutoWater(BaseModel):
-    auto_water_type: AutoWaterMode = Field(default=AutoWaterMode.NATURAL, title="Auto water mode")
+    auto_water_type: str = Field(default=AUTO_WATER_MODES, title="Auto water mode")
     multiplier: float = Field(default=.8, title="Multiplier for auto reward")
     unrewarded: int = Field(default=200, title="Number of unrewarded trials before auto water")
     ignored: int = Field(default=100, title="Number of ignored trials before auto water")

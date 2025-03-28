@@ -12,13 +12,13 @@ import aind_data_access_api.document_db
 from aind_behavior_dynamic_foraging import DynamicForagingMetrics, AindDynamicForagingTaskLogic
 from pydantic import Field
 from datetime import datetime
-
+from typing import Union
 
 class DynamicForagingTrainerState(TrainerState):
-    curriculum: create_curriculum("CoupledBaiting2p3Curriculum", "0.2.3", [AindDynamicForagingTaskLogic])() or \
-                create_curriculum("UnCoupledBaiting2p3Curriculum", "0.2.3", [AindDynamicForagingTaskLogic])() or \
-                create_curriculum("UncoupledNoBaiting2p3p1RewardDelayCurriculum", "0.2.3",
-                                  [AindDynamicForagingTaskLogic])() = Field()
+    curriculum: Union[create_curriculum("CoupledBaiting2p3Curriculum", "0.2.3", [AindDynamicForagingTaskLogic])(),
+        create_curriculum("UnCoupledBaiting2p3Curriculum", "0.2.3", [AindDynamicForagingTaskLogic])(),
+        create_curriculum("UncoupledNoBaiting2p3p1RewardDelayCurriculum", "0.2.3",[AindDynamicForagingTaskLogic])(),
+                      ] = Field()
 
 
 class DynamicForagingTrainerServer:

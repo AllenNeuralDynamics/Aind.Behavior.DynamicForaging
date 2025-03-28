@@ -11,7 +11,6 @@ from aind_behavior_dynamic_foraging.DataSchemas.task_logic import (
     BlockParameters,
     RewardProbability,
     DelayPeriod,
-    AutoWaterMode,
     AutoWater,
     InterTrialInterval,
     ResponseTime,
@@ -65,7 +64,7 @@ s_stage_1_warmup = Stage(
                 left_value_volume=4.0
             ),
             auto_water=AutoWater(
-                auto_water_type=AutoWaterMode.NATURAL,
+                auto_water_type="Natural",
                 multiplier=0.5,
                 unrewarded=3,
                 ignored=3,
@@ -116,7 +115,7 @@ s_stage_1 = Stage(
                 left_value_volume=2.0
             ),
             auto_water=AutoWater(
-                auto_water_type=AutoWaterMode.NATURAL,
+                auto_water_type="Natural",
                 multiplier=0.5,
                 unrewarded=5,
                 ignored=5,
@@ -167,7 +166,7 @@ s_stage_2 = Stage(
                 left_value_volume=2.0
             ),
             auto_water=AutoWater(
-                auto_water_type=AutoWaterMode.NATURAL,
+                auto_water_type="Natural",
                 multiplier=0.5,
                 unrewarded=7,
                 ignored=7,
@@ -218,7 +217,7 @@ s_stage_3 = Stage(
                 left_value_volume=2.0
             ),
             auto_water=AutoWater(
-                auto_water_type=AutoWaterMode.NATURAL,
+                auto_water_type="Natural",
                 multiplier=0.5,
                 unrewarded=10,
                 ignored=10,
@@ -269,7 +268,7 @@ s_stage_4 = Stage(
                 left_value_volume=2.0
             ),
             auto_water=AutoWater(
-                auto_water_type=AutoWaterMode.NATURAL,
+                auto_water_type="Natural",
                 multiplier=0.5,
                 unrewarded=10,
                 ignored=10,

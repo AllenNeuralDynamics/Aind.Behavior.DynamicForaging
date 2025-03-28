@@ -14,7 +14,6 @@ from aind_behavior_dynamic_foraging.DataSchemas.task_logic import (
     BlockParameters,
     RewardProbability,
     DelayPeriod,
-    AutoWaterMode,
     AutoWater,
     InterTrialInterval,
     ResponseTime,
@@ -37,7 +36,7 @@ s_stage_1_warmup = Stage(name="stage_1_warmup", task=AindDynamicForagingTaskLogi
         delay_period=DelayPeriod(min=0.1, max=0.1, beta=0),
         reward_delay=0.0,
         reward_size=RewardSize(right_value_volume=4.0, left_value_volume=4.0),
-        auto_water=AutoWater(auto_water_type=AutoWaterMode.NATURAL, unrewarded=3, ignored=3, multiplier=0.5),
+        auto_water=AutoWater(auto_water_type="Natural", unrewarded=3, ignored=3, multiplier=0.5),
         auto_block=AutoBlock(advanced_block_auto="now", switch_thr=0.5, points_in_a_row=5),
         response_time=ResponseTime(response_time=5, reward_consume_time=1),
         uncoupled_reward=None
@@ -52,7 +51,7 @@ s_stage_1 = Stage(name="stage_1", task=AindDynamicForagingTaskLogic(
         delay_period=DelayPeriod(min=0.1, max=0.1, beta=0),
         reward_delay=0.0,
         reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
-        auto_water=AutoWater(auto_water_type=AutoWaterMode.NATURAL, unrewarded=5, ignored=5, multiplier=0.5),
+        auto_water=AutoWater(auto_water_type="Natural", unrewarded=5, ignored=5, multiplier=0.5),
         auto_block=AutoBlock(advanced_block_auto="now", switch_thr=0.5, points_in_a_row=5),
         response_time=ResponseTime(response_time=5, reward_consume_time=1),
         uncoupled_reward=None
@@ -67,7 +66,7 @@ s_stage_2 = Stage(name="stage_2", task=AindDynamicForagingTaskLogic(
         delay_period=DelayPeriod(min=0.3, max=0.3, beta=0),
         reward_delay=0.0,
         reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
-        auto_water=AutoWater(auto_water_type=AutoWaterMode.NATURAL, unrewarded=7, ignored=7, multiplier=0.5),
+        auto_water=AutoWater(auto_water_type="Natural", unrewarded=7, ignored=7, multiplier=0.5),
         auto_block=AutoBlock(advanced_block_auto="now", switch_thr=0.5, points_in_a_row=5),
         response_time=ResponseTime(response_time=3, reward_consume_time=1),
         uncoupled_reward=None
@@ -82,7 +81,7 @@ s_stage_3 = Stage(name="stage_3", task=AindDynamicForagingTaskLogic(
         delay_period=DelayPeriod(min=0.5, max=0.5, beta=0),
         reward_delay=0.0,
         reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
-        auto_water=AutoWater(auto_water_type=AutoWaterMode.NATURAL, unrewarded=10, ignored=10, multiplier=0.5),
+        auto_water=AutoWater(auto_water_type="Natural", unrewarded=10, ignored=10, multiplier=0.5),
         response_time=ResponseTime(response_time=2, reward_consume_time=1),
         uncoupled_reward=[0.1, 0.4, 0.7]
     )
