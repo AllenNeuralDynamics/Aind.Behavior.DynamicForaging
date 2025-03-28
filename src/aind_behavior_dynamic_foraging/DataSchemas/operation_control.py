@@ -17,5 +17,6 @@ class StagePosition(BaseModel):
 
 
 class OperationalControl(BaseModel):
+    name: Literal["OperationalControl"] = Field(default="OperationalControl", frozen=True)
     auto_stop: AutoStop = Field(default=AutoStop(), description="Parameters describing auto stop.")
     stage_position: Optional[StagePosition] = Field(default=None, description="Stage positions related to session.")

@@ -78,11 +78,11 @@ class DynamicForagingTrainerServer:
 
         self.log.debug('Successfully read from Slims.')
 
-    def load_data(self, subject_id: str) -> tuple[Curriculum,
-                                                  TrainerState,
-                                                  Metrics,
+    def load_data(self, subject_id: str) -> tuple[Curriculum or None,
+                                                  TrainerState or None,
+                                                  Metrics or None,
                                                   [slims.models.SlimsAttachment],
-                                                  slims.models.behavior_session.SlimsBehaviorSession
+                                                  slims.models.behavior_session.SlimsBehaviorSession or None
     ]:
         """
         Read TrainerState of session from Slims and Metrics from DocDB
@@ -95,7 +95,7 @@ class DynamicForagingTrainerServer:
         mouse = self.slims_client.fetch_model(slims.models.SlimsMouseContent, barcode=subject_id)
         slims_sessions = self.slims_client.fetch_models(slims.models.behavior_session.SlimsBehaviorSession,
                                                   mouse_pk=mouse.pk)
-        if slims_sessions != []:
+        if slims_sessions != []:    # no sessions related to mouse
             curriculum_attachments = self.slims_client.fetch_attachments(slims_sessions[-1])
             # get most recently added TrainerState
             response = [self.slims_client.fetch_attachment_content(attach).json() for attach in curriculum_attachments
@@ -138,9 +138,9 @@ class DynamicForagingTrainerServer:
             trainer_state = None
             metrics = None
             curriculum_attachments = []
-            slims_sessions = None
+            slims_sessions = [None]
 
-        return curriculum, trainer_state, metrics, curriculum_attachments, slims_sessions
+        return curriculum, trainer_state, metrics, curriculum_attachments, slims_sessions[-1]
 
     def write_data(
             self,
