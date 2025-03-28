@@ -15,9 +15,10 @@ from datetime import datetime
 from typing import Union
 
 class DynamicForagingTrainerState(TrainerState):
-    curriculum: Union[create_curriculum("CoupledBaiting2p3Curriculum", "0.2.3", [AindDynamicForagingTaskLogic])(),
-        create_curriculum("UnCoupledBaiting2p3Curriculum", "0.2.3", [AindDynamicForagingTaskLogic])(),
-        create_curriculum("UncoupledNoBaiting2p3p1RewardDelayCurriculum", "0.2.3",[AindDynamicForagingTaskLogic])(),
+    curriculum: Union[
+        type(create_curriculum("CoupledBaiting2p3Curriculum", "0.2.3", [AindDynamicForagingTaskLogic])()),
+        type(create_curriculum("UnCoupledBaiting2p3Curriculum", "0.2.3", [AindDynamicForagingTaskLogic])()),
+        type(create_curriculum("UncoupledNoBaiting2p3p1RewardDelayCurriculum", "0.2.3",[AindDynamicForagingTaskLogic])()),
                       ] = Field()
 
 
