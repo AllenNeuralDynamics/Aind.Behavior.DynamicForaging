@@ -9,11 +9,9 @@ from aind_behavior_dynamic_foraging.DataSchemas.task_logic import (
     BlockParameters,
     RewardProbability,
     DelayPeriod,
-    AutoWaterMode,
     AutoWater,
     InterTrialInterval,
     ResponseTime,
-    AutoStop,
     AutoBlock,
     RewardSize,
     Warmup
@@ -73,7 +71,7 @@ def mock_task_logic() -> AindDynamicForagingTaskLogic:
                 left_value_volume=4.0
             ),
             auto_water=AutoWater(
-                auto_water_type=AutoWaterMode.NATURAL,
+                auto_water_type="Natural",
                 multiplier=0.5,
                 unrewarded=3,
                 ignored=3,
@@ -82,13 +80,6 @@ def mock_task_logic() -> AindDynamicForagingTaskLogic:
                 advanced_block_auto="now",
                 switch_thr=0.5,
                 points_in_a_row=5
-            ),
-            auto_stop=AutoStop(
-                ignore_win=20000,
-                ignore_ratio_threshold=1,
-                max_trial=1000,
-                max_time=75,
-                min_time=30
             ),
             response_time=ResponseTime(
                 response_time=5,

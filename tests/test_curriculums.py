@@ -1550,12 +1550,6 @@ class TestCurriculums(unittest.TestCase):
         else:
             self.assertTrue(new_logic.auto_block is None)
 
-        # check auto stop parameters
-        self.assertEqual(old_logic.MaxTrial, new_logic.auto_stop.max_trial)
-        self.assertEqual(old_logic.MaxTime, new_logic.auto_stop.max_time)
-        self.assertEqual(old_logic.StopIgnores, round(new_logic.auto_stop.ignore_win *
-                                                      new_logic.auto_stop.ignore_ratio_threshold))
-
         # check miscellaneous parameters
         self.assertEqual(old_logic.ResponseTime, new_logic.response_time.response_time)
         self.assertEqual(old_logic.RewardConsumeTime, new_logic.response_time.reward_consume_time)

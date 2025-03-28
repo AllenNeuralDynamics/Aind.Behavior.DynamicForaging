@@ -12,13 +12,22 @@ import aind_data_access_api.document_db
 from aind_behavior_dynamic_foraging import DynamicForagingMetrics, AindDynamicForagingTaskLogic
 from pydantic import Field
 from datetime import datetime
+from typing import Union
+
+CoupledBaiting2p3Curriculum = create_curriculum("CoupledBaiting2p3Curriculum", "0.2.3",
+                                                [AindDynamicForagingTaskLogic])()
+UnCoupledBaiting2p3Curriculum = create_curriculum("UnCoupledBaiting2p3Curriculum", "0.2.3",
+                                                  [AindDynamicForagingTaskLogic])()
+UncoupledNoBaiting2p3p1RewardDelayCurriculum = create_curriculum("UncoupledNoBaiting2p3p1RewardDelayCurriculum",
+                                                                 "0.2.3", [AindDynamicForagingTaskLogic])()
 
 
 class DynamicForagingTrainerState(TrainerState):
-    curriculum: create_curriculum("CoupledBaiting2p3Curriculum", "0.2.3", [AindDynamicForagingTaskLogic])() or \
-                create_curriculum("UnCoupledBaiting2p3Curriculum", "0.2.3", [AindDynamicForagingTaskLogic])() or \
-                create_curriculum("UncoupledNoBaiting2p3p1RewardDelayCurriculum", "0.2.3",
-                                  [AindDynamicForagingTaskLogic])() = Field()
+    curriculum: Union[
+        CoupledBaiting2p3Curriculum,
+        UnCoupledBaiting2p3Curriculum,
+        UncoupledNoBaiting2p3p1RewardDelayCurriculum,
+    ] = Field()
 
 
 class DynamicForagingTrainerServer:
@@ -78,11 +87,11 @@ class DynamicForagingTrainerServer:
 
         self.log.debug('Successfully read from Slims.')
 
-    def load_data(self, subject_id: str) -> tuple[Curriculum,
-                                                  TrainerState,
-                                                  Metrics,
+    def load_data(self, subject_id: str) -> tuple[Curriculum or None,
+                                                  TrainerState or None,
+                                                  Metrics or None,
                                                   [slims.models.SlimsAttachment],
-                                                  slims.models.behavior_session.SlimsBehaviorSession
+                                                  slims.models.behavior_session.SlimsBehaviorSession or None
     ]:
         """
         Read TrainerState of session from Slims and Metrics from DocDB
@@ -94,8 +103,8 @@ class DynamicForagingTrainerServer:
         # grab trainer state from slims
         mouse = self.slims_client.fetch_model(slims.models.SlimsMouseContent, barcode=subject_id)
         slims_sessions = self.slims_client.fetch_models(slims.models.behavior_session.SlimsBehaviorSession,
-                                                  mouse_pk=mouse.pk)
-        if slims_sessions != []:
+                                                        mouse_pk=mouse.pk)
+        if slims_sessions != []:  # no sessions related to mouse
             curriculum_attachments = self.slims_client.fetch_attachments(slims_sessions[-1])
             # get most recently added TrainerState
             response = [self.slims_client.fetch_attachment_content(attach).json() for attach in curriculum_attachments
@@ -122,7 +131,6 @@ class DynamicForagingTrainerServer:
             finished_trials = [epoch['trials_finished'] for epoch in epochs]
             foraging_efficiency = [epoch['output_parameters']['performance']['foraging_efficiency'] for epoch in epochs]
 
-
             current_stage = trainer_state.stage.name
             session_at_current_stage = len([sess for sess in slims_sessions if sess.task_stage == current_stage])
 
@@ -138,9 +146,9 @@ class DynamicForagingTrainerServer:
             trainer_state = None
             metrics = None
             curriculum_attachments = []
-            slims_sessions = None
+            slims_sessions = [None]
 
-        return curriculum, trainer_state, metrics, curriculum_attachments, slims_sessions
+        return curriculum, trainer_state, metrics, curriculum_attachments, slims_sessions[-1]
 
     def write_data(
             self,
@@ -162,7 +170,6 @@ class DynamicForagingTrainerServer:
         :param trainer_state: trainer state for next session
         :experimenters: list of experimenters who ran session
         """
-
 
         mouse = self.slims_client.fetch_model(slims.models.SlimsMouseContent, barcode=subject_id)
 

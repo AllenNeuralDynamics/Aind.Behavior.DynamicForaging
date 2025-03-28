@@ -116,7 +116,7 @@ class SessionControl(BaseModel):
 
 
 class Optogenetics(BaseModel):
-    experiment_type: Literal["Optogenetics"] = "Optogenetics"
+    name: Literal["Optogenetics"] = Field(default="Optogenetics", frozen=True)
     laser_colors: list[AvailableLaserColors] = Field(default=[],
                                                      description="List of lasers used in experiment.",
                                                      max_length=6)

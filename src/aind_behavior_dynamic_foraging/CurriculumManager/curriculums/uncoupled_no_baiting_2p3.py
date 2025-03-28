@@ -11,11 +11,9 @@ from aind_behavior_dynamic_foraging.DataSchemas.task_logic import (
     BlockParameters,
     RewardProbability,
     DelayPeriod,
-    AutoWaterMode,
     AutoWater,
     InterTrialInterval,
     ResponseTime,
-    AutoStop,
     AutoBlock,
     RewardSize,
     Warmup
@@ -66,7 +64,7 @@ s_stage_1_warmup = Stage(
                 left_value_volume=4.0
             ),
             auto_water=AutoWater(
-                auto_water_type=AutoWaterMode.NATURAL,
+                auto_water_type="Natural",
                 multiplier=0.5,
                 unrewarded=3,
                 ignored=3,
@@ -75,13 +73,6 @@ s_stage_1_warmup = Stage(
                 advanced_block_auto="now",
                 switch_thr=0.5,
                 points_in_a_row=5
-            ),
-            auto_stop=AutoStop(
-                ignore_win=20000,
-                ignore_ratio_threshold=1,
-                max_trial=1000,
-                max_time=75,
-                min_time=30
             ),
             response_time=ResponseTime(
                 response_time=5,
@@ -124,7 +115,7 @@ s_stage_1 = Stage(
                 left_value_volume=2.0
             ),
             auto_water=AutoWater(
-                auto_water_type=AutoWaterMode.NATURAL,
+                auto_water_type="Natural",
                 multiplier=0.5,
                 unrewarded=5,
                 ignored=5,
@@ -133,13 +124,6 @@ s_stage_1 = Stage(
                 advanced_block_auto="now",
                 switch_thr=0.5,
                 points_in_a_row=5
-            ),
-            auto_stop=AutoStop(
-                ignore_win=20000,
-                ignore_ratio_threshold=1,
-                max_trial=1000,
-                max_time=75,
-                min_time=30
             ),
             response_time=ResponseTime(
                 response_time=5,
@@ -182,7 +166,7 @@ s_stage_2 = Stage(
                 left_value_volume=2.0
             ),
             auto_water=AutoWater(
-                auto_water_type=AutoWaterMode.NATURAL,
+                auto_water_type="Natural",
                 multiplier=0.5,
                 unrewarded=7,
                 ignored=7,
@@ -191,13 +175,6 @@ s_stage_2 = Stage(
                 advanced_block_auto="now",
                 switch_thr=0.5,
                 points_in_a_row=5
-            ),
-            auto_stop=AutoStop(
-                ignore_win=30,
-                ignore_ratio_threshold=0.83,
-                max_trial=1000,
-                max_time=75,
-                min_time=30
             ),
             response_time=ResponseTime(
                 response_time=1.5,
@@ -240,7 +217,7 @@ s_stage_3 = Stage(
                 left_value_volume=2.0
             ),
             auto_water=AutoWater(
-                auto_water_type=AutoWaterMode.NATURAL,
+                auto_water_type="Natural",
                 multiplier=0.5,
                 unrewarded=10,
                 ignored=10,
@@ -249,13 +226,6 @@ s_stage_3 = Stage(
                 advanced_block_auto="now",
                 switch_thr=0.5,
                 points_in_a_row=5
-            ),
-            auto_stop=AutoStop(
-                ignore_win=30,
-                ignore_ratio_threshold=0.83,
-                max_trial=1000,
-                max_time=75,
-                min_time=30
             ),
             response_time=ResponseTime(
                 response_time=1.5,
@@ -298,17 +268,10 @@ s_stage_4 = Stage(
                 left_value_volume=2.0
             ),
             auto_water=AutoWater(
-                auto_water_type=AutoWaterMode.NATURAL,
+                auto_water_type="Natural",
                 multiplier=0.5,
                 unrewarded=10,
                 ignored=10,
-            ),
-            auto_stop=AutoStop(
-                ignore_win=30,
-                ignore_ratio_threshold=0.83,
-                max_trial=1000,
-                max_time=75,
-                min_time=30
             ),
             response_time=ResponseTime(
                 response_time=1.5,
@@ -350,13 +313,6 @@ s_final = Stage(
                 right_value_volume=2.0,
                 left_value_volume=2.0
             ),
-            auto_stop=AutoStop(
-                ignore_win=30,
-                ignore_ratio_threshold=0.83,
-                max_trial=1000,
-                max_time=75,
-                min_time=30
-            ),
             response_time=ResponseTime(
                 response_time=1.5,
                 reward_consume_time=1
@@ -395,13 +351,6 @@ s_graduated = Stage(
             reward_size=RewardSize(
                 right_value_volume=2.0,
                 left_value_volume=2.0
-            ),
-            auto_stop=AutoStop(
-                ignore_win=30,
-                ignore_ratio_threshold=0.83,
-                max_trial=1000,
-                max_time=75,
-                min_time=30
             ),
             response_time=ResponseTime(
                 response_time=1.5,
