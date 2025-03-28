@@ -33,7 +33,7 @@ class DelayPeriod(BaseModel):
     beta: float = Field(default=1.0, title="Delay period (beta)")
 
 class AutoWater(BaseModel):
-    auto_water_type: str = Field(default=AUTO_WATER_MODES, title="Auto water mode")
+    auto_water_type: AUTO_WATER_MODES = Field(default="Natural", title="Auto water mode")
     multiplier: float = Field(default=.8, title="Multiplier for auto reward")
     unrewarded: int = Field(default=200, title="Number of unrewarded trials before auto water")
     ignored: int = Field(default=100, title="Number of ignored trials before auto water")
