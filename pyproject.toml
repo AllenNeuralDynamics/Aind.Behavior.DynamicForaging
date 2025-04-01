@@ -21,7 +21,8 @@ dependencies = [
     "coverage",
     "aind-slims-api@git+https://github.com/AllenNeuralDynamics/aind-slims-api@main",
     "aind_data_access_api==0.17.1",
-    "pymongo"
+    "pymongo",
+    "pydantic==2.10.6"
 ]
 
 
