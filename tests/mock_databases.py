@@ -15,7 +15,8 @@ CURRICULUM_SCHEMA_VERSION = Literal["1.0"]
 RESOURCES_DIR = Path(os.path.dirname(os.path.realpath(__file__))) / "resources"
 COUPLED_BAITING_PATH = RESOURCES_DIR / "Coupled Baiting_curriculum_v2.3_schema_v1.0.json"
 UNCOUPLED_BAITING_PATH = RESOURCES_DIR / "Uncoupled Baiting_curriculum_v2.3_schema_v1.0.json"
-UNCOUPLED_NO_BAITING_PATH = RESOURCES_DIR / "Uncoupled Without Baiting_curriculum_v2.3.1rwdDelay159_schema_v1.0.json"
+UNCOUPLED_NO_BAITING_REWARD_DELAY_PATH = RESOURCES_DIR / "Uncoupled Without Baiting_curriculum_v2.3.1rwdDelay159_schema_v1.0.json"
+UNCOUPLED_NO_BAITING_PATH = RESOURCES_DIR / "Uncoupled Without Baiting_curriculum_v2.3.0_schema_v1.0.json"
 
 
 class MockCurriculumManager(Mock):
@@ -24,11 +25,12 @@ class MockCurriculumManager(Mock):
     def get_curriculum(self, curriculum_name: CURRICULUM_NAMES,
                        curriculum_version: CURRICULUM_VERSION,
                        curriculum_schema_version: CURRICULUM_SCHEMA_VERSION) -> dict:
-
         if curriculum_name == "Coupled Baiting":
             path = COUPLED_BAITING_PATH
         elif curriculum_name == "Uncoupled Baiting":
             path = UNCOUPLED_BAITING_PATH
+        elif curriculum_name + curriculum_version == "Uncoupled Without Baiting2.3.1rwdDelay159":
+            path = UNCOUPLED_NO_BAITING_REWARD_DELAY_PATH
         else:
             path = UNCOUPLED_NO_BAITING_PATH
 

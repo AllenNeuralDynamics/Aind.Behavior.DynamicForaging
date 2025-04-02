@@ -2,7 +2,7 @@
     "curriculum": {
         "pkg_location": "aind_behavior_curriculum.curriculum.ModelMetaclass",
         "name": "CoupledBaiting2p3Curriculum",
-        "version": "0.2.3",
+        "version": "2.3.0",
         "graph": {
             "nodes": {
                 "0": {

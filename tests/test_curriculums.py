@@ -21,16 +21,26 @@ from aind_behavior_dynamic_foraging.CurriculumManager.curriculums.uncoupled_bait
     s_final as ucb_final,
     s_graduated as ucb_graduated
 )
+from aind_behavior_dynamic_foraging.CurriculumManager.curriculums.uncoupled_no_baiting_rwdDelay_2p3p1 import (
+    construct_uncoupled_no_baiting_rwdDelay_2p3p1_curriculum,
+    s_stage_1_warmup as uc_rwd_stage_1_warmup,
+    s_stage_1 as uc_rwd_stage_1,
+    s_stage_2 as uc_rwd_stage_2,
+    s_stage_3 as uc_rwd_stage_3,
+    s_stage_4 as uc_rwd_stage_4,
+    s_final as uc_rwd_final,
+    s_graduated as uc_rwd_graduated
+)
 from aind_behavior_dynamic_foraging.CurriculumManager.curriculums.uncoupled_no_baiting_2p3 import (
     construct_uncoupled_no_baiting_2p3_curriculum,
     s_stage_1_warmup as uc_stage_1_warmup,
     s_stage_1 as uc_stage_1,
     s_stage_2 as uc_stage_2,
     s_stage_3 as uc_stage_3,
-    s_stage_4 as uc_stage_4,
     s_final as uc_final,
     s_graduated as uc_graduated
 )
+
 from aind_behavior_dynamic_foraging.DataSchemas.task_logic import AindDynamicForagingTaskParameters
 from aind_behavior_curriculum.trainer import Trainer, TrainerState
 from aind_behavior_curriculum import (
@@ -38,6 +48,7 @@ from aind_behavior_curriculum import (
     Curriculum as AINDCurriculum
 )
 from tests.mock_databases import MockCurriculumManager
+
 
 class TestCurriculums(unittest.TestCase):
     """ Testing aind-behavior-curriculum against aind-auto-train"""
@@ -970,9 +981,9 @@ class TestCurriculums(unittest.TestCase):
                               old_next_stage=TrainingStage.STAGE_3,
                               new_next_stage=ucb_stage_3)
 
-    def test_uncoupled_no_baiting(self):
+    def test_uncoupled_no_baiting_reward_delay(self):
         """
-        Test uncoupled no baiting task
+        Test uncoupled no baiting reward delay task
         """
 
         uncoupled_baiting = self.curriculum_manager.get_curriculum(
@@ -982,6 +993,492 @@ class TestCurriculums(unittest.TestCase):
         )
         old_curriculum = uncoupled_baiting['curriculum']
 
+        new_curriculum = construct_uncoupled_no_baiting_rwdDelay_2p3p1_curriculum()
+
+        # --WARMUP--
+
+        # Check warmup stay conditions
+        warmup_stay = DynamicForagingMetrics(
+            session_total=1,
+            session_at_current_stage=0,
+            foraging_efficiency=[0.0],
+            finished_trials=[0]
+        )
+        self.compare_decision(metrics=warmup_stay,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_1_WARMUP,
+                              new_stage=uc_rwd_stage_1_warmup,
+                              old_next_stage=TrainingStage.STAGE_1_WARMUP,
+                              new_next_stage=uc_rwd_stage_1_warmup)
+
+        # test warmup transition to stage 1 conditions above foraging efficiency
+        warmup_transition = DynamicForagingMetrics(
+            session_total=1,
+            session_at_current_stage=1,
+            foraging_efficiency=[0.8],
+            finished_trials=[10]
+        )
+        self.compare_decision(metrics=warmup_transition,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_1_WARMUP,
+                              new_stage=uc_rwd_stage_1_warmup,
+                              old_next_stage=TrainingStage.STAGE_1,
+                              new_next_stage=uc_rwd_stage_1)
+
+        # test warmup transition to stage 1 conditions above finished_trials
+        warmup_transition = DynamicForagingMetrics(
+            session_total=1,
+            session_at_current_stage=1,
+            foraging_efficiency=[0.1],
+            finished_trials=[300]
+        )
+        self.compare_decision(metrics=warmup_transition,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_1_WARMUP,
+                              new_stage=uc_rwd_stage_1_warmup,
+                              old_next_stage=TrainingStage.STAGE_1,
+                              new_next_stage=uc_rwd_stage_1)
+
+        # test warmup transition to stage 2 conditions
+        warmup_transition = DynamicForagingMetrics(
+            session_total=1,
+            session_at_current_stage=1,
+            foraging_efficiency=[0.6],
+            finished_trials=[200]
+        )
+        self.compare_decision(metrics=warmup_transition,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_1_WARMUP,
+                              new_stage=uc_rwd_stage_1_warmup,
+                              old_next_stage=TrainingStage.STAGE_2,
+                              new_next_stage=uc_rwd_stage_2)
+
+        # --STAGE 1--
+        # test stage 1 stay
+        stage_1_stay = DynamicForagingMetrics(
+            session_total=3,
+            session_at_current_stage=2,
+            foraging_efficiency=[0.1, 0.2, 0.3],
+            finished_trials=[10, 100, 150]
+        )
+        self.compare_decision(metrics=stage_1_stay,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_1,
+                              new_stage=uc_rwd_stage_1,
+                              old_next_stage=TrainingStage.STAGE_1,
+                              new_next_stage=uc_rwd_stage_1)
+
+        # test stage 1 stay above foraging efficiency
+        stage_1_stay = DynamicForagingMetrics(
+            session_total=3,
+            session_at_current_stage=2,
+            foraging_efficiency=[0.1, 0.2, 0.6],
+            finished_trials=[10, 100, 150]
+        )
+        self.compare_decision(metrics=stage_1_stay,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_1,
+                              new_stage=uc_rwd_stage_1,
+                              old_next_stage=TrainingStage.STAGE_1,
+                              new_next_stage=uc_rwd_stage_1)
+
+        # test stage 1 stay above finished trials
+        stage_1_stay = DynamicForagingMetrics(
+            session_total=3,
+            session_at_current_stage=2,
+            foraging_efficiency=[0.1, 0.2, 0.3],
+            finished_trials=[10, 100, 200]
+        )
+        self.compare_decision(metrics=stage_1_stay,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_1,
+                              new_stage=uc_rwd_stage_1,
+                              old_next_stage=TrainingStage.STAGE_1,
+                              new_next_stage=uc_rwd_stage_1)
+
+        # test stage 1 transition
+        stage_1_transition = DynamicForagingMetrics(
+            session_total=3,
+            session_at_current_stage=2,
+            foraging_efficiency=[0.1, 0.2, 0.6],
+            finished_trials=[10, 100, 200]
+        )
+        self.compare_decision(metrics=stage_1_transition,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_1,
+                              new_stage=uc_rwd_stage_1,
+                              old_next_stage=TrainingStage.STAGE_2,
+                              new_next_stage=uc_rwd_stage_2)
+
+        # --STAGE 2--
+        # test stage 2 stay
+        stage_2_stay = DynamicForagingMetrics(
+            session_total=4,
+            session_at_current_stage=1,
+            foraging_efficiency=[0.1, 0.2, 0.7, .55],
+            finished_trials=[10, 100, 200, 200]
+        )
+        self.compare_decision(metrics=stage_2_stay,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_2,
+                              new_stage=uc_rwd_stage_2,
+                              old_next_stage=TrainingStage.STAGE_2,
+                              new_next_stage=uc_rwd_stage_2)
+
+        # test stage 2 transition
+        stage_2_transition = DynamicForagingMetrics(
+            session_total=4,
+            session_at_current_stage=3,
+            foraging_efficiency=[0.1, 0.2, 0.7, .65, .65],
+            finished_trials=[10, 100, 200, 300, 300]
+        )
+        self.compare_decision(metrics=stage_2_transition,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_2,
+                              new_stage=uc_rwd_stage_2,
+                              old_next_stage=TrainingStage.STAGE_3,
+                              new_next_stage=uc_rwd_stage_3)
+
+        # test stage 2 de-transition
+        stage_2_detransition = DynamicForagingMetrics(
+            session_total=4,
+            session_at_current_stage=1,
+            foraging_efficiency=[0.1, 0.2, 0.7, .54],
+            finished_trials=[10, 100, 200, 199]
+        )
+        self.compare_decision(metrics=stage_2_detransition,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_2,
+                              new_stage=uc_rwd_stage_2,
+                              old_next_stage=TrainingStage.STAGE_1,
+                              new_next_stage=uc_rwd_stage_1)
+
+        # test stage 2 de-transition below foraging efficiency
+        stage_2_detransition = DynamicForagingMetrics(
+            session_total=4,
+            session_at_current_stage=1,
+            foraging_efficiency=[0.1, 0.2, 0.7, .54],
+            finished_trials=[10, 100, 200, 200]
+        )
+        self.compare_decision(metrics=stage_2_detransition,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_2,
+                              new_stage=uc_rwd_stage_2,
+                              old_next_stage=TrainingStage.STAGE_1,
+                              new_next_stage=uc_rwd_stage_1)
+
+        # test stage 2 de-transition below finished trials
+        stage_2_detransition = DynamicForagingMetrics(
+            session_total=4,
+            session_at_current_stage=1,
+            foraging_efficiency=[0.1, 0.2, 0.7, .55],
+            finished_trials=[10, 100, 200, 199]
+        )
+        self.compare_decision(metrics=stage_2_detransition,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_2,
+                              new_stage=uc_rwd_stage_2,
+                              old_next_stage=TrainingStage.STAGE_1,
+                              new_next_stage=uc_rwd_stage_1)
+
+        # --STAGE 3--
+        # test stage 3 stay
+        stage_3_stay = DynamicForagingMetrics(
+            session_total=5,
+            session_at_current_stage=2,
+            foraging_efficiency=[0.1, 0.2, 0.7, .65, .64],
+            finished_trials=[10, 100, 200, 300, 299]
+        )
+        self.compare_decision(metrics=stage_3_stay,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_3,
+                              new_stage=uc_rwd_stage_3,
+                              old_next_stage=TrainingStage.STAGE_3,
+                              new_next_stage=uc_rwd_stage_3)
+
+        # test stage 3 stay above foraging efficiency
+        stage_3_stay = DynamicForagingMetrics(
+            session_total=5,
+            session_at_current_stage=2,
+            foraging_efficiency=[0.1, 0.2, 0.7, .65, .65],
+            finished_trials=[10, 100, 200, 300, 299]
+        )
+        self.compare_decision(metrics=stage_3_stay,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_3,
+                              new_stage=uc_rwd_stage_3,
+                              old_next_stage=TrainingStage.STAGE_3,
+                              new_next_stage=uc_rwd_stage_3)
+
+        # test stage 3 stay above finished trials
+        stage_3_stay = DynamicForagingMetrics(
+            session_total=5,
+            session_at_current_stage=2,
+            foraging_efficiency=[0.1, 0.2, 0.7, .65, .64],
+            finished_trials=[10, 100, 200, 300, 300]
+        )
+        self.compare_decision(metrics=stage_3_stay,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_3,
+                              new_stage=uc_rwd_stage_3,
+                              old_next_stage=TrainingStage.STAGE_3,
+                              new_next_stage=uc_rwd_stage_3)
+
+        # test stage 3 stay above session_at_current_stage
+        stage_3_stay = DynamicForagingMetrics(
+            session_total=6,
+            session_at_current_stage=3,
+            foraging_efficiency=[0.1, 0.2, 0.7, .65, .64, .64],
+            finished_trials=[10, 100, 200, 300, 299, 299]
+        )
+        self.compare_decision(metrics=stage_3_stay,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_3,
+                              new_stage=uc_rwd_stage_3,
+                              old_next_stage=TrainingStage.STAGE_3,
+                              new_next_stage=uc_rwd_stage_3)
+
+        # test stage 3 stay below session_at_current_stage, finished trials, and foraging efficiency
+        stage_3_stay = DynamicForagingMetrics(
+            session_total=6,
+            session_at_current_stage=2,
+            foraging_efficiency=[0.1, 0.2, 0.7, .65, .49],
+            finished_trials=[10, 100, 200, 300, 249]
+        )
+        self.compare_decision(metrics=stage_3_stay,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_3,
+                              new_stage=uc_rwd_stage_3,
+                              old_next_stage=TrainingStage.STAGE_3,
+                              new_next_stage=uc_rwd_stage_3)
+
+        # test stage 3 transition
+        stage_3_transition = DynamicForagingMetrics(
+            session_total=6,
+            session_at_current_stage=3,
+            foraging_efficiency=[0.1, 0.2, 0.7, .65, .64, .65],
+            finished_trials=[10, 100, 200, 300, 299, 300]
+        )
+        self.compare_decision(metrics=stage_3_transition,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_3,
+                              new_stage=uc_rwd_stage_3,
+                              old_next_stage=TrainingStage.STAGE_4,
+                              new_next_stage=uc_rwd_stage_4)
+
+        # test stage 3 de-transition
+        stage_3_detransition = DynamicForagingMetrics(
+            session_total=6,
+            session_at_current_stage=3,
+            foraging_efficiency=[0.1, 0.2, 0.7, .65, .64, .49],
+            finished_trials=[10, 100, 200, 300, 299, 249]
+        )
+        self.compare_decision(metrics=stage_3_detransition,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_3,
+                              new_stage=uc_rwd_stage_3,
+                              old_next_stage=TrainingStage.STAGE_2,
+                              new_next_stage=uc_rwd_stage_2)
+
+        # --STAGE 4__
+        # test stage 4 stay
+        stage_4_stay = DynamicForagingMetrics(
+            session_total=7,
+            session_at_current_stage=1,
+            foraging_efficiency=[0.1, 0.2, 0.7, .65, .64, .65, .65],
+            finished_trials=[10, 100, 200, 300, 299, 300, 300]
+        )
+        self.compare_decision(metrics=stage_4_stay,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_4,
+                              new_stage=uc_rwd_stage_4,
+                              old_next_stage=TrainingStage.STAGE_4,
+                              new_next_stage=uc_rwd_stage_4)
+
+        # test stage 4 transition
+        stage_4_transition = DynamicForagingMetrics(
+            session_total=8,
+            session_at_current_stage=2,
+            foraging_efficiency=[0.1, 0.2, 0.7, .65, .64, .65, .65, .65],
+            finished_trials=[10, 100, 200, 300, 299, 300, 300, 300]
+        )
+        self.compare_decision(metrics=stage_4_transition,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_4,
+                              new_stage=uc_rwd_stage_4,
+                              old_next_stage=TrainingStage.STAGE_FINAL,
+                              new_next_stage=uc_rwd_final)
+
+        # --FINAL--
+        # test final stay
+        final_stay = DynamicForagingMetrics(
+            session_total=9,
+            session_at_current_stage=4,
+            foraging_efficiency=[0.1, 0.2, 0.7, .65, .60, .60, .60, .60, .60],
+            finished_trials=[10, 100, 200, 300, 300, 399, 399, 399, 399]
+        )
+        self.compare_decision(metrics=final_stay,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_FINAL,
+                              new_stage=uc_rwd_final,
+                              old_next_stage=TrainingStage.STAGE_FINAL,
+                              new_next_stage=uc_rwd_final)
+
+        # test final stay with above foraging efficiency
+        final_stay = DynamicForagingMetrics(
+            session_total=9,
+            session_at_current_stage=4,
+            foraging_efficiency=[0.1, 0.2, 0.7, .65, .7, .7, .7, .7, .7],
+            finished_trials=[10, 100, 200, 300, 300, 399, 399, 399, 399]
+        )
+        self.compare_decision(metrics=final_stay,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_FINAL,
+                              new_stage=uc_rwd_final,
+                              old_next_stage=TrainingStage.STAGE_FINAL,
+                              new_next_stage=uc_rwd_final)
+
+        # test final stay with above finished trials
+        final_stay = DynamicForagingMetrics(
+            session_total=9,
+            session_at_current_stage=4,
+            foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65],
+            finished_trials=[10, 100, 200, 300, 400, 400, 400, 400, 400]
+        )
+        self.compare_decision(metrics=final_stay,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_FINAL,
+                              new_stage=uc_rwd_final,
+                              old_next_stage=TrainingStage.STAGE_FINAL,
+                              new_next_stage=uc_rwd_final)
+
+        # test final stay with above session total
+        final_stay = DynamicForagingMetrics(
+            session_total=15,
+            session_at_current_stage=4,
+            foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65, .65, .65, .65, .65, .65, .65],
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 425, 425, 425, 425, 425]
+        )
+        self.compare_decision(metrics=final_stay,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_FINAL,
+                              new_stage=uc_rwd_final,
+                              old_next_stage=TrainingStage.STAGE_FINAL,
+                              new_next_stage=uc_rwd_final)
+
+        # test final stay with above session at current stage
+        final_stay = DynamicForagingMetrics(
+            session_total=9,
+            session_at_current_stage=5,
+            foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65],
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425]
+        )
+        self.compare_decision(metrics=final_stay,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_FINAL,
+                              new_stage=uc_rwd_final,
+                              old_next_stage=TrainingStage.STAGE_FINAL,
+                              new_next_stage=uc_rwd_final)
+
+        # test final transition
+        final_transition = DynamicForagingMetrics(
+            session_total=15,
+            session_at_current_stage=5,
+            foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65, .7, .7, .7, .7, .7],
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 500, 500, 500, 500, 500]
+        )
+        self.compare_decision(metrics=final_transition,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_FINAL,
+                              new_stage=uc_rwd_final,
+                              old_next_stage=TrainingStage.GRADUATED,
+                              new_next_stage=uc_rwd_graduated)
+
+        # test final de-transition
+        final_detransition = DynamicForagingMetrics(
+            session_total=15,
+            session_at_current_stage=5,
+            foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65, .59, .59, .59, .59, .59],
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 249, 249, 249, 249, 249]
+        )
+        self.compare_decision(metrics=final_detransition,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_FINAL,
+                              new_stage=uc_rwd_final,
+                              old_next_stage=TrainingStage.STAGE_4,
+                              new_next_stage=uc_rwd_stage_4)
+
+        # test final de-transition below foraging efficiency
+        final_detransition = DynamicForagingMetrics(
+            session_total=15,
+            session_at_current_stage=5,
+            foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65, .59, .59, .59, .59, .59],
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 250, 250, 250, 250, 250]
+        )
+        self.compare_decision(metrics=final_detransition,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_FINAL,
+                              new_stage=uc_rwd_final,
+                              old_next_stage=TrainingStage.STAGE_4,
+                              new_next_stage=uc_rwd_stage_4)
+
+        # test final de-transition below finished trials
+        final_detransition = DynamicForagingMetrics(
+            session_total=15,
+            session_at_current_stage=5,
+            foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65, .7, .7, .7, .7, .7],
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 249, 249, 249, 249, 249]
+        )
+        self.compare_decision(metrics=final_detransition,
+                              old_curriculum=old_curriculum,
+                              new_curriculum=new_curriculum,
+                              old_stage=TrainingStage.STAGE_FINAL,
+                              new_stage=uc_rwd_final,
+                              old_next_stage=TrainingStage.STAGE_4,
+                              new_next_stage=uc_rwd_stage_4)
+
+    def test_uncoupled_no_baiting(self):
+        """
+        Test uncoupled no baiting task
+        """
+
+        uncoupled_baiting = self.curriculum_manager.get_curriculum(
+            curriculum_name='Uncoupled Without Baiting',
+            curriculum_version='2.3',
+            curriculum_schema_version='1.0',
+        )
+
+        old_curriculum = uncoupled_baiting['curriculum']
         new_curriculum = construct_uncoupled_no_baiting_2p3_curriculum()
 
         # --WARMUP--
@@ -1184,81 +1681,6 @@ class TestCurriculums(unittest.TestCase):
                               new_next_stage=uc_stage_1)
 
         # --STAGE 3--
-        # test stage 3 stay
-        stage_3_stay = DynamicForagingMetrics(
-            session_total=5,
-            session_at_current_stage=2,
-            foraging_efficiency=[0.1, 0.2, 0.7, .65, .64],
-            finished_trials=[10, 100, 200, 300, 299]
-        )
-        self.compare_decision(metrics=stage_3_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
-                              old_stage=TrainingStage.STAGE_3,
-                              new_stage=uc_stage_3,
-                              old_next_stage=TrainingStage.STAGE_3,
-                              new_next_stage=uc_stage_3)
-
-        # test stage 3 stay above foraging efficiency
-        stage_3_stay = DynamicForagingMetrics(
-            session_total=5,
-            session_at_current_stage=2,
-            foraging_efficiency=[0.1, 0.2, 0.7, .65, .65],
-            finished_trials=[10, 100, 200, 300, 299]
-        )
-        self.compare_decision(metrics=stage_3_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
-                              old_stage=TrainingStage.STAGE_3,
-                              new_stage=uc_stage_3,
-                              old_next_stage=TrainingStage.STAGE_3,
-                              new_next_stage=uc_stage_3)
-
-        # test stage 3 stay above finished trials
-        stage_3_stay = DynamicForagingMetrics(
-            session_total=5,
-            session_at_current_stage=2,
-            foraging_efficiency=[0.1, 0.2, 0.7, .65, .64],
-            finished_trials=[10, 100, 200, 300, 300]
-        )
-        self.compare_decision(metrics=stage_3_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
-                              old_stage=TrainingStage.STAGE_3,
-                              new_stage=uc_stage_3,
-                              old_next_stage=TrainingStage.STAGE_3,
-                              new_next_stage=uc_stage_3)
-
-        # test stage 3 stay above session_at_current_stage
-        stage_3_stay = DynamicForagingMetrics(
-            session_total=6,
-            session_at_current_stage=3,
-            foraging_efficiency=[0.1, 0.2, 0.7, .65, .64, .64],
-            finished_trials=[10, 100, 200, 300, 299, 299]
-        )
-        self.compare_decision(metrics=stage_3_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
-                              old_stage=TrainingStage.STAGE_3,
-                              new_stage=uc_stage_3,
-                              old_next_stage=TrainingStage.STAGE_3,
-                              new_next_stage=uc_stage_3)
-
-        # test stage 3 stay below session_at_current_stage, finished trials, and foraging efficiency
-        stage_3_stay = DynamicForagingMetrics(
-            session_total=6,
-            session_at_current_stage=2,
-            foraging_efficiency=[0.1, 0.2, 0.7, .65, .49],
-            finished_trials=[10, 100, 200, 300, 249]
-        )
-        self.compare_decision(metrics=stage_3_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
-                              old_stage=TrainingStage.STAGE_3,
-                              new_stage=uc_stage_3,
-                              old_next_stage=TrainingStage.STAGE_3,
-                              new_next_stage=uc_stage_3)
-
         # test stage 3 transition
         stage_3_transition = DynamicForagingMetrics(
             session_total=6,
@@ -1271,52 +1693,6 @@ class TestCurriculums(unittest.TestCase):
                               new_curriculum=new_curriculum,
                               old_stage=TrainingStage.STAGE_3,
                               new_stage=uc_stage_3,
-                              old_next_stage=TrainingStage.STAGE_4,
-                              new_next_stage=uc_stage_4)
-
-        # test stage 3 de-transition
-        stage_3_detransition = DynamicForagingMetrics(
-            session_total=6,
-            session_at_current_stage=3,
-            foraging_efficiency=[0.1, 0.2, 0.7, .65, .64, .49],
-            finished_trials=[10, 100, 200, 300, 299, 249]
-        )
-        self.compare_decision(metrics=stage_3_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
-                              old_stage=TrainingStage.STAGE_3,
-                              new_stage=uc_stage_3,
-                              old_next_stage=TrainingStage.STAGE_2,
-                              new_next_stage=uc_stage_2)
-
-        # --STAGE 4__
-        # test stage 4 stay
-        stage_4_stay = DynamicForagingMetrics(
-            session_total=7,
-            session_at_current_stage=1,
-            foraging_efficiency=[0.1, 0.2, 0.7, .65, .64, .65, .65],
-            finished_trials=[10, 100, 200, 300, 299, 300, 300]
-        )
-        self.compare_decision(metrics=stage_4_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
-                              old_stage=TrainingStage.STAGE_4,
-                              new_stage=uc_stage_4,
-                              old_next_stage=TrainingStage.STAGE_4,
-                              new_next_stage=uc_stage_4)
-
-        # test stage 4 transition
-        stage_4_transition = DynamicForagingMetrics(
-            session_total=8,
-            session_at_current_stage=2,
-            foraging_efficiency=[0.1, 0.2, 0.7, .65, .64, .65, .65, .65],
-            finished_trials=[10, 100, 200, 300, 299, 300, 300, 300]
-        )
-        self.compare_decision(metrics=stage_4_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
-                              old_stage=TrainingStage.STAGE_4,
-                              new_stage=uc_stage_4,
                               old_next_stage=TrainingStage.STAGE_FINAL,
                               new_next_stage=uc_final)
 
@@ -1423,8 +1799,8 @@ class TestCurriculums(unittest.TestCase):
                               new_curriculum=new_curriculum,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=uc_final,
-                              old_next_stage=TrainingStage.STAGE_4,
-                              new_next_stage=uc_stage_4)
+                              old_next_stage=TrainingStage.STAGE_3,
+                              new_next_stage=uc_stage_3)
 
         # test final de-transition below foraging efficiency
         final_detransition = DynamicForagingMetrics(
@@ -1438,8 +1814,8 @@ class TestCurriculums(unittest.TestCase):
                               new_curriculum=new_curriculum,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=uc_final,
-                              old_next_stage=TrainingStage.STAGE_4,
-                              new_next_stage=uc_stage_4)
+                              old_next_stage=TrainingStage.STAGE_3,
+                              new_next_stage=uc_stage_3)
 
         # test final de-transition below finished trials
         final_detransition = DynamicForagingMetrics(
@@ -1453,8 +1829,8 @@ class TestCurriculums(unittest.TestCase):
                               new_curriculum=new_curriculum,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=uc_final,
-                              old_next_stage=TrainingStage.STAGE_4,
-                              new_next_stage=uc_stage_4)
+                              old_next_stage=TrainingStage.STAGE_3,
+                              new_next_stage=uc_stage_3)
 
     def compare_decision(self, metrics: DynamicForagingMetrics,
                          old_curriculum: AutoTrainCurriculum,
