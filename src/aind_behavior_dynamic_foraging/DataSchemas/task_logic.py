@@ -95,7 +95,7 @@ class AindDynamicForagingTaskParameters(TaskParameters):
     warmup: Optional[Warmup] = Field(default=None, description="Parameters describing warmup.")
     no_response_trial_addition: bool = Field(default=True,
                                              description="Add one trial to the block length on both lickspouts.")
-    reward_n: Optional[RewardN] = Field(default=RewardN())
+    reward_n: Optional[RewardN] = Field(default=None)
 
 
 class AindDynamicForagingTaskLogic(AindBehaviorTaskLogicModel):
