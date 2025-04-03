@@ -26,7 +26,7 @@ from aind_behavior_dynamic_foraging.DataSchemas.task_logic import (
 from typing import List, Literal
 import numpy as np
 
-__version__ = "0.2.3"
+__version__ = "2.3.0"
 
 # --- Stages  ---
 s_stage_1_warmup = Stage(

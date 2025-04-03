@@ -14,15 +14,20 @@ from pydantic import Field
 from datetime import datetime
 from typing import Union
 
+
 class DynamicForagingTrainerState(TrainerState):
     curriculum: Union[
-        create_curriculum("CoupledBaiting2p3Curriculum", "0.2.3",
+        create_curriculum("CoupledBaiting2p3Curriculum", "2.3.0",
                           [AindDynamicForagingTaskLogic])(),
-        create_curriculum("UnCoupledBaiting2p3Curriculum", "0.2.3",
+        create_curriculum("UnCoupledBaiting2p3Curriculum", "2.3.0",
                           [AindDynamicForagingTaskLogic])(),
+        create_curriculum("UncoupledNoBaitingRewardDelayCurriculum2p3p1",
+                          "2.3.1", [AindDynamicForagingTaskLogic])(),
         create_curriculum("UncoupledNoBaiting2p3p1RewardDelayCurriculum",
-                          "0.2.3", [AindDynamicForagingTaskLogic])()
+                          "2.3.0",
+                          [AindDynamicForagingTaskLogic])()
     ] = Field()
+
 
 class DynamicForagingTrainerServer:
     def __init__(self, slims_client: slims.SlimsClient = None,
@@ -110,7 +115,7 @@ class DynamicForagingTrainerServer:
             nodes = {int(k): v for k, v in response['curriculum']['graph']['nodes'].items()}
             response['curriculum']['graph'] = {'graph': graph, 'nodes': nodes}
             create_curriculum("CoupledBaiting2p3Curriculum", "0.2.3",
-                                                        [AindDynamicForagingTaskLogic])()
+                              [AindDynamicForagingTaskLogic])()
             trainer_state = DynamicForagingTrainerState(**response)
             trainer_state.stage.task = AindDynamicForagingTaskLogic(**trainer_state.stage.task.model_dump())
             curriculum = trainer_state.curriculum
