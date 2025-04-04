@@ -65,10 +65,7 @@
                                 "windowsize": 20
                             },
                             "no_response_trial_addition": true,
-                            "reward_n": {
-                                "min_reward": 60,
-                                "initial_inactive_trials": 2
-                            }
+                            "reward_n": null
                         },
                         "version": "0.1.0",
                         "stage_name": null
@@ -135,10 +132,7 @@
                             },
                             "warmup": null,
                             "no_response_trial_addition": true,
-                            "reward_n": {
-                                "min_reward": 60,
-                                "initial_inactive_trials": 2
-                            }
+                            "reward_n": null
                         },
                         "version": "0.1.0",
                         "stage_name": null
@@ -205,10 +199,7 @@
                             },
                             "warmup": null,
                             "no_response_trial_addition": true,
-                            "reward_n": {
-                                "min_reward": 60,
-                                "initial_inactive_trials": 2
-                            }
+                            "reward_n": null
                         },
                         "version": "0.1.0",
                         "stage_name": null
@@ -275,10 +266,7 @@
                             },
                             "warmup": null,
                             "no_response_trial_addition": true,
-                            "reward_n": {
-                                "min_reward": 60,
-                                "initial_inactive_trials": 2
-                            }
+                            "reward_n": null
                         },
                         "version": "0.1.0",
                         "stage_name": null
@@ -335,10 +323,7 @@
                             },
                             "warmup": null,
                             "no_response_trial_addition": true,
-                            "reward_n": {
-                                "min_reward": 60,
-                                "initial_inactive_trials": 2
-                            }
+                            "reward_n": null
                         },
                         "version": "0.1.0",
                         "stage_name": null
@@ -395,10 +380,7 @@
                             },
                             "warmup": null,
                             "no_response_trial_addition": true,
-                            "reward_n": {
-                                "min_reward": 60,
-                                "initial_inactive_trials": 2
-                            }
+                            "reward_n": null
                         },
                         "version": "0.1.0",
                         "stage_name": null
