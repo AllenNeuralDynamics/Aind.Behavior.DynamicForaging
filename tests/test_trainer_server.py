@@ -72,9 +72,6 @@ class TestTrainerServer(unittest.TestCase):
         # check curriculum returned
         expected_curriculum = construct_coupled_baiting_2p3_curriculum()
         self.assertEqual(curriculum.name, expected_curriculum.name)
-        from pprint import pprint
-        pprint(curriculum.graph.model_dump())
-        pprint(expected_curriculum.graph.model_dump())
         self.assertEqual(curriculum.graph, expected_curriculum.graph)
 
         # check metrics returned
