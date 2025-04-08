@@ -114,8 +114,7 @@ class DynamicForagingTrainerServer:
                      response['curriculum']['graph']['graph'].items()}
             nodes = {int(k): v for k, v in response['curriculum']['graph']['nodes'].items()}
             response['curriculum']['graph'] = {'graph': graph, 'nodes': nodes}
-            create_curriculum("CoupledBaiting2p3Curriculum", "0.2.3",
-                              [AindDynamicForagingTaskLogic])()
+
             trainer_state = DynamicForagingTrainerState(**response)
             trainer_state.stage.task = AindDynamicForagingTaskLogic(**trainer_state.stage.task.model_dump())
             curriculum = trainer_state.curriculum
