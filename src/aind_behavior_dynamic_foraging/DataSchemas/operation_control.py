@@ -15,9 +15,9 @@ class AutoStop(BaseModel):
 class StageSpecs(BaseModel):
     stage_name: STAGE_NAMES = Field(title="Name of stage used")
     rig_name: str = Field(title="Name of rig used")
-    x: int = Field(default=None, title="X position of stage")
-    y: int = Field(default=None, title="Y position of stage")
-    z: int = Field(default=None, title="Z position of stage")
+    x: float = Field(default=None, title="X position of stage")
+    y: float = Field(default=None, title="Y position of stage")
+    z: float = Field(default=None, title="Z position of stage")
 
 
 class OperationalControl(BaseModel):
