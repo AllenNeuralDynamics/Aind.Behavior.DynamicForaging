@@ -70,7 +70,6 @@ class Warmup(BaseModel):
     windowsize: int = Field(default=20, title="Warmup finish criteria: window size to compute the bias and ratio")
 
 class RewardN(BaseModel):
-    min_reward: int = Field(default=60, description="The minimum reward amount to enter the next block.")
     initial_inactive_trials: int = Field(default=2, description="Initial N trials of the active side where no "
                                                                  "bait will be be given.")
 
