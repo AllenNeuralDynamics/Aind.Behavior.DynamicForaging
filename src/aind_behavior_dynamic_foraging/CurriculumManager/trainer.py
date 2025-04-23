@@ -102,7 +102,7 @@ class DynamicForagingTrainerServer:
         # grab trainer state from slims
         mouse = self.slims_client.fetch_model(slims.models.SlimsMouseContent, barcode=subject_id)
         slims_sessions = self.slims_client.fetch_models(slims.models.behavior_session.SlimsBehaviorSession,
-                                                        mouse_pk=mouse.pk)
+                                                        mouse_pk=mouse.pk, sort="date")
         if slims_sessions != []:  # no sessions related to mouse
             curriculum_attachments = self.slims_client.fetch_attachments(slims_sessions[-1])
             # get most recently added TrainerState
