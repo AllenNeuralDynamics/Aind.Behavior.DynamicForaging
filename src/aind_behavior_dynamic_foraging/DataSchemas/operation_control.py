@@ -9,7 +9,7 @@ class AutoStop(BaseModel):
                                           title="Threshold for acceptable ignored trials within window.",
                                           ge=0, le=1)
     max_trial: int = Field(default=1000, title="Maximal number of trials")
-    max_time: int = Field(default=120, title="Maximal session time (min)")
+    max_time: int = Field(default=75, title="Maximal session time (min)")
     min_time: int = Field(default=30, title="Minimum session time (min)")
 
 class StageSpecs(BaseModel):
