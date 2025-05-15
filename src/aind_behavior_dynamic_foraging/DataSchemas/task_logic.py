@@ -94,7 +94,7 @@ class AindDynamicForagingTaskParameters(TaskParameters):
     no_response_trial_addition: bool = Field(default=True,
                                              description="Add one trial to the block length on both lickspouts.")
     reward_n: Optional[RewardN] = Field(default=None)
-
+    lick_spout_retraction: Optional[bool] = Field(default=False, description="Lick spout retraction enabled.")
 
 class AindDynamicForagingTaskLogic(AindBehaviorTaskLogicModel):
     version: Literal[__version__] = __version__
