@@ -33,7 +33,7 @@ class StageSpecs(BaseModel):
 
 class LickSpoutRetractionSpecs(BaseModel):
     wait_time: float = Field(default=3, description="Wait time in seconds before lick spout is un-retracted.")
-    un_retract_speed: UnRetractSpeed = Field(default=1,
+    un_retract_speed: UnRetractSpeed = Field(default=UnRetractSpeed.NORMAL,
                                              description="Speed of lick spout retraction")
 
 
