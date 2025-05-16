@@ -4,9 +4,9 @@ from enum import Enum
 
 
 class UnRetractSpeed(Enum):
-    SLOW: 0
-    NORMAL: 1
-    FAST: 2
+    SLOW = 0
+    NORMAL = 1
+    FAST = 2
 
 
 STAGE_NAMES = Literal["newscale", "AIND"]
