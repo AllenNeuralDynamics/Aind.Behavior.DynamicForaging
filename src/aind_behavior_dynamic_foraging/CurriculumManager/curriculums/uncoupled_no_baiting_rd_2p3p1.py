@@ -21,7 +21,7 @@ from aind_behavior_dynamic_foraging.DataSchemas.task_logic import (
 
 import numpy as np
 
-__version__ = "2.3.0"
+__version__ = "2.3.1"
 
 # --- Stages ---
 
