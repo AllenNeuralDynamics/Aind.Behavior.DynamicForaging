@@ -362,7 +362,7 @@ def st_final_to_stage_3(metrics: DynamicForagingMetrics) -> bool:
 # --Curriculum--
 def construct_uncoupled_no_baiting_2p3_curriculum() -> Curriculum:
 
-    cb_curriculum = create_curriculum("UnCoupledBaiting2p3Curriculum",
+    cb_curriculum = create_curriculum("UnCoupledNoBaiting2p3Curriculum",
                                       __version__,
                                       [AindDynamicForagingTaskLogic])()
 

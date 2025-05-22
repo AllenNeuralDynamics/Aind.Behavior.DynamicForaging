@@ -23,7 +23,7 @@ class DynamicForagingTrainerState(TrainerState):
                           [AindDynamicForagingTaskLogic])(),
         create_curriculum("UncoupledNoBaitingRewardDelayCurriculum2p3p1",
                           "2.3.1", [AindDynamicForagingTaskLogic])(),
-        create_curriculum("UncoupledNoBaiting2p3p1RewardDelayCurriculum",
+        create_curriculum("UnCoupledNoBaiting2p3Curriculum",
                           "2.3.0",
                           [AindDynamicForagingTaskLogic])()
     ] = Field()
