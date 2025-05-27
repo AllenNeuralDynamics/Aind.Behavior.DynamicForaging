@@ -36,6 +36,14 @@ class LickSpoutRetractionSpecs(BaseModel):
     un_retract_speed: UnRetractSpeed = Field(default=UnRetractSpeed.NORMAL,
                                              description="Speed of lick spout retraction")
 
+class LickSpoutBiasMovement(BaseModel):
+    trial_interval: int = Field(50, description="Trial interval to evaluate position.")
+    bias_lower_threshold: float = Field(default=.3, description="Value which lick spout will move towards origin if "
+                                                                "bias drops below.")
+    bias_upper_threshold: float = Field(default=.7, description="Value which lick spout will move away from origin if "
+                                                                "bias goes above.")
+    range_um: float = Field(default=300, description="+/- range lick spout can travel in um")
+    step_size_um: float = Field(default=50, description="Step size for moving lick spout if bias is outside thresholds")
 
 class OperationalControl(BaseModel):
     name: Literal["OperationalControl"] = Field(default="OperationalControl", frozen=True)
@@ -44,3 +52,4 @@ class OperationalControl(BaseModel):
     lick_spout_retraction_specs: LickSpoutRetractionSpecs = Field(default=LickSpoutRetractionSpecs(),
                                                                   description="Lick spout retraction settings"
                                                                               "related to session.")
+    lick_spout_bias_movement: Optional[LickSpoutBiasMovement] = Field(default=LickSpoutBiasMovement())
