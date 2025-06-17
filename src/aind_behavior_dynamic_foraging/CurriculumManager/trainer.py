@@ -131,8 +131,15 @@ class DynamicForagingTrainerServer:
             foraging_efficiency = [epoch['output_parameters']['performance']['foraging_efficiency'] for epoch in epochs]
 
             current_stage = trainer_state.stage.name
-            session_at_current_stage = len([sess for sess in slims_sessions if sess.task_stage == current_stage])
 
+            # add consecutive session on current stage
+            session_at_current_stage = 0
+            for sess in reversed(slims_sessions):
+                if sess.task_stage == current_stage:
+                    session_at_current_stage += 1
+                else:
+                    break
+        
             metrics = DynamicForagingMetrics(
                 foraging_efficiency=foraging_efficiency,
                 finished_trials=finished_trials,
