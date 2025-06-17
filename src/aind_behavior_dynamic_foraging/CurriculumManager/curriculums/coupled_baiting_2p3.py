@@ -258,19 +258,25 @@ def st_stage_1_warmup_to_stage_1(metrics: DynamicForagingMetrics) -> bool:
 
 @StageTransition
 def st_stage_1_warmup_to_stage_2(metrics: DynamicForagingMetrics) -> bool:
-    return metrics.finished_trials[-1] >= 200 and metrics.foraging_efficiency[-1] >= 0.6
+    return metrics.finished_trials[-1] >= 200 \
+           and metrics.foraging_efficiency[-1] >= 0.6 \
+           and np.mean(metrics.ignore_rate) <= .2
 
 
 # stage 1
 @StageTransition
 def st_stage_1_to_stage_2(metrics: DynamicForagingMetrics) -> bool:
-    return metrics.foraging_efficiency[-1] >= 0.6 and metrics.finished_trials[-1] >= 200
+    return metrics.foraging_efficiency[-1] >= 0.6\
+           and metrics.finished_trials[-1] >= 200 \
+           and np.mean(metrics.ignore_rate) <= .2
 
 
 # stage 2
 @StageTransition
 def st_stage_2_to_stage_3(metrics: DynamicForagingMetrics) -> bool:
-    return metrics.foraging_efficiency[-1] >= 0.65 and metrics.finished_trials[-1] >= 300
+    return metrics.foraging_efficiency[-1] >= 0.65 and \
+           metrics.finished_trials[-1] >= 300 \
+           and np.mean(metrics.ignore_rate) <= .2
 
 
 @StageTransition
@@ -281,7 +287,9 @@ def st_stage_2_to_stage_1(metrics: DynamicForagingMetrics) -> bool:
 # stage 3
 @StageTransition
 def st_stage_3_to_final(metrics: DynamicForagingMetrics) -> bool:
-    return metrics.foraging_efficiency[-1] >= 0.7 and metrics.finished_trials[-1] >= 400
+    return metrics.foraging_efficiency[-1] >= 0.7 \
+           and metrics.finished_trials[-1] >= 400 \
+           and np.mean(metrics.ignore_rate) <= .2
 
 
 @StageTransition
@@ -295,7 +303,8 @@ def st_final_to_graduated(metrics: DynamicForagingMetrics) -> bool:
     return metrics.session_total >= 10 and \
            metrics.session_at_current_stage >= 5 and \
            np.mean(metrics.finished_trials[-5:]) >= 450 and \
-           np.mean(metrics.foraging_efficiency[-5:]) >= 0.7
+           np.mean(metrics.foraging_efficiency[-5:]) >= 0.7 \
+           and np.mean(metrics.ignore_rate) <= .1
 
 
 @StageTransition
