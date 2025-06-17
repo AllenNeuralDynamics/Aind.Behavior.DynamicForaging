@@ -79,7 +79,8 @@ class TestTrainerServer(unittest.TestCase):
             session_total=1,
             session_at_current_stage=0,
             foraging_efficiency=[0.6539447567017806],
-            finished_trials=[483]
+            finished_trials=[483],
+            ignore_rate=[.1]
         )
         self.assertEqual(metrics, expected_metrics)
 

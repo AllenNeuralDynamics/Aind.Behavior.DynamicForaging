@@ -1,6 +1,6 @@
 import unittest
 from aind_auto_train.curriculum_manager import CurriculumManager
-from aind_auto_train.schema.task import DynamicForagingMetrics, TrainingStage, DynamicForagingParas
+from aind_auto_train.schema.task import TrainingStage, DynamicForagingParas, DynamicForagingMetrics as OldMetrics
 from aind_auto_train.schema.curriculum import Curriculum as AutoTrainCurriculum
 
 from aind_behavior_dynamic_foraging.CurriculumManager.curriculums.coupled_baiting_2p3 import (
@@ -42,10 +42,11 @@ from aind_behavior_dynamic_foraging.CurriculumManager.curriculums.uncoupled_no_b
 )
 
 from aind_behavior_dynamic_foraging.DataSchemas.task_logic import AindDynamicForagingTaskParameters
+from aind_behavior_dynamic_foraging.CurriculumManager.metrics import DynamicForagingMetrics
 from aind_behavior_curriculum.trainer import Trainer, TrainerState
 from aind_behavior_curriculum import (
     Stage,
-    Curriculum as AINDCurriculum
+    Curriculum as AINDCurriculum,
 )
 from tests.mock_databases import MockCurriculumManager
 
@@ -71,19 +72,46 @@ class TestCurriculums(unittest.TestCase):
         except:  # use resource curriculums if error using s3
             self.curriculum_manager = MockCurriculumManager()
 
-    def test_coupled_baiting(self):
-        """
-        Test coupled baiting task
-        """
-
         coupled_baiting = self.curriculum_manager.get_curriculum(
             curriculum_name='Coupled Baiting',
             curriculum_version='2.3',
             curriculum_schema_version='1.0',
         )
-        old_curriculum = coupled_baiting['curriculum']
+        self.coupled_baiting_old = coupled_baiting['curriculum']
 
-        new_curriculum = construct_coupled_baiting_2p3_curriculum()
+        self.coupled_baiting_new = construct_coupled_baiting_2p3_curriculum()
+
+        uncoupled_baiting = self.curriculum_manager.get_curriculum(
+            curriculum_name='Uncoupled Baiting',
+            curriculum_version='2.3',
+            curriculum_schema_version='1.0',
+        )
+        self.uncoupled_baiting_old = uncoupled_baiting['curriculum']
+
+        self.uncoupled_baiting_new = construct_uncoupled_baiting_2p3_curriculum()
+
+        uncoupled_no_baiting_reward_delay = self.curriculum_manager.get_curriculum(
+            curriculum_name='Uncoupled Without Baiting',
+            curriculum_version='2.3.1rwdDelay159',
+            curriculum_schema_version='1.0',
+        )
+        self.uncoupled_no_baiting_rwd_delay_old = uncoupled_no_baiting_reward_delay['curriculum']
+
+        self.uncoupled_no_baiting_rwd_delay_new = construct_uncoupled_no_baiting_rd_2p3p1_curriculum()
+
+        uncoupled_no_baiting = self.curriculum_manager.get_curriculum(
+            curriculum_name='Uncoupled Without Baiting',
+            curriculum_version='2.3',
+            curriculum_schema_version='1.0',
+        )
+
+        self.uncoupled_no_baiting_old = uncoupled_no_baiting['curriculum']
+        self.uncoupled_no_baiting_new = construct_uncoupled_no_baiting_2p3_curriculum()
+
+    def test_coupled_baiting_warmup(self):
+        """
+        Test coupled baiting task
+        """
 
         # --WARMUP--
 
@@ -92,11 +120,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=1,
             session_at_current_stage=0,
             foraging_efficiency=[0.0],
-            finished_trials=[0]
+            finished_trials=[0],
+            ignore_rate=[.1]
         )
         self.compare_decision(metrics=warmup_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_1_WARMUP,
                               new_stage=cb_stage_1_warmup,
                               old_next_stage=TrainingStage.STAGE_1_WARMUP,
@@ -107,11 +136,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=1,
             session_at_current_stage=1,
             foraging_efficiency=[0.8],
-            finished_trials=[10]
+            finished_trials=[10],
+            ignore_rate=[.1]
         )
         self.compare_decision(metrics=warmup_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_1_WARMUP,
                               new_stage=cb_stage_1_warmup,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -122,11 +152,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=1,
             session_at_current_stage=1,
             foraging_efficiency=[0.1],
-            finished_trials=[300]
+            finished_trials=[300],
+            ignore_rate=[.1]
         )
         self.compare_decision(metrics=warmup_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_1_WARMUP,
                               new_stage=cb_stage_1_warmup,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -137,27 +168,33 @@ class TestCurriculums(unittest.TestCase):
             session_total=1,
             session_at_current_stage=1,
             foraging_efficiency=[0.8],
-            finished_trials=[300]
+            finished_trials=[300],
+            ignore_rate=[.1]
         )
         self.compare_decision(metrics=warmup_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_1_WARMUP,
                               new_stage=cb_stage_1_warmup,
                               old_next_stage=TrainingStage.STAGE_2,
                               new_next_stage=cb_stage_2)
 
+    def test_coupled_baiting_stage_1(self):
+        """
+        Test coupled baiting task
+        """
         # --STAGE 1--
         # test stage 1 stay
         stage_1_stay = DynamicForagingMetrics(
             session_total=3,
             session_at_current_stage=2,
             foraging_efficiency=[0.1, 0.2, 0.3],
-            finished_trials=[10, 100, 150]
+            finished_trials=[10, 100, 150],
+            ignore_rate=[.1, .1, .1]
         )
         self.compare_decision(metrics=stage_1_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_1,
                               new_stage=cb_stage_1,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -168,11 +205,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=3,
             session_at_current_stage=2,
             foraging_efficiency=[0.1, 0.2, 0.6],
-            finished_trials=[10, 100, 150]
+            finished_trials=[10, 100, 150],
+            ignore_rate=[.1, .1, .1]
         )
         self.compare_decision(metrics=stage_1_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_1,
                               new_stage=cb_stage_1,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -183,11 +221,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=3,
             session_at_current_stage=2,
             foraging_efficiency=[0.1, 0.2, 0.3],
-            finished_trials=[10, 100, 200]
+            finished_trials=[10, 100, 200],
+            ignore_rate=[.1, .1, .1]
         )
         self.compare_decision(metrics=stage_1_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_1,
                               new_stage=cb_stage_1,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -198,27 +237,33 @@ class TestCurriculums(unittest.TestCase):
             session_total=3,
             session_at_current_stage=2,
             foraging_efficiency=[0.1, 0.2, 0.6],
-            finished_trials=[10, 100, 200]
+            finished_trials=[10, 100, 200],
+            ignore_rate=[.1, .1, .1]
         )
         self.compare_decision(metrics=stage_1_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_1,
                               new_stage=cb_stage_1,
                               old_next_stage=TrainingStage.STAGE_2,
                               new_next_stage=cb_stage_2)
 
+    def test_coupled_baiting_stage_2(self):
+        """
+        Test coupled baiting task
+        """
         # --STAGE 2--
         # test stage 2 stay
         stage_2_stay = DynamicForagingMetrics(
             session_total=4,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .55],
-            finished_trials=[10, 100, 200, 200]
+            finished_trials=[10, 100, 200, 200],
+            ignore_rate=[.1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_2_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_2,
                               new_stage=cb_stage_2,
                               old_next_stage=TrainingStage.STAGE_2,
@@ -229,11 +274,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=4,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .65],
-            finished_trials=[10, 100, 200, 200]
+            finished_trials=[10, 100, 200, 200],
+            ignore_rate=[.1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_2_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_2,
                               new_stage=cb_stage_2,
                               old_next_stage=TrainingStage.STAGE_2,
@@ -244,11 +290,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=4,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .55],
-            finished_trials=[10, 100, 200, 300]
+            finished_trials=[10, 100, 200, 300],
+            ignore_rate=[.1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_2_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_2,
                               new_stage=cb_stage_2,
                               old_next_stage=TrainingStage.STAGE_2,
@@ -259,11 +306,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=4,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .65],
-            finished_trials=[10, 100, 200, 300]
+            finished_trials=[10, 100, 200, 300],
+            ignore_rate=[.1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_2_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_2,
                               new_stage=cb_stage_2,
                               old_next_stage=TrainingStage.STAGE_3,
@@ -274,11 +322,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=4,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .54],
-            finished_trials=[10, 100, 200, 199]
+            finished_trials=[10, 100, 200, 199],
+            ignore_rate=[.1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_2_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_2,
                               new_stage=cb_stage_2,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -289,11 +338,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=4,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .54],
-            finished_trials=[10, 100, 200, 200]
+            finished_trials=[10, 100, 200, 200],
+            ignore_rate=[.1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_2_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_2,
                               new_stage=cb_stage_2,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -304,27 +354,33 @@ class TestCurriculums(unittest.TestCase):
             session_total=4,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .55],
-            finished_trials=[10, 100, 200, 199]
+            finished_trials=[10, 100, 200, 199],
+            ignore_rate=[.1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_2_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_2,
                               new_stage=cb_stage_2,
                               old_next_stage=TrainingStage.STAGE_1,
                               new_next_stage=cb_stage_1)
 
+    def test_coupled_baiting_stage_3(self):
+        """
+        Test coupled baiting task
+        """
         # --STAGE 3--
         # test stage 3 stay
         stage_3_stay = DynamicForagingMetrics(
             session_total=5,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .66],
-            finished_trials=[10, 100, 200, 300, 350]
+            finished_trials=[10, 100, 200, 300, 350],
+            ignore_rate=[.1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_3_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_3,
                               new_stage=cb_stage_3,
                               old_next_stage=TrainingStage.STAGE_3,
@@ -335,11 +391,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=5,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .7],
-            finished_trials=[10, 100, 200, 300, 350]
+            finished_trials=[10, 100, 200, 300, 350],
+            ignore_rate=[.1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_3_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_3,
                               new_stage=cb_stage_3,
                               old_next_stage=TrainingStage.STAGE_3,
@@ -350,11 +407,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=5,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .66],
-            finished_trials=[10, 100, 200, 300, 400]
+            finished_trials=[10, 100, 200, 300, 400],
+            ignore_rate=[.1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_3_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_3,
                               new_stage=cb_stage_3,
                               old_next_stage=TrainingStage.STAGE_3,
@@ -365,11 +423,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=5,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .7],
-            finished_trials=[10, 100, 200, 300, 400]
+            finished_trials=[10, 100, 200, 300, 400],
+            ignore_rate=[.1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_3_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_3,
                               new_stage=cb_stage_3,
                               old_next_stage=TrainingStage.STAGE_FINAL,
@@ -380,11 +439,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=5,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .64],
-            finished_trials=[10, 100, 200, 300, 299]
+            finished_trials=[10, 100, 200, 300, 299],
+            ignore_rate=[.1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_3_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_3,
                               new_stage=cb_stage_3,
                               old_next_stage=TrainingStage.STAGE_2,
@@ -395,11 +455,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=5,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .64],
-            finished_trials=[10, 100, 200, 300, 300]
+            finished_trials=[10, 100, 200, 300, 300],
+            ignore_rate=[.1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_3_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_3,
                               new_stage=cb_stage_3,
                               old_next_stage=TrainingStage.STAGE_2,
@@ -410,27 +471,33 @@ class TestCurriculums(unittest.TestCase):
             session_total=5,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65],
-            finished_trials=[10, 100, 200, 300, 299]
+            finished_trials=[10, 100, 200, 300, 299],
+            ignore_rate=[.1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_3_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_3,
                               new_stage=cb_stage_3,
                               old_next_stage=TrainingStage.STAGE_2,
                               new_next_stage=cb_stage_2)
 
+    def test_coupled_baiting_stage_final(self):
+        """
+        Test coupled baiting task
+        """
         # --FINAL--
         # test final stay
         final_stay = DynamicForagingMetrics(
             session_total=9,
             session_at_current_stage=4,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .60, .60, .60, .60, .60],
-            finished_trials=[10, 100, 200, 300, 400, 300, 300, 300, 300]
+            finished_trials=[10, 100, 200, 300, 400, 300, 300, 300, 300],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=final_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=cb_final,
                               old_next_stage=TrainingStage.STAGE_FINAL,
@@ -441,11 +508,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=9,
             session_at_current_stage=4,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .7, .7, .7, .7, .7],
-            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425]
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=final_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=cb_final,
                               old_next_stage=TrainingStage.STAGE_FINAL,
@@ -456,11 +524,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=9,
             session_at_current_stage=4,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65],
-            finished_trials=[10, 100, 200, 300, 400, 500, 500, 500, 500]
+            finished_trials=[10, 100, 200, 300, 400, 500, 500, 500, 500],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=final_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=cb_final,
                               old_next_stage=TrainingStage.STAGE_FINAL,
@@ -471,11 +540,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=15,
             session_at_current_stage=4,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65, .65, .65, .65, .65, .65, .65],
-            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 425, 425, 425, 425, 425]
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 425, 425, 425, 425, 425],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=final_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=cb_final,
                               old_next_stage=TrainingStage.STAGE_FINAL,
@@ -486,11 +556,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=9,
             session_at_current_stage=5,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65],
-            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425]
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=final_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=cb_final,
                               old_next_stage=TrainingStage.STAGE_FINAL,
@@ -501,11 +572,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=15,
             session_at_current_stage=5,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65, .7, .7, .7, .7, .7],
-            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 500, 500, 500, 500, 500]
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 500, 500, 500, 500, 500],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=final_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=cb_final,
                               old_next_stage=TrainingStage.GRADUATED,
@@ -516,11 +588,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=15,
             session_at_current_stage=5,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65, .59, .59, .59, .59, .59],
-            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 299, 299, 299, 299, 299]
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 299, 299, 299, 299, 299],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=final_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=cb_final,
                               old_next_stage=TrainingStage.STAGE_3,
@@ -531,11 +604,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=15,
             session_at_current_stage=5,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65, .59, .59, .59, .59, .59],
-            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 500, 500, 500, 500, 500]
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 500, 500, 500, 500, 500],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=final_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=cb_final,
                               old_next_stage=TrainingStage.STAGE_3,
@@ -546,29 +620,21 @@ class TestCurriculums(unittest.TestCase):
             session_total=15,
             session_at_current_stage=5,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65, .7, .7, .7, .7, .7],
-            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 299, 299, 299, 299, 299]
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 299, 299, 299, 299, 299],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=final_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.coupled_baiting_old,
+                              new_curriculum=self.coupled_baiting_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=cb_final,
                               old_next_stage=TrainingStage.STAGE_3,
                               new_next_stage=cb_stage_3)
 
-    def test_uncoupled_baiting(self):
+    def test_uncoupled_baiting_stage_warmup(self):
         """
         Test uncoupled baiting task
         """
-
-        uncoupled_baiting = self.curriculum_manager.get_curriculum(
-            curriculum_name='Uncoupled Baiting',
-            curriculum_version='2.3',
-            curriculum_schema_version='1.0',
-        )
-        old_curriculum = uncoupled_baiting['curriculum']
-
-        new_curriculum = construct_uncoupled_baiting_2p3_curriculum()
 
         # --WARMUP--
 
@@ -577,11 +643,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=1,
             session_at_current_stage=0,
             foraging_efficiency=[0.0],
-            finished_trials=[0]
+            finished_trials=[0],
+            ignore_rate=[.1]
         )
         self.compare_decision(metrics=warmup_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_baiting_old,
+                              new_curriculum=self.uncoupled_baiting_new,
                               old_stage=TrainingStage.STAGE_1_WARMUP,
                               new_stage=ucb_stage_1_warmup,
                               old_next_stage=TrainingStage.STAGE_1_WARMUP,
@@ -592,11 +659,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=1,
             session_at_current_stage=1,
             foraging_efficiency=[0.8],
-            finished_trials=[10]
+            finished_trials=[10],
+            ignore_rate=[.1]
         )
         self.compare_decision(metrics=warmup_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_baiting_old,
+                              new_curriculum=self.uncoupled_baiting_new,
                               old_stage=TrainingStage.STAGE_1_WARMUP,
                               new_stage=ucb_stage_1_warmup,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -607,11 +675,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=1,
             session_at_current_stage=1,
             foraging_efficiency=[0.1],
-            finished_trials=[300]
+            finished_trials=[300],
+            ignore_rate=[.1]
         )
         self.compare_decision(metrics=warmup_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_baiting_old,
+                              new_curriculum=self.uncoupled_baiting_new,
                               old_stage=TrainingStage.STAGE_1_WARMUP,
                               new_stage=ucb_stage_1_warmup,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -622,15 +691,21 @@ class TestCurriculums(unittest.TestCase):
             session_total=1,
             session_at_current_stage=1,
             foraging_efficiency=[0.6],
-            finished_trials=[200]
+            finished_trials=[200],
+            ignore_rate=[.1]
         )
         self.compare_decision(metrics=warmup_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_baiting_old,
+                              new_curriculum=self.uncoupled_baiting_new,
                               old_stage=TrainingStage.STAGE_1_WARMUP,
                               new_stage=ucb_stage_1_warmup,
                               old_next_stage=TrainingStage.STAGE_2,
                               new_next_stage=ucb_stage_2)
+
+    def test_uncoupled_baiting_stage_1(self):
+        """
+        Test uncoupled baiting task
+        """
 
         # --STAGE 1--
         # test stage 1 stay
@@ -638,11 +713,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=3,
             session_at_current_stage=2,
             foraging_efficiency=[0.1, 0.2, 0.3],
-            finished_trials=[10, 100, 150]
+            finished_trials=[10, 100, 150],
+            ignore_rate=[.1, .1, .1]
         )
         self.compare_decision(metrics=stage_1_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_baiting_old,
+                              new_curriculum=self.uncoupled_baiting_new,
                               old_stage=TrainingStage.STAGE_1,
                               new_stage=ucb_stage_1,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -653,11 +729,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=3,
             session_at_current_stage=2,
             foraging_efficiency=[0.1, 0.2, 0.6],
-            finished_trials=[10, 100, 150]
+            finished_trials=[10, 100, 150],
+            ignore_rate=[.1, .1, .1]
         )
         self.compare_decision(metrics=stage_1_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_baiting_old,
+                              new_curriculum=self.uncoupled_baiting_new,
                               old_stage=TrainingStage.STAGE_1,
                               new_stage=ucb_stage_1,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -668,11 +745,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=3,
             session_at_current_stage=2,
             foraging_efficiency=[0.1, 0.2, 0.3],
-            finished_trials=[10, 100, 200]
+            finished_trials=[10, 100, 200],
+            ignore_rate=[.1, .1, .1]
         )
         self.compare_decision(metrics=stage_1_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_baiting_old,
+                              new_curriculum=self.uncoupled_baiting_new,
                               old_stage=TrainingStage.STAGE_1,
                               new_stage=ucb_stage_1,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -683,27 +761,33 @@ class TestCurriculums(unittest.TestCase):
             session_total=3,
             session_at_current_stage=2,
             foraging_efficiency=[0.1, 0.2, 0.6],
-            finished_trials=[10, 100, 200]
+            finished_trials=[10, 100, 200],
+            ignore_rate=[.1, .1, .1]
         )
         self.compare_decision(metrics=stage_1_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_baiting_old,
+                              new_curriculum=self.uncoupled_baiting_new,
                               old_stage=TrainingStage.STAGE_1,
                               new_stage=ucb_stage_1,
                               old_next_stage=TrainingStage.STAGE_2,
                               new_next_stage=ucb_stage_2)
 
+    def test_uncoupled_baiting_stage_2(self):
+        """
+        Test uncoupled baiting task
+        """
         # --STAGE 2--
         # test stage 2 stay
         stage_2_stay = DynamicForagingMetrics(
             session_total=4,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .55],
-            finished_trials=[10, 100, 200, 200]
+            finished_trials=[10, 100, 200, 200],
+            ignore_rate=[.1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_2_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_baiting_old,
+                              new_curriculum=self.uncoupled_baiting_new,
                               old_stage=TrainingStage.STAGE_2,
                               new_stage=ucb_stage_2,
                               old_next_stage=TrainingStage.STAGE_2,
@@ -714,11 +798,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=4,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .65],
-            finished_trials=[10, 100, 200, 200]
+            finished_trials=[10, 100, 200, 200],
+            ignore_rate=[.1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_2_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_baiting_old,
+                              new_curriculum=self.uncoupled_baiting_new,
                               old_stage=TrainingStage.STAGE_2,
                               new_stage=ucb_stage_2,
                               old_next_stage=TrainingStage.STAGE_2,
@@ -729,11 +814,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=4,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .55],
-            finished_trials=[10, 100, 200, 300]
+            finished_trials=[10, 100, 200, 300],
+            ignore_rate=[.1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_2_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_baiting_old,
+                              new_curriculum=self.uncoupled_baiting_new,
                               old_stage=TrainingStage.STAGE_2,
                               new_stage=ucb_stage_2,
                               old_next_stage=TrainingStage.STAGE_2,
@@ -744,11 +830,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=4,
             session_at_current_stage=2,
             foraging_efficiency=[0.1, 0.2, 0.7, .55],
-            finished_trials=[10, 100, 200, 200]
+            finished_trials=[10, 100, 200, 200],
+            ignore_rate=[.1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_2_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_baiting_old,
+                              new_curriculum=self.uncoupled_baiting_new,
                               old_stage=TrainingStage.STAGE_2,
                               new_stage=ucb_stage_2,
                               old_next_stage=TrainingStage.STAGE_2,
@@ -759,11 +846,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=4,
             session_at_current_stage=2,
             foraging_efficiency=[0.1, 0.2, 0.7, .65],
-            finished_trials=[10, 100, 200, 300]
+            finished_trials=[10, 100, 200, 300],
+            ignore_rate=[.1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_2_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_baiting_old,
+                              new_curriculum=self.uncoupled_baiting_new,
                               old_stage=TrainingStage.STAGE_2,
                               new_stage=ucb_stage_2,
                               old_next_stage=TrainingStage.STAGE_3,
@@ -774,11 +862,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=4,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .54],
-            finished_trials=[10, 100, 200, 199]
+            finished_trials=[10, 100, 200, 199],
+            ignore_rate=[.1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_2_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_baiting_old,
+                              new_curriculum=self.uncoupled_baiting_new,
                               old_stage=TrainingStage.STAGE_2,
                               new_stage=ucb_stage_2,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -789,11 +878,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=4,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .54],
-            finished_trials=[10, 100, 200, 200]
+            finished_trials=[10, 100, 200, 200],
+            ignore_rate=[.1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_2_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_baiting_old,
+                              new_curriculum=self.uncoupled_baiting_new,
                               old_stage=TrainingStage.STAGE_2,
                               new_stage=ucb_stage_2,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -804,27 +894,33 @@ class TestCurriculums(unittest.TestCase):
             session_total=4,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .55],
-            finished_trials=[10, 100, 200, 199]
+            finished_trials=[10, 100, 200, 199],
+            ignore_rate=[.1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_2_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_baiting_old,
+                              new_curriculum=self.uncoupled_baiting_new,
                               old_stage=TrainingStage.STAGE_2,
                               new_stage=ucb_stage_2,
                               old_next_stage=TrainingStage.STAGE_1,
                               new_next_stage=ucb_stage_1)
 
+    def test_uncoupled_baiting_stage_3(self):
+        """
+        Test uncoupled baiting task
+        """
         # --STAGE 3--
         # test stage 3 stay
         stage_3_stay = DynamicForagingMetrics(
             session_total=5,
             session_at_current_stage=0,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .66],
-            finished_trials=[10, 100, 200, 300, 350]
+            finished_trials=[10, 100, 200, 300, 350],
+            ignore_rate=[.1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_3_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_baiting_old,
+                              new_curriculum=self.uncoupled_baiting_new,
                               old_stage=TrainingStage.STAGE_3,
                               new_stage=ucb_stage_3,
                               old_next_stage=TrainingStage.STAGE_3,
@@ -835,27 +931,33 @@ class TestCurriculums(unittest.TestCase):
             session_total=5,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .7],
-            finished_trials=[10, 100, 200, 300, 350]
+            finished_trials=[10, 100, 200, 300, 350],
+            ignore_rate=[.1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_3_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_baiting_old,
+                              new_curriculum=self.uncoupled_baiting_new,
                               old_stage=TrainingStage.STAGE_3,
                               new_stage=ucb_stage_3,
                               old_next_stage=TrainingStage.STAGE_FINAL,
                               new_next_stage=ucb_final)
 
+    def test_uncoupled_baiting_stage_final(self):
+        """
+        Test uncoupled baiting task
+        """
         # --FINAL--
         # test final stay
         final_stay = DynamicForagingMetrics(
             session_total=9,
             session_at_current_stage=4,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .60, .60, .60, .60, .60],
-            finished_trials=[10, 100, 200, 300, 400, 300, 300, 300, 300]
+            finished_trials=[10, 100, 200, 300, 400, 300, 300, 300, 300],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=final_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_baiting_old,
+                              new_curriculum=self.uncoupled_baiting_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=ucb_final,
                               old_next_stage=TrainingStage.STAGE_FINAL,
@@ -866,11 +968,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=9,
             session_at_current_stage=4,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .7, .7, .7, .7, .7],
-            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425]
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=final_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_baiting_old,
+                              new_curriculum=self.uncoupled_baiting_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=ucb_final,
                               old_next_stage=TrainingStage.STAGE_FINAL,
@@ -881,11 +984,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=9,
             session_at_current_stage=4,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65],
-            finished_trials=[10, 100, 200, 300, 400, 500, 500, 500, 500]
+            finished_trials=[10, 100, 200, 300, 400, 500, 500, 500, 500],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=final_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_baiting_old,
+                              new_curriculum=self.uncoupled_baiting_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=ucb_final,
                               old_next_stage=TrainingStage.STAGE_FINAL,
@@ -896,11 +1000,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=15,
             session_at_current_stage=4,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65, .65, .65, .65, .65, .65, .65],
-            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 425, 425, 425, 425, 425]
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 425, 425, 425, 425, 425],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .09]
         )
         self.compare_decision(metrics=final_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_baiting_old,
+                              new_curriculum=self.uncoupled_baiting_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=ucb_final,
                               old_next_stage=TrainingStage.STAGE_FINAL,
@@ -911,11 +1016,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=9,
             session_at_current_stage=5,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65],
-            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425]
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=final_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_baiting_old,
+                              new_curriculum=self.uncoupled_baiting_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=ucb_final,
                               old_next_stage=TrainingStage.STAGE_FINAL,
@@ -926,11 +1032,13 @@ class TestCurriculums(unittest.TestCase):
             session_total=15,
             session_at_current_stage=5,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65, .7, .7, .7, .7, .7],
-            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 500, 500, 500, 500, 500]
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 500, 500, 500, 500, 500],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .09]
         )
+
         self.compare_decision(metrics=final_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_baiting_old,
+                              new_curriculum=self.uncoupled_baiting_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=ucb_final,
                               old_next_stage=TrainingStage.GRADUATED,
@@ -941,11 +1049,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=15,
             session_at_current_stage=5,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65, .59, .59, .59, .59, .59],
-            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 299, 299, 299, 299, 299]
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 299, 299, 299, 299, 299],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .09]
         )
         self.compare_decision(metrics=final_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_baiting_old,
+                              new_curriculum=self.uncoupled_baiting_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=ucb_final,
                               old_next_stage=TrainingStage.STAGE_3,
@@ -956,11 +1065,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=15,
             session_at_current_stage=5,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65, .59, .59, .59, .59, .59],
-            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 500, 500, 500, 500, 500]
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 500, 500, 500, 500, 500],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .09]
         )
         self.compare_decision(metrics=final_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_baiting_old,
+                              new_curriculum=self.uncoupled_baiting_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=ucb_final,
                               old_next_stage=TrainingStage.STAGE_3,
@@ -971,29 +1081,21 @@ class TestCurriculums(unittest.TestCase):
             session_total=15,
             session_at_current_stage=5,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65, .7, .7, .7, .7, .7],
-            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 299, 299, 299, 299, 299]
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 299, 299, 299, 299, 299],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .09]
         )
         self.compare_decision(metrics=final_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_baiting_old,
+                              new_curriculum=self.uncoupled_baiting_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=ucb_final,
                               old_next_stage=TrainingStage.STAGE_3,
                               new_next_stage=ucb_stage_3)
 
-    def test_uncoupled_no_baiting_reward_delay(self):
+    def test_uncoupled_no_baiting_reward_delay_stage_warmup(self):
         """
         Test uncoupled no baiting reward delay task
         """
-
-        uncoupled_baiting = self.curriculum_manager.get_curriculum(
-            curriculum_name='Uncoupled Without Baiting',
-            curriculum_version='2.3.1rwdDelay159',
-            curriculum_schema_version='1.0',
-        )
-        old_curriculum = uncoupled_baiting['curriculum']
-
-        new_curriculum = construct_uncoupled_no_baiting_rd_2p3p1_curriculum()
 
         # --WARMUP--
 
@@ -1002,11 +1104,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=1,
             session_at_current_stage=0,
             foraging_efficiency=[0.0],
-            finished_trials=[0]
+            finished_trials=[0],
+            ignore_rate=[.1]
         )
         self.compare_decision(metrics=warmup_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_1_WARMUP,
                               new_stage=uc_rwd_stage_1_warmup,
                               old_next_stage=TrainingStage.STAGE_1_WARMUP,
@@ -1017,11 +1120,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=1,
             session_at_current_stage=1,
             foraging_efficiency=[0.8],
-            finished_trials=[10]
+            finished_trials=[10],
+            ignore_rate=[.1]
         )
         self.compare_decision(metrics=warmup_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_1_WARMUP,
                               new_stage=uc_rwd_stage_1_warmup,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -1032,11 +1136,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=1,
             session_at_current_stage=1,
             foraging_efficiency=[0.1],
-            finished_trials=[300]
+            finished_trials=[300],
+            ignore_rate=[.1]
         )
         self.compare_decision(metrics=warmup_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_1_WARMUP,
                               new_stage=uc_rwd_stage_1_warmup,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -1047,27 +1152,33 @@ class TestCurriculums(unittest.TestCase):
             session_total=1,
             session_at_current_stage=1,
             foraging_efficiency=[0.6],
-            finished_trials=[200]
+            finished_trials=[200],
+            ignore_rate=[.1]
         )
         self.compare_decision(metrics=warmup_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_1_WARMUP,
                               new_stage=uc_rwd_stage_1_warmup,
                               old_next_stage=TrainingStage.STAGE_2,
                               new_next_stage=uc_rwd_stage_2)
 
+    def test_uncoupled_no_baiting_reward_delay_stage_1(self):
+        """
+        Test uncoupled no baiting reward delay task
+        """
         # --STAGE 1--
         # test stage 1 stay
         stage_1_stay = DynamicForagingMetrics(
             session_total=3,
             session_at_current_stage=2,
             foraging_efficiency=[0.1, 0.2, 0.3],
-            finished_trials=[10, 100, 150]
+            finished_trials=[10, 100, 150],
+            ignore_rate=[.1, .1, .1]
         )
         self.compare_decision(metrics=stage_1_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_1,
                               new_stage=uc_rwd_stage_1,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -1078,11 +1189,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=3,
             session_at_current_stage=2,
             foraging_efficiency=[0.1, 0.2, 0.6],
-            finished_trials=[10, 100, 150]
+            finished_trials=[10, 100, 150],
+            ignore_rate=[.1, .1, .1]
         )
         self.compare_decision(metrics=stage_1_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_1,
                               new_stage=uc_rwd_stage_1,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -1093,11 +1205,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=3,
             session_at_current_stage=2,
             foraging_efficiency=[0.1, 0.2, 0.3],
-            finished_trials=[10, 100, 200]
+            finished_trials=[10, 100, 200],
+            ignore_rate=[.1, .1, .1]
         )
         self.compare_decision(metrics=stage_1_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_1,
                               new_stage=uc_rwd_stage_1,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -1108,27 +1221,33 @@ class TestCurriculums(unittest.TestCase):
             session_total=3,
             session_at_current_stage=2,
             foraging_efficiency=[0.1, 0.2, 0.6],
-            finished_trials=[10, 100, 200]
+            finished_trials=[10, 100, 200],
+            ignore_rate=[.1, .1, .1]
         )
         self.compare_decision(metrics=stage_1_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_1,
                               new_stage=uc_rwd_stage_1,
                               old_next_stage=TrainingStage.STAGE_2,
                               new_next_stage=uc_rwd_stage_2)
 
+    def test_uncoupled_no_baiting_reward_delay_stage_2(self):
+        """
+        Test uncoupled no baiting reward delay task
+        """
         # --STAGE 2--
         # test stage 2 stay
         stage_2_stay = DynamicForagingMetrics(
             session_total=4,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .55],
-            finished_trials=[10, 100, 200, 200]
+            finished_trials=[10, 100, 200, 200],
+            ignore_rate=[.1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_2_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_2,
                               new_stage=uc_rwd_stage_2,
                               old_next_stage=TrainingStage.STAGE_2,
@@ -1139,11 +1258,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=4,
             session_at_current_stage=3,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65],
-            finished_trials=[10, 100, 200, 300, 300]
+            finished_trials=[10, 100, 200, 300, 300],
+            ignore_rate=[.1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_2_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_2,
                               new_stage=uc_rwd_stage_2,
                               old_next_stage=TrainingStage.STAGE_3,
@@ -1154,11 +1274,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=4,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .54],
-            finished_trials=[10, 100, 200, 199]
+            finished_trials=[10, 100, 200, 199],
+            ignore_rate=[.1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_2_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_2,
                               new_stage=uc_rwd_stage_2,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -1169,11 +1290,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=4,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .54],
-            finished_trials=[10, 100, 200, 200]
+            finished_trials=[10, 100, 200, 200],
+            ignore_rate=[.1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_2_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_2,
                               new_stage=uc_rwd_stage_2,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -1184,27 +1306,33 @@ class TestCurriculums(unittest.TestCase):
             session_total=4,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .55],
-            finished_trials=[10, 100, 200, 199]
+            finished_trials=[10, 100, 200, 199],
+            ignore_rate=[.1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_2_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_2,
                               new_stage=uc_rwd_stage_2,
                               old_next_stage=TrainingStage.STAGE_1,
                               new_next_stage=uc_rwd_stage_1)
 
+    def test_uncoupled_no_baiting_reward_delay_stage_3(self):
+        """
+        Test uncoupled no baiting reward delay task
+        """
         # --STAGE 3--
         # test stage 3 stay
         stage_3_stay = DynamicForagingMetrics(
             session_total=5,
             session_at_current_stage=2,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .64],
-            finished_trials=[10, 100, 200, 300, 299]
+            finished_trials=[10, 100, 200, 300, 299],
+            ignore_rate=[.1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_3_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_3,
                               new_stage=uc_rwd_stage_3,
                               old_next_stage=TrainingStage.STAGE_3,
@@ -1215,11 +1343,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=5,
             session_at_current_stage=2,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65],
-            finished_trials=[10, 100, 200, 300, 299]
+            finished_trials=[10, 100, 200, 300, 299],
+            ignore_rate=[.1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_3_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_3,
                               new_stage=uc_rwd_stage_3,
                               old_next_stage=TrainingStage.STAGE_3,
@@ -1230,11 +1359,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=5,
             session_at_current_stage=2,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .64],
-            finished_trials=[10, 100, 200, 300, 300]
+            finished_trials=[10, 100, 200, 300, 300],
+            ignore_rate=[.1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_3_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_3,
                               new_stage=uc_rwd_stage_3,
                               old_next_stage=TrainingStage.STAGE_3,
@@ -1245,11 +1375,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=6,
             session_at_current_stage=3,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .64, .64],
-            finished_trials=[10, 100, 200, 300, 299, 299]
+            finished_trials=[10, 100, 200, 300, 299, 299],
+            ignore_rate=[.1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_3_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_3,
                               new_stage=uc_rwd_stage_3,
                               old_next_stage=TrainingStage.STAGE_3,
@@ -1260,11 +1391,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=6,
             session_at_current_stage=2,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .49],
-            finished_trials=[10, 100, 200, 300, 249]
+            finished_trials=[10, 100, 200, 300, 249],
+            ignore_rate=[.1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_3_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_3,
                               new_stage=uc_rwd_stage_3,
                               old_next_stage=TrainingStage.STAGE_3,
@@ -1275,11 +1407,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=6,
             session_at_current_stage=3,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .64, .65],
-            finished_trials=[10, 100, 200, 300, 299, 300]
+            finished_trials=[10, 100, 200, 300, 299, 300],
+            ignore_rate=[.1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_3_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_3,
                               new_stage=uc_rwd_stage_3,
                               old_next_stage=TrainingStage.STAGE_4,
@@ -1290,27 +1423,33 @@ class TestCurriculums(unittest.TestCase):
             session_total=6,
             session_at_current_stage=3,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .64, .49],
-            finished_trials=[10, 100, 200, 300, 299, 249]
+            finished_trials=[10, 100, 200, 300, 299, 249],
+            ignore_rate=[.1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_3_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_3,
                               new_stage=uc_rwd_stage_3,
                               old_next_stage=TrainingStage.STAGE_2,
                               new_next_stage=uc_rwd_stage_2)
 
+    def test_uncoupled_no_baiting_reward_delay_stage_4(self):
+        """
+        Test uncoupled no baiting reward delay task
+        """
         # --STAGE 4__
         # test stage 4 stay
         stage_4_stay = DynamicForagingMetrics(
             session_total=7,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .64, .65, .65],
-            finished_trials=[10, 100, 200, 300, 299, 300, 300]
+            finished_trials=[10, 100, 200, 300, 299, 300, 300],
+            ignore_rate=[.1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_4_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_4,
                               new_stage=uc_rwd_stage_4,
                               old_next_stage=TrainingStage.STAGE_4,
@@ -1321,27 +1460,33 @@ class TestCurriculums(unittest.TestCase):
             session_total=8,
             session_at_current_stage=2,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .64, .65, .65, .65],
-            finished_trials=[10, 100, 200, 300, 299, 300, 300, 300]
+            finished_trials=[10, 100, 200, 300, 299, 300, 300, 300],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_4_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_4,
                               new_stage=uc_rwd_stage_4,
                               old_next_stage=TrainingStage.STAGE_FINAL,
                               new_next_stage=uc_rwd_final)
 
+    def test_uncoupled_no_baiting_reward_delay_stage_final(self):
+        """
+        Test uncoupled no baiting reward delay task
+        """
         # --FINAL--
         # test final stay
         final_stay = DynamicForagingMetrics(
             session_total=9,
             session_at_current_stage=4,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .60, .60, .60, .60, .60],
-            finished_trials=[10, 100, 200, 300, 300, 399, 399, 399, 399]
+            finished_trials=[10, 100, 200, 300, 300, 399, 399, 399, 399],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=final_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=uc_rwd_final,
                               old_next_stage=TrainingStage.STAGE_FINAL,
@@ -1352,11 +1497,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=9,
             session_at_current_stage=4,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .7, .7, .7, .7, .7],
-            finished_trials=[10, 100, 200, 300, 300, 399, 399, 399, 399]
+            finished_trials=[10, 100, 200, 300, 300, 399, 399, 399, 399],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=final_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=uc_rwd_final,
                               old_next_stage=TrainingStage.STAGE_FINAL,
@@ -1367,11 +1513,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=9,
             session_at_current_stage=4,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65],
-            finished_trials=[10, 100, 200, 300, 400, 400, 400, 400, 400]
+            finished_trials=[10, 100, 200, 300, 400, 400, 400, 400, 400],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=final_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=uc_rwd_final,
                               old_next_stage=TrainingStage.STAGE_FINAL,
@@ -1382,11 +1529,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=15,
             session_at_current_stage=4,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65, .65, .65, .65, .65, .65, .65],
-            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 425, 425, 425, 425, 425]
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 425, 425, 425, 425, 425],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .09]
         )
         self.compare_decision(metrics=final_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=uc_rwd_final,
                               old_next_stage=TrainingStage.STAGE_FINAL,
@@ -1397,11 +1545,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=9,
             session_at_current_stage=5,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65],
-            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425]
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=final_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=uc_rwd_final,
                               old_next_stage=TrainingStage.STAGE_FINAL,
@@ -1412,11 +1561,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=15,
             session_at_current_stage=5,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65, .7, .7, .7, .7, .7],
-            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 500, 500, 500, 500, 500]
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 500, 500, 500, 500, 500],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .09]
         )
         self.compare_decision(metrics=final_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=uc_rwd_final,
                               old_next_stage=TrainingStage.GRADUATED,
@@ -1427,11 +1577,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=15,
             session_at_current_stage=5,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65, .59, .59, .59, .59, .59],
-            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 249, 249, 249, 249, 249]
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 249, 249, 249, 249, 249],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .09]
         )
         self.compare_decision(metrics=final_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=uc_rwd_final,
                               old_next_stage=TrainingStage.STAGE_4,
@@ -1442,11 +1593,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=15,
             session_at_current_stage=5,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65, .59, .59, .59, .59, .59],
-            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 250, 250, 250, 250, 250]
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 250, 250, 250, 250, 250],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .09]
         )
         self.compare_decision(metrics=final_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=uc_rwd_final,
                               old_next_stage=TrainingStage.STAGE_4,
@@ -1457,29 +1609,21 @@ class TestCurriculums(unittest.TestCase):
             session_total=15,
             session_at_current_stage=5,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65, .7, .7, .7, .7, .7],
-            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 249, 249, 249, 249, 249]
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 249, 249, 249, 249, 249],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .09]
         )
         self.compare_decision(metrics=final_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_rwd_delay_old,
+                              new_curriculum=self.uncoupled_no_baiting_rwd_delay_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=uc_rwd_final,
                               old_next_stage=TrainingStage.STAGE_4,
                               new_next_stage=uc_rwd_stage_4)
 
-    def test_uncoupled_no_baiting(self):
+    def test_uncoupled_no_baiting_stage_warmup(self):
         """
         Test uncoupled no baiting task
         """
-
-        uncoupled_baiting = self.curriculum_manager.get_curriculum(
-            curriculum_name='Uncoupled Without Baiting',
-            curriculum_version='2.3',
-            curriculum_schema_version='1.0',
-        )
-
-        old_curriculum = uncoupled_baiting['curriculum']
-        new_curriculum = construct_uncoupled_no_baiting_2p3_curriculum()
 
         # --WARMUP--
 
@@ -1488,11 +1632,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=1,
             session_at_current_stage=0,
             foraging_efficiency=[0.0],
-            finished_trials=[0]
+            finished_trials=[0],
+            ignore_rate=[.1]
         )
         self.compare_decision(metrics=warmup_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_old,
+                              new_curriculum=self.uncoupled_no_baiting_new,
                               old_stage=TrainingStage.STAGE_1_WARMUP,
                               new_stage=uc_stage_1_warmup,
                               old_next_stage=TrainingStage.STAGE_1_WARMUP,
@@ -1503,11 +1648,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=1,
             session_at_current_stage=1,
             foraging_efficiency=[0.8],
-            finished_trials=[10]
+            finished_trials=[10],
+            ignore_rate=[.1]
         )
         self.compare_decision(metrics=warmup_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_old,
+                              new_curriculum=self.uncoupled_no_baiting_new,
                               old_stage=TrainingStage.STAGE_1_WARMUP,
                               new_stage=uc_stage_1_warmup,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -1518,11 +1664,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=1,
             session_at_current_stage=1,
             foraging_efficiency=[0.1],
-            finished_trials=[300]
+            finished_trials=[300],
+            ignore_rate=[.1]
         )
         self.compare_decision(metrics=warmup_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_old,
+                              new_curriculum=self.uncoupled_no_baiting_new,
                               old_stage=TrainingStage.STAGE_1_WARMUP,
                               new_stage=uc_stage_1_warmup,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -1533,27 +1680,33 @@ class TestCurriculums(unittest.TestCase):
             session_total=1,
             session_at_current_stage=1,
             foraging_efficiency=[0.6],
-            finished_trials=[200]
+            finished_trials=[200],
+            ignore_rate=[.1]
         )
         self.compare_decision(metrics=warmup_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_old,
+                              new_curriculum=self.uncoupled_no_baiting_new,
                               old_stage=TrainingStage.STAGE_1_WARMUP,
                               new_stage=uc_stage_1_warmup,
                               old_next_stage=TrainingStage.STAGE_2,
                               new_next_stage=uc_stage_2)
 
+    def test_uncoupled_no_baiting_stage_1(self):
+        """
+        Test uncoupled no baiting task
+        """
         # --STAGE 1--
         # test stage 1 stay
         stage_1_stay = DynamicForagingMetrics(
             session_total=3,
             session_at_current_stage=2,
             foraging_efficiency=[0.1, 0.2, 0.3],
-            finished_trials=[10, 100, 150]
+            finished_trials=[10, 100, 150],
+            ignore_rate=[.1, .1, .1]
         )
         self.compare_decision(metrics=stage_1_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_old,
+                              new_curriculum=self.uncoupled_no_baiting_new,
                               old_stage=TrainingStage.STAGE_1,
                               new_stage=uc_stage_1,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -1564,11 +1717,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=3,
             session_at_current_stage=2,
             foraging_efficiency=[0.1, 0.2, 0.6],
-            finished_trials=[10, 100, 150]
+            finished_trials=[10, 100, 150],
+            ignore_rate=[.1, .1, .1]
         )
         self.compare_decision(metrics=stage_1_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_old,
+                              new_curriculum=self.uncoupled_no_baiting_new,
                               old_stage=TrainingStage.STAGE_1,
                               new_stage=uc_stage_1,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -1579,11 +1733,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=3,
             session_at_current_stage=2,
             foraging_efficiency=[0.1, 0.2, 0.3],
-            finished_trials=[10, 100, 200]
+            finished_trials=[10, 100, 200],
+            ignore_rate=[.1, .1, .1]
         )
         self.compare_decision(metrics=stage_1_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_old,
+                              new_curriculum=self.uncoupled_no_baiting_new,
                               old_stage=TrainingStage.STAGE_1,
                               new_stage=uc_stage_1,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -1594,27 +1749,33 @@ class TestCurriculums(unittest.TestCase):
             session_total=3,
             session_at_current_stage=2,
             foraging_efficiency=[0.1, 0.2, 0.6],
-            finished_trials=[10, 100, 200]
+            finished_trials=[10, 100, 200],
+            ignore_rate=[.1, .1, .1]
         )
         self.compare_decision(metrics=stage_1_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_old,
+                              new_curriculum=self.uncoupled_no_baiting_new,
                               old_stage=TrainingStage.STAGE_1,
                               new_stage=uc_stage_1,
                               old_next_stage=TrainingStage.STAGE_2,
                               new_next_stage=uc_stage_2)
 
+    def test_uncoupled_no_baiting_stage_2(self):
+        """
+        Test uncoupled no baiting task
+        """
         # --STAGE 2--
         # test stage 2 stay
         stage_2_stay = DynamicForagingMetrics(
             session_total=4,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .55],
-            finished_trials=[10, 100, 200, 200]
+            finished_trials=[10, 100, 200, 200],
+            ignore_rate=[.1, .1, .1]
         )
         self.compare_decision(metrics=stage_2_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_old,
+                              new_curriculum=self.uncoupled_no_baiting_new,
                               old_stage=TrainingStage.STAGE_2,
                               new_stage=uc_stage_2,
                               old_next_stage=TrainingStage.STAGE_2,
@@ -1625,11 +1786,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=4,
             session_at_current_stage=3,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65],
-            finished_trials=[10, 100, 200, 300, 300]
+            finished_trials=[10, 100, 200, 300, 300],
+            ignore_rate=[.1, .1, .1]
         )
         self.compare_decision(metrics=stage_2_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_old,
+                              new_curriculum=self.uncoupled_no_baiting_new,
                               old_stage=TrainingStage.STAGE_2,
                               new_stage=uc_stage_2,
                               old_next_stage=TrainingStage.STAGE_3,
@@ -1640,11 +1802,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=4,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .54],
-            finished_trials=[10, 100, 200, 199]
+            finished_trials=[10, 100, 200, 199],
+            ignore_rate=[.1, .1, .1]
         )
         self.compare_decision(metrics=stage_2_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_old,
+                              new_curriculum=self.uncoupled_no_baiting_new,
                               old_stage=TrainingStage.STAGE_2,
                               new_stage=uc_stage_2,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -1655,11 +1818,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=4,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .54],
-            finished_trials=[10, 100, 200, 200]
+            finished_trials=[10, 100, 200, 200],
+            ignore_rate=[.1, .1, .1]
         )
         self.compare_decision(metrics=stage_2_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_old,
+                              new_curriculum=self.uncoupled_no_baiting_new,
                               old_stage=TrainingStage.STAGE_2,
                               new_stage=uc_stage_2,
                               old_next_stage=TrainingStage.STAGE_1,
@@ -1670,43 +1834,54 @@ class TestCurriculums(unittest.TestCase):
             session_total=4,
             session_at_current_stage=1,
             foraging_efficiency=[0.1, 0.2, 0.7, .55],
-            finished_trials=[10, 100, 200, 199]
+            finished_trials=[10, 100, 200, 199],
+            ignore_rate=[.1, .1, .1]
         )
         self.compare_decision(metrics=stage_2_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_old,
+                              new_curriculum=self.uncoupled_no_baiting_new,
                               old_stage=TrainingStage.STAGE_2,
                               new_stage=uc_stage_2,
                               old_next_stage=TrainingStage.STAGE_1,
                               new_next_stage=uc_stage_1)
 
+    def test_uncoupled_no_baiting_stage_3(self):
+        """
+        Test uncoupled no baiting task
+        """
         # --STAGE 3--
         # test stage 3 transition
         stage_3_transition = DynamicForagingMetrics(
             session_total=6,
             session_at_current_stage=3,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .64, .65],
-            finished_trials=[10, 100, 200, 300, 299, 300]
+            finished_trials=[10, 100, 200, 300, 299, 300],
+            ignore_rate=[.1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=stage_3_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_old,
+                              new_curriculum=self.uncoupled_no_baiting_new,
                               old_stage=TrainingStage.STAGE_3,
                               new_stage=uc_stage_3,
                               old_next_stage=TrainingStage.STAGE_FINAL,
                               new_next_stage=uc_final)
 
+    def test_uncoupled_no_baiting_stage_final(self):
+        """
+        Test uncoupled no baiting task
+        """
         # --FINAL--
         # test final stay
         final_stay = DynamicForagingMetrics(
             session_total=9,
             session_at_current_stage=4,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .60, .60, .60, .60, .60],
-            finished_trials=[10, 100, 200, 300, 300, 399, 399, 399, 399]
+            finished_trials=[10, 100, 200, 300, 300, 399, 399, 399, 399],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=final_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_old,
+                              new_curriculum=self.uncoupled_no_baiting_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=uc_final,
                               old_next_stage=TrainingStage.STAGE_FINAL,
@@ -1717,11 +1892,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=9,
             session_at_current_stage=4,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .7, .7, .7, .7, .7],
-            finished_trials=[10, 100, 200, 300, 300, 399, 399, 399, 399]
+            finished_trials=[10, 100, 200, 300, 300, 399, 399, 399, 399],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=final_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_old,
+                              new_curriculum=self.uncoupled_no_baiting_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=uc_final,
                               old_next_stage=TrainingStage.STAGE_FINAL,
@@ -1732,11 +1908,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=9,
             session_at_current_stage=4,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65],
-            finished_trials=[10, 100, 200, 300, 400, 400, 400, 400, 400]
+            finished_trials=[10, 100, 200, 300, 400, 400, 400, 400, 400],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=final_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_old,
+                              new_curriculum=self.uncoupled_no_baiting_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=uc_final,
                               old_next_stage=TrainingStage.STAGE_FINAL,
@@ -1747,11 +1924,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=15,
             session_at_current_stage=4,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65, .65, .65, .65, .65, .65, .65],
-            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 425, 425, 425, 425, 425]
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 425, 425, 425, 425, 425],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=final_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_old,
+                              new_curriculum=self.uncoupled_no_baiting_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=uc_final,
                               old_next_stage=TrainingStage.STAGE_FINAL,
@@ -1762,11 +1940,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=9,
             session_at_current_stage=5,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65],
-            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425]
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=final_stay,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_old,
+                              new_curriculum=self.uncoupled_no_baiting_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=uc_final,
                               old_next_stage=TrainingStage.STAGE_FINAL,
@@ -1777,11 +1956,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=15,
             session_at_current_stage=5,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65, .7, .7, .7, .7, .7],
-            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 500, 500, 500, 500, 500]
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 500, 500, 500, 500, 500],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=final_transition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_old,
+                              new_curriculum=self.uncoupled_no_baiting_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=uc_final,
                               old_next_stage=TrainingStage.GRADUATED,
@@ -1792,11 +1972,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=15,
             session_at_current_stage=5,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65, .59, .59, .59, .59, .59],
-            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 249, 249, 249, 249, 249]
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 249, 249, 249, 249, 249],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=final_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_old,
+                              new_curriculum=self.uncoupled_no_baiting_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=uc_final,
                               old_next_stage=TrainingStage.STAGE_3,
@@ -1807,11 +1988,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=15,
             session_at_current_stage=5,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65, .59, .59, .59, .59, .59],
-            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 250, 250, 250, 250, 250]
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 250, 250, 250, 250, 250],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=final_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_old,
+                              new_curriculum=self.uncoupled_no_baiting_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=uc_final,
                               old_next_stage=TrainingStage.STAGE_3,
@@ -1822,11 +2004,12 @@ class TestCurriculums(unittest.TestCase):
             session_total=15,
             session_at_current_stage=5,
             foraging_efficiency=[0.1, 0.2, 0.7, .65, .65, .65, .65, .65, .65, .7, .7, .7, .7, .7],
-            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 249, 249, 249, 249, 249]
+            finished_trials=[10, 100, 200, 300, 400, 425, 425, 425, 425, 425, 249, 249, 249, 249, 249],
+            ignore_rate=[.1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1, .1]
         )
         self.compare_decision(metrics=final_detransition,
-                              old_curriculum=old_curriculum,
-                              new_curriculum=new_curriculum,
+                              old_curriculum=self.uncoupled_no_baiting_old,
+                              new_curriculum=self.uncoupled_no_baiting_new,
                               old_stage=TrainingStage.STAGE_FINAL,
                               new_stage=uc_final,
                               old_next_stage=TrainingStage.STAGE_3,
@@ -1852,7 +2035,7 @@ class TestCurriculums(unittest.TestCase):
 
         old_decision = old_curriculum.evaluate_transitions(
             current_stage=old_stage,
-            metrics=metrics
+            metrics=OldMetrics(**metrics.model_dump())  # transform to old metrics class
         )
         new_decision = Trainer(new_curriculum).evaluate(TrainerState(stage=new_stage,
                                                                      curriculum=new_curriculum,

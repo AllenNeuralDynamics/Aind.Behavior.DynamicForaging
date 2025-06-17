@@ -129,7 +129,7 @@ class DynamicForagingTrainerServer:
             epochs = [session['session']['stimulus_epochs'][0] for session in sessions]
             finished_trials = [epoch['trials_finished'] for epoch in epochs]
             foraging_efficiency = [epoch['output_parameters']['performance']['foraging_efficiency'] for epoch in epochs]
-
+            ignore_rate = [epoch['output_parameters']['performance']['ignore_rate'] for epoch in epochs]
             current_stage = trainer_state.stage.name
             session_at_current_stage = len([sess for sess in slims_sessions if sess.task_stage == current_stage])
 
@@ -137,7 +137,8 @@ class DynamicForagingTrainerServer:
                 foraging_efficiency=foraging_efficiency,
                 finished_trials=finished_trials,
                 session_total=session_total,
-                session_at_current_stage=session_at_current_stage
+                session_at_current_stage=session_at_current_stage,
+                ignore_rate=ignore_rate
             )
 
         else:
