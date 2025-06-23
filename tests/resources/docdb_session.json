@@ -723,7 +723,8 @@
      },
      "performance": {
       "foraging_efficiency": 0.6539447567017806,
-      "foraging_efficiency_with_actual_random_seed": 0.7194719471947195
+      "foraging_efficiency_with_actual_random_seed": 0.7194719471947195,
+      "ignore_rate": 0.1
      },
      "task_parameters": {
       "ITIMin": "1.0",
