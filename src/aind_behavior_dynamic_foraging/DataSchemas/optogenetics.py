@@ -16,11 +16,13 @@ INTERVAL_CONDITIONS = Literal[
 ]
 COLORS = Literal['Blue', 'Red', 'Green', 'Orange']
 
-POWERS = Literal[0.0, 1.0, 1.5, 2.0, 2.5, 3.0]
+POWERS = [""]
+
+FREQUENCIES = Literal[40]
 
 class LocationBaseClass(BaseModel):
     name: str = Field(..., description="Name of location")
-    power: POWERS = Field(default=1.0, description="Power of laser in mW")
+    power: float = Field(default=1.0, description="Power of laser in mW")
 
 
 class LocationOne(LocationBaseClass):
@@ -46,7 +48,7 @@ class _ProtocolBaseType(BaseModel):
 
 class SineProtocol(_ProtocolBaseType):
     name: Literal['Sine'] = 'Sine'
-    frequency: float = Field(default=40.0, description="Frequency of sine wave.")
+    frequency: FREQUENCIES = Field(default=40, description="Frequency of sine wave.")
     ramp_down: float = Field(default=1, description="Ramp down of laser in seconds.")
 
 class PulseProtocol(_ProtocolBaseType):
