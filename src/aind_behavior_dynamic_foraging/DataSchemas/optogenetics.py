@@ -124,5 +124,5 @@ class Optogenetics(BaseModel):
                                                      max_length=6)
     session_control: Optional[SessionControl] = Field(default=None,
                                                       description="Field defining session wide parameters.")
-    minimum_trial_interval: int = Field(default=10, description="Minimum trial count between two opto trials.")
+    minimum_trial_interval: int = Field(default=0, description="Minimum trial count between two opto trials.")
     sample_frequency: int = Field(defualt=5000, description="Sample frequency of wave")
