@@ -17,13 +17,14 @@ INTERVAL_CONDITIONS = Literal[
 COLORS = Literal['Blue', 'Red', 'Green', 'Orange']
 
 POWERS = [""]
+AMPLITUDES = [""]
 
 FREQUENCIES = Literal[40]
 
 class LocationBaseClass(BaseModel):
     name: str = Field(..., description="Name of location")
-    power: float = Field(default=1.0, description="Power of laser in mW")
-
+    power: float = Field(default=0.0, description="Power of laser in mW")
+    amplitude: float = Field(default=0.0, description="Amplitude of that correlates to power")
 
 class LocationOne(LocationBaseClass):
     name: Literal["LocationOne"] = "LocationOne"
