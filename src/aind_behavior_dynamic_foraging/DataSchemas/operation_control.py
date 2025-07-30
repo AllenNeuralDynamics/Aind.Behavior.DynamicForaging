@@ -45,7 +45,7 @@ class LickSpoutMovement(BaseModel):
     range_um: float = Field(default=300, description="+/- range lick spout can travel in um")
     step_size_um: float = Field(default=50, description="Step size for moving lick spout if bias is outside thresholds")
 
-class WaterBiasReward(BaseModel):
+class WaterReward(BaseModel):
     trial_interval: int = Field(50, description="Trial interval to evaluate reward.")
     bias_upper_threshold: float = Field(default=.7, description="Value which water will be given if bias exceeds")
     n_choices: int = Field(20, description="Last N choices to evaluate if all are on the lowest probability side")
@@ -56,7 +56,7 @@ class BiasCorrection(BaseModel):
                                                       "correction.")
     lick_spout_movement: Optional[LickSpoutMovement] = Field(default=LickSpoutMovement(),
                                                              description="Lick spout movement to correct for bias.")
-    water_reward: Optional[WaterBiasReward] = Field(default=WaterBiasReward(),
+    water_reward: Optional[WaterReward] = Field(default=WaterReward(),
                                                     description="Water reward to correct for bias.")
 
 class OperationalControl(BaseModel):
