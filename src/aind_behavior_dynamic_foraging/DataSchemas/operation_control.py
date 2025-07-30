@@ -49,7 +49,7 @@ class WaterBiasReward(BaseModel):
     trial_interval: int = Field(50, description="Trial interval to evaluate reward.")
     bias_upper_threshold: float = Field(default=.7, description="Value which water will be given if bias exceeds")
     n_choices: int = Field(20, description="Last N choices to evaluate if all are on the lowest probability side")
-    drops: int = Field(5, description="Number of drops to deliver")
+    volume_ul: int = Field(5, description="Volume in ul to deliver")
 
 class BiasCorrection(BaseModel):
     trial_buffer: int = Field(default=20, description="Buffer between water and lickspout movement to avoid over "
