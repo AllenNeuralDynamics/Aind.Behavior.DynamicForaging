@@ -47,13 +47,13 @@ class WaterReward(BaseModel):
 class BiasCorrection(BaseModel):
     max_water_reward_attempts: int = Field(10, description="Number of attempts to try a water reward before moving lickspouts")
     trial_interval: int = Field(50, description="Trial interval to evaluate bias.")
+    bias_upper_threshold: float = Field(default=.7, description="Value which water will be given if bias exceeds")
+    bias_lower_threshold: float = Field(default=.3, description="Value which lick spout will move towards origin if "
+                                                                "bias drops below.")
     lick_spout_movement: Optional[LickSpoutMovement] = Field(default=LickSpoutMovement(),
                                                              description="Lick spout movement to correct for bias.")
     water_reward: Optional[WaterReward] = Field(default=WaterReward(),
                                                 description="Water reward to correct for bias.")
-    bias_upper_threshold: float = Field(default=.7, description="Value which water will be given if bias exceeds")
-    bias_lower_threshold: float = Field(default=.3, description="Value which lick spout will move towards origin if "
-                                                                "bias drops below.")
 
 class OperationalControl(BaseModel):
     name: Literal["OperationalControl"] = Field(default="OperationalControl", frozen=True)
