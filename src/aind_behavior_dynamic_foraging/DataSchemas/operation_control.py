@@ -36,14 +36,24 @@ class LickSpoutRetractionSpecs(BaseModel):
     un_retract_speed: UnRetractSpeed = Field(default=UnRetractSpeed.NORMAL,
                                              description="Speed of lick spout retraction")
 
-class LickSpoutBiasMovement(BaseModel):
-    trial_interval: int = Field(50, description="Trial interval to evaluate position.")
-    bias_lower_threshold: float = Field(default=.3, description="Value which lick spout will move towards origin if "
-                                                                "bias drops below.")
-    bias_upper_threshold: float = Field(default=.7, description="Value which lick spout will move away from origin if "
-                                                                "bias goes above.")
+class LickSpoutMovement(BaseModel):
     range_um: float = Field(default=300, description="+/- range lick spout can travel in um")
     step_size_um: float = Field(default=50, description="Step size for moving lick spout if bias is outside thresholds")
+
+class WaterReward(BaseModel):
+    n_choices: int = Field(10, description="Last N choices to evaluate if all are on the lowest probability side")
+    volume_ul: int = Field(2, description="Volume in ul to deliver")
+
+class BiasCorrection(BaseModel):
+    max_water_reward_attempts: int = Field(10, description="Number of attempts to try a water reward before moving lickspouts")
+    trial_interval: int = Field(50, description="Trial interval to evaluate bias.")
+    bias_upper_threshold: float = Field(default=.7, description="Value which water will be given if bias exceeds")
+    bias_lower_threshold: float = Field(default=.3, description="Value which lick spout will move towards origin if "
+                                                                "bias drops below.")
+    lick_spout_movement: Optional[LickSpoutMovement] = Field(default=LickSpoutMovement(),
+                                                             description="Lick spout movement to correct for bias.")
+    water_reward: Optional[WaterReward] = Field(default=WaterReward(),
+                                                description="Water reward to correct for bias.")
 
 class OperationalControl(BaseModel):
     name: Literal["OperationalControl"] = Field(default="OperationalControl", frozen=True)
@@ -52,4 +62,6 @@ class OperationalControl(BaseModel):
     lick_spout_retraction_specs: LickSpoutRetractionSpecs = Field(default=LickSpoutRetractionSpecs(),
                                                                   description="Lick spout retraction settings"
                                                                               "related to session.")
-    lick_spout_bias_movement: Optional[LickSpoutBiasMovement] = Field(default=LickSpoutBiasMovement())
+    bias_correction: BiasCorrection = Field(default=BiasCorrection(),
+                                            description="Lick spout movement to correct for"
+                                                        " bias.")
