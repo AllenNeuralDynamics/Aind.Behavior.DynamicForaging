@@ -49,7 +49,7 @@ class InterTrialInterval(BaseModel):
     increase: float = Field(default=0.0, title="ITI increase")  # TODO: not implemented in the GUI??
 
 
-class ResponseTime(BaseModel):
+class Response(BaseModel):
     response_time: float = Field(default=1.0, title="Response time")
     reward_consume_time: float = Field(
         default=3.0, title="Reward consume time", description="Time of the no-lick period before trial end"
@@ -110,7 +110,7 @@ class AindDynamicForagingTaskParameters(TaskParameters):
     inter_trial_interval: InterTrialInterval = Field(
         default_factory=InterTrialInterval, validate_default=True, description="Parameters describing iti."
     )
-    response_time: ResponseTime = Field(default=ResponseTime(), description="Parameters describing response time.")
+    response_time: Response = Field(default=Response(), description="Parameters describing response time.")
     auto_block: Optional[AutoBlock] = Field(
         default=None, description="Parameters describing auto advancement to next block."
     )

@@ -876,7 +876,7 @@ namespace AindDynamicForagingDataSchema
     
         private InterTrialInterval _interTrialInterval;
     
-        private ResponseTime _responseTime;
+        private Response _responseTime;
     
         private AutoBlock _autoBlock;
     
@@ -898,7 +898,7 @@ namespace AindDynamicForagingDataSchema
             _randomness = AindDynamicForagingDataSchema.AindDynamicForagingTaskParametersRandomness.Exponential;
             _delayPeriod = new DelayPeriod();
             _rewardDelay = 0D;
-            _responseTime = new ResponseTime();
+            _responseTime = new Response();
             _rewardSize = new RewardSize();
             _noResponseTrialAddition = true;
         }
@@ -1092,7 +1092,7 @@ namespace AindDynamicForagingDataSchema
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("response_time")]
         [System.ComponentModel.DescriptionAttribute("Parameters describing response time.")]
-        public ResponseTime ResponseTime
+        public Response ResponseTime
         {
             get
             {
@@ -4399,20 +4399,20 @@ namespace AindDynamicForagingDataSchema
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
-    public partial class ResponseTime
+    public partial class Response
     {
     
         private double _responseTime;
     
         private double _rewardConsumeTime;
     
-        public ResponseTime()
+        public Response()
         {
             _responseTime = 1D;
             _rewardConsumeTime = 3D;
         }
     
-        protected ResponseTime(ResponseTime other)
+        protected Response(Response other)
         {
             _responseTime = other._responseTime;
             _rewardConsumeTime = other._rewardConsumeTime;
@@ -4448,14 +4448,14 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
-        public System.IObservable<ResponseTime> Generate()
+        public System.IObservable<Response> Generate()
         {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new ResponseTime(this)));
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new Response(this)));
         }
     
-        public System.IObservable<ResponseTime> Generate<TSource>(System.IObservable<TSource> source)
+        public System.IObservable<Response> Generate<TSource>(System.IObservable<TSource> source)
         {
-            return System.Reactive.Linq.Observable.Select(source, _ => new ResponseTime(this));
+            return System.Reactive.Linq.Observable.Select(source, _ => new Response(this));
         }
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
@@ -6956,9 +6956,9 @@ namespace AindDynamicForagingDataSchema
             return Process<Rect>(source);
         }
 
-        public System.IObservable<string> Process(System.IObservable<ResponseTime> source)
+        public System.IObservable<string> Process(System.IObservable<Response> source)
         {
-            return Process<ResponseTime>(source);
+            return Process<Response>(source);
         }
 
         public System.IObservable<string> Process(System.IObservable<RewardN> source)
@@ -7061,7 +7061,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<ManipulatorPosition>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Measurement>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Rect>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<ResponseTime>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Response>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<RewardN>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<RewardProbability>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<RewardSize>))]

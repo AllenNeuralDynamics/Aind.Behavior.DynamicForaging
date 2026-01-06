@@ -370,7 +370,7 @@
           "description": "Parameters describing iti."
         },
         "response_time": {
-          "$ref": "#/$defs/ResponseTime",
+          "$ref": "#/$defs/Response",
           "default": {
             "response_time": 1.0,
             "reward_consume_time": 3.0
@@ -1579,7 +1579,7 @@
       "title": "Rect",
       "type": "object"
     },
-    "ResponseTime": {
+    "Response": {
       "properties": {
         "response_time": {
           "default": 1.0,
@@ -1593,7 +1593,7 @@
           "type": "number"
         }
       },
-      "title": "ResponseTime",
+      "title": "Response",
       "type": "object"
     },
     "RewardN": {
