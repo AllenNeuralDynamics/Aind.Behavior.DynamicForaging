@@ -13,8 +13,8 @@
         <Property Name="SessionPath" />
       </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:ReadSchemas.bonsai">
-        <TaskLogicPath>C:\git\AllenNeuralDynamics\aind-vr-foraging\local\AindVrForagingTaskLogic.json</TaskLogicPath>
-        <RigPath>C:\git\AllenNeuralDynamics\aind-vr-foraging\local\AindVrForagingRig.json</RigPath>
+        <TaskLogicPath>C:\git\AllenNeuralDynamics\aind-vr-foraging\local\AindDynamicForagingTaskLogic.json</TaskLogicPath>
+        <RigPath>C:\git\AllenNeuralDynamics\aind-vr-foraging\local\AindDynamicForagingRig.json</RigPath>
         <SessionPath>C:\git\AllenNeuralDynamics\aind-vr-foraging\local\AindBehaviorSessionModel.json</SessionPath>
       </Expression>
       <Expression xsi:type="GroupWorkflow">
