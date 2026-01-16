@@ -29,10 +29,11 @@ class AindDynamicForagingRig(rig.AindBehaviorRigModel):
     harp_clock_generator: rig.harp.HarpWhiteRabbit = Field(description="Harp clock generator")
 
     harp_sniff_detector: Optional[rig.harp.HarpSniffDetector] = Field(
-        default=None, description="Sniff detector settings"
+        default=None, description="Harp sniff detector"
     )
     harp_environment_sensor: Optional[rig.harp.HarpEnvironmentSensor] = Field(
-        default=None, description="Environment sensor"
+        default=None, description="Harp environment sensor"
     )
     manipulator: aind_manipulator.AindManipulatorDevice = Field(description="Manipulator")
     calibration: RigCalibration = Field(description="Calibration models")
+    harp_sound_card: rig.harp.HarpSoundCard = Field(description="Harp sound card")

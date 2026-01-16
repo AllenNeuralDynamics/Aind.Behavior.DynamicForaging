@@ -176,7 +176,7 @@
         },
         "harp_sniff_detector": {
           "default": null,
-          "description": "Sniff detector settings",
+          "description": "Harp sniff detector",
           "oneOf": [
             {
               "$ref": "#/$defs/HarpSniffDetector"
@@ -188,7 +188,7 @@
         },
         "harp_environment_sensor": {
           "default": null,
-          "description": "Environment sensor",
+          "description": "Harp environment sensor",
           "oneOf": [
             {
               "$ref": "#/$defs/HarpEnvironmentSensor"
@@ -205,6 +205,10 @@
         "calibration": {
           "$ref": "#/$defs/RigCalibration",
           "description": "Calibration models"
+        },
+        "harp_sound_card": {
+          "$ref": "#/$defs/HarpSoundCard",
+          "description": "Harp sound card"
         }
       },
       "required": [
@@ -215,7 +219,8 @@
         "harp_lickometer_right",
         "harp_clock_generator",
         "manipulator",
-        "calibration"
+        "calibration",
+        "harp_sound_card"
       ],
       "title": "AindDynamicForagingRig",
       "type": "object"
@@ -1335,6 +1340,82 @@
         "port_name"
       ],
       "title": "HarpSniffDetector",
+      "type": "object"
+    },
+    "HarpSoundCard": {
+      "properties": {
+        "device_type": {
+          "const": "SoundCard",
+          "default": "SoundCard",
+          "title": "Device Type",
+          "type": "string"
+        },
+        "device_name": {
+          "default": null,
+          "description": "Device name",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Device Name"
+        },
+        "additional_settings": {
+          "default": null,
+          "description": "Additional settings",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/BaseModel"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "calibration": {
+          "default": null,
+          "description": "Calibration",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/BaseModel"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "who_am_i": {
+          "const": 1280,
+          "default": 1280,
+          "title": "Who Am I",
+          "type": "integer"
+        },
+        "serial_number": {
+          "default": null,
+          "description": "Device serial number",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Serial Number"
+        },
+        "port_name": {
+          "description": "Device port name",
+          "title": "Port Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "port_name"
+      ],
+      "title": "HarpSoundCard",
       "type": "object"
     },
     "HarpWhiteRabbit": {
