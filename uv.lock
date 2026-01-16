@@ -38,6 +38,7 @@ version = "0.0.2rc2"
 source = { editable = "." }
 dependencies = [
     { name = "aind-behavior-services" },
+    { name = "numpy" },
     { name = "pydantic-settings" },
 ]
 
@@ -58,6 +59,7 @@ docs = [
 [package.metadata]
 requires-dist = [
     { name = "aind-behavior-services", specifier = ">=0.12,<0.13" },
+    { name = "numpy", specifier = ">=2.4.0" },
     { name = "pydantic-settings" },
 ]
 
