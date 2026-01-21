@@ -361,6 +361,8 @@ namespace AindDynamicForagingDataSchema
     
         private RigCalibration _calibration;
     
+        private HarpSoundCard _harpSoundCard;
+    
         public AindDynamicForagingRig()
         {
             _aindBehaviorServicesPkgVersion = "0.12.5";
@@ -372,6 +374,7 @@ namespace AindDynamicForagingDataSchema
             _harpClockGenerator = new HarpWhiteRabbit();
             _manipulator = new AindManipulatorDevice();
             _calibration = new RigCalibration();
+            _harpSoundCard = new HarpSoundCard();
         }
     
         protected AindDynamicForagingRig(AindDynamicForagingRig other)
@@ -390,6 +393,7 @@ namespace AindDynamicForagingDataSchema
             _harpEnvironmentSensor = other._harpEnvironmentSensor;
             _manipulator = other._manipulator;
             _calibration = other._calibration;
+            _harpSoundCard = other._harpSoundCard;
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("aind_behavior_services_pkg_version")]
@@ -561,11 +565,11 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Sniff detector settings
+        /// Harp sniff detector
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("harp_sniff_detector")]
-        [System.ComponentModel.DescriptionAttribute("Sniff detector settings")]
+        [System.ComponentModel.DescriptionAttribute("Harp sniff detector")]
         public HarpSniffDetector HarpSniffDetector
         {
             get
@@ -579,11 +583,11 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Environment sensor
+        /// Harp environment sensor
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("harp_environment_sensor")]
-        [System.ComponentModel.DescriptionAttribute("Environment sensor")]
+        [System.ComponentModel.DescriptionAttribute("Harp environment sensor")]
         public HarpEnvironmentSensor HarpEnvironmentSensor
         {
             get
@@ -632,6 +636,24 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
+        /// <summary>
+        /// Harp sound card
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("harp_sound_card", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("Harp sound card")]
+        public HarpSoundCard HarpSoundCard
+        {
+            get
+            {
+                return _harpSoundCard;
+            }
+            set
+            {
+                _harpSoundCard = value;
+            }
+        }
+    
         public System.IObservable<AindDynamicForagingRig> Generate()
         {
             return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new AindDynamicForagingRig(this)));
@@ -657,7 +679,8 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("HarpSniffDetector = " + _harpSniffDetector + ", ");
             stringBuilder.Append("HarpEnvironmentSensor = " + _harpEnvironmentSensor + ", ");
             stringBuilder.Append("Manipulator = " + _manipulator + ", ");
-            stringBuilder.Append("Calibration = " + _calibration);
+            stringBuilder.Append("Calibration = " + _calibration + ", ");
+            stringBuilder.Append("HarpSoundCard = " + _harpSoundCard);
             return true;
         }
     
@@ -3633,6 +3656,193 @@ namespace AindDynamicForagingDataSchema
         public System.IObservable<HarpSniffDetector> Generate<TSource>(System.IObservable<TSource> source)
         {
             return System.Reactive.Linq.Observable.Select(source, _ => new HarpSniffDetector(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("DeviceType = " + _deviceType + ", ");
+            stringBuilder.Append("DeviceName = " + _deviceName + ", ");
+            stringBuilder.Append("AdditionalSettings = " + _additionalSettings + ", ");
+            stringBuilder.Append("Calibration = " + _calibration + ", ");
+            stringBuilder.Append("WhoAmI = " + _whoAmI + ", ");
+            stringBuilder.Append("SerialNumber = " + _serialNumber + ", ");
+            stringBuilder.Append("PortName = " + _portName);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class HarpSoundCard
+    {
+    
+        private string _deviceType;
+    
+        private string _deviceName;
+    
+        private BaseModel _additionalSettings;
+    
+        private BaseModel _calibration;
+    
+        private int _whoAmI;
+    
+        private string _serialNumber;
+    
+        private string _portName;
+    
+        public HarpSoundCard()
+        {
+            _deviceType = "SoundCard";
+            _whoAmI = 1280;
+        }
+    
+        protected HarpSoundCard(HarpSoundCard other)
+        {
+            _deviceType = other._deviceType;
+            _deviceName = other._deviceName;
+            _additionalSettings = other._additionalSettings;
+            _calibration = other._calibration;
+            _whoAmI = other._whoAmI;
+            _serialNumber = other._serialNumber;
+            _portName = other._portName;
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("device_type")]
+        public string DeviceType
+        {
+            get
+            {
+                return _deviceType;
+            }
+            set
+            {
+                _deviceType = value;
+            }
+        }
+    
+        /// <summary>
+        /// Device name
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("device_name")]
+        [System.ComponentModel.DescriptionAttribute("Device name")]
+        public string DeviceName
+        {
+            get
+            {
+                return _deviceName;
+            }
+            set
+            {
+                _deviceName = value;
+            }
+        }
+    
+        /// <summary>
+        /// Additional settings
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("additional_settings")]
+        [System.ComponentModel.DescriptionAttribute("Additional settings")]
+        public BaseModel AdditionalSettings
+        {
+            get
+            {
+                return _additionalSettings;
+            }
+            set
+            {
+                _additionalSettings = value;
+            }
+        }
+    
+        /// <summary>
+        /// Calibration
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("calibration")]
+        [System.ComponentModel.DescriptionAttribute("Calibration")]
+        public BaseModel Calibration
+        {
+            get
+            {
+                return _calibration;
+            }
+            set
+            {
+                _calibration = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("who_am_i")]
+        public int WhoAmI
+        {
+            get
+            {
+                return _whoAmI;
+            }
+            set
+            {
+                _whoAmI = value;
+            }
+        }
+    
+        /// <summary>
+        /// Device serial number
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("serial_number")]
+        [System.ComponentModel.DescriptionAttribute("Device serial number")]
+        public string SerialNumber
+        {
+            get
+            {
+                return _serialNumber;
+            }
+            set
+            {
+                _serialNumber = value;
+            }
+        }
+    
+        /// <summary>
+        /// Device port name
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("port_name", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("Device port name")]
+        public string PortName
+        {
+            get
+            {
+                return _portName;
+            }
+            set
+            {
+                _portName = value;
+            }
+        }
+    
+        public System.IObservable<HarpSoundCard> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new HarpSoundCard(this)));
+        }
+    
+        public System.IObservable<HarpSoundCard> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new HarpSoundCard(this));
         }
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
@@ -6931,6 +7141,11 @@ namespace AindDynamicForagingDataSchema
             return Process<HarpSniffDetector>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<HarpSoundCard> source)
+        {
+            return Process<HarpSoundCard>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<HarpWhiteRabbit> source)
         {
             return Process<HarpWhiteRabbit>(source);
@@ -7056,6 +7271,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpEnvironmentSensor>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpLicketySplit>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpSniffDetector>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpSoundCard>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpWhiteRabbit>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<InterTrialInterval>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<ManipulatorPosition>))]

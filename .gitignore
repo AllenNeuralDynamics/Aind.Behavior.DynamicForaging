@@ -1,6 +1,5 @@
 # Bonsai scripting files
 .vs
-.vscode
 bin
 obj
 Packages
@@ -83,3 +82,8 @@ ipython_config.py
 #   For a library or package, you might want to ignore these files since the code is
 #   intended to run in multiple environments; otherwise, check them in:
 # .python-version
+
+# IDEs and editors
+.vscode/
+.idea
+.sln
