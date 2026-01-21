@@ -28,9 +28,7 @@ class AindDynamicForagingRig(rig.AindBehaviorRigModel):
     harp_lickometer_right: rig.harp.HarpLicketySplit = Field(description="Harp right lickometer")
     harp_clock_generator: rig.harp.HarpWhiteRabbit = Field(description="Harp clock generator")
 
-    harp_sniff_detector: Optional[rig.harp.HarpSniffDetector] = Field(
-        default=None, description="Harp sniff detector"
-    )
+    harp_sniff_detector: Optional[rig.harp.HarpSniffDetector] = Field(default=None, description="Harp sniff detector")
     harp_environment_sensor: Optional[rig.harp.HarpEnvironmentSensor] = Field(
         default=None, description="Harp environment sensor"
     )
