@@ -1,12 +1,11 @@
 import datetime
 import os
 
-from aind_behavior_services.session import AindBehaviorSessionModel
+from aind_behavior_services.session import Session
 
-session = AindBehaviorSessionModel(
+session = Session(
     date=datetime.datetime.now(tz=datetime.timezone.utc),
     experiment="DynamicForaging No Baiting super duper cool",
-    root_path="c://",
     subject="test",
     notes="test session",
     allow_dirty_repo=True,
