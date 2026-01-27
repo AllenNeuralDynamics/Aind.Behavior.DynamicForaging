@@ -1,7 +1,7 @@
 import logging
 from typing import Literal, Optional
 
-from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel, TaskParameters
+from aind_behavior_services.task import Task, TaskParameters
 from pydantic import BaseModel, Field
 
 from aind_behavior_dynamic_foraging import (
@@ -123,7 +123,7 @@ class AindDynamicForagingTaskParameters(TaskParameters):
     lick_spout_retraction: Optional[bool] = Field(default=False, description="Lick spout retraction enabled.")
 
 
-class AindDynamicForagingTaskLogic(AindBehaviorTaskLogicModel):
+class AindDynamicForagingTaskLogic(Task):
     """
     Main task logic model for the AIND Dynamic Foraging task.
 

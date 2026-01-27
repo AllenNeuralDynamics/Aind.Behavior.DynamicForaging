@@ -99,7 +99,7 @@
               <Name>RigSchema</Name>
             </Expression>
             <Expression xsi:type="MemberSelector">
-              <Selector>Manipulator.Calibration.Input</Selector>
+              <Selector>Manipulator.Calibration</Selector>
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p2:SerializeToJson">
