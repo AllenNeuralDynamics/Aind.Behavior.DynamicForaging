@@ -1957,6 +1957,89 @@
         "Confidence32f"
       ]
     },
+    "Trial": {
+      "properties": {
+        "probability_left": {
+          "title": "Probability Left",
+          "type": "number"
+        },
+        "probability_right": {
+          "title": "Probability Right",
+          "type": "number"
+        },
+        "quiescent_period_wait_duration": {
+          "title": "Quiescent Period Wait Duration",
+          "type": "number"
+        },
+        "choice_deadline": {
+          "title": "Choice Deadline",
+          "type": "number"
+        },
+        "right_is_active": {
+          "title": "Right Is Active",
+          "type": "boolean"
+        },
+        "left_is_active": {
+          "title": "Left Is Active",
+          "type": "boolean"
+        },
+        "is_fast_retract": {
+          "title": "Is Fast Retract",
+          "type": "boolean"
+        },
+        "reward_consumption_duration": {
+          "title": "Reward Consumption Duration",
+          "type": "number"
+        },
+        "iti_duration": {
+          "title": "Iti Duration",
+          "type": "number"
+        },
+        "reward_delay": {
+          "title": "Reward Delay",
+          "type": "number"
+        },
+        "is_auto_water_right": {
+          "title": "Is Auto Water Right",
+          "type": "boolean"
+        },
+        "is_auto_water_left": {
+          "title": "Is Auto Water Left",
+          "type": "boolean"
+        },
+        "reward_size_left": {
+          "title": "Reward Size Left",
+          "type": "number"
+        },
+        "reward_size_right": {
+          "title": "Reward Size Right",
+          "type": "number"
+        },
+        "lickspout_offset": {
+          "title": "Lickspout Offset",
+          "type": "number"
+        }
+      },
+      "required": [
+        "probability_left",
+        "probability_right",
+        "quiescent_period_wait_duration",
+        "choice_deadline",
+        "right_is_active",
+        "left_is_active",
+        "is_fast_retract",
+        "reward_consumption_duration",
+        "iti_duration",
+        "reward_delay",
+        "is_auto_water_right",
+        "is_auto_water_left",
+        "reward_size_left",
+        "reward_size_right",
+        "lickspout_offset"
+      ],
+      "title": "Trial",
+      "type": "object"
+    },
     "VideoWriter": {
       "discriminator": {
         "mapping": {

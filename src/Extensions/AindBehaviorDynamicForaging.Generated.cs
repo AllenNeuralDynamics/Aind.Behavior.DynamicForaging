@@ -5230,6 +5230,305 @@ namespace AindDynamicForagingDataSchema
     }
 
 
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class Trial
+    {
+    
+        private double _probabilityLeft;
+    
+        private double _probabilityRight;
+    
+        private double _quiescentPeriodWaitDuration;
+    
+        private double _choiceDeadline;
+    
+        private bool _rightIsActive;
+    
+        private bool _leftIsActive;
+    
+        private bool _isFastRetract;
+    
+        private double _rewardConsumptionDuration;
+    
+        private double _itiDuration;
+    
+        private double _rewardDelay;
+    
+        private bool _isAutoWaterRight;
+    
+        private bool _isAutoWaterLeft;
+    
+        private double _rewardSizeLeft;
+    
+        private double _rewardSizeRight;
+    
+        private double _lickspoutOffset;
+    
+        public Trial()
+        {
+        }
+    
+        protected Trial(Trial other)
+        {
+            _probabilityLeft = other._probabilityLeft;
+            _probabilityRight = other._probabilityRight;
+            _quiescentPeriodWaitDuration = other._quiescentPeriodWaitDuration;
+            _choiceDeadline = other._choiceDeadline;
+            _rightIsActive = other._rightIsActive;
+            _leftIsActive = other._leftIsActive;
+            _isFastRetract = other._isFastRetract;
+            _rewardConsumptionDuration = other._rewardConsumptionDuration;
+            _itiDuration = other._itiDuration;
+            _rewardDelay = other._rewardDelay;
+            _isAutoWaterRight = other._isAutoWaterRight;
+            _isAutoWaterLeft = other._isAutoWaterLeft;
+            _rewardSizeLeft = other._rewardSizeLeft;
+            _rewardSizeRight = other._rewardSizeRight;
+            _lickspoutOffset = other._lickspoutOffset;
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("probability_left", Required=Newtonsoft.Json.Required.Always)]
+        public double ProbabilityLeft
+        {
+            get
+            {
+                return _probabilityLeft;
+            }
+            set
+            {
+                _probabilityLeft = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("probability_right", Required=Newtonsoft.Json.Required.Always)]
+        public double ProbabilityRight
+        {
+            get
+            {
+                return _probabilityRight;
+            }
+            set
+            {
+                _probabilityRight = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("quiescent_period_wait_duration", Required=Newtonsoft.Json.Required.Always)]
+        public double QuiescentPeriodWaitDuration
+        {
+            get
+            {
+                return _quiescentPeriodWaitDuration;
+            }
+            set
+            {
+                _quiescentPeriodWaitDuration = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("choice_deadline", Required=Newtonsoft.Json.Required.Always)]
+        public double ChoiceDeadline
+        {
+            get
+            {
+                return _choiceDeadline;
+            }
+            set
+            {
+                _choiceDeadline = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("right_is_active", Required=Newtonsoft.Json.Required.Always)]
+        public bool RightIsActive
+        {
+            get
+            {
+                return _rightIsActive;
+            }
+            set
+            {
+                _rightIsActive = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("left_is_active", Required=Newtonsoft.Json.Required.Always)]
+        public bool LeftIsActive
+        {
+            get
+            {
+                return _leftIsActive;
+            }
+            set
+            {
+                _leftIsActive = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("is_fast_retract", Required=Newtonsoft.Json.Required.Always)]
+        public bool IsFastRetract
+        {
+            get
+            {
+                return _isFastRetract;
+            }
+            set
+            {
+                _isFastRetract = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("reward_consumption_duration", Required=Newtonsoft.Json.Required.Always)]
+        public double RewardConsumptionDuration
+        {
+            get
+            {
+                return _rewardConsumptionDuration;
+            }
+            set
+            {
+                _rewardConsumptionDuration = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("iti_duration", Required=Newtonsoft.Json.Required.Always)]
+        public double ItiDuration
+        {
+            get
+            {
+                return _itiDuration;
+            }
+            set
+            {
+                _itiDuration = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("reward_delay", Required=Newtonsoft.Json.Required.Always)]
+        public double RewardDelay
+        {
+            get
+            {
+                return _rewardDelay;
+            }
+            set
+            {
+                _rewardDelay = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("is_auto_water_right", Required=Newtonsoft.Json.Required.Always)]
+        public bool IsAutoWaterRight
+        {
+            get
+            {
+                return _isAutoWaterRight;
+            }
+            set
+            {
+                _isAutoWaterRight = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("is_auto_water_left", Required=Newtonsoft.Json.Required.Always)]
+        public bool IsAutoWaterLeft
+        {
+            get
+            {
+                return _isAutoWaterLeft;
+            }
+            set
+            {
+                _isAutoWaterLeft = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("reward_size_left", Required=Newtonsoft.Json.Required.Always)]
+        public double RewardSizeLeft
+        {
+            get
+            {
+                return _rewardSizeLeft;
+            }
+            set
+            {
+                _rewardSizeLeft = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("reward_size_right", Required=Newtonsoft.Json.Required.Always)]
+        public double RewardSizeRight
+        {
+            get
+            {
+                return _rewardSizeRight;
+            }
+            set
+            {
+                _rewardSizeRight = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("lickspout_offset", Required=Newtonsoft.Json.Required.Always)]
+        public double LickspoutOffset
+        {
+            get
+            {
+                return _lickspoutOffset;
+            }
+            set
+            {
+                _lickspoutOffset = value;
+            }
+        }
+    
+        public System.IObservable<Trial> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new Trial(this)));
+        }
+    
+        public System.IObservable<Trial> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new Trial(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("ProbabilityLeft = " + _probabilityLeft + ", ");
+            stringBuilder.Append("ProbabilityRight = " + _probabilityRight + ", ");
+            stringBuilder.Append("QuiescentPeriodWaitDuration = " + _quiescentPeriodWaitDuration + ", ");
+            stringBuilder.Append("ChoiceDeadline = " + _choiceDeadline + ", ");
+            stringBuilder.Append("RightIsActive = " + _rightIsActive + ", ");
+            stringBuilder.Append("LeftIsActive = " + _leftIsActive + ", ");
+            stringBuilder.Append("IsFastRetract = " + _isFastRetract + ", ");
+            stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
+            stringBuilder.Append("ItiDuration = " + _itiDuration + ", ");
+            stringBuilder.Append("RewardDelay = " + _rewardDelay + ", ");
+            stringBuilder.Append("IsAutoWaterRight = " + _isAutoWaterRight + ", ");
+            stringBuilder.Append("IsAutoWaterLeft = " + _isAutoWaterLeft + ", ");
+            stringBuilder.Append("RewardSizeLeft = " + _rewardSizeLeft + ", ");
+            stringBuilder.Append("RewardSizeRight = " + _rewardSizeRight + ", ");
+            stringBuilder.Append("LickspoutOffset = " + _lickspoutOffset);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
     /// <summary>
     /// FFMPEG video writer configuration.
     /// </summary>
@@ -6371,6 +6670,11 @@ namespace AindDynamicForagingDataSchema
             return Process<SpinnakerCamera>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<Trial> source)
+        {
+            return Process<Trial>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<VideoWriter> source)
         {
             return Process<VideoWriter>(source);
@@ -6441,6 +6745,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<RigCalibration>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Session>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<SpinnakerCamera>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Trial>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriter>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriterFfmpeg>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriterOpenCv>))]
