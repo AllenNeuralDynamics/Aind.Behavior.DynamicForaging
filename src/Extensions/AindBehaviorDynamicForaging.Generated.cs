@@ -5236,9 +5236,9 @@ namespace AindDynamicForagingDataSchema
     public partial class Trial
     {
     
-        private double _probabilityLeft;
+        private bool _hasRewardLeft;
     
-        private double _probabilityRight;
+        private bool _hasRewardRight;
     
         private double _quiescentPeriodWaitDuration;
     
@@ -5272,8 +5272,8 @@ namespace AindDynamicForagingDataSchema
     
         protected Trial(Trial other)
         {
-            _probabilityLeft = other._probabilityLeft;
-            _probabilityRight = other._probabilityRight;
+            _hasRewardLeft = other._hasRewardLeft;
+            _hasRewardRight = other._hasRewardRight;
             _quiescentPeriodWaitDuration = other._quiescentPeriodWaitDuration;
             _choiceDeadline = other._choiceDeadline;
             _rightIsActive = other._rightIsActive;
@@ -5289,29 +5289,29 @@ namespace AindDynamicForagingDataSchema
             _lickspoutOffset = other._lickspoutOffset;
         }
     
-        [Newtonsoft.Json.JsonPropertyAttribute("probability_left", Required=Newtonsoft.Json.Required.Always)]
-        public double ProbabilityLeft
+        [Newtonsoft.Json.JsonPropertyAttribute("has_reward_left", Required=Newtonsoft.Json.Required.Always)]
+        public bool HasRewardLeft
         {
             get
             {
-                return _probabilityLeft;
+                return _hasRewardLeft;
             }
             set
             {
-                _probabilityLeft = value;
+                _hasRewardLeft = value;
             }
         }
     
-        [Newtonsoft.Json.JsonPropertyAttribute("probability_right", Required=Newtonsoft.Json.Required.Always)]
-        public double ProbabilityRight
+        [Newtonsoft.Json.JsonPropertyAttribute("has_reward_right", Required=Newtonsoft.Json.Required.Always)]
+        public bool HasRewardRight
         {
             get
             {
-                return _probabilityRight;
+                return _hasRewardRight;
             }
             set
             {
-                _probabilityRight = value;
+                _hasRewardRight = value;
             }
         }
     
@@ -5496,8 +5496,8 @@ namespace AindDynamicForagingDataSchema
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("ProbabilityLeft = " + _probabilityLeft + ", ");
-            stringBuilder.Append("ProbabilityRight = " + _probabilityRight + ", ");
+            stringBuilder.Append("HasRewardLeft = " + _hasRewardLeft + ", ");
+            stringBuilder.Append("HasRewardRight = " + _hasRewardRight + ", ");
             stringBuilder.Append("QuiescentPeriodWaitDuration = " + _quiescentPeriodWaitDuration + ", ");
             stringBuilder.Append("ChoiceDeadline = " + _choiceDeadline + ", ");
             stringBuilder.Append("RightIsActive = " + _rightIsActive + ", ");

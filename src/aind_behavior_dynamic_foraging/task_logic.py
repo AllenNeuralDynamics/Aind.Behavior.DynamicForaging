@@ -139,8 +139,8 @@ class AindDynamicForagingTaskLogic(Task):
     task_parameters: AindDynamicForagingTaskParameters = Field(description="Parameters of the task logic")
 
 class Trial(BaseModel):
-    probability_left: float
-    probability_right: float
+    has_reward_left: bool
+    has_reward_right: bool
     quiescent_period_wait_duration: float
     choice_deadline: float
     right_is_active: bool

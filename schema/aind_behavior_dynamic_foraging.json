@@ -1959,13 +1959,13 @@
     },
     "Trial": {
       "properties": {
-        "probability_left": {
-          "title": "Probability Left",
-          "type": "number"
+        "has_reward_left": {
+          "title": "Has Reward Left",
+          "type": "boolean"
         },
-        "probability_right": {
-          "title": "Probability Right",
-          "type": "number"
+        "has_reward_right": {
+          "title": "Has Reward Right",
+          "type": "boolean"
         },
         "quiescent_period_wait_duration": {
           "title": "Quiescent Period Wait Duration",
@@ -2021,8 +2021,8 @@
         }
       },
       "required": [
-        "probability_left",
-        "probability_right",
+        "has_reward_left",
+        "has_reward_right",
         "quiescent_period_wait_duration",
         "choice_deadline",
         "right_is_active",
