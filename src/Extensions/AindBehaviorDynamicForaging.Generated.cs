@@ -5236,6 +5236,8 @@ namespace AindDynamicForagingDataSchema
     public partial class Trial
     {
     
+        private bool _hasSecondaryReinforcer;
+    
         private bool _hasRewardLeft;
     
         private bool _hasRewardRight;
@@ -5256,13 +5258,7 @@ namespace AindDynamicForagingDataSchema
     
         private double _rewardDelay;
     
-        private bool _isAutoWaterRight;
-    
-        private bool _isAutoWaterLeft;
-    
-        private double _rewardSizeLeft;
-    
-        private double _rewardSizeRight;
+        private bool? _isAutoResponseRight;
     
         private double _lickspoutOffset;
     
@@ -5272,6 +5268,7 @@ namespace AindDynamicForagingDataSchema
     
         protected Trial(Trial other)
         {
+            _hasSecondaryReinforcer = other._hasSecondaryReinforcer;
             _hasRewardLeft = other._hasRewardLeft;
             _hasRewardRight = other._hasRewardRight;
             _quiescentPeriodWaitDuration = other._quiescentPeriodWaitDuration;
@@ -5282,11 +5279,21 @@ namespace AindDynamicForagingDataSchema
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
             _itiDuration = other._itiDuration;
             _rewardDelay = other._rewardDelay;
-            _isAutoWaterRight = other._isAutoWaterRight;
-            _isAutoWaterLeft = other._isAutoWaterLeft;
-            _rewardSizeLeft = other._rewardSizeLeft;
-            _rewardSizeRight = other._rewardSizeRight;
+            _isAutoResponseRight = other._isAutoResponseRight;
             _lickspoutOffset = other._lickspoutOffset;
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("has_secondary_reinforcer", Required=Newtonsoft.Json.Required.Always)]
+        public bool HasSecondaryReinforcer
+        {
+            get
+            {
+                return _hasSecondaryReinforcer;
+            }
+            set
+            {
+                _hasSecondaryReinforcer = value;
+            }
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("has_reward_left", Required=Newtonsoft.Json.Required.Always)]
@@ -5419,55 +5426,17 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
-        [Newtonsoft.Json.JsonPropertyAttribute("is_auto_water_right", Required=Newtonsoft.Json.Required.Always)]
-        public bool IsAutoWaterRight
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("is_auto_response_right", Required=Newtonsoft.Json.Required.AllowNull)]
+        public bool? IsAutoResponseRight
         {
             get
             {
-                return _isAutoWaterRight;
+                return _isAutoResponseRight;
             }
             set
             {
-                _isAutoWaterRight = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("is_auto_water_left", Required=Newtonsoft.Json.Required.Always)]
-        public bool IsAutoWaterLeft
-        {
-            get
-            {
-                return _isAutoWaterLeft;
-            }
-            set
-            {
-                _isAutoWaterLeft = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("reward_size_left", Required=Newtonsoft.Json.Required.Always)]
-        public double RewardSizeLeft
-        {
-            get
-            {
-                return _rewardSizeLeft;
-            }
-            set
-            {
-                _rewardSizeLeft = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("reward_size_right", Required=Newtonsoft.Json.Required.Always)]
-        public double RewardSizeRight
-        {
-            get
-            {
-                return _rewardSizeRight;
-            }
-            set
-            {
-                _rewardSizeRight = value;
+                _isAutoResponseRight = value;
             }
         }
     
@@ -5496,6 +5465,7 @@ namespace AindDynamicForagingDataSchema
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
+            stringBuilder.Append("HasSecondaryReinforcer = " + _hasSecondaryReinforcer + ", ");
             stringBuilder.Append("HasRewardLeft = " + _hasRewardLeft + ", ");
             stringBuilder.Append("HasRewardRight = " + _hasRewardRight + ", ");
             stringBuilder.Append("QuiescentPeriodWaitDuration = " + _quiescentPeriodWaitDuration + ", ");
@@ -5506,10 +5476,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
             stringBuilder.Append("ItiDuration = " + _itiDuration + ", ");
             stringBuilder.Append("RewardDelay = " + _rewardDelay + ", ");
-            stringBuilder.Append("IsAutoWaterRight = " + _isAutoWaterRight + ", ");
-            stringBuilder.Append("IsAutoWaterLeft = " + _isAutoWaterLeft + ", ");
-            stringBuilder.Append("RewardSizeLeft = " + _rewardSizeLeft + ", ");
-            stringBuilder.Append("RewardSizeRight = " + _rewardSizeRight + ", ");
+            stringBuilder.Append("IsAutoResponseRight = " + _isAutoResponseRight + ", ");
             stringBuilder.Append("LickspoutOffset = " + _lickspoutOffset);
             return true;
         }

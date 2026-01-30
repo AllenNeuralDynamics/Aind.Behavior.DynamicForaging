@@ -1959,6 +1959,10 @@
     },
     "Trial": {
       "properties": {
+        "has_secondary_reinforcer": {
+          "title": "Has Secondary Reinforcer",
+          "type": "boolean"
+        },
         "has_reward_left": {
           "title": "Has Reward Left",
           "type": "boolean"
@@ -1999,21 +2003,16 @@
           "title": "Reward Delay",
           "type": "number"
         },
-        "is_auto_water_right": {
-          "title": "Is Auto Water Right",
-          "type": "boolean"
-        },
-        "is_auto_water_left": {
-          "title": "Is Auto Water Left",
-          "type": "boolean"
-        },
-        "reward_size_left": {
-          "title": "Reward Size Left",
-          "type": "number"
-        },
-        "reward_size_right": {
-          "title": "Reward Size Right",
-          "type": "number"
+        "is_auto_response_right": {
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Is Auto Response Right"
         },
         "lickspout_offset": {
           "title": "Lickspout Offset",
@@ -2021,6 +2020,7 @@
         }
       },
       "required": [
+        "has_secondary_reinforcer",
         "has_reward_left",
         "has_reward_right",
         "quiescent_period_wait_duration",
@@ -2031,10 +2031,7 @@
         "reward_consumption_duration",
         "iti_duration",
         "reward_delay",
-        "is_auto_water_right",
-        "is_auto_water_left",
-        "reward_size_left",
-        "reward_size_right",
+        "is_auto_response_right",
         "lickspout_offset"
       ],
       "title": "Trial",

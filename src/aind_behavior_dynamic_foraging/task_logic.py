@@ -139,6 +139,7 @@ class AindDynamicForagingTaskLogic(Task):
     task_parameters: AindDynamicForagingTaskParameters = Field(description="Parameters of the task logic")
 
 class Trial(BaseModel):
+    has_secondary_reinforcer: bool
     has_reward_left: bool
     has_reward_right: bool
     quiescent_period_wait_duration: float
@@ -149,8 +150,10 @@ class Trial(BaseModel):
     reward_consumption_duration: float
     iti_duration: float
     reward_delay: float
-    is_auto_water_right: bool
-    is_auto_water_left: bool
-    reward_size_left: float
-    reward_size_right: float
+    is_auto_response_right: Optional[bool]
     lickspout_offset: float
+
+class TrialOutcome(BaseModel):
+    trial: Trial
+    choice: Optional[bool]
+    is_rewarded: bool
