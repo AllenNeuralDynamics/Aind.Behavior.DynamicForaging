@@ -1,6 +1,7 @@
 import numpy as np
 from typing import Literal, Optional
 
+
 class TrialGenerator():
     def __init___(*args, **kwargs):
         """
@@ -26,7 +27,31 @@ BlockBehaviorEvaluationMode = Literal[
                                         "anytime"]  # behavior can be stable anytime in block to allow switching
 
 
+class TrialOutcome(BaseModel):
+    """
+        Info from previous trial needed to generate next trial
+    """
+
+    trial_in_block: int
+    block_length: int
+
+
+
 class CoupledTrialGenerator(TrialGenerator):
+
+    def __init___(self, trial_outcome: TrialOutcome):
+        """
+        Check if block should switch, generate next block if necessary, and  generate next trial
+        
+        :param trial_outcome: outcome of previous trial
+        """
+
+        switch_block = self.check_block_transition(trial_outcome)
+
+        if switch_block:
+            next_block = self.generate_block()
+        
+        self.generate_trial(trial_outcome, next_block)
 
 
     def check_block_behavior(self, choice_history: np.ndarray, 
