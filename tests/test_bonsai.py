@@ -6,7 +6,7 @@ import warnings
 from pathlib import Path
 from typing import Generic, List, Optional, TypeVar, Union
 
-from aind_behavior_services.session import AindBehaviorSessionModel
+from aind_behavior_services.session import Session
 from aind_behavior_services.utils import run_bonsai_process
 from pydantic import ValidationError
 
@@ -17,7 +17,7 @@ sys.path.append(".")
 from examples import rig, session, task_logic  # isort:skip # pylint: disable=wrong-import-position
 from tests import JSON_ROOT  # isort:skip # pylint: disable=wrong-import-position
 
-TModel = TypeVar("TModel", bound=Union[AindDynamicForagingRig, AindDynamicForagingTaskLogic, AindBehaviorSessionModel])
+TModel = TypeVar("TModel", bound=Union[AindDynamicForagingRig, AindDynamicForagingTaskLogic, Session])
 
 
 @unittest.skipUnless(platform.system() == "Windows", "Bonsai tests only run on Windows")
@@ -28,7 +28,7 @@ class BonsaiTests(unittest.TestCase):
         task_logic.main("./local/{schema}.json")
 
         models_to_test = [
-            TestModel(bonsai_property="SessionPath", json_root=JSON_ROOT, model=AindBehaviorSessionModel),
+            TestModel(bonsai_property="SessionPath", json_root=JSON_ROOT, model=Session),
             TestModel(bonsai_property="RigPath", json_root=JSON_ROOT, model=AindDynamicForagingRig),
             TestModel(bonsai_property="TaskLogicPath", json_root=JSON_ROOT, model=AindDynamicForagingTaskLogic),
         ]

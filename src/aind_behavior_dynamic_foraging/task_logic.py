@@ -1,7 +1,7 @@
 import logging
 from typing import Literal, Optional
 
-from aind_behavior_services.task_logic import AindBehaviorTaskLogicModel, TaskParameters
+from aind_behavior_services.task import Task, TaskParameters
 from pydantic import BaseModel, Field
 
 from aind_behavior_dynamic_foraging import (
@@ -123,7 +123,7 @@ class AindDynamicForagingTaskParameters(TaskParameters):
     lick_spout_retraction: Optional[bool] = Field(default=False, description="Lick spout retraction enabled.")
 
 
-class AindDynamicForagingTaskLogic(AindBehaviorTaskLogicModel):
+class AindDynamicForagingTaskLogic(Task):
     """
     Main task logic model for the AIND Dynamic Foraging task.
 
@@ -137,3 +137,20 @@ class AindDynamicForagingTaskLogic(AindBehaviorTaskLogicModel):
         default="AindDynamicForaging", description="Name of the task logic", frozen=True
     )
     task_parameters: AindDynamicForagingTaskParameters = Field(description="Parameters of the task logic")
+
+class Trial(BaseModel):
+    probability_left: float
+    probability_right: float
+    quiescent_period_wait_duration: float
+    choice_deadline: float
+    right_is_active: bool
+    left_is_active: bool
+    is_fast_retract: bool
+    reward_consumption_duration: float
+    iti_duration: float
+    reward_delay: float
+    is_auto_water_right: bool
+    is_auto_water_left: bool
+    reward_size_left: float
+    reward_size_right: float
+    lickspout_offset: float
