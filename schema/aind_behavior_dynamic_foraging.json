@@ -539,6 +539,24 @@
       "title": "AindManipulatorCalibration",
       "type": "object"
     },
+    "AuditorySecondaryReinforcer": {
+      "description": "Represents an auditory secondary reinforcer.",
+      "properties": {
+        "type": {
+          "const": "Auditory",
+          "default": "Auditory",
+          "title": "Type",
+          "type": "string"
+        },
+        "frequency_or_index": {
+          "default": 15000,
+          "title": "Frequency or index of the auditory secondary reinforcer. Indices correspond to < 32 values",
+          "type": "integer"
+        }
+      },
+      "title": "AuditorySecondaryReinforcer",
+      "type": "object"
+    },
     "AutoBlock": {
       "properties": {
         "advanced_block_auto": {
@@ -1416,6 +1434,20 @@
       "title": "RigCalibration",
       "type": "object"
     },
+    "SecondaryReinforcer": {
+      "description": "Type of secondary reinforcer",
+      "discriminator": {
+        "mapping": {
+          "Auditory": "#/$defs/AuditorySecondaryReinforcer"
+        },
+        "propertyName": "type"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/AuditorySecondaryReinforcer"
+        }
+      ]
+    },
     "Session": {
       "properties": {
         "aind_behavior_services_pkg_version": {
@@ -1958,52 +1990,76 @@
       ]
     },
     "Trial": {
+      "description": "Represents a single trial that can be instantiated by the Bonsai state machine.",
       "properties": {
-        "has_secondary_reinforcer": {
-          "title": "Has Secondary Reinforcer",
-          "type": "boolean"
-        },
         "has_reward_left": {
+          "default": true,
+          "description": "Indicates if there is a reward on the left side if response is made.",
           "title": "Has Reward Left",
           "type": "boolean"
         },
         "has_reward_right": {
+          "default": true,
+          "description": "Indicates if there is a reward on the right side if response is made.",
           "title": "Has Reward Right",
           "type": "boolean"
         },
-        "quiescent_period_wait_duration": {
-          "title": "Quiescent Period Wait Duration",
-          "type": "number"
-        },
-        "choice_deadline": {
-          "title": "Choice Deadline",
-          "type": "number"
-        },
-        "right_is_active": {
-          "title": "Right Is Active",
-          "type": "boolean"
-        },
-        "left_is_active": {
-          "title": "Left Is Active",
-          "type": "boolean"
-        },
-        "is_fast_retract": {
-          "title": "Is Fast Retract",
-          "type": "boolean"
-        },
         "reward_consumption_duration": {
+          "default": 5.0,
+          "description": "Duration of reward consumption before transition to ITI (in seconds).",
+          "minimum": 0,
           "title": "Reward Consumption Duration",
           "type": "number"
         },
-        "iti_duration": {
-          "title": "Iti Duration",
+        "reward_delay_duration": {
+          "default": 0.0,
+          "description": "Delay before reward is delivered after the secondary reinforcer (in seconds).",
+          "minimum": 0,
+          "title": "Reward Delay Duration",
           "type": "number"
         },
-        "reward_delay": {
-          "title": "Reward Delay",
+        "secondary_reinforcer": {
+          "default": null,
+          "description": "Defines the secondary reinforcer used in the trial.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/SecondaryReinforcer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "response_deadline_duration": {
+          "default": 5.0,
+          "description": "Time allowed for the subject to make a response (in seconds).",
+          "minimum": 0,
+          "title": "Response Deadline Duration",
+          "type": "number"
+        },
+        "enable_fast_retract": {
+          "default": false,
+          "description": "If true, the opposite lickspout retracts quickly after a response is made.",
+          "title": "Enable Fast Retract",
+          "type": "boolean"
+        },
+        "quiescence_period_duration": {
+          "default": 0.5,
+          "description": "Duration of the quiescence period before trial starts (in seconds). Each lick resets the timer.",
+          "minimum": 0,
+          "title": "Quiescence Period Duration",
+          "type": "number"
+        },
+        "inter_trial_interval_duration": {
+          "default": 5.0,
+          "description": "Duration of the inter-trial interval (in seconds).",
+          "minimum": 0,
+          "title": "Inter Trial Interval Duration",
           "type": "number"
         },
         "is_auto_response_right": {
+          "default": null,
+          "description": "If set, the trial will automatically (and immediately) register a response to the right (True) or left (False).",
           "oneOf": [
             {
               "type": "boolean"
@@ -2015,34 +2071,24 @@
           "title": "Is Auto Response Right"
         },
         "lickspout_offset": {
+          "default": 0.0,
+          "description": "Horizontal offset of the lickspouts (in mm). Positive values move the lickspouts right.",
           "title": "Lickspout Offset",
           "type": "number"
         }
       },
-      "required": [
-        "has_secondary_reinforcer",
-        "has_reward_left",
-        "has_reward_right",
-        "quiescent_period_wait_duration",
-        "choice_deadline",
-        "right_is_active",
-        "left_is_active",
-        "is_fast_retract",
-        "reward_consumption_duration",
-        "iti_duration",
-        "reward_delay",
-        "is_auto_response_right",
-        "lickspout_offset"
-      ],
       "title": "Trial",
       "type": "object"
     },
     "TrialOutcome": {
+      "description": "Represents the outcome of a single trial.",
       "properties": {
         "trial": {
-          "$ref": "#/$defs/Trial"
+          "$ref": "#/$defs/Trial",
+          "description": "The trial associated with this outcome."
         },
-        "choice": {
+        "is_right_choice": {
+          "description": "Reports the choice made by the subject. True for right, False for left, None for no choice.",
           "oneOf": [
             {
               "type": "boolean"
@@ -2051,16 +2097,17 @@
               "type": "null"
             }
           ],
-          "title": "Choice"
+          "title": "Is Right Choice"
         },
         "is_rewarded": {
+          "description": "Indicates whether the subject received a reward on this trial.",
           "title": "Is Rewarded",
           "type": "boolean"
         }
       },
       "required": [
         "trial",
-        "choice",
+        "is_right_choice",
         "is_rewarded"
       ],
       "title": "TrialOutcome",

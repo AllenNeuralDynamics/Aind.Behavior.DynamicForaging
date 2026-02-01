@@ -1271,6 +1271,90 @@ namespace AindDynamicForagingDataSchema
     }
 
 
+    /// <summary>
+    /// Represents an auditory secondary reinforcer.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.ComponentModel.DescriptionAttribute("Represents an auditory secondary reinforcer.")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class AuditorySecondaryReinforcer
+    {
+    
+        private string _type;
+    
+        private int _frequencyOrIndex;
+    
+        public AuditorySecondaryReinforcer()
+        {
+            _type = "Auditory";
+            _frequencyOrIndex = 15000;
+        }
+    
+        protected AuditorySecondaryReinforcer(AuditorySecondaryReinforcer other)
+        {
+            _type = other._type;
+            _frequencyOrIndex = other._frequencyOrIndex;
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("type")]
+        public string Type
+        {
+            get
+            {
+                return _type;
+            }
+            set
+            {
+                _type = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("frequency_or_index")]
+        public int FrequencyOrIndex
+        {
+            get
+            {
+                return _frequencyOrIndex;
+            }
+            set
+            {
+                _frequencyOrIndex = value;
+            }
+        }
+    
+        public System.IObservable<AuditorySecondaryReinforcer> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new AuditorySecondaryReinforcer(this)));
+        }
+    
+        public System.IObservable<AuditorySecondaryReinforcer> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new AuditorySecondaryReinforcer(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("Type = " + _type + ", ");
+            stringBuilder.Append("FrequencyOrIndex = " + _frequencyOrIndex);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
@@ -5230,33 +5314,33 @@ namespace AindDynamicForagingDataSchema
     }
 
 
+    /// <summary>
+    /// Represents a single trial that can be instantiated by the Bonsai state machine.
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.ComponentModel.DescriptionAttribute("Represents a single trial that can be instantiated by the Bonsai state machine.")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class Trial
     {
     
-        private bool _hasSecondaryReinforcer;
-    
         private bool _hasRewardLeft;
     
         private bool _hasRewardRight;
     
-        private double _quiescentPeriodWaitDuration;
-    
-        private double _choiceDeadline;
-    
-        private bool _rightIsActive;
-    
-        private bool _leftIsActive;
-    
-        private bool _isFastRetract;
-    
         private double _rewardConsumptionDuration;
     
-        private double _itiDuration;
+        private double _rewardDelayDuration;
     
-        private double _rewardDelay;
+        private AuditorySecondaryReinforcer _secondaryReinforcer;
+    
+        private double _responseDeadlineDuration;
+    
+        private bool _enableFastRetract;
+    
+        private double _quiescencePeriodDuration;
+    
+        private double _interTrialIntervalDuration;
     
         private bool? _isAutoResponseRight;
     
@@ -5264,39 +5348,37 @@ namespace AindDynamicForagingDataSchema
     
         public Trial()
         {
+            _hasRewardLeft = true;
+            _hasRewardRight = true;
+            _rewardConsumptionDuration = 5D;
+            _rewardDelayDuration = 0D;
+            _responseDeadlineDuration = 5D;
+            _enableFastRetract = false;
+            _quiescencePeriodDuration = 0.5D;
+            _interTrialIntervalDuration = 5D;
+            _lickspoutOffset = 0D;
         }
     
         protected Trial(Trial other)
         {
-            _hasSecondaryReinforcer = other._hasSecondaryReinforcer;
             _hasRewardLeft = other._hasRewardLeft;
             _hasRewardRight = other._hasRewardRight;
-            _quiescentPeriodWaitDuration = other._quiescentPeriodWaitDuration;
-            _choiceDeadline = other._choiceDeadline;
-            _rightIsActive = other._rightIsActive;
-            _leftIsActive = other._leftIsActive;
-            _isFastRetract = other._isFastRetract;
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
-            _itiDuration = other._itiDuration;
-            _rewardDelay = other._rewardDelay;
+            _rewardDelayDuration = other._rewardDelayDuration;
+            _secondaryReinforcer = other._secondaryReinforcer;
+            _responseDeadlineDuration = other._responseDeadlineDuration;
+            _enableFastRetract = other._enableFastRetract;
+            _quiescencePeriodDuration = other._quiescencePeriodDuration;
+            _interTrialIntervalDuration = other._interTrialIntervalDuration;
             _isAutoResponseRight = other._isAutoResponseRight;
             _lickspoutOffset = other._lickspoutOffset;
         }
     
-        [Newtonsoft.Json.JsonPropertyAttribute("has_secondary_reinforcer", Required=Newtonsoft.Json.Required.Always)]
-        public bool HasSecondaryReinforcer
-        {
-            get
-            {
-                return _hasSecondaryReinforcer;
-            }
-            set
-            {
-                _hasSecondaryReinforcer = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("has_reward_left", Required=Newtonsoft.Json.Required.Always)]
+        /// <summary>
+        /// Indicates if there is a reward on the left side if response is made.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("has_reward_left")]
+        [System.ComponentModel.DescriptionAttribute("Indicates if there is a reward on the left side if response is made.")]
         public bool HasRewardLeft
         {
             get
@@ -5309,7 +5391,11 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
-        [Newtonsoft.Json.JsonPropertyAttribute("has_reward_right", Required=Newtonsoft.Json.Required.Always)]
+        /// <summary>
+        /// Indicates if there is a reward on the right side if response is made.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("has_reward_right")]
+        [System.ComponentModel.DescriptionAttribute("Indicates if there is a reward on the right side if response is made.")]
         public bool HasRewardRight
         {
             get
@@ -5322,72 +5408,11 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
-        [Newtonsoft.Json.JsonPropertyAttribute("quiescent_period_wait_duration", Required=Newtonsoft.Json.Required.Always)]
-        public double QuiescentPeriodWaitDuration
-        {
-            get
-            {
-                return _quiescentPeriodWaitDuration;
-            }
-            set
-            {
-                _quiescentPeriodWaitDuration = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("choice_deadline", Required=Newtonsoft.Json.Required.Always)]
-        public double ChoiceDeadline
-        {
-            get
-            {
-                return _choiceDeadline;
-            }
-            set
-            {
-                _choiceDeadline = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("right_is_active", Required=Newtonsoft.Json.Required.Always)]
-        public bool RightIsActive
-        {
-            get
-            {
-                return _rightIsActive;
-            }
-            set
-            {
-                _rightIsActive = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("left_is_active", Required=Newtonsoft.Json.Required.Always)]
-        public bool LeftIsActive
-        {
-            get
-            {
-                return _leftIsActive;
-            }
-            set
-            {
-                _leftIsActive = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("is_fast_retract", Required=Newtonsoft.Json.Required.Always)]
-        public bool IsFastRetract
-        {
-            get
-            {
-                return _isFastRetract;
-            }
-            set
-            {
-                _isFastRetract = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("reward_consumption_duration", Required=Newtonsoft.Json.Required.Always)]
+        /// <summary>
+        /// Duration of reward consumption before transition to ITI (in seconds).
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("reward_consumption_duration")]
+        [System.ComponentModel.DescriptionAttribute("Duration of reward consumption before transition to ITI (in seconds).")]
         public double RewardConsumptionDuration
         {
             get
@@ -5400,34 +5425,117 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
-        [Newtonsoft.Json.JsonPropertyAttribute("iti_duration", Required=Newtonsoft.Json.Required.Always)]
-        public double ItiDuration
+        /// <summary>
+        /// Delay before reward is delivered after the secondary reinforcer (in seconds).
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("reward_delay_duration")]
+        [System.ComponentModel.DescriptionAttribute("Delay before reward is delivered after the secondary reinforcer (in seconds).")]
+        public double RewardDelayDuration
         {
             get
             {
-                return _itiDuration;
+                return _rewardDelayDuration;
             }
             set
             {
-                _itiDuration = value;
+                _rewardDelayDuration = value;
             }
         }
     
-        [Newtonsoft.Json.JsonPropertyAttribute("reward_delay", Required=Newtonsoft.Json.Required.Always)]
-        public double RewardDelay
-        {
-            get
-            {
-                return _rewardDelay;
-            }
-            set
-            {
-                _rewardDelay = value;
-            }
-        }
-    
+        /// <summary>
+        /// Defines the secondary reinforcer used in the trial.
+        /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("is_auto_response_right", Required=Newtonsoft.Json.Required.AllowNull)]
+        [Newtonsoft.Json.JsonPropertyAttribute("secondary_reinforcer")]
+        [System.ComponentModel.DescriptionAttribute("Defines the secondary reinforcer used in the trial.")]
+        public AuditorySecondaryReinforcer SecondaryReinforcer
+        {
+            get
+            {
+                return _secondaryReinforcer;
+            }
+            set
+            {
+                _secondaryReinforcer = value;
+            }
+        }
+    
+        /// <summary>
+        /// Time allowed for the subject to make a response (in seconds).
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("response_deadline_duration")]
+        [System.ComponentModel.DescriptionAttribute("Time allowed for the subject to make a response (in seconds).")]
+        public double ResponseDeadlineDuration
+        {
+            get
+            {
+                return _responseDeadlineDuration;
+            }
+            set
+            {
+                _responseDeadlineDuration = value;
+            }
+        }
+    
+        /// <summary>
+        /// If true, the opposite lickspout retracts quickly after a response is made.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("enable_fast_retract")]
+        [System.ComponentModel.DescriptionAttribute("If true, the opposite lickspout retracts quickly after a response is made.")]
+        public bool EnableFastRetract
+        {
+            get
+            {
+                return _enableFastRetract;
+            }
+            set
+            {
+                _enableFastRetract = value;
+            }
+        }
+    
+        /// <summary>
+        /// Duration of the quiescence period before trial starts (in seconds). Each lick resets the timer.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("quiescence_period_duration")]
+        [System.ComponentModel.DescriptionAttribute("Duration of the quiescence period before trial starts (in seconds). Each lick res" +
+            "ets the timer.")]
+        public double QuiescencePeriodDuration
+        {
+            get
+            {
+                return _quiescencePeriodDuration;
+            }
+            set
+            {
+                _quiescencePeriodDuration = value;
+            }
+        }
+    
+        /// <summary>
+        /// Duration of the inter-trial interval (in seconds).
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("inter_trial_interval_duration")]
+        [System.ComponentModel.DescriptionAttribute("Duration of the inter-trial interval (in seconds).")]
+        public double InterTrialIntervalDuration
+        {
+            get
+            {
+                return _interTrialIntervalDuration;
+            }
+            set
+            {
+                _interTrialIntervalDuration = value;
+            }
+        }
+    
+        /// <summary>
+        /// If set, the trial will automatically (and immediately) register a response to the right (True) or left (False).
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("is_auto_response_right")]
+        [System.ComponentModel.DescriptionAttribute("If set, the trial will automatically (and immediately) register a response to the" +
+            " right (True) or left (False).")]
         public bool? IsAutoResponseRight
         {
             get
@@ -5440,7 +5548,12 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
-        [Newtonsoft.Json.JsonPropertyAttribute("lickspout_offset", Required=Newtonsoft.Json.Required.Always)]
+        /// <summary>
+        /// Horizontal offset of the lickspouts (in mm). Positive values move the lickspouts right.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("lickspout_offset")]
+        [System.ComponentModel.DescriptionAttribute("Horizontal offset of the lickspouts (in mm). Positive values move the lickspouts " +
+            "right.")]
         public double LickspoutOffset
         {
             get
@@ -5465,17 +5578,15 @@ namespace AindDynamicForagingDataSchema
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("HasSecondaryReinforcer = " + _hasSecondaryReinforcer + ", ");
             stringBuilder.Append("HasRewardLeft = " + _hasRewardLeft + ", ");
             stringBuilder.Append("HasRewardRight = " + _hasRewardRight + ", ");
-            stringBuilder.Append("QuiescentPeriodWaitDuration = " + _quiescentPeriodWaitDuration + ", ");
-            stringBuilder.Append("ChoiceDeadline = " + _choiceDeadline + ", ");
-            stringBuilder.Append("RightIsActive = " + _rightIsActive + ", ");
-            stringBuilder.Append("LeftIsActive = " + _leftIsActive + ", ");
-            stringBuilder.Append("IsFastRetract = " + _isFastRetract + ", ");
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
-            stringBuilder.Append("ItiDuration = " + _itiDuration + ", ");
-            stringBuilder.Append("RewardDelay = " + _rewardDelay + ", ");
+            stringBuilder.Append("RewardDelayDuration = " + _rewardDelayDuration + ", ");
+            stringBuilder.Append("SecondaryReinforcer = " + _secondaryReinforcer + ", ");
+            stringBuilder.Append("ResponseDeadlineDuration = " + _responseDeadlineDuration + ", ");
+            stringBuilder.Append("EnableFastRetract = " + _enableFastRetract + ", ");
+            stringBuilder.Append("QuiescencePeriodDuration = " + _quiescencePeriodDuration + ", ");
+            stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
             stringBuilder.Append("IsAutoResponseRight = " + _isAutoResponseRight + ", ");
             stringBuilder.Append("LickspoutOffset = " + _lickspoutOffset);
             return true;
@@ -5496,7 +5607,11 @@ namespace AindDynamicForagingDataSchema
     }
 
 
+    /// <summary>
+    /// Represents the outcome of a single trial.
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.ComponentModel.DescriptionAttribute("Represents the outcome of a single trial.")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class TrialOutcome
@@ -5504,7 +5619,7 @@ namespace AindDynamicForagingDataSchema
     
         private Trial _trial;
     
-        private bool? _choice;
+        private bool? _isRightChoice;
     
         private bool _isRewarded;
     
@@ -5516,12 +5631,16 @@ namespace AindDynamicForagingDataSchema
         protected TrialOutcome(TrialOutcome other)
         {
             _trial = other._trial;
-            _choice = other._choice;
+            _isRightChoice = other._isRightChoice;
             _isRewarded = other._isRewarded;
         }
     
+        /// <summary>
+        /// The trial associated with this outcome.
+        /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("trial", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("The trial associated with this outcome.")]
         public Trial Trial
         {
             get
@@ -5534,21 +5653,30 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
+        /// <summary>
+        /// Reports the choice made by the subject. True for right, False for left, None for no choice.
+        /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("choice", Required=Newtonsoft.Json.Required.AllowNull)]
-        public bool? Choice
+        [Newtonsoft.Json.JsonPropertyAttribute("is_right_choice", Required=Newtonsoft.Json.Required.AllowNull)]
+        [System.ComponentModel.DescriptionAttribute("Reports the choice made by the subject. True for right, False for left, None for " +
+            "no choice.")]
+        public bool? IsRightChoice
         {
             get
             {
-                return _choice;
+                return _isRightChoice;
             }
             set
             {
-                _choice = value;
+                _isRightChoice = value;
             }
         }
     
+        /// <summary>
+        /// Indicates whether the subject received a reward on this trial.
+        /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("is_rewarded", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("Indicates whether the subject received a reward on this trial.")]
         public bool IsRewarded
         {
             get
@@ -5574,7 +5702,7 @@ namespace AindDynamicForagingDataSchema
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
             stringBuilder.Append("Trial = " + _trial + ", ");
-            stringBuilder.Append("Choice = " + _choice + ", ");
+            stringBuilder.Append("IsRightChoice = " + _isRightChoice + ", ");
             stringBuilder.Append("IsRewarded = " + _isRewarded);
             return true;
         }
@@ -6605,6 +6733,11 @@ namespace AindDynamicForagingDataSchema
             return Process<AindManipulatorCalibration>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<AuditorySecondaryReinforcer> source)
+        {
+            return Process<AuditorySecondaryReinforcer>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<AutoBlock> source)
         {
             return Process<AutoBlock>(source);
@@ -6789,6 +6922,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AindDynamicForagingTaskParameters>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AindManipulator>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AindManipulatorCalibration>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AuditorySecondaryReinforcer>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AutoBlock>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AutoWater>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AxisConfiguration>))]
