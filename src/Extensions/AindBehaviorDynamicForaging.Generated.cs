@@ -9,7 +9,7 @@ namespace AindDynamicForagingDataSchema
 {
     #pragma warning disable // Disable all warnings
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class AindDynamicForagingRig
@@ -409,7 +409,7 @@ namespace AindDynamicForagingDataSchema
     ///specification for the dynamic foraging behavioral experiment.
     ///It includes all task parameters, environment specifications, and control settings.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute(@"Main task logic model for the AIND Dynamic Foraging task.
 
     This is the top-level class that encapsulates the complete task logic
@@ -571,7 +571,7 @@ namespace AindDynamicForagingDataSchema
     ///including environment structure, task mode settings, operation control,
     ///and numerical updaters for dynamic parameter modification.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute(@"Complete parameter specification for the AIND Dynamic Foraging task.
 
     This class contains all configurable parameters for the Dynamic Foraging task,
@@ -621,12 +621,13 @@ namespace AindDynamicForagingDataSchema
             _aindBehaviorServicesPkgVersion = "0.13.0-rc2";
             _blockParameters = new BlockParameters();
             _rewardProbability = new RewardProbability();
-            _randomness = AindDynamicForagingDataSchema.AindDynamicForagingTaskParametersRandomness.Exponential;
+            _randomness = AindDynamicForagingTaskParametersRandomness.Exponential;
             _delayPeriod = new DelayPeriod();
             _rewardDelay = 0D;
             _responseTime = new Response();
             _rewardSize = new RewardSize();
             _noResponseTrialAddition = true;
+            _lickSpoutRetraction = false;
         }
     
         protected AindDynamicForagingTaskParameters(AindDynamicForagingTaskParameters other)
@@ -653,7 +654,6 @@ namespace AindDynamicForagingDataSchema
         /// <summary>
         /// Seed of the random number generator
         /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("rng_seed")]
         [System.ComponentModel.DescriptionAttribute("Seed of the random number generator")]
         public double? RngSeed
@@ -731,7 +731,6 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("randomness")]
         public AindDynamicForagingTaskParametersRandomness Randomness
         {
@@ -918,7 +917,6 @@ namespace AindDynamicForagingDataSchema
         /// <summary>
         /// Lick spout retraction enabled.
         /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("lick_spout_retraction")]
         [System.ComponentModel.DescriptionAttribute("Lick spout retraction enabled.")]
         public bool? LickSpoutRetraction
@@ -983,7 +981,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// AindManipulator device definition
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("AindManipulator device definition")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
@@ -1132,7 +1130,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// AindManipulator calibration class
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("AindManipulator calibration class")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
@@ -1274,7 +1272,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// Represents an auditory secondary reinforcer.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Represents an auditory secondary reinforcer.")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
@@ -1355,7 +1353,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class AutoBlock
@@ -1369,7 +1367,7 @@ namespace AindDynamicForagingDataSchema
     
         public AutoBlock()
         {
-            _advancedBlockAuto = AindDynamicForagingDataSchema.AutoBlockAdvancedBlockAuto.Now;
+            _advancedBlockAuto = AutoBlockAdvancedBlockAuto.Now;
             _switchThr = 0.5D;
             _pointsInARow = 5;
         }
@@ -1381,7 +1379,6 @@ namespace AindDynamicForagingDataSchema
             _pointsInARow = other._pointsInARow;
         }
     
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("advanced_block_auto")]
         public AutoBlockAdvancedBlockAuto AdvancedBlockAuto
         {
@@ -1454,7 +1451,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class AutoWater
@@ -1472,7 +1469,7 @@ namespace AindDynamicForagingDataSchema
     
         public AutoWater()
         {
-            _autoWaterType = AindDynamicForagingDataSchema.AutoWaterType.Natural;
+            _autoWaterType = AutoWaterType.Natural;
             _multiplier = 0.8D;
             _unrewarded = 200;
             _ignored = 100;
@@ -1488,7 +1485,6 @@ namespace AindDynamicForagingDataSchema
             _includeReward = other._includeReward;
         }
     
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("auto_water_type")]
         public AutoWaterType AutoWaterType
         {
@@ -1596,7 +1592,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// Motor axis available
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     public enum Axis
     {
     
@@ -1620,7 +1616,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// Axis configuration
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Axis configuration")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
@@ -1647,9 +1643,9 @@ namespace AindDynamicForagingDataSchema
         {
             _stepAccelerationInterval = 100;
             _stepInterval = 100;
-            _microstepResolution = AindDynamicForagingDataSchema.MicrostepResolution.Microstep8;
+            _microstepResolution = MicrostepResolution.Microstep8;
             _maximumStepInterval = 2000;
-            _motorOperationMode = AindDynamicForagingDataSchema.MotorOperationMode.Quiet;
+            _motorOperationMode = MotorOperationMode.Quiet;
             _maxLimit = 25D;
             _minLimit = -0.01D;
         }
@@ -1666,7 +1662,6 @@ namespace AindDynamicForagingDataSchema
             _minLimit = other._minLimit;
         }
     
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("axis", Required=Newtonsoft.Json.Required.Always)]
         public Axis Axis
         {
@@ -1714,7 +1709,6 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("microstep_resolution")]
         public MicrostepResolution MicrostepResolution
         {
@@ -1741,7 +1735,6 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("motor_operation_mode")]
         public MotorOperationMode MotorOperationMode
         {
@@ -1819,7 +1812,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class BaseModel
@@ -1863,7 +1856,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class BlockParameters
@@ -1979,7 +1972,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class CameraControllerSpinnakerCamera
@@ -1997,6 +1990,7 @@ namespace AindDynamicForagingDataSchema
         {
             _deviceType = "CameraController";
             _cameras = new System.Collections.Generic.Dictionary<string, SpinnakerCamera>();
+            _frameRate = 30;
         }
     
         protected CameraControllerSpinnakerCamera(CameraControllerSpinnakerCamera other)
@@ -2059,7 +2053,6 @@ namespace AindDynamicForagingDataSchema
         /// <summary>
         /// Frame rate of the trigger to all cameras
         /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("frame_rate")]
         [System.ComponentModel.DescriptionAttribute("Frame rate of the trigger to all cameras")]
         public int? FrameRate
@@ -2108,7 +2101,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class CameraControllerWebCamera
@@ -2126,6 +2119,7 @@ namespace AindDynamicForagingDataSchema
         {
             _deviceType = "CameraController";
             _cameras = new System.Collections.Generic.Dictionary<string, WebCamera>();
+            _frameRate = 30;
         }
     
         protected CameraControllerWebCamera(CameraControllerWebCamera other)
@@ -2188,7 +2182,6 @@ namespace AindDynamicForagingDataSchema
         /// <summary>
         /// Frame rate of the trigger to all cameras
         /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("frame_rate")]
         [System.ComponentModel.DescriptionAttribute("Frame rate of the trigger to all cameras")]
         public int? FrameRate
@@ -2237,7 +2230,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class ConnectedClockOutput
@@ -2323,7 +2316,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class DelayPeriod
@@ -2421,7 +2414,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class HarpBehavior
@@ -2565,7 +2558,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class HarpEnvironmentSensor
@@ -2709,7 +2702,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class HarpLicketySplit
@@ -2853,7 +2846,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class HarpSniffDetector
@@ -2997,7 +2990,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class HarpSoundCard
@@ -3141,7 +3134,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class HarpWhiteRabbit
@@ -3308,7 +3301,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class InterTrialInterval
@@ -3427,7 +3420,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// Represents a position in the manipulator coordinate system
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Represents a position in the manipulator coordinate system")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
@@ -3543,7 +3536,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// Input for water valve calibration class
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Input for water valve calibration class")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
@@ -3677,7 +3670,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// Microstep resolution available
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     public enum MicrostepResolution
     {
     
@@ -3698,7 +3691,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// Motor operation mode
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     public enum MotorOperationMode
     {
     
@@ -3713,7 +3706,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// Represents a rectangle defined by its top-left corner, width, and height.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Represents a rectangle defined by its top-left corner, width, and height.")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
@@ -3846,7 +3839,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class Response
@@ -3930,7 +3923,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class RewardN
@@ -3996,7 +3989,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class RewardProbability
@@ -4094,7 +4087,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class RewardSize
@@ -4177,7 +4170,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// Container class for calibration models. In a future release these will be moved to the respective devices
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Container class for calibration models. In a future release these will be moved t" +
         "o the respective devices")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
@@ -4269,7 +4262,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class Session
@@ -4397,6 +4390,22 @@ namespace AindDynamicForagingDataSchema
             set
             {
                 _date = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonIgnoreAttribute()]
+        [System.ComponentModel.BrowsableAttribute(false)]
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
+        [System.Xml.Serialization.XmlElementAttribute("Date")]
+        public string DateXml
+        {
+            get
+            {
+                return _date.ToString("o");
+            }
+            set
+            {
+                _date = System.DateTimeOffset.Parse(value);
             }
         }
     
@@ -4547,7 +4556,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// Spinnaker camera device configuration.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Spinnaker camera device configuration.")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
@@ -4582,11 +4591,11 @@ namespace AindDynamicForagingDataSchema
         {
             _deviceType = "SpinnakerCamera";
             _binning = 1;
-            _colorProcessing = AindDynamicForagingDataSchema.SpinnakerCameraColorProcessing.Default;
+            _colorProcessing = SpinnakerCameraColorProcessing.Default;
             _exposure = 1000;
             _gain = 0D;
-            _adcBitDepth = AindDynamicForagingDataSchema.SpinnakerCameraAdcBitDepth.Adc8bit;
-            _pixelFormat = AindDynamicForagingDataSchema.SpinnakerCameraPixelFormat.Mono8;
+            _adcBitDepth = SpinnakerCameraAdcBitDepth.Adc8bit;
+            _pixelFormat = SpinnakerCameraPixelFormat.Mono8;
             _regionOfInterest = new Rect();
         }
     
@@ -4674,7 +4683,6 @@ namespace AindDynamicForagingDataSchema
         /// <summary>
         /// Color processing
         /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("color_processing")]
         [System.ComponentModel.DescriptionAttribute("Color processing")]
         public SpinnakerCameraColorProcessing ColorProcessing
@@ -4726,7 +4734,6 @@ namespace AindDynamicForagingDataSchema
         /// <summary>
         /// Gamma. If None, will disable gamma correction.
         /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("gamma")]
         [System.ComponentModel.DescriptionAttribute("Gamma. If None, will disable gamma correction.")]
         public double? Gamma
@@ -4744,7 +4751,6 @@ namespace AindDynamicForagingDataSchema
         /// <summary>
         /// ADC bit depth. If None will be left as default.
         /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("adc_bit_depth")]
         [System.ComponentModel.DescriptionAttribute("ADC bit depth. If None will be left as default.")]
         public SpinnakerCameraAdcBitDepth? AdcBitDepth
@@ -4762,7 +4768,6 @@ namespace AindDynamicForagingDataSchema
         /// <summary>
         /// Pixel format. If None will be left as default.
         /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("pixel_format")]
         [System.ComponentModel.DescriptionAttribute("Pixel format. If None will be left as default.")]
         public SpinnakerCameraPixelFormat? PixelFormat
@@ -4858,7 +4863,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// ADC bit depth options for Spinnaker cameras.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     public enum SpinnakerCameraAdcBitDepth
     {
     
@@ -4876,7 +4881,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// Pixel format options for Spinnaker cameras.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     public enum SpinnakerCameraPixelFormat
     {
     
@@ -5317,7 +5322,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// Represents a single trial that can be instantiated by the Bonsai state machine.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Represents a single trial that can be instantiated by the Bonsai state machine.")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
@@ -5532,7 +5537,6 @@ namespace AindDynamicForagingDataSchema
         /// <summary>
         /// If set, the trial will automatically (and immediately) register a response to the right (True) or left (False).
         /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("is_auto_response_right")]
         [System.ComponentModel.DescriptionAttribute("If set, the trial will automatically (and immediately) register a response to the" +
             " right (True) or left (False).")]
@@ -5610,7 +5614,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// Represents the outcome of a single trial.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Represents the outcome of a single trial.")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
@@ -5656,7 +5660,6 @@ namespace AindDynamicForagingDataSchema
         /// <summary>
         /// Reports the choice made by the subject. True for right, False for left, None for no choice.
         /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("is_right_choice", Required=Newtonsoft.Json.Required.AllowNull)]
         [System.ComponentModel.DescriptionAttribute("Reports the choice made by the subject. True for right, False for left, None for " +
             "no choice.")]
@@ -5725,7 +5728,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// FFMPEG video writer configuration.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Newtonsoft.Json.JsonConverter(typeof(JsonInheritanceConverter), "video_writer_type")]
     [JsonInheritanceAttribute("FFMPEG", typeof(VideoWriterFfmpeg))]
     [JsonInheritanceAttribute("OPENCV", typeof(VideoWriterOpenCv))]
@@ -5776,7 +5779,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// FFMPEG video writer configuration.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("FFMPEG video writer configuration.")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
@@ -5904,7 +5907,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// OpenCV video writer configuration.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("OpenCV video writer configuration.")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
@@ -6007,7 +6010,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class Warmup
@@ -6126,7 +6129,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// Represents a water valve calibration.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Represents a water valve calibration.")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
@@ -6178,6 +6181,22 @@ namespace AindDynamicForagingDataSchema
             set
             {
                 _date = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonIgnoreAttribute()]
+        [System.ComponentModel.BrowsableAttribute(false)]
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
+        [System.Xml.Serialization.XmlElementAttribute("Date")]
+        public string DateXml
+        {
+            get
+            {
+                return _date.ToString("o");
+            }
+            set
+            {
+                _date = System.DateTimeOffset.Parse(value);
             }
         }
     
@@ -6255,7 +6274,6 @@ namespace AindDynamicForagingDataSchema
         /// <summary>
         /// R2 metric from the linear model.
         /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("r2")]
         [System.ComponentModel.DescriptionAttribute("R2 metric from the linear model.")]
         public double? R2
@@ -6328,7 +6346,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// Web camera device configuration.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Web camera device configuration.")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
@@ -6457,7 +6475,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     public enum AindDynamicForagingTaskParametersRandomness
     {
@@ -6470,7 +6488,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     public enum AutoBlockAdvancedBlockAuto
     {
@@ -6483,7 +6501,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     public enum AutoWaterType
     {
@@ -6499,7 +6517,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     public enum SpinnakerCameraColorProcessing
     {
@@ -6649,7 +6667,7 @@ namespace AindDynamicForagingDataSchema
         }
     }
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DefaultPropertyAttribute("Type")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Combinator)]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriterFfmpeg>))]
@@ -6693,7 +6711,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// Serializes a sequence of data model objects into JSON strings.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Serializes a sequence of data model objects into JSON strings.")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
     [Bonsai.CombinatorAttribute()]
@@ -6913,7 +6931,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// Deserializes a sequence of JSON strings into data model objects.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Deserializes a sequence of JSON strings into data model objects.")]
     [System.ComponentModel.DefaultPropertyAttribute("Type")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
