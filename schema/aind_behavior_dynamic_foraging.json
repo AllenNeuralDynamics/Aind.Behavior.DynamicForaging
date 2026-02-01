@@ -1957,6 +1957,115 @@
         "Confidence32f"
       ]
     },
+    "Trial": {
+      "properties": {
+        "has_secondary_reinforcer": {
+          "title": "Has Secondary Reinforcer",
+          "type": "boolean"
+        },
+        "has_reward_left": {
+          "title": "Has Reward Left",
+          "type": "boolean"
+        },
+        "has_reward_right": {
+          "title": "Has Reward Right",
+          "type": "boolean"
+        },
+        "quiescent_period_wait_duration": {
+          "title": "Quiescent Period Wait Duration",
+          "type": "number"
+        },
+        "choice_deadline": {
+          "title": "Choice Deadline",
+          "type": "number"
+        },
+        "right_is_active": {
+          "title": "Right Is Active",
+          "type": "boolean"
+        },
+        "left_is_active": {
+          "title": "Left Is Active",
+          "type": "boolean"
+        },
+        "is_fast_retract": {
+          "title": "Is Fast Retract",
+          "type": "boolean"
+        },
+        "reward_consumption_duration": {
+          "title": "Reward Consumption Duration",
+          "type": "number"
+        },
+        "iti_duration": {
+          "title": "Iti Duration",
+          "type": "number"
+        },
+        "reward_delay": {
+          "title": "Reward Delay",
+          "type": "number"
+        },
+        "is_auto_response_right": {
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Is Auto Response Right"
+        },
+        "lickspout_offset": {
+          "title": "Lickspout Offset",
+          "type": "number"
+        }
+      },
+      "required": [
+        "has_secondary_reinforcer",
+        "has_reward_left",
+        "has_reward_right",
+        "quiescent_period_wait_duration",
+        "choice_deadline",
+        "right_is_active",
+        "left_is_active",
+        "is_fast_retract",
+        "reward_consumption_duration",
+        "iti_duration",
+        "reward_delay",
+        "is_auto_response_right",
+        "lickspout_offset"
+      ],
+      "title": "Trial",
+      "type": "object"
+    },
+    "TrialOutcome": {
+      "properties": {
+        "trial": {
+          "$ref": "#/$defs/Trial"
+        },
+        "choice": {
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Choice"
+        },
+        "is_rewarded": {
+          "title": "Is Rewarded",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "trial",
+        "choice",
+        "is_rewarded"
+      ],
+      "title": "TrialOutcome",
+      "type": "object"
+    },
     "VideoWriter": {
       "discriminator": {
         "mapping": {

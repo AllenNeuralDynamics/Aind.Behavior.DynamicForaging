@@ -137,3 +137,23 @@ class AindDynamicForagingTaskLogic(Task):
         default="AindDynamicForaging", description="Name of the task logic", frozen=True
     )
     task_parameters: AindDynamicForagingTaskParameters = Field(description="Parameters of the task logic")
+
+class Trial(BaseModel):
+    has_secondary_reinforcer: bool
+    has_reward_left: bool
+    has_reward_right: bool
+    quiescent_period_wait_duration: float
+    choice_deadline: float
+    right_is_active: bool
+    left_is_active: bool
+    is_fast_retract: bool
+    reward_consumption_duration: float
+    iti_duration: float
+    reward_delay: float
+    is_auto_response_right: Optional[bool]
+    lickspout_offset: float
+
+class TrialOutcome(BaseModel):
+    trial: Trial
+    choice: Optional[bool]
+    is_rewarded: bool

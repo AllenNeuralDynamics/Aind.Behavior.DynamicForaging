@@ -5230,6 +5230,370 @@ namespace AindDynamicForagingDataSchema
     }
 
 
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class Trial
+    {
+    
+        private bool _hasSecondaryReinforcer;
+    
+        private bool _hasRewardLeft;
+    
+        private bool _hasRewardRight;
+    
+        private double _quiescentPeriodWaitDuration;
+    
+        private double _choiceDeadline;
+    
+        private bool _rightIsActive;
+    
+        private bool _leftIsActive;
+    
+        private bool _isFastRetract;
+    
+        private double _rewardConsumptionDuration;
+    
+        private double _itiDuration;
+    
+        private double _rewardDelay;
+    
+        private bool? _isAutoResponseRight;
+    
+        private double _lickspoutOffset;
+    
+        public Trial()
+        {
+        }
+    
+        protected Trial(Trial other)
+        {
+            _hasSecondaryReinforcer = other._hasSecondaryReinforcer;
+            _hasRewardLeft = other._hasRewardLeft;
+            _hasRewardRight = other._hasRewardRight;
+            _quiescentPeriodWaitDuration = other._quiescentPeriodWaitDuration;
+            _choiceDeadline = other._choiceDeadline;
+            _rightIsActive = other._rightIsActive;
+            _leftIsActive = other._leftIsActive;
+            _isFastRetract = other._isFastRetract;
+            _rewardConsumptionDuration = other._rewardConsumptionDuration;
+            _itiDuration = other._itiDuration;
+            _rewardDelay = other._rewardDelay;
+            _isAutoResponseRight = other._isAutoResponseRight;
+            _lickspoutOffset = other._lickspoutOffset;
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("has_secondary_reinforcer", Required=Newtonsoft.Json.Required.Always)]
+        public bool HasSecondaryReinforcer
+        {
+            get
+            {
+                return _hasSecondaryReinforcer;
+            }
+            set
+            {
+                _hasSecondaryReinforcer = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("has_reward_left", Required=Newtonsoft.Json.Required.Always)]
+        public bool HasRewardLeft
+        {
+            get
+            {
+                return _hasRewardLeft;
+            }
+            set
+            {
+                _hasRewardLeft = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("has_reward_right", Required=Newtonsoft.Json.Required.Always)]
+        public bool HasRewardRight
+        {
+            get
+            {
+                return _hasRewardRight;
+            }
+            set
+            {
+                _hasRewardRight = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("quiescent_period_wait_duration", Required=Newtonsoft.Json.Required.Always)]
+        public double QuiescentPeriodWaitDuration
+        {
+            get
+            {
+                return _quiescentPeriodWaitDuration;
+            }
+            set
+            {
+                _quiescentPeriodWaitDuration = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("choice_deadline", Required=Newtonsoft.Json.Required.Always)]
+        public double ChoiceDeadline
+        {
+            get
+            {
+                return _choiceDeadline;
+            }
+            set
+            {
+                _choiceDeadline = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("right_is_active", Required=Newtonsoft.Json.Required.Always)]
+        public bool RightIsActive
+        {
+            get
+            {
+                return _rightIsActive;
+            }
+            set
+            {
+                _rightIsActive = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("left_is_active", Required=Newtonsoft.Json.Required.Always)]
+        public bool LeftIsActive
+        {
+            get
+            {
+                return _leftIsActive;
+            }
+            set
+            {
+                _leftIsActive = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("is_fast_retract", Required=Newtonsoft.Json.Required.Always)]
+        public bool IsFastRetract
+        {
+            get
+            {
+                return _isFastRetract;
+            }
+            set
+            {
+                _isFastRetract = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("reward_consumption_duration", Required=Newtonsoft.Json.Required.Always)]
+        public double RewardConsumptionDuration
+        {
+            get
+            {
+                return _rewardConsumptionDuration;
+            }
+            set
+            {
+                _rewardConsumptionDuration = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("iti_duration", Required=Newtonsoft.Json.Required.Always)]
+        public double ItiDuration
+        {
+            get
+            {
+                return _itiDuration;
+            }
+            set
+            {
+                _itiDuration = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("reward_delay", Required=Newtonsoft.Json.Required.Always)]
+        public double RewardDelay
+        {
+            get
+            {
+                return _rewardDelay;
+            }
+            set
+            {
+                _rewardDelay = value;
+            }
+        }
+    
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("is_auto_response_right", Required=Newtonsoft.Json.Required.AllowNull)]
+        public bool? IsAutoResponseRight
+        {
+            get
+            {
+                return _isAutoResponseRight;
+            }
+            set
+            {
+                _isAutoResponseRight = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("lickspout_offset", Required=Newtonsoft.Json.Required.Always)]
+        public double LickspoutOffset
+        {
+            get
+            {
+                return _lickspoutOffset;
+            }
+            set
+            {
+                _lickspoutOffset = value;
+            }
+        }
+    
+        public System.IObservable<Trial> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new Trial(this)));
+        }
+    
+        public System.IObservable<Trial> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new Trial(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("HasSecondaryReinforcer = " + _hasSecondaryReinforcer + ", ");
+            stringBuilder.Append("HasRewardLeft = " + _hasRewardLeft + ", ");
+            stringBuilder.Append("HasRewardRight = " + _hasRewardRight + ", ");
+            stringBuilder.Append("QuiescentPeriodWaitDuration = " + _quiescentPeriodWaitDuration + ", ");
+            stringBuilder.Append("ChoiceDeadline = " + _choiceDeadline + ", ");
+            stringBuilder.Append("RightIsActive = " + _rightIsActive + ", ");
+            stringBuilder.Append("LeftIsActive = " + _leftIsActive + ", ");
+            stringBuilder.Append("IsFastRetract = " + _isFastRetract + ", ");
+            stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
+            stringBuilder.Append("ItiDuration = " + _itiDuration + ", ");
+            stringBuilder.Append("RewardDelay = " + _rewardDelay + ", ");
+            stringBuilder.Append("IsAutoResponseRight = " + _isAutoResponseRight + ", ");
+            stringBuilder.Append("LickspoutOffset = " + _lickspoutOffset);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class TrialOutcome
+    {
+    
+        private Trial _trial;
+    
+        private bool? _choice;
+    
+        private bool _isRewarded;
+    
+        public TrialOutcome()
+        {
+            _trial = new Trial();
+        }
+    
+        protected TrialOutcome(TrialOutcome other)
+        {
+            _trial = other._trial;
+            _choice = other._choice;
+            _isRewarded = other._isRewarded;
+        }
+    
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("trial", Required=Newtonsoft.Json.Required.Always)]
+        public Trial Trial
+        {
+            get
+            {
+                return _trial;
+            }
+            set
+            {
+                _trial = value;
+            }
+        }
+    
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("choice", Required=Newtonsoft.Json.Required.AllowNull)]
+        public bool? Choice
+        {
+            get
+            {
+                return _choice;
+            }
+            set
+            {
+                _choice = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("is_rewarded", Required=Newtonsoft.Json.Required.Always)]
+        public bool IsRewarded
+        {
+            get
+            {
+                return _isRewarded;
+            }
+            set
+            {
+                _isRewarded = value;
+            }
+        }
+    
+        public System.IObservable<TrialOutcome> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new TrialOutcome(this)));
+        }
+    
+        public System.IObservable<TrialOutcome> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new TrialOutcome(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("Trial = " + _trial + ", ");
+            stringBuilder.Append("Choice = " + _choice + ", ");
+            stringBuilder.Append("IsRewarded = " + _isRewarded);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
     /// <summary>
     /// FFMPEG video writer configuration.
     /// </summary>
@@ -6371,6 +6735,16 @@ namespace AindDynamicForagingDataSchema
             return Process<SpinnakerCamera>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<Trial> source)
+        {
+            return Process<Trial>(source);
+        }
+
+        public System.IObservable<string> Process(System.IObservable<TrialOutcome> source)
+        {
+            return Process<TrialOutcome>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<VideoWriter> source)
         {
             return Process<VideoWriter>(source);
@@ -6441,6 +6815,8 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<RigCalibration>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Session>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<SpinnakerCamera>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Trial>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialOutcome>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriter>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriterFfmpeg>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriterOpenCv>))]
