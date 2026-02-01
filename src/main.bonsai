@@ -731,23 +731,16 @@
         <Name>TaskLogic</Name>
         <Workflow>
           <Nodes>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>GenerateTrial</Name>
+            </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:Trial">
-                <p1:HasSecondaryReinforcer>false</p1:HasSecondaryReinforcer>
-                <p1:HasRewardLeft>false</p1:HasRewardLeft>
-                <p1:HasRewardRight>false</p1:HasRewardRight>
-                <p1:QuiescentPeriodWaitDuration>0</p1:QuiescentPeriodWaitDuration>
-                <p1:ChoiceDeadline>0</p1:ChoiceDeadline>
-                <p1:RightIsActive>false</p1:RightIsActive>
-                <p1:LeftIsActive>false</p1:LeftIsActive>
-                <p1:IsFastRetract>false</p1:IsFastRetract>
-                <p1:RewardConsumptionDuration>0</p1:RewardConsumptionDuration>
-                <p1:ItiDuration>0</p1:ItiDuration>
-                <p1:RewardDelay>0</p1:RewardDelay>
-                <p1:LickspoutOffset>0</p1:LickspoutOffset>
+              <Combinator xsi:type="rx:Take">
+                <rx:Count>1</rx:Count>
               </Combinator>
             </Expression>
-            <Expression xsi:type="rx:CreateObservable">
+            <Expression xsi:type="rx:SelectMany">
+              <Name>RunTrial</Name>
               <Workflow>
                 <Nodes>
                   <Expression xsi:type="WorkflowInput">
@@ -1429,6 +1422,12 @@
                     <Name>ITI</Name>
                     <Workflow>
                       <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="rx:AsyncSubject">
+                          <Name>responseOutcome</Name>
+                        </Expression>
                         <Expression xsi:type="SubscribeSubject">
                           <Name>ThisTrial</Name>
                         </Expression>
@@ -1467,16 +1466,84 @@
                         <Expression xsi:type="MulticastSubject">
                           <Name>ResetQuickRetract</Name>
                         </Expression>
+                        <Expression xsi:type="SubscribeSubject">
+                          <Name>ThisTrial</Name>
+                        </Expression>
+                        <Expression xsi:type="PropertyMapping">
+                          <PropertyMappings>
+                            <Property Name="Trial" />
+                          </PropertyMappings>
+                        </Expression>
+                        <Expression xsi:type="SubscribeSubject">
+                          <Name>responseOutcome</Name>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Response</Selector>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Value</Selector>
+                        </Expression>
+                        <Expression xsi:type="PropertyMapping">
+                          <PropertyMappings>
+                            <Property Name="Choice" />
+                          </PropertyMappings>
+                        </Expression>
+                        <Expression xsi:type="SubscribeSubject">
+                          <Name>responseOutcome</Name>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>IsRewarded</Selector>
+                        </Expression>
+                        <Expression xsi:type="PropertyMapping">
+                          <PropertyMappings>
+                            <Property Name="IsRewarded" />
+                          </PropertyMappings>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="p1:TrialOutcome">
+                            <p1:IsRewarded>false</p1:IsRewarded>
+                          </Combinator>
+                        </Expression>
+                        <Expression xsi:type="Disable">
+                          <Builder xsi:type="scr:ExpressionTransform">
+                            <scr:Expression>UpdateGenerator(it) -&gt; next trial</scr:Expression>
+                          </Builder>
+                        </Expression>
                       </Nodes>
                       <Edges>
                         <Edge From="0" To="1" Label="Source1" />
-                        <Edge From="1" To="2" Label="Source1" />
                         <Edge From="2" To="3" Label="Source1" />
                         <Edge From="3" To="4" Label="Source1" />
                         <Edge From="4" To="5" Label="Source1" />
                         <Edge From="5" To="6" Label="Source1" />
+                        <Edge From="6" To="7" Label="Source1" />
                         <Edge From="7" To="8" Label="Source1" />
-                        <Edge From="8" To="9" Label="Source1" />
+                        <Edge From="9" To="10" Label="Source1" />
+                        <Edge From="10" To="11" Label="Source1" />
+                        <Edge From="12" To="13" Label="Source1" />
+                        <Edge From="13" To="21" Label="Source1" />
+                        <Edge From="14" To="15" Label="Source1" />
+                        <Edge From="15" To="16" Label="Source1" />
+                        <Edge From="16" To="17" Label="Source1" />
+                        <Edge From="17" To="21" Label="Source2" />
+                        <Edge From="18" To="19" Label="Source1" />
+                        <Edge From="19" To="20" Label="Source1" />
+                        <Edge From="20" To="21" Label="Source3" />
+                        <Edge From="21" To="22" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="rx:SelectMany">
+                    <Name>GetNextTrial</Name>
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="Unit" />
+                        <Expression xsi:type="scr:ExpressionTransform">
+                          <scr:Expression>GetNextTrial()-&gt;</scr:Expression>
+                        </Expression>
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
                       </Edges>
                     </Workflow>
                   </Expression>
@@ -1507,12 +1574,21 @@
                   <Edge From="15" To="16" Label="Source1" />
                   <Edge From="16" To="17" Label="Source1" />
                   <Edge From="17" To="18" Label="Source1" />
+                  <Edge From="18" To="19" Label="Source1" />
                 </Edges>
               </Workflow>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Repeat" />
+            </Expression>
+            <Expression xsi:type="rx:BehaviorSubject" TypeArguments="p1:Trial">
+              <rx:Name>GenerateTrial</rx:Name>
             </Expression>
           </Nodes>
           <Edges>
             <Edge From="0" To="1" Label="Source1" />
+            <Edge From="1" To="2" Label="Source1" />
+            <Edge From="2" To="3" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>

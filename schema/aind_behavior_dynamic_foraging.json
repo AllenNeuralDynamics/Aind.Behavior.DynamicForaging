@@ -2037,6 +2037,35 @@
       "title": "Trial",
       "type": "object"
     },
+    "TrialOutcome": {
+      "properties": {
+        "trial": {
+          "$ref": "#/$defs/Trial"
+        },
+        "choice": {
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Choice"
+        },
+        "is_rewarded": {
+          "title": "Is Rewarded",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "trial",
+        "choice",
+        "is_rewarded"
+      ],
+      "title": "TrialOutcome",
+      "type": "object"
+    },
     "VideoWriter": {
       "discriminator": {
         "mapping": {

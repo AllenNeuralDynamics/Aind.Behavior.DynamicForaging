@@ -18,7 +18,8 @@ def main():
         aind_behavior_dynamic_foraging.task_logic.AindDynamicForagingTaskLogic,
         aind_behavior_dynamic_foraging.rig.AindDynamicForagingRig,
         Session,
-        aind_behavior_dynamic_foraging.task_logic.Trial
+        aind_behavior_dynamic_foraging.task_logic.Trial,
+        aind_behavior_dynamic_foraging.task_logic.TrialOutcome,
     ]
     model = pydantic.RootModel[Union[tuple(models)]]
 

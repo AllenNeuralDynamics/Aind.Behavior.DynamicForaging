@@ -5496,6 +5496,104 @@ namespace AindDynamicForagingDataSchema
     }
 
 
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.6.1.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class TrialOutcome
+    {
+    
+        private Trial _trial;
+    
+        private bool? _choice;
+    
+        private bool _isRewarded;
+    
+        public TrialOutcome()
+        {
+            _trial = new Trial();
+        }
+    
+        protected TrialOutcome(TrialOutcome other)
+        {
+            _trial = other._trial;
+            _choice = other._choice;
+            _isRewarded = other._isRewarded;
+        }
+    
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("trial", Required=Newtonsoft.Json.Required.Always)]
+        public Trial Trial
+        {
+            get
+            {
+                return _trial;
+            }
+            set
+            {
+                _trial = value;
+            }
+        }
+    
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("choice", Required=Newtonsoft.Json.Required.AllowNull)]
+        public bool? Choice
+        {
+            get
+            {
+                return _choice;
+            }
+            set
+            {
+                _choice = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("is_rewarded", Required=Newtonsoft.Json.Required.Always)]
+        public bool IsRewarded
+        {
+            get
+            {
+                return _isRewarded;
+            }
+            set
+            {
+                _isRewarded = value;
+            }
+        }
+    
+        public System.IObservable<TrialOutcome> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new TrialOutcome(this)));
+        }
+    
+        public System.IObservable<TrialOutcome> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new TrialOutcome(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("Trial = " + _trial + ", ");
+            stringBuilder.Append("Choice = " + _choice + ", ");
+            stringBuilder.Append("IsRewarded = " + _isRewarded);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
     /// <summary>
     /// FFMPEG video writer configuration.
     /// </summary>
@@ -6642,6 +6740,11 @@ namespace AindDynamicForagingDataSchema
             return Process<Trial>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<TrialOutcome> source)
+        {
+            return Process<TrialOutcome>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<VideoWriter> source)
         {
             return Process<VideoWriter>(source);
@@ -6713,6 +6816,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Session>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<SpinnakerCamera>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Trial>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialOutcome>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriter>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriterFfmpeg>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriterOpenCv>))]
