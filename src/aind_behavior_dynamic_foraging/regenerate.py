@@ -6,7 +6,7 @@ from aind_behavior_services.schema import BonsaiSgenSerializers, convert_pydanti
 from aind_behavior_services.session import Session
 
 import aind_behavior_dynamic_foraging.rig
-import aind_behavior_dynamic_foraging.task_logic
+import aind_behavior_dynamic_foraging.task_logic.trial_generators._dummy_trial_generator
 
 SCHEMA_ROOT = Path("./schema")
 EXTENSIONS_ROOT = Path("./src/Extensions/")
@@ -18,8 +18,8 @@ def main():
         aind_behavior_dynamic_foraging.task_logic.AindDynamicForagingTaskLogic,
         aind_behavior_dynamic_foraging.rig.AindDynamicForagingRig,
         Session,
-        aind_behavior_dynamic_foraging.task_logic.Trial,
-        aind_behavior_dynamic_foraging.task_logic.TrialOutcome,
+        aind_behavior_dynamic_foraging.task_logic.trial_models.Trial,
+        aind_behavior_dynamic_foraging.task_logic.trial_models.TrialOutcome,
     ]
     model = pydantic.RootModel[Union[tuple(models)]]
 
