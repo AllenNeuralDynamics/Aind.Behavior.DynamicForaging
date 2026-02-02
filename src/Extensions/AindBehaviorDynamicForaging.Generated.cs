@@ -5351,6 +5351,8 @@ namespace AindDynamicForagingDataSchema
     
         private double _lickspoutOffset;
     
+        private object _extraMetadata;
+    
         public Trial()
         {
             _hasRewardLeft = true;
@@ -5377,6 +5379,7 @@ namespace AindDynamicForagingDataSchema
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
             _isAutoResponseRight = other._isAutoResponseRight;
             _lickspoutOffset = other._lickspoutOffset;
+            _extraMetadata = other._extraMetadata;
         }
     
         /// <summary>
@@ -5570,6 +5573,25 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
+        /// <summary>
+        /// Additional metadata to include with the trial. This field will NOT be used or validated by the task engine.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("extra_metadata")]
+        [System.ComponentModel.DescriptionAttribute("Additional metadata to include with the trial. This field will NOT be used or val" +
+            "idated by the task engine.")]
+        public object ExtraMetadata
+        {
+            get
+            {
+                return _extraMetadata;
+            }
+            set
+            {
+                _extraMetadata = value;
+            }
+        }
+    
         public System.IObservable<Trial> Generate()
         {
             return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new Trial(this)));
@@ -5592,7 +5614,8 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("QuiescencePeriodDuration = " + _quiescencePeriodDuration + ", ");
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
             stringBuilder.Append("IsAutoResponseRight = " + _isAutoResponseRight + ", ");
-            stringBuilder.Append("LickspoutOffset = " + _lickspoutOffset);
+            stringBuilder.Append("LickspoutOffset = " + _lickspoutOffset + ", ");
+            stringBuilder.Append("ExtraMetadata = " + _extraMetadata);
             return true;
         }
     

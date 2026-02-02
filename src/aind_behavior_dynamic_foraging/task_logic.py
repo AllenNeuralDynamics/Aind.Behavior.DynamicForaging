@@ -1,7 +1,7 @@
-from typing import TYPE_CHECKING, Annotated, Literal, Optional, TypeAliasType, Union
+from typing import TYPE_CHECKING, Annotated, Any, Literal, Optional, TypeAliasType, Union
 
 from aind_behavior_services.task import Task, TaskParameters
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, SerializeAsAny
 
 from aind_behavior_dynamic_foraging import (
     __semver__,
@@ -197,6 +197,10 @@ class Trial(BaseModel):
     lickspout_offset: float = Field(
         default=0.0,
         description="Horizontal offset of the lickspouts (in mm). Positive values move the lickspouts right.",
+    )
+    extra_metadata: Optional[SerializeAsAny[Any]] = Field(
+        default=None,
+        description="Additional metadata to include with the trial. This field will NOT be used or validated by the task engine.",
     )
 
 

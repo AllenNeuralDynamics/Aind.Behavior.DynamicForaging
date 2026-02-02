@@ -2075,6 +2075,17 @@
           "description": "Horizontal offset of the lickspouts (in mm). Positive values move the lickspouts right.",
           "title": "Lickspout Offset",
           "type": "number"
+        },
+        "extra_metadata": {
+          "default": null,
+          "description": "Additional metadata to include with the trial. This field will NOT be used or validated by the task engine.",
+          "oneOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Extra Metadata"
         }
       },
       "title": "Trial",
