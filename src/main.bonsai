@@ -713,8 +713,8 @@
               <Name>SecondaryReinforcerDispatcher</Name>
               <Workflow>
                 <Nodes>
-                  <Expression xsi:type="rx:BehaviorSubject" TypeArguments="sys:Boolean">
-                    <rx:Name>TriggerSecondaryReinforcer</rx:Name>
+                  <Expression xsi:type="rx:BehaviorSubject" TypeArguments="sys:Tuple(sys:Boolean,p1:AuditorySecondaryReinforcer)">
+                    <rx:Name>DeliverSecondaryReinforcer</rx:Name>
                   </Expression>
                 </Nodes>
                 <Edges />
@@ -779,7 +779,7 @@
                                 <Name>ThisTrial</Name>
                               </Expression>
                               <Expression xsi:type="MemberSelector">
-                                <Selector>QuiescentPeriodWaitDuration</Selector>
+                                <Selector>QuiescencePeriodDuration</Selector>
                               </Expression>
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="p6:TimeSpanFromSeconds" />
@@ -879,7 +879,7 @@
                           <Name>ThisTrial</Name>
                         </Expression>
                         <Expression xsi:type="MemberSelector">
-                          <Selector>ChoiceDeadline</Selector>
+                          <Selector>ResponseDeadlineDuration</Selector>
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="p6:TimeSpanFromSeconds" />
@@ -995,7 +995,7 @@
                           <Name>ThisTrial</Name>
                         </Expression>
                         <Expression xsi:type="MemberSelector">
-                          <Selector>IsFastRetract</Selector>
+                          <Selector>EnableFastRetract</Selector>
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="rx:WithLatestFrom" />
@@ -1080,7 +1080,7 @@
                     </Workflow>
                   </Expression>
                   <Expression xsi:type="rx:Condition">
-                    <Name>IfFastRetractFalse</Name>
+                    <Name>Else</Name>
                     <Workflow>
                       <Nodes>
                         <Expression xsi:type="WorkflowInput">
@@ -1090,7 +1090,7 @@
                           <Name>ThisTrial</Name>
                         </Expression>
                         <Expression xsi:type="MemberSelector">
-                          <Selector>IsFastRetract</Selector>
+                          <Selector>EnableFastRetract</Selector>
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="rx:WithLatestFrom" />
@@ -1182,13 +1182,17 @@
                           <Name>ThisTrial</Name>
                         </Expression>
                         <Expression xsi:type="MemberSelector">
-                          <Selector>HasSecondaryReinforcer</Selector>
+                          <Selector>SecondaryReinforcer</Selector>
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="rx:WithLatestFrom" />
                         </Expression>
                         <Expression xsi:type="MemberSelector">
                           <Selector>Item2</Selector>
+                        </Expression>
+                        <Expression xsi:type="scr:ExpressionTransform">
+                          <scr:Name>IsNotNull</scr:Name>
+                          <scr:Expression>it != null</scr:Expression>
                         </Expression>
                         <Expression xsi:type="WorkflowOutput" />
                       </Nodes>
@@ -1198,6 +1202,7 @@
                         <Edge From="2" To="3" Label="Source2" />
                         <Edge From="3" To="4" Label="Source1" />
                         <Edge From="4" To="5" Label="Source1" />
+                        <Edge From="5" To="6" Label="Source1" />
                       </Edges>
                     </Workflow>
                   </Expression>
@@ -1211,8 +1216,17 @@
                         <Expression xsi:type="MemberSelector">
                           <Selector>IsRewarded</Selector>
                         </Expression>
+                        <Expression xsi:type="SubscribeSubject">
+                          <Name>ThisTrial</Name>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>SecondaryReinforcer</Selector>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="rx:Zip" />
+                        </Expression>
                         <Expression xsi:type="MulticastSubject">
-                          <Name>TriggerSecondaryReinforcer</Name>
+                          <Name>DeliverSecondaryReinforcer</Name>
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="rx:Take">
@@ -1229,12 +1243,15 @@
                       </Nodes>
                       <Edges>
                         <Edge From="0" To="1" Label="Source1" />
-                        <Edge From="0" To="4" Label="Source2" />
-                        <Edge From="1" To="2" Label="Source1" />
+                        <Edge From="0" To="7" Label="Source2" />
+                        <Edge From="1" To="4" Label="Source1" />
                         <Edge From="2" To="3" Label="Source1" />
-                        <Edge From="3" To="4" Label="Source1" />
+                        <Edge From="3" To="4" Label="Source2" />
                         <Edge From="4" To="5" Label="Source1" />
                         <Edge From="5" To="6" Label="Source1" />
+                        <Edge From="6" To="7" Label="Source1" />
+                        <Edge From="7" To="8" Label="Source1" />
+                        <Edge From="8" To="9" Label="Source1" />
                       </Edges>
                     </Workflow>
                   </Expression>
@@ -1249,7 +1266,7 @@
                           <Name>ThisTrial</Name>
                         </Expression>
                         <Expression xsi:type="MemberSelector">
-                          <Selector>HasSecondaryReinforcer</Selector>
+                          <Selector>SecondaryReinforcer</Selector>
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="rx:WithLatestFrom" />
@@ -1257,7 +1274,10 @@
                         <Expression xsi:type="MemberSelector">
                           <Selector>Item2</Selector>
                         </Expression>
-                        <Expression xsi:type="BitwiseNot" />
+                        <Expression xsi:type="scr:ExpressionTransform">
+                          <scr:Name>IsNull</scr:Name>
+                          <scr:Expression>it == null</scr:Expression>
+                        </Expression>
                         <Expression xsi:type="WorkflowOutput" />
                       </Nodes>
                       <Edges>
@@ -1295,7 +1315,7 @@
                           <Name>ThisTrial</Name>
                         </Expression>
                         <Expression xsi:type="MemberSelector">
-                          <Selector>RewardDelay</Selector>
+                          <Selector>RewardDelayDuration</Selector>
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="p6:TimeSpanFromSeconds" />
@@ -1432,7 +1452,7 @@
                           <Name>ThisTrial</Name>
                         </Expression>
                         <Expression xsi:type="MemberSelector">
-                          <Selector>ItiDuration</Selector>
+                          <Selector>InterTrialIntervalDuration</Selector>
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="p6:TimeSpanFromSeconds" />
@@ -1485,7 +1505,7 @@
                         </Expression>
                         <Expression xsi:type="PropertyMapping">
                           <PropertyMappings>
-                            <Property Name="Choice" />
+                            <Property Name="IsRightChoice" />
                           </PropertyMappings>
                         </Expression>
                         <Expression xsi:type="SubscribeSubject">
@@ -1501,6 +1521,7 @@
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="p1:TrialOutcome">
+                            <p1:IsRightChoice xsi:nil="true" />
                             <p1:IsRewarded>false</p1:IsRewarded>
                           </Combinator>
                         </Expression>
@@ -1536,15 +1557,8 @@
                   <Expression xsi:type="rx:SelectMany">
                     <Name>GetNextTrial</Name>
                     <Workflow>
-                      <Nodes>
-                        <Expression xsi:type="Unit" />
-                        <Expression xsi:type="scr:ExpressionTransform">
-                          <scr:Expression>GetNextTrial()-&gt;</scr:Expression>
-                        </Expression>
-                      </Nodes>
-                      <Edges>
-                        <Edge From="0" To="1" Label="Source1" />
-                      </Edges>
+                      <Nodes />
+                      <Edges />
                     </Workflow>
                   </Expression>
                   <Expression xsi:type="Combinator">
