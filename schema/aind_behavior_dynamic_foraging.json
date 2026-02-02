@@ -333,6 +333,13 @@
             }
           ],
           "title": "Lick Spout Retraction"
+        },
+        "trial_generator": {
+          "$ref": "#/$defs/TrialGeneratorSpec",
+          "default": {
+            "type": "DummyTrialGenerator"
+          },
+          "description": "Trial generator model for generating trials in the task."
         }
       },
       "title": "AindDynamicForagingTaskParameters",
@@ -871,6 +878,30 @@
         }
       },
       "title": "DelayPeriod",
+      "type": "object"
+    },
+    "DummyTrialGeneratorModel": {
+      "properties": {
+        "type": {
+          "const": "DummyTrialGenerator",
+          "default": "DummyTrialGenerator",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "title": "DummyTrialGeneratorModel",
+      "type": "object"
+    },
+    "DummyTrialGeneratorModel2": {
+      "properties": {
+        "type": {
+          "const": "DummyTrialGenerator2",
+          "default": "DummyTrialGenerator2",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "title": "DummyTrialGeneratorModel2",
       "type": "object"
     },
     "HarpBehavior": {
@@ -2090,6 +2121,24 @@
       },
       "title": "Trial",
       "type": "object"
+    },
+    "TrialGeneratorSpec": {
+      "description": "Type of trial generator",
+      "discriminator": {
+        "mapping": {
+          "DummyTrialGenerator": "#/$defs/DummyTrialGeneratorModel",
+          "DummyTrialGenerator2": "#/$defs/DummyTrialGeneratorModel2"
+        },
+        "propertyName": "type"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/DummyTrialGeneratorModel"
+        },
+        {
+          "$ref": "#/$defs/DummyTrialGeneratorModel2"
+        }
+      ]
     },
     "TrialOutcome": {
       "description": "Represents the outcome of a single trial.",
