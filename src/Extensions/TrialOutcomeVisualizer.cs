@@ -36,12 +36,13 @@ public class TrialOutcomeVisualizer : BufferedVisualizer
     private const int RollingWindowSize = 10;
 
     // Colors (RGBA format)
-    private static readonly Vector4 RightChoiceColor = new Vector4(0.0f, 0.6f, 0.0f, 1.0f);        // Green for right
+    private static readonly Vector4 RightChoiceColor = new Vector4(0.0f, 0.0f, 0.8f, 1.0f);        // Blue for right
     private static readonly Vector4 LeftChoiceColor = new Vector4(0.8f, 0.0f, 0.0f, 1.0f);         // Red for left
     private static readonly Vector4 NoChoiceColor = new Vector4(0.5f, 0.5f, 0.5f, 1.0f);           // Gray
-    private static readonly Vector4 RightChoiceLineColor = new Vector4(0.0f, 0.6f, 0.0f, 1.0f);    // Green for right avg
-    private static readonly Vector4 RewardRateLineColor = new Vector4(0.0f, 0.0f, 0.8f, 1.0f);     // Blue for reward rate
+    private static readonly Vector4 RightChoiceLineColor = new Vector4(0.0f, 0.0f, 0.8f, 1.0f);    // Blue for right avg
+    private static readonly Vector4 RewardRateLineColor = new Vector4(0.0f, 0.6f, 0.0f, 1.0f);     // Green for reward rate (PWater)
     private static readonly Vector4 ProbabilityTraceColor = new Vector4(0.0f, 0.0f, 0.0f, 1.0f);   // Black for probability traces
+    private const float ProbabilityBarAlpha = 0.25f;
 
     // Line thickness for rolling averages
     private const float RollingLineThickness = 4.0f;
@@ -296,6 +297,53 @@ public class TrialOutcomeVisualizer : BufferedVisualizer
     }
 
     /// <summary>
+    /// Plots probability as filled bars on the Y2 axis. Each trial fills from
+    /// (index - 0.5) to (index + 0.5), and from 0 to (value * direction).
+    /// </summary>
+    private static void PlotProbabilityBars(
+        float[] trialIndices,
+        float[] values,
+        int direction,
+        Vector4 color,
+        string label)
+    {
+        if (trialIndices.Length == 0) return;
+
+        var xs = new float[trialIndices.Length * 2];
+        var ysLow = new float[trialIndices.Length * 2];
+        var ysHigh = new float[trialIndices.Length * 2];
+
+        for (int i = 0; i < trialIndices.Length; i++)
+        {
+            float x = trialIndices[i];
+            float val = values[i] * direction;
+
+            float yLow, yHigh;
+            if (val >= 0)
+            {
+                yLow = 0f;
+                yHigh = val;
+            }
+            else
+            {
+                yLow = val;
+                yHigh = 0f;
+            }
+
+            xs[i * 2] = x - 0.5f;
+            xs[i * 2 + 1] = x + 0.5f;
+            ysLow[i * 2] = yLow;
+            ysLow[i * 2 + 1] = yLow;
+            ysHigh[i * 2] = yHigh;
+            ysHigh[i * 2 + 1] = yHigh;
+        }
+
+        ImPlot.SetNextFillStyle(color, ProbabilityBarAlpha);
+        ImPlot.SetNextLineStyle(color, 0f);
+        ImPlot.PlotShaded(label, ref xs[0], ref ysLow[0], ref ysHigh[0], xs.Length);
+    }
+
+    /// <summary>
     /// Categorizes trials and collects their x positions.
     /// </summary>
     private static void CategorizeTrials(
@@ -416,9 +464,16 @@ public class TrialOutcomeVisualizer : BufferedVisualizer
             ImPlot.SetupAxes("Trial", "P(Right)");
             ImPlot.SetupAxisLimits(ImAxis.Y1, YAxisMin, YAxisMax, ImPlotCond.Always);
 
-            // Plot probability traces
-            PlotRollingLine(trialIndices, pRewardLeft, "P(Reward Left)", LeftChoiceColor);
-            PlotRollingLine(trialIndices, pRewardRight, "P(Reward Right)", RightChoiceColor);
+            ImPlot.SetupAxis(ImAxis.Y2, "P(Reward)", ImPlotAxisFlags.Opposite);
+            var y2Max = (YAxisMax - 1.0) * 2 + 1.0;
+            // Align 0.5 to 0, 1 to 1 and 0 to -1
+            ImPlot.SetupAxisLimits(ImAxis.Y2, -y2Max, y2Max, ImPlotCond.Always);
+            ImPlot.SetAxes(ImAxis.X1, ImAxis.Y2);
+            PlotProbabilityBars(trialIndices, pRewardRight, 1, RightChoiceColor, "P(Reward Right)");
+            PlotProbabilityBars(trialIndices, pRewardLeft, -1, LeftChoiceColor, "P(Reward Left)");
+
+            // Switch back to Y1 for everything else
+            ImPlot.SetAxes(ImAxis.X1, ImAxis.Y1);
 
             PlotRollingLine(trialIndices, rollingChoiceAvg, "Right Choice Rate", ProbabilityTraceColor);
             PlotRollingLine(trialIndices, rollingRewardRate, "Reward Rate", RewardRateLineColor);
