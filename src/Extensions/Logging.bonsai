@@ -784,6 +784,13 @@
                             </Edges>
                           </Workflow>
                         </Expression>
+                        <Expression xsi:type="GroupWorkflow">
+                          <Name>AdditionalSoftwareEvents</Name>
+                          <Workflow>
+                            <Nodes />
+                            <Edges />
+                          </Workflow>
+                        </Expression>
                       </Nodes>
                       <Edges>
                         <Edge From="0" To="2" Label="Source1" />
