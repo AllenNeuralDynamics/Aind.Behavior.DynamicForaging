@@ -66,7 +66,7 @@ class QuiescentPeriod(BaseModel):
 class Block(BaseModel):
     right_reward_prob: float
     left_reward_prob: float
-    length: int
+    min_length: int
 
 
 class CoupledTrialGeneratorModel(_BaseTrialGeneratorSpecModel):
@@ -142,6 +142,8 @@ class CoupledTrialGenerator(_ITrialGenerator):
         else: 
             raise ValueError(f"Randomness mode {self.spec.randomness} not recognized.")
         
+        self.trials_in_block += 1
+
         return Trial(
             has_reward_left= [self.block.left_reward_prob] > np.random.random(1), 
             has_reward_right=[self.block.right_reward_prob] > np.random.random(1),
@@ -337,7 +339,9 @@ class CoupledTrialGenerator(_ITrialGenerator):
         #   - planned block length reached
         #   - minimum reward requirement is reached
         #   - behavior is stable
+
         return block_length_ok and reward_ok and behavior_ok
+       
 
     def generate_block(
         reward_families: list,
@@ -403,4 +407,4 @@ class CoupledTrialGenerator(_ITrialGenerator):
         # clip to maximum
         next_block_len = min(next_block_len, block_max)
 
-        return Block(right_reward_prob=right_reward_prob, left_reward_prob=left_reward_prob, length=next_block_len)
+        return Block(right_reward_prob=right_reward_prob, left_reward_prob=left_reward_prob, min_length=next_block_len)
