@@ -1,7 +1,7 @@
 from typing import Literal
 
 from ..trial_models import Trial, TrialOutcome
-from ._base import _BaseTrialGeneratorSpecModel, _ITrialGenerator
+from ._base import ITrialGenerator, _BaseTrialGeneratorSpecModel
 
 
 class DummyTrialGeneratorModel(_BaseTrialGeneratorSpecModel):
@@ -11,7 +11,7 @@ class DummyTrialGeneratorModel(_BaseTrialGeneratorSpecModel):
         return DummyTrialGenerator(self)
 
 
-class DummyTrialGenerator(_ITrialGenerator):
+class DummyTrialGenerator(ITrialGenerator):
     def __init__(self, spec: DummyTrialGeneratorModel) -> None:
         self._spec = spec
         self._idx = 0
@@ -20,7 +20,7 @@ class DummyTrialGenerator(_ITrialGenerator):
         if self._idx >= 10:
             return None
         else:
-            return Trial(has_reward_left=self._idx % 2 == 0, has_reward_right=self._idx % 2 == 1)
+            return Trial(p_reward_left=self._idx % 2 == 0, has_reward_right=self._idx % 2 == 1)
 
     def update(self, outcome: TrialOutcome) -> None:
         self._idx += 1

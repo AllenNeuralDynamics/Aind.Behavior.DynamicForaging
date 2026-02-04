@@ -19,7 +19,7 @@ version = "0.0.2rc4"
 readme = {file = "README.md", content-type = "text/markdown"}
 
 dependencies = [
-"aind_behavior_services @git+https://github.com/AllenNeuralDynamics/Aind.Behavior.Services@0e3d08a4162afc5d0118dc5c1eb589e983b83c44",
+"aind_behavior_services<0.14",
 "pydantic-settings",
 ]
 
@@ -67,3 +67,4 @@ ignore-words-list = 'nd'
 [tool.uv]
 default-groups = ['dev']
 required-version = '>=0.8.4'
+

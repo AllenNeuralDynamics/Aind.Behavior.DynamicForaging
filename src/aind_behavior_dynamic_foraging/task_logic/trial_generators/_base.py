@@ -10,11 +10,11 @@ class _BaseTrialGeneratorSpecModel(BaseModel, abc.ABC):
     type: str
 
     @abc.abstractmethod
-    def create_generator(self) -> "_ITrialGenerator":
+    def create_generator(self) -> "ITrialGenerator":
         pass
 
 
-class _ITrialGenerator(Protocol):
+class ITrialGenerator(Protocol):
     def next(self) -> Trial | None: ...
 
     def update(self, outcome: TrialOutcome) -> None: ...

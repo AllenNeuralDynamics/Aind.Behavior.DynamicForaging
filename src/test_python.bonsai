@@ -11,39 +11,45 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="py:CreateRuntime">
           <py:PythonHome>../.venv</py:PythonHome>
-          <py:ScriptPath />
+          <py:ScriptPath>./Extensions\bonsai.py</py:ScriptPath>
         </Combinator>
       </Expression>
-      <Expression xsi:type="rx:BehaviorSubject">
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:Take">
+          <rx:Count>1</rx:Count>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="rx:ResourceSubject">
+        <Name>PythonRuntime</Name>
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
         <Name>PythonRuntime</Name>
       </Expression>
       <Expression xsi:type="Combinator">
-        <Combinator xsi:type="py:Exec">
-          <py:Script>from aind_behavior_dynamic_foraging.task_logic.trial_generators import resolve_generator</py:Script>
+        <Combinator xsi:type="py:Get">
+          <py:VariableName>resolve_generator</py:VariableName>
         </Combinator>
       </Expression>
-      <Expression xsi:type="rx:BehaviorSubject">
-        <Name>Module</Name>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="py:ObserveOnGIL" />
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="p1:DummyTrialGeneratorModel" />
       </Expression>
       <Expression xsi:type="p1:MatchTrialGeneratorSpec" />
-      <Expression xsi:type="SubscribeSubject">
-        <Name>Module</Name>
-      </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:Zip" />
       </Expression>
       <Expression xsi:type="Combinator">
-        <Combinator xsi:type="p2:ResolveGenerator">
-          <p2:MethodName>resolve_generator</p2:MethodName>
+        <Combinator xsi:type="p2:InvokeMethod">
+          <p2:MethodName>__call__</p2:MethodName>
+          <p2:AttemptSerialization>true</p2:AttemptSerialization>
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="p2:InvokeMethod">
           <p2:MethodName>next</p2:MethodName>
-          <p2:ForceSerialization>true</p2:ForceSerialization>
+          <p2:AttemptSerialization>true</p2:AttemptSerialization>
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
@@ -68,26 +74,32 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="p2:InvokeMethod">
           <p2:MethodName>update</p2:MethodName>
-          <p2:ForceSerialization>true</p2:ForceSerialization>
+          <p2:AttemptSerialization>true</p2:AttemptSerialization>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="IntProperty">
+          <Value>0</Value>
         </Combinator>
       </Expression>
     </Nodes>
     <Edges>
       <Edge From="0" To="1" Label="Source1" />
       <Edge From="1" To="2" Label="Source1" />
-      <Edge From="2" To="3" Label="Source1" />
+      <Edge From="3" To="4" Label="Source1" />
       <Edge From="4" To="5" Label="Source1" />
-      <Edge From="5" To="7" Label="Source1" />
-      <Edge From="6" To="7" Label="Source2" />
-      <Edge From="7" To="8" Label="Source1" />
+      <Edge From="5" To="8" Label="Source1" />
+      <Edge From="6" To="7" Label="Source1" />
+      <Edge From="7" To="8" Label="Source2" />
       <Edge From="8" To="9" Label="Source1" />
-      <Edge From="8" To="13" Label="Source1" />
       <Edge From="9" To="10" Label="Source1" />
+      <Edge From="9" To="14" Label="Source1" />
       <Edge From="10" To="11" Label="Source1" />
-      <Edge From="10" To="12" Label="Source1" />
-      <Edge From="11" To="12" Label="Source2" />
+      <Edge From="11" To="12" Label="Source1" />
+      <Edge From="11" To="13" Label="Source1" />
       <Edge From="12" To="13" Label="Source2" />
-      <Edge From="13" To="14" Label="Source1" />
+      <Edge From="13" To="14" Label="Source2" />
+      <Edge From="14" To="15" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>

@@ -34,12 +34,17 @@ public class DeserializeFromPyObject : SingleArgumentExpressionBuilder
             Enumerable.Single(arguments));
     }
 
-    private static IObservable<TSerializable> Process<TSerializable>(IObservable<PyObject> source)
+    private static IObservable<TSerializable> Process<TSerializable>(IObservable<PyObject> source) where TSerializable : class
     {
         return source.Select(value =>
         {
             using (Py.GIL())
             {
+                bool isNone = value.IsNone();
+                if (isNone)
+                {
+                    return default(TSerializable); // I am assuming we are not using value types here
+                }
                 var serialized = value.InvokeMethod("model_dump_json").As<string>();
                 return Newtonsoft.Json.JsonConvert.DeserializeObject<TSerializable>(serialized);
             }
