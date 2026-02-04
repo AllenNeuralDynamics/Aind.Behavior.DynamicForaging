@@ -176,7 +176,7 @@ class CoupledTrialGenerator(_ITrialGenerator):
             right_reward_prob=self.block.right_reward_prob,
             left_reward_prob=self.block.left_reward_prob,
             beh_eval_mode=self.spec.behavior_evaluation_mode,
-            block_length=self.block.length,
+            block_length=self.block.min_length,
             points_in_a_row=self.spec.points_in_a_row,
             switch_thr=self.spec.switch_thr,
             kernel_size=self.spec.kernel_size,

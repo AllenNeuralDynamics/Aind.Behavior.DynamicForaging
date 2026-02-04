@@ -62,10 +62,6 @@ class DummyTrialGenerator3(_ITrialGenerator):
         
         return self.trial_opts[self._idx]
 
-    def update(self, outcome: TrialOutcome, idx: int = None) -> None:
+    def update(self, outcome: TrialOutcome) -> None:
         
-        if idx:
-            self._idx = idx
-        
-        else:
-            self._idx += 1
+        self._idx += 1
