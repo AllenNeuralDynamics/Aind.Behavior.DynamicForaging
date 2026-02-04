@@ -41,6 +41,7 @@ public class TrialOutcomeVisualizer : BufferedVisualizer
     private static readonly Vector4 NoChoiceColor = new Vector4(0.5f, 0.5f, 0.5f, 1.0f);           // Gray
     private static readonly Vector4 RightChoiceLineColor = new Vector4(0.0f, 0.6f, 0.0f, 1.0f);    // Green for right avg
     private static readonly Vector4 RewardRateLineColor = new Vector4(0.0f, 0.0f, 0.8f, 1.0f);     // Blue for reward rate
+    private static readonly Vector4 ProbabilityTraceColor = new Vector4(0.0f, 0.0f, 0.0f, 1.0f);   // Black for probability traces
 
     // Line thickness for rolling averages
     private const float RollingLineThickness = 4.0f;
@@ -149,6 +150,32 @@ public class TrialOutcomeVisualizer : BufferedVisualizer
             {
                 values[i] = null;
             }
+        }
+        return values;
+    }
+
+    /// <summary>
+    /// Extracts PRewardLeft values from trials.
+    /// </summary>
+    private static float[] ExtractPRewardLeft(List<TrialOutcome> trialList)
+    {
+        var values = new float[trialList.Count];
+        for (int i = 0; i < trialList.Count; i++)
+        {
+            values[i] = (float)trialList[i].Trial.PRewardLeft;
+        }
+        return values;
+    }
+
+    /// <summary>
+    /// Extracts PRewardRight values from trials.
+    /// </summary>
+    private static float[] ExtractPRewardRight(List<TrialOutcome> trialList)
+    {
+        var values = new float[trialList.Count];
+        for (int i = 0; i < trialList.Count; i++)
+        {
+            values[i] = (float)trialList[i].Trial.PRewardRight;
         }
         return values;
     }
@@ -361,6 +388,10 @@ public class TrialOutcomeVisualizer : BufferedVisualizer
         var rollingChoiceAvg = ComputeRollingAverage(choiceValues, RollingWindowSize);
         var rollingRewardRate = ComputeRollingAverage(rewardValues, RollingWindowSize);
 
+        // Extract probability traces
+        var pRewardLeft = ExtractPRewardLeft(trials);
+        var pRewardRight = ExtractPRewardRight(trials);
+
         // Categorize trials
         List<float> rightRewardedX;
         List<float> rightUnrewardedX;
@@ -385,7 +416,11 @@ public class TrialOutcomeVisualizer : BufferedVisualizer
             ImPlot.SetupAxes("Trial", "P(Right)");
             ImPlot.SetupAxisLimits(ImAxis.Y1, YAxisMin, YAxisMax, ImPlotCond.Always);
 
-            PlotRollingLine(trialIndices, rollingChoiceAvg, "Right Choice Rate", RightChoiceLineColor);
+            // Plot probability traces
+            PlotRollingLine(trialIndices, pRewardLeft, "P(Reward Left)", LeftChoiceColor);
+            PlotRollingLine(trialIndices, pRewardRight, "P(Reward Right)", RightChoiceColor);
+
+            PlotRollingLine(trialIndices, rollingChoiceAvg, "Right Choice Rate", ProbabilityTraceColor);
             PlotRollingLine(trialIndices, rollingRewardRate, "Reward Rate", RewardRateLineColor);
 
             // Right choices: bars extend upward from Y=1 (past 1)

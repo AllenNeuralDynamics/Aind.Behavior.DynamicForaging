@@ -20,7 +20,7 @@ class DummyTrialGenerator(ITrialGenerator):
         if self._idx >= 10:
             return None
         else:
-            return Trial(has_reward_left=self._idx % 2 == 0, has_reward_right=self._idx % 2 == 1)
+            return Trial(p_reward_left=self._idx % 2 == 0, has_reward_right=self._idx % 2 == 1)
 
     def update(self, outcome: TrialOutcome) -> None:
         self._idx += 1

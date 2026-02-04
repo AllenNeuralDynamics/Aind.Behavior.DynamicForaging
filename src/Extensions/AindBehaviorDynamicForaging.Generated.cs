@@ -49,7 +49,7 @@ namespace AindDynamicForagingDataSchema
     
         public AindDynamicForagingRig()
         {
-            _aindBehaviorServicesPkgVersion = "0.13.0-rc2";
+            _aindBehaviorServicesPkgVersion = "0.13.0";
             _version = "0.0.2-rc3";
             _triggeredCameraController = new CameraControllerSpinnakerCamera();
             _harpBehavior = new HarpBehavior();
@@ -620,7 +620,7 @@ namespace AindDynamicForagingDataSchema
     
         public AindDynamicForagingTaskParameters()
         {
-            _aindBehaviorServicesPkgVersion = "0.13.0-rc2";
+            _aindBehaviorServicesPkgVersion = "0.13.0";
             _blockParameters = new BlockParameters();
             _rewardProbability = new RewardProbability();
             _randomness = AindDynamicForagingTaskParametersRandomness.Exponential;
@@ -4379,8 +4379,8 @@ namespace AindDynamicForagingDataSchema
     
         public Session()
         {
-            _aindBehaviorServicesPkgVersion = "0.13.0-rc2";
-            _version = "0.13.0-rc2";
+            _aindBehaviorServicesPkgVersion = "0.13.0";
+            _version = "0.13.0";
             _experimenter = new System.Collections.Generic.List<string>();
             _allowDirtyRepo = false;
             _skipHardwareValidation = false;
@@ -5416,9 +5416,9 @@ namespace AindDynamicForagingDataSchema
     public partial class Trial
     {
     
-        private bool _hasRewardLeft;
+        private double _pRewardLeft;
     
-        private bool _hasRewardRight;
+        private double _pRewardRight;
     
         private double _rewardConsumptionDuration;
     
@@ -5442,8 +5442,8 @@ namespace AindDynamicForagingDataSchema
     
         public Trial()
         {
-            _hasRewardLeft = true;
-            _hasRewardRight = true;
+            _pRewardLeft = 1D;
+            _pRewardRight = 1D;
             _rewardConsumptionDuration = 5D;
             _rewardDelayDuration = 0D;
             _responseDeadlineDuration = 5D;
@@ -5455,8 +5455,8 @@ namespace AindDynamicForagingDataSchema
     
         protected Trial(Trial other)
         {
-            _hasRewardLeft = other._hasRewardLeft;
-            _hasRewardRight = other._hasRewardRight;
+            _pRewardLeft = other._pRewardLeft;
+            _pRewardRight = other._pRewardRight;
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
             _rewardDelayDuration = other._rewardDelayDuration;
             _secondaryReinforcer = other._secondaryReinforcer;
@@ -5470,36 +5470,36 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Indicates if there is a reward on the left side if response is made.
+        /// The probability of reward on the left side if response is made.
         /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("has_reward_left")]
-        [System.ComponentModel.DescriptionAttribute("Indicates if there is a reward on the left side if response is made.")]
-        public bool HasRewardLeft
+        [Newtonsoft.Json.JsonPropertyAttribute("p_reward_left")]
+        [System.ComponentModel.DescriptionAttribute("The probability of reward on the left side if response is made.")]
+        public double PRewardLeft
         {
             get
             {
-                return _hasRewardLeft;
+                return _pRewardLeft;
             }
             set
             {
-                _hasRewardLeft = value;
+                _pRewardLeft = value;
             }
         }
     
         /// <summary>
-        /// Indicates if there is a reward on the right side if response is made.
+        /// The probability of reward on the right side if response is made.
         /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("has_reward_right")]
-        [System.ComponentModel.DescriptionAttribute("Indicates if there is a reward on the right side if response is made.")]
-        public bool HasRewardRight
+        [Newtonsoft.Json.JsonPropertyAttribute("p_reward_right")]
+        [System.ComponentModel.DescriptionAttribute("The probability of reward on the right side if response is made.")]
+        public double PRewardRight
         {
             get
             {
-                return _hasRewardRight;
+                return _pRewardRight;
             }
             set
             {
-                _hasRewardRight = value;
+                _pRewardRight = value;
             }
         }
     
@@ -5691,8 +5691,8 @@ namespace AindDynamicForagingDataSchema
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("HasRewardLeft = " + _hasRewardLeft + ", ");
-            stringBuilder.Append("HasRewardRight = " + _hasRewardRight + ", ");
+            stringBuilder.Append("PRewardLeft = " + _pRewardLeft + ", ");
+            stringBuilder.Append("PRewardRight = " + _pRewardRight + ", ");
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
             stringBuilder.Append("RewardDelayDuration = " + _rewardDelayDuration + ", ");
             stringBuilder.Append("SecondaryReinforcer = " + _secondaryReinforcer + ", ");

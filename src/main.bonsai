@@ -1141,9 +1141,10 @@
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="rx:Zip" />
                         </Expression>
-                        <Expression xsi:type="scr:ExpressionTransform">
-                          <scr:Name>Determine Reward</scr:Name>
-                          <scr:Expression>it.Item1.HasValue ? (it.Item1.Value ? it.Item2.HasRewardRight : it.Item2.HasRewardLeft) : false</scr:Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="p7:DetermineReward">
+                            <p7:MyProperty />
+                          </Combinator>
                         </Expression>
                         <Expression xsi:type="SubscribeSubject">
                           <Name>response</Name>

@@ -28,11 +28,11 @@ else:
 class Trial(BaseModel):
     """Represents a single trial that can be instantiated by the Bonsai state machine."""
 
-    has_reward_left: bool = Field(
-        default=True, description="Indicates if there is a reward on the left side if response is made."
+    p_reward_left: float = Field(
+        default=1.0, ge=0, le=1, description="The probability of reward on the left side if response is made."
     )
-    has_reward_right: bool = Field(
-        default=True, description="Indicates if there is a reward on the right side if response is made."
+    p_reward_right: float = Field(
+        default=1.0, ge=0, le=1, description="The probability of reward on the right side if response is made."
     )
     reward_consumption_duration: float = Field(
         default=5.0, ge=0, description="Duration of reward consumption before transition to ITI (in seconds)."

@@ -11,7 +11,7 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="py:CreateRuntime">
           <py:PythonHome>../.venv</py:PythonHome>
-          <py:ScriptPath>Extensions\bonsai.py</py:ScriptPath>
+          <py:ScriptPath>./Extensions\bonsai.py</py:ScriptPath>
         </Combinator>
       </Expression>
       <Expression xsi:type="rx:BehaviorSubject">
