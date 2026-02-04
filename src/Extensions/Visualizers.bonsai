@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WorkflowBuilder Version="2.9.0"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
+                 xmlns:p1="clr-namespace:;assembly=Extensions"
+                 xmlns="https://bonsai-rx.org/2018/workflow">
+  <Workflow>
+    <Nodes>
+      <Expression xsi:type="WorkflowInput">
+        <Name>Source1</Name>
+      </Expression>
+      <Expression xsi:type="rx:Visualizer">
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>TriggeredCamerasStream</Name>
+            </Expression>
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\SpinnakerCameraControllerSaturationVisualizer.bonsai" />
+            <Expression xsi:type="SubscribeSubject">
+              <Name>GlobalTrial</Name>
+            </Expression>
+            <Expression xsi:type="p1:TrialTableVisualizerBuilder">
+              <p1:History>3</p1:History>
+              <p1:FontSize>16</p1:FontSize>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>GlobalTrialOutcome</Name>
+            </Expression>
+            <Expression xsi:type="p1:TrialOutcomeVisualizerBuilder">
+              <p1:FontSize>16</p1:FontSize>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>SoftwareEvent</Name>
+            </Expression>
+            <Expression xsi:type="p1:SoftwareEventVisualizerBuilder">
+              <p1:FontSize>16</p1:FontSize>
+              <p1:TimeWindow>30</p1:TimeWindow>
+              <p1:ShadedAreaPlotters />
+              <p1:PointPlotters />
+              <p1:MaxTrials>0</p1:MaxTrials>
+            </Expression>
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="2" To="3" Label="Source1" />
+            <Edge From="4" To="5" Label="Source1" />
+            <Edge From="6" To="7" Label="Source1" />
+          </Edges>
+        </Workflow>
+      </Expression>
+      <Expression xsi:type="WorkflowOutput" />
+    </Nodes>
+    <Edges>
+      <Edge From="0" To="1" Label="Source1" />
+      <Edge From="1" To="2" Label="Source1" />
+    </Edges>
+  </Workflow>
+</WorkflowBuilder>
