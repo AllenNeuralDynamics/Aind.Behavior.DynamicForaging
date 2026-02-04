@@ -3,7 +3,7 @@
     "AindDynamicForagingRig": {
       "properties": {
         "aind_behavior_services_pkg_version": {
-          "default": "0.13.0-rc2",
+          "default": "0.13.0",
           "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
           "title": "aind_behavior_services package version",
           "type": "string"
@@ -180,7 +180,7 @@
           "title": "Rng Seed"
         },
         "aind_behavior_services_pkg_version": {
-          "default": "0.13.0-rc2",
+          "default": "0.13.0",
           "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
           "title": "aind_behavior_services package version",
           "type": "string"
@@ -333,6 +333,13 @@
             }
           ],
           "title": "Lick Spout Retraction"
+        },
+        "trial_generator": {
+          "$ref": "#/$defs/TrialGeneratorSpec",
+          "default": {
+            "type": "DummyTrialGenerator"
+          },
+          "description": "Trial generator model for generating trials in the task."
         }
       },
       "title": "AindDynamicForagingTaskParameters",
@@ -871,6 +878,30 @@
         }
       },
       "title": "DelayPeriod",
+      "type": "object"
+    },
+    "DummyTrialGeneratorModel": {
+      "properties": {
+        "type": {
+          "const": "DummyTrialGenerator",
+          "default": "DummyTrialGenerator",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "title": "DummyTrialGeneratorModel",
+      "type": "object"
+    },
+    "DummyTrialGeneratorModel2": {
+      "properties": {
+        "type": {
+          "const": "DummyTrialGenerator2",
+          "default": "DummyTrialGenerator2",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "title": "DummyTrialGeneratorModel2",
       "type": "object"
     },
     "HarpBehavior": {
@@ -1451,14 +1482,14 @@
     "Session": {
       "properties": {
         "aind_behavior_services_pkg_version": {
-          "default": "0.13.0-rc2",
+          "default": "0.13.0",
           "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
           "title": "aind_behavior_services package version",
           "type": "string"
         },
         "version": {
-          "const": "0.13.0-rc2",
-          "default": "0.13.0-rc2",
+          "const": "0.13.0",
+          "default": "0.13.0",
           "title": "Version",
           "type": "string"
         },
@@ -1992,17 +2023,21 @@
     "Trial": {
       "description": "Represents a single trial that can be instantiated by the Bonsai state machine.",
       "properties": {
-        "has_reward_left": {
-          "default": true,
-          "description": "Indicates if there is a reward on the left side if response is made.",
-          "title": "Has Reward Left",
-          "type": "boolean"
+        "p_reward_left": {
+          "default": 1.0,
+          "description": "The probability of reward on the left side if response is made.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "P Reward Left",
+          "type": "number"
         },
-        "has_reward_right": {
-          "default": true,
-          "description": "Indicates if there is a reward on the right side if response is made.",
-          "title": "Has Reward Right",
-          "type": "boolean"
+        "p_reward_right": {
+          "default": 1.0,
+          "description": "The probability of reward on the right side if response is made.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "P Reward Right",
+          "type": "number"
         },
         "reward_consumption_duration": {
           "default": 5.0,
@@ -2090,6 +2125,24 @@
       },
       "title": "Trial",
       "type": "object"
+    },
+    "TrialGeneratorSpec": {
+      "description": "Type of trial generator",
+      "discriminator": {
+        "mapping": {
+          "DummyTrialGenerator": "#/$defs/DummyTrialGeneratorModel",
+          "DummyTrialGenerator2": "#/$defs/DummyTrialGeneratorModel2"
+        },
+        "propertyName": "type"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/DummyTrialGeneratorModel"
+        },
+        {
+          "$ref": "#/$defs/DummyTrialGeneratorModel2"
+        }
+      ]
     },
     "TrialOutcome": {
       "description": "Represents the outcome of a single trial.",

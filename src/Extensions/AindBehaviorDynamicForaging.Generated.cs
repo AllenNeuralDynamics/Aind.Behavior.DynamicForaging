@@ -49,8 +49,8 @@ namespace AindDynamicForagingDataSchema
     
         public AindDynamicForagingRig()
         {
-            _aindBehaviorServicesPkgVersion = "0.13.0-rc2";
-            _version = "0.0.2-rc4";
+            _aindBehaviorServicesPkgVersion = "0.13.0";
+            _version = "0.0.2-rc3";
             _triggeredCameraController = new CameraControllerSpinnakerCamera();
             _harpBehavior = new HarpBehavior();
             _harpLickometerLeft = new HarpLicketySplit();
@@ -616,9 +616,11 @@ namespace AindDynamicForagingDataSchema
     
         private bool? _lickSpoutRetraction;
     
+        private TrialGeneratorSpec _trialGenerator;
+    
         public AindDynamicForagingTaskParameters()
         {
-            _aindBehaviorServicesPkgVersion = "0.13.0-rc2";
+            _aindBehaviorServicesPkgVersion = "0.13.0";
             _blockParameters = new BlockParameters();
             _rewardProbability = new RewardProbability();
             _randomness = AindDynamicForagingTaskParametersRandomness.Exponential;
@@ -628,6 +630,7 @@ namespace AindDynamicForagingDataSchema
             _rewardSize = new RewardSize();
             _noResponseTrialAddition = true;
             _lickSpoutRetraction = false;
+            _trialGenerator = new TrialGeneratorSpec();
         }
     
         protected AindDynamicForagingTaskParameters(AindDynamicForagingTaskParameters other)
@@ -649,6 +652,7 @@ namespace AindDynamicForagingDataSchema
             _noResponseTrialAddition = other._noResponseTrialAddition;
             _rewardN = other._rewardN;
             _lickSpoutRetraction = other._lickSpoutRetraction;
+            _trialGenerator = other._trialGenerator;
         }
     
         /// <summary>
@@ -931,6 +935,24 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
+        /// <summary>
+        /// Trial generator model for generating trials in the task.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("trial_generator")]
+        [System.ComponentModel.DescriptionAttribute("Trial generator model for generating trials in the task.")]
+        public TrialGeneratorSpec TrialGenerator
+        {
+            get
+            {
+                return _trialGenerator;
+            }
+            set
+            {
+                _trialGenerator = value;
+            }
+        }
+    
         public System.IObservable<AindDynamicForagingTaskParameters> Generate()
         {
             return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new AindDynamicForagingTaskParameters(this)));
@@ -959,7 +981,8 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("Warmup = " + _warmup + ", ");
             stringBuilder.Append("NoResponseTrialAddition = " + _noResponseTrialAddition + ", ");
             stringBuilder.Append("RewardN = " + _rewardN + ", ");
-            stringBuilder.Append("LickSpoutRetraction = " + _lickSpoutRetraction);
+            stringBuilder.Append("LickSpoutRetraction = " + _lickSpoutRetraction + ", ");
+            stringBuilder.Append("TrialGenerator = " + _trialGenerator);
             return true;
         }
     
@@ -2410,6 +2433,70 @@ namespace AindDynamicForagingDataSchema
             }
             stringBuilder.Append("}");
             return stringBuilder.ToString();
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class DummyTrialGeneratorModel : TrialGeneratorSpec
+    {
+    
+        public DummyTrialGeneratorModel()
+        {
+        }
+    
+        protected DummyTrialGeneratorModel(DummyTrialGeneratorModel other) : 
+                base(other)
+        {
+        }
+    
+        public System.IObservable<DummyTrialGeneratorModel> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new DummyTrialGeneratorModel(this)));
+        }
+    
+        public System.IObservable<DummyTrialGeneratorModel> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new DummyTrialGeneratorModel(this));
+        }
+    
+        protected override bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            return base.PrintMembers(stringBuilder);
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class DummyTrialGeneratorModel2 : TrialGeneratorSpec
+    {
+    
+        public DummyTrialGeneratorModel2()
+        {
+        }
+    
+        protected DummyTrialGeneratorModel2(DummyTrialGeneratorModel2 other) : 
+                base(other)
+        {
+        }
+    
+        public System.IObservable<DummyTrialGeneratorModel2> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new DummyTrialGeneratorModel2(this)));
+        }
+    
+        public System.IObservable<DummyTrialGeneratorModel2> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new DummyTrialGeneratorModel2(this));
+        }
+    
+        protected override bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            return base.PrintMembers(stringBuilder);
         }
     }
 
@@ -4292,8 +4379,8 @@ namespace AindDynamicForagingDataSchema
     
         public Session()
         {
-            _aindBehaviorServicesPkgVersion = "0.13.0-rc2";
-            _version = "0.13.0-rc2";
+            _aindBehaviorServicesPkgVersion = "0.13.0";
+            _version = "0.13.0";
             _experimenter = new System.Collections.Generic.List<string>();
             _allowDirtyRepo = false;
             _skipHardwareValidation = false;
@@ -5329,9 +5416,9 @@ namespace AindDynamicForagingDataSchema
     public partial class Trial
     {
     
-        private bool _hasRewardLeft;
+        private double _pRewardLeft;
     
-        private bool _hasRewardRight;
+        private double _pRewardRight;
     
         private double _rewardConsumptionDuration;
     
@@ -5355,8 +5442,8 @@ namespace AindDynamicForagingDataSchema
     
         public Trial()
         {
-            _hasRewardLeft = true;
-            _hasRewardRight = true;
+            _pRewardLeft = 1D;
+            _pRewardRight = 1D;
             _rewardConsumptionDuration = 5D;
             _rewardDelayDuration = 0D;
             _responseDeadlineDuration = 5D;
@@ -5368,8 +5455,8 @@ namespace AindDynamicForagingDataSchema
     
         protected Trial(Trial other)
         {
-            _hasRewardLeft = other._hasRewardLeft;
-            _hasRewardRight = other._hasRewardRight;
+            _pRewardLeft = other._pRewardLeft;
+            _pRewardRight = other._pRewardRight;
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
             _rewardDelayDuration = other._rewardDelayDuration;
             _secondaryReinforcer = other._secondaryReinforcer;
@@ -5383,36 +5470,36 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Indicates if there is a reward on the left side if response is made.
+        /// The probability of reward on the left side if response is made.
         /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("has_reward_left")]
-        [System.ComponentModel.DescriptionAttribute("Indicates if there is a reward on the left side if response is made.")]
-        public bool HasRewardLeft
+        [Newtonsoft.Json.JsonPropertyAttribute("p_reward_left")]
+        [System.ComponentModel.DescriptionAttribute("The probability of reward on the left side if response is made.")]
+        public double PRewardLeft
         {
             get
             {
-                return _hasRewardLeft;
+                return _pRewardLeft;
             }
             set
             {
-                _hasRewardLeft = value;
+                _pRewardLeft = value;
             }
         }
     
         /// <summary>
-        /// Indicates if there is a reward on the right side if response is made.
+        /// The probability of reward on the right side if response is made.
         /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("has_reward_right")]
-        [System.ComponentModel.DescriptionAttribute("Indicates if there is a reward on the right side if response is made.")]
-        public bool HasRewardRight
+        [Newtonsoft.Json.JsonPropertyAttribute("p_reward_right")]
+        [System.ComponentModel.DescriptionAttribute("The probability of reward on the right side if response is made.")]
+        public double PRewardRight
         {
             get
             {
-                return _hasRewardRight;
+                return _pRewardRight;
             }
             set
             {
-                _hasRewardRight = value;
+                _pRewardRight = value;
             }
         }
     
@@ -5604,8 +5691,8 @@ namespace AindDynamicForagingDataSchema
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("HasRewardLeft = " + _hasRewardLeft + ", ");
-            stringBuilder.Append("HasRewardRight = " + _hasRewardRight + ", ");
+            stringBuilder.Append("PRewardLeft = " + _pRewardLeft + ", ");
+            stringBuilder.Append("PRewardRight = " + _pRewardRight + ", ");
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
             stringBuilder.Append("RewardDelayDuration = " + _rewardDelayDuration + ", ");
             stringBuilder.Append("SecondaryReinforcer = " + _secondaryReinforcer + ", ");
@@ -5617,6 +5704,53 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("LickspoutOffset = " + _lickspoutOffset + ", ");
             stringBuilder.Append("ExtraMetadata = " + _extraMetadata);
             return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Newtonsoft.Json.JsonConverter(typeof(JsonInheritanceConverter), "type")]
+    [JsonInheritanceAttribute("DummyTrialGenerator", typeof(DummyTrialGeneratorModel))]
+    [JsonInheritanceAttribute("DummyTrialGenerator2", typeof(DummyTrialGeneratorModel2))]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class TrialGeneratorSpec
+    {
+    
+        public TrialGeneratorSpec()
+        {
+        }
+    
+        protected TrialGeneratorSpec(TrialGeneratorSpec other)
+        {
+        }
+    
+        public System.IObservable<TrialGeneratorSpec> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new TrialGeneratorSpec(this)));
+        }
+    
+        public System.IObservable<TrialGeneratorSpec> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new TrialGeneratorSpec(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            return false;
         }
     
         public override string ToString()
@@ -6693,6 +6827,47 @@ namespace AindDynamicForagingDataSchema
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DefaultPropertyAttribute("Type")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Combinator)]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<DummyTrialGeneratorModel>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<DummyTrialGeneratorModel2>))]
+    public partial class MatchTrialGeneratorSpec : Bonsai.Expressions.SingleArgumentExpressionBuilder
+    {
+    
+        public Bonsai.Expressions.TypeMapping Type { get; set; }
+
+        public override System.Linq.Expressions.Expression Build(System.Collections.Generic.IEnumerable<System.Linq.Expressions.Expression> arguments)
+        {
+            var typeMapping = Type;
+            var returnType = typeMapping != null ? typeMapping.GetType().GetGenericArguments()[0] : typeof(TrialGeneratorSpec);
+            return System.Linq.Expressions.Expression.Call(
+                typeof(MatchTrialGeneratorSpec),
+                "Process",
+                new System.Type[] { returnType },
+                System.Linq.Enumerable.Single(arguments));
+        }
+
+    
+        private static System.IObservable<TResult> Process<TResult>(System.IObservable<TrialGeneratorSpec> source)
+            where TResult : TrialGeneratorSpec
+        {
+            return System.Reactive.Linq.Observable.Create<TResult>(observer =>
+            {
+                var sourceObserver = System.Reactive.Observer.Create<TrialGeneratorSpec>(
+                    value =>
+                    {
+                        var match = value as TResult;
+                        if (match != null) observer.OnNext(match);
+                    },
+                    observer.OnError,
+                    observer.OnCompleted);
+                return System.ObservableExtensions.SubscribeSafe(source, sourceObserver);
+            });
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.ComponentModel.DefaultPropertyAttribute("Type")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Combinator)]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriterFfmpeg>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriterOpenCv>))]
     public partial class MatchVideoWriter : Bonsai.Expressions.SingleArgumentExpressionBuilder
@@ -6824,6 +6999,16 @@ namespace AindDynamicForagingDataSchema
             return Process<DelayPeriod>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<DummyTrialGeneratorModel> source)
+        {
+            return Process<DummyTrialGeneratorModel>(source);
+        }
+
+        public System.IObservable<string> Process(System.IObservable<DummyTrialGeneratorModel2> source)
+        {
+            return Process<DummyTrialGeneratorModel2>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<HarpBehavior> source)
         {
             return Process<HarpBehavior>(source);
@@ -6914,6 +7099,11 @@ namespace AindDynamicForagingDataSchema
             return Process<Trial>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<TrialGeneratorSpec> source)
+        {
+            return Process<TrialGeneratorSpec>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<TrialOutcome> source)
         {
             return Process<TrialOutcome>(source);
@@ -6973,6 +7163,8 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CameraControllerWebCamera>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<ConnectedClockOutput>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<DelayPeriod>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<DummyTrialGeneratorModel>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<DummyTrialGeneratorModel2>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpBehavior>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpEnvironmentSensor>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpLicketySplit>))]
@@ -6991,6 +7183,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Session>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<SpinnakerCamera>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Trial>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialOutcome>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriter>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriterFfmpeg>))]

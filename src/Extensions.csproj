@@ -14,5 +14,6 @@
     <PackageReference Include="AllenNeuralDynamics.Core.Design" Version="0.3.0" />
     <PackageReference Include="Bonsai.Dsp.Design" Version="2.9.0" />
     <PackageReference Include="AllenNeuralDynamics.AindBehaviorServices" Version="0.13.0" />
+    <PackageReference Include="pythonnet" Version="3.0.5" />
   </ItemGroup>
 </Project>
