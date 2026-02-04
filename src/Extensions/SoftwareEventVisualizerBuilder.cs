@@ -164,6 +164,12 @@ public class SoftwareEventVisualizerBuilder : ExpressionBuilder
     [Description("Point plotter configurations.")]
     public List<PointPlotter> PointPlotters { get; set; }
 
+    [Description("Software event name that triggers a new trial row. Leave empty to disable trial breaks.")]
+    public string TrialBreakEventName { get; set; }
+
+    [Description("Maximum number of trial rows to display. When exceeded, only the last N trials are shown. 0 = show all.")]
+    public int MaxTrials { get; set; }
+
     /// <inheritdoc/>
     public override Expression Build(IEnumerable<Expression> arguments)
     {

@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 public class SoftwareEventVisualizer : BufferedVisualizer
@@ -28,6 +29,14 @@ public class SoftwareEventVisualizer : BufferedVisualizer
 
     private readonly Dictionary<string, List<EventRecord>> eventHistory = new Dictionary<string, List<EventRecord>>();
     private double latestTimestamp = 0;
+
+    // Trial break support
+    private string trialBreakEventName = "";
+    private int maxTrials = 0;
+    private readonly List<double> trialBreaks = new List<double>();
+
+    private bool HasTrialBreaks { get { return !string.IsNullOrEmpty(trialBreakEventName); } }
+    private int TrialCount { get { return HasTrialBreaks ? trialBreaks.Count + 1 : 1; } }
 
     private struct EventRecord
     {
@@ -86,6 +95,12 @@ public class SoftwareEventVisualizer : BufferedVisualizer
             string name = softwareEvent.Name;
             if (string.IsNullOrEmpty(name)) continue;
 
+            // Detect trial break events
+            if (HasTrialBreaks && name == trialBreakEventName)
+            {
+                trialBreaks.Add(timestamp);
+            }
+
             double value = 0.5;
             if (softwareEvent.Data != null)
             {
@@ -124,6 +139,44 @@ public class SoftwareEventVisualizer : BufferedVisualizer
     }
 
     /// <summary>
+    /// Returns which trial a given timestamp belongs to.
+    /// Trial 0 is before the first break, trial 1 after the first break, etc.
+    /// </summary>
+    private int GetTrialIndex(double timestamp)
+    {
+        if (!HasTrialBreaks || trialBreaks.Count == 0) return 0;
+        for (int i = trialBreaks.Count - 1; i >= 0; i--)
+        {
+            if (timestamp >= trialBreaks[i])
+                return i + 1;
+        }
+        return 0;
+    }
+
+    /// <summary>
+    /// Computes the visible trial range based on MaxTrials rolling window.
+    /// </summary>
+    private void GetVisibleTrialRange(out int firstVisible, out int numVisible)
+    {
+        int total = TrialCount;
+        if (!HasTrialBreaks)
+        {
+            firstVisible = 0;
+            numVisible = 1;
+        }
+        else if (maxTrials > 0 && total > maxTrials)
+        {
+            firstVisible = total - maxTrials;
+            numVisible = maxTrials;
+        }
+        else
+        {
+            firstVisible = 0;
+            numVisible = total;
+        }
+    }
+
+    /// <summary>
     /// Builds a merged timeline of all shaded area events, sorted by timestamp.
     /// </summary>
     private List<ShadedSegment> BuildMergedTimeline()
@@ -155,8 +208,33 @@ public class SoftwareEventVisualizer : BufferedVisualizer
     }
 
     /// <summary>
-    /// Draws shaded areas as mutually exclusive colored regions spanning full Y (0-1).
-    /// Each segment is drawn as a PlotShaded bar using fixed pointers (proven pattern).
+    /// Draws a single shaded rectangle in a given trial row.
+    /// </summary>
+    unsafe private void DrawShadedRect(ShadedAreaPlotter config, double tStart, double tEnd, int trialIndex, ref int labelCounter)
+    {
+        double x0 = ToPlotTime(tStart);
+        double x1 = ToPlotTime(tEnd);
+        double yLow = HasTrialBreaks ? (double)trialIndex : 0.0;
+        double yHigh = HasTrialBreaks ? (double)(trialIndex + 1) : 1.0;
+
+        var color = ToVec4(config.Color);
+        ImPlot.SetNextLineStyle(color, 0f);
+        ImPlot.SetNextFillStyle(color, config.Alpha);
+
+        string label = "##s" + (labelCounter++).ToString();
+
+        fixed (double* xs = new double[] { x0, x1 })
+        fixed (double* ysL = new double[] { yLow, yLow })
+        fixed (double* ysH = new double[] { yHigh, yHigh })
+        {
+            ImPlot.PlotShaded(label, xs, ysL, ysH, 2);
+        }
+    }
+
+    /// <summary>
+    /// Draws shaded areas as mutually exclusive colored regions.
+    /// When trial breaks are active, segments are split at trial boundaries
+    /// and drawn in the corresponding trial row.
     /// </summary>
     unsafe private void DrawAllShadedAreas(double plotTMin, double plotTMax)
     {
@@ -167,6 +245,10 @@ public class SoftwareEventVisualizer : BufferedVisualizer
 
         double absMin = latestTimestamp + plotTMin;
         double absMax = latestTimestamp + plotTMax;
+
+        int firstVisible, numVisible;
+        GetVisibleTrialRange(out firstVisible, out numVisible);
+        int lastVisible = firstVisible + numVisible;
 
         // Find the last event at or before the visible window start
         int startIdx = -1;
@@ -183,6 +265,8 @@ public class SoftwareEventVisualizer : BufferedVisualizer
             startIdx = 0;
         if (startIdx < 0) return;
 
+        int labelCounter = 0;
+
         for (int i = startIdx; i < timeline.Count; i++)
         {
             var segment = timeline[i];
@@ -192,27 +276,38 @@ public class SoftwareEventVisualizer : BufferedVisualizer
             if (segStart >= absMax) break;
             segEnd = Math.Min(segEnd, absMax);
 
-            double x0 = ToPlotTime(segStart);
-            double x1 = ToPlotTime(segEnd);
-
-            var color = ToVec4(segment.Config.Color);
-
-            ImPlot.SetNextLineStyle(color, 0f);
-            ImPlot.SetNextFillStyle(color, segment.Config.Alpha);
-
-            string label = "##shaded_" + i.ToString();
-
-            fixed (double* xs = new double[] { x0, x1 })
-            fixed (double* ysLow = new double[] { 0.0, 0.0 })
-            fixed (double* ysHigh = new double[] { 1.0, 1.0 })
+            if (HasTrialBreaks)
             {
-                ImPlot.PlotShaded(label, xs, ysLow, ysHigh, 2);
+                // Split segment at trial boundaries
+                int startTrial = GetTrialIndex(segStart);
+                double currentStart = segStart;
+                int currentTrial = startTrial;
+
+                while (currentStart < segEnd)
+                {
+                    double trialEnd = (currentTrial < trialBreaks.Count)
+                        ? trialBreaks[currentTrial]
+                        : double.MaxValue;
+                    double currentEnd = Math.Min(trialEnd, segEnd);
+
+                    if (currentTrial >= firstVisible && currentTrial < lastVisible)
+                    {
+                        DrawShadedRect(segment.Config, currentStart, currentEnd, currentTrial, ref labelCounter);
+                    }
+
+                    currentStart = currentEnd;
+                    currentTrial++;
+                }
+            }
+            else
+            {
+                DrawShadedRect(segment.Config, segStart, segEnd, 0, ref labelCounter);
             }
         }
     }
 
     /// <summary>
-    /// Draws point markers using fixed pointers (proven pattern from PatchStateVisualizer).
+    /// Draws scatter markers for a PointPlotter, offset by trial row when active.
     /// </summary>
     unsafe private void DrawPointMarkers(PointPlotter config, double plotTMin, double plotTMax)
     {
@@ -223,6 +318,10 @@ public class SoftwareEventVisualizer : BufferedVisualizer
         double absMin = latestTimestamp + plotTMin;
         double absMax = latestTimestamp + plotTMax;
 
+        int firstVisible, numVisible;
+        GetVisibleTrialRange(out firstVisible, out numVisible);
+        int lastVisible = firstVisible + numVisible;
+
         var xsList = new List<double>();
         var ysList = new List<double>();
 
@@ -230,8 +329,19 @@ public class SoftwareEventVisualizer : BufferedVisualizer
         {
             if (records[i].Timestamp < absMin) continue;
             if (records[i].Timestamp > absMax) continue;
-            xsList.Add(ToPlotTime(records[i].Timestamp));
-            ysList.Add((double)config.YPosition);
+
+            if (HasTrialBreaks)
+            {
+                int trial = GetTrialIndex(records[i].Timestamp);
+                if (trial < firstVisible || trial >= lastVisible) continue;
+                xsList.Add(ToPlotTime(records[i].Timestamp));
+                ysList.Add((double)trial + (double)config.YPosition);
+            }
+            else
+            {
+                xsList.Add(ToPlotTime(records[i].Timestamp));
+                ysList.Add((double)config.YPosition);
+            }
         }
 
         if (xsList.Count == 0) return;
@@ -247,6 +357,50 @@ public class SoftwareEventVisualizer : BufferedVisualizer
         fixed (double* ys = yArr)
         {
             ImPlot.PlotScatter(config.EventName, xs, ys, xArr.Length);
+        }
+    }
+
+    /// <summary>
+    /// Sets up Y axis ticks with trial number labels at the center of each row.
+    /// Tick at position (trialNum + 0.5) labeled as "trialNum".
+    /// </summary>
+    unsafe private void SetupTrialAxisTicks(int firstVisibleTrial, int numVisibleTrials)
+    {
+        if (numVisibleTrials <= 0) return;
+
+        var positions = new double[numVisibleTrials];
+        var labelData = new byte[numVisibleTrials][];
+
+        for (int t = 0; t < numVisibleTrials; t++)
+        {
+            int trialNum = firstVisibleTrial + t;
+            positions[t] = trialNum + 0.5;
+            labelData[t] = System.Text.Encoding.UTF8.GetBytes(trialNum.ToString() + '\0');
+        }
+
+        var handles = new GCHandle[numVisibleTrials];
+        var ptrs = new IntPtr[numVisibleTrials];
+
+        try
+        {
+            for (int t = 0; t < numVisibleTrials; t++)
+            {
+                handles[t] = GCHandle.Alloc(labelData[t], GCHandleType.Pinned);
+                ptrs[t] = handles[t].AddrOfPinnedObject();
+            }
+
+            fixed (double* posPtr = positions)
+            fixed (IntPtr* labelPtrs = ptrs)
+            {
+                ImPlot.SetupAxisTicks(ImAxis.Y1, posPtr, numVisibleTrials, (byte**)labelPtrs, false);
+            }
+        }
+        finally
+        {
+            for (int t = 0; t < numVisibleTrials; t++)
+            {
+                if (handles[t].IsAllocated) handles[t].Free();
+            }
         }
     }
 
@@ -271,13 +425,25 @@ public class SoftwareEventVisualizer : BufferedVisualizer
         double plotTMin = -(double)timeWindow;
         double plotTMax = 0.0;
 
-        ImPlot.SetNextAxesLimits(plotTMin, plotTMax, YAxisMin, YAxisMax, ImPlotCond.Always);
+        // Y axis: single row [0,1] or multiple trial rows
+        int firstVisible, numVisible;
+        GetVisibleTrialRange(out firstVisible, out numVisible);
+
+        double yMin = HasTrialBreaks ? (double)firstVisible : YAxisMin;
+        double yMax = HasTrialBreaks ? (double)(firstVisible + numVisible) : YAxisMax;
+
+        ImPlot.SetNextAxesLimits(plotTMin, plotTMax, yMin, yMax, ImPlotCond.Always);
         if (ImPlot.BeginPlot("Software Events", new Vector2(-1, plotHeight), ImPlotFlags.NoLegend | ImPlotFlags.NoTitle))
         {
-            ImPlot.SetupAxes("Time (s)", "Value");
-            ImPlot.SetupAxisLimits(ImAxis.Y1, YAxisMin, YAxisMax, ImPlotCond.Always);
+            ImPlot.SetupAxes("Time (s)", HasTrialBreaks ? "Trial" : "Value");
+            ImPlot.SetupAxisLimits(ImAxis.Y1, yMin, yMax, ImPlotCond.Always);
 
-            // Draw shaded areas (mutually exclusive timeline)
+            if (HasTrialBreaks && numVisible > 0)
+            {
+                SetupTrialAxisTicks(firstVisible, numVisible);
+            }
+
+            // Draw shaded areas (mutually exclusive timeline, split by trial)
             DrawAllShadedAreas(plotTMin, plotTMax);
 
             // Draw point markers on top
@@ -301,6 +467,8 @@ public class SoftwareEventVisualizer : BufferedVisualizer
             timeWindow = builder.TimeWindow;
             shadedAreaPlotters = builder.ShadedAreaPlotters ?? new List<ShadedAreaPlotter>();
             pointPlotters = builder.PointPlotters ?? new List<PointPlotter>();
+            trialBreakEventName = builder.TrialBreakEventName ?? "";
+            maxTrials = builder.MaxTrials;
         }
 
         imGuiCanvas = new ImGuiControl();
@@ -349,5 +517,6 @@ public class SoftwareEventVisualizer : BufferedVisualizer
             imGuiCanvas.Dispose();
         }
         eventHistory.Clear();
+        trialBreaks.Clear();
     }
 }

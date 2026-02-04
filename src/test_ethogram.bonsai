@@ -39,7 +39,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Timer">
-                <rx:DueTime>PT0.012S</rx:DueTime>
+                <rx:DueTime>PT0.082S</rx:DueTime>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -91,7 +91,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Timer">
-                <rx:DueTime>PT1.508S</rx:DueTime>
+                <rx:DueTime>PT1.511S</rx:DueTime>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -162,7 +162,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Timer">
-                <rx:DueTime>PT2.485S</rx:DueTime>
+                <rx:DueTime>PT1.656S</rx:DueTime>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -203,10 +203,28 @@
       <Expression xsi:type="rx:BehaviorSubject" TypeArguments="p4:SoftwareEvent">
         <rx:Name>SoftwareEvent</rx:Name>
       </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>SoftwareEvent</Name>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:Slice">
+          <rx:Start>0</rx:Start>
+          <rx:Step>5</rx:Step>
+          <rx:Stop xsi:nil="true" />
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p2:CreateSoftwareEvent">
+          <p2:EventName>Break</p2:EventName>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:Merge" />
+      </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:Timer">
           <rx:DueTime>PT0S</rx:DueTime>
-          <rx:Period>PT0.1S</rx:Period>
+          <rx:Period>PT0.05S</rx:Period>
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
@@ -262,6 +280,8 @@
             <p5:Marker>Circle</p5:Marker>
           </p5:PointPlotter>
         </p5:PointPlotters>
+        <p5:TrialBreakEventName>Break</p5:TrialBreakEventName>
+        <p5:MaxTrials>5</p5:MaxTrials>
       </Expression>
     </Nodes>
     <Edges>
@@ -278,10 +298,14 @@
       <Edge From="11" To="12" Label="Source1" />
       <Edge From="12" To="13" Label="Source1" />
       <Edge From="13" To="14" Label="Source2" />
-      <Edge From="14" To="15" Label="Source1" />
+      <Edge From="14" To="18" Label="Source1" />
       <Edge From="15" To="16" Label="Source1" />
-      <Edge From="16" To="18" Label="Source1" />
+      <Edge From="16" To="17" Label="Source1" />
       <Edge From="17" To="18" Label="Source2" />
+      <Edge From="18" To="19" Label="Source1" />
+      <Edge From="19" To="20" Label="Source1" />
+      <Edge From="20" To="22" Label="Source1" />
+      <Edge From="21" To="22" Label="Source2" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>
