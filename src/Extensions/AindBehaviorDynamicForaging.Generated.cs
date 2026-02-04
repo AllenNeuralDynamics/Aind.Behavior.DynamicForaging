@@ -435,7 +435,7 @@ namespace AindDynamicForagingDataSchema
             _name = "AindDynamicForaging";
             _description = "";
             _taskParameters = new AindDynamicForagingTaskParameters();
-            _version = "0.0.2-rc3";
+            _version = "0.0.2-rc4";
         }
     
         protected AindDynamicForagingTaskLogic(AindDynamicForagingTaskLogic other)
