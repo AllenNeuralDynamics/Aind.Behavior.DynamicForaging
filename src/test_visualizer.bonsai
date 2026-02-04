@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WorkflowBuilder Version="2.9.0"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:p1="clr-namespace:Bonsai.Numerics.Distributions;assembly=Bonsai.Numerics"
+                 xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
+                 xmlns:p2="clr-namespace:AindDynamicForagingDataSchema;assembly=Extensions"
+                 xmlns:p3="clr-namespace:;assembly=Extensions"
+                 xmlns="https://bonsai-rx.org/2018/workflow">
+  <Workflow>
+    <Nodes>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p1:CreateContinuousUniform">
+          <p1:Lower>0</p1:Lower>
+          <p1:Upper>1</p1:Upper>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p1:SampleMany">
+          <p1:Count>1000</p1:Count>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="GreaterThan">
+        <Operand xsi:type="DoubleProperty">
+          <Value>0.5</Value>
+        </Operand>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p1:CreateContinuousUniform">
+          <p1:Lower>0</p1:Lower>
+          <p1:Upper>1</p1:Upper>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p1:SampleMany">
+          <p1:Count>1000</p1:Count>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="GreaterThan">
+        <Operand xsi:type="DoubleProperty">
+          <Value>0.5</Value>
+        </Operand>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p1:CreateContinuousUniform">
+          <p1:Lower>0</p1:Lower>
+          <p1:Upper>1</p1:Upper>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p1:SampleMany">
+          <p1:Count>1000</p1:Count>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="GreaterThan">
+        <Operand xsi:type="DoubleProperty">
+          <Value>0.5</Value>
+        </Operand>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:Zip" />
+      </Expression>
+      <Expression xsi:type="InputMapping">
+        <PropertyMappings>
+          <Property Name="IsRightChoice" Selector="Item3" />
+          <Property Name="IsRewarded" Selector="Item5" />
+        </PropertyMappings>
+      </Expression>
+      <Expression xsi:type="InputMapping">
+        <PropertyMappings>
+          <Property Name="PRewardLeft" Selector="Item2" />
+          <Property Name="PRewardRight" Selector="Item4" />
+        </PropertyMappings>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p2:Trial">
+          <p2:PRewardLeft>0.075239107979107239</p2:PRewardLeft>
+          <p2:PRewardRight>0.57995148402636476</p2:PRewardRight>
+          <p2:RewardConsumptionDuration>5</p2:RewardConsumptionDuration>
+          <p2:RewardDelayDuration>0</p2:RewardDelayDuration>
+          <p2:ResponseDeadlineDuration>5</p2:ResponseDeadlineDuration>
+          <p2:EnableFastRetract>false</p2:EnableFastRetract>
+          <p2:QuiescencePeriodDuration>0.5</p2:QuiescencePeriodDuration>
+          <p2:InterTrialIntervalDuration>5</p2:InterTrialIntervalDuration>
+          <p2:IsAutoResponseRight xsi:nil="true" />
+          <p2:LickspoutOffset>0</p2:LickspoutOffset>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="PropertyMapping">
+        <PropertyMappings>
+          <Property Name="Trial" />
+        </PropertyMappings>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p2:TrialOutcome">
+          <p2:IsRightChoice>true</p2:IsRightChoice>
+          <p2:IsRewarded>true</p2:IsRewarded>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="p3:TrialOutcomeVisualizerBuilder">
+        <p3:FontSize>16</p3:FontSize>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="IntProperty">
+          <Value>0</Value>
+        </Combinator>
+      </Expression>
+    </Nodes>
+    <Edges>
+      <Edge From="0" To="1" Label="Source1" />
+      <Edge From="1" To="2" Label="Source1" />
+      <Edge From="1" To="9" Label="Source2" />
+      <Edge From="2" To="9" Label="Source1" />
+      <Edge From="3" To="4" Label="Source1" />
+      <Edge From="4" To="5" Label="Source1" />
+      <Edge From="4" To="9" Label="Source4" />
+      <Edge From="5" To="9" Label="Source3" />
+      <Edge From="6" To="7" Label="Source1" />
+      <Edge From="7" To="8" Label="Source1" />
+      <Edge From="8" To="9" Label="Source5" />
+      <Edge From="9" To="10" Label="Source1" />
+      <Edge From="9" To="11" Label="Source1" />
+      <Edge From="10" To="14" Label="Source1" />
+      <Edge From="11" To="12" Label="Source1" />
+      <Edge From="12" To="13" Label="Source1" />
+      <Edge From="13" To="14" Label="Source2" />
+      <Edge From="14" To="15" Label="Source1" />
+    </Edges>
+  </Workflow>
+</WorkflowBuilder>
