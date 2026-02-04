@@ -39,7 +39,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Timer">
-                <rx:DueTime>PT0.082S</rx:DueTime>
+                <rx:DueTime>PT1.487S</rx:DueTime>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -91,7 +91,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Timer">
-                <rx:DueTime>PT1.511S</rx:DueTime>
+                <rx:DueTime>PT2.15S</rx:DueTime>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -162,7 +162,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Timer">
-                <rx:DueTime>PT1.656S</rx:DueTime>
+                <rx:DueTime>PT1.829S</rx:DueTime>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -248,12 +248,9 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="p2:TimestampSoftwareEvent" />
       </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>Tick</Name>
-      </Expression>
       <Expression xsi:type="p5:SoftwareEventVisualizerBuilder">
         <p5:FontSize>16</p5:FontSize>
-        <p5:TimeWindow>30</p5:TimeWindow>
+        <p5:TimeWindow>10</p5:TimeWindow>
         <p5:ShadedAreaPlotters>
           <p5:ShadedAreaPlotter>
             <p5:EventName>TrialOutcome</p5:EventName>
@@ -304,8 +301,7 @@
       <Edge From="17" To="18" Label="Source2" />
       <Edge From="18" To="19" Label="Source1" />
       <Edge From="19" To="20" Label="Source1" />
-      <Edge From="20" To="22" Label="Source1" />
-      <Edge From="21" To="22" Label="Source2" />
+      <Edge From="20" To="21" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>

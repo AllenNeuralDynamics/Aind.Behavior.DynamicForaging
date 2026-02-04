@@ -1,6 +1,5 @@
-using Bonsai.Design;
+﻿using Bonsai.Design;
 using Bonsai.Expressions;
-using Bonsai.Harp;
 using AllenNeuralDynamics.AindBehaviorServices.DataTypes;
 using AllenNeuralDynamics.Core.Design;
 using Hexa.NET.ImGui;
@@ -26,11 +25,10 @@ public class SoftwareEventVisualizer : BufferedVisualizer
     private List<PointPlotter> pointPlotters = new List<PointPlotter>();
 
     private ImGuiControl imGuiCanvas;
+    private DateTimeOffset startTime;
 
     private readonly Dictionary<string, List<EventRecord>> eventHistory = new Dictionary<string, List<EventRecord>>();
     private double latestTimestamp = 0;
-
-    // Trial break support
     private string trialBreakEventName = "";
     private int maxTrials = 0;
     private readonly List<double> trialBreaks = new List<double>();
@@ -41,7 +39,6 @@ public class SoftwareEventVisualizer : BufferedVisualizer
     private struct EventRecord
     {
         public double Timestamp;
-        public double Value;
     }
 
     private struct ShadedSegment
@@ -58,54 +55,19 @@ public class SoftwareEventVisualizer : BufferedVisualizer
     /// <inheritdoc/>
     protected override void ShowBuffer(IList<System.Reactive.Timestamped<object>> values)
     {
-        imGuiCanvas.Invalidate();
         foreach (var v in values)
         {
-            // Clock tick: just update the latest timestamp for plot scrolling
-            if (v.Value is double)
-            {
-                var clockTimestamp = (double)v.Value;
-                if (clockTimestamp > latestTimestamp)
-                    latestTimestamp = clockTimestamp;
-                continue;
-            }
+            if (!(v.Value is SoftwareEvent)) continue;
+            var softwareEvent = (SoftwareEvent)v.Value;
 
-            SoftwareEvent softwareEvent;
-            double timestamp;
-
-            if (v.Value is Timestamped<SoftwareEvent>)
-            {
-                var harpTimestamped = (Timestamped<SoftwareEvent>)v.Value;
-                softwareEvent = harpTimestamped.Value;
-                timestamp = harpTimestamped.Seconds;
-            }
-            else if (v.Value is SoftwareEvent)
-            {
-                softwareEvent = (SoftwareEvent)v.Value;
-                timestamp = softwareEvent.Timestamp ?? v.Timestamp.Ticks / (double)TimeSpan.TicksPerSecond;
-            }
-            else
-            {
-                continue;
-            }
-
-            if (timestamp > latestTimestamp)
-                latestTimestamp = timestamp;
+            double timestamp = (v.Timestamp - startTime).TotalSeconds;
 
             string name = softwareEvent.Name;
             if (string.IsNullOrEmpty(name)) continue;
 
-            // Detect trial break events
             if (HasTrialBreaks && name == trialBreakEventName)
             {
                 trialBreaks.Add(timestamp);
-            }
-
-            double value = 0.5;
-            if (softwareEvent.Data != null)
-            {
-                try { value = Convert.ToDouble(softwareEvent.Data); }
-                catch { value = 0.5; }
             }
 
             List<EventRecord> records;
@@ -114,9 +76,72 @@ public class SoftwareEventVisualizer : BufferedVisualizer
                 records = new List<EventRecord>();
                 eventHistory[name] = records;
             }
-            records.Add(new EventRecord { Timestamp = timestamp, Value = value });
+            records.Add(new EventRecord { Timestamp = timestamp });
         }
+        
+        CleanupOldEvents();
+        
         base.ShowBuffer(values);
+        if (imGuiCanvas != null) imGuiCanvas.Invalidate();
+    }
+
+    /// <summary>
+    /// Removes old event records outside the visible window.
+    /// Keeps the last event before the window for shaded area continuity.
+    /// </summary>
+    private void CleanupOldEvents()
+    {
+        latestTimestamp = (DateTimeOffset.Now - startTime).TotalSeconds;
+        
+        double cutoffTime = latestTimestamp - timeWindow;
+        
+        if (HasTrialBreaks && maxTrials > 0 && trialBreaks.Count > 0)
+        {
+            int firstVisible = Math.Max(0, TrialCount - maxTrials);
+            if (firstVisible > 0 && firstVisible <= trialBreaks.Count)
+            {
+                double trialCutoff = trialBreaks[firstVisible - 1];
+                cutoffTime = Math.Min(cutoffTime, trialCutoff);
+            }
+        }
+        
+        foreach (var kvp in eventHistory)
+        {
+            var records = kvp.Value;
+            if (records.Count <= 1) continue;
+            
+            int keepFromIndex = -1;
+            for (int i = records.Count - 1; i >= 0; i--)
+            {
+                if (records[i].Timestamp < cutoffTime)
+                {
+                    keepFromIndex = i;
+                    break;
+                }
+            }
+            
+            if (keepFromIndex > 0)
+            {
+                records.RemoveRange(0, keepFromIndex);
+            }
+        }
+        
+        if (HasTrialBreaks && trialBreaks.Count > 1)
+        {
+            int keepFromIndex = -1;
+            for (int i = trialBreaks.Count - 1; i >= 0; i--)
+            {
+                if (trialBreaks[i] < cutoffTime)
+                {
+                    keepFromIndex = i;
+                    break;
+                }
+            }
+            if (keepFromIndex > 0)
+            {
+                trialBreaks.RemoveRange(0, keepFromIndex);
+            }
+        }
     }
 
     private static Vector4 ToVec4(Color color)
@@ -131,7 +156,7 @@ public class SoftwareEventVisualizer : BufferedVisualizer
     }
 
     /// <summary>
-    /// Converts an absolute timestamp to plot-relative time where 0 = now.
+    /// Converts absolute timestamp to plot-relative time where 0 = now.
     /// </summary>
     private double ToPlotTime(double timestamp)
     {
@@ -139,8 +164,7 @@ public class SoftwareEventVisualizer : BufferedVisualizer
     }
 
     /// <summary>
-    /// Returns which trial a given timestamp belongs to.
-    /// Trial 0 is before the first break, trial 1 after the first break, etc.
+    /// Returns which trial a timestamp belongs to.
     /// </summary>
     private int GetTrialIndex(double timestamp)
     {
@@ -154,7 +178,7 @@ public class SoftwareEventVisualizer : BufferedVisualizer
     }
 
     /// <summary>
-    /// Computes the visible trial range based on MaxTrials rolling window.
+    /// Computes visible trial range based on MaxTrials rolling window.
     /// </summary>
     private void GetVisibleTrialRange(out int firstVisible, out int numVisible)
     {
@@ -177,7 +201,7 @@ public class SoftwareEventVisualizer : BufferedVisualizer
     }
 
     /// <summary>
-    /// Builds a merged timeline of all shaded area events, sorted by timestamp.
+    /// Builds merged timeline of shaded area events, sorted by timestamp.
     /// </summary>
     private List<ShadedSegment> BuildMergedTimeline()
     {
@@ -232,9 +256,7 @@ public class SoftwareEventVisualizer : BufferedVisualizer
     }
 
     /// <summary>
-    /// Draws shaded areas as mutually exclusive colored regions.
-    /// When trial breaks are active, segments are split at trial boundaries
-    /// and drawn in the corresponding trial row.
+    /// Draws shaded areas as mutually exclusive regions, split at trial boundaries when active.
     /// </summary>
     unsafe private void DrawAllShadedAreas(double plotTMin, double plotTMax)
     {
@@ -361,8 +383,7 @@ public class SoftwareEventVisualizer : BufferedVisualizer
     }
 
     /// <summary>
-    /// Sets up Y axis ticks with trial number labels at the center of each row.
-    /// Tick at position (trialNum + 0.5) labeled as "trialNum".
+    /// Sets up Y axis ticks with trial labels at row centers.
     /// </summary>
     unsafe private void SetupTrialAxisTicks(int firstVisibleTrial, int numVisibleTrials)
     {
@@ -404,28 +425,22 @@ public class SoftwareEventVisualizer : BufferedVisualizer
         }
     }
 
-    unsafe private void DrawEvents()
+    private void DrawEvents()
     {
+        latestTimestamp = (DateTimeOffset.Now - startTime).TotalSeconds;
+
         ImGui.Text("Time Window (s):");
         ImGui.SameLine();
         ImGui.SetNextItemWidth(InputWidth);
         ImGui.InputFloat("##timewindow", ref timeWindow);
         if (timeWindow < 1.0f) timeWindow = 1.0f;
 
-        if (latestTimestamp == 0)
-        {
-            ImGui.Text("No events received.");
-            return;
-        }
-
         var availableSize = ImGui.GetContentRegionAvail();
         float plotHeight = Math.Max(availableSize.Y, MinPlotHeight);
 
-        // X axis: 0 = now (right), -timeWindow = oldest visible (left)
         double plotTMin = -(double)timeWindow;
         double plotTMax = 0.0;
 
-        // Y axis: single row [0,1] or multiple trial rows
         int firstVisible, numVisible;
         GetVisibleTrialRange(out firstVisible, out numVisible);
 
@@ -443,10 +458,8 @@ public class SoftwareEventVisualizer : BufferedVisualizer
                 SetupTrialAxisTicks(firstVisible, numVisible);
             }
 
-            // Draw shaded areas (mutually exclusive timeline, split by trial)
             DrawAllShadedAreas(plotTMin, plotTMax);
 
-            // Draw point markers on top
             foreach (var config in pointPlotters)
             {
                 DrawPointMarkers(config, plotTMin, plotTMax);
@@ -469,6 +482,11 @@ public class SoftwareEventVisualizer : BufferedVisualizer
             pointPlotters = builder.PointPlotters ?? new List<PointPlotter>();
             trialBreakEventName = builder.TrialBreakEventName ?? "";
             maxTrials = builder.MaxTrials;
+        }
+
+        if (startTime == default(DateTimeOffset))
+        {
+            startTime = DateTimeOffset.Now;
         }
 
         imGuiCanvas = new ImGuiControl();
@@ -515,8 +533,7 @@ public class SoftwareEventVisualizer : BufferedVisualizer
         if (imGuiCanvas != null)
         {
             imGuiCanvas.Dispose();
+            imGuiCanvas = null;
         }
-        eventHistory.Clear();
-        trialBreaks.Clear();
     }
 }

@@ -8,7 +8,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reactive.Linq;
 using System.Xml.Serialization;
 
 public interface IPlotter
@@ -125,7 +124,7 @@ public class PointPlotter : IPlotter
 [TypeVisualizer(typeof(SoftwareEventVisualizer))]
 [WorkflowElementCategory(ElementCategory.Combinator)]
 [Description("Visualizes software events as shaded areas and/or point markers over time.")]
-public class SoftwareEventVisualizerBuilder : ExpressionBuilder
+public class SoftwareEventVisualizerBuilder : SingleArgumentExpressionBuilder
 {
     private float _fontSize;
     private float _timeWindow;
@@ -136,12 +135,6 @@ public class SoftwareEventVisualizerBuilder : ExpressionBuilder
         _timeWindow = 30.0f;
         ShadedAreaPlotters = new List<ShadedAreaPlotter>();
         PointPlotters = new List<PointPlotter>();
-    }
-
-    /// <inheritdoc/>
-    public override Range<int> ArgumentRange
-    {
-        get { return new Range<int>(1, 2); }
     }
 
     [Description("Font size for text rendering.")]
@@ -173,23 +166,12 @@ public class SoftwareEventVisualizerBuilder : ExpressionBuilder
     /// <inheritdoc/>
     public override Expression Build(IEnumerable<Expression> arguments)
     {
-        var args = arguments.ToArray();
-        var source = args[0];
-        if (args.Length > 1)
-        {
-            return Expression.Call(typeof(SoftwareEventVisualizerBuilder), "Process", null, source, args[1]);
-        }
+        var source = arguments.First();
         return Expression.Call(typeof(SoftwareEventVisualizerBuilder), "Process", null, source);
     }
 
     static IObservable<SoftwareEvent> Process(IObservable<SoftwareEvent> source)
     {
         return source;
-    }
-
-    static IObservable<object> Process(IObservable<SoftwareEvent> source, IObservable<double> clock)
-    {
-        return source.Select(x => (object)x)
-            .Merge(clock.Select(x => (object)x));
     }
 }
