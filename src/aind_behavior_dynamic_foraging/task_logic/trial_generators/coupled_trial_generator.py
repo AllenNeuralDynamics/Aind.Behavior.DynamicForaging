@@ -1,26 +1,24 @@
-from typing import Literal, Optional
+from typing import Literal, Optional, Union
 import numpy as np
 from pydantic import Field, BaseModel
 import random
 
-import aind_behavior_services.task.distributions as distributions
+from aind_behavior_services.task.distributions import (
+    UniformDistribution,
+    DistributionFamily,
+    ExponentialDistribution,
+    ExponentialDistributionParameters,
+    TruncationParameters,
+)
 from ..trial_models import Trial, TrialOutcome
 from ._base import _BaseTrialGeneratorSpecModel, _ITrialGenerator
 
 AutoWaterModes = Literal["Natural", "Both", "High pro"]
-Randomness = Literal["exponential", "even"]
 BlockBehaviorEvaluationMode = Literal[
     "ignore",  # do not take behavior into account when switching blocks
     "end",  # behavior must be stable at end of block to allow switching
     "anytime",
 ]  # behavior can be stable anytime in block to allow switching
-
-
-class BlockParameters(BaseModel):
-    # Block length
-    min: int = Field(default=20, title="Block length (min)")
-    max: int = Field(default=60, title="Block length (max)")
-    beta: int = Field(default=20, title="Block length (beta)")
 
 
 class RewardProbability(BaseModel):
@@ -53,15 +51,6 @@ class Warmup(BaseModel):
         title="Warmup finish criteria: window size to compute the bias and ratio",
     )
 
-class InterTrialInterval(BaseModel):
-    min: float = Field(default=1.0, title="ITI (min)")
-    max: float = Field(default=8.0, title="ITI (max)")
-    beta: float = Field(default=2.0, title="ITI (beta)")
-
-class QuiescentPeriod(BaseModel):
-    min: float = Field(default=0.0, title="Delay period (min) ")
-    max: float = Field(default=1.0, title="Delay period (max) ")
-    beta: float = Field(default=1.0, title="Delay period (beta)")
 
 class Block(BaseModel):
     right_reward_prob: float
@@ -71,16 +60,35 @@ class Block(BaseModel):
 
 class CoupledTrialGeneratorModel(_BaseTrialGeneratorSpecModel):
     type: Literal["CoupledTrialGenerator"] = "CoupledTrialGenerator"
-    
-    iti: InterTrialInterval = Field(default=InterTrialInterval())
-    quiescent_period: QuiescentPeriod = Field(default=QuiescentPeriod())
+
+    iti: Union[UniformDistribution, ExponentialDistribution] = Field(
+        default=ExponentialDistribution(
+            distribution_parameters=ExponentialDistributionParameters(
+                rate=1 / 2, truncation_parameters=TruncationParameters(min=1, max=8)
+            )
+        )
+    )
+    quiescent_period: Union[UniformDistribution, ExponentialDistribution] = Field(
+        default=ExponentialDistribution(
+            distribution_parameters=ExponentialDistributionParameters(
+                rate=1, truncation_parameters=TruncationParameters(min=0, max=1)
+            )
+        )
+    )
     response_time: float = Field(default=1.0, title="Response time")
     reward_consume_time: float = Field(
-        default=3.0, title="Reward consume time", description="Time of the no-lick period before trial end"
+        default=3.0,
+        title="Reward consume time",
+        description="Time of the no-lick period before trial end",
     )
-    block_parameters: BlockParameters = Field(default=BlockParameters())
+    block_parameters: Union[UniformDistribution, ExponentialDistribution] = Field(
+        default=ExponentialDistribution(
+            distribution_parameters=ExponentialDistributionParameters(
+                rate=1 / 20, truncation_parameters=TruncationParameters(min=20, max=60)
+            )
+        )
+    )
     min_reward: int = Field(default=1, title="Minimal rewards in a block to switch")
-    randomness: Randomness = Field(default="Exponential", title="Randomness mode")
     auto_water: Optional[AutoWater] = Field(
         default=None, description="Parameters describing auto water."
     )
@@ -97,11 +105,18 @@ class CoupledTrialGeneratorModel(_BaseTrialGeneratorSpecModel):
         description="Add one trial to the block length on both lickspouts.",
     )
     kernel_size: int
-
+    reward_probability_specs: RewardProbability = Field(default=RewardProbability())
     reward_family: list = [
         [[8, 1], [6, 1], [3, 1], [1, 1]],
         [[8, 1], [1, 1]],
-        [[1, 0], [0.9, 0.1], [0.8, 0.2], [0.7, 0.3], [0.6, 0.4], [0.5, 0.5],],
+        [
+            [1, 0],
+            [0.9, 0.1],
+            [0.8, 0.2],
+            [0.7, 0.3],
+            [0.6, 0.4],
+            [0.5, 0.5],
+        ],
         [[6, 1], [3, 1], [1, 1]],
     ]
 
@@ -129,30 +144,38 @@ class CoupledTrialGenerator(_ITrialGenerator):
         :rtype: Trial | None
         """
 
-        if self.spec.randomness == "exponential":
-            iti = np.random.exponential(self.spec.iti.beta, 1) + self.spec.iti.min
-            quiescent = np.random.exponential(self.spec.quiescent_period.beta, 1) + self.spec.quiescent_period.min
-            
+        iti = self.evaluate_distribution(self.spec.iti)
+        quiescent = self.evaluate_distribution(self.spec.quiescent_period)
 
-        elif self.spec.randomness == "even":
-            iti = min(random.uniform(self.spec.iti.min, self.spec.iti.max), self.spec.iti.max)
-            quiescent = min(random.uniform(self.spec.quiescent_period.min, self.spec.quiescent_period.max), 
-                            self.spec.quiescent_period.max)
-
-        else: 
-            raise ValueError(f"Randomness mode {self.spec.randomness} not recognized.")
-        
         self.trials_in_block += 1
 
         return Trial(
-            p_reward_left= self.block.left_reward_prob, 
+            p_reward_left=self.block.left_reward_prob,
             p_reward_right=self.block.right_reward_prob,
-            reward_consumption_duration= self.spec.reward_consume_time,
+            reward_consumption_duration=self.spec.reward_consume_time,
             response_deadline_duration=self.spec.response_time,
             quiescence_period_duration=quiescent,
             inter_trial_interval_duration=iti,
-
         )
+
+    @staticmethod
+    def evaluate_distribution(
+        distribution: Union[UniformDistribution, ExponentialDistribution],
+    ) -> Union[UniformDistribution, ExponentialDistribution]:
+
+        if distribution.family == DistributionFamily.EXPONENTIAL:
+            return (
+                np.random.exponential(1 / distribution.distribution_parameters.rate, 1)
+                + distribution.truncation_parameters.min
+            )
+        elif distribution.family == DistributionFamily.UNIFORM:
+            return random.uniform(
+                distribution.distribution_parameters.min,
+                distribution.distribution_parameters.max,
+            )
+
+        else:
+            raise ValueError(f"Distibution {distribution.family} not recognized.")
 
     def update(self, outcome: TrialOutcome) -> None:
         """
@@ -184,7 +207,14 @@ class CoupledTrialGenerator(_ITrialGenerator):
 
         if switch_block:
             self.trials_in_block = 0
-            self.block = self.generate_block()
+            self.block = self.generate_block(
+                reward_families=self.spec.reward_family,
+                reward_family_index=self.spec.reward_probability_specs.family,
+                reward_pairs_n=self.spec.reward_probability_specs.pairs_n,
+                base_reward_sum=self.spec.reward_probability_specs.base_reward_sum,
+                block_history=self.block_history,
+                block_distribution=self.spec.block_parameters,
+            )
             self.block_history.append(self.block)
 
     def is_behavior_stable(
@@ -341,18 +371,15 @@ class CoupledTrialGenerator(_ITrialGenerator):
         #   - behavior is stable
 
         return block_length_ok and reward_ok and behavior_ok
-       
 
     def generate_block(
+        self,
         reward_families: list,
         reward_family_index: int,
         reward_pairs_n: int,
         base_reward_sum: float,
         block_history: list[Block],
-        block_min: int,
-        block_max: int,
-        block_beta: float,
-        randomness: Randomness,
+        block_distribution: Union[UniformDistribution, ExponentialDistribution],
     ) -> Block:
         """
         Generate the next block for a coupled task.
@@ -362,10 +389,7 @@ class CoupledTrialGenerator(_ITrialGenerator):
         :param reward_pairs_n: Description
         :param base_reward_sum: Description
         :param reward_prob_history: Description
-        :param block_min: Description
-        :param block_max: Description
-        :param block_beta: Description
-        :param randomness: Description
+        :param block_distribution: Description
         """
 
         # determine candidate reward pairs
@@ -377,34 +401,37 @@ class CoupledTrialGenerator(_ITrialGenerator):
         # create pool including all reward probabiliteis and mirrored pairs
         reward_prob_pool = np.vstack([reward_prob, np.fliplr(reward_prob)])
 
-        if block_history: # exclude previous block if history exists
-            reward_prob_history = [[block.right_reward_prob, block.left_reward_prob] for block in block_history]
+        if block_history:  # exclude previous block if history exists
+            reward_prob_history = [
+                [block.right_reward_prob, block.left_reward_prob]
+                for block in block_history
+            ]
             last_block_reward_prob = reward_prob_history[:, -1]
 
             # remove blocks identical to last block
-            reward_prob_pool = reward_prob_pool[np.any(reward_prob_pool != last_block_reward_prob, axis=1)]
+            reward_prob_pool = reward_prob_pool[
+                np.any(reward_prob_pool != last_block_reward_prob, axis=1)
+            ]
 
             # remove blocks with same high-reward side (if last block had a clear high side)
             if last_block_reward_prob[0] != last_block_reward_prob[1]:
                 high_side_last = last_block_reward_prob[0] > last_block_reward_prob[1]
                 high_side_pool = reward_prob_pool[:, 0] > reward_prob_pool[:, 1]
                 reward_prob_pool = reward_prob_pool[high_side_pool != high_side_last]
-        
+
         # remove duplicates
         reward_prob_pool = np.unique(reward_prob_pool, axis=0)
 
         # randomly pick next block reward probability
-        right_reward_prob, left_reward_prob = reward_prob_pool[random.choice(range(reward_prob_pool.shape[0]))]
+        right_reward_prob, left_reward_prob = reward_prob_pool[
+            random.choice(range(reward_prob_pool.shape[0]))
+        ]
 
         # randomly pick block length
-        if randomness == "exponential":
-            next_block_len = int(np.random.exponential(block_beta) + block_min)
-        elif randomness == "even":  
-            next_block_len = np.random.randint(block_min, block_max + 1)
-        else: 
-            raise ValueError(f"Randomness mode {randomness} not recognized.")
-        
-        # clip to maximum
-        next_block_len = min(next_block_len, block_max)
+        next_block_len = self.evaluate_distribution(block_distribution)
 
-        return Block(right_reward_prob=right_reward_prob, left_reward_prob=left_reward_prob, min_length=next_block_len)
+        return Block(
+            right_reward_prob=right_reward_prob,
+            left_reward_prob=left_reward_prob,
+            min_length=next_block_len,
+        )
