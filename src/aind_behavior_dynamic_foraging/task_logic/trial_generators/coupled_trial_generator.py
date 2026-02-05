@@ -145,8 +145,8 @@ class CoupledTrialGenerator(_ITrialGenerator):
         self.trials_in_block += 1
 
         return Trial(
-            has_reward_left= [self.block.left_reward_prob] > np.random.random(1), 
-            has_reward_right=[self.block.right_reward_prob] > np.random.random(1),
+            p_reward_left= self.block.left_reward_prob, 
+            p_reward_right=self.block.right_reward_prob,
             reward_consumption_duration= self.spec.reward_consume_time,
             response_deadline_duration=self.spec.response_time,
             quiescence_period_duration=quiescent,

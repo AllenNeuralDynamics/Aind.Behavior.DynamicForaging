@@ -18,22 +18,22 @@ class DummyTrialGenerator3(_ITrialGenerator):
 
         self.trial_opts = [
             Trial(), # 0: left and right reward
-            Trial(has_reward_left=True, has_reward_right=False), # 1: left reward
-            Trial(has_reward_left=False, has_reward_right=True), # 2: right reward
-            Trial(has_reward_left=False, has_reward_right=False), # 3: no reward
-            Trial(has_reward_left=True, has_reward_right=True), # 4: both reward
+            Trial(p_reward_left=1.0, has_reward_right=0.0), # 1: left reward
+            Trial(p_reward_left=0.0, has_reward_right=1.0), # 2: right reward
+            Trial(p_reward_left=0.0, has_reward_right=0.0), # 3: no reward
+            Trial(p_reward_left=1.0, has_reward_right=1.0), # 4: both reward
 
             # auto response right
-            Trial(has_reward_left=True, has_reward_right=False, is_auto_response_right=True), # 5: left reward, auto response right
-            Trial(has_reward_left=False, has_reward_right=True, is_auto_response_right=True), # 6: right reward, auto response right
-            Trial(has_reward_left=True, has_reward_right=True, is_auto_response_right=True), # 9: both reward, auto response right,
-            Trial(has_reward_left=False, has_reward_right=False, is_auto_response_right=True), # 10: no reward, auto response right,
+            Trial(p_reward_left=1.0, has_reward_right=0.0, is_auto_response_right=True), # 5: left reward, auto response right
+            Trial(p_reward_left=0.0, has_reward_right=1.0, is_auto_response_right=True), # 6: right reward, auto response right
+            Trial(p_reward_left=1.0, has_reward_right=1.0, is_auto_response_right=True), # 9: both reward, auto response right,
+            Trial(p_reward_left=0.0, has_reward_right=0.0, is_auto_response_right=True), # 10: no reward, auto response right,
 
             # auto response left
-            Trial(has_reward_left=True, has_reward_right=False, is_auto_response_right=False), # 11: left reward, auto response left,
-            Trial(has_reward_left=False, has_reward_right=True, is_auto_response_right=False), # 12: right reward, auto response left,
-            Trial(has_reward_left=False, has_reward_right=True, is_auto_response_right=False), # 13: both reward, auto response left,
-            Trial(has_reward_left=False, has_reward_right=False, is_auto_response_right=False), # 14: no reward, auto response left,
+            Trial(p_reward_left=1.0, has_reward_right=0.0, is_auto_response_right=False), # 11: left reward, auto response left,
+            Trial(p_reward_left=0.0, has_reward_right=1.0, is_auto_response_right=False), # 12: right reward, auto response left,
+            Trial(p_reward_left=0.0, has_reward_right=1.0, is_auto_response_right=False), # 13: both reward, auto response left,
+            Trial(p_reward_left=0.0, has_reward_right=0.0, is_auto_response_right=False), # 14: no reward, auto response left,
 
             # fast retract
             Trial(enable_fast_retract=True), # 15: enable fast retract
