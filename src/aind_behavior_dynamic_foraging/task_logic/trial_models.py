@@ -55,7 +55,7 @@ class Trial(BaseModel):
         description="Duration of the quiescence period before trial starts (in seconds). Each lick resets the timer.",
     )
     inter_trial_interval_duration: float = Field(
-        default=5.0, ge=0, description="Duration of the inter-trial interval (in seconds)."
+        default=5.0, ge=0.5, description="Duration of the inter-trial interval (in seconds)."
     )
     is_auto_response_right: Optional[bool] = Field(
         default=None,

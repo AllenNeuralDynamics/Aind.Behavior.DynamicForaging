@@ -6,7 +6,7 @@ from aind_behavior_services.schema import BonsaiSgenSerializers, convert_pydanti
 from aind_behavior_services.session import Session
 
 import aind_behavior_dynamic_foraging.rig
-import aind_behavior_dynamic_foraging.task_logic.trial_generators._dummy_trial_generator
+import aind_behavior_dynamic_foraging.task_logic
 
 SCHEMA_ROOT = Path("./schema")
 EXTENSIONS_ROOT = Path("./src/Extensions/")

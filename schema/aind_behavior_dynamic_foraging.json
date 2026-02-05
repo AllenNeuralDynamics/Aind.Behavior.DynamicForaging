@@ -253,7 +253,7 @@
           "description": "Parameters describing auto water.",
           "oneOf": [
             {
-              "$ref": "#/$defs/AutoWater"
+              "$ref": "#/$defs/aind_behavior_dynamic_foraging__task_logic__AutoWater"
             },
             {
               "type": "null"
@@ -337,7 +337,7 @@
         "trial_generator": {
           "$ref": "#/$defs/TrialGeneratorSpec",
           "default": {
-            "type": "DummyTrialGenerator"
+            "type": "IntegrationTestTrialGenerator"
           },
           "description": "Trial generator model for generating trials in the task."
         }
@@ -589,43 +589,6 @@
       "title": "AutoBlock",
       "type": "object"
     },
-    "AutoWater": {
-      "properties": {
-        "auto_water_type": {
-          "default": "Natural",
-          "enum": [
-            "Natural",
-            "Both",
-            "High pro"
-          ],
-          "title": "Auto water mode",
-          "type": "string"
-        },
-        "multiplier": {
-          "default": 0.8,
-          "title": "Multiplier for auto reward",
-          "type": "number"
-        },
-        "unrewarded": {
-          "default": 200,
-          "title": "Number of unrewarded trials before auto water",
-          "type": "integer"
-        },
-        "ignored": {
-          "default": 100,
-          "title": "Number of ignored trials before auto water",
-          "type": "integer"
-        },
-        "include_reward": {
-          "default": false,
-          "description": "Include auto water in total rewards.",
-          "title": "Include Reward",
-          "type": "boolean"
-        }
-      },
-      "title": "AutoWater",
-      "type": "object"
-    },
     "Axis": {
       "description": "Motor axis available",
       "enum": [
@@ -859,6 +822,246 @@
       "title": "ConnectedClockOutput",
       "type": "object"
     },
+    "CoupledTrialGeneratorSpec": {
+      "properties": {
+        "type": {
+          "const": "CoupledTrialGenerator",
+          "default": "CoupledTrialGenerator",
+          "title": "Type",
+          "type": "string"
+        },
+        "iti": {
+          "default": {
+            "family": "Exponential",
+            "distribution_parameters": {
+              "family": "Exponential",
+              "rate": 0.5
+            },
+            "truncation_parameters": {
+              "max": 8.0,
+              "min": 1.0,
+              "truncation_mode": "exclude"
+            },
+            "scaling_parameters": null
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/UniformDistribution"
+            },
+            {
+              "$ref": "#/$defs/ExponentialDistribution"
+            }
+          ],
+          "title": "Iti"
+        },
+        "quiescent_period": {
+          "default": {
+            "family": "Exponential",
+            "distribution_parameters": {
+              "family": "Exponential",
+              "rate": 1.0
+            },
+            "truncation_parameters": {
+              "max": 1.0,
+              "min": 0.0,
+              "truncation_mode": "exclude"
+            },
+            "scaling_parameters": null
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/UniformDistribution"
+            },
+            {
+              "$ref": "#/$defs/ExponentialDistribution"
+            }
+          ],
+          "title": "Quiescent Period"
+        },
+        "response_time": {
+          "default": 1.0,
+          "title": "Response time",
+          "type": "number"
+        },
+        "reward_consume_time": {
+          "default": 3.0,
+          "description": "Time of the no-lick period before trial end",
+          "title": "Reward consume time",
+          "type": "number"
+        },
+        "block_parameters": {
+          "default": {
+            "family": "Exponential",
+            "distribution_parameters": {
+              "family": "Exponential",
+              "rate": 0.05
+            },
+            "truncation_parameters": {
+              "max": 60.0,
+              "min": 20.0,
+              "truncation_mode": "exclude"
+            },
+            "scaling_parameters": null
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/UniformDistribution"
+            },
+            {
+              "$ref": "#/$defs/ExponentialDistribution"
+            }
+          ],
+          "title": "Block Parameters"
+        },
+        "min_reward": {
+          "default": 1,
+          "title": "Minimal rewards in a block to switch",
+          "type": "integer"
+        },
+        "auto_water": {
+          "default": null,
+          "description": "Parameters describing auto water.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/aind_behavior_dynamic_foraging__task_logic__trial_generators__coupled_trial_generator__AutoWater"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "behavior_evaluation_mode": {
+          "default": "now",
+          "enum": [
+            "ignore",
+            "end",
+            "anytime"
+          ],
+          "title": "Auto block mode",
+          "type": "string"
+        },
+        "switch_thr": {
+          "default": 0.5,
+          "title": "Switch threshold for auto block",
+          "type": "number"
+        },
+        "points_in_a_row": {
+          "default": 5,
+          "title": "Points in a row for auto block",
+          "type": "integer"
+        },
+        "warmup": {
+          "default": null,
+          "description": "Parameters describing warmup.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Warmup"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "no_response_trial_addition": {
+          "default": true,
+          "description": "Add one trial to the block length on both lickspouts.",
+          "title": "No Response Trial Addition",
+          "type": "boolean"
+        },
+        "kernel_size": {
+          "title": "Kernel Size",
+          "type": "integer"
+        },
+        "reward_probability_specs": {
+          "$ref": "#/$defs/RewardProbability",
+          "default": {
+            "base_reward_sum": 0.8,
+            "family": 1,
+            "pairs_n": 1
+          }
+        },
+        "reward_family": {
+          "default": [
+            [
+              [
+                8,
+                1
+              ],
+              [
+                6,
+                1
+              ],
+              [
+                3,
+                1
+              ],
+              [
+                1,
+                1
+              ]
+            ],
+            [
+              [
+                8,
+                1
+              ],
+              [
+                1,
+                1
+              ]
+            ],
+            [
+              [
+                1,
+                0
+              ],
+              [
+                0.9,
+                0.1
+              ],
+              [
+                0.8,
+                0.2
+              ],
+              [
+                0.7,
+                0.3
+              ],
+              [
+                0.6,
+                0.4
+              ],
+              [
+                0.5,
+                0.5
+              ]
+            ],
+            [
+              [
+                6,
+                1
+              ],
+              [
+                3,
+                1
+              ],
+              [
+                1,
+                1
+              ]
+            ]
+          ],
+          "items": {},
+          "title": "Reward Family",
+          "type": "array"
+        }
+      },
+      "required": [
+        "kernel_size"
+      ],
+      "title": "CoupledTrialGeneratorSpec",
+      "type": "object"
+    },
     "DelayPeriod": {
       "properties": {
         "min": {
@@ -880,28 +1083,69 @@
       "title": "DelayPeriod",
       "type": "object"
     },
-    "DummyTrialGeneratorModel": {
+    "ExponentialDistribution": {
+      "description": "An exponential probability distribution.\n\nModels time between events in a Poisson process. Commonly used\nfor wait times and inter-event intervals.",
       "properties": {
-        "type": {
-          "const": "DummyTrialGenerator",
-          "default": "DummyTrialGenerator",
-          "title": "Type",
+        "family": {
+          "const": "Exponential",
+          "default": "Exponential",
+          "title": "Family",
           "type": "string"
+        },
+        "distribution_parameters": {
+          "$ref": "#/$defs/ExponentialDistributionParameters",
+          "default": {
+            "family": "Exponential",
+            "rate": 0.0
+          },
+          "description": "Parameters of the distribution"
+        },
+        "truncation_parameters": {
+          "default": null,
+          "description": "Truncation parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TruncationParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scaling_parameters": {
+          "default": null,
+          "description": "Scaling parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ScalingParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
-      "title": "DummyTrialGeneratorModel",
+      "title": "ExponentialDistribution",
       "type": "object"
     },
-    "DummyTrialGeneratorModel2": {
+    "ExponentialDistributionParameters": {
+      "description": "Parameters for an exponential distribution.\n\nDefined by the rate parameter (inverse of mean).",
       "properties": {
-        "type": {
-          "const": "DummyTrialGenerator2",
-          "default": "DummyTrialGenerator2",
-          "title": "Type",
+        "family": {
+          "const": "Exponential",
+          "default": "Exponential",
+          "title": "Family",
           "type": "string"
+        },
+        "rate": {
+          "default": 0,
+          "description": "Rate parameter of the distribution",
+          "minimum": 0,
+          "title": "Rate",
+          "type": "number"
         }
       },
-      "title": "DummyTrialGeneratorModel2",
+      "title": "ExponentialDistributionParameters",
       "type": "object"
     },
     "HarpBehavior": {
@@ -1219,6 +1463,18 @@
       "title": "HarpWhiteRabbit",
       "type": "object"
     },
+    "IntegrationTestTrialGeneratorSpec": {
+      "properties": {
+        "type": {
+          "const": "IntegrationTestTrialGenerator",
+          "default": "IntegrationTestTrialGenerator",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "title": "IntegrationTestTrialGeneratorSpec",
+      "type": "object"
+    },
     "InterTrialInterval": {
       "properties": {
         "min": {
@@ -1463,6 +1719,25 @@
         "water_valve_right"
       ],
       "title": "RigCalibration",
+      "type": "object"
+    },
+    "ScalingParameters": {
+      "description": "Parameters for scaling and offsetting sampled distribution values.\nScaling is applied as (value * scale + offset).\n\nApplies linear transformation: result = (value * scale) + offset.",
+      "properties": {
+        "scale": {
+          "default": 1,
+          "description": "Scaling factor to apply on the sampled distribution",
+          "title": "Scale",
+          "type": "number"
+        },
+        "offset": {
+          "default": 0,
+          "description": "Offset factor to apply on the sampled distribution",
+          "title": "Offset",
+          "type": "number"
+        }
+      },
+      "title": "ScalingParameters",
       "type": "object"
     },
     "SecondaryReinforcer": {
@@ -2088,7 +2363,7 @@
         "inter_trial_interval_duration": {
           "default": 5.0,
           "description": "Duration of the inter-trial interval (in seconds).",
-          "minimum": 0,
+          "minimum": 0.5,
           "title": "Inter Trial Interval Duration",
           "type": "number"
         },
@@ -2130,17 +2405,17 @@
       "description": "Type of trial generator",
       "discriminator": {
         "mapping": {
-          "DummyTrialGenerator": "#/$defs/DummyTrialGeneratorModel",
-          "DummyTrialGenerator2": "#/$defs/DummyTrialGeneratorModel2"
+          "CoupledTrialGenerator": "#/$defs/CoupledTrialGeneratorSpec",
+          "IntegrationTestTrialGenerator": "#/$defs/IntegrationTestTrialGeneratorSpec"
         },
         "propertyName": "type"
       },
       "oneOf": [
         {
-          "$ref": "#/$defs/DummyTrialGeneratorModel"
+          "$ref": "#/$defs/CoupledTrialGeneratorSpec"
         },
         {
-          "$ref": "#/$defs/DummyTrialGeneratorModel2"
+          "$ref": "#/$defs/IntegrationTestTrialGeneratorSpec"
         }
       ]
     },
@@ -2175,6 +2450,106 @@
         "is_rewarded"
       ],
       "title": "TrialOutcome",
+      "type": "object"
+    },
+    "TruncationParameters": {
+      "description": "Parameters for truncating a distribution to a specified range. Truncation should\nbe applied after sampling and scaling.\n\nThe truncation_mode determines how out-of-bounds values are handled:\n- \"exclude\": Resample until a value within [min, max] is obtained.\nIf after a certain number of attempts no valid value is found, it\nwill use the average of sampled values and pick the closest bound.\n- \"clamp\": Clamp values to the nearest bound within [min, max].\nUsed to constrain sampled values within minimum and maximum bounds.",
+      "properties": {
+        "truncation_mode": {
+          "default": "exclude",
+          "description": "Mode of truncation to apply",
+          "enum": [
+            "exclude",
+            "clamp"
+          ],
+          "title": "Truncation Mode",
+          "type": "string"
+        },
+        "min": {
+          "default": 0,
+          "description": "Minimum value of the sampled distribution",
+          "title": "Min",
+          "type": "number"
+        },
+        "max": {
+          "default": 0,
+          "description": "Maximum value of the sampled distribution",
+          "title": "Max",
+          "type": "number"
+        }
+      },
+      "title": "TruncationParameters",
+      "type": "object"
+    },
+    "UniformDistribution": {
+      "description": "A uniform probability distribution.\n\nAll values between min and max have equal probability of being sampled.",
+      "properties": {
+        "family": {
+          "const": "Uniform",
+          "default": "Uniform",
+          "title": "Family",
+          "type": "string"
+        },
+        "distribution_parameters": {
+          "$ref": "#/$defs/UniformDistributionParameters",
+          "default": {
+            "family": "Uniform",
+            "min": 0.0,
+            "max": 0.0
+          },
+          "description": "Parameters of the distribution"
+        },
+        "truncation_parameters": {
+          "default": null,
+          "description": "Truncation parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TruncationParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scaling_parameters": {
+          "default": null,
+          "description": "Scaling parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ScalingParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "title": "UniformDistribution",
+      "type": "object"
+    },
+    "UniformDistributionParameters": {
+      "description": "Parameters for a uniform distribution.\n\nDefined by minimum and maximum bounds of the distribution.",
+      "properties": {
+        "family": {
+          "const": "Uniform",
+          "default": "Uniform",
+          "title": "Family",
+          "type": "string"
+        },
+        "min": {
+          "default": 0,
+          "description": "Minimum value of the distribution",
+          "title": "Min",
+          "type": "number"
+        },
+        "max": {
+          "default": 0,
+          "description": "Maximum value of the distribution",
+          "title": "Max",
+          "type": "number"
+        }
+      },
+      "title": "UniformDistributionParameters",
       "type": "object"
     },
     "VideoWriter": {
@@ -2418,6 +2793,74 @@
         }
       },
       "title": "WebCamera",
+      "type": "object"
+    },
+    "aind_behavior_dynamic_foraging__task_logic__AutoWater": {
+      "properties": {
+        "auto_water_type": {
+          "default": "Natural",
+          "enum": [
+            "Natural",
+            "Both",
+            "High pro"
+          ],
+          "title": "Auto water mode",
+          "type": "string"
+        },
+        "multiplier": {
+          "default": 0.8,
+          "title": "Multiplier for auto reward",
+          "type": "number"
+        },
+        "unrewarded": {
+          "default": 200,
+          "title": "Number of unrewarded trials before auto water",
+          "type": "integer"
+        },
+        "ignored": {
+          "default": 100,
+          "title": "Number of ignored trials before auto water",
+          "type": "integer"
+        },
+        "include_reward": {
+          "default": false,
+          "description": "Include auto water in total rewards.",
+          "title": "Include Reward",
+          "type": "boolean"
+        }
+      },
+      "title": "AutoWater",
+      "type": "object"
+    },
+    "aind_behavior_dynamic_foraging__task_logic__trial_generators__coupled_trial_generator__AutoWater": {
+      "properties": {
+        "auto_water_type": {
+          "default": "Natural",
+          "enum": [
+            "Natural",
+            "Both",
+            "High pro"
+          ],
+          "title": "Auto water mode",
+          "type": "string"
+        },
+        "multiplier": {
+          "default": 0.8,
+          "title": "Multiplier for auto reward",
+          "type": "number"
+        },
+        "unrewarded": {
+          "default": 200,
+          "title": "Number of unrewarded trials before auto water",
+          "type": "integer"
+        },
+        "ignored": {
+          "default": 100,
+          "title": "Number of ignored trials before auto water",
+          "type": "integer"
+        }
+      },
+      "title": "AutoWater",
       "type": "object"
     }
   }
