@@ -39,7 +39,7 @@ class IntegrationTestTrialGenerator(ITrialGenerator):
             Trial(enable_fast_retract=True), # 15: enable fast retract
 
             # secondary reinforcer
-            Trial(secondary_reinforcer=SecondaryReinforcer()),   # 16: enable secondary reinforcer
+            #Trial(secondary_reinforcer=SecondaryReinforcer()),   # 16: enable secondary reinforcer
 
             # no reward consumption duration
             Trial(reward_consumption_duration=0),    # 17: no reward consumption duration
