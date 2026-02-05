@@ -1,7 +1,7 @@
 from typing import Literal
 
 from ..trial_models import Trial, TrialOutcome, SecondaryReinforcer
-from ._base import _BaseTrialGeneratorSpecModel, _ITrialGenerator
+from ._base import _BaseTrialGeneratorSpecModel, ITrialGenerator
 
 
 class IntegrationTestTrialGeneratorSpec(_BaseTrialGeneratorSpecModel):
@@ -11,7 +11,7 @@ class IntegrationTestTrialGeneratorSpec(_BaseTrialGeneratorSpecModel):
         return IntegrationTestTrialGenerator(self)
 
 
-class IntegrationTestTrialGenerator(_ITrialGenerator):
+class IntegrationTestTrialGenerator(ITrialGenerator):
     def __init__(self, spec: IntegrationTestTrialGeneratorSpec) -> None:
         self._spec = spec
         self._idx = 0

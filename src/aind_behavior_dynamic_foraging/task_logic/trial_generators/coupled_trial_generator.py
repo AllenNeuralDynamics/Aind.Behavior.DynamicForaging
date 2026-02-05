@@ -11,7 +11,7 @@ from aind_behavior_services.task.distributions import (
     TruncationParameters,
 )
 from ..trial_models import Trial, TrialOutcome
-from ._base import _BaseTrialGeneratorSpecModel, _ITrialGenerator
+from ._base import _BaseTrialGeneratorSpecModel, ITrialGenerator
 
 AutoWaterModes = Literal["Natural", "Both", "High pro"]
 BlockBehaviorEvaluationMode = Literal[
@@ -124,7 +124,7 @@ class CoupledTrialGeneratorModel(_BaseTrialGeneratorSpecModel):
         return CoupledTrialGenerator(self)
 
 
-class CoupledTrialGenerator(_ITrialGenerator):
+class CoupledTrialGenerator(ITrialGenerator):
     def __init__(self, spec: CoupledTrialGeneratorModel) -> None:
         """"""
 
