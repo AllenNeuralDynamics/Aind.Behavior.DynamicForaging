@@ -1,17 +1,18 @@
-from typing import Literal, Optional, Union
-import numpy as np
-from pydantic import Field, BaseModel
 import random
+from typing import Literal, Optional, Union
 
+import numpy as np
 from aind_behavior_services.task.distributions import (
-    UniformDistribution,
     DistributionFamily,
     ExponentialDistribution,
     ExponentialDistributionParameters,
     TruncationParameters,
+    UniformDistribution,
 )
+from pydantic import BaseModel, Field
+
 from ..trial_models import Trial, TrialOutcome
-from ._base import _BaseTrialGeneratorSpecModel, ITrialGenerator
+from ._base import ITrialGenerator, _BaseTrialGeneratorSpecModel
 
 AutoWaterModes = Literal["Natural", "Both", "High pro"]
 BlockBehaviorEvaluationMode = Literal[
@@ -30,12 +31,8 @@ class RewardProbability(BaseModel):
 class AutoWater(BaseModel):
     auto_water_type: AutoWaterModes = Field(default="Natural", title="Auto water mode")
     multiplier: float = Field(default=0.8, title="Multiplier for auto reward")
-    unrewarded: int = Field(
-        default=200, title="Number of unrewarded trials before auto water"
-    )
-    ignored: int = Field(
-        default=100, title="Number of ignored trials before auto water"
-    )
+    unrewarded: int = Field(default=200, title="Number of unrewarded trials before auto water")
+    ignored: int = Field(default=100, title="Number of ignored trials before auto water")
 
 
 class Warmup(BaseModel):
@@ -43,9 +40,7 @@ class Warmup(BaseModel):
     max_choice_ratio_bias: float = Field(
         default=0.1, title="Warmup finish criteria: maximal choice ratio bias from 0.5"
     )
-    min_finish_ratio: float = Field(
-        default=0.8, title="Warmup finish criteria: minimal finish ratio"
-    )
+    min_finish_ratio: float = Field(default=0.8, title="Warmup finish criteria: minimal finish ratio")
     windowsize: int = Field(
         default=20,
         title="Warmup finish criteria: window size to compute the bias and ratio",
@@ -58,23 +53,22 @@ class Block(BaseModel):
     min_length: int
 
 
-class CoupledTrialGeneratorModel(_BaseTrialGeneratorSpecModel):
+class CoupledTrialGeneratorSpec(_BaseTrialGeneratorSpecModel):
     type: Literal["CoupledTrialGenerator"] = "CoupledTrialGenerator"
 
     iti: Union[UniformDistribution, ExponentialDistribution] = Field(
         default=ExponentialDistribution(
-            distribution_parameters=ExponentialDistributionParameters(
-                rate=1 / 2, truncation_parameters=TruncationParameters(min=1, max=8)
-            )
+            distribution_parameters=ExponentialDistributionParameters(rate=1 / 2),
+            truncation_parameters=TruncationParameters(min=1, max=8),
         )
     )
     quiescent_period: Union[UniformDistribution, ExponentialDistribution] = Field(
         default=ExponentialDistribution(
-            distribution_parameters=ExponentialDistributionParameters(
-                rate=1, truncation_parameters=TruncationParameters(min=0, max=1)
-            )
+            distribution_parameters=ExponentialDistributionParameters(rate=1),
+            truncation_parameters=TruncationParameters(min=0, max=1),
         )
     )
+
     response_time: float = Field(default=1.0, title="Response time")
     reward_consume_time: float = Field(
         default=3.0,
@@ -83,23 +77,17 @@ class CoupledTrialGeneratorModel(_BaseTrialGeneratorSpecModel):
     )
     block_parameters: Union[UniformDistribution, ExponentialDistribution] = Field(
         default=ExponentialDistribution(
-            distribution_parameters=ExponentialDistributionParameters(
-                rate=1 / 20, truncation_parameters=TruncationParameters(min=20, max=60)
-            )
+            distribution_parameters=ExponentialDistributionParameters(rate=1 / 20),
+            truncation_parameters=TruncationParameters(min=20, max=60),
         )
     )
+
     min_reward: int = Field(default=1, title="Minimal rewards in a block to switch")
-    auto_water: Optional[AutoWater] = Field(
-        default=None, description="Parameters describing auto water."
-    )
-    behavior_evaluation_mode: BlockBehaviorEvaluationMode = Field(
-        default="now", title="Auto block mode"
-    )
+    auto_water: Optional[AutoWater] = Field(default=None, description="Parameters describing auto water.")
+    behavior_evaluation_mode: BlockBehaviorEvaluationMode = Field(default="now", title="Auto block mode")
     switch_thr: float = Field(default=0.5, title="Switch threshold for auto block")
     points_in_a_row: int = Field(default=5, title="Points in a row for auto block")
-    warmup: Optional[Warmup] = Field(
-        default=None, description="Parameters describing warmup."
-    )
+    warmup: Optional[Warmup] = Field(default=None, description="Parameters describing warmup.")
     no_response_trial_addition: bool = Field(
         default=True,
         description="Add one trial to the block length on both lickspouts.",
@@ -125,7 +113,7 @@ class CoupledTrialGeneratorModel(_BaseTrialGeneratorSpecModel):
 
 
 class CoupledTrialGenerator(ITrialGenerator):
-    def __init__(self, spec: CoupledTrialGeneratorModel) -> None:
+    def __init__(self, spec: CoupledTrialGeneratorSpec) -> None:
         """"""
 
         self.spec = spec
@@ -162,7 +150,6 @@ class CoupledTrialGenerator(ITrialGenerator):
     def evaluate_distribution(
         distribution: Union[UniformDistribution, ExponentialDistribution],
     ) -> Union[UniformDistribution, ExponentialDistribution]:
-
         if distribution.family == DistributionFamily.EXPONENTIAL:
             return (
                 np.random.exponential(1 / distribution.distribution_parameters.rate, 1)
@@ -244,11 +231,7 @@ class CoupledTrialGenerator(ITrialGenerator):
         """
 
         # do not prohibit block transition if does not rely on behavior or not enough trials to evaluate or reward probs are the same.
-        if (
-            beh_eval_mode == "ignore"
-            or left_reward_prob == right_reward_prob
-            or len(choice_history) < kernel_size
-        ):
+        if beh_eval_mode == "ignore" or left_reward_prob == right_reward_prob or len(choice_history) < kernel_size:
             return True
 
         # compute fraction of right choices with running average using a sliding window
@@ -258,9 +241,7 @@ class CoupledTrialGenerator(ITrialGenerator):
         # margin based on right and left probabilities and scaled by switch threshold. Window for evaluating behavior
         delta = abs((left_reward_prob - right_reward_prob) * float(switch_thr))
         threshold = (
-            [0, left_reward_prob - delta]
-            if left_reward_prob > right_reward_prob
-            else [left_reward_prob + delta, 1]
+            [0, left_reward_prob - delta] if left_reward_prob > right_reward_prob else [left_reward_prob + delta, 1]
         )
 
         # block_choice_fractions above threshold
@@ -294,13 +275,9 @@ class CoupledTrialGenerator(ITrialGenerator):
             return run_len >= points_in_a_row
 
         else:
-            raise ValueError(
-                f"Behavior evaluation mode {beh_eval_mode} not recognized."
-            )
+            raise ValueError(f"Behavior evaluation mode {beh_eval_mode} not recognized.")
 
-    def compute_choice_fraction(
-        self, kernel_size: int, choice_history: list[int | None]
-    ):
+    def compute_choice_fraction(self, kernel_size: int, choice_history: list[int | None]):
         """
         Compute fraction of right choices with running average using a sliding window
 
@@ -309,9 +286,7 @@ class CoupledTrialGenerator(ITrialGenerator):
         """
 
         n_windows = len(choice_history) - kernel_size + 1
-        choice_fraction = np.empty(
-            n_windows, dtype=float
-        )  # create empty array to store running averages
+        choice_fraction = np.empty(n_windows, dtype=float)  # create empty array to store running averages
         for i in range(n_windows):
             window = choice_history[i : i + kernel_size].astype(float)
             choice_fraction[i] = np.nanmean(window)
@@ -402,16 +377,11 @@ class CoupledTrialGenerator(ITrialGenerator):
         reward_prob_pool = np.vstack([reward_prob, np.fliplr(reward_prob)])
 
         if block_history:  # exclude previous block if history exists
-            reward_prob_history = [
-                [block.right_reward_prob, block.left_reward_prob]
-                for block in block_history
-            ]
+            reward_prob_history = [[block.right_reward_prob, block.left_reward_prob] for block in block_history]
             last_block_reward_prob = reward_prob_history[:, -1]
 
             # remove blocks identical to last block
-            reward_prob_pool = reward_prob_pool[
-                np.any(reward_prob_pool != last_block_reward_prob, axis=1)
-            ]
+            reward_prob_pool = reward_prob_pool[np.any(reward_prob_pool != last_block_reward_prob, axis=1)]
 
             # remove blocks with same high-reward side (if last block had a clear high side)
             if last_block_reward_prob[0] != last_block_reward_prob[1]:
@@ -423,9 +393,7 @@ class CoupledTrialGenerator(ITrialGenerator):
         reward_prob_pool = np.unique(reward_prob_pool, axis=0)
 
         # randomly pick next block reward probability
-        right_reward_prob, left_reward_prob = reward_prob_pool[
-            random.choice(range(reward_prob_pool.shape[0]))
-        ]
+        right_reward_prob, left_reward_prob = reward_prob_pool[random.choice(range(reward_prob_pool.shape[0]))]
 
         # randomly pick block length
         next_block_len = self.evaluate_distribution(block_distribution)

@@ -8,7 +8,7 @@ from aind_behavior_dynamic_foraging import (
 )
 
 from . import trial_models as trial_models
-from .trial_generators import IntegrationTestTrialGenerator, TrialGeneratorSpec
+from .trial_generators import IntegrationTestTrialGeneratorSpec, TrialGeneratorSpec
 
 RANDOMNESSES = Literal["Exponential", "Even"]
 AUTO_WATER_MODES = Literal["Natural", "Both", "High pro"]
@@ -122,7 +122,7 @@ class AindDynamicForagingTaskParameters(TaskParameters):
     reward_n: Optional[RewardN] = Field(default=None)
     lick_spout_retraction: Optional[bool] = Field(default=False, description="Lick spout retraction enabled.")
     trial_generator: TrialGeneratorSpec = Field(
-        IntegrationTestTrialGenerator(None),
+        default=IntegrationTestTrialGeneratorSpec(),
         description="Trial generator model for generating trials in the task.",
         validate_default=True,
     )
