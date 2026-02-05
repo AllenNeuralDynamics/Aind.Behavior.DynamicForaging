@@ -84,7 +84,9 @@ class CoupledTrialGeneratorSpec(_BaseTrialGeneratorSpecModel):
 
     min_reward: int = Field(default=1, title="Minimal rewards in a block to switch")
     auto_water: Optional[AutoWater] = Field(default=None, description="Parameters describing auto water.")
-    behavior_evaluation_mode: BlockBehaviorEvaluationMode = Field(default="now", title="Auto block mode")
+    behavior_evaluation_mode: BlockBehaviorEvaluationMode = Field(
+        default="ignore", title="Auto block mode", validate_default=True
+    )
     switch_thr: float = Field(default=0.5, title="Switch threshold for auto block")
     points_in_a_row: int = Field(default=5, title="Points in a row for auto block")
     warmup: Optional[Warmup] = Field(default=None, description="Parameters describing warmup.")

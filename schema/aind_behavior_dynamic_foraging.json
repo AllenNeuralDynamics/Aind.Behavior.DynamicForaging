@@ -931,7 +931,7 @@
           ]
         },
         "behavior_evaluation_mode": {
-          "default": "now",
+          "default": "ignore",
           "enum": [
             "ignore",
             "end",

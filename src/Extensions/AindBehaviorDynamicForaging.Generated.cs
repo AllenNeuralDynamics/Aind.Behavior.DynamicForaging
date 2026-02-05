@@ -2245,7 +2245,7 @@ namespace AindDynamicForagingDataSchema
             _rewardConsumeTime = 3D;
             _blockParameters = new object();
             _minReward = 1;
-            _behaviorEvaluationMode = CoupledTrialGeneratorSpecBehaviorEvaluationMode.Now;
+            _behaviorEvaluationMode = CoupledTrialGeneratorSpecBehaviorEvaluationMode.Ignore;
             _switchThr = 0.5D;
             _pointsInARow = 5;
             _noResponseTrialAddition = true;
