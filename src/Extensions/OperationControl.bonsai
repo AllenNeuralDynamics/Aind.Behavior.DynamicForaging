@@ -471,7 +471,7 @@
               <Combinator xsi:type="rx:Merge" />
             </Expression>
             <Expression xsi:type="MulticastSubject">
-              <Name>HarpBehaviorEvents</Name>
+              <Name>HarpBehaviorCommands</Name>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
               <Name>StartLogging</Name>
