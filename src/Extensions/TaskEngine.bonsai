@@ -12,7 +12,7 @@
   <Workflow>
     <Nodes>
       <Expression xsi:type="rx:Defer">
-        <Name>TasEngine</Name>
+        <Name>TaskEngine</Name>
         <Workflow>
           <Nodes>
             <Expression xsi:type="Combinator">
@@ -64,7 +64,7 @@
                 <rx:Count>1</rx:Count>
               </Combinator>
             </Expression>
-            <Expression xsi:type="rx:ResourceSubject">
+            <Expression xsi:type="rx:AsyncSubject">
               <Name>PyObjectTrialGenerator</Name>
             </Expression>
             <Expression xsi:type="rx:BehaviorSubject" TypeArguments="p1:Trial">
@@ -282,8 +282,37 @@
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="harp:CreateTimestamped" />
                         </Expression>
-                        <Expression xsi:type="IncludeWorkflow" Path="Extensions\InlineSoftwareEvent.bonsai">
-                          <EventName>Response</EventName>
+                        <Expression xsi:type="rx:Sink">
+                          <Name>CreateResponseSoftwaveEvent</Name>
+                          <Workflow>
+                            <Nodes>
+                              <Expression xsi:type="WorkflowInput">
+                                <Name>Source1</Name>
+                              </Expression>
+                              <Expression xsi:type="MemberSelector">
+                                <Selector>Seconds,Value</Selector>
+                              </Expression>
+                              <Expression xsi:type="ExternalizedMapping">
+                                <Property Name="EventName" />
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="p3:CreateSoftwareEvent">
+                                  <p3:EventName>Response</p3:EventName>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="MulticastSubject">
+                                <Name>SoftwareEvent</Name>
+                              </Expression>
+                              <Expression xsi:type="WorkflowOutput" />
+                            </Nodes>
+                            <Edges>
+                              <Edge From="0" To="1" Label="Source1" />
+                              <Edge From="1" To="3" Label="Source1" />
+                              <Edge From="2" To="3" Label="Source2" />
+                              <Edge From="3" To="4" Label="Source1" />
+                              <Edge From="4" To="5" Label="Source1" />
+                            </Edges>
+                          </Workflow>
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="rx:Take">
@@ -796,9 +825,7 @@
                           <Selector>Item2</Selector>
                         </Expression>
                         <Expression xsi:type="WorkflowOutput" />
-                        <Expression xsi:type="SubscribeSubject">
-                          <Name>ResponseOutcome</Name>
-                        </Expression>
+                        <Expression xsi:type="Unit" />
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="p3:CreateSoftwareEvent">
                             <p3:EventName>RewardConsumptionPeriod</p3:EventName>
@@ -1003,11 +1030,6 @@
               </Workflow>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="rx:Take">
-                <rx:Count>1</rx:Count>
-              </Combinator>
-            </Expression>
-            <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Repeat" />
             </Expression>
             <Expression xsi:type="SubscribeSubject">
@@ -1035,8 +1057,7 @@
             <Edge From="19" To="20" Label="Source1" />
             <Edge From="20" To="21" Label="Source1" />
             <Edge From="21" To="22" Label="Source1" />
-            <Edge From="22" To="23" Label="Source1" />
-            <Edge From="24" To="25" Label="Source1" />
+            <Edge From="23" To="24" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
