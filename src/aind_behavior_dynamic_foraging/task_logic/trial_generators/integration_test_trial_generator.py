@@ -4,15 +4,15 @@ from ..trial_models import Trial, TrialOutcome, SecondaryReinforcer
 from ._base import _BaseTrialGeneratorSpecModel, _ITrialGenerator
 
 
-class DummyTrialGeneratorModel3(_BaseTrialGeneratorSpecModel):
-    type: Literal["DummyTrialGenerator3"] = "DummyTrialGenerator3"
+class IntegrationTestTrialGeneratorSpec(_BaseTrialGeneratorSpecModel):
+    type: Literal["IntegrationTestTrialGenerator"] = "IntegrationTestTrialGenerator"
 
-    def create_generator(self) -> "DummyTrialGenerator3":
-        return DummyTrialGenerator3(self)
+    def create_generator(self) -> "IntegrationTestTrialGenerator":
+        return IntegrationTestTrialGenerator(self)
 
 
-class DummyTrialGenerator3(_ITrialGenerator):
-    def __init__(self, spec: DummyTrialGeneratorModel3) -> None:
+class IntegrationTestTrialGenerator(_ITrialGenerator):
+    def __init__(self, spec: IntegrationTestTrialGeneratorSpec) -> None:
         self._spec = spec
         self._idx = 0
 
