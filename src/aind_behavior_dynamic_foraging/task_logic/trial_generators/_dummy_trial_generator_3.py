@@ -54,7 +54,7 @@ class DummyTrialGenerator3(_ITrialGenerator):
             Trial(quiescence_period_duration=0),    # 20: no quiescence period duration 
 
             # no inter trial interval        
-            Trial(inter_trial_interval_duration=0),    # 21: no inter trial interval duration
+            Trial(inter_trial_interval_duration=0.5),    # 21: no inter trial interval duration
 
         ]
 
