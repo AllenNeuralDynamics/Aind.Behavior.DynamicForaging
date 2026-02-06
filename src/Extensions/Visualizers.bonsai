@@ -15,10 +15,6 @@
         <Workflow>
           <Nodes>
             <Expression xsi:type="SubscribeSubject">
-              <Name>TriggeredCamerasStream</Name>
-            </Expression>
-            <Expression xsi:type="IncludeWorkflow" Path="Extensions\SpinnakerCameraControllerSaturationVisualizer.bonsai" />
-            <Expression xsi:type="SubscribeSubject">
               <Name>GlobalTrial</Name>
             </Expression>
             <Expression xsi:type="p1:TrialTableVisualizerBuilder">
@@ -37,9 +33,39 @@
             <Expression xsi:type="p1:SoftwareEventVisualizerBuilder">
               <p1:FontSize>16</p1:FontSize>
               <p1:TimeWindow>30</p1:TimeWindow>
-              <p1:ShadedAreaPlotters />
-              <p1:PointPlotters />
-              <p1:MaxTrials>0</p1:MaxTrials>
+              <p1:ShadedAreaPlotters>
+                <p1:ShadedAreaPlotter>
+                  <p1:EventName>ItiPeriod</p1:EventName>
+                  <p1:Color>OrangeRed</p1:Color>
+                  <p1:Alpha>0.3</p1:Alpha>
+                </p1:ShadedAreaPlotter>
+                <p1:ShadedAreaPlotter>
+                  <p1:EventName>QuiscentPeriod</p1:EventName>
+                  <p1:Color>CornflowerBlue</p1:Color>
+                  <p1:Alpha>0.3</p1:Alpha>
+                </p1:ShadedAreaPlotter>
+                <p1:ShadedAreaPlotter>
+                  <p1:EventName>ResponsePeriod</p1:EventName>
+                  <p1:Color>ForestGreen</p1:Color>
+                  <p1:Alpha>0.3</p1:Alpha>
+                </p1:ShadedAreaPlotter>
+                <p1:ShadedAreaPlotter>
+                  <p1:EventName>RewardConsumptionPeriod</p1:EventName>
+                  <p1:Color>Orange</p1:Color>
+                  <p1:Alpha>0.3</p1:Alpha>
+                </p1:ShadedAreaPlotter>
+              </p1:ShadedAreaPlotters>
+              <p1:PointPlotters>
+                <p1:PointPlotter>
+                  <p1:EventName>Response</p1:EventName>
+                  <p1:Color>Indigo</p1:Color>
+                  <p1:YPosition>0.5</p1:YPosition>
+                  <p1:MarkerSize>10</p1:MarkerSize>
+                  <p1:Marker>Diamond</p1:Marker>
+                </p1:PointPlotter>
+              </p1:PointPlotters>
+              <p1:TrialBreakEventName>QuiscentPeriod</p1:TrialBreakEventName>
+              <p1:MaxTrials>5</p1:MaxTrials>
             </Expression>
             <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.AindManipulator:AindManipulatorGui.bonsai" />
             <Expression xsi:type="rx:Defer">
@@ -156,12 +182,16 @@
                 </Edges>
               </Workflow>
             </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>TriggeredCamerasStream</Name>
+            </Expression>
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\SpinnakerCameraControllerSaturationVisualizer.bonsai" />
           </Nodes>
           <Edges>
             <Edge From="0" To="1" Label="Source1" />
             <Edge From="2" To="3" Label="Source1" />
             <Edge From="4" To="5" Label="Source1" />
-            <Edge From="6" To="7" Label="Source1" />
+            <Edge From="8" To="9" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
