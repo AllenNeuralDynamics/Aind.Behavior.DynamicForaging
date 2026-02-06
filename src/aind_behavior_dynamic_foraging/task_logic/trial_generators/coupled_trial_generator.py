@@ -164,7 +164,7 @@ class CoupledTrialGenerator(ITrialGenerator):
             )
 
         else:
-            raise ValueError(f"Distibution {distribution.family} not recognized.")
+            raise ValueError(f"Distribution {distribution.family} not recognized.")
 
     def update(self, outcome: TrialOutcome) -> None:
         """
@@ -228,7 +228,7 @@ class CoupledTrialGenerator(ITrialGenerator):
         trials_in_block: number of trials in current block. In couple trials, both sides have same block length so block length is int.
         points_in_a_row: number of consecutive trials above threshold required
         switch_thr: fraction threshold to define stable behavior
-        kernel_size: kernal to evaluate choice fraction
+        kernel_size: kernel to evaluate choice fraction
 
         """
 
@@ -283,7 +283,7 @@ class CoupledTrialGenerator(ITrialGenerator):
         """
         Compute fraction of right choices with running average using a sliding window
 
-        :param kernel_size: kernal to evaluate choice fraction
+        :param kernel_size: kernel to evaluate choice fraction
         :param choice_history: 1D array with 0: left, 1: right and None: ignored entries.
         """
 
@@ -321,7 +321,7 @@ class CoupledTrialGenerator(ITrialGenerator):
         block_length: planned number of trials in current block. In couple trials, both sides have same block length so block length is int.
         points_in_a_row: number of consecutive trials above threshold required
         switch_thr: fraction threshold to define stable behavior
-        kernel_size: kernal to evaluate choice fraction
+        kernel_size: kernel to evaluate choice fraction
         """
 
         # has planned block length been reached?
