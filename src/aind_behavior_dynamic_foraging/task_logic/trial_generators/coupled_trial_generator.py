@@ -13,38 +13,44 @@ from pydantic import BaseModel, Field
 
 from ..trial_models import Trial, TrialOutcome
 from ._base import ITrialGenerator, _BaseTrialGeneratorSpecModel
+from datetime import datetime, timedelta
 
-AutoWaterModes = Literal["Natural", "Both", "High pro"]
 BlockBehaviorEvaluationMode = Literal[
-    "ignore",  # do not take behavior into account when switching blocks
-    "end",  # behavior must be stable at end of block to allow switching
-    "anytime",
-]  # behavior can be stable anytime in block to allow switching
+    "end",  # behavior stable at end of block to allow switching
+    "anytime",  # behavior stable anytime in block to allow switching
+]
 
 
-class RewardProbability(BaseModel):
+class TrialGenerationEndConditions(BaseModel):
+    ignore_win: int = Field(default=30, title="Window of trials to check ignored responses")
+    ignore_ratio_threshold: float = Field(
+        default=0.8, title="Threshold for acceptable ignored trials within window.", ge=0, le=1
+    )
+    max_trial: int = Field(default=1000, title="Maximal number of trials")
+    max_time: timedelta = Field(timedelta(minutes=75), title="Maximal session time (min)")
+    min_time: timedelta = Field(default=timedelta(minutes=30), title="Minimum session time (min)")
+
+
+class BehaviorStabilityParameters(BaseModel):
+    behavior_evaluation_mode: BlockBehaviorEvaluationMode = Field(
+        default="end", title="Mode to evaluate behavior stability.", validate_default=True
+    )
+    behavior_stability_fraction: float = Field(
+        default=0.5,
+        ge=0,
+        le=1,
+        description="Fraction scaling reward-probability difference for behavior.",
+    )
+    min_consecutive_stable_trials: int = Field(
+        default=5,
+        description="Minimum number of consecutive trials satisfying the behavioral stability fraction.",
+    )
+
+
+class RewardProbabilityParameters(BaseModel):
     base_reward_sum: float = Field(default=0.8, title="Sum of p_reward")
     family: int = Field(default=1, title="Reward family")
     pairs_n: int = Field(default=1, title="Number of pairs")
-
-
-class AutoWater(BaseModel):
-    auto_water_type: AutoWaterModes = Field(default="Natural", title="Auto water mode")
-    multiplier: float = Field(default=0.8, title="Multiplier for auto reward")
-    unrewarded: int = Field(default=200, title="Number of unrewarded trials before auto water")
-    ignored: int = Field(default=100, title="Number of ignored trials before auto water")
-
-
-class Warmup(BaseModel):
-    min_trial: int = Field(default=50, title="Warmup finish criteria: minimal trials")
-    max_choice_ratio_bias: float = Field(
-        default=0.1, title="Warmup finish criteria: maximal choice ratio bias from 0.5"
-    )
-    min_finish_ratio: float = Field(default=0.8, title="Warmup finish criteria: minimal finish ratio")
-    windowsize: int = Field(
-        default=20,
-        title="Warmup finish criteria: window size to compute the bias and ratio",
-    )
 
 
 class Block(BaseModel):
@@ -56,46 +62,49 @@ class Block(BaseModel):
 class CoupledTrialGeneratorSpec(_BaseTrialGeneratorSpecModel):
     type: Literal["CoupledTrialGenerator"] = "CoupledTrialGenerator"
 
-    iti: Union[UniformDistribution, ExponentialDistribution] = Field(
-        default=ExponentialDistribution(
-            distribution_parameters=ExponentialDistributionParameters(rate=1 / 2),
-            truncation_parameters=TruncationParameters(min=1, max=8),
-        )
-    )
-    quiescent_period: Union[UniformDistribution, ExponentialDistribution] = Field(
+    quiescent_duration_distribution: Union[UniformDistribution, ExponentialDistribution] = Field(
         default=ExponentialDistribution(
             distribution_parameters=ExponentialDistributionParameters(rate=1),
             truncation_parameters=TruncationParameters(min=0, max=1),
-        )
+        ),
+        description="Duration of the quiescence period before trial starts (in seconds). Each lick resets the timer.",
     )
 
-    response_time: float = Field(default=1.0, title="Response time")
-    reward_consume_time: float = Field(
+    response_duration: float = Field(default=1.0, description="Duration after go cue for animal response.")
+
+    reward_consumption_duration: float = Field(
         default=3.0,
-        title="Reward consume time",
-        description="Time of the no-lick period before trial end",
+        description="Duration of reward consumption before transition to ITI (in seconds).",
     )
-    block_parameters: Union[UniformDistribution, ExponentialDistribution] = Field(
+
+    inter_trial_interval_duration_distribution: Union[UniformDistribution, ExponentialDistribution] = Field(
+        default=ExponentialDistribution(
+            distribution_parameters=ExponentialDistributionParameters(rate=1 / 2),
+            truncation_parameters=TruncationParameters(min=1, max=8),
+        ),
+        description="Duration of the inter-trial interval (in seconds).",
+    )
+
+    block_len_distribution: Union[UniformDistribution, ExponentialDistribution] = Field(
         default=ExponentialDistribution(
             distribution_parameters=ExponentialDistributionParameters(rate=1 / 20),
             truncation_parameters=TruncationParameters(min=20, max=60),
         )
     )
 
-    min_reward: int = Field(default=1, title="Minimal rewards in a block to switch")
-    auto_water: Optional[AutoWater] = Field(default=None, description="Parameters describing auto water.")
-    behavior_evaluation_mode: BlockBehaviorEvaluationMode = Field(
-        default="ignore", title="Auto block mode", validate_default=True
+    trial_generation_end_parameters: TrialGenerationEndConditions = Field(
+        default=TrialGenerationEndConditions(), description="Conditions to end trial generation."
     )
-    switch_thr: float = Field(default=0.5, title="Switch threshold for auto block")
-    points_in_a_row: int = Field(default=5, title="Points in a row for auto block")
-    warmup: Optional[Warmup] = Field(default=None, description="Parameters describing warmup.")
-    no_response_trial_addition: bool = Field(
+    min_block_reward: int = Field(default=1, title="Minimal rewards in a block to switch")
+    behavior_stability_parameters: Optional[BehaviorStabilityParameters] = Field(
+        default=None, description="Parameters describing behavior stability required to switch blocks."
+    )
+    extend_block_on_no_response: bool = Field(
         default=True,
-        description="Add one trial to the block length on both lickspouts.",
+        description="Add one trial to the min block length.",
     )
-    kernel_size: int
-    reward_probability_specs: RewardProbability = Field(default=RewardProbability())
+    kernel_size: int = Field(default=2, description="Kernel to evaluate choice fraction.")
+    reward_probability_parameters: RewardProbabilityParameters = Field(default=RewardProbabilityParameters())
     reward_family: list = [
         [[8, 1], [6, 1], [3, 1], [1, 1]],
         [[8, 1], [1, 1]],
@@ -122,39 +131,79 @@ class CoupledTrialGenerator(ITrialGenerator):
         self.is_right_choice_history: list[bool | None] = []
         self.reward_history: list[bool] = []
         self.block_history: list[Block] = []
-        self.block: Block = Block()
+        self.block: Block = self.generate_next_block(
+            reward_families=self.spec.reward_family,
+            reward_family_index=self.spec.reward_probability_parameters.family,
+            reward_pairs_n=self.spec.reward_probability_parameters.pairs_n,
+            base_reward_sum=self.spec.reward_probability_parameters.base_reward_sum,
+            block_len_distribution=self.spec.block_len_distribution,
+        )
         self.trials_in_block = 0
+        self.start_time = datetime.now()
 
     def next(self) -> Trial | None:
         """
-        generate next trial
+        Generate next trial
 
-        :param self: Description
-        :return: Description
-        :rtype: Trial | None
         """
 
-        iti = self.evaluate_distribution(self.spec.iti)
-        quiescent = self.evaluate_distribution(self.spec.quiescent_period)
+        # check end conditions
+        if not self.are_end_conditions_met(
+            self.spec.trial_generation_end_parameters, self.is_right_choice_history, self.start_time
+        ):
+            return
 
+        # determine iti and quiescent period duration
+        iti = self.evaluate_distribution(self.spec.inter_trial_interval_duration_distribution)
+        quiescent = self.evaluate_distribution(self.spec.quiescent_duration_distribution)
+
+        # iterate trials in block
         self.trials_in_block += 1
 
         return Trial(
             p_reward_left=self.block.left_reward_prob,
             p_reward_right=self.block.right_reward_prob,
-            reward_consumption_duration=self.spec.reward_consume_time,
-            response_deadline_duration=self.spec.response_time,
+            reward_consumption_duration=self.spec.reward_consumption_duration,
+            response_deadline_duration=self.spec.response_duration,
             quiescence_period_duration=quiescent,
             inter_trial_interval_duration=iti,
         )
 
     @staticmethod
+    def are_end_conditions_met(
+        end_conditions: TrialGenerationEndConditions, choice_history: list[bool | None], start_time: datetime
+    ) -> bool:
+        """
+
+        Check if end conditions are met to stop session
+
+        :param end_conditons: conditions to be met for trial generation to stop
+
+        """
+        time_elapsed = datetime.now() - start_time
+        if time_elapsed < end_conditions.min_time:
+            return True
+
+        if end_conditions.max_trial < len(choice_history):
+            return False
+
+        if end_conditions.max_time < time_elapsed:
+            return False
+
+        frac = end_conditions.ignore_ratio_threshold
+        win = end_conditions.ignore_win
+        if choice_history[-win:].count(None) > frac * win:
+            return False
+
+        return True
+
+    @staticmethod
     def evaluate_distribution(
         distribution: Union[UniformDistribution, ExponentialDistribution],
-    ) -> Union[UniformDistribution, ExponentialDistribution]:
+    ) -> float:
         if distribution.family == DistributionFamily.EXPONENTIAL:
             return (
-                np.random.exponential(1 / distribution.distribution_parameters.rate, 1)
+                np.random.exponential(1 / distribution.distribution_parameters.rate)
                 + distribution.truncation_parameters.min
             )
         elif distribution.family == DistributionFamily.UNIFORM:
@@ -170,51 +219,49 @@ class CoupledTrialGenerator(ITrialGenerator):
         """
         Check if block should switch, generate next block if necessary, and  generate next trial
 
-        :param self: Description
-        :param outcome: Description
-        :type outcome: TrialOutcome
+        :param outcome: trial outcome of previous trial
         """
-
-        self.is_right_choice_history.append[outcome.is_right_choice]
-        self.reward_history.append[outcome.is_rewarded]
+      
+        self.is_right_choice_history.append(outcome.is_right_choice)
+        self.reward_history.append(outcome.is_rewarded)
         self.trials_in_block += 1
+
+        if self.spec.extend_block_on_no_response and outcome.is_right_choice == None:
+            self.block.min_length += 1
 
         switch_block = self.switch_block(
             trials_in_block=self.trials_in_block,
-            min_block_reward=self.spec.min_reward,
+            min_block_reward=self.spec.min_block_reward,
             block_left_rewards=self.reward_history.count(False),
             block_right_rewards=self.reward_history.count(True),
             choice_history=self.is_right_choice_history,
             right_reward_prob=self.block.right_reward_prob,
             left_reward_prob=self.block.left_reward_prob,
-            beh_eval_mode=self.spec.behavior_evaluation_mode,
+            beh_stability_params=self.spec.behavior_stability_parameters,
             block_length=self.block.min_length,
-            points_in_a_row=self.spec.points_in_a_row,
-            switch_thr=self.spec.switch_thr,
             kernel_size=self.spec.kernel_size,
         )
-
+        
         if switch_block:
+            print("block switch")
             self.trials_in_block = 0
-            self.block = self.generate_block(
+            self.block = self.generate_next_block(
                 reward_families=self.spec.reward_family,
-                reward_family_index=self.spec.reward_probability_specs.family,
-                reward_pairs_n=self.spec.reward_probability_specs.pairs_n,
-                base_reward_sum=self.spec.reward_probability_specs.base_reward_sum,
-                block_history=self.block_history,
-                block_distribution=self.spec.block_parameters,
+                reward_family_index=self.spec.reward_probability_parameters.family,
+                reward_pairs_n=self.spec.reward_probability_parameters.pairs_n,
+                base_reward_sum=self.spec.reward_probability_parameters.base_reward_sum,
+                current_block=self.block,
+                block_len_distribution=self.spec.block_len_distribution,
             )
             self.block_history.append(self.block)
 
     def is_behavior_stable(
         self,
-        choice_history: np.ndarray,
+        choice_history: list,
         right_reward_prob: float,
         left_reward_prob: float,
-        beh_eval_mode: BlockBehaviorEvaluationMode,
+        beh_stability_params: BehaviorStabilityParameters,
         trials_in_block: int,
-        points_in_a_row: int = 3,
-        switch_thr: float = 0.8,
         kernel_size: int = 2,
     ) -> Optional[bool]:
         """
@@ -224,16 +271,14 @@ class CoupledTrialGenerator(ITrialGenerator):
         choice_history: 1D array with 0: left, 1: right and None: ignored entries.
         right_reward_prob: reward probability for right side
         left_reward_prob: reward probability for left side
-        beh_eval_mode: mode to evaluate behavior
+        beh_stability_params: Parameters to evaluate behavior
         trials_in_block: number of trials in current block. In couple trials, both sides have same block length so block length is int.
-        points_in_a_row: number of consecutive trials above threshold required
-        switch_thr: fraction threshold to define stable behavior
         kernel_size: kernel to evaluate choice fraction
 
         """
 
         # do not prohibit block transition if does not rely on behavior or not enough trials to evaluate or reward probs are the same.
-        if beh_eval_mode == "ignore" or left_reward_prob == right_reward_prob or len(choice_history) < kernel_size:
+        if not beh_stability_params or left_reward_prob == right_reward_prob or len(choice_history) < kernel_size:
             return True
 
         # compute fraction of right choices with running average using a sliding window
@@ -241,7 +286,7 @@ class CoupledTrialGenerator(ITrialGenerator):
         block_choice_frac = self.compute_choice_fraction(kernel_size, block_history)
 
         # margin based on right and left probabilities and scaled by switch threshold. Window for evaluating behavior
-        delta = abs((left_reward_prob - right_reward_prob) * float(switch_thr))
+        delta = abs((left_reward_prob - right_reward_prob) * float(beh_stability_params.behavior_stability_fraction))
         threshold = (
             [0, left_reward_prob - delta] if left_reward_prob > right_reward_prob else [left_reward_prob + delta, 1]
         )
@@ -252,34 +297,33 @@ class CoupledTrialGenerator(ITrialGenerator):
             block_choice_frac <= threshold[1],
         )
 
-        # check consecutive pts above threshold
-        if points_in_a_row <= 0:
-            return True
-
-        if beh_eval_mode == "end":
+        if beh_stability_params.behavior_evaluation_mode == "end":
             # requires consecutive trials ending on the last trial
             # check if the current trial occurs at the end of a long enough consecutive run above threshold
-            if len(points_above_threshold) < points_in_a_row:
+            if len(points_above_threshold) < beh_stability_params.min_consecutive_stable_trials:
                 return False
-            return np.all(points_above_threshold[-points_in_a_row:])
+            return np.all(points_above_threshold[-beh_stability_params.min_consecutive_stable_trials :])
 
-        elif beh_eval_mode == "anytime":
+        elif beh_stability_params.behavior_evaluation_mode == "anytime":
             # allows consecutive trials any time in the behavior
             run_len = 0
             for v in points_above_threshold:
                 if v:
                     run_len += 1
                 else:
-                    if run_len >= points_in_a_row:
+                    if run_len >= beh_stability_params.min_consecutive_stable_trials:
                         return True
                     else:
                         run_len = 0
-            return run_len >= points_in_a_row
+            return run_len >= beh_stability_params.min_consecutive_stable_trials
 
         else:
-            raise ValueError(f"Behavior evaluation mode {beh_eval_mode} not recognized.")
+            raise ValueError(
+                f"Behavior evaluation mode {beh_stability_params.behavior_evaluation_mode} not recognized."
+            )
 
-    def compute_choice_fraction(self, kernel_size: int, choice_history: list[int | None]):
+    @staticmethod
+    def compute_choice_fraction(kernel_size: int, choice_history: list[int | None]):
         """
         Compute fraction of right choices with running average using a sliding window
 
@@ -300,13 +344,11 @@ class CoupledTrialGenerator(ITrialGenerator):
         min_block_reward: int,
         block_left_rewards: int,
         block_right_rewards: int,
-        choice_history: np.ndarray,
+        choice_history: list,
         right_reward_prob: float,
         left_reward_prob: float,
-        beh_eval_mode: BlockBehaviorEvaluationMode,
+        beh_stability_params: BehaviorStabilityParameters,
         block_length: int,
-        points_in_a_row: int = 3,
-        switch_thr: float = 0.8,
         kernel_size: int = 2,
     ) -> bool:
         """
@@ -317,10 +359,8 @@ class CoupledTrialGenerator(ITrialGenerator):
         choice_history: 2D array (rows = sides, columns = trials) with 0: left, 1: right and 2: ignored entries.
         right_reward_prob: reward probability for right side
         left_reward_prob: reward probability for left side
-        beh_eval_mode: mode to evaluate behavior
+        beh_stability_params: parameters to evaluate behavior
         block_length: planned number of trials in current block. In couple trials, both sides have same block length so block length is int.
-        points_in_a_row: number of consecutive trials above threshold required
-        switch_thr: fraction threshold to define stable behavior
         kernel_size: kernel to evaluate choice fraction
         """
 
@@ -332,10 +372,8 @@ class CoupledTrialGenerator(ITrialGenerator):
             choice_history,
             right_reward_prob,
             left_reward_prob,
-            beh_eval_mode,
+            beh_stability_params,
             trials_in_block,
-            points_in_a_row,
-            switch_thr,
             kernel_size,
         )
 
@@ -349,14 +387,14 @@ class CoupledTrialGenerator(ITrialGenerator):
 
         return block_length_ok and reward_ok and behavior_ok
 
-    def generate_block(
+    def generate_next_block(
         self,
         reward_families: list,
         reward_family_index: int,
         reward_pairs_n: int,
         base_reward_sum: float,
-        block_history: list[Block],
-        block_distribution: Union[UniformDistribution, ExponentialDistribution],
+        block_len_distribution: Union[UniformDistribution, ExponentialDistribution],
+        current_block: Optional[None] = None,
     ) -> Block:
         """
         Generate the next block for a coupled task.
@@ -365,8 +403,8 @@ class CoupledTrialGenerator(ITrialGenerator):
         :param reward_family_index: Description
         :param reward_pairs_n: Description
         :param base_reward_sum: Description
-        :param reward_prob_history: Description
-        :param block_distribution: Description
+        :param current_block: Description
+        :param block_len_distribution: Description
         """
 
         # determine candidate reward pairs
@@ -378,10 +416,9 @@ class CoupledTrialGenerator(ITrialGenerator):
         # create pool including all reward probabiliteis and mirrored pairs
         reward_prob_pool = np.vstack([reward_prob, np.fliplr(reward_prob)])
 
-        if block_history:  # exclude previous block if history exists
-            reward_prob_history = [[block.right_reward_prob, block.left_reward_prob] for block in block_history]
-            last_block_reward_prob = reward_prob_history[:, -1]
-
+        if current_block:  # exclude previous block if history exists
+            last_block_reward_prob = [current_block.right_reward_prob, current_block.left_reward_prob]
+        
             # remove blocks identical to last block
             reward_prob_pool = reward_prob_pool[np.any(reward_prob_pool != last_block_reward_prob, axis=1)]
 
@@ -398,8 +435,7 @@ class CoupledTrialGenerator(ITrialGenerator):
         right_reward_prob, left_reward_prob = reward_prob_pool[random.choice(range(reward_prob_pool.shape[0]))]
 
         # randomly pick block length
-        next_block_len = self.evaluate_distribution(block_distribution)
-
+        next_block_len = round(self.evaluate_distribution(block_len_distribution))
         return Block(
             right_reward_prob=right_reward_prob,
             left_reward_prob=left_reward_prob,
