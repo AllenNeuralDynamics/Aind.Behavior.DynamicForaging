@@ -447,6 +447,7 @@ public class SoftwareEventVisualizer : BufferedVisualizer
         {
             ImPlot.SetupAxes("Time (s)", HasTrialBreaks ? "Trial" : "Value");
             ImPlot.SetupAxisLimits(ImAxis.Y1, yMin, yMax, ImPlotCond.Always);
+            ImPlot.SetupLegend(ImPlotLocation.North, ImPlotLegendFlags.Outside | ImPlotLegendFlags.Horizontal);
 
             if (HasTrialBreaks && numVisible > 0)
             {
