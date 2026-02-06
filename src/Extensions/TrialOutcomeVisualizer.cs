@@ -38,7 +38,7 @@ public class TrialOutcomeVisualizer : BufferedVisualizer
     // Colors (RGBA format)
     private static readonly Vector4 RightChoiceColor = new Vector4(0.0f, 0.0f, 0.8f, 1.0f);        // Blue for right
     private static readonly Vector4 LeftChoiceColor = new Vector4(0.8f, 0.0f, 0.0f, 1.0f);         // Red for left
-    private static readonly Vector4 NoChoiceColor = new Vector4(0.5f, 0.5f, 0.5f, 1.0f);           // Gray
+    private static readonly Vector4 NoChoiceColor = new Vector4(0.1f, 0.1f, 0.1f, 1.0f);           // Gray
     private static readonly Vector4 RightChoiceLineColor = new Vector4(0.0f, 0.0f, 0.8f, 1.0f);    // Blue for right avg
     private static readonly Vector4 RewardRateLineColor = new Vector4(0.0f, 0.6f, 0.0f, 1.0f);     // Green for reward rate (PWater)
     private static readonly Vector4 ProbabilityTraceColor = new Vector4(0.0f, 0.0f, 0.0f, 1.0f);   // Black for probability traces
@@ -277,7 +277,7 @@ public class TrialOutcomeVisualizer : BufferedVisualizer
         var xArray = xValues.ToArray();
         var yArray = yValues.ToArray();
 
-        ImPlot.SetNextMarkerStyle(ImPlotMarker.Cross, 4.0f, color, 1.5f, color);
+        ImPlot.SetNextMarkerStyle(ImPlotMarker.Cross, 10.0f, color, 3.0f, color);
         ImPlot.PlotScatter(label, ref xArray[0], ref yArray[0], xArray.Length);
     }
 
