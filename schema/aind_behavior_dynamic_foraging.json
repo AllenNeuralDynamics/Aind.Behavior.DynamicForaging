@@ -253,7 +253,7 @@
           "description": "Parameters describing auto water.",
           "oneOf": [
             {
-              "$ref": "#/$defs/aind_behavior_dynamic_foraging__task_logic__AutoWater"
+              "$ref": "#/$defs/AutoWater"
             },
             {
               "type": "null"
@@ -589,6 +589,43 @@
       "title": "AutoBlock",
       "type": "object"
     },
+    "AutoWater": {
+      "properties": {
+        "auto_water_type": {
+          "default": "Natural",
+          "enum": [
+            "Natural",
+            "Both",
+            "High pro"
+          ],
+          "title": "Auto water mode",
+          "type": "string"
+        },
+        "multiplier": {
+          "default": 0.8,
+          "title": "Multiplier for auto reward",
+          "type": "number"
+        },
+        "unrewarded": {
+          "default": 200,
+          "title": "Number of unrewarded trials before auto water",
+          "type": "integer"
+        },
+        "ignored": {
+          "default": 100,
+          "title": "Number of ignored trials before auto water",
+          "type": "integer"
+        },
+        "include_reward": {
+          "default": false,
+          "description": "Include auto water in total rewards.",
+          "title": "Include Reward",
+          "type": "boolean"
+        }
+      },
+      "title": "AutoWater",
+      "type": "object"
+    },
     "Axis": {
       "description": "Motor axis available",
       "enum": [
@@ -668,6 +705,35 @@
     "BaseModel": {
       "properties": {},
       "title": "BaseModel",
+      "type": "object"
+    },
+    "BehaviorStabilityParameters": {
+      "properties": {
+        "behavior_evaluation_mode": {
+          "default": "end",
+          "enum": [
+            "end",
+            "anytime"
+          ],
+          "title": "Mode to evaluate behavior stability.",
+          "type": "string"
+        },
+        "behavior_stability_fraction": {
+          "default": 0.5,
+          "description": "Fraction scaling reward-probability difference for behavior.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Behavior Stability Fraction",
+          "type": "number"
+        },
+        "min_consecutive_stable_trials": {
+          "default": 5,
+          "description": "Minimum number of consecutive trials satisfying the behavioral stability fraction.",
+          "title": "Min Consecutive Stable Trials",
+          "type": "integer"
+        }
+      },
+      "title": "BehaviorStabilityParameters",
       "type": "object"
     },
     "BlockParameters": {
@@ -830,31 +896,7 @@
           "title": "Type",
           "type": "string"
         },
-        "iti": {
-          "default": {
-            "family": "Exponential",
-            "distribution_parameters": {
-              "family": "Exponential",
-              "rate": 0.5
-            },
-            "truncation_parameters": {
-              "max": 8.0,
-              "min": 1.0,
-              "truncation_mode": "exclude"
-            },
-            "scaling_parameters": null
-          },
-          "oneOf": [
-            {
-              "$ref": "#/$defs/UniformDistribution"
-            },
-            {
-              "$ref": "#/$defs/ExponentialDistribution"
-            }
-          ],
-          "title": "Iti"
-        },
-        "quiescent_period": {
+        "quiescent_duration_distribution": {
           "default": {
             "family": "Exponential",
             "distribution_parameters": {
@@ -868,6 +910,7 @@
             },
             "scaling_parameters": null
           },
+          "description": "Duration of the quiescence period before trial starts (in seconds). Each lick resets the timer.",
           "oneOf": [
             {
               "$ref": "#/$defs/UniformDistribution"
@@ -876,20 +919,46 @@
               "$ref": "#/$defs/ExponentialDistribution"
             }
           ],
-          "title": "Quiescent Period"
+          "title": "Quiescent Duration Distribution"
         },
-        "response_time": {
+        "response_duration": {
           "default": 1.0,
-          "title": "Response time",
+          "description": "Duration after go cue for animal response.",
+          "title": "Response Duration",
           "type": "number"
         },
-        "reward_consume_time": {
+        "reward_consumption_duration": {
           "default": 3.0,
-          "description": "Time of the no-lick period before trial end",
-          "title": "Reward consume time",
+          "description": "Duration of reward consumption before transition to ITI (in seconds).",
+          "title": "Reward Consumption Duration",
           "type": "number"
         },
-        "block_parameters": {
+        "inter_trial_interval_duration_distribution": {
+          "default": {
+            "family": "Exponential",
+            "distribution_parameters": {
+              "family": "Exponential",
+              "rate": 0.5
+            },
+            "truncation_parameters": {
+              "max": 8.0,
+              "min": 1.0,
+              "truncation_mode": "exclude"
+            },
+            "scaling_parameters": null
+          },
+          "description": "Duration of the inter-trial interval (in seconds).",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/UniformDistribution"
+            },
+            {
+              "$ref": "#/$defs/ExponentialDistribution"
+            }
+          ],
+          "title": "Inter Trial Interval Duration Distribution"
+        },
+        "block_len_distribution": {
           "default": {
             "family": "Exponential",
             "distribution_parameters": {
@@ -911,69 +980,50 @@
               "$ref": "#/$defs/ExponentialDistribution"
             }
           ],
-          "title": "Block Parameters"
+          "title": "Block Len Distribution"
         },
-        "min_reward": {
+        "trial_generation_end_parameters": {
+          "$ref": "#/$defs/TrialGenerationEndConditions",
+          "default": {
+            "ignore_win": 30,
+            "ignore_ratio_threshold": 0.8,
+            "max_trial": 1000,
+            "max_time": "PT1H15M",
+            "min_time": "PT30M"
+          },
+          "description": "Conditions to end trial generation."
+        },
+        "min_block_reward": {
           "default": 1,
           "title": "Minimal rewards in a block to switch",
           "type": "integer"
         },
-        "auto_water": {
+        "behavior_stability_parameters": {
           "default": null,
-          "description": "Parameters describing auto water.",
+          "description": "Parameters describing behavior stability required to switch blocks.",
           "oneOf": [
             {
-              "$ref": "#/$defs/aind_behavior_dynamic_foraging__task_logic__trial_generators__coupled_trial_generator__AutoWater"
+              "$ref": "#/$defs/BehaviorStabilityParameters"
             },
             {
               "type": "null"
             }
           ]
         },
-        "behavior_evaluation_mode": {
-          "default": "ignore",
-          "enum": [
-            "ignore",
-            "end",
-            "anytime"
-          ],
-          "title": "Auto block mode",
-          "type": "string"
-        },
-        "switch_thr": {
-          "default": 0.5,
-          "title": "Switch threshold for auto block",
-          "type": "number"
-        },
-        "points_in_a_row": {
-          "default": 5,
-          "title": "Points in a row for auto block",
-          "type": "integer"
-        },
-        "warmup": {
-          "default": null,
-          "description": "Parameters describing warmup.",
-          "oneOf": [
-            {
-              "$ref": "#/$defs/Warmup"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "no_response_trial_addition": {
+        "extend_block_on_no_response": {
           "default": true,
-          "description": "Add one trial to the block length on both lickspouts.",
-          "title": "No Response Trial Addition",
+          "description": "Add one trial to the min block length.",
+          "title": "Extend Block On No Response",
           "type": "boolean"
         },
         "kernel_size": {
+          "default": 2,
+          "description": "Kernel to evaluate choice fraction.",
           "title": "Kernel Size",
           "type": "integer"
         },
-        "reward_probability_specs": {
-          "$ref": "#/$defs/RewardProbability",
+        "reward_probability_parameters": {
+          "$ref": "#/$defs/RewardProbabilityParameters",
           "default": {
             "base_reward_sum": 0.8,
             "family": 1,
@@ -1056,9 +1106,6 @@
           "type": "array"
         }
       },
-      "required": [
-        "kernel_size"
-      ],
       "title": "CoupledTrialGeneratorSpec",
       "type": "object"
     },
@@ -1684,6 +1731,27 @@
         }
       },
       "title": "RewardProbability",
+      "type": "object"
+    },
+    "RewardProbabilityParameters": {
+      "properties": {
+        "base_reward_sum": {
+          "default": 0.8,
+          "title": "Sum of p_reward",
+          "type": "number"
+        },
+        "family": {
+          "default": 1,
+          "title": "Reward family",
+          "type": "integer"
+        },
+        "pairs_n": {
+          "default": 1,
+          "title": "Number of pairs",
+          "type": "integer"
+        }
+      },
+      "title": "RewardProbabilityParameters",
       "type": "object"
     },
     "RewardSize": {
@@ -2401,6 +2469,41 @@
       "title": "Trial",
       "type": "object"
     },
+    "TrialGenerationEndConditions": {
+      "properties": {
+        "ignore_win": {
+          "default": 30,
+          "title": "Window of trials to check ignored responses",
+          "type": "integer"
+        },
+        "ignore_ratio_threshold": {
+          "default": 0.8,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Threshold for acceptable ignored trials within window.",
+          "type": "number"
+        },
+        "max_trial": {
+          "default": 1000,
+          "title": "Maximal number of trials",
+          "type": "integer"
+        },
+        "max_time": {
+          "default": "PT1H15M",
+          "format": "duration",
+          "title": "Maximal session time (min)",
+          "type": "string"
+        },
+        "min_time": {
+          "default": "PT30M",
+          "format": "duration",
+          "title": "Minimum session time (min)",
+          "type": "string"
+        }
+      },
+      "title": "TrialGenerationEndConditions",
+      "type": "object"
+    },
     "TrialGeneratorSpec": {
       "description": "Type of trial generator",
       "discriminator": {
@@ -2793,74 +2896,6 @@
         }
       },
       "title": "WebCamera",
-      "type": "object"
-    },
-    "aind_behavior_dynamic_foraging__task_logic__AutoWater": {
-      "properties": {
-        "auto_water_type": {
-          "default": "Natural",
-          "enum": [
-            "Natural",
-            "Both",
-            "High pro"
-          ],
-          "title": "Auto water mode",
-          "type": "string"
-        },
-        "multiplier": {
-          "default": 0.8,
-          "title": "Multiplier for auto reward",
-          "type": "number"
-        },
-        "unrewarded": {
-          "default": 200,
-          "title": "Number of unrewarded trials before auto water",
-          "type": "integer"
-        },
-        "ignored": {
-          "default": 100,
-          "title": "Number of ignored trials before auto water",
-          "type": "integer"
-        },
-        "include_reward": {
-          "default": false,
-          "description": "Include auto water in total rewards.",
-          "title": "Include Reward",
-          "type": "boolean"
-        }
-      },
-      "title": "AutoWater",
-      "type": "object"
-    },
-    "aind_behavior_dynamic_foraging__task_logic__trial_generators__coupled_trial_generator__AutoWater": {
-      "properties": {
-        "auto_water_type": {
-          "default": "Natural",
-          "enum": [
-            "Natural",
-            "Both",
-            "High pro"
-          ],
-          "title": "Auto water mode",
-          "type": "string"
-        },
-        "multiplier": {
-          "default": 0.8,
-          "title": "Multiplier for auto reward",
-          "type": "number"
-        },
-        "unrewarded": {
-          "default": 200,
-          "title": "Number of unrewarded trials before auto water",
-          "type": "integer"
-        },
-        "ignored": {
-          "default": 100,
-          "title": "Number of ignored trials before auto water",
-          "type": "integer"
-        }
-      },
-      "title": "AutoWater",
       "type": "object"
     }
   }
