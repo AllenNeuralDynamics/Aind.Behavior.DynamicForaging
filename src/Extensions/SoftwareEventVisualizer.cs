@@ -234,7 +234,7 @@ public class SoftwareEventVisualizer : BufferedVisualizer
     /// <summary>
     /// Draws a single shaded rectangle in a given trial row.
     /// </summary>
-    unsafe private void DrawShadedRect(ShadedAreaPlotter config, double tStart, double tEnd, int trialIndex, ref int labelCounter)
+    unsafe private void DrawShadedRect(ShadedAreaPlotter config, double tStart, double tEnd, int trialIndex)
     {
         double x0 = ToPlotTime(tStart);
         double x1 = ToPlotTime(tEnd);
@@ -245,13 +245,11 @@ public class SoftwareEventVisualizer : BufferedVisualizer
         ImPlot.SetNextLineStyle(color, 0f);
         ImPlot.SetNextFillStyle(color, config.Alpha);
 
-        string label = "##s" + (labelCounter++).ToString();
-
         fixed (double* xs = new double[] { x0, x1 })
         fixed (double* ysL = new double[] { yLow, yLow })
         fixed (double* ysH = new double[] { yHigh, yHigh })
         {
-            ImPlot.PlotShaded(label, xs, ysL, ysH, 2);
+            ImPlot.PlotShaded(config.EventName, xs, ysL, ysH, 2);
         }
     }
 
@@ -287,8 +285,6 @@ public class SoftwareEventVisualizer : BufferedVisualizer
             startIdx = 0;
         if (startIdx < 0) return;
 
-        int labelCounter = 0;
-
         for (int i = startIdx; i < timeline.Count; i++)
         {
             var segment = timeline[i];
@@ -300,7 +296,6 @@ public class SoftwareEventVisualizer : BufferedVisualizer
 
             if (HasTrialBreaks)
             {
-                // Split segment at trial boundaries
                 int startTrial = GetTrialIndex(segStart);
                 double currentStart = segStart;
                 int currentTrial = startTrial;
@@ -314,7 +309,7 @@ public class SoftwareEventVisualizer : BufferedVisualizer
 
                     if (currentTrial >= firstVisible && currentTrial < lastVisible)
                     {
-                        DrawShadedRect(segment.Config, currentStart, currentEnd, currentTrial, ref labelCounter);
+                        DrawShadedRect(segment.Config, currentStart, currentEnd, currentTrial);
                     }
 
                     currentStart = currentEnd;
@@ -323,7 +318,7 @@ public class SoftwareEventVisualizer : BufferedVisualizer
             }
             else
             {
-                DrawShadedRect(segment.Config, segStart, segEnd, 0, ref labelCounter);
+                DrawShadedRect(segment.Config, segStart, segEnd, 0);
             }
         }
     }
@@ -448,7 +443,7 @@ public class SoftwareEventVisualizer : BufferedVisualizer
         double yMax = HasTrialBreaks ? (double)(firstVisible + numVisible) : YAxisMax;
 
         ImPlot.SetNextAxesLimits(plotTMin, plotTMax, yMin, yMax, ImPlotCond.Always);
-        if (ImPlot.BeginPlot("Software Events", new Vector2(-1, plotHeight), ImPlotFlags.NoLegend | ImPlotFlags.NoTitle))
+        if (ImPlot.BeginPlot("Software Events", new Vector2(-1, plotHeight), ImPlotFlags.NoTitle))
         {
             ImPlot.SetupAxes("Time (s)", HasTrialBreaks ? "Trial" : "Value");
             ImPlot.SetupAxisLimits(ImAxis.Y1, yMin, yMax, ImPlotCond.Always);
