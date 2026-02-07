@@ -66,6 +66,14 @@ uv run dynamic-foraging -h
 
 You may need to install optional dependencies depending on the sub-commands you run.
 
+## 🔍 Primary data quality-control
+
+Once an experiment is collected, the primary data quality-control script can be run to check the data for issues. This script can be launcher using:
+
+```powershell
+uv run dynamic-foraging data-qc <path-to-data-dir>
+```
+
 ## 🔄 Regenerating schemas
 
 DSL schemas can be modified in `./src/aind_behavior_dynamic_foraging/rig.py` (or `(...)/task_logic`.py`).

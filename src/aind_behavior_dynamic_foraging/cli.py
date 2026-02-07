@@ -5,6 +5,8 @@ from pydantic_settings import BaseSettings, CliApp, CliSubCommand
 
 from aind_behavior_dynamic_foraging import __semver__, regenerate
 
+from .data_qc import DataQcCli
+
 
 class VersionCli(RootModel):
     root: t.Any
@@ -27,6 +29,7 @@ class DynamicForagingCli(BaseSettings, cli_prog_name="dynamic-foraging", cli_keb
     regenerate: CliSubCommand[DslRegenerateCli] = Field(
         description="Regenerate the dynamic-foraging dsl dependencies.",
     )
+    data_qc: CliSubCommand[DataQcCli] = Field(description="Run data quality checks.")
 
     def cli_cmd(self):
         return CliApp().run_subcommand(self)
