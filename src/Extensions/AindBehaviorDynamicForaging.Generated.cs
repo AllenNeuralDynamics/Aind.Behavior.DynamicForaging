@@ -50,7 +50,7 @@ namespace AindDynamicForagingDataSchema
         public AindDynamicForagingRig()
         {
             _aindBehaviorServicesPkgVersion = "0.13.0";
-            _version = "0.0.2-rc4";
+            _version = "0.0.2-rc5";
             _triggeredCameraController = new CameraControllerSpinnakerCamera();
             _harpBehavior = new HarpBehavior();
             _harpLickometerLeft = new HarpLicketySplit();
@@ -435,7 +435,7 @@ namespace AindDynamicForagingDataSchema
             _name = "AindDynamicForaging";
             _description = "";
             _taskParameters = new AindDynamicForagingTaskParameters();
-            _version = "0.0.2-rc4";
+            _version = "0.0.2-rc5";
         }
     
         protected AindDynamicForagingTaskLogic(AindDynamicForagingTaskLogic other)
