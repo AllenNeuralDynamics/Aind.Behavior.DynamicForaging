@@ -154,7 +154,7 @@ class CoupledTrialGenerator(ITrialGenerator):
         if not self.are_end_conditions_met(
             self.spec.trial_generation_end_parameters, self.is_right_choice_history, self.start_time
         ):
-            self.logger.info("Trial generator end conditons met.")
+            self.logger.info("Trial generator end conditions met.")
             return
 
         # determine iti and quiescent period duration
