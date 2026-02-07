@@ -6203,9 +6203,70 @@ namespace AindDynamicForagingDataSchema
 
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class TrialGeneratorCompositeSpecTrialGeneratorSpec : TrialGeneratorSpec
+    {
+    
+        private System.Collections.Generic.List<TrialGeneratorSpec> _generators;
+    
+        public TrialGeneratorCompositeSpecTrialGeneratorSpec()
+        {
+            _generators = new System.Collections.Generic.List<TrialGeneratorSpec>();
+        }
+    
+        protected TrialGeneratorCompositeSpecTrialGeneratorSpec(TrialGeneratorCompositeSpecTrialGeneratorSpec other) : 
+                base(other)
+        {
+            _generators = other._generators;
+        }
+    
+        /// <summary>
+        /// List of trial generator specifications to concatenate. When one generator returns None, the next one is concatenated.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("generators", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("List of trial generator specifications to concatenate. When one generator returns" +
+            " None, the next one is concatenated.")]
+        public System.Collections.Generic.List<TrialGeneratorSpec> Generators
+        {
+            get
+            {
+                return _generators;
+            }
+            set
+            {
+                _generators = value;
+            }
+        }
+    
+        public System.IObservable<TrialGeneratorCompositeSpecTrialGeneratorSpec> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new TrialGeneratorCompositeSpecTrialGeneratorSpec(this)));
+        }
+    
+        public System.IObservable<TrialGeneratorCompositeSpecTrialGeneratorSpec> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new TrialGeneratorCompositeSpecTrialGeneratorSpec(this));
+        }
+    
+        protected override bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            if (base.PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(", ");
+            }
+            stringBuilder.Append("Generators = " + _generators);
+            return true;
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Newtonsoft.Json.JsonConverter(typeof(JsonInheritanceConverter), "type")]
     [JsonInheritanceAttribute("CoupledTrialGenerator", typeof(CoupledTrialGeneratorSpec))]
     [JsonInheritanceAttribute("IntegrationTestTrialGenerator", typeof(IntegrationTestTrialGeneratorSpec))]
+    [JsonInheritanceAttribute("TrialGeneratorComposite", typeof(TrialGeneratorCompositeSpecTrialGeneratorSpec))]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class TrialGeneratorSpec
@@ -7747,6 +7808,51 @@ namespace AindDynamicForagingDataSchema
 
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Newtonsoft.Json.JsonConverter(typeof(JsonInheritanceConverter), "type")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class Anonymous
+    {
+    
+        public Anonymous()
+        {
+        }
+    
+        protected Anonymous(Anonymous other)
+        {
+        }
+    
+        public System.IObservable<Anonymous> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new Anonymous(this)));
+        }
+    
+        public System.IObservable<Anonymous> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new Anonymous(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            return false;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     public enum AindDynamicForagingTaskParametersRandomness
     {
@@ -7988,6 +8094,7 @@ namespace AindDynamicForagingDataSchema
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Combinator)]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CoupledTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<IntegrationTestTrialGeneratorSpec>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialGeneratorCompositeSpecTrialGeneratorSpec>))]
     public partial class MatchTrialGeneratorSpec : Bonsai.Expressions.SingleArgumentExpressionBuilder
     {
     
@@ -8052,6 +8159,45 @@ namespace AindDynamicForagingDataSchema
             return System.Reactive.Linq.Observable.Create<TResult>(observer =>
             {
                 var sourceObserver = System.Reactive.Observer.Create<VideoWriter>(
+                    value =>
+                    {
+                        var match = value as TResult;
+                        if (match != null) observer.OnNext(match);
+                    },
+                    observer.OnError,
+                    observer.OnCompleted);
+                return System.ObservableExtensions.SubscribeSafe(source, sourceObserver);
+            });
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.ComponentModel.DefaultPropertyAttribute("Type")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Combinator)]
+    public partial class MatchAnonymous : Bonsai.Expressions.SingleArgumentExpressionBuilder
+    {
+    
+        public Bonsai.Expressions.TypeMapping Type { get; set; }
+
+        public override System.Linq.Expressions.Expression Build(System.Collections.Generic.IEnumerable<System.Linq.Expressions.Expression> arguments)
+        {
+            var typeMapping = Type;
+            var returnType = typeMapping != null ? typeMapping.GetType().GetGenericArguments()[0] : typeof(Anonymous);
+            return System.Linq.Expressions.Expression.Call(
+                typeof(MatchAnonymous),
+                "Process",
+                new System.Type[] { returnType },
+                System.Linq.Enumerable.Single(arguments));
+        }
+
+    
+        private static System.IObservable<TResult> Process<TResult>(System.IObservable<Anonymous> source)
+            where TResult : Anonymous
+        {
+            return System.Reactive.Linq.Observable.Create<TResult>(observer =>
+            {
+                var sourceObserver = System.Reactive.Observer.Create<Anonymous>(
                     value =>
                     {
                         var match = value as TResult;
@@ -8268,6 +8414,11 @@ namespace AindDynamicForagingDataSchema
             return Process<Trial>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<TrialGeneratorCompositeSpecTrialGeneratorSpec> source)
+        {
+            return Process<TrialGeneratorCompositeSpecTrialGeneratorSpec>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<TrialGeneratorSpec> source)
         {
             return Process<TrialGeneratorSpec>(source);
@@ -8332,6 +8483,11 @@ namespace AindDynamicForagingDataSchema
         {
             return Process<AindBehaviorDynamicForagingTaskLogicTrialGeneratorsCoupledTrialGeneratorAutoWater>(source);
         }
+
+        public System.IObservable<string> Process(System.IObservable<Anonymous> source)
+        {
+            return Process<Anonymous>(source);
+        }
     }
 
 
@@ -8379,6 +8535,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Session>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<SpinnakerCamera>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Trial>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialGeneratorCompositeSpecTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialOutcome>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TruncationParameters>))]
@@ -8392,6 +8549,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WebCamera>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AindBehaviorDynamicForagingTaskLogicAutoWater>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AindBehaviorDynamicForagingTaskLogicTrialGeneratorsCoupledTrialGeneratorAutoWater>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Anonymous>))]
     public partial class DeserializeFromJson : Bonsai.Expressions.SingleArgumentExpressionBuilder
     {
     

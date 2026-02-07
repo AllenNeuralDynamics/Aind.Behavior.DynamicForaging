@@ -1,17 +1,19 @@
-from typing import Literal
+from typing import Generic, Literal, TypeVar
 
-from pydantic import Field
+from pydantic import Field, SerializeAsAny
 
 from ..trial_models import Trial, TrialOutcome
 from ._base import BaseTrialGeneratorSpecModel, ITrialGenerator
 
+_TSpec = TypeVar("_TSpec", bound=BaseTrialGeneratorSpecModel)
 
-class TrialGeneratorCompositeSpec(BaseTrialGeneratorSpecModel):
+
+class TrialGeneratorCompositeSpec(BaseTrialGeneratorSpecModel, Generic[_TSpec]):
     """Specification for a composite trial generator that concatenates multiple generators."""
 
     type: Literal["TrialGeneratorComposite"] = "TrialGeneratorComposite"
 
-    generators: list[BaseTrialGeneratorSpecModel] = Field(
+    generators: list[SerializeAsAny[_TSpec]] = Field(
         description="List of trial generator specifications to concatenate. "
         "When one generator returns None, the next one is concatenated.",
         min_length=1,

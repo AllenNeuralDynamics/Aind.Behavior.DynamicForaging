@@ -10,13 +10,23 @@ from .integration_test_trial_generator import IntegrationTestTrialGeneratorSpec
 
 if TYPE_CHECKING:
     TrialGeneratorSpec = Union[
-        (CoupledTrialGeneratorSpec, IntegrationTestTrialGeneratorSpec, TrialGeneratorCompositeSpec)
+        (
+            CoupledTrialGeneratorSpec,
+            IntegrationTestTrialGeneratorSpec,
+            TrialGeneratorCompositeSpec["TrialGeneratorSpec"],
+        )
     ]
 else:
     TrialGeneratorSpec = TypeAliasType(
         "TrialGeneratorSpec",
         Annotated[
-            Union[(CoupledTrialGeneratorSpec, IntegrationTestTrialGeneratorSpec, TrialGeneratorCompositeSpec)],
+            Union[
+                (
+                    CoupledTrialGeneratorSpec,
+                    IntegrationTestTrialGeneratorSpec,
+                    TrialGeneratorCompositeSpec["TrialGeneratorSpec"],
+                )
+            ],
             Field(discriminator="type", description="Type of trial generator"),
         ],
     )
