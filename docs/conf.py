@@ -84,3 +84,10 @@ def export_model_diagram(model: BaseModel, root: str = _static_path) -> None:
 
 
 export_model_diagram(aind_behavior_dynamic_foraging.task_logic.AindDynamicForagingTaskLogic, _static_path)
+
+# -- Dataset rendering
+
+with open(f"{_static_path}/dataset.html", "w", encoding="utf-8") as f:
+    from aind_behavior_dynamic_foraging.data_contract import render_dataset
+
+    f.write(render_dataset(version=release))
