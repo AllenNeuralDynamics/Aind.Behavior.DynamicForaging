@@ -1,9 +1,8 @@
-import os
-import random
 import logging
+import random
 
 from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generator import CoupledTrialGeneratorSpec
-from aind_behavior_dynamic_foraging.task_logic.trial_models import TrialOutcome, Trial
+from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial, TrialOutcome
 
 
 def main():

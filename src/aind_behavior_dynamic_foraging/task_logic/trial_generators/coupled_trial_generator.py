@@ -1,6 +1,7 @@
-import random
-from typing import Literal, Optional, Union
 import logging
+import random
+from datetime import datetime, timedelta
+from typing import Literal, Optional, Union
 
 import numpy as np
 from aind_behavior_services.task.distributions import (
@@ -14,7 +15,6 @@ from pydantic import BaseModel, Field
 
 from ..trial_models import Trial, TrialOutcome
 from ._base import ITrialGenerator, _BaseTrialGeneratorSpecModel
-from datetime import datetime, timedelta
 
 BlockBehaviorEvaluationMode = Literal[
     "end",  # behavior stable at end of block to allow switching
@@ -232,8 +232,8 @@ class CoupledTrialGenerator(ITrialGenerator):
         self.reward_history.append(outcome.is_rewarded)
         self.trials_in_block += 1
 
-        if self.spec.extend_block_on_no_response and outcome.is_right_choice == None:
-            self.logger.info(f"Extending minimum block length due to ignored trial.")
+        if self.spec.extend_block_on_no_response and outcome.is_right_choice is None:
+            self.logger.info("Extending minimum block length due to ignored trial.")
             self.block.min_length += 1
 
         switch_block = self.is_block_switch_allowed(
@@ -250,7 +250,7 @@ class CoupledTrialGenerator(ITrialGenerator):
         )
 
         if switch_block:
-            self.logger.info(f"Switching block.")
+            self.logger.info("Switching block.")
             self.trials_in_block = 0
             self.block = self.generate_next_block(
                 reward_families=self.spec.reward_family,
@@ -448,7 +448,7 @@ class CoupledTrialGenerator(ITrialGenerator):
         reward_prob_pool = np.vstack([reward_prob, np.fliplr(reward_prob)])
 
         if current_block:  # exclude previous block if history exists
-            self.logger.info(f"Excluding previous block reward probability.")
+            self.logger.info("Excluding previous block reward probability.")
             last_block_reward_prob = [current_block.right_reward_prob, current_block.left_reward_prob]
 
             # remove blocks identical to last block
