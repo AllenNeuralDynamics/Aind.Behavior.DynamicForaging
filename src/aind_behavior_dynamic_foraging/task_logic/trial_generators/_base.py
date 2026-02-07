@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from ..trial_models import Trial, TrialOutcome
 
 
-class _BaseTrialGeneratorSpecModel(BaseModel, abc.ABC):
+class BaseTrialGeneratorSpecModel(BaseModel, abc.ABC):
     type: str
 
     @abc.abstractmethod
