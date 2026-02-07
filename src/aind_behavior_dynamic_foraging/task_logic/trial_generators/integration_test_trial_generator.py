@@ -1,10 +1,10 @@
 from typing import Literal
 
 from ..trial_models import Trial, TrialOutcome
-from ._base import ITrialGenerator, _BaseTrialGeneratorSpecModel
+from ._base import BaseTrialGeneratorSpecModel, ITrialGenerator
 
 
-class IntegrationTestTrialGeneratorSpec(_BaseTrialGeneratorSpecModel):
+class IntegrationTestTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
     type: Literal["IntegrationTestTrialGenerator"] = "IntegrationTestTrialGenerator"
 
     def create_generator(self) -> "IntegrationTestTrialGenerator":
@@ -65,6 +65,8 @@ class IntegrationTestTrialGenerator(ITrialGenerator):
         ]
 
     def next(self) -> Trial | None:
+        if self._idx >= len(self.trial_opts):
+            return None
         return self.trial_opts[self._idx]
 
     def update(self, outcome: TrialOutcome) -> None:
