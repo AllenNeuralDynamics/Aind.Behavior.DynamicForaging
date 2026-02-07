@@ -87,7 +87,7 @@ def make_qc_runner(dataset: contract.Dataset) -> qc.Runner:
     for stream in csv_streams:
         _runner.add_suite(qc.csv.CsvTestSuite(stream), stream.name)
 
-    # Add the VR foraging specific tests
+    # Add the task specific tests
     _runner.add_suite(DynamicForagingQcSuite(dataset), "DynamicForaging")
 
     return _runner

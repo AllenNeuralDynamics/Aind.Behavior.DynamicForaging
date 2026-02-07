@@ -18,12 +18,12 @@ class DataQcCli(BaseSettings, cli_kebab_case=True):
     )
 
     def cli_cmd(self):
-        """Run data quality checks on the VR Foraging dataset located at the specified path."""
+        """Run data quality checks on the dataset located at the specified path."""
         from ..data_contract import dataset
         from ._suite import make_qc_runner
 
-        vr_dataset = dataset(Path(self.data_path), self.version)
-        runner = make_qc_runner(vr_dataset)
+        this_dataset = dataset(Path(self.data_path), self.version)
+        runner = make_qc_runner(this_dataset)
         results = runner.run_all_with_progress()
         if report_path := self.report_path:
             from contraqctor.qc.reporters import HtmlReporter

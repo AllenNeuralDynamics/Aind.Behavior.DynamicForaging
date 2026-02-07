@@ -10,7 +10,7 @@ if t.TYPE_CHECKING:
 
 def dataset(path: os.PathLike, version: str = __semver__) -> "Dataset":
     """
-    Loads the dataset for the Aind VR Foraging project from a specified version.
+    Loads the dataset for an acquisition from an experiment with a specified version.
 
     Args:
         path (os.PathLike): The path to the dataset root directory.
