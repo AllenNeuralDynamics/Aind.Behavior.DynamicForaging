@@ -1,5 +1,6 @@
 import random
 from typing import Literal, Optional, Union
+import logging
 
 import numpy as np
 from aind_behavior_services.task.distributions import (
@@ -97,7 +98,8 @@ class CoupledTrialGeneratorSpec(_BaseTrialGeneratorSpecModel):
     )
     min_block_reward: int = Field(default=1, title="Minimal rewards in a block to switch")
     behavior_stability_parameters: Optional[BehaviorStabilityParameters] = Field(
-        default=None, description="Parameters describing behavior stability required to switch blocks."
+        default=BehaviorStabilityParameters(),
+        description="Parameters describing behavior stability required to switch blocks.",
     )
     extend_block_on_no_response: bool = Field(
         default=True,
@@ -126,7 +128,7 @@ class CoupledTrialGeneratorSpec(_BaseTrialGeneratorSpecModel):
 class CoupledTrialGenerator(ITrialGenerator):
     def __init__(self, spec: CoupledTrialGeneratorSpec) -> None:
         """"""
-
+        self.logger = logging.getLogger(__name__ + "." + self.__class__.__name__)
         self.spec = spec
         self.is_right_choice_history: list[bool | None] = []
         self.reward_history: list[bool] = []
@@ -146,11 +148,13 @@ class CoupledTrialGenerator(ITrialGenerator):
         Generate next trial
 
         """
+        self.logger.info("Generating next trial.")
 
         # check end conditions
         if not self.are_end_conditions_met(
             self.spec.trial_generation_end_parameters, self.is_right_choice_history, self.start_time
         ):
+            self.logger.info("Trial generator end conditons met.")
             return
 
         # determine iti and quiescent period duration
@@ -221,15 +225,18 @@ class CoupledTrialGenerator(ITrialGenerator):
 
         :param outcome: trial outcome of previous trial
         """
-      
+
+        self.logger.info(f"Updating coupled trial generator with trial outcome of {outcome}")
+
         self.is_right_choice_history.append(outcome.is_right_choice)
         self.reward_history.append(outcome.is_rewarded)
         self.trials_in_block += 1
 
         if self.spec.extend_block_on_no_response and outcome.is_right_choice == None:
+            self.logger.info(f"Extending minimum block length due to ignored trial.")
             self.block.min_length += 1
 
-        switch_block = self.switch_block(
+        switch_block = self.is_block_switch_allowed(
             trials_in_block=self.trials_in_block,
             min_block_reward=self.spec.min_block_reward,
             block_left_rewards=self.reward_history.count(False),
@@ -241,9 +248,9 @@ class CoupledTrialGenerator(ITrialGenerator):
             block_length=self.block.min_length,
             kernel_size=self.spec.kernel_size,
         )
-        
+
         if switch_block:
-            print("block switch")
+            self.logger.info(f"Switching block.")
             self.trials_in_block = 0
             self.block = self.generate_next_block(
                 reward_families=self.spec.reward_family,
@@ -277,19 +284,29 @@ class CoupledTrialGenerator(ITrialGenerator):
 
         """
 
+        self.logger.info("Evaluating block behavior.")
+
         # do not prohibit block transition if does not rely on behavior or not enough trials to evaluate or reward probs are the same.
         if not beh_stability_params or left_reward_prob == right_reward_prob or len(choice_history) < kernel_size:
+            self.logger.debug(
+                "Behavior stability evaluation skipped: "
+                f"parameters_missing={not bool(beh_stability_params)}, "
+                f"rewards_equal={left_reward_prob == right_reward_prob}, "
+                f"trials_available={len(choice_history)} < kernel_size({kernel_size})"
+            )
             return True
 
         # compute fraction of right choices with running average using a sliding window
         block_history = choice_history[-(trials_in_block + kernel_size - 1) :]
         block_choice_frac = self.compute_choice_fraction(kernel_size, block_history)
+        self.logger.debug(f"Choice fraction of block is {block_choice_frac}.")
 
         # margin based on right and left probabilities and scaled by switch threshold. Window for evaluating behavior
         delta = abs((left_reward_prob - right_reward_prob) * float(beh_stability_params.behavior_stability_fraction))
         threshold = (
             [0, left_reward_prob - delta] if left_reward_prob > right_reward_prob else [left_reward_prob + delta, 1]
         )
+        self.logger.debug(f"Behavior stability threshold applied: {threshold}")
 
         # block_choice_fractions above threshold
         points_above_threshold = np.logical_and(
@@ -297,30 +314,36 @@ class CoupledTrialGenerator(ITrialGenerator):
             block_choice_frac <= threshold[1],
         )
 
-        if beh_stability_params.behavior_evaluation_mode == "end":
-            # requires consecutive trials ending on the last trial
-            # check if the current trial occurs at the end of a long enough consecutive run above threshold
-            if len(points_above_threshold) < beh_stability_params.min_consecutive_stable_trials:
+        # evaluate stability based on mode
+        min_stable = beh_stability_params.min_consecutive_stable_trials
+        mode = beh_stability_params.behavior_evaluation_mode
+        if mode == "end":
+            # requires consecutive trials at end of trial
+            self.logger.info(f"Evaluating last {min_stable} trials for end-of-block stability.")
+            if len(points_above_threshold) < min_stable:
+                self.logger.info("Not enough trials to evaluate stability at block end.")
                 return False
-            return np.all(points_above_threshold[-beh_stability_params.min_consecutive_stable_trials :])
+            stable = np.all(points_above_threshold[-min_stable:])
+            self.logger.info(f"Behavior stable at block end: {stable}")
+            return stable
 
-        elif beh_stability_params.behavior_evaluation_mode == "anytime":
+        elif mode == "anytime":
             # allows consecutive trials any time in the behavior
+            self.logger.info(f"Evaluating block for stability anytime over {min_stable} consecutive trials.")
             run_len = 0
-            for v in points_above_threshold:
+            for i, v in enumerate(points_above_threshold):
                 if v:
                     run_len += 1
                 else:
-                    if run_len >= beh_stability_params.min_consecutive_stable_trials:
-                        return True
-                    else:
-                        run_len = 0
-            return run_len >= beh_stability_params.min_consecutive_stable_trials
+                    run_len = 0
+                if run_len >= min_stable:
+                    self.logger.info(f"Behavior stable at trial index {i}.")
+                    return True
+            self.logger.info("Behavior not stable in block anytime evaluation.")
+            return False
 
         else:
-            raise ValueError(
-                f"Behavior evaluation mode {beh_stability_params.behavior_evaluation_mode} not recognized."
-            )
+            raise ValueError(f"Behavior evaluation mode {mode} not recognized.")
 
     @staticmethod
     def compute_choice_fraction(kernel_size: int, choice_history: list[int | None]):
@@ -334,11 +357,11 @@ class CoupledTrialGenerator(ITrialGenerator):
         n_windows = len(choice_history) - kernel_size + 1
         choice_fraction = np.empty(n_windows, dtype=float)  # create empty array to store running averages
         for i in range(n_windows):
-            window = choice_history[i : i + kernel_size].astype(float)
+            window = np.array(choice_history[i : i + kernel_size], dtype=float)
             choice_fraction[i] = np.nanmean(window)
         return choice_fraction
 
-    def switch_block(
+    def is_block_switch_allowed(
         self,
         trials_in_block: int,
         min_block_reward: int,
@@ -364,8 +387,11 @@ class CoupledTrialGenerator(ITrialGenerator):
         kernel_size: kernel to evaluate choice fraction
         """
 
+        self.logger.info("Evaluating block switch.")
+
         # has planned block length been reached?
         block_length_ok = trials_in_block >= block_length
+        self.logger.debug(f"Planned block length reached: {block_length_ok}")
 
         # is behavior qualified to switch?
         behavior_ok = self.is_behavior_stable(
@@ -376,9 +402,11 @@ class CoupledTrialGenerator(ITrialGenerator):
             trials_in_block,
             kernel_size,
         )
+        self.logger.debug(f"Behavior meets stability criteria: {behavior_ok}")
 
         # has reward criteria been met?
         reward_ok = block_left_rewards + block_right_rewards >= min_block_reward
+        self.logger.debug(f"Reward criterion satisfied: {reward_ok}")
 
         # conditions to switch:
         #   - planned block length reached
@@ -407,35 +435,47 @@ class CoupledTrialGenerator(ITrialGenerator):
         :param block_len_distribution: Description
         """
 
+        self.logger.info("Generating next block.")
+
         # determine candidate reward pairs
         reward_pairs = reward_families[reward_family_index][:reward_pairs_n]
         reward_prob = np.array(reward_pairs, dtype=float)
         reward_prob /= reward_prob.sum(axis=1, keepdims=True)
         reward_prob *= float(base_reward_sum)
+        self.logger.info(f"Candidate reward pairs normalized and scaled: {reward_prob.tolist()}")
 
         # create pool including all reward probabiliteis and mirrored pairs
         reward_prob_pool = np.vstack([reward_prob, np.fliplr(reward_prob)])
 
         if current_block:  # exclude previous block if history exists
+            self.logger.info(f"Excluding previous block reward probability.")
             last_block_reward_prob = [current_block.right_reward_prob, current_block.left_reward_prob]
-        
+
             # remove blocks identical to last block
             reward_prob_pool = reward_prob_pool[np.any(reward_prob_pool != last_block_reward_prob, axis=1)]
+            self.logger.debug(f"Pool after removing identical to last block: {reward_prob_pool.tolist()}")
 
             # remove blocks with same high-reward side (if last block had a clear high side)
             if last_block_reward_prob[0] != last_block_reward_prob[1]:
                 high_side_last = last_block_reward_prob[0] > last_block_reward_prob[1]
                 high_side_pool = reward_prob_pool[:, 0] > reward_prob_pool[:, 1]
                 reward_prob_pool = reward_prob_pool[high_side_pool != high_side_last]
+                self.logger.debug(f"Pool after removing same high-reward side: {reward_prob_pool.tolist()}")
 
         # remove duplicates
         reward_prob_pool = np.unique(reward_prob_pool, axis=0)
+        self.logger.debug(f"Final reward probability pool after removing duplicates: {reward_prob_pool.tolist()}")
 
         # randomly pick next block reward probability
         right_reward_prob, left_reward_prob = reward_prob_pool[random.choice(range(reward_prob_pool.shape[0]))]
+        self.logger.info(
+            f"Selected next block reward probabilities: right={right_reward_prob}, left={left_reward_prob}"
+        )
 
         # randomly pick block length
         next_block_len = round(self.evaluate_distribution(block_len_distribution))
+        self.logger.info(f"Selected next block length: {next_block_len}")
+
         return Block(
             right_reward_prob=right_reward_prob,
             left_reward_prob=left_reward_prob,
