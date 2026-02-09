@@ -2401,12 +2401,37 @@
       "title": "Trial",
       "type": "object"
     },
+    "TrialGeneratorCompositeSpec_TrialGeneratorSpec_": {
+      "properties": {
+        "type": {
+          "const": "TrialGeneratorComposite",
+          "default": "TrialGeneratorComposite",
+          "title": "Type",
+          "type": "string"
+        },
+        "generators": {
+          "description": "List of trial generator specifications to concatenate. When one generator returns None, the next one is concatenated.",
+          "items": {
+            "$ref": "#/$defs/TrialGeneratorSpec"
+          },
+          "minItems": 1,
+          "title": "Generators",
+          "type": "array"
+        }
+      },
+      "required": [
+        "generators"
+      ],
+      "title": "TrialGeneratorCompositeSpec[TrialGeneratorSpec]",
+      "type": "object"
+    },
     "TrialGeneratorSpec": {
       "description": "Type of trial generator",
       "discriminator": {
         "mapping": {
           "CoupledTrialGenerator": "#/$defs/CoupledTrialGeneratorSpec",
-          "IntegrationTestTrialGenerator": "#/$defs/IntegrationTestTrialGeneratorSpec"
+          "IntegrationTestTrialGenerator": "#/$defs/IntegrationTestTrialGeneratorSpec",
+          "TrialGeneratorComposite": "#/$defs/TrialGeneratorCompositeSpec_TrialGeneratorSpec_"
         },
         "propertyName": "type"
       },
@@ -2416,6 +2441,9 @@
         },
         {
           "$ref": "#/$defs/IntegrationTestTrialGeneratorSpec"
+        },
+        {
+          "$ref": "#/$defs/TrialGeneratorCompositeSpec_TrialGeneratorSpec_"
         }
       ]
     },

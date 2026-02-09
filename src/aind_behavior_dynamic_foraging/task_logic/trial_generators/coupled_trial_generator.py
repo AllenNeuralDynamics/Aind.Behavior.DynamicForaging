@@ -12,7 +12,7 @@ from aind_behavior_services.task.distributions import (
 from pydantic import BaseModel, Field
 
 from ..trial_models import Trial, TrialOutcome
-from ._base import ITrialGenerator, _BaseTrialGeneratorSpecModel
+from ._base import BaseTrialGeneratorSpecModel, ITrialGenerator
 
 AutoWaterModes = Literal["Natural", "Both", "High pro"]
 BlockBehaviorEvaluationMode = Literal[
@@ -53,7 +53,7 @@ class Block(BaseModel):
     min_length: int
 
 
-class CoupledTrialGeneratorSpec(_BaseTrialGeneratorSpecModel):
+class CoupledTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
     type: Literal["CoupledTrialGenerator"] = "CoupledTrialGenerator"
 
     iti: Union[UniformDistribution, ExponentialDistribution] = Field(
