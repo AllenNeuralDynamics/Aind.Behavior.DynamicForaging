@@ -3,6 +3,8 @@
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
+from __future__ import annotations
+
 import erdantic as erd
 from pydantic import BaseModel
 
@@ -83,11 +85,24 @@ def export_model_diagram(model: BaseModel, root: str = _static_path) -> None:
     diagram.draw(f"{root}/{model.__name__}.svg")
 
 
-export_model_diagram(aind_behavior_dynamic_foraging.task_logic.AindDynamicForagingTaskLogic, _static_path)
-
 # -- Dataset rendering
 
 with open(f"{_static_path}/dataset.html", "w", encoding="utf-8") as f:
     from aind_behavior_dynamic_foraging.data_contract import render_dataset
 
     f.write(render_dataset(version=release))
+
+
+def setup(app):
+    from aind_behavior_dynamic_foraging.task_logic import (
+        AindDynamicForagingTaskLogic,
+        AindDynamicForagingTaskParameters,
+        TrialGeneratorSpec,
+    )
+
+    AindDynamicForagingTaskParameters.model_rebuild(_types_namespace={"TrialGeneratorSpec": TrialGeneratorSpec})
+
+    export_model_diagram(
+        AindDynamicForagingTaskLogic,
+        _static_path,
+    )
