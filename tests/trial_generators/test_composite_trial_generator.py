@@ -116,10 +116,10 @@ class TestTrialGeneratorComposite(unittest.TestCase):
         outcome = TrialOutcome(trial=trial, is_right_choice=True, is_rewarded=True)
         generator.update(outcome)
 
-        self.assertIsInstance(generator.generators[0], MockTrialGenerator)
-        self.assertIsInstance(generator.generators[1], MockTrialGenerator)
-        self.assertEqual(generator.generators[0].trial_count, 1)
-        self.assertEqual(generator.generators[1].trial_count, 0)
+        self.assertIsInstance(generator._generators[0], MockTrialGenerator)
+        self.assertIsInstance(generator._generators[1], MockTrialGenerator)
+        self.assertEqual(generator._generators[0].trial_count, 1)
+        self.assertEqual(generator._generators[1].trial_count, 0)
 
     def test_no_update_after_exhaustion(self):
         num_trials = 5
@@ -135,8 +135,8 @@ class TestTrialGeneratorComposite(unittest.TestCase):
         if trial is not None:
             outcome = TrialOutcome(trial=trial, is_right_choice=None, is_rewarded=False)
             generator.update(outcome)
-        self.assertIsInstance(generator.generators[0], MockTrialGenerator)
-        self.assertEqual(generator.generators[0].trial_count, num_trials)
+        self.assertIsInstance(generator._generators[0], MockTrialGenerator)
+        self.assertEqual(generator._generators[0].trial_count, num_trials)
 
     def test_nested_composite_generators(self):
         num_trials = 3

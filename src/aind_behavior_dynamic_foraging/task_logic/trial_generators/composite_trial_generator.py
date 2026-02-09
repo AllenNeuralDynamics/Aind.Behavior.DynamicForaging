@@ -31,15 +31,14 @@ class TrialGeneratorComposite(ITrialGenerator):
     automatically moves to the next generator in the list.
     """
 
-    def __init__(self, spec: TrialGeneratorCompositeSpec) -> None:
+    def __init__(self, spec: TrialGeneratorCompositeSpec[BaseTrialGeneratorSpecModel]) -> None:
         """
         Initialize the composite trial generator.
 
         :param spec: The specification containing the list of generator specs
         """
-        self.spec = spec
-        # Create generator instances from specs
-        self.generators: list[ITrialGenerator] = [gen_spec.create_generator() for gen_spec in spec.generators]
+        self._spec = spec
+        self._generators: list[ITrialGenerator] = [gen_spec.create_generator() for gen_spec in spec.generators]
         self._current_index = 0
 
     def next(self) -> Trial | None:
@@ -51,8 +50,8 @@ class TrialGeneratorComposite(ITrialGenerator):
 
         :return: The next Trial, or None if all generators are exhausted
         """
-        while self._current_index < len(self.generators):
-            trial = self.generators[self._current_index].next()
+        while self._current_index < len(self._generators):
+            trial = self._generators[self._current_index].next()
 
             if trial is not None:
                 return trial
@@ -69,5 +68,5 @@ class TrialGeneratorComposite(ITrialGenerator):
 
         :param outcome: The outcome of the last trial
         """
-        if self._current_index < len(self.generators):
-            self.generators[self._current_index].update(outcome)
+        if self._current_index < len(self._generators):
+            self._generators[self._current_index].update(outcome)
