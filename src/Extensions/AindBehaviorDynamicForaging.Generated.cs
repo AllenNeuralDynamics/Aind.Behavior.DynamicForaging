@@ -53,8 +53,6 @@ namespace AindDynamicForagingDataSchema
             _version = "0.0.2-rc7";
             _triggeredCameraController = new CameraControllerSpinnakerCamera();
             _harpBehavior = new HarpBehavior();
-            _harpLickometerLeft = new HarpLicketySplit();
-            _harpLickometerRight = new HarpLicketySplit();
             _harpClockGenerator = new HarpWhiteRabbit();
             _harpSoundCard = new HarpSoundCard();
             _manipulator = new AindManipulator();
@@ -213,11 +211,12 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Harp left lickometer
+        /// Harp left lickometer. If null, the rig will use the harp_behavior DIPort0 for lick detection.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("harp_lickometer_left", Required=Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DescriptionAttribute("Harp left lickometer")]
+        [Newtonsoft.Json.JsonPropertyAttribute("harp_lickometer_left")]
+        [System.ComponentModel.DescriptionAttribute("Harp left lickometer. If null, the rig will use the harp_behavior DIPort0 for lic" +
+            "k detection.")]
         public HarpLicketySplit HarpLickometerLeft
         {
             get
@@ -231,11 +230,12 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Harp right lickometer
+        /// Harp right lickometer. If null, the rig will use the harp_behavior DIPort1 for lick detection.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("harp_lickometer_right", Required=Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DescriptionAttribute("Harp right lickometer")]
+        [Newtonsoft.Json.JsonPropertyAttribute("harp_lickometer_right")]
+        [System.ComponentModel.DescriptionAttribute("Harp right lickometer. If null, the rig will use the harp_behavior DIPort1 for li" +
+            "ck detection.")]
         public HarpLicketySplit HarpLickometerRight
         {
             get

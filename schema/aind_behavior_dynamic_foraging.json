@@ -51,12 +51,28 @@
           "description": "Harp behavior"
         },
         "harp_lickometer_left": {
-          "$ref": "#/$defs/HarpLicketySplit",
-          "description": "Harp left lickometer"
+          "default": null,
+          "description": "Harp left lickometer. If null, the rig will use the harp_behavior DIPort0 for lick detection.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/HarpLicketySplit"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "harp_lickometer_right": {
-          "$ref": "#/$defs/HarpLicketySplit",
-          "description": "Harp right lickometer"
+          "default": null,
+          "description": "Harp right lickometer. If null, the rig will use the harp_behavior DIPort1 for lick detection.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/HarpLicketySplit"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "harp_clock_generator": {
           "$ref": "#/$defs/HarpWhiteRabbit",
@@ -105,8 +121,6 @@
         "data_directory",
         "triggered_camera_controller",
         "harp_behavior",
-        "harp_lickometer_left",
-        "harp_lickometer_right",
         "harp_clock_generator",
         "harp_sound_card",
         "manipulator",
