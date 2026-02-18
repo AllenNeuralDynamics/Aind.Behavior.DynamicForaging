@@ -37,7 +37,7 @@ namespace AindDynamicForagingDataSchema
     
         private HarpWhiteRabbit _harpClockGenerator;
     
-        private HarpSoundCard _harpSoundCard;
+        private DynamicForagingSoundCard _harpSoundCard;
     
         private HarpSniffDetector _harpSniffDetector;
     
@@ -53,8 +53,10 @@ namespace AindDynamicForagingDataSchema
             _version = "0.0.2-rc8";
             _triggeredCameraController = new CameraControllerSpinnakerCamera();
             _harpBehavior = new HarpBehavior();
+            _harpLickometerLeft = new HarpLicketySplit();
+            _harpLickometerRight = new HarpLicketySplit();
             _harpClockGenerator = new HarpWhiteRabbit();
-            _harpSoundCard = new HarpSoundCard();
+            _harpSoundCard = new DynamicForagingSoundCard();
             _manipulator = new AindManipulator();
             _calibration = new RigCalibration();
         }
@@ -211,12 +213,11 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Harp left lickometer. If null, the rig will use the harp_behavior DIPort0 for lick detection.
+        /// Harp left lickometer
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("harp_lickometer_left")]
-        [System.ComponentModel.DescriptionAttribute("Harp left lickometer. If null, the rig will use the harp_behavior DIPort0 for lic" +
-            "k detection.")]
+        [Newtonsoft.Json.JsonPropertyAttribute("harp_lickometer_left", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("Harp left lickometer")]
         public HarpLicketySplit HarpLickometerLeft
         {
             get
@@ -230,12 +231,11 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Harp right lickometer. If null, the rig will use the harp_behavior DIPort1 for lick detection.
+        /// Harp right lickometer
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("harp_lickometer_right")]
-        [System.ComponentModel.DescriptionAttribute("Harp right lickometer. If null, the rig will use the harp_behavior DIPort1 for li" +
-            "ck detection.")]
+        [Newtonsoft.Json.JsonPropertyAttribute("harp_lickometer_right", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("Harp right lickometer")]
         public HarpLicketySplit HarpLickometerRight
         {
             get
@@ -272,7 +272,7 @@ namespace AindDynamicForagingDataSchema
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("harp_sound_card", Required=Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DescriptionAttribute("Harp sound card")]
-        public HarpSoundCard HarpSoundCard
+        public DynamicForagingSoundCard HarpSoundCard
         {
             get
             {
@@ -2626,6 +2626,156 @@ namespace AindDynamicForagingDataSchema
 
 
     /// <summary>
+    /// A calibrated sound card for the dynamic foraging rig. This is a subclass of the HarpSoundCard that includes the sound card calibration.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.ComponentModel.DescriptionAttribute("A calibrated sound card for the dynamic foraging rig. This is a subclass of the H" +
+        "arpSoundCard that includes the sound card calibration.")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class DynamicForagingSoundCard
+    {
+    
+        private string _deviceType;
+    
+        private SoundCardCalibration _calibration;
+    
+        private int _whoAmI;
+    
+        private string _serialNumber;
+    
+        private string _portName;
+    
+        public DynamicForagingSoundCard()
+        {
+            _deviceType = "SoundCard";
+            _calibration = new SoundCardCalibration();
+            _whoAmI = 1280;
+        }
+    
+        protected DynamicForagingSoundCard(DynamicForagingSoundCard other)
+        {
+            _deviceType = other._deviceType;
+            _calibration = other._calibration;
+            _whoAmI = other._whoAmI;
+            _serialNumber = other._serialNumber;
+            _portName = other._portName;
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("device_type")]
+        public string DeviceType
+        {
+            get
+            {
+                return _deviceType;
+            }
+            set
+            {
+                _deviceType = value;
+            }
+        }
+    
+        /// <summary>
+        /// Sound card calibration
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("calibration")]
+        [System.ComponentModel.DescriptionAttribute("Sound card calibration")]
+        public SoundCardCalibration Calibration
+        {
+            get
+            {
+                return _calibration;
+            }
+            set
+            {
+                _calibration = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("who_am_i")]
+        public int WhoAmI
+        {
+            get
+            {
+                return _whoAmI;
+            }
+            set
+            {
+                _whoAmI = value;
+            }
+        }
+    
+        /// <summary>
+        /// Device serial number
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("serial_number")]
+        [System.ComponentModel.DescriptionAttribute("Device serial number")]
+        public string SerialNumber
+        {
+            get
+            {
+                return _serialNumber;
+            }
+            set
+            {
+                _serialNumber = value;
+            }
+        }
+    
+        /// <summary>
+        /// Device port name
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("port_name", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("Device port name")]
+        public string PortName
+        {
+            get
+            {
+                return _portName;
+            }
+            set
+            {
+                _portName = value;
+            }
+        }
+    
+        public System.IObservable<DynamicForagingSoundCard> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new DynamicForagingSoundCard(this)));
+        }
+    
+        public System.IObservable<DynamicForagingSoundCard> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new DynamicForagingSoundCard(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("DeviceType = " + _deviceType + ", ");
+            stringBuilder.Append("Calibration = " + _calibration + ", ");
+            stringBuilder.Append("WhoAmI = " + _whoAmI + ", ");
+            stringBuilder.Append("SerialNumber = " + _serialNumber + ", ");
+            stringBuilder.Append("PortName = " + _portName);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    /// <summary>
     /// An exponential probability distribution.
     ///
     ///Models time between events in a Poisson process. Commonly used
@@ -3402,150 +3552,6 @@ namespace AindDynamicForagingDataSchema
         public System.IObservable<HarpSniffDetector> Generate<TSource>(System.IObservable<TSource> source)
         {
             return System.Reactive.Linq.Observable.Select(source, _ => new HarpSniffDetector(this));
-        }
-    
-        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
-        {
-            stringBuilder.Append("DeviceType = " + _deviceType + ", ");
-            stringBuilder.Append("Calibration = " + _calibration + ", ");
-            stringBuilder.Append("WhoAmI = " + _whoAmI + ", ");
-            stringBuilder.Append("SerialNumber = " + _serialNumber + ", ");
-            stringBuilder.Append("PortName = " + _portName);
-            return true;
-        }
-    
-        public override string ToString()
-        {
-            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
-            stringBuilder.Append(GetType().Name);
-            stringBuilder.Append(" { ");
-            if (PrintMembers(stringBuilder))
-            {
-                stringBuilder.Append(" ");
-            }
-            stringBuilder.Append("}");
-            return stringBuilder.ToString();
-        }
-    }
-
-
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
-    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    [Bonsai.CombinatorAttribute(MethodName="Generate")]
-    public partial class HarpSoundCard
-    {
-    
-        private string _deviceType;
-    
-        private BaseModel _calibration;
-    
-        private int _whoAmI;
-    
-        private string _serialNumber;
-    
-        private string _portName;
-    
-        public HarpSoundCard()
-        {
-            _deviceType = "SoundCard";
-            _whoAmI = 1280;
-        }
-    
-        protected HarpSoundCard(HarpSoundCard other)
-        {
-            _deviceType = other._deviceType;
-            _calibration = other._calibration;
-            _whoAmI = other._whoAmI;
-            _serialNumber = other._serialNumber;
-            _portName = other._portName;
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("device_type")]
-        public string DeviceType
-        {
-            get
-            {
-                return _deviceType;
-            }
-            set
-            {
-                _deviceType = value;
-            }
-        }
-    
-        /// <summary>
-        /// Calibration for the device.
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("calibration")]
-        [System.ComponentModel.DescriptionAttribute("Calibration for the device.")]
-        public BaseModel Calibration
-        {
-            get
-            {
-                return _calibration;
-            }
-            set
-            {
-                _calibration = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("who_am_i")]
-        public int WhoAmI
-        {
-            get
-            {
-                return _whoAmI;
-            }
-            set
-            {
-                _whoAmI = value;
-            }
-        }
-    
-        /// <summary>
-        /// Device serial number
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("serial_number")]
-        [System.ComponentModel.DescriptionAttribute("Device serial number")]
-        public string SerialNumber
-        {
-            get
-            {
-                return _serialNumber;
-            }
-            set
-            {
-                _serialNumber = value;
-            }
-        }
-    
-        /// <summary>
-        /// Device port name
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("port_name", Required=Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DescriptionAttribute("Device port name")]
-        public string PortName
-        {
-            get
-            {
-                return _portName;
-            }
-            set
-            {
-                _portName = value;
-            }
-        }
-    
-        public System.IObservable<HarpSoundCard> Generate()
-        {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new HarpSoundCard(this)));
-        }
-    
-        public System.IObservable<HarpSoundCard> Generate<TSource>(System.IObservable<TSource> source)
-        {
-            return System.Reactive.Linq.Observable.Select(source, _ => new HarpSoundCard(this));
         }
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
@@ -5103,6 +5109,124 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("CommitHash = " + _commitHash + ", ");
             stringBuilder.Append("AllowDirtyRepo = " + _allowDirtyRepo + ", ");
             stringBuilder.Append("SkipHardwareValidation = " + _skipHardwareValidation);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    /// <summary>
+    /// Calibration model for the sound card. Contains the waveforms to play for each cue.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.ComponentModel.DescriptionAttribute("Calibration model for the sound card. Contains the waveforms to play for each cue" +
+        ".")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class SoundCardCalibration
+    {
+    
+        private Waveform _goCue;
+    
+        private Waveform _csPlus;
+    
+        private Waveform _csMinus;
+    
+        public SoundCardCalibration()
+        {
+            _goCue = new Waveform();
+            _csPlus = new Waveform();
+            _csMinus = new Waveform();
+        }
+    
+        protected SoundCardCalibration(SoundCardCalibration other)
+        {
+            _goCue = other._goCue;
+            _csPlus = other._csPlus;
+            _csMinus = other._csMinus;
+        }
+    
+        /// <summary>
+        /// Waveform to play for go cue
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("go_cue")]
+        [System.ComponentModel.DescriptionAttribute("Waveform to play for go cue")]
+        public Waveform GoCue
+        {
+            get
+            {
+                return _goCue;
+            }
+            set
+            {
+                _goCue = value;
+            }
+        }
+    
+        /// <summary>
+        /// Waveform to play for CS+ cue
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("cs_plus")]
+        [System.ComponentModel.DescriptionAttribute("Waveform to play for CS+ cue")]
+        public Waveform CsPlus
+        {
+            get
+            {
+                return _csPlus;
+            }
+            set
+            {
+                _csPlus = value;
+            }
+        }
+    
+        /// <summary>
+        /// Waveform to play for CS- cue
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("cs_minus")]
+        [System.ComponentModel.DescriptionAttribute("Waveform to play for CS- cue")]
+        public Waveform CsMinus
+        {
+            get
+            {
+                return _csMinus;
+            }
+            set
+            {
+                _csMinus = value;
+            }
+        }
+    
+        public System.IObservable<SoundCardCalibration> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new SoundCardCalibration(this)));
+        }
+    
+        public System.IObservable<SoundCardCalibration> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new SoundCardCalibration(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("GoCue = " + _goCue + ", ");
+            stringBuilder.Append("CsPlus = " + _csPlus + ", ");
+            stringBuilder.Append("CsMinus = " + _csMinus);
             return true;
         }
     
@@ -7422,6 +7546,139 @@ namespace AindDynamicForagingDataSchema
 
 
     /// <summary>
+    /// Model for a waveform to be played on the sound card.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.ComponentModel.DescriptionAttribute("Model for a waveform to be played on the sound card.")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class Waveform
+    {
+    
+        private WaveformType _waveformType;
+    
+        private int _index;
+    
+        private double _duration;
+    
+        private double? _frequency;
+    
+        public Waveform()
+        {
+            _waveformType = WaveformType.Sine;
+        }
+    
+        protected Waveform(Waveform other)
+        {
+            _waveformType = other._waveformType;
+            _index = other._index;
+            _duration = other._duration;
+            _frequency = other._frequency;
+        }
+    
+        /// <summary>
+        /// Type of the waveform
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("waveform_type")]
+        [System.ComponentModel.DescriptionAttribute("Type of the waveform")]
+        public WaveformType WaveformType
+        {
+            get
+            {
+                return _waveformType;
+            }
+            set
+            {
+                _waveformType = value;
+            }
+        }
+    
+        /// <summary>
+        /// Index of the waveform on the sound card
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("index", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("Index of the waveform on the sound card")]
+        public int Index
+        {
+            get
+            {
+                return _index;
+            }
+            set
+            {
+                _index = value;
+            }
+        }
+    
+        /// <summary>
+        /// Duration of the waveform in seconds
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("duration", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("Duration of the waveform in seconds")]
+        public double Duration
+        {
+            get
+            {
+                return _duration;
+            }
+            set
+            {
+                _duration = value;
+            }
+        }
+    
+        /// <summary>
+        /// Frequency of the sine wave in Hz. Required if waveform_type is 'sine'.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("frequency")]
+        [System.ComponentModel.DescriptionAttribute("Frequency of the sine wave in Hz. Required if waveform_type is \'sine\'.")]
+        public double? Frequency
+        {
+            get
+            {
+                return _frequency;
+            }
+            set
+            {
+                _frequency = value;
+            }
+        }
+    
+        public System.IObservable<Waveform> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new Waveform(this)));
+        }
+    
+        public System.IObservable<Waveform> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new Waveform(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("WaveformType = " + _waveformType + ", ");
+            stringBuilder.Append("Index = " + _index + ", ");
+            stringBuilder.Append("Duration = " + _duration + ", ");
+            stringBuilder.Append("Frequency = " + _frequency);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    /// <summary>
     /// Web camera device configuration.
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
@@ -7922,6 +8179,19 @@ namespace AindDynamicForagingDataSchema
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+    public enum WaveformType
+    {
+    
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="sine")]
+        Sine = 0,
+    
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="white_noise")]
+        WhiteNoise = 1,
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     public enum AindBehaviorDynamicForagingTaskLogicAutoWaterAutoWaterType
     {
     
@@ -8304,6 +8574,11 @@ namespace AindDynamicForagingDataSchema
             return Process<DelayPeriod>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<DynamicForagingSoundCard> source)
+        {
+            return Process<DynamicForagingSoundCard>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<ExponentialDistribution> source)
         {
             return Process<ExponentialDistribution>(source);
@@ -8332,11 +8607,6 @@ namespace AindDynamicForagingDataSchema
         public System.IObservable<string> Process(System.IObservable<HarpSniffDetector> source)
         {
             return Process<HarpSniffDetector>(source);
-        }
-
-        public System.IObservable<string> Process(System.IObservable<HarpSoundCard> source)
-        {
-            return Process<HarpSoundCard>(source);
         }
 
         public System.IObservable<string> Process(System.IObservable<HarpWhiteRabbit> source)
@@ -8404,6 +8674,11 @@ namespace AindDynamicForagingDataSchema
             return Process<Session>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<SoundCardCalibration> source)
+        {
+            return Process<SoundCardCalibration>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<SpinnakerCamera> source)
         {
             return Process<SpinnakerCamera>(source);
@@ -8469,6 +8744,11 @@ namespace AindDynamicForagingDataSchema
             return Process<WaterValveCalibration>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<Waveform> source)
+        {
+            return Process<Waveform>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<WebCamera> source)
         {
             return Process<WebCamera>(source);
@@ -8513,13 +8793,13 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<ConnectedClockOutput>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CoupledTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<DelayPeriod>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<DynamicForagingSoundCard>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<ExponentialDistribution>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<ExponentialDistributionParameters>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpBehavior>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpEnvironmentSensor>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpLicketySplit>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpSniffDetector>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpSoundCard>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpWhiteRabbit>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<IntegrationTestTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<InterTrialInterval>))]
@@ -8533,6 +8813,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<RigCalibration>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<ScalingParameters>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Session>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<SoundCardCalibration>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<SpinnakerCamera>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Trial>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialGeneratorCompositeSpecTrialGeneratorSpec>))]
@@ -8546,6 +8827,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriterOpenCv>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Warmup>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WaterValveCalibration>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Waveform>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WebCamera>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AindBehaviorDynamicForagingTaskLogicAutoWater>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AindBehaviorDynamicForagingTaskLogicTrialGeneratorsCoupledTrialGeneratorAutoWater>))]
