@@ -554,11 +554,6 @@
           "default": "Auditory",
           "title": "Type",
           "type": "string"
-        },
-        "frequency_or_index": {
-          "default": 15000,
-          "title": "Frequency or index of the auditory secondary reinforcer. Indices correspond to < 32 values",
-          "type": "integer"
         }
       },
       "title": "AuditorySecondaryReinforcer",

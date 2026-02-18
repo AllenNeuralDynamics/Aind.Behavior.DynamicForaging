@@ -1304,18 +1304,14 @@ namespace AindDynamicForagingDataSchema
     
         private string _type;
     
-        private int _frequencyOrIndex;
-    
         public AuditorySecondaryReinforcer()
         {
             _type = "Auditory";
-            _frequencyOrIndex = 15000;
         }
     
         protected AuditorySecondaryReinforcer(AuditorySecondaryReinforcer other)
         {
             _type = other._type;
-            _frequencyOrIndex = other._frequencyOrIndex;
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("type")]
@@ -1331,19 +1327,6 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
-        [Newtonsoft.Json.JsonPropertyAttribute("frequency_or_index")]
-        public int FrequencyOrIndex
-        {
-            get
-            {
-                return _frequencyOrIndex;
-            }
-            set
-            {
-                _frequencyOrIndex = value;
-            }
-        }
-    
         public System.IObservable<AuditorySecondaryReinforcer> Generate()
         {
             return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new AuditorySecondaryReinforcer(this)));
@@ -1356,8 +1339,7 @@ namespace AindDynamicForagingDataSchema
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("Type = " + _type + ", ");
-            stringBuilder.Append("FrequencyOrIndex = " + _frequencyOrIndex);
+            stringBuilder.Append("Type = " + _type);
             return true;
         }
     

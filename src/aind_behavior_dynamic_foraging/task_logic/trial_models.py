@@ -7,10 +7,6 @@ class AuditorySecondaryReinforcer(BaseModel):
     """Represents an auditory secondary reinforcer."""
 
     type: Literal["Auditory"] = "Auditory"
-    frequency_or_index: int = Field(
-        default=15000,
-        title="Frequency or index of the auditory secondary reinforcer. Indices correspond to < 32 values",
-    )
 
 
 if TYPE_CHECKING:
