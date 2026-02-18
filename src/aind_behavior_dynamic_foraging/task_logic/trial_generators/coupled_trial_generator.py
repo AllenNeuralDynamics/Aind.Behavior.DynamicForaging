@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from typing import Literal, Optional, Union
 
 import numpy as np
+from aind_behavior_services.task.distributions_utils import draw_sample
 from aind_behavior_services.task.distributions import (
     DistributionFamily,
     ExponentialDistribution,
@@ -158,8 +159,8 @@ class CoupledTrialGenerator(ITrialGenerator):
             return
 
         # determine iti and quiescent period duration
-        iti = self.evaluate_distribution(self.spec.inter_trial_interval_duration_distribution)
-        quiescent = self.evaluate_distribution(self.spec.quiescent_duration_distribution)
+        iti = draw_sample(self.spec.inter_trial_interval_duration_distribution)
+        quiescent = draw_sample(self.spec.quiescent_duration_distribution)
 
         # iterate trials in block
         self.trials_in_block += 1
@@ -200,24 +201,6 @@ class CoupledTrialGenerator(ITrialGenerator):
             return False
 
         return True
-
-    @staticmethod
-    def evaluate_distribution(
-        distribution: Union[UniformDistribution, ExponentialDistribution],
-    ) -> float:
-        if distribution.family == DistributionFamily.EXPONENTIAL:
-            return (
-                np.random.exponential(1 / distribution.distribution_parameters.rate)
-                + distribution.truncation_parameters.min
-            )
-        elif distribution.family == DistributionFamily.UNIFORM:
-            return random.uniform(
-                distribution.distribution_parameters.min,
-                distribution.distribution_parameters.max,
-            )
-
-        else:
-            raise ValueError(f"Distribution {distribution.family} not recognized.")
 
     def update(self, outcome: TrialOutcome) -> None:
         """
@@ -439,6 +422,7 @@ class CoupledTrialGenerator(ITrialGenerator):
 
         # determine candidate reward pairs
         reward_pairs = reward_families[reward_family_index][:reward_pairs_n]
+        print("reward pairs", reward_pairs)
         reward_prob = np.array(reward_pairs, dtype=float)
         reward_prob /= reward_prob.sum(axis=1, keepdims=True)
         reward_prob *= float(base_reward_sum)
@@ -473,7 +457,7 @@ class CoupledTrialGenerator(ITrialGenerator):
         )
 
         # randomly pick block length
-        next_block_len = round(self.evaluate_distribution(block_len_distribution))
+        next_block_len = round(draw_sample(block_len_distribution))
         self.logger.info(f"Selected next block length: {next_block_len}")
 
         return Block(

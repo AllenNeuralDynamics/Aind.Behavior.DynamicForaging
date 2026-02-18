@@ -7,14 +7,14 @@ from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial, TrialO
 
 def main():
     coupled_trial_generator = CoupledTrialGeneratorSpec().create_generator()
-
+    trial = Trial()
     for i in range(100):
         trial_outcome = TrialOutcome(
-            trial=Trial(), is_right_choice=random.choice([True, False, None]), is_rewarded=random.choice([True, False])
+            trial=trial, is_right_choice=random.choice([True, False, None]), is_rewarded=random.choice([True, False])
         )
         coupled_trial_generator.update(trial_outcome)
-        coupled_trial_generator.next()
-
+        trial = coupled_trial_generator.next()
+        print(f"Next trial: {trial}")
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
