@@ -16,6 +16,7 @@ def main():
         trial = coupled_trial_generator.next()
         print(f"Next trial: {trial}")
 
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     main()
