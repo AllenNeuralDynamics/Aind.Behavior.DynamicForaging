@@ -70,6 +70,7 @@ cover/
 
 # Sphinx documentation
 docs/_build/
+/_build/
 
 # Jupyter Notebook
 .ipynb_checkpoints

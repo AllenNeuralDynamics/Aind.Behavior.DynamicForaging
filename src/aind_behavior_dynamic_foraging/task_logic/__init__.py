@@ -142,3 +142,9 @@ class AindDynamicForagingTaskLogic(Task):
         default="AindDynamicForaging", description="Name of the task logic", frozen=True
     )
     task_parameters: AindDynamicForagingTaskParameters = Field(description="Parameters of the task logic")
+
+
+# We must rebuild these models after imports to resolve the forward reference in TrialGeneratorCompositeSpec
+# See https://docs.pydantic.dev/latest/errors/usage_errors/#class-not-fully-defined for details
+AindDynamicForagingTaskParameters.model_rebuild()
+AindDynamicForagingTaskLogic.model_rebuild()

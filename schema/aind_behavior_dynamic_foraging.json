@@ -9,8 +9,8 @@
           "type": "string"
         },
         "version": {
-          "const": "0.0.2-rc4",
-          "default": "0.0.2-rc4",
+          "const": "0.0.2-rc8",
+          "default": "0.0.2-rc8",
           "title": "Version",
           "type": "string"
         },
@@ -51,12 +51,28 @@
           "description": "Harp behavior"
         },
         "harp_lickometer_left": {
-          "$ref": "#/$defs/HarpLicketySplit",
-          "description": "Harp left lickometer"
+          "default": null,
+          "description": "Harp left lickometer. If null, the rig will use the harp_behavior DIPort0 for lick detection.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/HarpLicketySplit"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "harp_lickometer_right": {
-          "$ref": "#/$defs/HarpLicketySplit",
-          "description": "Harp right lickometer"
+          "default": null,
+          "description": "Harp right lickometer. If null, the rig will use the harp_behavior DIPort1 for lick detection.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/HarpLicketySplit"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "harp_clock_generator": {
           "$ref": "#/$defs/HarpWhiteRabbit",
@@ -105,8 +121,6 @@
         "data_directory",
         "triggered_camera_controller",
         "harp_behavior",
-        "harp_lickometer_left",
-        "harp_lickometer_right",
         "harp_clock_generator",
         "harp_sound_card",
         "manipulator",
@@ -137,8 +151,8 @@
           "description": "Parameters of the task logic"
         },
         "version": {
-          "const": "0.0.2-rc4",
-          "default": "0.0.2-rc4",
+          "const": "0.0.2-rc8",
+          "default": "0.0.2-rc8",
           "title": "Version",
           "type": "string"
         },
@@ -2469,39 +2483,28 @@
       "title": "Trial",
       "type": "object"
     },
-    "TrialGenerationEndConditions": {
+    "TrialGeneratorCompositeSpec_TrialGeneratorSpec_": {
       "properties": {
-        "ignore_win": {
-          "default": 30,
-          "title": "Window of trials to check ignored responses",
-          "type": "integer"
-        },
-        "ignore_ratio_threshold": {
-          "default": 0.8,
-          "maximum": 1,
-          "minimum": 0,
-          "title": "Threshold for acceptable ignored trials within window.",
-          "type": "number"
-        },
-        "max_trial": {
-          "default": 1000,
-          "title": "Maximal number of trials",
-          "type": "integer"
-        },
-        "max_time": {
-          "default": "PT1H15M",
-          "format": "duration",
-          "title": "Maximal session time (min)",
+        "type": {
+          "const": "TrialGeneratorComposite",
+          "default": "TrialGeneratorComposite",
+          "title": "Type",
           "type": "string"
         },
-        "min_time": {
-          "default": "PT30M",
-          "format": "duration",
-          "title": "Minimum session time (min)",
-          "type": "string"
+        "generators": {
+          "description": "List of trial generator specifications to concatenate. When one generator returns None, the next one is concatenated.",
+          "items": {
+            "$ref": "#/$defs/TrialGeneratorSpec"
+          },
+          "minItems": 1,
+          "title": "Generators",
+          "type": "array"
         }
       },
-      "title": "TrialGenerationEndConditions",
+      "required": [
+        "generators"
+      ],
+      "title": "TrialGeneratorCompositeSpec[TrialGeneratorSpec]",
       "type": "object"
     },
     "TrialGeneratorSpec": {
@@ -2509,7 +2512,8 @@
       "discriminator": {
         "mapping": {
           "CoupledTrialGenerator": "#/$defs/CoupledTrialGeneratorSpec",
-          "IntegrationTestTrialGenerator": "#/$defs/IntegrationTestTrialGeneratorSpec"
+          "IntegrationTestTrialGenerator": "#/$defs/IntegrationTestTrialGeneratorSpec",
+          "TrialGeneratorComposite": "#/$defs/TrialGeneratorCompositeSpec_TrialGeneratorSpec_"
         },
         "propertyName": "type"
       },
@@ -2519,6 +2523,9 @@
         },
         {
           "$ref": "#/$defs/IntegrationTestTrialGeneratorSpec"
+        },
+        {
+          "$ref": "#/$defs/TrialGeneratorCompositeSpec_TrialGeneratorSpec_"
         }
       ]
     },

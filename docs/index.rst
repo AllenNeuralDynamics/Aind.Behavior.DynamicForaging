@@ -11,6 +11,7 @@ Welcome to the AIND Dynamic Foraging project documentation!
    self
    api
    json-schemas
+   dataset
    GitHub Source Code <https://github.com/AllenNeuralDynamics/Aind.Behavior.DynamicForaging>
 
 Indices and tables

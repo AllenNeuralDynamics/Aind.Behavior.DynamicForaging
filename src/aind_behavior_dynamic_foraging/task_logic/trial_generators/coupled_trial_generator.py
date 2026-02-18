@@ -14,7 +14,7 @@ from aind_behavior_services.task.distributions import (
 from pydantic import BaseModel, Field
 
 from ..trial_models import Trial, TrialOutcome
-from ._base import ITrialGenerator, _BaseTrialGeneratorSpecModel
+from ._base import BaseTrialGeneratorSpecModel, ITrialGenerator
 
 BlockBehaviorEvaluationMode = Literal[
     "end",  # behavior stable at end of block to allow switching
@@ -60,7 +60,7 @@ class Block(BaseModel):
     min_length: int
 
 
-class CoupledTrialGeneratorSpec(_BaseTrialGeneratorSpecModel):
+class CoupledTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
     type: Literal["CoupledTrialGenerator"] = "CoupledTrialGenerator"
 
     quiescent_duration_distribution: Union[UniformDistribution, ExponentialDistribution] = Field(
