@@ -1013,7 +1013,11 @@
           "type": "integer"
         },
         "behavior_stability_parameters": {
-          "default": null,
+          "default": {
+            "behavior_evaluation_mode": "end",
+            "behavior_stability_fraction": 0.5,
+            "min_consecutive_stable_trials": 5
+          },
           "description": "Parameters describing behavior stability required to switch blocks.",
           "oneOf": [
             {
@@ -2481,6 +2485,41 @@
         }
       },
       "title": "Trial",
+      "type": "object"
+    },
+    "TrialGenerationEndConditions": {
+      "properties": {
+        "ignore_win": {
+          "default": 30,
+          "title": "Window of trials to check ignored responses",
+          "type": "integer"
+        },
+        "ignore_ratio_threshold": {
+          "default": 0.8,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Threshold for acceptable ignored trials within window.",
+          "type": "number"
+        },
+        "max_trial": {
+          "default": 1000,
+          "title": "Maximal number of trials",
+          "type": "integer"
+        },
+        "max_time": {
+          "default": "PT1H15M",
+          "format": "duration",
+          "title": "Maximal session time (min)",
+          "type": "string"
+        },
+        "min_time": {
+          "default": "PT30M",
+          "format": "duration",
+          "title": "Minimum session time (min)",
+          "type": "string"
+        }
+      },
+      "title": "TrialGenerationEndConditions",
       "type": "object"
     },
     "TrialGeneratorCompositeSpec_TrialGeneratorSpec_": {
