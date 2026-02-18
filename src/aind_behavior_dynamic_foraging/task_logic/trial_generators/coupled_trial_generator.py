@@ -4,14 +4,13 @@ from datetime import datetime, timedelta
 from typing import Literal, Optional, Union
 
 import numpy as np
-from aind_behavior_services.task.distributions_utils import draw_sample
 from aind_behavior_services.task.distributions import (
-    DistributionFamily,
     ExponentialDistribution,
     ExponentialDistributionParameters,
     TruncationParameters,
     UniformDistribution,
 )
+from aind_behavior_services.task.distributions_utils import draw_sample
 from pydantic import BaseModel, Field
 
 from ..trial_models import Trial, TrialOutcome
