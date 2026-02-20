@@ -52,7 +52,7 @@
         },
         "harp_lickometer_left": {
           "default": null,
-          "description": "Harp left lickometer. If null, the rig will use the harp_behavior DIPort0 for lick detection.",
+          "description": "Harp left lickometer",
           "oneOf": [
             {
               "$ref": "#/$defs/HarpLicketySplit"
@@ -63,8 +63,8 @@
           ]
         },
         "harp_lickometer_right": {
-          "default": null,
-          "description": "Harp right lickometer. If null, the rig will use the harp_behavior DIPort1 for lick detection.",
+          "defulat": null,
+          "description": "Harp right lickometer",
           "oneOf": [
             {
               "$ref": "#/$defs/HarpLicketySplit"
@@ -79,7 +79,7 @@
           "description": "Harp clock generator"
         },
         "harp_sound_card": {
-          "$ref": "#/$defs/HarpSoundCard",
+          "$ref": "#/$defs/DynamicForagingSoundCard",
           "description": "Harp sound card"
         },
         "harp_sniff_detector": {
@@ -121,6 +121,7 @@
         "data_directory",
         "triggered_camera_controller",
         "harp_behavior",
+        "harp_lickometer_right",
         "harp_clock_generator",
         "harp_sound_card",
         "manipulator",
@@ -568,11 +569,6 @@
           "default": "Auditory",
           "title": "Type",
           "type": "string"
-        },
-        "frequency_or_index": {
-          "default": 15000,
-          "title": "Frequency or index of the auditory secondary reinforcer. Indices correspond to < 32 values",
-          "type": "integer"
         }
       },
       "title": "AuditorySecondaryReinforcer",
@@ -1097,6 +1093,70 @@
       "title": "DelayPeriod",
       "type": "object"
     },
+    "DynamicForagingSoundCard": {
+      "description": "A calibrated sound card for the dynamic foraging rig. This is a subclass of the HarpSoundCard that includes the sound card calibration.",
+      "properties": {
+        "device_type": {
+          "const": "SoundCard",
+          "default": "SoundCard",
+          "title": "Device Type",
+          "type": "string"
+        },
+        "calibration": {
+          "$ref": "#/$defs/SoundCardCalibration",
+          "default": {
+            "go_cue": {
+              "duration": 0.1,
+              "frequency": 7500.0,
+              "index": 3,
+              "waveform_type": "sine"
+            },
+            "cs_plus": {
+              "duration": 0.1,
+              "frequency": 13000.0,
+              "index": 4,
+              "waveform_type": "sine"
+            },
+            "cs_minus": {
+              "duration": 0.1,
+              "frequency": null,
+              "index": 5,
+              "waveform_type": "white_noise"
+            }
+          },
+          "description": "Sound card calibration"
+        },
+        "who_am_i": {
+          "const": 1280,
+          "default": 1280,
+          "title": "Who Am I",
+          "type": "integer"
+        },
+        "serial_number": {
+          "default": null,
+          "description": "Device serial number",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Serial Number"
+        },
+        "port_name": {
+          "description": "Device port name",
+          "title": "Port Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "port_name"
+      ],
+      "title": "DynamicForagingSoundCard",
+      "type": "object"
+    },
     "ExponentialDistribution": {
       "description": "An exponential probability distribution.\n\nModels time between events in a Poisson process. Commonly used\nfor wait times and inter-event intervals.",
       "properties": {
@@ -1364,57 +1424,6 @@
         "port_name"
       ],
       "title": "HarpSniffDetector",
-      "type": "object"
-    },
-    "HarpSoundCard": {
-      "properties": {
-        "device_type": {
-          "const": "SoundCard",
-          "default": "SoundCard",
-          "title": "Device Type",
-          "type": "string"
-        },
-        "calibration": {
-          "default": null,
-          "description": "Calibration for the device.",
-          "oneOf": [
-            {
-              "$ref": "#/$defs/BaseModel"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "who_am_i": {
-          "const": 1280,
-          "default": 1280,
-          "title": "Who Am I",
-          "type": "integer"
-        },
-        "serial_number": {
-          "default": null,
-          "description": "Device serial number",
-          "oneOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "title": "Serial Number"
-        },
-        "port_name": {
-          "description": "Device port name",
-          "title": "Port Name",
-          "type": "string"
-        }
-      },
-      "required": [
-        "port_name"
-      ],
-      "title": "HarpSoundCard",
       "type": "object"
     },
     "HarpWhiteRabbit": {
@@ -1871,6 +1880,43 @@
         "subject"
       ],
       "title": "Session",
+      "type": "object"
+    },
+    "SoundCardCalibration": {
+      "description": "Calibration model for the sound card. Contains the waveforms to play for each cue.",
+      "properties": {
+        "go_cue": {
+          "$ref": "#/$defs/Waveform",
+          "default": {
+            "waveform_type": "sine",
+            "index": 3,
+            "duration": 0.1,
+            "frequency": 7500.0
+          },
+          "description": "Waveform to play for go cue"
+        },
+        "cs_plus": {
+          "$ref": "#/$defs/Waveform",
+          "default": {
+            "waveform_type": "sine",
+            "index": 4,
+            "duration": 0.1,
+            "frequency": 13000.0
+          },
+          "description": "Waveform to play for CS+ cue"
+        },
+        "cs_minus": {
+          "$ref": "#/$defs/Waveform",
+          "default": {
+            "waveform_type": "white_noise",
+            "index": 5,
+            "duration": 0.1,
+            "frequency": null
+          },
+          "description": "Waveform to play for CS- cue"
+        }
+      },
+      "title": "SoundCardCalibration",
       "type": "object"
     },
     "SpinnakerCamera": {
@@ -2791,6 +2837,53 @@
         "offset"
       ],
       "title": "WaterValveCalibration",
+      "type": "object"
+    },
+    "Waveform": {
+      "description": "Model for a waveform to be played on the sound card.",
+      "properties": {
+        "waveform_type": {
+          "default": "sine",
+          "description": "Type of the waveform",
+          "enum": [
+            "sine",
+            "white_noise"
+          ],
+          "title": "Waveform Type",
+          "type": "string"
+        },
+        "index": {
+          "description": "Index of the waveform on the sound card",
+          "maximum": 31,
+          "minimum": 3,
+          "title": "Index",
+          "type": "integer"
+        },
+        "duration": {
+          "description": "Duration of the waveform in seconds",
+          "exclusiveMinimum": 0,
+          "title": "Duration",
+          "type": "number"
+        },
+        "frequency": {
+          "default": null,
+          "description": "Frequency of the sine wave in Hz. Required if waveform_type is 'sine'.",
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Frequency"
+        }
+      },
+      "required": [
+        "index",
+        "duration"
+      ],
+      "title": "Waveform",
       "type": "object"
     },
     "WebCamera": {
