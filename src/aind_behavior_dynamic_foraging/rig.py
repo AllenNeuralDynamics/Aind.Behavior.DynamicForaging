@@ -71,8 +71,8 @@ class AindDynamicForagingRig(rig.Rig):
         default=None, description="Optional camera controller for monitoring cameras."
     )
     harp_behavior: harp.HarpBehavior = Field(description="Harp behavior")
-    harp_lickometer_left: harp.HarpLicketySplit = Field(description="Harp left lickometer")
-    harp_lickometer_right: harp.HarpLicketySplit = Field(description="Harp right lickometer")
+    harp_lickometer_left: Optional[harp.HarpLicketySplit] = Field(default=None, description="Harp left lickometer")
+    harp_lickometer_right: Optional[harp.HarpLicketySplit] = Field(defulat=None, description="Harp right lickometer")
     harp_clock_generator: harp.HarpWhiteRabbit = Field(description="Harp clock generator")
     harp_sound_card: DynamicForagingSoundCard = Field(description="Harp sound card")
     harp_sniff_detector: Optional[harp.HarpSniffDetector] = Field(default=None, description="Harp sniff detector")

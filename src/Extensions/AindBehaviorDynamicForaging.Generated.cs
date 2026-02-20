@@ -53,8 +53,6 @@ namespace AindDynamicForagingDataSchema
             _version = "0.0.2-rc8";
             _triggeredCameraController = new CameraControllerSpinnakerCamera();
             _harpBehavior = new HarpBehavior();
-            _harpLickometerLeft = new HarpLicketySplit();
-            _harpLickometerRight = new HarpLicketySplit();
             _harpClockGenerator = new HarpWhiteRabbit();
             _harpSoundCard = new DynamicForagingSoundCard();
             _manipulator = new AindManipulator();
@@ -216,7 +214,7 @@ namespace AindDynamicForagingDataSchema
         /// Harp left lickometer
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("harp_lickometer_left", Required=Newtonsoft.Json.Required.Always)]
+        [Newtonsoft.Json.JsonPropertyAttribute("harp_lickometer_left")]
         [System.ComponentModel.DescriptionAttribute("Harp left lickometer")]
         public HarpLicketySplit HarpLickometerLeft
         {
@@ -234,7 +232,7 @@ namespace AindDynamicForagingDataSchema
         /// Harp right lickometer
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("harp_lickometer_right", Required=Newtonsoft.Json.Required.Always)]
+        [Newtonsoft.Json.JsonPropertyAttribute("harp_lickometer_right", Required=Newtonsoft.Json.Required.AllowNull)]
         [System.ComponentModel.DescriptionAttribute("Harp right lickometer")]
         public HarpLicketySplit HarpLickometerRight
         {
