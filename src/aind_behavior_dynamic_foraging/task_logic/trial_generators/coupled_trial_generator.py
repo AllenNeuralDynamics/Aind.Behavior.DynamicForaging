@@ -161,9 +161,6 @@ class CoupledTrialGenerator(ITrialGenerator):
         iti = draw_sample(self.spec.inter_trial_interval_duration_distribution)
         quiescent = draw_sample(self.spec.quiescent_duration_distribution)
 
-        # iterate trials in block
-        self.trials_in_block += 1
-
         return Trial(
             p_reward_left=self.block.left_reward_prob,
             p_reward_right=self.block.right_reward_prob,
@@ -421,7 +418,6 @@ class CoupledTrialGenerator(ITrialGenerator):
 
         # determine candidate reward pairs
         reward_pairs = reward_families[reward_family_index][:reward_pairs_n]
-        print("reward pairs", reward_pairs)
         reward_prob = np.array(reward_pairs, dtype=float)
         reward_prob /= reward_prob.sum(axis=1, keepdims=True)
         reward_prob *= float(base_reward_sum)
