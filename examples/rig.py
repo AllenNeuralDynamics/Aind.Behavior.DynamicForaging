@@ -12,15 +12,11 @@ from aind_behavior_services.rig.harp import (
     HarpBehavior,
     HarpLicketySplit,
     HarpSniffDetector,
-    HarpSoundCard,
     HarpWhiteRabbit,
 )
 from aind_behavior_services.rig.water_valve import Measurement, calibrate_water_valves
 
-from aind_behavior_dynamic_foraging.rig import (
-    AindDynamicForagingRig,
-    RigCalibration,
-)
+from aind_behavior_dynamic_foraging.rig import AindDynamicForagingRig, DynamicForagingSoundCard, RigCalibration
 
 manipulator_calibration = AindManipulatorCalibration(
     full_step_to_mm=(ManipulatorPosition(x=0.010, y1=0.010, y2=0.010, z=0.010)),
@@ -63,7 +59,7 @@ rig = AindDynamicForagingRig(
     monitoring_camera_controller=None,
     harp_behavior=HarpBehavior(port_name="COM3"),
     harp_lickometer_left=HarpLicketySplit(port_name="COM5"),
-    harp_lickometer_right=HarpLicketySplit(port_name="COM10"),
+    harp_lickometer_right=None,
     harp_clock_generator=HarpWhiteRabbit(port_name="COM6"),
     harp_sniff_detector=HarpSniffDetector(port_name="COM7"),
     manipulator=AindManipulator(port_name="COM9", calibration=manipulator_calibration),
@@ -71,7 +67,7 @@ rig = AindDynamicForagingRig(
         water_valve_left=water_valve_calibration,
         water_valve_right=water_valve_calibration,
     ),
-    harp_sound_card=HarpSoundCard(port_name="COM8"),
+    harp_sound_card=DynamicForagingSoundCard(port_name="COM8"),
 )
 
 
