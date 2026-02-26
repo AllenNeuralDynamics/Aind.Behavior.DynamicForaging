@@ -234,10 +234,10 @@ class CoupledTrialGenerator(ITrialGenerator):
 
         if self.spec.baiting:   
             if outcome.is_right_choice:
-                self.logger.debug(f"Resesting right bait.")
+                self.logger.debug("Resesting right bait.")
                 self.is_right_baited = False
             elif not outcome.is_right_choice:
-                self.logger.debug(f"Resesting left bait.")
+                self.logger.debug("Resesting left bait.")
                 self.is_left_baited = False
 
         if self.spec.extend_block_on_no_response and outcome.is_right_choice is None:
