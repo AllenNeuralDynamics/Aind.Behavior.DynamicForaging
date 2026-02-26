@@ -166,9 +166,9 @@ class CoupledTrialGenerator(ITrialGenerator):
         iti = draw_sample(self.spec.inter_trial_interval_duration_distribution)
         quiescent = draw_sample(self.spec.quiescent_duration_distribution)
         
-        p_reward_left=self.block.left_reward_prob,
+        p_reward_left=self.block.left_reward_prob
         p_reward_right=self.block.right_reward_prob
-
+        
         if self.spec.baiting:
             random_numbers = np.random.random(2)
             
@@ -180,7 +180,6 @@ class CoupledTrialGenerator(ITrialGenerator):
             self.logger.debug(f"Right baited: {is_left_baited}")
             p_reward_right = 1 if is_right_baited else p_reward_right
             
-
         return Trial(
             p_reward_left=p_reward_left,
             p_reward_right=p_reward_right,
