@@ -121,6 +121,8 @@ class CoupledTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
         [[6, 1], [3, 1], [1, 1]],
     ]
 
+    baiting: bool = Field(default=False, description="Whether uncollected rewards carry over to the next trial.")
+
     def create_generator(self) -> "CoupledTrialGenerator":
         return CoupledTrialGenerator(self)
 
@@ -143,6 +145,9 @@ class CoupledTrialGenerator(ITrialGenerator):
         self.trials_in_block = 0
         self.start_time = datetime.now()
 
+        self.is_left_baited: bool = False
+        self.is_right_baited: bool = False
+
     def next(self) -> Trial | None:
         """
         Generate next trial
@@ -160,10 +165,25 @@ class CoupledTrialGenerator(ITrialGenerator):
         # determine iti and quiescent period duration
         iti = draw_sample(self.spec.inter_trial_interval_duration_distribution)
         quiescent = draw_sample(self.spec.quiescent_duration_distribution)
+        
+        p_reward_left=self.block.left_reward_prob,
+        p_reward_right=self.block.right_reward_prob
+
+        if self.spec.baiting:
+            random_numbers = np.random.random(2)
+            
+            is_left_baited = self.block.left_reward_prob > random_numbers[0] or self.is_left_baited
+            self.logger.debug(f"Left baited: {is_left_baited}")
+            p_reward_left = 1 if is_left_baited else p_reward_left
+            
+            is_right_baited = self.block.right_reward_prob > random_numbers[1] or self.is_right_baited
+            self.logger.debug(f"Right baited: {is_left_baited}")
+            p_reward_right = 1 if is_right_baited else p_reward_right
+            
 
         return Trial(
-            p_reward_left=self.block.left_reward_prob,
-            p_reward_right=self.block.right_reward_prob,
+            p_reward_left=p_reward_left,
+            p_reward_right=p_reward_right,
             reward_consumption_duration=self.spec.reward_consumption_duration,
             response_deadline_duration=self.spec.response_duration,
             quiescence_period_duration=quiescent,
@@ -210,6 +230,15 @@ class CoupledTrialGenerator(ITrialGenerator):
         self.is_right_choice_history.append(outcome.is_right_choice)
         self.reward_history.append(outcome.is_rewarded)
         self.trials_in_block += 1
+
+
+        if self.spec.baiting:   
+            if outcome.is_right_choice:
+                self.logger.debug(f"Resesting right bait.")
+                self.is_right_baited = False
+            elif not outcome.is_right_choice:
+                self.logger.debug(f"Resesting left bait.")
+                self.is_left_baited = False
 
         if self.spec.extend_block_on_no_response and outcome.is_right_choice is None:
             self.logger.info("Extending minimum block length due to ignored trial.")
