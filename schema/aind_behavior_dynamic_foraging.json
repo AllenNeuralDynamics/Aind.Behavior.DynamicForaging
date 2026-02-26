@@ -3,7 +3,7 @@
     "AindDynamicForagingRig": {
       "properties": {
         "aind_behavior_services_pkg_version": {
-          "default": "0.13.1",
+          "default": "0.13.2-rc1",
           "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
           "title": "aind_behavior_services package version",
           "type": "string"
@@ -195,7 +195,7 @@
           "title": "Rng Seed"
         },
         "aind_behavior_services_pkg_version": {
-          "default": "0.13.1",
+          "default": "0.13.2-rc1",
           "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
           "title": "aind_behavior_services package version",
           "type": "string"
@@ -902,6 +902,12 @@
           "items": {},
           "title": "Reward Family",
           "type": "array"
+        },
+        "baiting": {
+          "default": false,
+          "description": "Whether uncollected rewards carry over to the next trial.",
+          "title": "Baiting",
+          "type": "boolean"
         }
       },
       "title": "CoupledTrialGeneratorSpec",
@@ -1539,14 +1545,14 @@
     "Session": {
       "properties": {
         "aind_behavior_services_pkg_version": {
-          "default": "0.13.1",
+          "default": "0.13.2-rc1",
           "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
           "title": "aind_behavior_services package version",
           "type": "string"
         },
         "version": {
-          "const": "0.13.1",
-          "default": "0.13.1",
+          "const": "0.13.2-rc1",
+          "default": "0.13.2-rc1",
           "title": "Version",
           "type": "string"
         },
@@ -2525,10 +2531,18 @@
       "description": "Represents a water valve calibration.",
       "properties": {
         "date": {
+          "default": null,
           "description": "Date of the calibration",
-          "format": "date-time",
-          "title": "Date",
-          "type": "string"
+          "oneOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Date"
         },
         "measurements": {
           "default": [],
@@ -2601,7 +2615,6 @@
         }
       },
       "required": [
-        "date",
         "slope",
         "offset"
       ],

@@ -49,7 +49,7 @@ namespace AindDynamicForagingDataSchema
     
         public AindDynamicForagingRig()
         {
-            _aindBehaviorServicesPkgVersion = "0.13.1";
+            _aindBehaviorServicesPkgVersion = "0.13.2-rc1";
             _version = "0.0.2-rc9";
             _triggeredCameraController = new CameraControllerSpinnakerCamera();
             _harpBehavior = new HarpBehavior();
@@ -592,7 +592,7 @@ namespace AindDynamicForagingDataSchema
     
         public AindDynamicForagingTaskParameters()
         {
-            _aindBehaviorServicesPkgVersion = "0.13.1";
+            _aindBehaviorServicesPkgVersion = "0.13.2-rc1";
             _rewardSize = new RewardSize();
             _lickSpoutRetraction = false;
             _trialGenerator = new TrialGeneratorSpec();
@@ -1830,6 +1830,8 @@ namespace AindDynamicForagingDataSchema
     
         private System.Collections.Generic.List<object> _rewardFamily;
     
+        private bool _baiting;
+    
         public CoupledTrialGeneratorSpec()
         {
             _quiescentDurationDistribution = new object();
@@ -1844,6 +1846,7 @@ namespace AindDynamicForagingDataSchema
             _kernelSize = 2;
             _rewardProbabilityParameters = new RewardProbabilityParameters();
             _rewardFamily = new System.Collections.Generic.List<object>();
+            _baiting = false;
         }
     
         protected CoupledTrialGeneratorSpec(CoupledTrialGeneratorSpec other) : 
@@ -1861,6 +1864,7 @@ namespace AindDynamicForagingDataSchema
             _kernelSize = other._kernelSize;
             _rewardProbabilityParameters = other._rewardProbabilityParameters;
             _rewardFamily = other._rewardFamily;
+            _baiting = other._baiting;
         }
     
         /// <summary>
@@ -2059,6 +2063,23 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
+        /// <summary>
+        /// Whether uncollected rewards carry over to the next trial.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("baiting")]
+        [System.ComponentModel.DescriptionAttribute("Whether uncollected rewards carry over to the next trial.")]
+        public bool Baiting
+        {
+            get
+            {
+                return _baiting;
+            }
+            set
+            {
+                _baiting = value;
+            }
+        }
+    
         public System.IObservable<CoupledTrialGeneratorSpec> Generate()
         {
             return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new CoupledTrialGeneratorSpec(this)));
@@ -2086,7 +2107,8 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("ExtendBlockOnNoResponse = " + _extendBlockOnNoResponse + ", ");
             stringBuilder.Append("KernelSize = " + _kernelSize + ", ");
             stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters + ", ");
-            stringBuilder.Append("RewardFamily = " + _rewardFamily);
+            stringBuilder.Append("RewardFamily = " + _rewardFamily + ", ");
+            stringBuilder.Append("Baiting = " + _baiting);
             return true;
         }
     }
@@ -4067,8 +4089,8 @@ namespace AindDynamicForagingDataSchema
     
         public Session()
         {
-            _aindBehaviorServicesPkgVersion = "0.13.1";
-            _version = "0.13.1";
+            _aindBehaviorServicesPkgVersion = "0.13.2-rc1";
+            _version = "0.13.2-rc1";
             _experimenter = new System.Collections.Generic.List<string>();
             _allowDirtyRepo = false;
             _skipHardwareValidation = false;
@@ -6589,7 +6611,7 @@ namespace AindDynamicForagingDataSchema
     public partial class WaterValveCalibration
     {
     
-        private System.DateTimeOffset _date;
+        private System.DateTimeOffset? _date;
     
         private System.Collections.Generic.List<Measurement> _measurements;
     
@@ -6623,9 +6645,9 @@ namespace AindDynamicForagingDataSchema
         /// Date of the calibration
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("date", Required=Newtonsoft.Json.Required.Always)]
+        [Newtonsoft.Json.JsonPropertyAttribute("date")]
         [System.ComponentModel.DescriptionAttribute("Date of the calibration")]
-        public System.DateTimeOffset Date
+        public System.DateTimeOffset? Date
         {
             get
             {
@@ -6634,22 +6656,6 @@ namespace AindDynamicForagingDataSchema
             set
             {
                 _date = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonIgnoreAttribute()]
-        [System.ComponentModel.BrowsableAttribute(false)]
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
-        [System.Xml.Serialization.XmlElementAttribute("Date")]
-        public string DateXml
-        {
-            get
-            {
-                return _date.ToString("o");
-            }
-            set
-            {
-                _date = System.DateTimeOffset.Parse(value);
             }
         }
     
