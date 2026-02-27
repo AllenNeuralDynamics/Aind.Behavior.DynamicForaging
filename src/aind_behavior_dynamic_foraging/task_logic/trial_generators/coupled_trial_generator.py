@@ -20,11 +20,11 @@ BlockBehaviorEvaluationMode = Literal[
 
 
 class CoupledTrialGenerationEndConditions(BaseModel):
-    ignore_win: int = Field(default=30, title="Window of trials to check ignored responses")
+    ignore_win: int = Field(default=30, ge=0, title="Window of trials to check ignored responses")
     ignore_ratio_threshold: float = Field(
-        default=0.8, title="Threshold for acceptable ignored trials within window.", ge=0, le=1
+        default=0.8, ge=0, le=1, title="Threshold for acceptable ignored trials within window.", ge=0, le=1
     )
-    max_trial: int = Field(default=1000, title="Maximal number of trials")
+    max_trial: int = Field(default=1000, ge=0, title="Maximal number of trials")
     max_time: timedelta = Field(timedelta(minutes=75), title="Maximal session time (min)")
     min_time: timedelta = Field(default=timedelta(minutes=30), title="Minimum session time (min)")
 
@@ -41,6 +41,7 @@ class BehaviorStabilityParameters(BaseModel):
     )
     min_consecutive_stable_trials: int = Field(
         default=5,
+        ge=0,
         description="Minimum number of consecutive trials satisfying the behavioral stability fraction.",
     )
 
@@ -74,7 +75,7 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
         super().__init__(spec)
         self.start_time = datetime.now()
 
-    def are_end_conditions_met(self) -> bool:
+    def _are_end_conditions_met(self) -> bool:
         """
         Check if end conditions are met to stop session
         """
@@ -113,7 +114,7 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
         self.reward_history.append(outcome.is_rewarded)
         self.trials_in_block += 1
 
-        if self.spec.baiting:
+        if self.spec.is_baiting:
             if outcome.is_right_choice:
                 logger.debug("Resesting right bait.")
                 self.is_right_baited = False

@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 class WarmupTrialGenerationEndConditions(BaseModel):
-    min_trial: int = Field(default=50, description="Minimum trials in generator.")
+    min_trial: int = Field(default=50, ge=0, description="Minimum trials in generator.")
     max_choice_bias: float = Field(
         default=0.1,
         ge=0,
@@ -31,22 +31,22 @@ class WarmupTrialGenerationEndConditions(BaseModel):
         le=1,
         description="Minimum fraction of trials with a choice (non-ignored) to end trial generation.",
     )
-    evaluation_window: int = Field(default=20, description="Number of most recent trials to evaluate the end criteria.")
+    evaluation_window: int = Field(default=20, ge=0, description="Number of most recent trials to evaluate the end criteria.")
 
 
 class WarmupTrialGeneratorSpec(BlockBasedTrialGeneratorSpec):
     type: Literal["WarmupTrialGenerator"] = "WarmupTrialGenerator"
 
-    block_len_distribution: ExponentialDistribution = ExponentialDistribution(
+    block_len: ExponentialDistribution = Field(ExponentialDistribution(
         distribution_parameters=ExponentialDistributionParameters(rate=1),
         truncation_parameters=TruncationParameters(min=1, max=2),
-    )
+    ), description="Distribution describing block length.")
 
     trial_generation_end_parameters: WarmupTrialGenerationEndConditions = Field(
         default=WarmupTrialGenerationEndConditions(), description="Conditions to end trial generation."
     )
-    min_block_reward: int = 1
-    baiting: bool = True
+    min_block_reward: Literal[1] = Field(1, title="Minimal rewards in a block to switch")
+    is_baiting: Literal[True] = Field(default=True, description="Whether uncollected rewards carry over to the next trial.")
 
     def create_generator(self) -> "WarmupTrialGenerator":
         return WarmupTrialGenerator(self)
@@ -55,7 +55,7 @@ class WarmupTrialGeneratorSpec(BlockBasedTrialGeneratorSpec):
 class WarmupTrialGenerator(BlockBasedTrialGenerator):
     spec: WarmupTrialGeneratorSpec
 
-    def are_end_conditions_met(self) -> bool:
+    def _are_end_conditions_met(self) -> bool:
         """
         Check if end conditions are met to stop session
         """
@@ -99,7 +99,7 @@ class WarmupTrialGenerator(BlockBasedTrialGenerator):
         self.reward_history.append(outcome.is_rewarded)
         self.trials_in_block += 1
 
-        if self.spec.baiting:
+        if self.spec.is_baiting:
             if outcome.is_right_choice:
                 logger.debug("Resesting right bait.")
                 self.is_right_baited = False

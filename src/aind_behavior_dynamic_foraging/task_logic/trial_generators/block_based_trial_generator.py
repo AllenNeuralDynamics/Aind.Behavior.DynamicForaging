@@ -33,40 +33,43 @@ class Block(BaseModel):
 class BlockBasedTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
     type: Literal["BlockBasedTrialGenerator"] = "BlockBasedTrialGenerator"
 
-    quiescent_duration_distribution: Union[UniformDistribution, ExponentialDistribution] = Field(
+    quiescent_duration: Union[UniformDistribution, ExponentialDistribution] = Field(
         default=ExponentialDistribution(
             distribution_parameters=ExponentialDistributionParameters(rate=1),
             truncation_parameters=TruncationParameters(min=0, max=1),
         ),
-        description="Duration of the quiescence period before trial starts (in seconds). Each lick resets the timer.",
+        description="Distribution describing the quiescence period before trial starts (in seconds). Each lick resets the timer.",
     )
 
-    response_duration: float = Field(default=1.0, description="Duration after go cue for animal response.")
+    response_duration: float = Field(default=1.0, ge=0, description="Duration after go cue for animal response.")
 
-    reward_consumption_duration: float = Field(
+    reward_consumption: float = Field(
         default=3.0,
+        ge=0,
         description="Duration of reward consumption before transition to ITI (in seconds).",
     )
 
-    inter_trial_interval_duration_distribution: Union[UniformDistribution, ExponentialDistribution] = Field(
+    inter_trial_interval_duration: Union[UniformDistribution, ExponentialDistribution] = Field(
         default=ExponentialDistribution(
             distribution_parameters=ExponentialDistributionParameters(rate=1 / 2),
             truncation_parameters=TruncationParameters(min=1, max=8),
         ),
-        description="Duration of the inter-trial interval (in seconds).",
+        description="Distribution describing the inter-trial interval (in seconds).",
     )
 
-    block_len_distribution: Union[UniformDistribution, ExponentialDistribution] = Field(
+    block_len: Union[UniformDistribution, ExponentialDistribution] = Field(
         default=ExponentialDistribution(
             distribution_parameters=ExponentialDistributionParameters(rate=1 / 20),
             truncation_parameters=TruncationParameters(min=20, max=60),
-        )
-    )
+        ),
+    description="Distribution describing block length.")
 
-    min_block_reward: int = Field(default=1, title="Minimal rewards in a block to switch")
+    min_block_reward: int = Field(default=1, ge=0, title="Minimal rewards in a block to switch")
 
     kernel_size: int = Field(default=2, description="Kernel to evaluate choice fraction.")
-    reward_probability_parameters: RewardProbabilityParameters = Field(default=RewardProbabilityParameters())
+    reward_probability_parameters: RewardProbabilityParameters = Field(
+        default=RewardProbabilityParameters(), description="Parameters defining the reward probability structure."
+    )
     reward_family: list = [
         [[8, 1], [6, 1], [3, 1], [1, 1]],
         [[8, 1], [1, 1]],
@@ -81,7 +84,7 @@ class BlockBasedTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
         [[6, 1], [3, 1], [1, 1]],
     ]
 
-    baiting: bool = Field(default=False, description="Whether uncollected rewards carry over to the next trial.")
+    Is_baiting: bool = Field(default=False, description="Whether uncollected rewards carry over to the next trial.")
 
     def create_generator(self) -> "BlockBasedTrialGenerator":
         return BlockBasedTrialGenerator(self)
@@ -113,7 +116,7 @@ class BlockBasedTrialGenerator(ITrialGenerator):
         logger.info("Generating next trial.")
 
         # check end conditions
-        if self.are_end_conditions_met():
+        if self._are_end_conditions_met():
             logger.info("Trial generator end conditions met.")
             return
 
@@ -144,7 +147,7 @@ class BlockBasedTrialGenerator(ITrialGenerator):
             inter_trial_interval_duration=iti,
         )
 
-    def are_end_conditions_met(self) -> bool:
+    def _are_end_conditions_met(self) -> bool:
         """
         Check if end conditions are met to stop session
         """
