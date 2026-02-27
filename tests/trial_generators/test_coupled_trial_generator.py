@@ -2,20 +2,16 @@ import logging
 import unittest
 
 from aind_behavior_dynamic_foraging.task_logic.trial_generators import CoupledTrialGeneratorSpec
-from aind_behavior_dynamic_foraging.task_logic.trial_generators.block_based_trial_generator import (
-    RewardProbabilityParameters,
-)
 from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial, TrialOutcome
 
 logging.basicConfig(level=logging.DEBUG)
 
 
 class TestCoupledTrialGenerator(unittest.TestCase):
-    
     def setUp(self):
         self.spec = CoupledTrialGeneratorSpec()
         self.generator = self.spec.create_generator()
-    
+
     ##### Tests is_behavior_stable #####
 
     def test_behavior_stable_end(self):
@@ -151,10 +147,10 @@ class TestCoupledTrialGenerator(unittest.TestCase):
         spec = CoupledTrialGeneratorSpec(behavior_stability_parameters=None)
         generator = spec.create_generator()
 
-        beh_params = self.generator.spec.behavior_stability_parameters
-        right_prob = self.generator.block.right_reward_prob
-        left_prob = self.generator.block.left_reward_prob
-        kernel_size = self.generator.spec.kernel_size
+        beh_params = generator.spec.behavior_stability_parameters
+        right_prob = generator.block.right_reward_prob
+        left_prob = generator.block.left_reward_prob
+        kernel_size = generator.spec.kernel_size
 
         choices = [True]
         self.assertTrue(

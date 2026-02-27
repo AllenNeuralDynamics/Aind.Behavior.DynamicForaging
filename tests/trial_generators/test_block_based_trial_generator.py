@@ -1,17 +1,16 @@
 import logging
 import unittest
 
-from aind_behavior_dynamic_foraging.task_logic.trial_generators.block_based_trial_generator import BlockBasedTrialGeneratorSpec
 from aind_behavior_dynamic_foraging.task_logic.trial_generators.block_based_trial_generator import (
+    BlockBasedTrialGeneratorSpec,
     RewardProbabilityParameters,
 )
-from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial, TrialOutcome
+from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial
 
 logging.basicConfig(level=logging.DEBUG)
 
 
 class TestCoupledTrialGenerator(unittest.TestCase):
-    
     def setUp(self):
         self.spec = BlockBasedTrialGeneratorSpec()
         self.generator = self.spec.create_generator()

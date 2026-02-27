@@ -148,7 +148,6 @@ class BlockBasedTrialGenerator(ITrialGenerator):
         """
         Check if end conditions are met to stop session
         """
-        
 
     def generate_next_block(
         self,
