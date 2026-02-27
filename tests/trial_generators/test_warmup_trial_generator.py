@@ -1,8 +1,7 @@
 import unittest
-from unittest.mock import patch
+
 from aind_behavior_dynamic_foraging.task_logic.trial_generators.warmup_trial_generator import (
     WarmupTrialGeneratorSpec,
-    WarmupTrialGenerationEndConditions,
 )
 from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial, TrialOutcome
 
@@ -12,7 +11,6 @@ def make_outcome(is_right_choice: bool | None, is_rewarded: bool) -> TrialOutcom
 
 
 class TestWarmupEndConditions(unittest.TestCase):
-
     def setUp(self):
         self.spec = WarmupTrialGeneratorSpec()
         self.generator = self.spec.create_generator()
