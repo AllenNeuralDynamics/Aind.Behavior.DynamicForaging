@@ -777,7 +777,7 @@
           "title": "Block Len Distribution"
         },
         "trial_generation_end_parameters": {
-          "$ref": "#/$defs/TrialGenerationEndConditions",
+          "$ref": "#/$defs/aind_behavior_dynamic_foraging__task_logic__trial_generators__coupled_trial_generator__TrialGenerationEndConditions",
           "default": {
             "ignore_win": 30,
             "ignore_ratio_threshold": 0.8,
@@ -821,7 +821,7 @@
           "type": "integer"
         },
         "reward_probability_parameters": {
-          "$ref": "#/$defs/RewardProbabilityParameters",
+          "$ref": "#/$defs/aind_behavior_dynamic_foraging__task_logic__trial_generators__coupled_trial_generator__RewardProbabilityParameters",
           "default": {
             "base_reward_sum": 0.8,
             "family": 1,
@@ -1451,27 +1451,6 @@
         }
       },
       "title": "Rect",
-      "type": "object"
-    },
-    "RewardProbabilityParameters": {
-      "properties": {
-        "base_reward_sum": {
-          "default": 0.8,
-          "title": "Sum of p_reward",
-          "type": "number"
-        },
-        "family": {
-          "default": 1,
-          "title": "Reward family",
-          "type": "integer"
-        },
-        "pairs_n": {
-          "default": 1,
-          "title": "Number of pairs",
-          "type": "integer"
-        }
-      },
-      "title": "RewardProbabilityParameters",
       "type": "object"
     },
     "RewardSize": {
@@ -2226,41 +2205,6 @@
       "title": "Trial",
       "type": "object"
     },
-    "TrialGenerationEndConditions": {
-      "properties": {
-        "ignore_win": {
-          "default": 30,
-          "title": "Window of trials to check ignored responses",
-          "type": "integer"
-        },
-        "ignore_ratio_threshold": {
-          "default": 0.8,
-          "maximum": 1,
-          "minimum": 0,
-          "title": "Threshold for acceptable ignored trials within window.",
-          "type": "number"
-        },
-        "max_trial": {
-          "default": 1000,
-          "title": "Maximal number of trials",
-          "type": "integer"
-        },
-        "max_time": {
-          "default": "PT1H15M",
-          "format": "duration",
-          "title": "Maximal session time (min)",
-          "type": "string"
-        },
-        "min_time": {
-          "default": "PT30M",
-          "format": "duration",
-          "title": "Minimum session time (min)",
-          "type": "string"
-        }
-      },
-      "title": "TrialGenerationEndConditions",
-      "type": "object"
-    },
     "TrialGeneratorCompositeSpec_TrialGeneratorSpec_": {
       "properties": {
         "type": {
@@ -2291,11 +2235,15 @@
         "mapping": {
           "CoupledTrialGenerator": "#/$defs/CoupledTrialGeneratorSpec",
           "IntegrationTestTrialGenerator": "#/$defs/IntegrationTestTrialGeneratorSpec",
-          "TrialGeneratorComposite": "#/$defs/TrialGeneratorCompositeSpec_TrialGeneratorSpec_"
+          "TrialGeneratorComposite": "#/$defs/TrialGeneratorCompositeSpec_TrialGeneratorSpec_",
+          "WarmupTrialGenerator": "#/$defs/WarmupTrialGeneratorSpec"
         },
         "propertyName": "type"
       },
       "oneOf": [
+        {
+          "$ref": "#/$defs/WarmupTrialGeneratorSpec"
+        },
         {
           "$ref": "#/$defs/CoupledTrialGeneratorSpec"
         },
@@ -2527,6 +2475,199 @@
       "title": "VideoWriterOpenCv",
       "type": "object"
     },
+    "WarmupTrialGeneratorSpec": {
+      "properties": {
+        "type": {
+          "const": "WarmupTrialGenerator",
+          "default": "WarmupTrialGenerator",
+          "title": "Type",
+          "type": "string"
+        },
+        "quiescent_duration_distribution": {
+          "default": {
+            "family": "Exponential",
+            "distribution_parameters": {
+              "family": "Exponential",
+              "rate": 1.0
+            },
+            "truncation_parameters": {
+              "max": 1.0,
+              "min": 0.0,
+              "truncation_mode": "exclude"
+            },
+            "scaling_parameters": null
+          },
+          "description": "Duration of the quiescence period before trial starts (in seconds). Each lick resets the timer.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/UniformDistribution"
+            },
+            {
+              "$ref": "#/$defs/ExponentialDistribution"
+            }
+          ],
+          "title": "Quiescent Duration Distribution"
+        },
+        "response_duration": {
+          "default": 1.0,
+          "description": "Duration after go cue for animal response.",
+          "title": "Response Duration",
+          "type": "number"
+        },
+        "reward_consumption_duration": {
+          "default": 3.0,
+          "description": "Duration of reward consumption before transition to ITI (in seconds).",
+          "title": "Reward Consumption Duration",
+          "type": "number"
+        },
+        "inter_trial_interval_duration_distribution": {
+          "default": {
+            "family": "Exponential",
+            "distribution_parameters": {
+              "family": "Exponential",
+              "rate": 0.5
+            },
+            "truncation_parameters": {
+              "max": 8.0,
+              "min": 1.0,
+              "truncation_mode": "exclude"
+            },
+            "scaling_parameters": null
+          },
+          "description": "Duration of the inter-trial interval (in seconds).",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/UniformDistribution"
+            },
+            {
+              "$ref": "#/$defs/ExponentialDistribution"
+            }
+          ],
+          "title": "Inter Trial Interval Duration Distribution"
+        },
+        "block_len_distribution": {
+          "$ref": "#/$defs/ExponentialDistribution",
+          "default": {
+            "family": "Exponential",
+            "distribution_parameters": {
+              "family": "Exponential",
+              "rate": 1.0
+            },
+            "truncation_parameters": {
+              "max": 2.0,
+              "min": 1.0,
+              "truncation_mode": "exclude"
+            },
+            "scaling_parameters": null
+          }
+        },
+        "trial_generation_end_parameters": {
+          "$ref": "#/$defs/aind_behavior_dynamic_foraging__task_logic__trial_generators__warmup_trial_generator__TrialGenerationEndConditions",
+          "default": {
+            "min_trial": 50,
+            "max_choice_bias": 0.1,
+            "min_response_rate": 0.8,
+            "evaluation_window": 20
+          },
+          "description": "Conditions to end trial generation."
+        },
+        "min_block_reward": {
+          "default": 1,
+          "title": "Min Block Reward",
+          "type": "integer"
+        },
+        "reward_probability_parameters": {
+          "$ref": "#/$defs/aind_behavior_dynamic_foraging__task_logic__trial_generators__warmup_trial_generator__RewardProbabilityParameters",
+          "default": {
+            "base_reward_sum": 1.0,
+            "family": 3,
+            "pairs_n": 1
+          }
+        },
+        "reward_family": {
+          "default": [
+            [
+              [
+                8,
+                1
+              ],
+              [
+                6,
+                1
+              ],
+              [
+                3,
+                1
+              ],
+              [
+                1,
+                1
+              ]
+            ],
+            [
+              [
+                8,
+                1
+              ],
+              [
+                1,
+                1
+              ]
+            ],
+            [
+              [
+                1,
+                0
+              ],
+              [
+                0.9,
+                0.1
+              ],
+              [
+                0.8,
+                0.2
+              ],
+              [
+                0.7,
+                0.3
+              ],
+              [
+                0.6,
+                0.4
+              ],
+              [
+                0.5,
+                0.5
+              ]
+            ],
+            [
+              [
+                6,
+                1
+              ],
+              [
+                3,
+                1
+              ],
+              [
+                1,
+                1
+              ]
+            ]
+          ],
+          "items": {},
+          "title": "Reward Family",
+          "type": "array"
+        },
+        "baiting": {
+          "default": true,
+          "title": "Baiting",
+          "type": "boolean"
+        }
+      },
+      "title": "WarmupTrialGeneratorSpec",
+      "type": "object"
+    },
     "WaterValveCalibration": {
       "description": "Represents a water valve calibration.",
       "properties": {
@@ -2710,6 +2851,117 @@
         }
       },
       "title": "WebCamera",
+      "type": "object"
+    },
+    "aind_behavior_dynamic_foraging__task_logic__trial_generators__coupled_trial_generator__RewardProbabilityParameters": {
+      "properties": {
+        "base_reward_sum": {
+          "default": 0.8,
+          "title": "Sum of p_reward",
+          "type": "number"
+        },
+        "family": {
+          "default": 1,
+          "title": "Reward family",
+          "type": "integer"
+        },
+        "pairs_n": {
+          "default": 1,
+          "title": "Number of pairs",
+          "type": "integer"
+        }
+      },
+      "title": "RewardProbabilityParameters",
+      "type": "object"
+    },
+    "aind_behavior_dynamic_foraging__task_logic__trial_generators__coupled_trial_generator__TrialGenerationEndConditions": {
+      "properties": {
+        "ignore_win": {
+          "default": 30,
+          "title": "Window of trials to check ignored responses",
+          "type": "integer"
+        },
+        "ignore_ratio_threshold": {
+          "default": 0.8,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Threshold for acceptable ignored trials within window.",
+          "type": "number"
+        },
+        "max_trial": {
+          "default": 1000,
+          "title": "Maximal number of trials",
+          "type": "integer"
+        },
+        "max_time": {
+          "default": "PT1H15M",
+          "format": "duration",
+          "title": "Maximal session time (min)",
+          "type": "string"
+        },
+        "min_time": {
+          "default": "PT30M",
+          "format": "duration",
+          "title": "Minimum session time (min)",
+          "type": "string"
+        }
+      },
+      "title": "TrialGenerationEndConditions",
+      "type": "object"
+    },
+    "aind_behavior_dynamic_foraging__task_logic__trial_generators__warmup_trial_generator__RewardProbabilityParameters": {
+      "properties": {
+        "base_reward_sum": {
+          "default": 1,
+          "title": "Base Reward Sum",
+          "type": "number"
+        },
+        "family": {
+          "default": 3,
+          "title": "Family",
+          "type": "integer"
+        },
+        "pairs_n": {
+          "default": 1,
+          "title": "Pairs N",
+          "type": "integer"
+        }
+      },
+      "title": "RewardProbabilityParameters",
+      "type": "object"
+    },
+    "aind_behavior_dynamic_foraging__task_logic__trial_generators__warmup_trial_generator__TrialGenerationEndConditions": {
+      "properties": {
+        "min_trial": {
+          "default": 50,
+          "description": "Minimum trials in generator.",
+          "title": "Min Trial",
+          "type": "integer"
+        },
+        "max_choice_bias": {
+          "default": 0.1,
+          "description": "Maximum allowed deviation from 50/50 choice ratio to end trial generation.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Max Choice Bias",
+          "type": "number"
+        },
+        "min_response_rate": {
+          "default": 0.8,
+          "description": "Minimum fraction of trials with a choice (non-ignored) to end trial generation.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Min Response Rate",
+          "type": "number"
+        },
+        "evaluation_window": {
+          "default": 20,
+          "description": "Number of most recent trials to evaluate the end criteria.",
+          "title": "Evaluation Window",
+          "type": "integer"
+        }
+      },
+      "title": "TrialGenerationEndConditions",
       "type": "object"
     }
   }

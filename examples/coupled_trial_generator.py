@@ -1,9 +1,11 @@
 import logging
 import random
+
 import numpy as np
 
 from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generator import CoupledTrialGeneratorSpec
 from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial, TrialOutcome
+
 
 def simulate_response(previous_reward: bool, previous_choice: bool | None, previous_left_bait: bool, previous_right_bait: bool) -> TrialOutcome:
     
