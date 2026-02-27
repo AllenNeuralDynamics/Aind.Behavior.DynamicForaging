@@ -17,18 +17,29 @@ from ._base import BaseTrialGeneratorSpecModel, ITrialGenerator
 
 logger = logging.getLogger(__name__)
 
+
 class TrialGenerationEndConditions(BaseModel):
     min_trial: int = Field(default=50, description="Minimum trials in generator.")
-    max_choice_bias: float = Field(default=.1, ge=0,
-        le=1,description="Maximum allowed deviation from 50/50 choice ratio to end trial generation.")
-    min_response_rate: float = Field(default=.8, ge=0,
-        le=1,description="Minimum fraction of trials with a choice (non-ignored) to end trial generation.")
+    max_choice_bias: float = Field(
+        default=0.1,
+        ge=0,
+        le=1,
+        description="Maximum allowed deviation from 50/50 choice ratio to end trial generation.",
+    )
+    min_response_rate: float = Field(
+        default=0.8,
+        ge=0,
+        le=1,
+        description="Minimum fraction of trials with a choice (non-ignored) to end trial generation.",
+    )
     evaluation_window: int = Field(default=20, description="Number of most recent trials to evaluate the end criteria.")
+
 
 class RewardProbabilityParameters(BaseModel):
     base_reward_sum: float = 1
     family: int = 3
     pairs_n: int = 1
+
 
 class Block(BaseModel):
     right_reward_prob: float
@@ -49,9 +60,9 @@ class WarmupTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
     response_duration: float = Field(default=1.0, description="Duration after go cue for animal response.")
 
     reward_consumption_duration: float = Field(
-            default=3.0,
-            description="Duration of reward consumption before transition to ITI (in seconds).",
-        )
+        default=3.0,
+        description="Duration of reward consumption before transition to ITI (in seconds).",
+    )
     inter_trial_interval_duration_distribution: Union[UniformDistribution, ExponentialDistribution] = Field(
         default=ExponentialDistribution(
             distribution_parameters=ExponentialDistributionParameters(rate=1 / 2),
@@ -61,8 +72,9 @@ class WarmupTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
     )
 
     block_len_distribution: ExponentialDistribution = ExponentialDistribution(
-            distribution_parameters=ExponentialDistributionParameters(rate=1),
-            truncation_parameters=TruncationParameters(min=1, max=2),)
+        distribution_parameters=ExponentialDistributionParameters(rate=1),
+        truncation_parameters=TruncationParameters(min=1, max=2),
+    )
 
     trial_generation_end_parameters: TrialGenerationEndConditions = Field(
         default=TrialGenerationEndConditions(), description="Conditions to end trial generation."
@@ -116,30 +128,28 @@ class WarmupTrialGenerator(ITrialGenerator):
         logger.info("Generating next trial.")
 
         # check end conditions
-        if self.are_end_conditions_met(
-            self.spec.trial_generation_end_parameters, self.is_right_choice_history
-        ):
+        if self.are_end_conditions_met(self.spec.trial_generation_end_parameters, self.is_right_choice_history):
             logger.info("Trial generator end conditions met.")
             return
 
         # determine iti and quiescent period duration
         iti = draw_sample(self.spec.inter_trial_interval_duration_distribution)
         quiescent = draw_sample(self.spec.quiescent_duration_distribution)
-        
-        p_reward_left=self.block.left_reward_prob
-        p_reward_right=self.block.right_reward_prob
-        
+
+        p_reward_left = self.block.left_reward_prob
+        p_reward_right = self.block.right_reward_prob
+
         if self.spec.baiting:
             random_numbers = np.random.random(2)
-            
+
             is_left_baited = self.block.left_reward_prob > random_numbers[0] or self.is_left_baited
             logger.debug(f"Left baited: {is_left_baited}")
             p_reward_left = 1 if is_left_baited else p_reward_left
-            
+
             is_right_baited = self.block.right_reward_prob > random_numbers[1] or self.is_right_baited
             logger.debug(f"Right baited: {is_left_baited}")
             p_reward_right = 1 if is_right_baited else p_reward_right
-            
+
         return Trial(
             p_reward_left=p_reward_left,
             p_reward_right=p_reward_right,
@@ -150,9 +160,7 @@ class WarmupTrialGenerator(ITrialGenerator):
         )
 
     @staticmethod
-    def are_end_conditions_met(
-        end_conditions: TrialGenerationEndConditions, choice_history: list[bool | None]
-    ) -> bool:
+    def are_end_conditions_met(end_conditions: TrialGenerationEndConditions, choice_history: list[bool | None]) -> bool:
         """
 
         Check if end conditions are met to stop session
@@ -169,7 +177,11 @@ class WarmupTrialGenerator(ITrialGenerator):
         finish_ratio = 0 if choice_len == 0 else (unignored) / choice_len
         choice_ratio = 0 if unignored == 0 else right_choices / (unignored)
 
-        if choice_len >= end_conditions.min_trial and finish_ratio >= end_conditions.min_response_rate and abs(choice_ratio - 0.5) <= end_conditions.max_choice_bias:
+        if (
+            choice_len >= end_conditions.min_trial
+            and finish_ratio >= end_conditions.min_response_rate
+            and abs(choice_ratio - 0.5) <= end_conditions.max_choice_bias
+        ):
             logger.debug(
                 "Warmup trial generation end conditions met: "
                 f"total trials={choice_len}, "
@@ -193,16 +205,13 @@ class WarmupTrialGenerator(ITrialGenerator):
         self.reward_history.append(outcome.is_rewarded)
         self.trials_in_block += 1
 
-
-        if self.spec.baiting:   
+        if self.spec.baiting:
             if outcome.is_right_choice:
                 logger.debug("Resesting right bait.")
                 self.is_right_baited = False
             elif not outcome.is_right_choice:
                 logger.debug("Resesting left bait.")
                 self.is_left_baited = False
-
-        
 
         # warmup switches block each choice
         logger.info("Switching block.")
@@ -270,9 +279,7 @@ class WarmupTrialGenerator(ITrialGenerator):
 
         # randomly pick next block reward probability
         right_reward_prob, left_reward_prob = reward_prob_pool[random.choice(range(reward_prob_pool.shape[0]))]
-        logger.info(
-            f"Selected next block reward probabilities: right={right_reward_prob}, left={left_reward_prob}"
-        )
+        logger.info(f"Selected next block reward probabilities: right={right_reward_prob}, left={left_reward_prob}")
 
         # randomly pick block length
         next_block_len = round(draw_sample(block_len_distribution))

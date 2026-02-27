@@ -9,7 +9,7 @@ task_logic = AindDynamicForagingTaskLogic(
     task_parameters=AindDynamicForagingTaskParameters(
         rng_seed=42,
         reward_size=df_task_logic.RewardSize(right_value_volume=4.0, left_value_volume=4.0),
-            )
+    )
 )
 
 

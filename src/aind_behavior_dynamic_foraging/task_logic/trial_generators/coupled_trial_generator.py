@@ -166,21 +166,21 @@ class CoupledTrialGenerator(ITrialGenerator):
         # determine iti and quiescent period duration
         iti = draw_sample(self.spec.inter_trial_interval_duration_distribution)
         quiescent = draw_sample(self.spec.quiescent_duration_distribution)
-        
-        p_reward_left=self.block.left_reward_prob
-        p_reward_right=self.block.right_reward_prob
-        
+
+        p_reward_left = self.block.left_reward_prob
+        p_reward_right = self.block.right_reward_prob
+
         if self.spec.baiting:
             random_numbers = np.random.random(2)
-            
+
             is_left_baited = self.block.left_reward_prob > random_numbers[0] or self.is_left_baited
             logger.debug(f"Left baited: {is_left_baited}")
             p_reward_left = 1 if is_left_baited else p_reward_left
-            
+
             is_right_baited = self.block.right_reward_prob > random_numbers[1] or self.is_right_baited
             logger.debug(f"Right baited: {is_left_baited}")
             p_reward_right = 1 if is_right_baited else p_reward_right
-            
+
         return Trial(
             p_reward_left=p_reward_left,
             p_reward_right=p_reward_right,
@@ -233,8 +233,7 @@ class CoupledTrialGenerator(ITrialGenerator):
         self.reward_history.append(outcome.is_rewarded)
         self.trials_in_block += 1
 
-
-        if self.spec.baiting:   
+        if self.spec.baiting:
             if outcome.is_right_choice:
                 logger.debug("Resesting right bait.")
                 self.is_right_baited = False
@@ -478,9 +477,7 @@ class CoupledTrialGenerator(ITrialGenerator):
 
         # randomly pick next block reward probability
         right_reward_prob, left_reward_prob = reward_prob_pool[random.choice(range(reward_prob_pool.shape[0]))]
-        logger.info(
-            f"Selected next block reward probabilities: right={right_reward_prob}, left={left_reward_prob}"
-        )
+        logger.info(f"Selected next block reward probabilities: right={right_reward_prob}, left={left_reward_prob}")
 
         # randomly pick block length
         next_block_len = round(draw_sample(block_len_distribution))
