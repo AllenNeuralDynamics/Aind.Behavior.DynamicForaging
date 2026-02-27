@@ -823,7 +823,7 @@
           "type": "integer"
         },
         "reward_probability_parameters": {
-          "$ref": "#/$defs/aind_behavior_dynamic_foraging__task_logic__trial_generators__block_based_trial_generator__RewardProbabilityParameters",
+          "$ref": "#/$defs/RewardProbabilityParameters",
           "default": {
             "base_reward_sum": 0.8,
             "family": 1,
@@ -1486,6 +1486,27 @@
         }
       },
       "title": "Rect",
+      "type": "object"
+    },
+    "RewardProbabilityParameters": {
+      "properties": {
+        "base_reward_sum": {
+          "default": 0.8,
+          "title": "Sum of p_reward",
+          "type": "number"
+        },
+        "family": {
+          "default": 1,
+          "title": "Reward family",
+          "type": "integer"
+        },
+        "pairs_n": {
+          "default": 1,
+          "title": "Number of pairs",
+          "type": "integer"
+        }
+      },
+      "title": "RewardProbabilityParameters",
       "type": "object"
     },
     "RewardSize": {
@@ -2240,40 +2261,6 @@
       "title": "Trial",
       "type": "object"
     },
-    "TrialGenerationEndConditions": {
-      "properties": {
-        "min_trial": {
-          "default": 50,
-          "description": "Minimum trials in generator.",
-          "title": "Min Trial",
-          "type": "integer"
-        },
-        "max_choice_bias": {
-          "default": 0.1,
-          "description": "Maximum allowed deviation from 50/50 choice ratio to end trial generation.",
-          "maximum": 1,
-          "minimum": 0,
-          "title": "Max Choice Bias",
-          "type": "number"
-        },
-        "min_response_rate": {
-          "default": 0.8,
-          "description": "Minimum fraction of trials with a choice (non-ignored) to end trial generation.",
-          "maximum": 1,
-          "minimum": 0,
-          "title": "Min Response Rate",
-          "type": "number"
-        },
-        "evaluation_window": {
-          "default": 20,
-          "description": "Number of most recent trials to evaluate the end criteria.",
-          "title": "Evaluation Window",
-          "type": "integer"
-        }
-      },
-      "title": "TrialGenerationEndConditions",
-      "type": "object"
-    },
     "TrialGeneratorCompositeSpec_TrialGeneratorSpec_": {
       "properties": {
         "type": {
@@ -2544,6 +2531,40 @@
       "title": "VideoWriterOpenCv",
       "type": "object"
     },
+    "WarmupTrialGenerationEndConditions": {
+      "properties": {
+        "min_trial": {
+          "default": 50,
+          "description": "Minimum trials in generator.",
+          "title": "Min Trial",
+          "type": "integer"
+        },
+        "max_choice_bias": {
+          "default": 0.1,
+          "description": "Maximum allowed deviation from 50/50 choice ratio to end trial generation.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Max Choice Bias",
+          "type": "number"
+        },
+        "min_response_rate": {
+          "default": 0.8,
+          "description": "Minimum fraction of trials with a choice (non-ignored) to end trial generation.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Min Response Rate",
+          "type": "number"
+        },
+        "evaluation_window": {
+          "default": 20,
+          "description": "Number of most recent trials to evaluate the end criteria.",
+          "title": "Evaluation Window",
+          "type": "integer"
+        }
+      },
+      "title": "WarmupTrialGenerationEndConditions",
+      "type": "object"
+    },
     "WarmupTrialGeneratorSpec": {
       "properties": {
         "type": {
@@ -2630,26 +2651,22 @@
             "scaling_parameters": null
           }
         },
-        "trial_generation_end_parameters": {
-          "$ref": "#/$defs/TrialGenerationEndConditions",
-          "default": {
-            "min_trial": 50,
-            "max_choice_bias": 0.1,
-            "min_response_rate": 0.8,
-            "evaluation_window": 20
-          },
-          "description": "Conditions to end trial generation."
-        },
         "min_block_reward": {
           "default": 1,
           "title": "Min Block Reward",
           "type": "integer"
         },
+        "kernel_size": {
+          "default": 2,
+          "description": "Kernel to evaluate choice fraction.",
+          "title": "Kernel Size",
+          "type": "integer"
+        },
         "reward_probability_parameters": {
-          "$ref": "#/$defs/aind_behavior_dynamic_foraging__task_logic__trial_generators__warmup_trial_generator__RewardProbabilityParameters",
+          "$ref": "#/$defs/RewardProbabilityParameters",
           "default": {
-            "base_reward_sum": 1.0,
-            "family": 3,
+            "base_reward_sum": 0.8,
+            "family": 1,
             "pairs_n": 1
           }
         },
@@ -2732,6 +2749,16 @@
           "default": true,
           "title": "Baiting",
           "type": "boolean"
+        },
+        "trial_generation_end_parameters": {
+          "$ref": "#/$defs/WarmupTrialGenerationEndConditions",
+          "default": {
+            "min_trial": 50,
+            "max_choice_bias": 0.1,
+            "min_response_rate": 0.8,
+            "evaluation_window": 20
+          },
+          "description": "Conditions to end trial generation."
         }
       },
       "title": "WarmupTrialGeneratorSpec",
@@ -2920,48 +2947,6 @@
         }
       },
       "title": "WebCamera",
-      "type": "object"
-    },
-    "aind_behavior_dynamic_foraging__task_logic__trial_generators__block_based_trial_generator__RewardProbabilityParameters": {
-      "properties": {
-        "base_reward_sum": {
-          "default": 0.8,
-          "title": "Sum of p_reward",
-          "type": "number"
-        },
-        "family": {
-          "default": 1,
-          "title": "Reward family",
-          "type": "integer"
-        },
-        "pairs_n": {
-          "default": 1,
-          "title": "Number of pairs",
-          "type": "integer"
-        }
-      },
-      "title": "RewardProbabilityParameters",
-      "type": "object"
-    },
-    "aind_behavior_dynamic_foraging__task_logic__trial_generators__warmup_trial_generator__RewardProbabilityParameters": {
-      "properties": {
-        "base_reward_sum": {
-          "default": 1,
-          "title": "Base Reward Sum",
-          "type": "number"
-        },
-        "family": {
-          "default": 3,
-          "title": "Family",
-          "type": "integer"
-        },
-        "pairs_n": {
-          "default": 1,
-          "title": "Pairs N",
-          "type": "integer"
-        }
-      },
-      "title": "RewardProbabilityParameters",
       "type": "object"
     }
   }

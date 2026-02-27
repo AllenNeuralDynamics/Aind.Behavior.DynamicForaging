@@ -1986,7 +1986,7 @@ namespace AindDynamicForagingDataSchema
     
         private int _kernelSize;
     
-        private AindBehaviorDynamicForagingTaskLogicTrialGeneratorsBlockBasedTrialGeneratorRewardProbabilityParameters _rewardProbabilityParameters;
+        private RewardProbabilityParameters _rewardProbabilityParameters;
     
         private System.Collections.Generic.List<object> _rewardFamily;
     
@@ -2007,7 +2007,7 @@ namespace AindDynamicForagingDataSchema
             _blockLenDistribution = new object();
             _minBlockReward = 1;
             _kernelSize = 2;
-            _rewardProbabilityParameters = new AindBehaviorDynamicForagingTaskLogicTrialGeneratorsBlockBasedTrialGeneratorRewardProbabilityParameters();
+            _rewardProbabilityParameters = new RewardProbabilityParameters();
             _rewardFamily = new System.Collections.Generic.List<object>();
             _baiting = false;
             _trialGenerationEndParameters = new CoupledTrialGenerationEndConditions();
@@ -2150,7 +2150,7 @@ namespace AindDynamicForagingDataSchema
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("reward_probability_parameters")]
-        public AindBehaviorDynamicForagingTaskLogicTrialGeneratorsBlockBasedTrialGeneratorRewardProbabilityParameters RewardProbabilityParameters
+        public RewardProbabilityParameters RewardProbabilityParameters
         {
             get
             {
@@ -3837,6 +3837,104 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("Y = " + _y + ", ");
             stringBuilder.Append("Width = " + _width + ", ");
             stringBuilder.Append("Height = " + _height);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class RewardProbabilityParameters
+    {
+    
+        private double _baseRewardSum;
+    
+        private int _family;
+    
+        private int _pairsN;
+    
+        public RewardProbabilityParameters()
+        {
+            _baseRewardSum = 0.8D;
+            _family = 1;
+            _pairsN = 1;
+        }
+    
+        protected RewardProbabilityParameters(RewardProbabilityParameters other)
+        {
+            _baseRewardSum = other._baseRewardSum;
+            _family = other._family;
+            _pairsN = other._pairsN;
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("base_reward_sum")]
+        public double BaseRewardSum
+        {
+            get
+            {
+                return _baseRewardSum;
+            }
+            set
+            {
+                _baseRewardSum = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("family")]
+        public int Family
+        {
+            get
+            {
+                return _family;
+            }
+            set
+            {
+                _family = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("pairs_n")]
+        public int PairsN
+        {
+            get
+            {
+                return _pairsN;
+            }
+            set
+            {
+                _pairsN = value;
+            }
+        }
+    
+        public System.IObservable<RewardProbabilityParameters> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new RewardProbabilityParameters(this)));
+        }
+    
+        public System.IObservable<RewardProbabilityParameters> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new RewardProbabilityParameters(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("BaseRewardSum = " + _baseRewardSum + ", ");
+            stringBuilder.Append("Family = " + _family + ", ");
+            stringBuilder.Append("PairsN = " + _pairsN);
             return true;
         }
     
@@ -5620,138 +5718,6 @@ namespace AindDynamicForagingDataSchema
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
-    public partial class TrialGenerationEndConditions
-    {
-    
-        private int _minTrial;
-    
-        private double _maxChoiceBias;
-    
-        private double _minResponseRate;
-    
-        private int _evaluationWindow;
-    
-        public TrialGenerationEndConditions()
-        {
-            _minTrial = 50;
-            _maxChoiceBias = 0.1D;
-            _minResponseRate = 0.8D;
-            _evaluationWindow = 20;
-        }
-    
-        protected TrialGenerationEndConditions(TrialGenerationEndConditions other)
-        {
-            _minTrial = other._minTrial;
-            _maxChoiceBias = other._maxChoiceBias;
-            _minResponseRate = other._minResponseRate;
-            _evaluationWindow = other._evaluationWindow;
-        }
-    
-        /// <summary>
-        /// Minimum trials in generator.
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("min_trial")]
-        [System.ComponentModel.DescriptionAttribute("Minimum trials in generator.")]
-        public int MinTrial
-        {
-            get
-            {
-                return _minTrial;
-            }
-            set
-            {
-                _minTrial = value;
-            }
-        }
-    
-        /// <summary>
-        /// Maximum allowed deviation from 50/50 choice ratio to end trial generation.
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("max_choice_bias")]
-        [System.ComponentModel.DescriptionAttribute("Maximum allowed deviation from 50/50 choice ratio to end trial generation.")]
-        public double MaxChoiceBias
-        {
-            get
-            {
-                return _maxChoiceBias;
-            }
-            set
-            {
-                _maxChoiceBias = value;
-            }
-        }
-    
-        /// <summary>
-        /// Minimum fraction of trials with a choice (non-ignored) to end trial generation.
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("min_response_rate")]
-        [System.ComponentModel.DescriptionAttribute("Minimum fraction of trials with a choice (non-ignored) to end trial generation.")]
-        public double MinResponseRate
-        {
-            get
-            {
-                return _minResponseRate;
-            }
-            set
-            {
-                _minResponseRate = value;
-            }
-        }
-    
-        /// <summary>
-        /// Number of most recent trials to evaluate the end criteria.
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("evaluation_window")]
-        [System.ComponentModel.DescriptionAttribute("Number of most recent trials to evaluate the end criteria.")]
-        public int EvaluationWindow
-        {
-            get
-            {
-                return _evaluationWindow;
-            }
-            set
-            {
-                _evaluationWindow = value;
-            }
-        }
-    
-        public System.IObservable<TrialGenerationEndConditions> Generate()
-        {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new TrialGenerationEndConditions(this)));
-        }
-    
-        public System.IObservable<TrialGenerationEndConditions> Generate<TSource>(System.IObservable<TSource> source)
-        {
-            return System.Reactive.Linq.Observable.Select(source, _ => new TrialGenerationEndConditions(this));
-        }
-    
-        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
-        {
-            stringBuilder.Append("MinTrial = " + _minTrial + ", ");
-            stringBuilder.Append("MaxChoiceBias = " + _maxChoiceBias + ", ");
-            stringBuilder.Append("MinResponseRate = " + _minResponseRate + ", ");
-            stringBuilder.Append("EvaluationWindow = " + _evaluationWindow);
-            return true;
-        }
-    
-        public override string ToString()
-        {
-            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
-            stringBuilder.Append(GetType().Name);
-            stringBuilder.Append(" { ");
-            if (PrintMembers(stringBuilder))
-            {
-                stringBuilder.Append(" ");
-            }
-            stringBuilder.Append("}");
-            return stringBuilder.ToString();
-        }
-    }
-
-
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
-    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class TrialGeneratorCompositeSpecTrialGeneratorSpec : TrialGeneratorSpec
     {
     
@@ -6639,6 +6605,138 @@ namespace AindDynamicForagingDataSchema
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class WarmupTrialGenerationEndConditions
+    {
+    
+        private int _minTrial;
+    
+        private double _maxChoiceBias;
+    
+        private double _minResponseRate;
+    
+        private int _evaluationWindow;
+    
+        public WarmupTrialGenerationEndConditions()
+        {
+            _minTrial = 50;
+            _maxChoiceBias = 0.1D;
+            _minResponseRate = 0.8D;
+            _evaluationWindow = 20;
+        }
+    
+        protected WarmupTrialGenerationEndConditions(WarmupTrialGenerationEndConditions other)
+        {
+            _minTrial = other._minTrial;
+            _maxChoiceBias = other._maxChoiceBias;
+            _minResponseRate = other._minResponseRate;
+            _evaluationWindow = other._evaluationWindow;
+        }
+    
+        /// <summary>
+        /// Minimum trials in generator.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("min_trial")]
+        [System.ComponentModel.DescriptionAttribute("Minimum trials in generator.")]
+        public int MinTrial
+        {
+            get
+            {
+                return _minTrial;
+            }
+            set
+            {
+                _minTrial = value;
+            }
+        }
+    
+        /// <summary>
+        /// Maximum allowed deviation from 50/50 choice ratio to end trial generation.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("max_choice_bias")]
+        [System.ComponentModel.DescriptionAttribute("Maximum allowed deviation from 50/50 choice ratio to end trial generation.")]
+        public double MaxChoiceBias
+        {
+            get
+            {
+                return _maxChoiceBias;
+            }
+            set
+            {
+                _maxChoiceBias = value;
+            }
+        }
+    
+        /// <summary>
+        /// Minimum fraction of trials with a choice (non-ignored) to end trial generation.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("min_response_rate")]
+        [System.ComponentModel.DescriptionAttribute("Minimum fraction of trials with a choice (non-ignored) to end trial generation.")]
+        public double MinResponseRate
+        {
+            get
+            {
+                return _minResponseRate;
+            }
+            set
+            {
+                _minResponseRate = value;
+            }
+        }
+    
+        /// <summary>
+        /// Number of most recent trials to evaluate the end criteria.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("evaluation_window")]
+        [System.ComponentModel.DescriptionAttribute("Number of most recent trials to evaluate the end criteria.")]
+        public int EvaluationWindow
+        {
+            get
+            {
+                return _evaluationWindow;
+            }
+            set
+            {
+                _evaluationWindow = value;
+            }
+        }
+    
+        public System.IObservable<WarmupTrialGenerationEndConditions> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new WarmupTrialGenerationEndConditions(this)));
+        }
+    
+        public System.IObservable<WarmupTrialGenerationEndConditions> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new WarmupTrialGenerationEndConditions(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("MinTrial = " + _minTrial + ", ");
+            stringBuilder.Append("MaxChoiceBias = " + _maxChoiceBias + ", ");
+            stringBuilder.Append("MinResponseRate = " + _minResponseRate + ", ");
+            stringBuilder.Append("EvaluationWindow = " + _evaluationWindow);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class WarmupTrialGeneratorSpec : TrialGeneratorSpec
     {
     
@@ -6652,15 +6750,17 @@ namespace AindDynamicForagingDataSchema
     
         private ExponentialDistribution _blockLenDistribution;
     
-        private TrialGenerationEndConditions _trialGenerationEndParameters;
-    
         private int _minBlockReward;
     
-        private AindBehaviorDynamicForagingTaskLogicTrialGeneratorsWarmupTrialGeneratorRewardProbabilityParameters _rewardProbabilityParameters;
+        private int _kernelSize;
+    
+        private RewardProbabilityParameters _rewardProbabilityParameters;
     
         private System.Collections.Generic.List<object> _rewardFamily;
     
         private bool _baiting;
+    
+        private WarmupTrialGenerationEndConditions _trialGenerationEndParameters;
     
         public WarmupTrialGeneratorSpec()
         {
@@ -6669,11 +6769,12 @@ namespace AindDynamicForagingDataSchema
             _rewardConsumptionDuration = 3D;
             _interTrialIntervalDurationDistribution = new object();
             _blockLenDistribution = new ExponentialDistribution();
-            _trialGenerationEndParameters = new TrialGenerationEndConditions();
             _minBlockReward = 1;
-            _rewardProbabilityParameters = new AindBehaviorDynamicForagingTaskLogicTrialGeneratorsWarmupTrialGeneratorRewardProbabilityParameters();
+            _kernelSize = 2;
+            _rewardProbabilityParameters = new RewardProbabilityParameters();
             _rewardFamily = new System.Collections.Generic.List<object>();
             _baiting = true;
+            _trialGenerationEndParameters = new WarmupTrialGenerationEndConditions();
         }
     
         protected WarmupTrialGeneratorSpec(WarmupTrialGeneratorSpec other) : 
@@ -6684,11 +6785,12 @@ namespace AindDynamicForagingDataSchema
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
             _interTrialIntervalDurationDistribution = other._interTrialIntervalDurationDistribution;
             _blockLenDistribution = other._blockLenDistribution;
-            _trialGenerationEndParameters = other._trialGenerationEndParameters;
             _minBlockReward = other._minBlockReward;
+            _kernelSize = other._kernelSize;
             _rewardProbabilityParameters = other._rewardProbabilityParameters;
             _rewardFamily = other._rewardFamily;
             _baiting = other._baiting;
+            _trialGenerationEndParameters = other._trialGenerationEndParameters;
         }
     
         /// <summary>
@@ -6776,24 +6878,6 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
-        /// <summary>
-        /// Conditions to end trial generation.
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("trial_generation_end_parameters")]
-        [System.ComponentModel.DescriptionAttribute("Conditions to end trial generation.")]
-        public TrialGenerationEndConditions TrialGenerationEndParameters
-        {
-            get
-            {
-                return _trialGenerationEndParameters;
-            }
-            set
-            {
-                _trialGenerationEndParameters = value;
-            }
-        }
-    
         [Newtonsoft.Json.JsonPropertyAttribute("min_block_reward")]
         public int MinBlockReward
         {
@@ -6807,9 +6891,26 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
+        /// <summary>
+        /// Kernel to evaluate choice fraction.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("kernel_size")]
+        [System.ComponentModel.DescriptionAttribute("Kernel to evaluate choice fraction.")]
+        public int KernelSize
+        {
+            get
+            {
+                return _kernelSize;
+            }
+            set
+            {
+                _kernelSize = value;
+            }
+        }
+    
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("reward_probability_parameters")]
-        public AindBehaviorDynamicForagingTaskLogicTrialGeneratorsWarmupTrialGeneratorRewardProbabilityParameters RewardProbabilityParameters
+        public RewardProbabilityParameters RewardProbabilityParameters
         {
             get
             {
@@ -6848,6 +6949,24 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
+        /// <summary>
+        /// Conditions to end trial generation.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("trial_generation_end_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Conditions to end trial generation.")]
+        public WarmupTrialGenerationEndConditions TrialGenerationEndParameters
+        {
+            get
+            {
+                return _trialGenerationEndParameters;
+            }
+            set
+            {
+                _trialGenerationEndParameters = value;
+            }
+        }
+    
         public System.IObservable<WarmupTrialGeneratorSpec> Generate()
         {
             return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new WarmupTrialGeneratorSpec(this)));
@@ -6869,11 +6988,12 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
             stringBuilder.Append("InterTrialIntervalDurationDistribution = " + _interTrialIntervalDurationDistribution + ", ");
             stringBuilder.Append("BlockLenDistribution = " + _blockLenDistribution + ", ");
-            stringBuilder.Append("TrialGenerationEndParameters = " + _trialGenerationEndParameters + ", ");
             stringBuilder.Append("MinBlockReward = " + _minBlockReward + ", ");
+            stringBuilder.Append("KernelSize = " + _kernelSize + ", ");
             stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters + ", ");
             stringBuilder.Append("RewardFamily = " + _rewardFamily + ", ");
-            stringBuilder.Append("Baiting = " + _baiting);
+            stringBuilder.Append("Baiting = " + _baiting + ", ");
+            stringBuilder.Append("TrialGenerationEndParameters = " + _trialGenerationEndParameters);
             return true;
         }
     }
@@ -7327,202 +7447,6 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("Calibration = " + _calibration + ", ");
             stringBuilder.Append("Index = " + _index + ", ");
             stringBuilder.Append("VideoWriter = " + _videoWriter);
-            return true;
-        }
-    
-        public override string ToString()
-        {
-            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
-            stringBuilder.Append(GetType().Name);
-            stringBuilder.Append(" { ");
-            if (PrintMembers(stringBuilder))
-            {
-                stringBuilder.Append(" ");
-            }
-            stringBuilder.Append("}");
-            return stringBuilder.ToString();
-        }
-    }
-
-
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
-    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    [Bonsai.CombinatorAttribute(MethodName="Generate")]
-    public partial class AindBehaviorDynamicForagingTaskLogicTrialGeneratorsBlockBasedTrialGeneratorRewardProbabilityParameters
-    {
-    
-        private double _baseRewardSum;
-    
-        private int _family;
-    
-        private int _pairsN;
-    
-        public AindBehaviorDynamicForagingTaskLogicTrialGeneratorsBlockBasedTrialGeneratorRewardProbabilityParameters()
-        {
-            _baseRewardSum = 0.8D;
-            _family = 1;
-            _pairsN = 1;
-        }
-    
-        protected AindBehaviorDynamicForagingTaskLogicTrialGeneratorsBlockBasedTrialGeneratorRewardProbabilityParameters(AindBehaviorDynamicForagingTaskLogicTrialGeneratorsBlockBasedTrialGeneratorRewardProbabilityParameters other)
-        {
-            _baseRewardSum = other._baseRewardSum;
-            _family = other._family;
-            _pairsN = other._pairsN;
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("base_reward_sum")]
-        public double BaseRewardSum
-        {
-            get
-            {
-                return _baseRewardSum;
-            }
-            set
-            {
-                _baseRewardSum = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("family")]
-        public int Family
-        {
-            get
-            {
-                return _family;
-            }
-            set
-            {
-                _family = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("pairs_n")]
-        public int PairsN
-        {
-            get
-            {
-                return _pairsN;
-            }
-            set
-            {
-                _pairsN = value;
-            }
-        }
-    
-        public System.IObservable<AindBehaviorDynamicForagingTaskLogicTrialGeneratorsBlockBasedTrialGeneratorRewardProbabilityParameters> Generate()
-        {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new AindBehaviorDynamicForagingTaskLogicTrialGeneratorsBlockBasedTrialGeneratorRewardProbabilityParameters(this)));
-        }
-    
-        public System.IObservable<AindBehaviorDynamicForagingTaskLogicTrialGeneratorsBlockBasedTrialGeneratorRewardProbabilityParameters> Generate<TSource>(System.IObservable<TSource> source)
-        {
-            return System.Reactive.Linq.Observable.Select(source, _ => new AindBehaviorDynamicForagingTaskLogicTrialGeneratorsBlockBasedTrialGeneratorRewardProbabilityParameters(this));
-        }
-    
-        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
-        {
-            stringBuilder.Append("BaseRewardSum = " + _baseRewardSum + ", ");
-            stringBuilder.Append("Family = " + _family + ", ");
-            stringBuilder.Append("PairsN = " + _pairsN);
-            return true;
-        }
-    
-        public override string ToString()
-        {
-            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
-            stringBuilder.Append(GetType().Name);
-            stringBuilder.Append(" { ");
-            if (PrintMembers(stringBuilder))
-            {
-                stringBuilder.Append(" ");
-            }
-            stringBuilder.Append("}");
-            return stringBuilder.ToString();
-        }
-    }
-
-
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
-    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    [Bonsai.CombinatorAttribute(MethodName="Generate")]
-    public partial class AindBehaviorDynamicForagingTaskLogicTrialGeneratorsWarmupTrialGeneratorRewardProbabilityParameters
-    {
-    
-        private double _baseRewardSum;
-    
-        private int _family;
-    
-        private int _pairsN;
-    
-        public AindBehaviorDynamicForagingTaskLogicTrialGeneratorsWarmupTrialGeneratorRewardProbabilityParameters()
-        {
-            _baseRewardSum = 1D;
-            _family = 3;
-            _pairsN = 1;
-        }
-    
-        protected AindBehaviorDynamicForagingTaskLogicTrialGeneratorsWarmupTrialGeneratorRewardProbabilityParameters(AindBehaviorDynamicForagingTaskLogicTrialGeneratorsWarmupTrialGeneratorRewardProbabilityParameters other)
-        {
-            _baseRewardSum = other._baseRewardSum;
-            _family = other._family;
-            _pairsN = other._pairsN;
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("base_reward_sum")]
-        public double BaseRewardSum
-        {
-            get
-            {
-                return _baseRewardSum;
-            }
-            set
-            {
-                _baseRewardSum = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("family")]
-        public int Family
-        {
-            get
-            {
-                return _family;
-            }
-            set
-            {
-                _family = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("pairs_n")]
-        public int PairsN
-        {
-            get
-            {
-                return _pairsN;
-            }
-            set
-            {
-                _pairsN = value;
-            }
-        }
-    
-        public System.IObservable<AindBehaviorDynamicForagingTaskLogicTrialGeneratorsWarmupTrialGeneratorRewardProbabilityParameters> Generate()
-        {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new AindBehaviorDynamicForagingTaskLogicTrialGeneratorsWarmupTrialGeneratorRewardProbabilityParameters(this)));
-        }
-    
-        public System.IObservable<AindBehaviorDynamicForagingTaskLogicTrialGeneratorsWarmupTrialGeneratorRewardProbabilityParameters> Generate<TSource>(System.IObservable<TSource> source)
-        {
-            return System.Reactive.Linq.Observable.Select(source, _ => new AindBehaviorDynamicForagingTaskLogicTrialGeneratorsWarmupTrialGeneratorRewardProbabilityParameters(this));
-        }
-    
-        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
-        {
-            stringBuilder.Append("BaseRewardSum = " + _baseRewardSum + ", ");
-            stringBuilder.Append("Family = " + _family + ", ");
-            stringBuilder.Append("PairsN = " + _pairsN);
             return true;
         }
     
@@ -8046,6 +7970,11 @@ namespace AindDynamicForagingDataSchema
             return Process<Rect>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<RewardProbabilityParameters> source)
+        {
+            return Process<RewardProbabilityParameters>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<RewardSize> source)
         {
             return Process<RewardSize>(source);
@@ -8079,11 +8008,6 @@ namespace AindDynamicForagingDataSchema
         public System.IObservable<string> Process(System.IObservable<Trial> source)
         {
             return Process<Trial>(source);
-        }
-
-        public System.IObservable<string> Process(System.IObservable<TrialGenerationEndConditions> source)
-        {
-            return Process<TrialGenerationEndConditions>(source);
         }
 
         public System.IObservable<string> Process(System.IObservable<TrialGeneratorCompositeSpecTrialGeneratorSpec> source)
@@ -8131,6 +8055,11 @@ namespace AindDynamicForagingDataSchema
             return Process<VideoWriterOpenCv>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<WarmupTrialGenerationEndConditions> source)
+        {
+            return Process<WarmupTrialGenerationEndConditions>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<WarmupTrialGeneratorSpec> source)
         {
             return Process<WarmupTrialGeneratorSpec>(source);
@@ -8149,16 +8078,6 @@ namespace AindDynamicForagingDataSchema
         public System.IObservable<string> Process(System.IObservable<WebCamera> source)
         {
             return Process<WebCamera>(source);
-        }
-
-        public System.IObservable<string> Process(System.IObservable<AindBehaviorDynamicForagingTaskLogicTrialGeneratorsBlockBasedTrialGeneratorRewardProbabilityParameters> source)
-        {
-            return Process<AindBehaviorDynamicForagingTaskLogicTrialGeneratorsBlockBasedTrialGeneratorRewardProbabilityParameters>(source);
-        }
-
-        public System.IObservable<string> Process(System.IObservable<AindBehaviorDynamicForagingTaskLogicTrialGeneratorsWarmupTrialGeneratorRewardProbabilityParameters> source)
-        {
-            return Process<AindBehaviorDynamicForagingTaskLogicTrialGeneratorsWarmupTrialGeneratorRewardProbabilityParameters>(source);
         }
 
         public System.IObservable<string> Process(System.IObservable<Anonymous> source)
@@ -8201,6 +8120,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<ManipulatorPosition>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Measurement>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Rect>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<RewardProbabilityParameters>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<RewardSize>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<RigCalibration>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<ScalingParameters>))]
@@ -8208,7 +8128,6 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<SoundCardCalibration>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<SpinnakerCamera>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Trial>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialGenerationEndConditions>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialGeneratorCompositeSpecTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialOutcome>))]
@@ -8218,12 +8137,11 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriter>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriterFfmpeg>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriterOpenCv>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WarmupTrialGenerationEndConditions>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WarmupTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WaterValveCalibration>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Waveform>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WebCamera>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AindBehaviorDynamicForagingTaskLogicTrialGeneratorsBlockBasedTrialGeneratorRewardProbabilityParameters>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AindBehaviorDynamicForagingTaskLogicTrialGeneratorsWarmupTrialGeneratorRewardProbabilityParameters>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Anonymous>))]
     public partial class DeserializeFromJson : Bonsai.Expressions.SingleArgumentExpressionBuilder
     {

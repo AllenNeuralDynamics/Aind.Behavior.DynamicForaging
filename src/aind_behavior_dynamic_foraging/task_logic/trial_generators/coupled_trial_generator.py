@@ -74,9 +74,6 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
         super().__init__(spec)
         self.start_time = datetime.now()
 
-        self.is_left_baited: bool = False
-        self.is_right_baited: bool = False
-
     def are_end_conditions_met(self) -> bool:
         """
         Check if end conditions are met to stop session
@@ -306,4 +303,3 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
         #   - behavior is stable
 
         return block_length_ok and reward_ok and behavior_ok
-
