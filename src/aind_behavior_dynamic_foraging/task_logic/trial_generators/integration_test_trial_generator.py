@@ -31,37 +31,37 @@ class IntegrationTestTrialGenerator(ITrialGenerator):
             ),  # 6: right reward, auto response right
             Trial(
                 p_reward_left=1.0, p_reward_right=1.0, is_auto_response_right=True
-            ),  # 9: both reward, auto response right,
+            ),  # 7: both reward, auto response right,
             Trial(
                 p_reward_left=0.0, p_reward_right=0.0, is_auto_response_right=True
-            ),  # 10: no reward, auto response right,
+            ),  # 8: no reward, auto response right,
             # auto response left
             Trial(
                 p_reward_left=1.0, p_reward_right=0.0, is_auto_response_right=False
-            ),  # 11: left reward, auto response left,
+            ),  # 9: left reward, auto response left,
             Trial(
                 p_reward_left=0.0, p_reward_right=1.0, is_auto_response_right=False
-            ),  # 12: right reward, auto response left,
+            ),  # 10: right reward, auto response left,
             Trial(
                 p_reward_left=0.0, p_reward_right=1.0, is_auto_response_right=False
-            ),  # 13: both reward, auto response left,
+            ),  # 11: both reward, auto response left,
             Trial(
                 p_reward_left=0.0, p_reward_right=0.0, is_auto_response_right=False
-            ),  # 14: no reward, auto response left,
+            ),  # 12: no reward, auto response left,
             # fast retract
-            Trial(enable_fast_retract=True),  # 15: enable fast retract
+            Trial(enable_fast_retract=True),  # 13: enable fast retract
             # secondary reinforcer
-            # Trial(secondary_reinforcer=SecondaryReinforcer()),   # 16: enable secondary reinforcer
+            # Trial(secondary_reinforcer=SecondaryReinforcer()),   # 14: enable secondary reinforcer
             # no reward consumption duration
-            Trial(reward_consumption_duration=0),  # 17: no reward consumption duration
+            Trial(reward_consumption_duration=0),  # 15: no reward consumption duration
             # no reward delay
-            Trial(reward_delay_duration=0),  # 18: no reward delay duration
+            Trial(reward_delay_duration=0),  # 16: no reward delay duration
             # no response deadline duration
-            Trial(response_deadline_duration=0),  # 19: no response deadline duration
+            Trial(response_deadline_duration=0),  # 17: no response deadline duration
             # no quiescence period duration
-            Trial(quiescence_period_duration=0),  # 20: no quiescence period duration
+            Trial(quiescence_period_duration=0),  # 18: no quiescence period duration
             # no inter trial interval
-            Trial(inter_trial_interval_duration=0.5),  # 21: no inter trial interval duration
+            Trial(inter_trial_interval_duration=0.5),  # 19: no inter trial interval duration
         ]
 
     def next(self) -> Trial | None:
