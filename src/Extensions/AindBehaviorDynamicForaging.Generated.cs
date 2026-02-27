@@ -1972,15 +1972,15 @@ namespace AindDynamicForagingDataSchema
     public partial class CoupledTrialGeneratorSpec : TrialGeneratorSpec
     {
     
-        private object _quiescentDurationDistribution;
+        private object _quiescentDuration;
     
         private double _responseDuration;
     
         private double _rewardConsumptionDuration;
     
-        private object _interTrialIntervalDurationDistribution;
+        private object _interTrialIntervalDuration;
     
-        private object _blockLenDistribution;
+        private object _blockLen;
     
         private int _minBlockReward;
     
@@ -1990,7 +1990,7 @@ namespace AindDynamicForagingDataSchema
     
         private System.Collections.Generic.List<object> _rewardFamily;
     
-        private bool _baiting;
+        private bool _isBaiting;
     
         private CoupledTrialGenerationEndConditions _trialGenerationEndParameters;
     
@@ -2000,16 +2000,16 @@ namespace AindDynamicForagingDataSchema
     
         public CoupledTrialGeneratorSpec()
         {
-            _quiescentDurationDistribution = new object();
+            _quiescentDuration = new object();
             _responseDuration = 1D;
             _rewardConsumptionDuration = 3D;
-            _interTrialIntervalDurationDistribution = new object();
-            _blockLenDistribution = new object();
+            _interTrialIntervalDuration = new object();
+            _blockLen = new object();
             _minBlockReward = 1;
             _kernelSize = 2;
             _rewardProbabilityParameters = new RewardProbabilityParameters();
             _rewardFamily = new System.Collections.Generic.List<object>();
-            _baiting = false;
+            _isBaiting = false;
             _trialGenerationEndParameters = new CoupledTrialGenerationEndConditions();
             _behaviorStabilityParameters = new BehaviorStabilityParameters();
             _extendBlockOnNoResponse = true;
@@ -2018,37 +2018,37 @@ namespace AindDynamicForagingDataSchema
         protected CoupledTrialGeneratorSpec(CoupledTrialGeneratorSpec other) : 
                 base(other)
         {
-            _quiescentDurationDistribution = other._quiescentDurationDistribution;
+            _quiescentDuration = other._quiescentDuration;
             _responseDuration = other._responseDuration;
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
-            _interTrialIntervalDurationDistribution = other._interTrialIntervalDurationDistribution;
-            _blockLenDistribution = other._blockLenDistribution;
+            _interTrialIntervalDuration = other._interTrialIntervalDuration;
+            _blockLen = other._blockLen;
             _minBlockReward = other._minBlockReward;
             _kernelSize = other._kernelSize;
             _rewardProbabilityParameters = other._rewardProbabilityParameters;
             _rewardFamily = other._rewardFamily;
-            _baiting = other._baiting;
+            _isBaiting = other._isBaiting;
             _trialGenerationEndParameters = other._trialGenerationEndParameters;
             _behaviorStabilityParameters = other._behaviorStabilityParameters;
             _extendBlockOnNoResponse = other._extendBlockOnNoResponse;
         }
     
         /// <summary>
-        /// Duration of the quiescence period before trial starts (in seconds). Each lick resets the timer.
+        /// Distribution describing the quiescence period before trial starts (in seconds). Each lick resets the timer.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("quiescent_duration_distribution")]
-        [System.ComponentModel.DescriptionAttribute("Duration of the quiescence period before trial starts (in seconds). Each lick res" +
-            "ets the timer.")]
-        public object QuiescentDurationDistribution
+        [Newtonsoft.Json.JsonPropertyAttribute("quiescent_duration")]
+        [System.ComponentModel.DescriptionAttribute("Distribution describing the quiescence period before trial starts (in seconds). E" +
+            "ach lick resets the timer.")]
+        public object QuiescentDuration
         {
             get
             {
-                return _quiescentDurationDistribution;
+                return _quiescentDuration;
             }
             set
             {
-                _quiescentDurationDistribution = value;
+                _quiescentDuration = value;
             }
         }
     
@@ -2087,34 +2087,38 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Duration of the inter-trial interval (in seconds).
+        /// Distribution describing the inter-trial interval (in seconds).
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("inter_trial_interval_duration_distribution")]
-        [System.ComponentModel.DescriptionAttribute("Duration of the inter-trial interval (in seconds).")]
-        public object InterTrialIntervalDurationDistribution
+        [Newtonsoft.Json.JsonPropertyAttribute("inter_trial_interval_duration")]
+        [System.ComponentModel.DescriptionAttribute("Distribution describing the inter-trial interval (in seconds).")]
+        public object InterTrialIntervalDuration
         {
             get
             {
-                return _interTrialIntervalDurationDistribution;
+                return _interTrialIntervalDuration;
             }
             set
             {
-                _interTrialIntervalDurationDistribution = value;
+                _interTrialIntervalDuration = value;
             }
         }
     
+        /// <summary>
+        /// Distribution describing block length.
+        /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("block_len_distribution")]
-        public object BlockLenDistribution
+        [Newtonsoft.Json.JsonPropertyAttribute("block_len")]
+        [System.ComponentModel.DescriptionAttribute("Distribution describing block length.")]
+        public object BlockLen
         {
             get
             {
-                return _blockLenDistribution;
+                return _blockLen;
             }
             set
             {
-                _blockLenDistribution = value;
+                _blockLen = value;
             }
         }
     
@@ -2148,8 +2152,12 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
+        /// <summary>
+        /// Parameters defining the reward probability structure.
+        /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("reward_probability_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Parameters defining the reward probability structure.")]
         public RewardProbabilityParameters RewardProbabilityParameters
         {
             get
@@ -2179,17 +2187,17 @@ namespace AindDynamicForagingDataSchema
         /// <summary>
         /// Whether uncollected rewards carry over to the next trial.
         /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("baiting")]
+        [Newtonsoft.Json.JsonPropertyAttribute("is_baiting")]
         [System.ComponentModel.DescriptionAttribute("Whether uncollected rewards carry over to the next trial.")]
-        public bool Baiting
+        public bool IsBaiting
         {
             get
             {
-                return _baiting;
+                return _isBaiting;
             }
             set
             {
-                _baiting = value;
+                _isBaiting = value;
             }
         }
     
@@ -2262,16 +2270,16 @@ namespace AindDynamicForagingDataSchema
             {
                 stringBuilder.Append(", ");
             }
-            stringBuilder.Append("QuiescentDurationDistribution = " + _quiescentDurationDistribution + ", ");
+            stringBuilder.Append("QuiescentDuration = " + _quiescentDuration + ", ");
             stringBuilder.Append("ResponseDuration = " + _responseDuration + ", ");
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
-            stringBuilder.Append("InterTrialIntervalDurationDistribution = " + _interTrialIntervalDurationDistribution + ", ");
-            stringBuilder.Append("BlockLenDistribution = " + _blockLenDistribution + ", ");
+            stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
+            stringBuilder.Append("BlockLen = " + _blockLen + ", ");
             stringBuilder.Append("MinBlockReward = " + _minBlockReward + ", ");
             stringBuilder.Append("KernelSize = " + _kernelSize + ", ");
             stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters + ", ");
             stringBuilder.Append("RewardFamily = " + _rewardFamily + ", ");
-            stringBuilder.Append("Baiting = " + _baiting + ", ");
+            stringBuilder.Append("IsBaiting = " + _isBaiting + ", ");
             stringBuilder.Append("TrialGenerationEndParameters = " + _trialGenerationEndParameters + ", ");
             stringBuilder.Append("BehaviorStabilityParameters = " + _behaviorStabilityParameters + ", ");
             stringBuilder.Append("ExtendBlockOnNoResponse = " + _extendBlockOnNoResponse);
@@ -6740,15 +6748,15 @@ namespace AindDynamicForagingDataSchema
     public partial class WarmupTrialGeneratorSpec : TrialGeneratorSpec
     {
     
-        private object _quiescentDurationDistribution;
+        private object _quiescentDuration;
     
         private double _responseDuration;
     
         private double _rewardConsumptionDuration;
     
-        private object _interTrialIntervalDurationDistribution;
+        private object _interTrialIntervalDuration;
     
-        private ExponentialDistribution _blockLenDistribution;
+        private ExponentialDistribution _blockLen;
     
         private int _minBlockReward;
     
@@ -6758,57 +6766,56 @@ namespace AindDynamicForagingDataSchema
     
         private System.Collections.Generic.List<object> _rewardFamily;
     
-        private bool _baiting;
+        private int _isBaiting;
     
         private WarmupTrialGenerationEndConditions _trialGenerationEndParameters;
     
         public WarmupTrialGeneratorSpec()
         {
-            _quiescentDurationDistribution = new object();
+            _quiescentDuration = new object();
             _responseDuration = 1D;
             _rewardConsumptionDuration = 3D;
-            _interTrialIntervalDurationDistribution = new object();
-            _blockLenDistribution = new ExponentialDistribution();
+            _interTrialIntervalDuration = new object();
+            _blockLen = new ExponentialDistribution();
             _minBlockReward = 1;
             _kernelSize = 2;
             _rewardProbabilityParameters = new RewardProbabilityParameters();
             _rewardFamily = new System.Collections.Generic.List<object>();
-            _baiting = true;
             _trialGenerationEndParameters = new WarmupTrialGenerationEndConditions();
         }
     
         protected WarmupTrialGeneratorSpec(WarmupTrialGeneratorSpec other) : 
                 base(other)
         {
-            _quiescentDurationDistribution = other._quiescentDurationDistribution;
+            _quiescentDuration = other._quiescentDuration;
             _responseDuration = other._responseDuration;
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
-            _interTrialIntervalDurationDistribution = other._interTrialIntervalDurationDistribution;
-            _blockLenDistribution = other._blockLenDistribution;
+            _interTrialIntervalDuration = other._interTrialIntervalDuration;
+            _blockLen = other._blockLen;
             _minBlockReward = other._minBlockReward;
             _kernelSize = other._kernelSize;
             _rewardProbabilityParameters = other._rewardProbabilityParameters;
             _rewardFamily = other._rewardFamily;
-            _baiting = other._baiting;
+            _isBaiting = other._isBaiting;
             _trialGenerationEndParameters = other._trialGenerationEndParameters;
         }
     
         /// <summary>
-        /// Duration of the quiescence period before trial starts (in seconds). Each lick resets the timer.
+        /// Distribution describing the quiescence period before trial starts (in seconds). Each lick resets the timer.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("quiescent_duration_distribution")]
-        [System.ComponentModel.DescriptionAttribute("Duration of the quiescence period before trial starts (in seconds). Each lick res" +
-            "ets the timer.")]
-        public object QuiescentDurationDistribution
+        [Newtonsoft.Json.JsonPropertyAttribute("quiescent_duration")]
+        [System.ComponentModel.DescriptionAttribute("Distribution describing the quiescence period before trial starts (in seconds). E" +
+            "ach lick resets the timer.")]
+        public object QuiescentDuration
         {
             get
             {
-                return _quiescentDurationDistribution;
+                return _quiescentDuration;
             }
             set
             {
-                _quiescentDurationDistribution = value;
+                _quiescentDuration = value;
             }
         }
     
@@ -6847,34 +6854,38 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Duration of the inter-trial interval (in seconds).
+        /// Distribution describing the inter-trial interval (in seconds).
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("inter_trial_interval_duration_distribution")]
-        [System.ComponentModel.DescriptionAttribute("Duration of the inter-trial interval (in seconds).")]
-        public object InterTrialIntervalDurationDistribution
+        [Newtonsoft.Json.JsonPropertyAttribute("inter_trial_interval_duration")]
+        [System.ComponentModel.DescriptionAttribute("Distribution describing the inter-trial interval (in seconds).")]
+        public object InterTrialIntervalDuration
         {
             get
             {
-                return _interTrialIntervalDurationDistribution;
+                return _interTrialIntervalDuration;
             }
             set
             {
-                _interTrialIntervalDurationDistribution = value;
+                _interTrialIntervalDuration = value;
             }
         }
     
+        /// <summary>
+        /// Distribution describing block length.
+        /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("block_len_distribution")]
-        public ExponentialDistribution BlockLenDistribution
+        [Newtonsoft.Json.JsonPropertyAttribute("block_len")]
+        [System.ComponentModel.DescriptionAttribute("Distribution describing block length.")]
+        public ExponentialDistribution BlockLen
         {
             get
             {
-                return _blockLenDistribution;
+                return _blockLen;
             }
             set
             {
-                _blockLenDistribution = value;
+                _blockLen = value;
             }
         }
     
@@ -6908,8 +6919,12 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
+        /// <summary>
+        /// Parameters defining the reward probability structure.
+        /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("reward_probability_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Parameters defining the reward probability structure.")]
         public RewardProbabilityParameters RewardProbabilityParameters
         {
             get
@@ -6936,16 +6951,20 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
-        [Newtonsoft.Json.JsonPropertyAttribute("baiting")]
-        public bool Baiting
+        /// <summary>
+        /// Whether uncollected rewards carry over to the next trial.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("is_baiting")]
+        [System.ComponentModel.DescriptionAttribute("Whether uncollected rewards carry over to the next trial.")]
+        public int IsBaiting
         {
             get
             {
-                return _baiting;
+                return _isBaiting;
             }
             set
             {
-                _baiting = value;
+                _isBaiting = value;
             }
         }
     
@@ -6983,16 +7002,16 @@ namespace AindDynamicForagingDataSchema
             {
                 stringBuilder.Append(", ");
             }
-            stringBuilder.Append("QuiescentDurationDistribution = " + _quiescentDurationDistribution + ", ");
+            stringBuilder.Append("QuiescentDuration = " + _quiescentDuration + ", ");
             stringBuilder.Append("ResponseDuration = " + _responseDuration + ", ");
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
-            stringBuilder.Append("InterTrialIntervalDurationDistribution = " + _interTrialIntervalDurationDistribution + ", ");
-            stringBuilder.Append("BlockLenDistribution = " + _blockLenDistribution + ", ");
+            stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
+            stringBuilder.Append("BlockLen = " + _blockLen + ", ");
             stringBuilder.Append("MinBlockReward = " + _minBlockReward + ", ");
             stringBuilder.Append("KernelSize = " + _kernelSize + ", ");
             stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters + ", ");
             stringBuilder.Append("RewardFamily = " + _rewardFamily + ", ");
-            stringBuilder.Append("Baiting = " + _baiting + ", ");
+            stringBuilder.Append("IsBaiting = " + _isBaiting + ", ");
             stringBuilder.Append("TrialGenerationEndParameters = " + _trialGenerationEndParameters);
             return true;
         }

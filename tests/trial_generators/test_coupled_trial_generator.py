@@ -295,6 +295,52 @@ class TestCoupledTrialGenerator(unittest.TestCase):
         trial = self.generator.next()
         self.assertIsNone(trial)
 
+    ### test unbaited ###
+    def test_baiting_disabled_bait_state_never_changes(self):
+        self.generator.is_right_baited = True
+        self.generator.is_left_baited = True
+        self.generator.update(self._make_outcome(is_right_choice=True, is_rewarded=True))
+        self.assertTrue(self.generator.is_right_baited)
+        self.assertTrue(self.generator.is_left_baited)
+
+
+class TestCoupledBaitingTrialGenerator(unittest.TestCase):
+    def setUp(self):
+        self.spec = CoupledTrialGeneratorSpec(is_baiting=True)
+        self.generator = self.spec.create_generator()
+
+    def _make_outcome(self, is_right_choice, is_rewarded):
+        return TrialOutcome(trial=Trial(), is_right_choice=is_right_choice, is_rewarded=is_rewarded)
+
+    ### test baiting ###
+
+    def test_right_bait_resets_on_right_choice(self):
+        self.generator.is_right_baited = True
+        self.generator.update(self._make_outcome(is_right_choice=True, is_rewarded=True))
+        self.assertFalse(self.generator.is_right_baited)
+
+    def test_left_bait_resets_on_left_choice(self):
+        self.generator.is_left_baited = True
+        self.generator.update(self._make_outcome(is_right_choice=False, is_rewarded=True))
+        self.assertFalse(self.generator.is_left_baited)
+
+    def test_right_bait_preserved_on_left_choice(self):
+        self.generator.is_right_baited = True
+        self.generator.update(self._make_outcome(is_right_choice=False, is_rewarded=False))
+        self.assertTrue(self.generator.is_right_baited)
+
+    def test_left_bait_preserved_on_right_choice(self):
+        self.generator.is_left_baited = True
+        self.generator.update(self._make_outcome(is_right_choice=True, is_rewarded=True))
+        self.assertTrue(self.generator.is_left_baited)
+
+    def test_bait_not_reset_on_ignored_trial(self):
+        self.generator.is_right_baited = True
+        self.generator.is_left_baited = True
+        self.generator.update(self._make_outcome(is_right_choice=None, is_rewarded=False))
+        self.assertTrue(self.generator.is_right_baited)
+        self.assertTrue(self.generator.is_left_baited)
+
 
 if __name__ == "__main__":
     unittest.main()

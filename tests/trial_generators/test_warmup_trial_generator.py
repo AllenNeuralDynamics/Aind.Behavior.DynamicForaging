@@ -17,23 +17,23 @@ class TestWarmupEndConditions(unittest.TestCase):
 
     def test_end_conditions_not_met_too_few_trials(self):
         self.generator.is_right_choice_history.append([True] * 5)
-        self.assertFalse(self.generator.are_end_conditions_met())
+        self.assertFalse(self.generator._are_end_conditions_met())
 
     def test_end_conditions_not_met_high_bias(self):
         # all right choices = biased
         self.generator.is_right_choice_history.append([True] * 10)
-        self.assertFalse(self.generator.are_end_conditions_met())
+        self.assertFalse(self.generator._are_end_conditions_met())
 
     def test_end_conditions_not_met_low_response_rate(self):
         # ignored
         self.generator.is_right_choice_history.append([None] * 10)
-        self.assertFalse(self.generator.are_end_conditions_met())
+        self.assertFalse(self.generator._are_end_conditions_met())
 
     def test_end_conditions_met(self):
         # balanced choices, high response rate
         for i in range(50):
             self.generator.is_right_choice_history.append(i % 2 == 0)
-        self.assertTrue(self.generator.are_end_conditions_met())
+        self.assertTrue(self.generator._are_end_conditions_met())
 
     ### block switches ###
 

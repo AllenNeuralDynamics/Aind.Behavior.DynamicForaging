@@ -31,22 +31,29 @@ class WarmupTrialGenerationEndConditions(BaseModel):
         le=1,
         description="Minimum fraction of trials with a choice (non-ignored) to end trial generation.",
     )
-    evaluation_window: int = Field(default=20, ge=0, description="Number of most recent trials to evaluate the end criteria.")
+    evaluation_window: int = Field(
+        default=20, ge=0, description="Number of most recent trials to evaluate the end criteria."
+    )
 
 
 class WarmupTrialGeneratorSpec(BlockBasedTrialGeneratorSpec):
     type: Literal["WarmupTrialGenerator"] = "WarmupTrialGenerator"
 
-    block_len: ExponentialDistribution = Field(ExponentialDistribution(
-        distribution_parameters=ExponentialDistributionParameters(rate=1),
-        truncation_parameters=TruncationParameters(min=1, max=2),
-    ), description="Distribution describing block length.")
+    block_len: ExponentialDistribution = Field(
+        ExponentialDistribution(
+            distribution_parameters=ExponentialDistributionParameters(rate=1),
+            truncation_parameters=TruncationParameters(min=1, max=2),
+        ),
+        description="Distribution describing block length.",
+    )
 
     trial_generation_end_parameters: WarmupTrialGenerationEndConditions = Field(
         default=WarmupTrialGenerationEndConditions(), description="Conditions to end trial generation."
     )
     min_block_reward: Literal[1] = Field(1, title="Minimal rewards in a block to switch")
-    is_baiting: Literal[True] = Field(default=True, description="Whether uncollected rewards carry over to the next trial.")
+    is_baiting: Literal[True] = Field(
+        default=True, description="Whether uncollected rewards carry over to the next trial."
+    )
 
     def create_generator(self) -> "WarmupTrialGenerator":
         return WarmupTrialGenerator(self)
@@ -116,6 +123,6 @@ class WarmupTrialGenerator(BlockBasedTrialGenerator):
             reward_pairs_n=self.spec.reward_probability_parameters.pairs_n,
             base_reward_sum=self.spec.reward_probability_parameters.base_reward_sum,
             current_block=self.block,
-            block_len_distribution=self.spec.block_len_distribution,
+            block_len=self.spec.block_len,
         )
         self.block_history.append(self.block)

@@ -22,7 +22,7 @@ BlockBehaviorEvaluationMode = Literal[
 class CoupledTrialGenerationEndConditions(BaseModel):
     ignore_win: int = Field(default=30, ge=0, title="Window of trials to check ignored responses")
     ignore_ratio_threshold: float = Field(
-        default=0.8, ge=0, le=1, title="Threshold for acceptable ignored trials within window.", ge=0, le=1
+        default=0.8, ge=0, le=1, title="Threshold for acceptable ignored trials within window."
     )
     max_trial: int = Field(default=1000, ge=0, title="Maximal number of trials")
     max_time: timedelta = Field(timedelta(minutes=75), title="Maximal session time (min)")
@@ -118,7 +118,7 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
             if outcome.is_right_choice:
                 logger.debug("Resesting right bait.")
                 self.is_right_baited = False
-            elif not outcome.is_right_choice:
+            elif outcome.is_right_choice is False:
                 logger.debug("Resesting left bait.")
                 self.is_left_baited = False
 
@@ -148,7 +148,7 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
                 reward_pairs_n=self.spec.reward_probability_parameters.pairs_n,
                 base_reward_sum=self.spec.reward_probability_parameters.base_reward_sum,
                 current_block=self.block,
-                block_len_distribution=self.spec.block_len_distribution,
+                block_len=self.spec.block_len,
             )
             self.block_history.append(self.block)
 

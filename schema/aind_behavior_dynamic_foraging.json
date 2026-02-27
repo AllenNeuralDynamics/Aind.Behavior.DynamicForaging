@@ -549,6 +549,7 @@
         "min_consecutive_stable_trials": {
           "default": 5,
           "description": "Minimum number of consecutive trials satisfying the behavioral stability fraction.",
+          "minimum": 0,
           "title": "Min Consecutive Stable Trials",
           "type": "integer"
         }
@@ -686,6 +687,7 @@
       "properties": {
         "ignore_win": {
           "default": 30,
+          "minimum": 0,
           "title": "Window of trials to check ignored responses",
           "type": "integer"
         },
@@ -698,6 +700,7 @@
         },
         "max_trial": {
           "default": 1000,
+          "minimum": 0,
           "title": "Maximal number of trials",
           "type": "integer"
         },
@@ -725,7 +728,7 @@
           "title": "Type",
           "type": "string"
         },
-        "quiescent_duration_distribution": {
+        "quiescent_duration": {
           "default": {
             "family": "Exponential",
             "distribution_parameters": {
@@ -739,7 +742,7 @@
             },
             "scaling_parameters": null
           },
-          "description": "Duration of the quiescence period before trial starts (in seconds). Each lick resets the timer.",
+          "description": "Distribution describing the quiescence period before trial starts (in seconds). Each lick resets the timer.",
           "oneOf": [
             {
               "$ref": "#/$defs/UniformDistribution"
@@ -748,21 +751,23 @@
               "$ref": "#/$defs/ExponentialDistribution"
             }
           ],
-          "title": "Quiescent Duration Distribution"
+          "title": "Quiescent Duration"
         },
         "response_duration": {
           "default": 1.0,
           "description": "Duration after go cue for animal response.",
+          "minimum": 0,
           "title": "Response Duration",
           "type": "number"
         },
         "reward_consumption_duration": {
           "default": 3.0,
           "description": "Duration of reward consumption before transition to ITI (in seconds).",
+          "minimum": 0,
           "title": "Reward Consumption Duration",
           "type": "number"
         },
-        "inter_trial_interval_duration_distribution": {
+        "inter_trial_interval_duration": {
           "default": {
             "family": "Exponential",
             "distribution_parameters": {
@@ -776,7 +781,7 @@
             },
             "scaling_parameters": null
           },
-          "description": "Duration of the inter-trial interval (in seconds).",
+          "description": "Distribution describing the inter-trial interval (in seconds).",
           "oneOf": [
             {
               "$ref": "#/$defs/UniformDistribution"
@@ -785,9 +790,9 @@
               "$ref": "#/$defs/ExponentialDistribution"
             }
           ],
-          "title": "Inter Trial Interval Duration Distribution"
+          "title": "Inter Trial Interval Duration"
         },
-        "block_len_distribution": {
+        "block_len": {
           "default": {
             "family": "Exponential",
             "distribution_parameters": {
@@ -801,6 +806,7 @@
             },
             "scaling_parameters": null
           },
+          "description": "Distribution describing block length.",
           "oneOf": [
             {
               "$ref": "#/$defs/UniformDistribution"
@@ -809,10 +815,11 @@
               "$ref": "#/$defs/ExponentialDistribution"
             }
           ],
-          "title": "Block Len Distribution"
+          "title": "Block Len"
         },
         "min_block_reward": {
           "default": 1,
+          "minimum": 0,
           "title": "Minimal rewards in a block to switch",
           "type": "integer"
         },
@@ -828,7 +835,8 @@
             "base_reward_sum": 0.8,
             "family": 1,
             "pairs_n": 1
-          }
+          },
+          "description": "Parameters defining the reward probability structure."
         },
         "reward_family": {
           "default": [
@@ -905,10 +913,10 @@
           "title": "Reward Family",
           "type": "array"
         },
-        "baiting": {
+        "is_baiting": {
           "default": false,
           "description": "Whether uncollected rewards carry over to the next trial.",
-          "title": "Baiting",
+          "title": "Is Baiting",
           "type": "boolean"
         },
         "trial_generation_end_parameters": {
@@ -2536,6 +2544,7 @@
         "min_trial": {
           "default": 50,
           "description": "Minimum trials in generator.",
+          "minimum": 0,
           "title": "Min Trial",
           "type": "integer"
         },
@@ -2558,6 +2567,7 @@
         "evaluation_window": {
           "default": 20,
           "description": "Number of most recent trials to evaluate the end criteria.",
+          "minimum": 0,
           "title": "Evaluation Window",
           "type": "integer"
         }
@@ -2573,7 +2583,7 @@
           "title": "Type",
           "type": "string"
         },
-        "quiescent_duration_distribution": {
+        "quiescent_duration": {
           "default": {
             "family": "Exponential",
             "distribution_parameters": {
@@ -2587,7 +2597,7 @@
             },
             "scaling_parameters": null
           },
-          "description": "Duration of the quiescence period before trial starts (in seconds). Each lick resets the timer.",
+          "description": "Distribution describing the quiescence period before trial starts (in seconds). Each lick resets the timer.",
           "oneOf": [
             {
               "$ref": "#/$defs/UniformDistribution"
@@ -2596,21 +2606,23 @@
               "$ref": "#/$defs/ExponentialDistribution"
             }
           ],
-          "title": "Quiescent Duration Distribution"
+          "title": "Quiescent Duration"
         },
         "response_duration": {
           "default": 1.0,
           "description": "Duration after go cue for animal response.",
+          "minimum": 0,
           "title": "Response Duration",
           "type": "number"
         },
         "reward_consumption_duration": {
           "default": 3.0,
           "description": "Duration of reward consumption before transition to ITI (in seconds).",
+          "minimum": 0,
           "title": "Reward Consumption Duration",
           "type": "number"
         },
-        "inter_trial_interval_duration_distribution": {
+        "inter_trial_interval_duration": {
           "default": {
             "family": "Exponential",
             "distribution_parameters": {
@@ -2624,7 +2636,7 @@
             },
             "scaling_parameters": null
           },
-          "description": "Duration of the inter-trial interval (in seconds).",
+          "description": "Distribution describing the inter-trial interval (in seconds).",
           "oneOf": [
             {
               "$ref": "#/$defs/UniformDistribution"
@@ -2633,9 +2645,9 @@
               "$ref": "#/$defs/ExponentialDistribution"
             }
           ],
-          "title": "Inter Trial Interval Duration Distribution"
+          "title": "Inter Trial Interval Duration"
         },
-        "block_len_distribution": {
+        "block_len": {
           "$ref": "#/$defs/ExponentialDistribution",
           "default": {
             "family": "Exponential",
@@ -2649,11 +2661,13 @@
               "truncation_mode": "exclude"
             },
             "scaling_parameters": null
-          }
+          },
+          "description": "Distribution describing block length."
         },
         "min_block_reward": {
+          "const": 1,
           "default": 1,
-          "title": "Min Block Reward",
+          "title": "Minimal rewards in a block to switch",
           "type": "integer"
         },
         "kernel_size": {
@@ -2668,7 +2682,8 @@
             "base_reward_sum": 0.8,
             "family": 1,
             "pairs_n": 1
-          }
+          },
+          "description": "Parameters defining the reward probability structure."
         },
         "reward_family": {
           "default": [
@@ -2745,10 +2760,12 @@
           "title": "Reward Family",
           "type": "array"
         },
-        "baiting": {
+        "is_baiting": {
+          "const": true,
           "default": true,
-          "title": "Baiting",
-          "type": "boolean"
+          "description": "Whether uncollected rewards carry over to the next trial.",
+          "title": "Is Baiting",
+          "type": "integer"
         },
         "trial_generation_end_parameters": {
           "$ref": "#/$defs/WarmupTrialGenerationEndConditions",
