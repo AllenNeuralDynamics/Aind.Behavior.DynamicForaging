@@ -16,6 +16,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 class TestBlockBasedTrialGenerator(unittest.TestCase):
     def setUp(self):
+        np.random.seed(42)
         self.spec = BlockBasedTrialGeneratorSpec()
         self.generator = self.spec.create_generator()
 
