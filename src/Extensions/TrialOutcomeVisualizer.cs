@@ -41,8 +41,11 @@ public class TrialOutcomeVisualizer : BufferedVisualizer
     private static readonly Vector4 NoChoiceColor = new Vector4(0.1f, 0.1f, 0.1f, 1.0f);           // Gray
     private static readonly Vector4 RightChoiceLineColor = new Vector4(0.0f, 0.0f, 0.8f, 1.0f);    // Blue for right avg
     private static readonly Vector4 RewardRateLineColor = new Vector4(0.0f, 0.6f, 0.0f, 1.0f);     // Green for reward rate (PWater)
+    private static readonly Vector4 FinishedTrialRateColor = new Vector4(0.6f, 0.0f, 0.8f, 1.0f);  // Purple for finished trial rate
+    private static readonly Vector4 AutoResponseMarkerColor = new Vector4(0.0f, 0.7f, 1.0f, 1.0f); // Bright blue marker for auto-response trials
     private static readonly Vector4 ProbabilityTraceColor = new Vector4(0.0f, 0.0f, 0.0f, 1.0f);   // Black for probability traces
     private const float ProbabilityBarAlpha = 0.25f;
+    private const float AutoResponseMarkerSize = 6.0f;
 
     // Line thickness for rolling averages
     private const float RollingLineThickness = 4.0f;
@@ -156,6 +159,19 @@ public class TrialOutcomeVisualizer : BufferedVisualizer
     }
 
     /// <summary>
+    /// Extracts finished trial values (1 if choice was made, 0 if not) from all trials.
+    /// </summary>
+    private static float[] ExtractFinishedTrialValues(List<TrialOutcome> trialList)
+    {
+        var values = new float[trialList.Count];
+        for (int i = 0; i < trialList.Count; i++)
+        {
+            values[i] = trialList[i].IsRightChoice.HasValue ? 1.0f : 0.0f;
+        }
+        return values;
+    }
+
+    /// <summary>
     /// Extracts PRewardLeft values from trials.
     /// </summary>
     private static float[] ExtractPRewardLeft(List<TrialOutcome> trialList)
@@ -259,6 +275,48 @@ public class TrialOutcomeVisualizer : BufferedVisualizer
     }
 
     /// <summary>
+    /// Plots bright blue circle markers at the top of bars for auto-response trials (lollipop style).
+    /// </summary>
+    private static void PlotAutoResponseMarkers(List<float> xValues, float yPosition, string label)
+    {
+        if (xValues.Count == 0) return;
+
+        var xArray = xValues.ToArray();
+        var yArray = Enumerable.Repeat(yPosition, xValues.Count).ToArray();
+
+        ImPlot.SetNextMarkerStyle(ImPlotMarker.Circle, AutoResponseMarkerSize, AutoResponseMarkerColor, 1.0f, AutoResponseMarkerColor);
+        ImPlot.PlotScatter("##automarker" + label, ref xArray[0], ref yArray[0], xArray.Length);
+    }
+
+    /// <summary>
+    /// Plots rewarded trial bars with bright blue circle marker for auto-response trials (lollipop style).
+    /// </summary>
+    private static void PlotRewardedBarsWithOutline(
+        List<float> xValues,
+        float baseY,
+        int direction,
+        Vector4 color,
+        string label)
+    {
+        PlotRewardedBars(xValues, baseY, direction, color, label);
+        PlotAutoResponseMarkers(xValues, baseY + (RewardedBarLength * direction), label);
+    }
+
+    /// <summary>
+    /// Plots unrewarded trial bars with bright blue circle marker for auto-response trials (lollipop style).
+    /// </summary>
+    private static void PlotUnrewardedBarsWithOutline(
+        List<float> xValues,
+        float baseY,
+        int direction,
+        Vector4 color,
+        string label)
+    {
+        PlotUnrewardedBars(xValues, baseY, direction, color, label);
+        PlotAutoResponseMarkers(xValues, baseY + (UnrewardedBarLength * direction), label);
+    }
+
+    /// <summary>
     /// Plots no-choice markers (cross at middle).
     /// </summary>
     private static void PlotNoChoiceMarkers(
@@ -352,18 +410,27 @@ public class TrialOutcomeVisualizer : BufferedVisualizer
         out List<float> rightUnrewardedX,
         out List<float> leftRewardedX,
         out List<float> leftUnrewardedX,
-        out List<float> noChoiceX)
+        out List<float> noChoiceX,
+        out List<float> rightRewardedAutoX,
+        out List<float> rightUnrewardedAutoX,
+        out List<float> leftRewardedAutoX,
+        out List<float> leftUnrewardedAutoX)
     {
         rightRewardedX = new List<float>();
         rightUnrewardedX = new List<float>();
         leftRewardedX = new List<float>();
         leftUnrewardedX = new List<float>();
         noChoiceX = new List<float>();
+        rightRewardedAutoX = new List<float>();
+        rightUnrewardedAutoX = new List<float>();
+        leftRewardedAutoX = new List<float>();
+        leftUnrewardedAutoX = new List<float>();
 
         for (int i = 0; i < trialList.Count; i++)
         {
             var trial = trialList[i];
             float x = i;
+            bool isAutoResponse = trial.Trial.IsAutoResponseRight.HasValue;
 
             if (!trial.IsRightChoice.HasValue)
             {
@@ -371,24 +438,52 @@ public class TrialOutcomeVisualizer : BufferedVisualizer
             }
             else if (trial.IsRightChoice.Value)
             {
-                if (trial.IsRewarded)
+                if (isAutoResponse)
                 {
-                    rightRewardedX.Add(x);
+                    if (trial.IsRewarded)
+                    {
+                        rightRewardedAutoX.Add(x);
+                    }
+                    else
+                    {
+                        rightUnrewardedAutoX.Add(x);
+                    }
                 }
                 else
                 {
-                    rightUnrewardedX.Add(x);
+                    if (trial.IsRewarded)
+                    {
+                        rightRewardedX.Add(x);
+                    }
+                    else
+                    {
+                        rightUnrewardedX.Add(x);
+                    }
                 }
             }
             else
             {
-                if (trial.IsRewarded)
+                if (isAutoResponse)
                 {
-                    leftRewardedX.Add(x);
+                    if (trial.IsRewarded)
+                    {
+                        leftRewardedAutoX.Add(x);
+                    }
+                    else
+                    {
+                        leftUnrewardedAutoX.Add(x);
+                    }
                 }
                 else
                 {
-                    leftUnrewardedX.Add(x);
+                    if (trial.IsRewarded)
+                    {
+                        leftRewardedX.Add(x);
+                    }
+                    else
+                    {
+                        leftUnrewardedX.Add(x);
+                    }
                 }
             }
         }
@@ -433,8 +528,10 @@ public class TrialOutcomeVisualizer : BufferedVisualizer
         var trialIndices = CreateTrialIndices(trials.Count);
         var choiceValues = ExtractChoiceValues(trials);
         var rewardValues = ExtractRewardValues(trials);
+        var finishedTrialValues = ExtractFinishedTrialValues(trials);
         var rollingChoiceAvg = ComputeRollingAverage(choiceValues, RollingWindowSize);
         var rollingRewardRate = ComputeRollingAverage(rewardValues, RollingWindowSize);
+        var rollingFinishedRate = ComputeRollingAverage(finishedTrialValues.Select(v => (float?)v).ToArray(), RollingWindowSize);
 
         // Extract probability traces
         var pRewardLeft = ExtractPRewardLeft(trials);
@@ -446,13 +543,21 @@ public class TrialOutcomeVisualizer : BufferedVisualizer
         List<float> leftRewardedX;
         List<float> leftUnrewardedX;
         List<float> noChoiceX;
+        List<float> rightRewardedAutoX;
+        List<float> rightUnrewardedAutoX;
+        List<float> leftRewardedAutoX;
+        List<float> leftUnrewardedAutoX;
 
         CategorizeTrials(trials,
             out rightRewardedX,
             out rightUnrewardedX,
             out leftRewardedX,
             out leftUnrewardedX,
-            out noChoiceX);
+            out noChoiceX,
+            out rightRewardedAutoX,
+            out rightUnrewardedAutoX,
+            out leftRewardedAutoX,
+            out leftUnrewardedAutoX);
 
         // Calculate x-axis limits
         double xMin, xMax;
@@ -477,6 +582,7 @@ public class TrialOutcomeVisualizer : BufferedVisualizer
 
             PlotRollingLine(trialIndices, rollingChoiceAvg, "Right Choice Rate", ProbabilityTraceColor);
             PlotRollingLine(trialIndices, rollingRewardRate, "Reward Rate", RewardRateLineColor);
+            PlotRollingLine(trialIndices, rollingFinishedRate, "Finished Trial Rate", FinishedTrialRateColor);
 
             // Right choices: bars extend upward from Y=1 (past 1)
             PlotRewardedBars(rightRewardedX, RightChoiceY, 1, RightChoiceColor, "Right + Rewarded");
@@ -485,6 +591,12 @@ public class TrialOutcomeVisualizer : BufferedVisualizer
             // Left choices: bars extend downward from Y=0 (past 0 into negative)
             PlotRewardedBars(leftRewardedX, LeftChoiceY, -1, LeftChoiceColor, "Left + Rewarded");
             PlotUnrewardedBars(leftUnrewardedX, LeftChoiceY, -1, LeftChoiceColor, "Left + Unrewarded");
+
+            // Auto-response trials with purple outline
+            PlotRewardedBarsWithOutline(rightRewardedAutoX, RightChoiceY, 1, RightChoiceColor, "Right + Rewarded (Auto)");
+            PlotUnrewardedBarsWithOutline(rightUnrewardedAutoX, RightChoiceY, 1, RightChoiceColor, "Right + Unrewarded (Auto)");
+            PlotRewardedBarsWithOutline(leftRewardedAutoX, LeftChoiceY, -1, LeftChoiceColor, "Left + Rewarded (Auto)");
+            PlotUnrewardedBarsWithOutline(leftUnrewardedAutoX, LeftChoiceY, -1, LeftChoiceColor, "Left + Unrewarded (Auto)");
 
             // No choice: cross marker at middle
             PlotNoChoiceMarkers(noChoiceX, NoChoiceColor, "No Choice");
