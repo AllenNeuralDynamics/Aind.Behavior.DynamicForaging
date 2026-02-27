@@ -1803,6 +1803,172 @@ namespace AindDynamicForagingDataSchema
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class CoupledTrialGenerationEndConditions
+    {
+    
+        private int _ignoreWin;
+    
+        private double _ignoreRatioThreshold;
+    
+        private int _maxTrial;
+    
+        private System.TimeSpan _maxTime;
+    
+        private System.TimeSpan _minTime;
+    
+        public CoupledTrialGenerationEndConditions()
+        {
+            _ignoreWin = 30;
+            _ignoreRatioThreshold = 0.8D;
+            _maxTrial = 1000;
+        }
+    
+        protected CoupledTrialGenerationEndConditions(CoupledTrialGenerationEndConditions other)
+        {
+            _ignoreWin = other._ignoreWin;
+            _ignoreRatioThreshold = other._ignoreRatioThreshold;
+            _maxTrial = other._maxTrial;
+            _maxTime = other._maxTime;
+            _minTime = other._minTime;
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("ignore_win")]
+        public int IgnoreWin
+        {
+            get
+            {
+                return _ignoreWin;
+            }
+            set
+            {
+                _ignoreWin = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("ignore_ratio_threshold")]
+        public double IgnoreRatioThreshold
+        {
+            get
+            {
+                return _ignoreRatioThreshold;
+            }
+            set
+            {
+                _ignoreRatioThreshold = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("max_trial")]
+        public int MaxTrial
+        {
+            get
+            {
+                return _maxTrial;
+            }
+            set
+            {
+                _maxTrial = value;
+            }
+        }
+    
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("max_time")]
+        public System.TimeSpan MaxTime
+        {
+            get
+            {
+                return _maxTime;
+            }
+            set
+            {
+                _maxTime = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonIgnoreAttribute()]
+        [System.ComponentModel.BrowsableAttribute(false)]
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
+        [System.Xml.Serialization.XmlElementAttribute("MaxTime")]
+        public string MaxTimeXml
+        {
+            get
+            {
+                return System.Xml.XmlConvert.ToString(_maxTime);
+            }
+            set
+            {
+                _maxTime = System.Xml.XmlConvert.ToTimeSpan(value);
+            }
+        }
+    
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("min_time")]
+        public System.TimeSpan MinTime
+        {
+            get
+            {
+                return _minTime;
+            }
+            set
+            {
+                _minTime = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonIgnoreAttribute()]
+        [System.ComponentModel.BrowsableAttribute(false)]
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
+        [System.Xml.Serialization.XmlElementAttribute("MinTime")]
+        public string MinTimeXml
+        {
+            get
+            {
+                return System.Xml.XmlConvert.ToString(_minTime);
+            }
+            set
+            {
+                _minTime = System.Xml.XmlConvert.ToTimeSpan(value);
+            }
+        }
+    
+        public System.IObservable<CoupledTrialGenerationEndConditions> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new CoupledTrialGenerationEndConditions(this)));
+        }
+    
+        public System.IObservable<CoupledTrialGenerationEndConditions> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new CoupledTrialGenerationEndConditions(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("IgnoreWin = " + _ignoreWin + ", ");
+            stringBuilder.Append("IgnoreRatioThreshold = " + _ignoreRatioThreshold + ", ");
+            stringBuilder.Append("MaxTrial = " + _maxTrial + ", ");
+            stringBuilder.Append("MaxTime = " + _maxTime + ", ");
+            stringBuilder.Append("MinTime = " + _minTime);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class CoupledTrialGeneratorSpec : TrialGeneratorSpec
     {
     
@@ -1816,13 +1982,7 @@ namespace AindDynamicForagingDataSchema
     
         private object _blockLenDistribution;
     
-        private TrialGenerationEndConditions _trialGenerationEndParameters;
-    
         private int _minBlockReward;
-    
-        private BehaviorStabilityParameters _behaviorStabilityParameters;
-    
-        private bool _extendBlockOnNoResponse;
     
         private int _kernelSize;
     
@@ -1832,6 +1992,12 @@ namespace AindDynamicForagingDataSchema
     
         private bool _baiting;
     
+        private CoupledTrialGenerationEndConditions _trialGenerationEndParameters;
+    
+        private BehaviorStabilityParameters _behaviorStabilityParameters;
+    
+        private bool _extendBlockOnNoResponse;
+    
         public CoupledTrialGeneratorSpec()
         {
             _quiescentDurationDistribution = new object();
@@ -1839,14 +2005,14 @@ namespace AindDynamicForagingDataSchema
             _rewardConsumptionDuration = 3D;
             _interTrialIntervalDurationDistribution = new object();
             _blockLenDistribution = new object();
-            _trialGenerationEndParameters = new TrialGenerationEndConditions();
             _minBlockReward = 1;
-            _behaviorStabilityParameters = new BehaviorStabilityParameters();
-            _extendBlockOnNoResponse = true;
             _kernelSize = 2;
             _rewardProbabilityParameters = new RewardProbabilityParameters();
             _rewardFamily = new System.Collections.Generic.List<object>();
             _baiting = false;
+            _trialGenerationEndParameters = new CoupledTrialGenerationEndConditions();
+            _behaviorStabilityParameters = new BehaviorStabilityParameters();
+            _extendBlockOnNoResponse = true;
         }
     
         protected CoupledTrialGeneratorSpec(CoupledTrialGeneratorSpec other) : 
@@ -1857,14 +2023,14 @@ namespace AindDynamicForagingDataSchema
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
             _interTrialIntervalDurationDistribution = other._interTrialIntervalDurationDistribution;
             _blockLenDistribution = other._blockLenDistribution;
-            _trialGenerationEndParameters = other._trialGenerationEndParameters;
             _minBlockReward = other._minBlockReward;
-            _behaviorStabilityParameters = other._behaviorStabilityParameters;
-            _extendBlockOnNoResponse = other._extendBlockOnNoResponse;
             _kernelSize = other._kernelSize;
             _rewardProbabilityParameters = other._rewardProbabilityParameters;
             _rewardFamily = other._rewardFamily;
             _baiting = other._baiting;
+            _trialGenerationEndParameters = other._trialGenerationEndParameters;
+            _behaviorStabilityParameters = other._behaviorStabilityParameters;
+            _extendBlockOnNoResponse = other._extendBlockOnNoResponse;
         }
     
         /// <summary>
@@ -1952,24 +2118,6 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
-        /// <summary>
-        /// Conditions to end trial generation.
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("trial_generation_end_parameters")]
-        [System.ComponentModel.DescriptionAttribute("Conditions to end trial generation.")]
-        public TrialGenerationEndConditions TrialGenerationEndParameters
-        {
-            get
-            {
-                return _trialGenerationEndParameters;
-            }
-            set
-            {
-                _trialGenerationEndParameters = value;
-            }
-        }
-    
         [Newtonsoft.Json.JsonPropertyAttribute("min_block_reward")]
         public int MinBlockReward
         {
@@ -1980,41 +2128,6 @@ namespace AindDynamicForagingDataSchema
             set
             {
                 _minBlockReward = value;
-            }
-        }
-    
-        /// <summary>
-        /// Parameters describing behavior stability required to switch blocks.
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("behavior_stability_parameters")]
-        [System.ComponentModel.DescriptionAttribute("Parameters describing behavior stability required to switch blocks.")]
-        public BehaviorStabilityParameters BehaviorStabilityParameters
-        {
-            get
-            {
-                return _behaviorStabilityParameters;
-            }
-            set
-            {
-                _behaviorStabilityParameters = value;
-            }
-        }
-    
-        /// <summary>
-        /// Add one trial to the min block length.
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("extend_block_on_no_response")]
-        [System.ComponentModel.DescriptionAttribute("Add one trial to the min block length.")]
-        public bool ExtendBlockOnNoResponse
-        {
-            get
-            {
-                return _extendBlockOnNoResponse;
-            }
-            set
-            {
-                _extendBlockOnNoResponse = value;
             }
         }
     
@@ -2080,6 +2193,59 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
+        /// <summary>
+        /// Conditions to end trial generation.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("trial_generation_end_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Conditions to end trial generation.")]
+        public CoupledTrialGenerationEndConditions TrialGenerationEndParameters
+        {
+            get
+            {
+                return _trialGenerationEndParameters;
+            }
+            set
+            {
+                _trialGenerationEndParameters = value;
+            }
+        }
+    
+        /// <summary>
+        /// Parameters describing behavior stability required to switch blocks.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("behavior_stability_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Parameters describing behavior stability required to switch blocks.")]
+        public BehaviorStabilityParameters BehaviorStabilityParameters
+        {
+            get
+            {
+                return _behaviorStabilityParameters;
+            }
+            set
+            {
+                _behaviorStabilityParameters = value;
+            }
+        }
+    
+        /// <summary>
+        /// Add one trial to the min block length.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("extend_block_on_no_response")]
+        [System.ComponentModel.DescriptionAttribute("Add one trial to the min block length.")]
+        public bool ExtendBlockOnNoResponse
+        {
+            get
+            {
+                return _extendBlockOnNoResponse;
+            }
+            set
+            {
+                _extendBlockOnNoResponse = value;
+            }
+        }
+    
         public System.IObservable<CoupledTrialGeneratorSpec> Generate()
         {
             return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new CoupledTrialGeneratorSpec(this)));
@@ -2101,14 +2267,14 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
             stringBuilder.Append("InterTrialIntervalDurationDistribution = " + _interTrialIntervalDurationDistribution + ", ");
             stringBuilder.Append("BlockLenDistribution = " + _blockLenDistribution + ", ");
-            stringBuilder.Append("TrialGenerationEndParameters = " + _trialGenerationEndParameters + ", ");
             stringBuilder.Append("MinBlockReward = " + _minBlockReward + ", ");
-            stringBuilder.Append("BehaviorStabilityParameters = " + _behaviorStabilityParameters + ", ");
-            stringBuilder.Append("ExtendBlockOnNoResponse = " + _extendBlockOnNoResponse + ", ");
             stringBuilder.Append("KernelSize = " + _kernelSize + ", ");
             stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters + ", ");
             stringBuilder.Append("RewardFamily = " + _rewardFamily + ", ");
-            stringBuilder.Append("Baiting = " + _baiting);
+            stringBuilder.Append("Baiting = " + _baiting + ", ");
+            stringBuilder.Append("TrialGenerationEndParameters = " + _trialGenerationEndParameters + ", ");
+            stringBuilder.Append("BehaviorStabilityParameters = " + _behaviorStabilityParameters + ", ");
+            stringBuilder.Append("ExtendBlockOnNoResponse = " + _extendBlockOnNoResponse);
             return true;
         }
     }
@@ -5552,172 +5718,6 @@ namespace AindDynamicForagingDataSchema
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
-    public partial class TrialGenerationEndConditions
-    {
-    
-        private int _ignoreWin;
-    
-        private double _ignoreRatioThreshold;
-    
-        private int _maxTrial;
-    
-        private System.TimeSpan _maxTime;
-    
-        private System.TimeSpan _minTime;
-    
-        public TrialGenerationEndConditions()
-        {
-            _ignoreWin = 30;
-            _ignoreRatioThreshold = 0.8D;
-            _maxTrial = 1000;
-        }
-    
-        protected TrialGenerationEndConditions(TrialGenerationEndConditions other)
-        {
-            _ignoreWin = other._ignoreWin;
-            _ignoreRatioThreshold = other._ignoreRatioThreshold;
-            _maxTrial = other._maxTrial;
-            _maxTime = other._maxTime;
-            _minTime = other._minTime;
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("ignore_win")]
-        public int IgnoreWin
-        {
-            get
-            {
-                return _ignoreWin;
-            }
-            set
-            {
-                _ignoreWin = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("ignore_ratio_threshold")]
-        public double IgnoreRatioThreshold
-        {
-            get
-            {
-                return _ignoreRatioThreshold;
-            }
-            set
-            {
-                _ignoreRatioThreshold = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("max_trial")]
-        public int MaxTrial
-        {
-            get
-            {
-                return _maxTrial;
-            }
-            set
-            {
-                _maxTrial = value;
-            }
-        }
-    
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("max_time")]
-        public System.TimeSpan MaxTime
-        {
-            get
-            {
-                return _maxTime;
-            }
-            set
-            {
-                _maxTime = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonIgnoreAttribute()]
-        [System.ComponentModel.BrowsableAttribute(false)]
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
-        [System.Xml.Serialization.XmlElementAttribute("MaxTime")]
-        public string MaxTimeXml
-        {
-            get
-            {
-                return System.Xml.XmlConvert.ToString(_maxTime);
-            }
-            set
-            {
-                _maxTime = System.Xml.XmlConvert.ToTimeSpan(value);
-            }
-        }
-    
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("min_time")]
-        public System.TimeSpan MinTime
-        {
-            get
-            {
-                return _minTime;
-            }
-            set
-            {
-                _minTime = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonIgnoreAttribute()]
-        [System.ComponentModel.BrowsableAttribute(false)]
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
-        [System.Xml.Serialization.XmlElementAttribute("MinTime")]
-        public string MinTimeXml
-        {
-            get
-            {
-                return System.Xml.XmlConvert.ToString(_minTime);
-            }
-            set
-            {
-                _minTime = System.Xml.XmlConvert.ToTimeSpan(value);
-            }
-        }
-    
-        public System.IObservable<TrialGenerationEndConditions> Generate()
-        {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new TrialGenerationEndConditions(this)));
-        }
-    
-        public System.IObservable<TrialGenerationEndConditions> Generate<TSource>(System.IObservable<TSource> source)
-        {
-            return System.Reactive.Linq.Observable.Select(source, _ => new TrialGenerationEndConditions(this));
-        }
-    
-        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
-        {
-            stringBuilder.Append("IgnoreWin = " + _ignoreWin + ", ");
-            stringBuilder.Append("IgnoreRatioThreshold = " + _ignoreRatioThreshold + ", ");
-            stringBuilder.Append("MaxTrial = " + _maxTrial + ", ");
-            stringBuilder.Append("MaxTime = " + _maxTime + ", ");
-            stringBuilder.Append("MinTime = " + _minTime);
-            return true;
-        }
-    
-        public override string ToString()
-        {
-            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
-            stringBuilder.Append(GetType().Name);
-            stringBuilder.Append(" { ");
-            if (PrintMembers(stringBuilder))
-            {
-                stringBuilder.Append(" ");
-            }
-            stringBuilder.Append("}");
-            return stringBuilder.ToString();
-        }
-    }
-
-
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
-    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class TrialGeneratorCompositeSpecTrialGeneratorSpec : TrialGeneratorSpec
     {
     
@@ -7501,6 +7501,11 @@ namespace AindDynamicForagingDataSchema
             return Process<ConnectedClockOutput>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<CoupledTrialGenerationEndConditions> source)
+        {
+            return Process<CoupledTrialGenerationEndConditions>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<CoupledTrialGeneratorSpec> source)
         {
             return Process<CoupledTrialGeneratorSpec>(source);
@@ -7606,11 +7611,6 @@ namespace AindDynamicForagingDataSchema
             return Process<Trial>(source);
         }
 
-        public System.IObservable<string> Process(System.IObservable<TrialGenerationEndConditions> source)
-        {
-            return Process<TrialGenerationEndConditions>(source);
-        }
-
         public System.IObservable<string> Process(System.IObservable<TrialGeneratorCompositeSpecTrialGeneratorSpec> source)
         {
             return Process<TrialGeneratorCompositeSpecTrialGeneratorSpec>(source);
@@ -7697,6 +7697,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CameraControllerSpinnakerCamera>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CameraControllerWebCamera>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<ConnectedClockOutput>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CoupledTrialGenerationEndConditions>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CoupledTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<DynamicForagingSoundCard>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<ExponentialDistribution>))]
@@ -7718,7 +7719,6 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<SoundCardCalibration>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<SpinnakerCamera>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Trial>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialGenerationEndConditions>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialGeneratorCompositeSpecTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialOutcome>))]
