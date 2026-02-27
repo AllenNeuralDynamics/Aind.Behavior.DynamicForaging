@@ -210,11 +210,11 @@ class CoupledTrialGenerator(ITrialGenerator):
             logger.debug("Minimum time and ignored trial count exceeded.")
             return True
 
-        if end_conditions.max_time > time_elapsed:
+        if end_conditions.max_time < time_elapsed:
             logger.debug("Maximum session time exceeded.")
             return True
 
-        if end_conditions.max_trial > len(choice_history):
+        if end_conditions.max_trial < len(choice_history):
             logger.debug("Maximum trial count exceeded.")
             return True
 
