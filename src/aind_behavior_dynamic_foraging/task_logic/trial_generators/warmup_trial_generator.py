@@ -171,7 +171,7 @@ class WarmupTrialGenerator(ITrialGenerator):
 
         if choice_len >= end_conditions.min_trial and finish_ratio >= end_conditions.min_response_rate and abs(choice_ratio - 0.5) <= end_conditions.max_choice_bias:
             logger.debug(
-                "Warmup trial generation end conditons met: "
+                "Warmup trial generation end conditions met: "
                 f"total trials={choice_len}, "
                 f"finish ratio={finish_ratio}, "
                 f"choice bias={abs(choice_ratio - 0.5)}"
