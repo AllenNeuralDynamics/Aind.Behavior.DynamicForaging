@@ -148,7 +148,7 @@ class BlockBasedTrialGenerator(ITrialGenerator):
         """
         Check if end conditions are met to stop session
         """
-        raise NotImplementedError
+        
 
     def generate_next_block(
         self,
