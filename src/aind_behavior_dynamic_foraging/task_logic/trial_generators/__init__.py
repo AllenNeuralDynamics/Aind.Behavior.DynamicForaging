@@ -7,10 +7,12 @@ from ._base import ITrialGenerator as ITrialGenerator
 from .composite_trial_generator import TrialGeneratorCompositeSpec
 from .coupled_trial_generator import CoupledTrialGeneratorSpec
 from .integration_test_trial_generator import IntegrationTestTrialGeneratorSpec
+from .warmup_trial_generator import WarmupTrialGeneratorSpec
 
 if TYPE_CHECKING:
     TrialGeneratorSpec = Union[
         (
+            WarmupTrialGeneratorSpec,
             CoupledTrialGeneratorSpec,
             IntegrationTestTrialGeneratorSpec,
             TrialGeneratorCompositeSpec["TrialGeneratorSpec"],
@@ -22,6 +24,7 @@ else:
         Annotated[
             Union[
                 (
+                    WarmupTrialGeneratorSpec,
                     CoupledTrialGeneratorSpec,
                     IntegrationTestTrialGeneratorSpec,
                     TrialGeneratorCompositeSpec["TrialGeneratorSpec"],

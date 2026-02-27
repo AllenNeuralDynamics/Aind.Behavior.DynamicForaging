@@ -1972,15 +1972,15 @@ namespace AindDynamicForagingDataSchema
     public partial class CoupledTrialGeneratorSpec : TrialGeneratorSpec
     {
     
-        private object _quiescentDurationDistribution;
+        private object _quiescentDuration;
     
         private double _responseDuration;
     
         private double _rewardConsumptionDuration;
     
-        private object _interTrialIntervalDurationDistribution;
+        private object _interTrialIntervalDuration;
     
-        private object _blockLenDistribution;
+        private object _blockLen;
     
         private int _minBlockReward;
     
@@ -1990,7 +1990,7 @@ namespace AindDynamicForagingDataSchema
     
         private System.Collections.Generic.List<object> _rewardFamily;
     
-        private bool _baiting;
+        private bool _isBaiting;
     
         private CoupledTrialGenerationEndConditions _trialGenerationEndParameters;
     
@@ -2000,16 +2000,16 @@ namespace AindDynamicForagingDataSchema
     
         public CoupledTrialGeneratorSpec()
         {
-            _quiescentDurationDistribution = new object();
+            _quiescentDuration = new object();
             _responseDuration = 1D;
             _rewardConsumptionDuration = 3D;
-            _interTrialIntervalDurationDistribution = new object();
-            _blockLenDistribution = new object();
+            _interTrialIntervalDuration = new object();
+            _blockLen = new object();
             _minBlockReward = 1;
             _kernelSize = 2;
             _rewardProbabilityParameters = new RewardProbabilityParameters();
             _rewardFamily = new System.Collections.Generic.List<object>();
-            _baiting = false;
+            _isBaiting = false;
             _trialGenerationEndParameters = new CoupledTrialGenerationEndConditions();
             _behaviorStabilityParameters = new BehaviorStabilityParameters();
             _extendBlockOnNoResponse = true;
@@ -2018,37 +2018,37 @@ namespace AindDynamicForagingDataSchema
         protected CoupledTrialGeneratorSpec(CoupledTrialGeneratorSpec other) : 
                 base(other)
         {
-            _quiescentDurationDistribution = other._quiescentDurationDistribution;
+            _quiescentDuration = other._quiescentDuration;
             _responseDuration = other._responseDuration;
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
-            _interTrialIntervalDurationDistribution = other._interTrialIntervalDurationDistribution;
-            _blockLenDistribution = other._blockLenDistribution;
+            _interTrialIntervalDuration = other._interTrialIntervalDuration;
+            _blockLen = other._blockLen;
             _minBlockReward = other._minBlockReward;
             _kernelSize = other._kernelSize;
             _rewardProbabilityParameters = other._rewardProbabilityParameters;
             _rewardFamily = other._rewardFamily;
-            _baiting = other._baiting;
+            _isBaiting = other._isBaiting;
             _trialGenerationEndParameters = other._trialGenerationEndParameters;
             _behaviorStabilityParameters = other._behaviorStabilityParameters;
             _extendBlockOnNoResponse = other._extendBlockOnNoResponse;
         }
     
         /// <summary>
-        /// Duration of the quiescence period before trial starts (in seconds). Each lick resets the timer.
+        /// Distribution describing the quiescence period before trial starts (in seconds). Each lick resets the timer.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("quiescent_duration_distribution")]
-        [System.ComponentModel.DescriptionAttribute("Duration of the quiescence period before trial starts (in seconds). Each lick res" +
-            "ets the timer.")]
-        public object QuiescentDurationDistribution
+        [Newtonsoft.Json.JsonPropertyAttribute("quiescent_duration")]
+        [System.ComponentModel.DescriptionAttribute("Distribution describing the quiescence period before trial starts (in seconds). E" +
+            "ach lick resets the timer.")]
+        public object QuiescentDuration
         {
             get
             {
-                return _quiescentDurationDistribution;
+                return _quiescentDuration;
             }
             set
             {
-                _quiescentDurationDistribution = value;
+                _quiescentDuration = value;
             }
         }
     
@@ -2087,34 +2087,38 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Duration of the inter-trial interval (in seconds).
+        /// Distribution describing the inter-trial interval (in seconds).
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("inter_trial_interval_duration_distribution")]
-        [System.ComponentModel.DescriptionAttribute("Duration of the inter-trial interval (in seconds).")]
-        public object InterTrialIntervalDurationDistribution
+        [Newtonsoft.Json.JsonPropertyAttribute("inter_trial_interval_duration")]
+        [System.ComponentModel.DescriptionAttribute("Distribution describing the inter-trial interval (in seconds).")]
+        public object InterTrialIntervalDuration
         {
             get
             {
-                return _interTrialIntervalDurationDistribution;
+                return _interTrialIntervalDuration;
             }
             set
             {
-                _interTrialIntervalDurationDistribution = value;
+                _interTrialIntervalDuration = value;
             }
         }
     
+        /// <summary>
+        /// Distribution describing block length.
+        /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("block_len_distribution")]
-        public object BlockLenDistribution
+        [Newtonsoft.Json.JsonPropertyAttribute("block_len")]
+        [System.ComponentModel.DescriptionAttribute("Distribution describing block length.")]
+        public object BlockLen
         {
             get
             {
-                return _blockLenDistribution;
+                return _blockLen;
             }
             set
             {
-                _blockLenDistribution = value;
+                _blockLen = value;
             }
         }
     
@@ -2148,8 +2152,12 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
+        /// <summary>
+        /// Parameters defining the reward probability structure.
+        /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("reward_probability_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Parameters defining the reward probability structure.")]
         public RewardProbabilityParameters RewardProbabilityParameters
         {
             get
@@ -2179,17 +2187,17 @@ namespace AindDynamicForagingDataSchema
         /// <summary>
         /// Whether uncollected rewards carry over to the next trial.
         /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("baiting")]
+        [Newtonsoft.Json.JsonPropertyAttribute("is_baiting")]
         [System.ComponentModel.DescriptionAttribute("Whether uncollected rewards carry over to the next trial.")]
-        public bool Baiting
+        public bool IsBaiting
         {
             get
             {
-                return _baiting;
+                return _isBaiting;
             }
             set
             {
-                _baiting = value;
+                _isBaiting = value;
             }
         }
     
@@ -2262,16 +2270,16 @@ namespace AindDynamicForagingDataSchema
             {
                 stringBuilder.Append(", ");
             }
-            stringBuilder.Append("QuiescentDurationDistribution = " + _quiescentDurationDistribution + ", ");
+            stringBuilder.Append("QuiescentDuration = " + _quiescentDuration + ", ");
             stringBuilder.Append("ResponseDuration = " + _responseDuration + ", ");
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
-            stringBuilder.Append("InterTrialIntervalDurationDistribution = " + _interTrialIntervalDurationDistribution + ", ");
-            stringBuilder.Append("BlockLenDistribution = " + _blockLenDistribution + ", ");
+            stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
+            stringBuilder.Append("BlockLen = " + _blockLen + ", ");
             stringBuilder.Append("MinBlockReward = " + _minBlockReward + ", ");
             stringBuilder.Append("KernelSize = " + _kernelSize + ", ");
             stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters + ", ");
             stringBuilder.Append("RewardFamily = " + _rewardFamily + ", ");
-            stringBuilder.Append("Baiting = " + _baiting + ", ");
+            stringBuilder.Append("IsBaiting = " + _isBaiting + ", ");
             stringBuilder.Append("TrialGenerationEndParameters = " + _trialGenerationEndParameters + ", ");
             stringBuilder.Append("BehaviorStabilityParameters = " + _behaviorStabilityParameters + ", ");
             stringBuilder.Append("ExtendBlockOnNoResponse = " + _extendBlockOnNoResponse);
@@ -5777,6 +5785,7 @@ namespace AindDynamicForagingDataSchema
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Newtonsoft.Json.JsonConverter(typeof(JsonInheritanceConverter), "type")]
+    [JsonInheritanceAttribute("WarmupTrialGenerator", typeof(WarmupTrialGeneratorSpec))]
     [JsonInheritanceAttribute("CoupledTrialGenerator", typeof(CoupledTrialGeneratorSpec))]
     [JsonInheritanceAttribute("IntegrationTestTrialGenerator", typeof(IntegrationTestTrialGeneratorSpec))]
     [JsonInheritanceAttribute("TrialGeneratorComposite", typeof(TrialGeneratorCompositeSpecTrialGeneratorSpec))]
@@ -6601,6 +6610,414 @@ namespace AindDynamicForagingDataSchema
     }
 
 
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class WarmupTrialGenerationEndConditions
+    {
+    
+        private int _minTrial;
+    
+        private double _maxChoiceBias;
+    
+        private double _minResponseRate;
+    
+        private int _evaluationWindow;
+    
+        public WarmupTrialGenerationEndConditions()
+        {
+            _minTrial = 50;
+            _maxChoiceBias = 0.1D;
+            _minResponseRate = 0.8D;
+            _evaluationWindow = 20;
+        }
+    
+        protected WarmupTrialGenerationEndConditions(WarmupTrialGenerationEndConditions other)
+        {
+            _minTrial = other._minTrial;
+            _maxChoiceBias = other._maxChoiceBias;
+            _minResponseRate = other._minResponseRate;
+            _evaluationWindow = other._evaluationWindow;
+        }
+    
+        /// <summary>
+        /// Minimum trials in generator.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("min_trial")]
+        [System.ComponentModel.DescriptionAttribute("Minimum trials in generator.")]
+        public int MinTrial
+        {
+            get
+            {
+                return _minTrial;
+            }
+            set
+            {
+                _minTrial = value;
+            }
+        }
+    
+        /// <summary>
+        /// Maximum allowed deviation from 50/50 choice ratio to end trial generation.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("max_choice_bias")]
+        [System.ComponentModel.DescriptionAttribute("Maximum allowed deviation from 50/50 choice ratio to end trial generation.")]
+        public double MaxChoiceBias
+        {
+            get
+            {
+                return _maxChoiceBias;
+            }
+            set
+            {
+                _maxChoiceBias = value;
+            }
+        }
+    
+        /// <summary>
+        /// Minimum fraction of trials with a choice (non-ignored) to end trial generation.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("min_response_rate")]
+        [System.ComponentModel.DescriptionAttribute("Minimum fraction of trials with a choice (non-ignored) to end trial generation.")]
+        public double MinResponseRate
+        {
+            get
+            {
+                return _minResponseRate;
+            }
+            set
+            {
+                _minResponseRate = value;
+            }
+        }
+    
+        /// <summary>
+        /// Number of most recent trials to evaluate the end criteria.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("evaluation_window")]
+        [System.ComponentModel.DescriptionAttribute("Number of most recent trials to evaluate the end criteria.")]
+        public int EvaluationWindow
+        {
+            get
+            {
+                return _evaluationWindow;
+            }
+            set
+            {
+                _evaluationWindow = value;
+            }
+        }
+    
+        public System.IObservable<WarmupTrialGenerationEndConditions> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new WarmupTrialGenerationEndConditions(this)));
+        }
+    
+        public System.IObservable<WarmupTrialGenerationEndConditions> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new WarmupTrialGenerationEndConditions(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("MinTrial = " + _minTrial + ", ");
+            stringBuilder.Append("MaxChoiceBias = " + _maxChoiceBias + ", ");
+            stringBuilder.Append("MinResponseRate = " + _minResponseRate + ", ");
+            stringBuilder.Append("EvaluationWindow = " + _evaluationWindow);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class WarmupTrialGeneratorSpec : TrialGeneratorSpec
+    {
+    
+        private object _quiescentDuration;
+    
+        private double _responseDuration;
+    
+        private double _rewardConsumptionDuration;
+    
+        private object _interTrialIntervalDuration;
+    
+        private ExponentialDistribution _blockLen;
+    
+        private int _minBlockReward;
+    
+        private int _kernelSize;
+    
+        private RewardProbabilityParameters _rewardProbabilityParameters;
+    
+        private System.Collections.Generic.List<object> _rewardFamily;
+    
+        private int _isBaiting;
+    
+        private WarmupTrialGenerationEndConditions _trialGenerationEndParameters;
+    
+        public WarmupTrialGeneratorSpec()
+        {
+            _quiescentDuration = new object();
+            _responseDuration = 1D;
+            _rewardConsumptionDuration = 3D;
+            _interTrialIntervalDuration = new object();
+            _blockLen = new ExponentialDistribution();
+            _minBlockReward = 1;
+            _kernelSize = 2;
+            _rewardProbabilityParameters = new RewardProbabilityParameters();
+            _rewardFamily = new System.Collections.Generic.List<object>();
+            _trialGenerationEndParameters = new WarmupTrialGenerationEndConditions();
+        }
+    
+        protected WarmupTrialGeneratorSpec(WarmupTrialGeneratorSpec other) : 
+                base(other)
+        {
+            _quiescentDuration = other._quiescentDuration;
+            _responseDuration = other._responseDuration;
+            _rewardConsumptionDuration = other._rewardConsumptionDuration;
+            _interTrialIntervalDuration = other._interTrialIntervalDuration;
+            _blockLen = other._blockLen;
+            _minBlockReward = other._minBlockReward;
+            _kernelSize = other._kernelSize;
+            _rewardProbabilityParameters = other._rewardProbabilityParameters;
+            _rewardFamily = other._rewardFamily;
+            _isBaiting = other._isBaiting;
+            _trialGenerationEndParameters = other._trialGenerationEndParameters;
+        }
+    
+        /// <summary>
+        /// Distribution describing the quiescence period before trial starts (in seconds). Each lick resets the timer.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("quiescent_duration")]
+        [System.ComponentModel.DescriptionAttribute("Distribution describing the quiescence period before trial starts (in seconds). E" +
+            "ach lick resets the timer.")]
+        public object QuiescentDuration
+        {
+            get
+            {
+                return _quiescentDuration;
+            }
+            set
+            {
+                _quiescentDuration = value;
+            }
+        }
+    
+        /// <summary>
+        /// Duration after go cue for animal response.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("response_duration")]
+        [System.ComponentModel.DescriptionAttribute("Duration after go cue for animal response.")]
+        public double ResponseDuration
+        {
+            get
+            {
+                return _responseDuration;
+            }
+            set
+            {
+                _responseDuration = value;
+            }
+        }
+    
+        /// <summary>
+        /// Duration of reward consumption before transition to ITI (in seconds).
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("reward_consumption_duration")]
+        [System.ComponentModel.DescriptionAttribute("Duration of reward consumption before transition to ITI (in seconds).")]
+        public double RewardConsumptionDuration
+        {
+            get
+            {
+                return _rewardConsumptionDuration;
+            }
+            set
+            {
+                _rewardConsumptionDuration = value;
+            }
+        }
+    
+        /// <summary>
+        /// Distribution describing the inter-trial interval (in seconds).
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("inter_trial_interval_duration")]
+        [System.ComponentModel.DescriptionAttribute("Distribution describing the inter-trial interval (in seconds).")]
+        public object InterTrialIntervalDuration
+        {
+            get
+            {
+                return _interTrialIntervalDuration;
+            }
+            set
+            {
+                _interTrialIntervalDuration = value;
+            }
+        }
+    
+        /// <summary>
+        /// Distribution describing block length.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("block_len")]
+        [System.ComponentModel.DescriptionAttribute("Distribution describing block length.")]
+        public ExponentialDistribution BlockLen
+        {
+            get
+            {
+                return _blockLen;
+            }
+            set
+            {
+                _blockLen = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("min_block_reward")]
+        public int MinBlockReward
+        {
+            get
+            {
+                return _minBlockReward;
+            }
+            set
+            {
+                _minBlockReward = value;
+            }
+        }
+    
+        /// <summary>
+        /// Kernel to evaluate choice fraction.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("kernel_size")]
+        [System.ComponentModel.DescriptionAttribute("Kernel to evaluate choice fraction.")]
+        public int KernelSize
+        {
+            get
+            {
+                return _kernelSize;
+            }
+            set
+            {
+                _kernelSize = value;
+            }
+        }
+    
+        /// <summary>
+        /// Parameters defining the reward probability structure.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("reward_probability_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Parameters defining the reward probability structure.")]
+        public RewardProbabilityParameters RewardProbabilityParameters
+        {
+            get
+            {
+                return _rewardProbabilityParameters;
+            }
+            set
+            {
+                _rewardProbabilityParameters = value;
+            }
+        }
+    
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("reward_family")]
+        public System.Collections.Generic.List<object> RewardFamily
+        {
+            get
+            {
+                return _rewardFamily;
+            }
+            set
+            {
+                _rewardFamily = value;
+            }
+        }
+    
+        /// <summary>
+        /// Whether uncollected rewards carry over to the next trial.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("is_baiting")]
+        [System.ComponentModel.DescriptionAttribute("Whether uncollected rewards carry over to the next trial.")]
+        public int IsBaiting
+        {
+            get
+            {
+                return _isBaiting;
+            }
+            set
+            {
+                _isBaiting = value;
+            }
+        }
+    
+        /// <summary>
+        /// Conditions to end trial generation.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("trial_generation_end_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Conditions to end trial generation.")]
+        public WarmupTrialGenerationEndConditions TrialGenerationEndParameters
+        {
+            get
+            {
+                return _trialGenerationEndParameters;
+            }
+            set
+            {
+                _trialGenerationEndParameters = value;
+            }
+        }
+    
+        public System.IObservable<WarmupTrialGeneratorSpec> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new WarmupTrialGeneratorSpec(this)));
+        }
+    
+        public System.IObservable<WarmupTrialGeneratorSpec> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new WarmupTrialGeneratorSpec(this));
+        }
+    
+        protected override bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            if (base.PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(", ");
+            }
+            stringBuilder.Append("QuiescentDuration = " + _quiescentDuration + ", ");
+            stringBuilder.Append("ResponseDuration = " + _responseDuration + ", ");
+            stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
+            stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
+            stringBuilder.Append("BlockLen = " + _blockLen + ", ");
+            stringBuilder.Append("MinBlockReward = " + _minBlockReward + ", ");
+            stringBuilder.Append("KernelSize = " + _kernelSize + ", ");
+            stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters + ", ");
+            stringBuilder.Append("RewardFamily = " + _rewardFamily + ", ");
+            stringBuilder.Append("IsBaiting = " + _isBaiting + ", ");
+            stringBuilder.Append("TrialGenerationEndParameters = " + _trialGenerationEndParameters);
+            return true;
+        }
+    }
+
+
     /// <summary>
     /// Represents a water valve calibration.
     /// </summary>
@@ -7304,6 +7721,7 @@ namespace AindDynamicForagingDataSchema
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DefaultPropertyAttribute("Type")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Combinator)]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WarmupTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CoupledTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<IntegrationTestTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialGeneratorCompositeSpecTrialGeneratorSpec>))]
@@ -7656,6 +8074,16 @@ namespace AindDynamicForagingDataSchema
             return Process<VideoWriterOpenCv>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<WarmupTrialGenerationEndConditions> source)
+        {
+            return Process<WarmupTrialGenerationEndConditions>(source);
+        }
+
+        public System.IObservable<string> Process(System.IObservable<WarmupTrialGeneratorSpec> source)
+        {
+            return Process<WarmupTrialGeneratorSpec>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<WaterValveCalibration> source)
         {
             return Process<WaterValveCalibration>(source);
@@ -7728,6 +8156,8 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriter>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriterFfmpeg>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriterOpenCv>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WarmupTrialGenerationEndConditions>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WarmupTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WaterValveCalibration>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Waveform>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WebCamera>))]

@@ -33,40 +33,44 @@ class Block(BaseModel):
 class BlockBasedTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
     type: Literal["BlockBasedTrialGenerator"] = "BlockBasedTrialGenerator"
 
-    quiescent_duration_distribution: Union[UniformDistribution, ExponentialDistribution] = Field(
+    quiescent_duration: Union[UniformDistribution, ExponentialDistribution] = Field(
         default=ExponentialDistribution(
             distribution_parameters=ExponentialDistributionParameters(rate=1),
             truncation_parameters=TruncationParameters(min=0, max=1),
         ),
-        description="Duration of the quiescence period before trial starts (in seconds). Each lick resets the timer.",
+        description="Distribution describing the quiescence period before trial starts (in seconds). Each lick resets the timer.",
     )
 
-    response_duration: float = Field(default=1.0, description="Duration after go cue for animal response.")
+    response_duration: float = Field(default=1.0, ge=0, description="Duration after go cue for animal response.")
 
     reward_consumption_duration: float = Field(
         default=3.0,
+        ge=0,
         description="Duration of reward consumption before transition to ITI (in seconds).",
     )
 
-    inter_trial_interval_duration_distribution: Union[UniformDistribution, ExponentialDistribution] = Field(
+    inter_trial_interval_duration: Union[UniformDistribution, ExponentialDistribution] = Field(
         default=ExponentialDistribution(
             distribution_parameters=ExponentialDistributionParameters(rate=1 / 2),
             truncation_parameters=TruncationParameters(min=1, max=8),
         ),
-        description="Duration of the inter-trial interval (in seconds).",
+        description="Distribution describing the inter-trial interval (in seconds).",
     )
 
-    block_len_distribution: Union[UniformDistribution, ExponentialDistribution] = Field(
+    block_len: Union[UniformDistribution, ExponentialDistribution] = Field(
         default=ExponentialDistribution(
             distribution_parameters=ExponentialDistributionParameters(rate=1 / 20),
             truncation_parameters=TruncationParameters(min=20, max=60),
-        )
+        ),
+        description="Distribution describing block length.",
     )
 
-    min_block_reward: int = Field(default=1, title="Minimal rewards in a block to switch")
+    min_block_reward: int = Field(default=1, ge=0, title="Minimal rewards in a block to switch")
 
     kernel_size: int = Field(default=2, description="Kernel to evaluate choice fraction.")
-    reward_probability_parameters: RewardProbabilityParameters = Field(default=RewardProbabilityParameters())
+    reward_probability_parameters: RewardProbabilityParameters = Field(
+        default=RewardProbabilityParameters(), description="Parameters defining the reward probability structure."
+    )
     reward_family: list = [
         [[8, 1], [6, 1], [3, 1], [1, 1]],
         [[8, 1], [1, 1]],
@@ -81,7 +85,7 @@ class BlockBasedTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
         [[6, 1], [3, 1], [1, 1]],
     ]
 
-    baiting: bool = Field(default=False, description="Whether uncollected rewards carry over to the next trial.")
+    is_baiting: bool = Field(default=False, description="Whether uncollected rewards carry over to the next trial.")
 
     def create_generator(self) -> "BlockBasedTrialGenerator":
         return BlockBasedTrialGenerator(self)
@@ -99,7 +103,7 @@ class BlockBasedTrialGenerator(ITrialGenerator):
             reward_family_index=self.spec.reward_probability_parameters.family,
             reward_pairs_n=self.spec.reward_probability_parameters.pairs_n,
             base_reward_sum=self.spec.reward_probability_parameters.base_reward_sum,
-            block_len_distribution=self.spec.block_len_distribution,
+            block_len=self.spec.block_len,
         )
         self.trials_in_block = 0
         self.is_left_baited: bool = False
@@ -113,18 +117,18 @@ class BlockBasedTrialGenerator(ITrialGenerator):
         logger.info("Generating next trial.")
 
         # check end conditions
-        if self.are_end_conditions_met():
+        if self._are_end_conditions_met():
             logger.info("Trial generator end conditions met.")
             return
 
         # determine iti and quiescent period duration
-        iti = draw_sample(self.spec.inter_trial_interval_duration_distribution)
-        quiescent = draw_sample(self.spec.quiescent_duration_distribution)
+        iti = draw_sample(self.spec.inter_trial_interval_duration)
+        quiescent = draw_sample(self.spec.quiescent_duration)
 
         p_reward_left = self.block.left_reward_prob
         p_reward_right = self.block.right_reward_prob
 
-        if self.spec.baiting:
+        if self.spec.is_baiting:
             random_numbers = np.random.random(2)
 
             is_left_baited = self.block.left_reward_prob > random_numbers[0] or self.is_left_baited
@@ -144,7 +148,7 @@ class BlockBasedTrialGenerator(ITrialGenerator):
             inter_trial_interval_duration=iti,
         )
 
-    def are_end_conditions_met(self) -> bool:
+    def _are_end_conditions_met(self) -> bool:
         """
         Check if end conditions are met to stop session
         """
@@ -155,7 +159,7 @@ class BlockBasedTrialGenerator(ITrialGenerator):
         reward_family_index: int,
         reward_pairs_n: int,
         base_reward_sum: float,
-        block_len_distribution: Union[UniformDistribution, ExponentialDistribution],
+        block_len: Union[UniformDistribution, ExponentialDistribution],
         current_block: Optional[None] = None,
     ) -> Block:
         """
@@ -166,7 +170,7 @@ class BlockBasedTrialGenerator(ITrialGenerator):
         :param reward_pairs_n: Description
         :param base_reward_sum: Description
         :param current_block: Description
-        :param block_len_distribution: Description
+        :param block_len: Description
         """
 
         logger.info("Generating next block.")
@@ -205,7 +209,7 @@ class BlockBasedTrialGenerator(ITrialGenerator):
         logger.info(f"Selected next block reward probabilities: right={right_reward_prob}, left={left_reward_prob}")
 
         # randomly pick block length
-        next_block_len = round(draw_sample(block_len_distribution))
+        next_block_len = round(draw_sample(block_len))
         logger.info(f"Selected next block length: {next_block_len}")
 
         return Block(

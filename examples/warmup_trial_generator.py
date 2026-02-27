@@ -3,7 +3,7 @@ import random
 
 import numpy as np
 
-from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generator import CoupledTrialGeneratorSpec
+from aind_behavior_dynamic_foraging.task_logic.trial_generators import WarmupTrialGeneratorSpec
 from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial, TrialOutcome
 
 
@@ -31,23 +31,22 @@ def simulate_response(
 
 
 def main():
-    coupled_trial_generator = CoupledTrialGeneratorSpec().create_generator()
+    warmup_trial_generator = WarmupTrialGeneratorSpec().create_generator()
     trial = Trial()
     outcome = TrialOutcome(
         trial=trial, is_right_choice=random.choice([True, False, None]), is_rewarded=random.choice([True, False])
     )
     for i in range(100):
-        trial = coupled_trial_generator.next()
-        coupled_trial_generator.update(outcome)
+        trial = warmup_trial_generator.next()
+        warmup_trial_generator.update(outcome)
         outcome = simulate_response(
             previous_reward=outcome.is_rewarded,
             previous_choice=outcome.is_right_choice,
-            previous_left_bait=False,
-            previous_right_bait=False,
+            previous_left_bait=warmup_trial_generator.is_left_baited,
+            previous_right_bait=warmup_trial_generator.is_right_baited,
         )
-
         if not trial:
-            print("Session finished")
+            print("Warmup finished")
             return
 
         print(f"Next trial: {trial}")

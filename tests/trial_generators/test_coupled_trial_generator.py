@@ -306,7 +306,7 @@ class TestCoupledTrialGenerator(unittest.TestCase):
 
 class TestCoupledBaitingTrialGenerator(unittest.TestCase):
     def setUp(self):
-        self.spec = CoupledTrialGeneratorSpec(baiting=True)
+        self.spec = CoupledTrialGeneratorSpec(is_baiting=True)
         self.generator = self.spec.create_generator()
 
     def _make_outcome(self, is_right_choice, is_rewarded):

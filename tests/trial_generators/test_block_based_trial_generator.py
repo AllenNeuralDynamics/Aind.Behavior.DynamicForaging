@@ -16,6 +16,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 class TestBlockBasedTrialGenerator(unittest.TestCase):
     def setUp(self):
+        np.random.seed(42)
         self.spec = BlockBasedTrialGeneratorSpec()
         self.generator = self.spec.create_generator()
 
@@ -28,7 +29,7 @@ class TestBlockBasedTrialGenerator(unittest.TestCase):
             reward_family_index=self.spec.reward_probability_parameters.family,
             reward_pairs_n=self.spec.reward_probability_parameters.pairs_n,
             base_reward_sum=self.spec.reward_probability_parameters.base_reward_sum,
-            block_len_distribution=self.spec.block_len_distribution,
+            block_len=self.spec.block_len,
             current_block=current,
         )
         self.assertNotEqual(
@@ -43,7 +44,7 @@ class TestBlockBasedTrialGenerator(unittest.TestCase):
             reward_family_index=self.spec.reward_probability_parameters.family,
             reward_pairs_n=self.spec.reward_probability_parameters.pairs_n,
             base_reward_sum=self.spec.reward_probability_parameters.base_reward_sum,
-            block_len_distribution=self.spec.block_len_distribution,
+            block_len=self.spec.block_len,
             current_block=current,
         )
         current_high_is_right = current.right_reward_prob > current.left_reward_prob
@@ -65,7 +66,7 @@ class TestBlockBasedTrialGenerator(unittest.TestCase):
             reward_family_index=spec.reward_probability_parameters.family,
             reward_pairs_n=spec.reward_probability_parameters.pairs_n,
             base_reward_sum=spec.reward_probability_parameters.base_reward_sum,
-            block_len_distribution=spec.block_len_distribution,
+            block_len=spec.block_len,
             current_block=current,
         )
 
@@ -89,7 +90,7 @@ class TestBlockBasedTrialGenerator(unittest.TestCase):
                 reward_family_index=spec.reward_probability_parameters.family,
                 reward_pairs_n=spec.reward_probability_parameters.pairs_n,
                 base_reward_sum=spec.reward_probability_parameters.base_reward_sum,
-                block_len_distribution=spec.block_len_distribution,
+                block_len=spec.block_len,
                 current_block=current,
             )
             self.assertNotEqual(
@@ -130,7 +131,7 @@ class TestBlockBaseBaitingTrialGenerator(unittest.TestCase):
     ### test baiting ###
 
     def setUp(self):
-        self.spec = BlockBasedTrialGeneratorSpec(baiting=True)
+        self.spec = BlockBasedTrialGeneratorSpec(is_baiting=True)
         self.generator = self.spec.create_generator()
 
     def test_baiting_sets_prob_to_1_when_baited(self):
