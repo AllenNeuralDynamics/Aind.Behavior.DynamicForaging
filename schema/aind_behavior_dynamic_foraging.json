@@ -682,6 +682,41 @@
       "title": "ConnectedClockOutput",
       "type": "object"
     },
+    "CoupledTrialGenerationEndConditions": {
+      "properties": {
+        "ignore_win": {
+          "default": 30,
+          "title": "Window of trials to check ignored responses",
+          "type": "integer"
+        },
+        "ignore_ratio_threshold": {
+          "default": 0.8,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Threshold for acceptable ignored trials within window.",
+          "type": "number"
+        },
+        "max_trial": {
+          "default": 1000,
+          "title": "Maximal number of trials",
+          "type": "integer"
+        },
+        "max_time": {
+          "default": "PT1H15M",
+          "format": "duration",
+          "title": "Maximal session time (min)",
+          "type": "string"
+        },
+        "min_time": {
+          "default": "PT30M",
+          "format": "duration",
+          "title": "Minimum session time (min)",
+          "type": "string"
+        }
+      },
+      "title": "CoupledTrialGenerationEndConditions",
+      "type": "object"
+    },
     "CoupledTrialGeneratorSpec": {
       "properties": {
         "type": {
@@ -776,43 +811,10 @@
           ],
           "title": "Block Len Distribution"
         },
-        "trial_generation_end_parameters": {
-          "$ref": "#/$defs/aind_behavior_dynamic_foraging__task_logic__trial_generators__coupled_trial_generator__TrialGenerationEndConditions",
-          "default": {
-            "ignore_win": 30,
-            "ignore_ratio_threshold": 0.8,
-            "max_trial": 1000,
-            "max_time": "PT1H15M",
-            "min_time": "PT30M"
-          },
-          "description": "Conditions to end trial generation."
-        },
         "min_block_reward": {
           "default": 1,
           "title": "Minimal rewards in a block to switch",
           "type": "integer"
-        },
-        "behavior_stability_parameters": {
-          "default": {
-            "behavior_evaluation_mode": "end",
-            "behavior_stability_fraction": 0.5,
-            "min_consecutive_stable_trials": 5
-          },
-          "description": "Parameters describing behavior stability required to switch blocks.",
-          "oneOf": [
-            {
-              "$ref": "#/$defs/BehaviorStabilityParameters"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "extend_block_on_no_response": {
-          "default": true,
-          "description": "Add one trial to the min block length.",
-          "title": "Extend Block On No Response",
-          "type": "boolean"
         },
         "kernel_size": {
           "default": 2,
@@ -821,7 +823,7 @@
           "type": "integer"
         },
         "reward_probability_parameters": {
-          "$ref": "#/$defs/aind_behavior_dynamic_foraging__task_logic__trial_generators__coupled_trial_generator__RewardProbabilityParameters",
+          "$ref": "#/$defs/aind_behavior_dynamic_foraging__task_logic__trial_generators__block_based_trial_generator__RewardProbabilityParameters",
           "default": {
             "base_reward_sum": 0.8,
             "family": 1,
@@ -907,6 +909,39 @@
           "default": false,
           "description": "Whether uncollected rewards carry over to the next trial.",
           "title": "Baiting",
+          "type": "boolean"
+        },
+        "trial_generation_end_parameters": {
+          "$ref": "#/$defs/CoupledTrialGenerationEndConditions",
+          "default": {
+            "ignore_win": 30,
+            "ignore_ratio_threshold": 0.8,
+            "max_trial": 1000,
+            "max_time": "PT1H15M",
+            "min_time": "PT30M"
+          },
+          "description": "Conditions to end trial generation."
+        },
+        "behavior_stability_parameters": {
+          "default": {
+            "behavior_evaluation_mode": "end",
+            "behavior_stability_fraction": 0.5,
+            "min_consecutive_stable_trials": 5
+          },
+          "description": "Parameters describing behavior stability required to switch blocks.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/BehaviorStabilityParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "extend_block_on_no_response": {
+          "default": true,
+          "description": "Add one trial to the min block length.",
+          "title": "Extend Block On No Response",
           "type": "boolean"
         }
       },
@@ -2205,6 +2240,40 @@
       "title": "Trial",
       "type": "object"
     },
+    "TrialGenerationEndConditions": {
+      "properties": {
+        "min_trial": {
+          "default": 50,
+          "description": "Minimum trials in generator.",
+          "title": "Min Trial",
+          "type": "integer"
+        },
+        "max_choice_bias": {
+          "default": 0.1,
+          "description": "Maximum allowed deviation from 50/50 choice ratio to end trial generation.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Max Choice Bias",
+          "type": "number"
+        },
+        "min_response_rate": {
+          "default": 0.8,
+          "description": "Minimum fraction of trials with a choice (non-ignored) to end trial generation.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Min Response Rate",
+          "type": "number"
+        },
+        "evaluation_window": {
+          "default": 20,
+          "description": "Number of most recent trials to evaluate the end criteria.",
+          "title": "Evaluation Window",
+          "type": "integer"
+        }
+      },
+      "title": "TrialGenerationEndConditions",
+      "type": "object"
+    },
     "TrialGeneratorCompositeSpec_TrialGeneratorSpec_": {
       "properties": {
         "type": {
@@ -2562,7 +2631,7 @@
           }
         },
         "trial_generation_end_parameters": {
-          "$ref": "#/$defs/aind_behavior_dynamic_foraging__task_logic__trial_generators__warmup_trial_generator__TrialGenerationEndConditions",
+          "$ref": "#/$defs/TrialGenerationEndConditions",
           "default": {
             "min_trial": 50,
             "max_choice_bias": 0.1,
@@ -2853,7 +2922,7 @@
       "title": "WebCamera",
       "type": "object"
     },
-    "aind_behavior_dynamic_foraging__task_logic__trial_generators__coupled_trial_generator__RewardProbabilityParameters": {
+    "aind_behavior_dynamic_foraging__task_logic__trial_generators__block_based_trial_generator__RewardProbabilityParameters": {
       "properties": {
         "base_reward_sum": {
           "default": 0.8,
@@ -2872,41 +2941,6 @@
         }
       },
       "title": "RewardProbabilityParameters",
-      "type": "object"
-    },
-    "aind_behavior_dynamic_foraging__task_logic__trial_generators__coupled_trial_generator__TrialGenerationEndConditions": {
-      "properties": {
-        "ignore_win": {
-          "default": 30,
-          "title": "Window of trials to check ignored responses",
-          "type": "integer"
-        },
-        "ignore_ratio_threshold": {
-          "default": 0.8,
-          "maximum": 1,
-          "minimum": 0,
-          "title": "Threshold for acceptable ignored trials within window.",
-          "type": "number"
-        },
-        "max_trial": {
-          "default": 1000,
-          "title": "Maximal number of trials",
-          "type": "integer"
-        },
-        "max_time": {
-          "default": "PT1H15M",
-          "format": "duration",
-          "title": "Maximal session time (min)",
-          "type": "string"
-        },
-        "min_time": {
-          "default": "PT30M",
-          "format": "duration",
-          "title": "Minimum session time (min)",
-          "type": "string"
-        }
-      },
-      "title": "TrialGenerationEndConditions",
       "type": "object"
     },
     "aind_behavior_dynamic_foraging__task_logic__trial_generators__warmup_trial_generator__RewardProbabilityParameters": {
@@ -2928,40 +2962,6 @@
         }
       },
       "title": "RewardProbabilityParameters",
-      "type": "object"
-    },
-    "aind_behavior_dynamic_foraging__task_logic__trial_generators__warmup_trial_generator__TrialGenerationEndConditions": {
-      "properties": {
-        "min_trial": {
-          "default": 50,
-          "description": "Minimum trials in generator.",
-          "title": "Min Trial",
-          "type": "integer"
-        },
-        "max_choice_bias": {
-          "default": 0.1,
-          "description": "Maximum allowed deviation from 50/50 choice ratio to end trial generation.",
-          "maximum": 1,
-          "minimum": 0,
-          "title": "Max Choice Bias",
-          "type": "number"
-        },
-        "min_response_rate": {
-          "default": 0.8,
-          "description": "Minimum fraction of trials with a choice (non-ignored) to end trial generation.",
-          "maximum": 1,
-          "minimum": 0,
-          "title": "Min Response Rate",
-          "type": "number"
-        },
-        "evaluation_window": {
-          "default": 20,
-          "description": "Number of most recent trials to evaluate the end criteria.",
-          "title": "Evaluation Window",
-          "type": "integer"
-        }
-      },
-      "title": "TrialGenerationEndConditions",
       "type": "object"
     }
   }

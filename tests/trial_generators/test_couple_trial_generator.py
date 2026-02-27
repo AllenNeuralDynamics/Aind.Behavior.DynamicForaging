@@ -2,7 +2,7 @@ import logging
 import unittest
 
 from aind_behavior_dynamic_foraging.task_logic.trial_generators import CoupledTrialGeneratorSpec
-from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generator import (
+from aind_behavior_dynamic_foraging.task_logic.trial_generators.block_based_trial_generator import (
     RewardProbabilityParameters,
 )
 from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial, TrialOutcome
