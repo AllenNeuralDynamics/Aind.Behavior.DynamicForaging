@@ -187,6 +187,22 @@
             <Expression xsi:type="rx:BehaviorSubject">
               <Name>ExperimentState</Name>
             </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="DoubleProperty">
+                <Value>-5</Value>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="DoubleProperty">
+                <Value>5</Value>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Zip" />
+            </Expression>
+            <Expression xsi:type="rx:AsyncSubject">
+              <Name>BiasOffsetBounds</Name>
+            </Expression>
           </Nodes>
           <Edges>
             <Edge From="1" To="2" Label="Source1" />
@@ -204,6 +220,9 @@
             <Edge From="22" To="23" Label="Source1" />
             <Edge From="23" To="24" Label="Source3" />
             <Edge From="24" To="25" Label="Source1" />
+            <Edge From="26" To="28" Label="Source1" />
+            <Edge From="27" To="28" Label="Source2" />
+            <Edge From="28" To="29" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
