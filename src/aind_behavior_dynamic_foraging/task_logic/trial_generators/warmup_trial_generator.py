@@ -42,7 +42,7 @@ class WarmupTrialGeneratorSpec(BlockBasedTrialGeneratorSpec):
     block_len: ExponentialDistribution = Field(
         ExponentialDistribution(
             distribution_parameters=ExponentialDistributionParameters(rate=1),
-            truncation_parameters=TruncationParameters(min=1, max=2),
+            truncation_parameters=TruncationParameters(min=1, max=1),
         ),
         description="Distribution describing block length.",
     )
