@@ -1,0 +1,8 @@
+from .curriculum import CURRICULUM, CURRICULUM_NAME, PKG_LOCATION, TRAINER
+
+__all__ = [
+    "CURRICULUM_NAME",
+    "CURRICULUM",
+    "TRAINER",
+    "PKG_LOCATION",
+]
