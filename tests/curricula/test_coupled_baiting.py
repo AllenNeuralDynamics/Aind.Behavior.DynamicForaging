@@ -52,7 +52,6 @@ class TestWarmupTransitions(unittest.TestCase):
         self.assertEqual(updated.stage.name, "stage_2")
 
     def test_warmup_to_stage_1_after_first_session(self):
-        # does not meet stage_2 criteria, but has completed a session
         metrics = make_metrics(finished_trials=[100], foraging_efficiency=[0.4], session_at_current_stage=1)
         updated = TRAINER.evaluate(self.trainer_state, metrics)
         self.assertEqual(updated.stage.name, "stage_1")
@@ -156,8 +155,8 @@ class TestFinalTransitions(unittest.TestCase):
         metrics = make_metrics(
             finished_trials=[450] * 5,
             foraging_efficiency=[0.70] * 5,
-            session_total=5,  # not enough total sessions
-            session_at_current_stage=3,  # not enough at final
+            session_total=5,  
+            session_at_current_stage=3,  
         )
         updated = TRAINER.evaluate(self.trainer_state, metrics)
         self.assertNotEqual(updated.stage.name, "graduated")
