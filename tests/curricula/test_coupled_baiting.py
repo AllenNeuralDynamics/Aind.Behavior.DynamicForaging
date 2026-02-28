@@ -155,8 +155,8 @@ class TestFinalTransitions(unittest.TestCase):
         metrics = make_metrics(
             finished_trials=[450] * 5,
             foraging_efficiency=[0.70] * 5,
-            session_total=5,  
-            session_at_current_stage=3,  
+            session_total=5,
+            session_at_current_stage=3,
         )
         updated = TRAINER.evaluate(self.trainer_state, metrics)
         self.assertNotEqual(updated.stage.name, "graduated")
