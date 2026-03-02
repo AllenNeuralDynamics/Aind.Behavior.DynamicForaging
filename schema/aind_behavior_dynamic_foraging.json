@@ -2440,10 +2440,10 @@
           ],
           "title": "Is Auto Response Right"
         },
-        "lickspout_offset": {
+        "lickspout_offset_delta": {
           "default": 0.0,
-          "description": "Horizontal offset of the lickspouts (in mm). Positive values move the lickspouts right.",
-          "title": "Lickspout Offset",
+          "description": "Horizontal delta offset of the lickspouts (in mm) applied in this trial. Positive values move the lickspouts right.",
+          "title": "Lickspout Offset Delta",
           "type": "number"
         },
         "extra_metadata": {

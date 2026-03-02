@@ -187,6 +187,7 @@
             </Expression>
             <Expression xsi:type="IncludeWorkflow" Path="Extensions\SpinnakerCameraControllerSaturationVisualizer.bonsai" />
             <Expression xsi:type="IncludeWorkflow" Path="Extensions\ValveUi.bonsai" />
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\SpoutOffsetControl.bonsai" />
           </Nodes>
           <Edges>
             <Edge From="0" To="1" Label="Source1" />
