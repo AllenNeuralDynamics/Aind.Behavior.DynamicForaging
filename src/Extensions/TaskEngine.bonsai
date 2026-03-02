@@ -1024,7 +1024,7 @@
                               </Expression>
                               <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:FilterNotNull.bonsai" />
                               <Expression xsi:type="MemberSelector">
-                                <Selector>LickspoutOffset</Selector>
+                                <Selector>LickspoutOffsetDelta</Selector>
                               </Expression>
                               <Expression xsi:type="MulticastSubject">
                                 <Name>AutomaticSpoutDelta</Name>
