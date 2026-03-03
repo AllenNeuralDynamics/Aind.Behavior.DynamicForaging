@@ -5,12 +5,12 @@ using System.Linq;
 using System.Reactive.Linq;
 
 [Combinator]
-[Description("Creates an AutoWaterGlobalState instance.")]
+[Description("Creates an AutoWaterState instance.")]
 [WorkflowElementCategory(ElementCategory.Source)]
 public class CreateAutoWaterState
 {
     private bool? value = null;
-    [Description("Initial value of the AutoWaterGlobalState instance.")]
+    [Description("Initial value of the AutoWaterState instance.")]
 
     public bool? Value
     {
@@ -65,38 +65,6 @@ public class AutoWaterState
         lock(_lock)
         {
             IsAutoWaterRight = false;
-        }
-        return this;
-    }
-
-    public AutoWaterState ToggleRight()
-    {
-        lock(_lock)
-        {
-            if (!IsAutoWaterRight.HasValue)
-            {
-                IsAutoWaterRight = true;
-            }
-            else
-            {
-                IsAutoWaterRight = IsAutoWaterRight.Value ? null : (bool?)true;
-            }
-        }
-        return this;
-    }
-
-    public AutoWaterState ToggleLeft()
-    {
-        lock(_lock)
-        {
-            if (!IsAutoWaterRight.HasValue)
-            {
-                IsAutoWaterRight = false;
-            }
-            else
-            {
-                IsAutoWaterRight = IsAutoWaterRight.Value ? (bool?)false : null;
-            }
         }
         return this;
     }
