@@ -4,7 +4,6 @@ from typing import Literal, Optional
 
 import numpy as np
 from pydantic import BaseModel, Field
-import json
 
 from ..trial_models import TrialOutcome
 from .block_based_trial_generator import (
@@ -148,7 +147,7 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
             outcome: The TrialOutcome from the most recently completed trial.
         """
 
-        print(f"Updating coupled trial generator with trial outcome of {outcome}")
+        logger.info(f"Updating coupled trial generator with trial outcome of {outcome}")
 
         if isinstance(outcome, str):
             outcome = TrialOutcome.model_validate_json(outcome)
