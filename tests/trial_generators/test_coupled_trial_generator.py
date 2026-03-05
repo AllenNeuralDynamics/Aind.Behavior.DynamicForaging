@@ -1,6 +1,5 @@
 import logging
 import unittest
-
 from datetime import timedelta
 
 from aind_behavior_dynamic_foraging.task_logic.trial_generators import CoupledTrialGeneratorSpec
@@ -269,7 +268,9 @@ class TestCoupledTrialGenerator(unittest.TestCase):
 
     def test_next_returns_none_after_max_trials(self):
         self.generator.is_right_choice_history = [True] * (self.spec.trial_generation_end_parameters.max_trial + 1)
-        self.generator.start_time = self.generator.start_time - timedelta(self.spec.trial_generation_end_parameters.min_time)
+        self.generator.start_time = self.generator.start_time - timedelta(
+            self.spec.trial_generation_end_parameters.min_time
+        )
 
         trial = self.generator.next()
         self.assertIsNone(trial)

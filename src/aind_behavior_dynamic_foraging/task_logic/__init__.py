@@ -1,4 +1,4 @@
-from typing import Literal, Optional
+from typing import Literal
 
 from aind_behavior_services.task import Task, TaskParameters
 from pydantic import BaseModel, Field
@@ -28,7 +28,9 @@ class AindDynamicForagingTaskParameters(TaskParameters):
     and numerical updaters for dynamic parameter modification.
     """
 
-    reward_size: RewardSize = Field(default=RewardSize(left_value_volume=3, right_value_volume=3), description="Parameters describing reward size.")
+    reward_size: RewardSize = Field(
+        default=RewardSize(left_value_volume=3, right_value_volume=3), description="Parameters describing reward size."
+    )
     trial_generator: TrialGeneratorSpec = Field(
         default=IntegrationTestTrialGeneratorSpec(),
         description="Trial generator model for generating trials in the task.",

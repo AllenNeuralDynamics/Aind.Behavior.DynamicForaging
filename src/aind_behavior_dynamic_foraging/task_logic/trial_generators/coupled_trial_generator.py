@@ -30,8 +30,8 @@ class CoupledTrialGenerationEndConditions(BaseModel):
         description="Maximum fraction of ignored trials within the window before the session is ended.",
     )
     max_trial: int = Field(default=1000, ge=0, description="Maximum number of trials allowed in a session.")
-    max_time: float = Field(default=75*60, description="Maximum session duration (sec).")
-    min_time: float = Field(default=30*60, description="Minimum session duration (sec)")
+    max_time: float = Field(default=75 * 60, description="Maximum session duration (sec).")
+    min_time: float = Field(default=30 * 60, description="Minimum session duration (sec)")
 
 
 class BehaviorStabilityParameters(BaseModel):
@@ -59,7 +59,9 @@ class CoupledTrialGeneratorSpec(BlockBasedTrialGeneratorSpec):
     type: Literal["CoupledTrialGenerator"] = "CoupledTrialGenerator"
 
     trial_generation_end_parameters: CoupledTrialGenerationEndConditions = Field(
-        default=CoupledTrialGenerationEndConditions(), description="Conditions to end trial generation.", validate_default=True
+        default=CoupledTrialGenerationEndConditions(),
+        description="Conditions to end trial generation.",
+        validate_default=True,
     )
 
     behavior_stability_parameters: Optional[BehaviorStabilityParameters] = Field(
@@ -117,7 +119,10 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
         frac = end_conditions.ignore_ratio_threshold
         win = end_conditions.ignore_win
 
-        if time_elapsed >timedelta(seconds=end_conditions.min_time )and choice_history[-win:].count(None) >= frac * win:
+        if (
+            time_elapsed > timedelta(seconds=end_conditions.min_time)
+            and choice_history[-win:].count(None) >= frac * win
+        ):
             logger.debug("Minimum time and ignored trial count exceeded.")
             return True
 
