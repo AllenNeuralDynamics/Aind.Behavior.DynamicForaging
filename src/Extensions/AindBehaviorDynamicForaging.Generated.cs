@@ -50,7 +50,7 @@ namespace AindDynamicForagingDataSchema
         public AindDynamicForagingRig()
         {
             _aindBehaviorServicesPkgVersion = "0.13.2-rc1";
-            _version = "0.0.2-rc10";
+            _version = "0.0.2-rc13";
             _triggeredCameraController = new CameraControllerSpinnakerCamera();
             _harpBehavior = new HarpBehavior();
             _harpClockGenerator = new HarpWhiteRabbit();
@@ -433,7 +433,7 @@ namespace AindDynamicForagingDataSchema
             _name = "AindDynamicForaging";
             _description = "";
             _taskParameters = new AindDynamicForagingTaskParameters();
-            _version = "0.0.2-rc10";
+            _version = "0.0.2-rc13";
         }
     
         protected AindDynamicForagingTaskLogic(AindDynamicForagingTaskLogic other)
@@ -7244,7 +7244,7 @@ namespace AindDynamicForagingDataSchema
     
         private bool? _isAutoResponseRight;
     
-        private double _lickspoutOffset;
+        private double _lickspoutOffsetDelta;
     
         private object _extraMetadata;
     
@@ -7258,7 +7258,7 @@ namespace AindDynamicForagingDataSchema
             _enableFastRetract = false;
             _quiescencePeriodDuration = 0.5D;
             _interTrialIntervalDuration = 5D;
-            _lickspoutOffset = 0D;
+            _lickspoutOffsetDelta = 0D;
         }
     
         protected Trial(Trial other)
@@ -7273,7 +7273,7 @@ namespace AindDynamicForagingDataSchema
             _quiescencePeriodDuration = other._quiescencePeriodDuration;
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
             _isAutoResponseRight = other._isAutoResponseRight;
-            _lickspoutOffset = other._lickspoutOffset;
+            _lickspoutOffsetDelta = other._lickspoutOffsetDelta;
             _extraMetadata = other._extraMetadata;
         }
     
@@ -7451,20 +7451,20 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Horizontal offset of the lickspouts (in mm). Positive values move the lickspouts right.
+        /// Horizontal delta offset of the lickspouts (in mm) applied in this trial. Positive values move the lickspouts right.
         /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("lickspout_offset")]
-        [System.ComponentModel.DescriptionAttribute("Horizontal offset of the lickspouts (in mm). Positive values move the lickspouts " +
-            "right.")]
-        public double LickspoutOffset
+        [Newtonsoft.Json.JsonPropertyAttribute("lickspout_offset_delta")]
+        [System.ComponentModel.DescriptionAttribute("Horizontal delta offset of the lickspouts (in mm) applied in this trial. Positive" +
+            " values move the lickspouts right.")]
+        public double LickspoutOffsetDelta
         {
             get
             {
-                return _lickspoutOffset;
+                return _lickspoutOffsetDelta;
             }
             set
             {
-                _lickspoutOffset = value;
+                _lickspoutOffsetDelta = value;
             }
         }
     
@@ -7509,7 +7509,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("QuiescencePeriodDuration = " + _quiescencePeriodDuration + ", ");
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
             stringBuilder.Append("IsAutoResponseRight = " + _isAutoResponseRight + ", ");
-            stringBuilder.Append("LickspoutOffset = " + _lickspoutOffset + ", ");
+            stringBuilder.Append("LickspoutOffsetDelta = " + _lickspoutOffsetDelta + ", ");
             stringBuilder.Append("ExtraMetadata = " + _extraMetadata);
             return true;
         }

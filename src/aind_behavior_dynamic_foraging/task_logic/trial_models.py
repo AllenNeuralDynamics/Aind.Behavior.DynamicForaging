@@ -57,9 +57,9 @@ class Trial(BaseModel):
         default=None,
         description="If set, the trial will automatically (and immediately) register a response to the right (True) or left (False).",
     )
-    lickspout_offset: float = Field(
+    lickspout_offset_delta: float = Field(
         default=0.0,
-        description="Horizontal offset of the lickspouts (in mm). Positive values move the lickspouts right.",
+        description="Horizontal delta offset of the lickspouts (in mm) applied in this trial. Positive values move the lickspouts right.",
     )
     extra_metadata: Optional[SerializeAsAny[Any]] = Field(
         default=None,
