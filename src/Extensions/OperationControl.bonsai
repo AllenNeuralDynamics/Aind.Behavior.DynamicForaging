@@ -1050,7 +1050,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="DoubleProperty">
-                      <Value>0</Value>
+                      <Value>96000</Value>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="SubscribeSubject">
@@ -1196,7 +1196,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="DoubleProperty">
-                      <Value>0</Value>
+                      <Value>96000</Value>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="SubscribeSubject">
