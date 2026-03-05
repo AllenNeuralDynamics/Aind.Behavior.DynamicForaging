@@ -165,7 +165,7 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
             min_block_reward=self.spec.min_block_reward,
             choice_history=self.is_right_choice_history,
             p_right_reward=self.block.p_right_reward,
-            l_right_reward=self.block.l_right_reward,
+            p_left_reward=self.block.p_left_reward,
             beh_stability_params=self.spec.behavior_stability_parameters,
             block_length=self.block.min_length,
             kernel_size=self.spec.kernel_size,
@@ -186,7 +186,7 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
         self,
         choice_history: list,
         p_right_reward: float,
-        l_right_reward: float,
+        p_left_reward: float,
         beh_stability_params: BehaviorStabilityParameters,
         trials_in_block: int,
         kernel_size: int = 2,
@@ -202,7 +202,7 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
             choice_history: Trial history with True for right, False for left,
                 and None for ignored trials.
             p_right_reward: Reward probability for the right port in the current block.
-            l_right_reward: Reward probability for the left port in the current block.
+            p_left_reward: Reward probability for the left port in the current block.
             beh_stability_params: Parameters defining the stability threshold and
                 evaluation mode.
             trials_in_block: Number of trials elapsed in the current block.
@@ -219,11 +219,11 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
         logger.info("Evaluating block behavior.")
 
         # do not prohibit block transition if does not rely on behavior or not enough trials to evaluate or reward probs are the same.
-        if not beh_stability_params or l_right_reward == p_right_reward or len(choice_history) < kernel_size:
+        if not beh_stability_params or p_left_reward == p_right_reward or len(choice_history) < kernel_size:
             logger.debug(
                 "Behavior stability evaluation skipped: "
                 f"parameters_missing={not bool(beh_stability_params)}, "
-                f"rewards_equal={l_right_reward == p_right_reward}, "
+                f"rewards_equal={p_left_reward == p_right_reward}, "
                 f"trials_available={len(choice_history)} < kernel_size({kernel_size})"
             )
             return True
@@ -234,8 +234,8 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
         logger.debug(f"Choice fraction of block is {block_choice_frac}.")
 
         # margin based on right and left probabilities and scaled by switch threshold. Window for evaluating behavior
-        delta = abs((l_right_reward - p_right_reward) * float(beh_stability_params.behavior_stability_fraction))
-        threshold = [0, l_right_reward - delta] if l_right_reward > p_right_reward else [l_right_reward + delta, 1]
+        delta = abs((p_left_reward - p_right_reward) * float(beh_stability_params.behavior_stability_fraction))
+        threshold = [0, p_left_reward - delta] if p_left_reward > p_right_reward else [p_left_reward + delta, 1]
         logger.debug(f"Behavior stability threshold applied: {threshold}")
 
         # block_choice_fractions above threshold
@@ -304,7 +304,7 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
         min_block_reward: int,
         choice_history: list,
         p_right_reward: float,
-        l_right_reward: float,
+        p_left_reward: float,
         beh_stability_params: BehaviorStabilityParameters,
         block_length: int,
         kernel_size: int = 2,
@@ -321,7 +321,7 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
             choice_history: Trial history with True for right, False for left,
                 and None for ignored trials.
             p_right_reward: Reward probability for the right port in the current block.
-            l_right_reward: Reward probability for the left port in the current block.
+            p_left_reward: Reward probability for the left port in the current block.
             beh_stability_params: Parameters defining the behavior stability criterion.
             block_length: Planned minimum number of trials in the current block.
             kernel_size: Sliding window size for computing choice fraction.
@@ -340,7 +340,7 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
         behavior_ok = self._is_behavior_stable(
             choice_history,
             p_right_reward,
-            l_right_reward,
+            p_left_reward,
             beh_stability_params,
             trials_in_block,
             kernel_size,

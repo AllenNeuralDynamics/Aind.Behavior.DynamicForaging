@@ -41,8 +41,8 @@ class TestBlockBasedTrialGenerator(unittest.TestCase):
             current_block=current,
         )
         self.assertNotEqual(
-            (next_block.p_right_reward, next_block.l_right_reward),
-            (current.p_right_reward, current.l_right_reward),
+            (next_block.p_right_reward, next_block.p_left_reward),
+            (current.p_right_reward, current.p_left_reward),
         )
 
     def test_next_block_switches_high_reward_side(self):
@@ -53,8 +53,8 @@ class TestBlockBasedTrialGenerator(unittest.TestCase):
             block_len=self.spec.block_len,
             current_block=current,
         )
-        current_high_is_right = current.p_right_reward > current.l_right_reward
-        next_high_is_right = next_block.p_right_reward > next_block.l_right_reward
+        current_high_is_right = current.p_right_reward > current.p_left_reward
+        next_high_is_right = next_block.p_right_reward > next_block.p_left_reward
         self.assertNotEqual(current_high_is_right, next_high_is_right)
 
     def test_next_block_switches_high_reward_side_multiple_pairs(self):
@@ -73,8 +73,8 @@ class TestBlockBasedTrialGenerator(unittest.TestCase):
             current_block=current,
         )
 
-        current_high_is_right = current.p_right_reward > current.l_right_reward
-        next_high_is_right = next_block.p_right_reward > next_block.l_right_reward
+        current_high_is_right = current.p_right_reward > current.p_left_reward
+        next_high_is_right = next_block.p_right_reward > next_block.p_left_reward
         self.assertNotEqual(current_high_is_right, next_high_is_right)
 
     def test_next_block_never_repeats_current_multiple_pairs(self):
@@ -94,12 +94,12 @@ class TestBlockBasedTrialGenerator(unittest.TestCase):
                 current_block=current,
             )
             self.assertNotEqual(
-                (next_block.p_right_reward, next_block.l_right_reward),
-                (current.p_right_reward, current.l_right_reward),
+                (next_block.p_right_reward, next_block.p_left_reward),
+                (current.p_right_reward, current.p_left_reward),
             )
             self.assertNotEqual(
-                next_block.p_right_reward > next_block.l_right_reward,
-                current.p_right_reward > current.l_right_reward,
+                next_block.p_right_reward > next_block.p_left_reward,
+                current.p_right_reward > current.p_left_reward,
             )
             current = next_block
 
@@ -111,14 +111,14 @@ class TestBlockBasedTrialGenerator(unittest.TestCase):
 
     def test_next_returns_correct_reward_probs(self):
         trial = self.generator.next()
-        self.assertEqual(trial.p_reward_left, self.generator.block.l_right_reward)
+        self.assertEqual(trial.p_reward_left, self.generator.block.p_left_reward)
         self.assertEqual(trial.p_reward_right, self.generator.block.p_right_reward)
 
     #### Test unbaited ####
 
     def test_baiting_disabled_reward_prob_unchanged(self):
         """Without baiting, reward probs should equal block probs exactly."""
-        self.generator.block = Block(p_right_reward=0.8, l_right_reward=0.2, min_length=10)
+        self.generator.block = Block(p_right_reward=0.8, p_left_reward=0.2, min_length=10)
         self.generator.is_left_baited = True
         self.generator.is_right_baited = True
         trial = self.generator.next()
@@ -134,7 +134,7 @@ class TestBlockBaseBaitingTrialGenerator(unittest.TestCase):
 
     def test_baiting_sets_prob_to_1_when_baited(self):
         """If bait is held, reward prob should be 1.0 on that side."""
-        self.generator.block = Block(p_right_reward=0.5, l_right_reward=0.5, min_length=10)
+        self.generator.block = Block(p_right_reward=0.5, p_left_reward=0.5, min_length=10)
         self.generator.is_right_baited = True
         self.generator.is_left_baited = True
 
@@ -145,7 +145,7 @@ class TestBlockBaseBaitingTrialGenerator(unittest.TestCase):
 
     def test_baiting_accumulates_when_random_exceeds_prob(self):
         """Bait should carry over when random number exceeds reward prob."""
-        self.generator.block = Block(p_right_reward=0.5, l_right_reward=0.5, min_length=10)
+        self.generator.block = Block(p_right_reward=0.5, p_left_reward=0.5, min_length=10)
         self.generator.is_right_baited = False
         self.generator.is_left_baited = False
 
@@ -157,7 +157,7 @@ class TestBlockBaseBaitingTrialGenerator(unittest.TestCase):
 
     def test_baiting_triggers_when_random_below_prob(self):
         """Bait should trigger reward prob of 1.0 when random number is below reward prob."""
-        self.generator.block = Block(p_right_reward=0.5, l_right_reward=0.5, min_length=10)
+        self.generator.block = Block(p_right_reward=0.5, p_left_reward=0.5, min_length=10)
         self.generator.is_right_baited = False
         self.generator.is_left_baited = False
 

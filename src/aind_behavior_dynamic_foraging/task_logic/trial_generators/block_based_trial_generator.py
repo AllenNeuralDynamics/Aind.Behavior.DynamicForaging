@@ -45,7 +45,7 @@ class RewardProbabilityParameters(BaseModel):
 
 class Block(BaseModel):
     p_right_reward: float = Field(ge=0, le=1, description="Reward probability for right side during block.")
-    l_right_reward: float = Field(ge=0, le=1, description="Reward probability for left side during block.")
+    p_left_reward: float = Field(ge=0, le=1, description="Reward probability for left side during block.")
     min_length: int = Field(ge=0, description="Minimum number of trials in block.")
 
 
@@ -155,13 +155,13 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
         iti = draw_sample(self.spec.inter_trial_interval_duration)
         quiescent = draw_sample(self.spec.quiescent_duration)
 
-        p_reward_left = self.block.l_right_reward
+        p_reward_left = self.block.p_left_reward
         p_reward_right = self.block.p_right_reward
 
         if self.spec.is_baiting:
             random_numbers = np.random.random(2)
 
-            is_left_baited = self.block.l_right_reward > random_numbers[0] or self.is_left_baited
+            is_left_baited = self.block.p_left_reward > random_numbers[0] or self.is_left_baited
             logger.debug(f"Left baited: {is_left_baited}")
             p_reward_left = 1 if is_left_baited else p_reward_left
 
@@ -225,7 +225,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
 
         if current_block:  # exclude previous block if history exists
             logger.info("Excluding previous block reward probability.")
-            last_block_reward_prob = [current_block.p_right_reward, current_block.l_right_reward]
+            last_block_reward_prob = [current_block.p_right_reward, current_block.p_left_reward]
 
             # remove blocks identical to last block
             reward_prob_pool = reward_prob_pool[np.any(reward_prob_pool != last_block_reward_prob, axis=1)]
@@ -243,8 +243,8 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
         logger.debug(f"Final reward probability pool after removing duplicates: {reward_prob_pool.tolist()}")
 
         # randomly pick next block reward probability
-        p_right_reward, l_right_reward = reward_prob_pool[random.choice(range(reward_prob_pool.shape[0]))]
-        logger.info(f"Selected next block reward probabilities: right={p_right_reward}, left={l_right_reward}")
+        p_right_reward, p_left_reward = reward_prob_pool[random.choice(range(reward_prob_pool.shape[0]))]
+        logger.info(f"Selected next block reward probabilities: right={p_right_reward}, left={p_left_reward}")
 
         # randomly pick block length
         next_block_len = round(draw_sample(block_len))
@@ -252,6 +252,6 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
 
         return Block(
             p_right_reward=p_right_reward,
-            l_right_reward=l_right_reward,
+            p_left_reward=p_left_reward,
             min_length=next_block_len,
         )
