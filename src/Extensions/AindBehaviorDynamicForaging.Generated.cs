@@ -49,7 +49,7 @@ namespace AindDynamicForagingDataSchema
     
         public AindDynamicForagingRig()
         {
-            _aindBehaviorServicesPkgVersion = "0.13.2-rc1";
+            _aindBehaviorServicesPkgVersion = "0.13.2";
             _version = "0.0.2-rc13";
             _triggeredCameraController = new CameraControllerSpinnakerCamera();
             _harpBehavior = new HarpBehavior();
@@ -586,15 +586,12 @@ namespace AindDynamicForagingDataSchema
     
         private RewardSize _rewardSize;
     
-        private bool? _lickSpoutRetraction;
-    
         private TrialGeneratorSpec _trialGenerator;
     
         public AindDynamicForagingTaskParameters()
         {
-            _aindBehaviorServicesPkgVersion = "0.13.2-rc1";
+            _aindBehaviorServicesPkgVersion = "0.13.2";
             _rewardSize = new RewardSize();
-            _lickSpoutRetraction = false;
             _trialGenerator = new TrialGeneratorSpec();
         }
     
@@ -603,7 +600,6 @@ namespace AindDynamicForagingDataSchema
             _rngSeed = other._rngSeed;
             _aindBehaviorServicesPkgVersion = other._aindBehaviorServicesPkgVersion;
             _rewardSize = other._rewardSize;
-            _lickSpoutRetraction = other._lickSpoutRetraction;
             _trialGenerator = other._trialGenerator;
         }
     
@@ -656,23 +652,6 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Lick spout retraction enabled.
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("lick_spout_retraction")]
-        [System.ComponentModel.DescriptionAttribute("Lick spout retraction enabled.")]
-        public bool? LickSpoutRetraction
-        {
-            get
-            {
-                return _lickSpoutRetraction;
-            }
-            set
-            {
-                _lickSpoutRetraction = value;
-            }
-        }
-    
-        /// <summary>
         /// Trial generator model for generating trials in the task.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -705,7 +684,6 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("RngSeed = " + _rngSeed + ", ");
             stringBuilder.Append("AindBehaviorServicesPkgVersion = " + _aindBehaviorServicesPkgVersion + ", ");
             stringBuilder.Append("RewardSize = " + _rewardSize + ", ");
-            stringBuilder.Append("LickSpoutRetraction = " + _lickSpoutRetraction + ", ");
             stringBuilder.Append("TrialGenerator = " + _trialGenerator);
             return true;
         }
@@ -5586,8 +5564,6 @@ namespace AindDynamicForagingDataSchema
     
         public RewardSize()
         {
-            _rightValueVolume = 3D;
-            _leftValueVolume = 3D;
         }
     
         protected RewardSize(RewardSize other)
@@ -5596,7 +5572,7 @@ namespace AindDynamicForagingDataSchema
             _leftValueVolume = other._leftValueVolume;
         }
     
-        [Newtonsoft.Json.JsonPropertyAttribute("right_value_volume")]
+        [Newtonsoft.Json.JsonPropertyAttribute("right_value_volume", Required=Newtonsoft.Json.Required.Always)]
         public double RightValueVolume
         {
             get
@@ -5609,7 +5585,7 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
-        [Newtonsoft.Json.JsonPropertyAttribute("left_value_volume")]
+        [Newtonsoft.Json.JsonPropertyAttribute("left_value_volume", Required=Newtonsoft.Json.Required.Always)]
         public double LeftValueVolume
         {
             get
@@ -6069,8 +6045,8 @@ namespace AindDynamicForagingDataSchema
     
         public Session()
         {
-            _aindBehaviorServicesPkgVersion = "0.13.2-rc1";
-            _version = "0.13.2-rc1";
+            _aindBehaviorServicesPkgVersion = "0.13.2";
+            _version = "0.13.2";
             _experimenter = new System.Collections.Generic.List<string>();
             _allowDirtyRepo = false;
             _skipHardwareValidation = false;

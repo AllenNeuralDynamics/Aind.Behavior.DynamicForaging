@@ -3,7 +3,7 @@
     "AindDynamicForagingRig": {
       "properties": {
         "aind_behavior_services_pkg_version": {
-          "default": "0.13.2-rc1",
+          "default": "0.13.2",
           "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
           "title": "aind_behavior_services package version",
           "type": "string"
@@ -195,7 +195,7 @@
           "title": "Rng Seed"
         },
         "aind_behavior_services_pkg_version": {
-          "default": "0.13.2-rc1",
+          "default": "0.13.2",
           "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
           "title": "aind_behavior_services package version",
           "type": "string"
@@ -207,19 +207,6 @@
             "left_value_volume": 3.0
           },
           "description": "Parameters describing reward size."
-        },
-        "lick_spout_retraction": {
-          "default": false,
-          "description": "Lick spout retraction enabled.",
-          "oneOf": [
-            {
-              "type": "boolean"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "title": "Lick Spout Retraction"
         },
         "trial_generator": {
           "$ref": "#/$defs/TrialGeneratorSpec",
@@ -2006,16 +1993,18 @@
     "RewardSize": {
       "properties": {
         "right_value_volume": {
-          "default": 3.0,
           "title": "Right reward size (uL)",
           "type": "number"
         },
         "left_value_volume": {
-          "default": 3.0,
           "title": "Left reward size (uL)",
           "type": "number"
         }
       },
+      "required": [
+        "right_value_volume",
+        "left_value_volume"
+      ],
       "title": "RewardSize",
       "type": "object"
     },
@@ -2126,14 +2115,14 @@
     "Session": {
       "properties": {
         "aind_behavior_services_pkg_version": {
-          "default": "0.13.2-rc1",
+          "default": "0.13.2",
           "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
           "title": "aind_behavior_services package version",
           "type": "string"
         },
         "version": {
-          "const": "0.13.2-rc1",
-          "default": "0.13.2-rc1",
+          "const": "0.13.2",
+          "default": "0.13.2",
           "title": "Version",
           "type": "string"
         },

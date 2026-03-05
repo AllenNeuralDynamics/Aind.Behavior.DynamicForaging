@@ -71,7 +71,7 @@ docs = [
 
 [package.metadata]
 requires-dist = [
-    { name = "aind-behavior-services", git = "https://github.com/AllenNeuralDynamics/Aind.Behavior.Services.git?rev=v0.13.2rc1" },
+    { name = "aind-behavior-services", specifier = ">=0.13.2" },
     { name = "contraqctor", marker = "extra == 'data'", specifier = ">=0.5.3" },
     { name = "pydantic-settings" },
 ]
@@ -94,14 +94,18 @@ docs = [
 
 [[package]]
 name = "aind-behavior-services"
-version = "0.13.2rc1"
-source = { git = "https://github.com/AllenNeuralDynamics/Aind.Behavior.Services.git?rev=v0.13.2rc1#ff8accd8d1b09b358d665f7bf0fefaeaf7af6db9" }
+version = "0.13.2"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aind-behavior-curriculum" },
     { name = "gitpython" },
     { name = "harp-python" },
     { name = "pydantic" },
     { name = "semver" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/fb/4b/3a5153a56ba92bf4cb8503b3670c58b0ce2dc1a38152a6888a654b2faefc/aind_behavior_services-0.13.2.tar.gz", hash = "sha256:506e9551c74db57026750f085b5f0034ba9896d9d7d496bf17977d4fc55b5f0f", size = 27357, upload-time = "2026-02-27T18:28:45.264Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/49/ad/01b1da25639b2261159975b08e40e3fde74f73c01216cd83c1751ab23829/aind_behavior_services-0.13.2-py3-none-any.whl", hash = "sha256:2003a19aea0b0669088f02c8453c630bb0f0b3eb278c71d1107b972ac9171c8a", size = 37296, upload-time = "2026-02-27T18:28:44.055Z" },
 ]
 
 [[package]]
