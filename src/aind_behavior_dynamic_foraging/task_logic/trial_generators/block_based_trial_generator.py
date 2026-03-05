@@ -170,14 +170,12 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             p_reward_right = 1 if is_right_baited else p_reward_right
 
         return Trial(
-            p_reward_left=1,
-            p_reward_right=1,
+            p_reward_left=p_reward_left,
+            p_reward_right=p_reward_right,
             reward_consumption_duration=self.spec.reward_consumption_duration,
             response_deadline_duration=self.spec.response_duration,
             quiescence_period_duration=quiescent,
             inter_trial_interval_duration=iti,
-            lickspout_offset_delta=.5 if self.trials_in_block %2 == 0 else -.5,
-            is_auto_response_right=np.random.random([True, False, None])
         )
 
     @abstractmethod
