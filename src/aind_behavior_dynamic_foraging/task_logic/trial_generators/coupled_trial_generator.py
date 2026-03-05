@@ -151,7 +151,7 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
 
         if isinstance(outcome, str):
             outcome = TrialOutcome.model_validate_json(outcome)
-        logger.info(outcome, type(outcome))
+
         self.is_right_choice_history.append(outcome.is_right_choice)
         self.reward_history.append(outcome.is_rewarded)
         self.trials_in_block += 1
