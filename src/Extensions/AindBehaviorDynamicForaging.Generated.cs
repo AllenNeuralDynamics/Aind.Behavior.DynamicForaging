@@ -2251,15 +2251,17 @@ namespace AindDynamicForagingDataSchema
     
         private int _maxTrial;
     
-        private System.TimeSpan _maxTime;
+        private double _maxTime;
     
-        private System.TimeSpan _minTime;
+        private double _minTime;
     
         public CoupledTrialGenerationEndConditions()
         {
             _ignoreWin = 30;
             _ignoreRatioThreshold = 0.8D;
             _maxTrial = 1000;
+            _maxTime = 4500D;
+            _minTime = 1800D;
         }
     
         protected CoupledTrialGenerationEndConditions(CoupledTrialGenerationEndConditions other)
@@ -2324,12 +2326,11 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Maximum session duration (min).
+        /// Maximum session duration (sec).
         /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("max_time")]
-        [System.ComponentModel.DescriptionAttribute("Maximum session duration (min).")]
-        public System.TimeSpan MaxTime
+        [System.ComponentModel.DescriptionAttribute("Maximum session duration (sec).")]
+        public double MaxTime
         {
             get
             {
@@ -2341,29 +2342,12 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
-        [Newtonsoft.Json.JsonIgnoreAttribute()]
-        [System.ComponentModel.BrowsableAttribute(false)]
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
-        [System.Xml.Serialization.XmlElementAttribute("MaxTime")]
-        public string MaxTimeXml
-        {
-            get
-            {
-                return System.Xml.XmlConvert.ToString(_maxTime);
-            }
-            set
-            {
-                _maxTime = System.Xml.XmlConvert.ToTimeSpan(value);
-            }
-        }
-    
         /// <summary>
-        /// Minimum session duration (min)
+        /// Minimum session duration (sec)
         /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("min_time")]
-        [System.ComponentModel.DescriptionAttribute("Minimum session duration (min)")]
-        public System.TimeSpan MinTime
+        [System.ComponentModel.DescriptionAttribute("Minimum session duration (sec)")]
+        public double MinTime
         {
             get
             {
@@ -2372,22 +2356,6 @@ namespace AindDynamicForagingDataSchema
             set
             {
                 _minTime = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonIgnoreAttribute()]
-        [System.ComponentModel.BrowsableAttribute(false)]
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
-        [System.Xml.Serialization.XmlElementAttribute("MinTime")]
-        public string MinTimeXml
-        {
-            get
-            {
-                return System.Xml.XmlConvert.ToString(_minTime);
-            }
-            set
-            {
-                _minTime = System.Xml.XmlConvert.ToTimeSpan(value);
             }
         }
     

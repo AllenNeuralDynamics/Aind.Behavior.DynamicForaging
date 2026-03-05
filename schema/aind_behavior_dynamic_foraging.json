@@ -845,18 +845,16 @@
           "type": "integer"
         },
         "max_time": {
-          "default": "PT1H15M",
-          "description": "Maximum session duration (min).",
-          "format": "duration",
+          "default": 4500,
+          "description": "Maximum session duration (sec).",
           "title": "Max Time",
-          "type": "string"
+          "type": "number"
         },
         "min_time": {
-          "default": "PT30M",
-          "description": "Minimum session duration (min)",
-          "format": "duration",
+          "default": 1800,
+          "description": "Minimum session duration (sec)",
           "title": "Min Time",
-          "type": "string"
+          "type": "number"
         }
       },
       "title": "CoupledTrialGenerationEndConditions",
@@ -972,8 +970,8 @@
             "ignore_win": 30,
             "ignore_ratio_threshold": 0.8,
             "max_trial": 1000,
-            "max_time": "PT1H15M",
-            "min_time": "PT30M"
+            "max_time": 4500.0,
+            "min_time": 1800.0
           },
           "description": "Conditions to end trial generation."
         },
