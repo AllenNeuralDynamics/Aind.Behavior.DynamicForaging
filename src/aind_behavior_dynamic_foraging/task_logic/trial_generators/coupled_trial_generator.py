@@ -20,18 +20,27 @@ BlockBehaviorEvaluationMode = Literal[
 
 
 class CoupledTrialGenerationEndConditions(BaseModel):
-    ignore_win: int = Field(default=30, title="Window of trials to check ignored responses")
+    """Defines the conditions under which a foraging session should terminate."""
+
+    ignore_win: int = Field(default=30, ge=0, description="Number of recent trials to check for ignored responses.")
     ignore_ratio_threshold: float = Field(
-        default=0.8, title="Threshold for acceptable ignored trials within window.", ge=0, le=1
+        default=0.8,
+        ge=0,
+        le=1,
+        description="Maximum fraction of ignored trials within the window before the session is ended.",
     )
-    max_trial: int = Field(default=1000, title="Maximal number of trials")
-    max_time: timedelta = Field(timedelta(minutes=75), title="Maximal session time (min)")
-    min_time: timedelta = Field(default=timedelta(minutes=30), title="Minimum session time (min)")
+    max_trial: int = Field(default=1000, ge=0, description="Maximum number of trials allowed in a session.")
+    max_time: timedelta = Field(timedelta(minutes=75), description="Maximum session duration (min).")
+    min_time: timedelta = Field(default=timedelta(minutes=30), description="Minimum session duration (min)")
 
 
 class BehaviorStabilityParameters(BaseModel):
+    """Parameters controlling when behavior is considered stable enough to switch blocks."""
+
     behavior_evaluation_mode: BlockBehaviorEvaluationMode = Field(
-        default="end", title="Mode to evaluate behavior stability.", validate_default=True
+        default="end",
+        description="When to evaluate stability — at the end of the block (end) or at any point during the block (anytime).",
+        validate_default=True,
     )
     behavior_stability_fraction: float = Field(
         default=0.5,
@@ -41,6 +50,7 @@ class BehaviorStabilityParameters(BaseModel):
     )
     min_consecutive_stable_trials: int = Field(
         default=5,
+        ge=0,
         description="Minimum number of consecutive trials satisfying the behavioral stability fraction.",
     )
 
@@ -54,11 +64,11 @@ class CoupledTrialGeneratorSpec(BlockBasedTrialGeneratorSpec):
 
     behavior_stability_parameters: Optional[BehaviorStabilityParameters] = Field(
         default=BehaviorStabilityParameters(),
-        description="Parameters describing behavior stability required to switch blocks.",
+        description="Parameters controlling behavior-dependent block switching. If None, block switches rely only on length and reward criteria.",
     )
     extend_block_on_no_response: bool = Field(
         default=True,
-        description="Add one trial to the min block length.",
+        description="Whether to extend the minimum block length by one trial when the animal does not respond.",
     )
 
     def create_generator(self) -> "CoupledTrialGenerator":
@@ -66,17 +76,38 @@ class CoupledTrialGeneratorSpec(BlockBasedTrialGeneratorSpec):
 
 
 class CoupledTrialGenerator(BlockBasedTrialGenerator):
+    """Trial generator for a coupled block-based dynamic foraging task.
+
+    Extends BlockBasedTrialGenerator with session end conditions, baiting state
+    management, and behavior-dependent block switching.
+
+    Attributes:
+        spec: The CoupledTrialGeneratorSpec defining task parameters.
+        start_time: Timestamp recorded at initialization, used to track elapsed
+            session time.
+    """
+
     spec: CoupledTrialGeneratorSpec
 
     def __init__(self, spec: CoupledTrialGeneratorSpec) -> None:
-        """"""
+        """Initializes the generator and records the session start time.
+
+        Args:
+            spec: The CoupledTrialGeneratorSpec defining task parameters.
+        """
 
         super().__init__(spec)
         self.start_time = datetime.now()
 
-    def are_end_conditions_met(self) -> bool:
-        """
-        Check if end conditions are met to stop session
+    def _are_end_conditions_met(self) -> bool:
+        """Checks whether the session should end.
+
+        Evaluates three termination conditions: excessive ignored trials after
+        minimum session time, maximum session time exceeded, and maximum trial
+        count exceeded.
+
+        Returns:
+            True if any end condition is met, False otherwise.
         """
 
         end_conditions = self.spec.trial_generation_end_parameters
@@ -101,10 +132,14 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
         return False
 
     def update(self, outcome: TrialOutcome) -> None:
-        """
-        Check if block should switch, generate next block if necessary, and  generate next trial
+        """Updates generator state from the previous trial outcome and switches block if criteria are met.
 
-        :param outcome: trial outcome of previous trial
+        Records choice and reward history, manages baiting state, optionally extends
+        the block on no response, and triggers a block switch if all switch criteria
+        are satisfied.
+
+        Args:
+            outcome: The TrialOutcome from the most recently completed trial.
         """
 
         logger.info(f"Updating coupled trial generator with trial outcome of {outcome}")
@@ -113,8 +148,8 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
         self.reward_history.append(outcome.is_rewarded)
         self.trials_in_block += 1
 
-        if self.spec.baiting:
-            if outcome.is_right_choice is True:
+        if self.spec.is_baiting:
+            if outcome.is_right_choice:
                 logger.debug("Resesting right bait.")
                 self.is_right_baited = False
             elif outcome.is_right_choice is False:
@@ -125,14 +160,12 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
             logger.info("Extending minimum block length due to ignored trial.")
             self.block.min_length += 1
 
-        switch_block = self.is_block_switch_allowed(
+        switch_block = self._is_block_switch_allowed(
             trials_in_block=self.trials_in_block,
             min_block_reward=self.spec.min_block_reward,
-            block_left_rewards=self.reward_history.count(False),
-            block_right_rewards=self.reward_history.count(True),
             choice_history=self.is_right_choice_history,
-            right_reward_prob=self.block.right_reward_prob,
-            left_reward_prob=self.block.left_reward_prob,
+            p_right_reward=self.block.p_right_reward,
+            l_right_reward=self.block.l_right_reward,
             beh_stability_params=self.spec.behavior_stability_parameters,
             block_length=self.block.min_length,
             kernel_size=self.spec.kernel_size,
@@ -141,46 +174,56 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
         if switch_block:
             logger.info("Switching block.")
             self.trials_in_block = 0
-            self.block = self.generate_next_block(
-                reward_families=self.spec.reward_family,
-                reward_family_index=self.spec.reward_probability_parameters.family,
-                reward_pairs_n=self.spec.reward_probability_parameters.pairs_n,
+            self.block = self._generate_next_block(
+                reward_pairs=self.spec.reward_probability_parameters.reward_pairs,
                 base_reward_sum=self.spec.reward_probability_parameters.base_reward_sum,
                 current_block=self.block,
-                block_len_distribution=self.spec.block_len_distribution,
+                block_len=self.spec.block_len,
             )
             self.block_history.append(self.block)
 
-    def is_behavior_stable(
+    def _is_behavior_stable(
         self,
         choice_history: list,
-        right_reward_prob: float,
-        left_reward_prob: float,
+        p_right_reward: float,
+        l_right_reward: float,
         beh_stability_params: BehaviorStabilityParameters,
         trials_in_block: int,
         kernel_size: int = 2,
     ) -> Optional[bool]:
-        """
-        This function replaces _check_advanced_block_switch. Checks if behavior within block
-        allows for switching
+        """Evaluates whether the animal's choice behavior is stable enough to allow a block switch.
 
-        choice_history: 1D array with 0: left, 1: right and None: ignored entries.
-        right_reward_prob: reward probability for right side
-        left_reward_prob: reward probability for left side
-        beh_stability_params: Parameters to evaluate behavior
-        trials_in_block: number of trials in current block. In couple trials, both sides have same block length so block length is int.
-        kernel_size: kernel to evaluate choice fraction
+        Computes a sliding-window choice fraction and checks whether it falls within
+        a threshold derived from the reward probability difference. Stability is
+        assessed either at the end of the block or at any point, depending on
+        the evaluation mode.
 
+        Args:
+            choice_history: Trial history with True for right, False for left,
+                and None for ignored trials.
+            p_right_reward: Reward probability for the right port in the current block.
+            l_right_reward: Reward probability for the left port in the current block.
+            beh_stability_params: Parameters defining the stability threshold and
+                evaluation mode.
+            trials_in_block: Number of trials elapsed in the current block.
+            kernel_size: Sliding window size for computing choice fraction.
+
+        Returns:
+            True if behavior is stable or evaluation is skipped, False if behavior
+            does not meet the stability criterion.
+
+        Raises:
+            ValueError: If the behavior evaluation mode is not recognized.
         """
 
         logger.info("Evaluating block behavior.")
 
         # do not prohibit block transition if does not rely on behavior or not enough trials to evaluate or reward probs are the same.
-        if not beh_stability_params or left_reward_prob == right_reward_prob or len(choice_history) < kernel_size:
+        if not beh_stability_params or l_right_reward == p_right_reward or len(choice_history) < kernel_size:
             logger.debug(
                 "Behavior stability evaluation skipped: "
                 f"parameters_missing={not bool(beh_stability_params)}, "
-                f"rewards_equal={left_reward_prob == right_reward_prob}, "
+                f"rewards_equal={l_right_reward == p_right_reward}, "
                 f"trials_available={len(choice_history)} < kernel_size({kernel_size})"
             )
             return True
@@ -191,10 +234,8 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
         logger.debug(f"Choice fraction of block is {block_choice_frac}.")
 
         # margin based on right and left probabilities and scaled by switch threshold. Window for evaluating behavior
-        delta = abs((left_reward_prob - right_reward_prob) * float(beh_stability_params.behavior_stability_fraction))
-        threshold = (
-            [0, left_reward_prob - delta] if left_reward_prob > right_reward_prob else [left_reward_prob + delta, 1]
-        )
+        delta = abs((l_right_reward - p_right_reward) * float(beh_stability_params.behavior_stability_fraction))
+        threshold = [0, l_right_reward - delta] if l_right_reward > p_right_reward else [l_right_reward + delta, 1]
         logger.debug(f"Behavior stability threshold applied: {threshold}")
 
         # block_choice_fractions above threshold
@@ -236,11 +277,18 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
 
     @staticmethod
     def compute_choice_fraction(kernel_size: int, choice_history: list[int | None]):
-        """
-        Compute fraction of right choices with running average using a sliding window
+        """Computes a sliding-window fraction of right choices over the trial history.
 
-        :param kernel_size: kernel to evaluate choice fraction
-        :param choice_history: 1D array with 0: left, 1: right and None: ignored entries.
+        Ignores None (no-response) trials by treating them as NaN in the mean.
+
+        Args:
+            kernel_size: Number of trials in each sliding window.
+            choice_history: Trial history with 1 for right, 0 for left, and
+                None for ignored trials.
+
+        Returns:
+            Array of per-window right-choice fractions, of length
+            len(choice_history) - kernel_size + 1.
         """
 
         n_windows = len(choice_history) - kernel_size + 1
@@ -250,30 +298,36 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
             choice_fraction[i] = np.nanmean(window)
         return choice_fraction
 
-    def is_block_switch_allowed(
+    def _is_block_switch_allowed(
         self,
         trials_in_block: int,
         min_block_reward: int,
-        block_left_rewards: int,
-        block_right_rewards: int,
         choice_history: list,
-        right_reward_prob: float,
-        left_reward_prob: float,
+        p_right_reward: float,
+        l_right_reward: float,
         beh_stability_params: BehaviorStabilityParameters,
         block_length: int,
         kernel_size: int = 2,
     ) -> bool:
-        """
-        trials_in_block: number of trials in block
-        min_block_reward: minimum reward to allow switching
-        block_left_rewards: number of left rewarded trials in current block
-        block_right_rewards: number of left rewarded trials in current block
-        choice_history: 2D array (rows = sides, columns = trials) with 0: left, 1: right and 2: ignored entries.
-        right_reward_prob: reward probability for right side
-        left_reward_prob: reward probability for left side
-        beh_stability_params: parameters to evaluate behavior
-        block_length: planned number of trials in current block. In couple trials, both sides have same block length so block length is int.
-        kernel_size: kernel to evaluate choice fraction
+        """Determines whether all criteria are met to switch to the next block.
+
+        A block switch requires: the planned block length has been reached, the
+        minimum reward count has been collected, and behavior meets the stability
+        criterion.
+
+        Args:
+            trials_in_block: Number of trials elapsed in the current block.
+            min_block_reward: Minimum total rewards required before switching.
+            choice_history: Trial history with True for right, False for left,
+                and None for ignored trials.
+            p_right_reward: Reward probability for the right port in the current block.
+            l_right_reward: Reward probability for the left port in the current block.
+            beh_stability_params: Parameters defining the behavior stability criterion.
+            block_length: Planned minimum number of trials in the current block.
+            kernel_size: Sliding window size for computing choice fraction.
+
+        Returns:
+            True if all switch criteria are satisfied, False otherwise.
         """
 
         logger.info("Evaluating block switch.")
@@ -283,10 +337,10 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
         logger.debug(f"Planned block length reached: {block_length_ok}")
 
         # is behavior qualified to switch?
-        behavior_ok = self.is_behavior_stable(
+        behavior_ok = self._is_behavior_stable(
             choice_history,
-            right_reward_prob,
-            left_reward_prob,
+            p_right_reward,
+            l_right_reward,
             beh_stability_params,
             trials_in_block,
             kernel_size,
@@ -294,7 +348,7 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
         logger.debug(f"Behavior meets stability criteria: {behavior_ok}")
 
         # has reward criteria been met?
-        reward_ok = block_left_rewards + block_right_rewards >= min_block_reward
+        reward_ok = self.reward_history.count(False) + self.reward_history.count(True) >= min_block_reward
         logger.debug(f"Reward criterion satisfied: {reward_ok}")
 
         # conditions to switch:
