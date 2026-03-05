@@ -121,12 +121,20 @@
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:WithLatestFrom" />
                   </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Take">
+                      <rx:Count>1</rx:Count>
+                    </Combinator>
+                  </Expression>
                   <Expression xsi:type="MemberSelector">
                     <Selector>Item2</Selector>
                   </Expression>
                   <Expression xsi:type="scr:ExpressionSink">
                     <scr:Name>Reset</scr:Name>
                     <scr:Expression>it.Reset()</scr:Expression>
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>GlobalAutoWaterState</Name>
                   </Expression>
                   <Expression xsi:type="WorkflowOutput" />
                 </Nodes>
@@ -136,6 +144,8 @@
                   <Edge From="2" To="3" Label="Source1" />
                   <Edge From="3" To="4" Label="Source1" />
                   <Edge From="4" To="5" Label="Source1" />
+                  <Edge From="5" To="6" Label="Source1" />
+                  <Edge From="6" To="7" Label="Source1" />
                 </Edges>
               </Workflow>
             </Expression>
@@ -1116,12 +1126,20 @@
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="rx:WithLatestFrom" />
                               </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:Take">
+                                  <rx:Count>1</rx:Count>
+                                </Combinator>
+                              </Expression>
                               <Expression xsi:type="MemberSelector">
                                 <Selector>Item2</Selector>
                               </Expression>
                               <Expression xsi:type="scr:ExpressionSink">
                                 <scr:Name>Reset</scr:Name>
                                 <scr:Expression>it.Reset()</scr:Expression>
+                              </Expression>
+                              <Expression xsi:type="MulticastSubject">
+                                <Name>GlobalAutoWaterState</Name>
                               </Expression>
                               <Expression xsi:type="WorkflowOutput" />
                             </Nodes>
@@ -1131,6 +1149,8 @@
                               <Edge From="2" To="3" Label="Source1" />
                               <Edge From="3" To="4" Label="Source1" />
                               <Edge From="4" To="5" Label="Source1" />
+                              <Edge From="5" To="6" Label="Source1" />
+                              <Edge From="6" To="7" Label="Source1" />
                             </Edges>
                           </Workflow>
                         </Expression>
