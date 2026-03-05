@@ -22,5 +22,5 @@ class ITrialGenerator(Protocol):
     def next(self) -> Trial | None:
         """Return the next trial to run. Return None if there are no more trials to run."""
 
-    def update(self, outcome: TrialOutcome) -> None:
+    def update(self, outcome: TrialOutcome | str) -> None:
         """Update the trial generator with the outcome of the previous trial."""
