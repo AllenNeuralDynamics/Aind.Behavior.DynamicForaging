@@ -30,7 +30,7 @@ class CoupledTrialGenerationEndConditions(BaseModel):
         description="Maximum fraction of ignored trials within the window before the session is ended.",
     )
     max_trial: int = Field(default=1000, ge=0, description="Maximum number of trials allowed in a session.")
-    max_time: timedelta = Field(timedelta(minutes=75), description="Maximum session duration (min).")
+    max_time: timedelta = Field(default=timedelta(minutes=75), description="Maximum session duration (min).")
     min_time: timedelta = Field(default=timedelta(minutes=30), description="Minimum session duration (min)")
 
 
@@ -59,7 +59,7 @@ class CoupledTrialGeneratorSpec(BlockBasedTrialGeneratorSpec):
     type: Literal["CoupledTrialGenerator"] = "CoupledTrialGenerator"
 
     trial_generation_end_parameters: CoupledTrialGenerationEndConditions = Field(
-        default=CoupledTrialGenerationEndConditions(), description="Conditions to end trial generation."
+        default=CoupledTrialGenerationEndConditions(), description="Conditions to end trial generation.", validate_default=True
     )
 
     behavior_stability_parameters: Optional[BehaviorStabilityParameters] = Field(
