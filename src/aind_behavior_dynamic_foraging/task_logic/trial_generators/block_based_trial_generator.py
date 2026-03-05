@@ -176,6 +176,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             response_deadline_duration=self.spec.response_duration,
             quiescence_period_duration=quiescent,
             inter_trial_interval_duration=iti,
+            lickspout_offset_delta=.5 if self.trials_in_block %2 == 0 else -.5
         )
 
     @abstractmethod
