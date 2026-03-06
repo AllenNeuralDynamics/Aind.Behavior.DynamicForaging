@@ -39,6 +39,7 @@ dev = [
     "ruff",
     "codespell",
     "aind-behavior-dynamic-foraging[data]",
+    "aind-clabe[aind-services]>=0.10"
 ]
 
 docs = [
