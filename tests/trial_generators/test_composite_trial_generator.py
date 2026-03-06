@@ -29,7 +29,7 @@ class MockTrialGenerator(ITrialGenerator):
             return None
         return Trial(p_reward_left=1.0, p_reward_right=1.0)
 
-    def update(self, outcome: TrialOutcome) -> None:
+    def update(self, outcome: TrialOutcome | str) -> None:
         self.trial_count += 1
 
 
