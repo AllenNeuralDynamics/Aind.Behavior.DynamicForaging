@@ -841,7 +841,7 @@
             <Expression xsi:type="beh:CreateMessage">
               <harp:MessageType>Write</harp:MessageType>
               <harp:Payload xsi:type="beh:CreateStartCamerasPayload">
-                <beh:StartCameras>CameraOutput0</beh:StartCameras>
+                <beh:StartCameras>CameraOutput1</beh:StartCameras>
               </harp:Payload>
             </Expression>
             <Expression xsi:type="BitwiseNot" />
@@ -861,7 +861,7 @@
             <Expression xsi:type="beh:CreateMessage">
               <harp:MessageType>Write</harp:MessageType>
               <harp:Payload xsi:type="beh:CreateStopCamerasPayload">
-                <beh:StopCameras>CameraOutput0</beh:StopCameras>
+                <beh:StopCameras>CameraOutput1</beh:StopCameras>
               </harp:Payload>
             </Expression>
             <Expression xsi:type="Combinator">
