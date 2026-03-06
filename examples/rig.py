@@ -13,6 +13,7 @@ from aind_behavior_services.rig.harp import (
     HarpLicketySplit,
     HarpSniffDetector,
     HarpWhiteRabbit,
+    HarpEnvironmentSensor
 )
 from aind_behavior_services.rig.water_valve import Measurement, calibrate_water_valves
 
@@ -48,26 +49,27 @@ rig = AindDynamicForagingRig(
     triggered_camera_controller=cameras.CameraController[cameras.SpinnakerCamera](
         frame_rate=120,
         cameras={
-            "FaceCamera": cameras.SpinnakerCamera(
-                serial_number="SerialNumber", binning=1, exposure=5000, gain=0, video_writer=video_writer
+            "BodyCamera": cameras.SpinnakerCamera(
+                serial_number="23349426", binning=1, exposure=1000, gain=8, video_writer=None
             ),
             "SideCamera": cameras.SpinnakerCamera(
-                serial_number="SerialNumber", binning=1, exposure=5000, gain=0, video_writer=video_writer
+                serial_number="23349424", binning=1, exposure=1000, gain=8, video_writer=None
             ),
+            
         },
     ),
     monitoring_camera_controller=None,
     harp_behavior=HarpBehavior(port_name="COM3"),
-    harp_lickometer_left=HarpLicketySplit(port_name="COM5"),
+    harp_lickometer_left=None,
     harp_lickometer_right=None,
-    harp_clock_generator=HarpWhiteRabbit(port_name="COM6"),
-    harp_sniff_detector=HarpSniffDetector(port_name="COM7"),
+    harp_clock_generator=HarpWhiteRabbit(port_name="COM11"),
     manipulator=AindManipulator(port_name="COM9", calibration=manipulator_calibration),
     calibration=RigCalibration(
         water_valve_left=water_valve_calibration,
         water_valve_right=water_valve_calibration,
     ),
-    harp_sound_card=DynamicForagingSoundCard(port_name="COM8"),
+    harp_sound_card=DynamicForagingSoundCard(port_name="COM4"),
+    harp_environment_sensor=HarpEnvironmentSensor(port_name="COM10")
 )
 
 
