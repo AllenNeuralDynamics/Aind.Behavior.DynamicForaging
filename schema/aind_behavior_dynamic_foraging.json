@@ -3,7 +3,7 @@
     "AindDynamicForagingRig": {
       "properties": {
         "aind_behavior_services_pkg_version": {
-          "default": "0.13.0",
+          "default": "0.13.2",
           "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
           "title": "aind_behavior_services package version",
           "type": "string"
@@ -195,109 +195,10 @@
           "title": "Rng Seed"
         },
         "aind_behavior_services_pkg_version": {
-          "default": "0.13.0",
+          "default": "0.13.2",
           "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
           "title": "aind_behavior_services package version",
           "type": "string"
-        },
-        "block_parameters": {
-          "$ref": "#/$defs/BlockParameters",
-          "default": {
-            "min": 20,
-            "max": 60,
-            "beta": 20,
-            "min_reward": 1
-          },
-          "description": "Parameters describing block conditions."
-        },
-        "reward_probability": {
-          "$ref": "#/$defs/RewardProbability",
-          "default": {
-            "base_reward_sum": 0.8,
-            "family": 1,
-            "pairs_n": 1
-          },
-          "description": "Parameters describing reward_probability."
-        },
-        "uncoupled_reward": {
-          "default": [
-            0.1,
-            0.3,
-            0.7
-          ],
-          "oneOf": [
-            {
-              "items": {
-                "type": "number"
-              },
-              "maxItems": 3,
-              "minItems": 3,
-              "type": "array"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "title": "Uncoupled reward"
-        },
-        "randomness": {
-          "default": "Exponential",
-          "enum": [
-            "Exponential",
-            "Even"
-          ],
-          "title": "Randomness mode",
-          "type": "string"
-        },
-        "delay_period": {
-          "$ref": "#/$defs/DelayPeriod",
-          "default": {
-            "min": 0.0,
-            "max": 1.0,
-            "beta": 1.0
-          },
-          "description": "Parameters describing delay period."
-        },
-        "reward_delay": {
-          "default": 0,
-          "title": "Reward delay (sec)",
-          "type": "number"
-        },
-        "auto_water": {
-          "default": null,
-          "description": "Parameters describing auto water.",
-          "oneOf": [
-            {
-              "$ref": "#/$defs/aind_behavior_dynamic_foraging__task_logic__AutoWater"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "inter_trial_interval": {
-          "$ref": "#/$defs/InterTrialInterval",
-          "description": "Parameters describing iti."
-        },
-        "response_time": {
-          "$ref": "#/$defs/Response",
-          "default": {
-            "response_time": 1.0,
-            "reward_consume_time": 3.0
-          },
-          "description": "Parameters describing response time."
-        },
-        "auto_block": {
-          "default": null,
-          "description": "Parameters describing auto advancement to next block.",
-          "oneOf": [
-            {
-              "$ref": "#/$defs/AutoBlock"
-            },
-            {
-              "type": "null"
-            }
-          ]
         },
         "reward_size": {
           "$ref": "#/$defs/RewardSize",
@@ -306,48 +207,6 @@
             "left_value_volume": 3.0
           },
           "description": "Parameters describing reward size."
-        },
-        "warmup": {
-          "default": null,
-          "description": "Parameters describing warmup.",
-          "oneOf": [
-            {
-              "$ref": "#/$defs/Warmup"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "no_response_trial_addition": {
-          "default": true,
-          "description": "Add one trial to the block length on both lickspouts.",
-          "title": "No Response Trial Addition",
-          "type": "boolean"
-        },
-        "reward_n": {
-          "default": null,
-          "oneOf": [
-            {
-              "$ref": "#/$defs/RewardN"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "lick_spout_retraction": {
-          "default": false,
-          "description": "Lick spout retraction enabled.",
-          "oneOf": [
-            {
-              "type": "boolean"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "title": "Lick Spout Retraction"
         },
         "trial_generator": {
           "$ref": "#/$defs/TrialGeneratorSpec",
@@ -574,31 +433,6 @@
       "title": "AuditorySecondaryReinforcer",
       "type": "object"
     },
-    "AutoBlock": {
-      "properties": {
-        "advanced_block_auto": {
-          "default": "now",
-          "enum": [
-            "now",
-            "once"
-          ],
-          "title": "Auto block mode",
-          "type": "string"
-        },
-        "switch_thr": {
-          "default": 0.5,
-          "title": "Switch threshold for auto block",
-          "type": "number"
-        },
-        "points_in_a_row": {
-          "default": 5,
-          "title": "Points in a row for auto block",
-          "type": "integer"
-        }
-      },
-      "title": "AutoBlock",
-      "type": "object"
-    },
     "Axis": {
       "description": "Motor axis available",
       "enum": [
@@ -680,30 +514,183 @@
       "title": "BaseModel",
       "type": "object"
     },
-    "BlockParameters": {
+    "BehaviorStabilityParameters": {
+      "description": "Parameters controlling when behavior is considered stable enough to switch blocks.",
       "properties": {
-        "min": {
-          "default": 20,
-          "title": "Block length (min)",
-          "type": "integer"
+        "behavior_evaluation_mode": {
+          "default": "end",
+          "description": "When to evaluate stability \u2014 at the end of the block (end) or at any point during the block (anytime).",
+          "enum": [
+            "end",
+            "anytime"
+          ],
+          "title": "Behavior Evaluation Mode",
+          "type": "string"
         },
-        "max": {
-          "default": 60,
-          "title": "Block length (max)",
-          "type": "integer"
+        "behavior_stability_fraction": {
+          "default": 0.5,
+          "description": "Fraction scaling reward-probability difference for behavior.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Behavior Stability Fraction",
+          "type": "number"
         },
-        "beta": {
-          "default": 20,
-          "title": "Block length (beta)",
-          "type": "integer"
-        },
-        "min_reward": {
-          "default": 1,
-          "title": "Minimal rewards in a block to switch",
+        "min_consecutive_stable_trials": {
+          "default": 5,
+          "description": "Minimum number of consecutive trials satisfying the behavioral stability fraction.",
+          "minimum": 0,
+          "title": "Min Consecutive Stable Trials",
           "type": "integer"
         }
       },
-      "title": "BlockParameters",
+      "title": "BehaviorStabilityParameters",
+      "type": "object"
+    },
+    "BetaDistribution": {
+      "description": "A beta probability distribution.\n\nContinuous distribution bounded between 0 and 1. Commonly used\nfor modeling probabilities and proportions.",
+      "properties": {
+        "family": {
+          "const": "Beta",
+          "default": "Beta",
+          "title": "Family",
+          "type": "string"
+        },
+        "distribution_parameters": {
+          "$ref": "#/$defs/BetaDistributionParameters",
+          "default": {
+            "family": "Beta",
+            "alpha": 5.0,
+            "beta": 5.0
+          },
+          "description": "Parameters of the distribution"
+        },
+        "truncation_parameters": {
+          "default": null,
+          "description": "Truncation parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TruncationParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scaling_parameters": {
+          "default": null,
+          "description": "Scaling parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ScalingParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "title": "BetaDistribution",
+      "type": "object"
+    },
+    "BetaDistributionParameters": {
+      "description": "Parameters for a beta distribution.\n\nDefined by alpha and beta shape parameters.",
+      "properties": {
+        "family": {
+          "const": "Beta",
+          "default": "Beta",
+          "title": "Family",
+          "type": "string"
+        },
+        "alpha": {
+          "default": 5,
+          "description": "Alpha parameter of the distribution",
+          "minimum": 0,
+          "title": "Alpha",
+          "type": "number"
+        },
+        "beta": {
+          "default": 5,
+          "description": "Beta parameter of the distribution",
+          "minimum": 0,
+          "title": "Beta",
+          "type": "number"
+        }
+      },
+      "title": "BetaDistributionParameters",
+      "type": "object"
+    },
+    "BinomialDistribution": {
+      "description": "A binomial probability distribution.\n\nModels the number of successes in a fixed number of independent\nBernoulli trials with constant success probability.",
+      "properties": {
+        "family": {
+          "const": "Binomial",
+          "default": "Binomial",
+          "title": "Family",
+          "type": "string"
+        },
+        "distribution_parameters": {
+          "$ref": "#/$defs/BinomialDistributionParameters",
+          "default": {
+            "family": "Binomial",
+            "n": 1,
+            "p": 0.5
+          },
+          "description": "Parameters of the distribution"
+        },
+        "truncation_parameters": {
+          "default": null,
+          "description": "Truncation parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TruncationParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scaling_parameters": {
+          "default": null,
+          "description": "Scaling parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ScalingParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "title": "BinomialDistribution",
+      "type": "object"
+    },
+    "BinomialDistributionParameters": {
+      "description": "Parameters for a binomial distribution.\n\nDefined by number of trials (n) and success probability (p).",
+      "properties": {
+        "family": {
+          "const": "Binomial",
+          "default": "Binomial",
+          "title": "Family",
+          "type": "string"
+        },
+        "n": {
+          "default": 1,
+          "description": "Number of trials",
+          "minimum": 0,
+          "title": "N",
+          "type": "integer"
+        },
+        "p": {
+          "default": 0.5,
+          "description": "Probability of success",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "P",
+          "type": "number"
+        }
+      },
+      "title": "BinomialDistributionParameters",
       "type": "object"
     },
     "CameraController_SpinnakerCamera_": {
@@ -832,6 +819,47 @@
       "title": "ConnectedClockOutput",
       "type": "object"
     },
+    "CoupledTrialGenerationEndConditions": {
+      "description": "Defines the conditions under which a foraging session should terminate.",
+      "properties": {
+        "ignore_win": {
+          "default": 30,
+          "description": "Number of recent trials to check for ignored responses.",
+          "minimum": 0,
+          "title": "Ignore Win",
+          "type": "integer"
+        },
+        "ignore_ratio_threshold": {
+          "default": 0.8,
+          "description": "Maximum fraction of ignored trials within the window before the session is ended.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Ignore Ratio Threshold",
+          "type": "number"
+        },
+        "max_trial": {
+          "default": 1000,
+          "description": "Maximum number of trials allowed in a session.",
+          "minimum": 0,
+          "title": "Max Trial",
+          "type": "integer"
+        },
+        "max_time": {
+          "default": 4500,
+          "description": "Maximum session duration (sec).",
+          "title": "Max Time",
+          "type": "number"
+        },
+        "min_time": {
+          "default": 1800,
+          "description": "Minimum session duration (sec)",
+          "title": "Min Time",
+          "type": "number"
+        }
+      },
+      "title": "CoupledTrialGenerationEndConditions",
+      "type": "object"
+    },
     "CoupledTrialGeneratorSpec": {
       "properties": {
         "type": {
@@ -840,31 +868,8 @@
           "title": "Type",
           "type": "string"
         },
-        "iti": {
-          "default": {
-            "family": "Exponential",
-            "distribution_parameters": {
-              "family": "Exponential",
-              "rate": 0.5
-            },
-            "truncation_parameters": {
-              "max": 8.0,
-              "min": 1.0,
-              "truncation_mode": "exclude"
-            },
-            "scaling_parameters": null
-          },
-          "oneOf": [
-            {
-              "$ref": "#/$defs/UniformDistribution"
-            },
-            {
-              "$ref": "#/$defs/ExponentialDistribution"
-            }
-          ],
-          "title": "Iti"
-        },
-        "quiescent_period": {
+        "quiescent_duration": {
+          "$ref": "#/$defs/Distribution",
           "default": {
             "family": "Exponential",
             "distribution_parameters": {
@@ -878,28 +883,41 @@
             },
             "scaling_parameters": null
           },
-          "oneOf": [
-            {
-              "$ref": "#/$defs/UniformDistribution"
-            },
-            {
-              "$ref": "#/$defs/ExponentialDistribution"
-            }
-          ],
-          "title": "Quiescent Period"
+          "description": "Distribution describing the quiescence period before trial starts (in seconds). Each lick resets the timer."
         },
-        "response_time": {
+        "response_duration": {
           "default": 1.0,
-          "title": "Response time",
+          "description": "Duration after go cue for animal response.",
+          "minimum": 0,
+          "title": "Response Duration",
           "type": "number"
         },
-        "reward_consume_time": {
+        "reward_consumption_duration": {
           "default": 3.0,
-          "description": "Time of the no-lick period before trial end",
-          "title": "Reward consume time",
+          "description": "Duration of reward consumption before transition to ITI (in seconds).",
+          "minimum": 0,
+          "title": "Reward Consumption Duration",
           "type": "number"
         },
-        "block_parameters": {
+        "inter_trial_interval_duration": {
+          "$ref": "#/$defs/Distribution",
+          "default": {
+            "family": "Exponential",
+            "distribution_parameters": {
+              "family": "Exponential",
+              "rate": 0.5
+            },
+            "truncation_parameters": {
+              "max": 8.0,
+              "min": 1.0,
+              "truncation_mode": "exclude"
+            },
+            "scaling_parameters": null
+          },
+          "description": "Distribution describing the inter-trial interval (in seconds)."
+        },
+        "block_len": {
+          "$ref": "#/$defs/Distribution",
           "default": {
             "family": "Exponential",
             "distribution_parameters": {
@@ -913,185 +931,126 @@
             },
             "scaling_parameters": null
           },
-          "oneOf": [
-            {
-              "$ref": "#/$defs/UniformDistribution"
-            },
-            {
-              "$ref": "#/$defs/ExponentialDistribution"
-            }
-          ],
-          "title": "Block Parameters"
+          "description": "Distribution describing block length."
         },
-        "min_reward": {
+        "min_block_reward": {
           "default": 1,
+          "minimum": 0,
           "title": "Minimal rewards in a block to switch",
           "type": "integer"
         },
-        "auto_water": {
-          "default": null,
-          "description": "Parameters describing auto water.",
-          "oneOf": [
-            {
-              "$ref": "#/$defs/aind_behavior_dynamic_foraging__task_logic__trial_generators__coupled_trial_generator__AutoWater"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "behavior_evaluation_mode": {
-          "default": "ignore",
-          "enum": [
-            "ignore",
-            "end",
-            "anytime"
-          ],
-          "title": "Auto block mode",
-          "type": "string"
-        },
-        "switch_thr": {
-          "default": 0.5,
-          "title": "Switch threshold for auto block",
-          "type": "number"
-        },
-        "points_in_a_row": {
-          "default": 5,
-          "title": "Points in a row for auto block",
-          "type": "integer"
-        },
-        "warmup": {
-          "default": null,
-          "description": "Parameters describing warmup.",
-          "oneOf": [
-            {
-              "$ref": "#/$defs/Warmup"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "no_response_trial_addition": {
-          "default": true,
-          "description": "Add one trial to the block length on both lickspouts.",
-          "title": "No Response Trial Addition",
-          "type": "boolean"
-        },
         "kernel_size": {
+          "default": 2,
+          "description": "Kernel to evaluate choice fraction.",
           "title": "Kernel Size",
           "type": "integer"
         },
-        "reward_probability_specs": {
-          "$ref": "#/$defs/RewardProbability",
+        "reward_probability_parameters": {
+          "$ref": "#/$defs/RewardProbabilityParameters",
           "default": {
             "base_reward_sum": 0.8,
-            "family": 1,
-            "pairs_n": 1
-          }
-        },
-        "reward_family": {
-          "default": [
-            [
+            "reward_pairs": [
               [
-                8,
-                1
-              ],
-              [
-                6,
-                1
-              ],
-              [
-                3,
-                1
-              ],
-              [
-                1,
-                1
-              ]
-            ],
-            [
-              [
-                8,
-                1
-              ],
-              [
-                1,
-                1
-              ]
-            ],
-            [
-              [
-                1,
-                0
-              ],
-              [
-                0.9,
-                0.1
-              ],
-              [
-                0.8,
-                0.2
-              ],
-              [
-                0.7,
-                0.3
-              ],
-              [
-                0.6,
-                0.4
-              ],
-              [
-                0.5,
-                0.5
-              ]
-            ],
-            [
-              [
-                6,
-                1
-              ],
-              [
-                3,
-                1
-              ],
-              [
-                1,
-                1
+                8.0,
+                1.0
               ]
             ]
-          ],
-          "items": {},
-          "title": "Reward Family",
-          "type": "array"
+          },
+          "description": "Parameters defining the reward probability structure."
+        },
+        "is_baiting": {
+          "default": false,
+          "description": "Whether uncollected rewards carry over to the next trial.",
+          "title": "Is Baiting",
+          "type": "boolean"
+        },
+        "trial_generation_end_parameters": {
+          "$ref": "#/$defs/CoupledTrialGenerationEndConditions",
+          "default": {
+            "ignore_win": 30,
+            "ignore_ratio_threshold": 0.8,
+            "max_trial": 1000,
+            "max_time": 4500.0,
+            "min_time": 1800.0
+          },
+          "description": "Conditions to end trial generation."
+        },
+        "behavior_stability_parameters": {
+          "default": {
+            "behavior_evaluation_mode": "end",
+            "behavior_stability_fraction": 0.5,
+            "min_consecutive_stable_trials": 5
+          },
+          "description": "Parameters controlling behavior-dependent block switching. If None, block switches rely only on length and reward criteria.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/BehaviorStabilityParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "extend_block_on_no_response": {
+          "default": true,
+          "description": "Whether to extend the minimum block length by one trial when the animal does not respond.",
+          "title": "Extend Block On No Response",
+          "type": "boolean"
         }
       },
-      "required": [
-        "kernel_size"
-      ],
       "title": "CoupledTrialGeneratorSpec",
       "type": "object"
     },
-    "DelayPeriod": {
-      "properties": {
-        "min": {
-          "default": 0.0,
-          "title": "Delay period (min) ",
-          "type": "number"
+    "Distribution": {
+      "description": "Available distributions",
+      "discriminator": {
+        "mapping": {
+          "Beta": "#/$defs/BetaDistribution",
+          "Binomial": "#/$defs/BinomialDistribution",
+          "Exponential": "#/$defs/ExponentialDistribution",
+          "Gamma": "#/$defs/GammaDistribution",
+          "LogNormal": "#/$defs/LogNormalDistribution",
+          "Normal": "#/$defs/NormalDistribution",
+          "Pdf": "#/$defs/PdfDistribution",
+          "Poisson": "#/$defs/PoissonDistribution",
+          "Scalar": "#/$defs/Scalar",
+          "Uniform": "#/$defs/UniformDistribution"
         },
-        "max": {
-          "default": 1.0,
-          "title": "Delay period (max) ",
-          "type": "number"
-        },
-        "beta": {
-          "default": 1.0,
-          "title": "Delay period (beta)",
-          "type": "number"
-        }
+        "propertyName": "family"
       },
-      "title": "DelayPeriod",
-      "type": "object"
+      "oneOf": [
+        {
+          "$ref": "#/$defs/Scalar"
+        },
+        {
+          "$ref": "#/$defs/NormalDistribution"
+        },
+        {
+          "$ref": "#/$defs/LogNormalDistribution"
+        },
+        {
+          "$ref": "#/$defs/ExponentialDistribution"
+        },
+        {
+          "$ref": "#/$defs/UniformDistribution"
+        },
+        {
+          "$ref": "#/$defs/PoissonDistribution"
+        },
+        {
+          "$ref": "#/$defs/BinomialDistribution"
+        },
+        {
+          "$ref": "#/$defs/BetaDistribution"
+        },
+        {
+          "$ref": "#/$defs/GammaDistribution"
+        },
+        {
+          "$ref": "#/$defs/PdfDistribution"
+        }
+      ],
+      "title": "Distribution"
     },
     "DynamicForagingSoundCard": {
       "description": "A calibrated sound card for the dynamic foraging rig. This is a subclass of the HarpSoundCard that includes the sound card calibration.",
@@ -1220,6 +1179,79 @@
         }
       },
       "title": "ExponentialDistributionParameters",
+      "type": "object"
+    },
+    "GammaDistribution": {
+      "description": "A gamma probability distribution.\n\nGeneralizes the exponential distribution. Used for modeling\npositive continuous variables with right-skewed distributions.",
+      "properties": {
+        "family": {
+          "const": "Gamma",
+          "default": "Gamma",
+          "title": "Family",
+          "type": "string"
+        },
+        "distribution_parameters": {
+          "$ref": "#/$defs/GammaDistributionParameters",
+          "default": {
+            "family": "Gamma",
+            "shape": 1.0,
+            "rate": 1.0
+          },
+          "description": "Parameters of the distribution"
+        },
+        "truncation_parameters": {
+          "default": null,
+          "description": "Truncation parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TruncationParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scaling_parameters": {
+          "default": null,
+          "description": "Scaling parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ScalingParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "title": "GammaDistribution",
+      "type": "object"
+    },
+    "GammaDistributionParameters": {
+      "description": "Parameters for a gamma distribution.\n\nDefined by shape (k) and rate (\u03b8\u207b\u00b9) parameters.",
+      "properties": {
+        "family": {
+          "const": "Gamma",
+          "default": "Gamma",
+          "title": "Family",
+          "type": "string"
+        },
+        "shape": {
+          "default": 1,
+          "description": "Shape parameter of the distribution",
+          "minimum": 0,
+          "title": "Shape",
+          "type": "number"
+        },
+        "rate": {
+          "default": 1,
+          "description": "Rate parameter of the distribution",
+          "minimum": 0,
+          "title": "Rate",
+          "type": "number"
+        }
+      },
+      "title": "GammaDistributionParameters",
       "type": "object"
     },
     "HarpBehavior": {
@@ -1498,30 +1530,75 @@
       "title": "IntegrationTestTrialGeneratorSpec",
       "type": "object"
     },
-    "InterTrialInterval": {
+    "LogNormalDistribution": {
+      "description": "A log-normal probability distribution.\n\nDistribution where the logarithm of the variable is normally distributed.\nAlways produces positive values and is right-skewed.",
       "properties": {
-        "min": {
-          "default": 1.0,
-          "title": "ITI (min)",
+        "family": {
+          "const": "LogNormal",
+          "default": "LogNormal",
+          "title": "Family",
+          "type": "string"
+        },
+        "distribution_parameters": {
+          "$ref": "#/$defs/LogNormalDistributionParameters",
+          "default": {
+            "family": "LogNormal",
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "description": "Parameters of the distribution"
+        },
+        "truncation_parameters": {
+          "default": null,
+          "description": "Truncation parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TruncationParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scaling_parameters": {
+          "default": null,
+          "description": "Scaling parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ScalingParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "title": "LogNormalDistribution",
+      "type": "object"
+    },
+    "LogNormalDistributionParameters": {
+      "description": "Parameters for a log-normal distribution.\n\nDefined by the mean and standard deviation of the underlying normal distribution.",
+      "properties": {
+        "family": {
+          "const": "LogNormal",
+          "default": "LogNormal",
+          "title": "Family",
+          "type": "string"
+        },
+        "mean": {
+          "default": 0,
+          "description": "Mean of the distribution",
+          "title": "Mean",
           "type": "number"
         },
-        "max": {
-          "default": 8.0,
-          "title": "ITI (max)",
-          "type": "number"
-        },
-        "beta": {
-          "default": 2.0,
-          "title": "ITI (beta)",
-          "type": "number"
-        },
-        "increase": {
-          "default": 0.0,
-          "title": "ITI increase",
+        "std": {
+          "default": 0,
+          "description": "Standard deviation of the distribution",
+          "title": "Std",
           "type": "number"
         }
       },
-      "title": "InterTrialInterval",
+      "title": "LogNormalDistributionParameters",
       "type": "object"
     },
     "ManipulatorPosition": {
@@ -1624,6 +1701,228 @@
         "Dynamic"
       ]
     },
+    "NormalDistribution": {
+      "description": "A normal (Gaussian) probability distribution.\n\nBell-shaped distribution symmetric around the mean, commonly used\nfor modeling naturally occurring random variables.",
+      "properties": {
+        "family": {
+          "const": "Normal",
+          "default": "Normal",
+          "title": "Family",
+          "type": "string"
+        },
+        "distribution_parameters": {
+          "$ref": "#/$defs/NormalDistributionParameters",
+          "default": {
+            "family": "Normal",
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "description": "Parameters of the distribution"
+        },
+        "truncation_parameters": {
+          "default": null,
+          "description": "Truncation parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TruncationParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scaling_parameters": {
+          "default": null,
+          "description": "Scaling parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ScalingParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "title": "NormalDistribution",
+      "type": "object"
+    },
+    "NormalDistributionParameters": {
+      "description": "Parameters for a normal (Gaussian) distribution.\n\nDefined by mean (center) and standard deviation (spread).",
+      "properties": {
+        "family": {
+          "const": "Normal",
+          "default": "Normal",
+          "title": "Family",
+          "type": "string"
+        },
+        "mean": {
+          "default": 0,
+          "description": "Mean of the distribution",
+          "title": "Mean",
+          "type": "number"
+        },
+        "std": {
+          "default": 0,
+          "description": "Standard deviation of the distribution",
+          "title": "Std",
+          "type": "number"
+        }
+      },
+      "title": "NormalDistributionParameters",
+      "type": "object"
+    },
+    "PdfDistribution": {
+      "description": "A custom probability density function distribution.\n\nAllows defining arbitrary discrete distributions by specifying\nprobability values and their corresponding indices.",
+      "properties": {
+        "family": {
+          "const": "Pdf",
+          "default": "Pdf",
+          "title": "Family",
+          "type": "string"
+        },
+        "distribution_parameters": {
+          "$ref": "#/$defs/PdfDistributionParameters",
+          "default": {
+            "family": "Pdf",
+            "pdf": [
+              1.0
+            ],
+            "index": [
+              0.0
+            ]
+          },
+          "description": "Parameters of the distribution"
+        },
+        "truncation_parameters": {
+          "default": null,
+          "description": "Truncation parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TruncationParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scaling_parameters": {
+          "default": null,
+          "description": "Scaling parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ScalingParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "title": "PdfDistribution",
+      "type": "object"
+    },
+    "PdfDistributionParameters": {
+      "description": "Parameters for a custom probability density function distribution.\n\nDefined by explicit probability values and their corresponding indices.\nProbabilities are automatically normalized to sum to 1.",
+      "properties": {
+        "family": {
+          "const": "Pdf",
+          "default": "Pdf",
+          "title": "Family",
+          "type": "string"
+        },
+        "pdf": {
+          "default": [
+            1
+          ],
+          "description": "The probability density function",
+          "items": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "title": "Pdf",
+          "type": "array"
+        },
+        "index": {
+          "default": [
+            0
+          ],
+          "description": "The index of the probability density function",
+          "items": {
+            "type": "number"
+          },
+          "title": "Index",
+          "type": "array"
+        }
+      },
+      "title": "PdfDistributionParameters",
+      "type": "object"
+    },
+    "PoissonDistribution": {
+      "description": "A Poisson probability distribution.\n\nModels the number of events occurring in a fixed interval of time or space\nwhen events occur independently at a constant rate.",
+      "properties": {
+        "family": {
+          "const": "Poisson",
+          "default": "Poisson",
+          "title": "Family",
+          "type": "string"
+        },
+        "distribution_parameters": {
+          "$ref": "#/$defs/PoissonDistributionParameters",
+          "default": {
+            "family": "Poisson",
+            "rate": 1.0
+          },
+          "description": "Parameters of the distribution"
+        },
+        "truncation_parameters": {
+          "default": null,
+          "description": "Truncation parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TruncationParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scaling_parameters": {
+          "default": null,
+          "description": "Scaling parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ScalingParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "title": "PoissonDistribution",
+      "type": "object"
+    },
+    "PoissonDistributionParameters": {
+      "description": "Parameters for a Poisson distribution.\n\nDefined by the rate parameter (average number of events).",
+      "properties": {
+        "family": {
+          "const": "Poisson",
+          "default": "Poisson",
+          "title": "Family",
+          "type": "string"
+        },
+        "rate": {
+          "default": 1,
+          "description": "Rate parameter of the Poisson process that generates the distribution",
+          "minimum": 0,
+          "title": "Rate",
+          "type": "number"
+        }
+      },
+      "title": "PoissonDistributionParameters",
+      "type": "object"
+    },
     "Rect": {
       "description": "Represents a rectangle defined by its top-left corner, width, and height.",
       "properties": {
@@ -1659,69 +1958,51 @@
       "title": "Rect",
       "type": "object"
     },
-    "Response": {
-      "properties": {
-        "response_time": {
-          "default": 1.0,
-          "title": "Response time",
-          "type": "number"
-        },
-        "reward_consume_time": {
-          "default": 3.0,
-          "description": "Time of the no-lick period before trial end",
-          "title": "Reward consume time",
-          "type": "number"
-        }
-      },
-      "title": "Response",
-      "type": "object"
-    },
-    "RewardN": {
-      "properties": {
-        "initial_inactive_trials": {
-          "default": 2,
-          "description": "Initial N trials of the active side where no bait will be be given.",
-          "title": "Initial Inactive Trials",
-          "type": "integer"
-        }
-      },
-      "title": "RewardN",
-      "type": "object"
-    },
-    "RewardProbability": {
+    "RewardProbabilityParameters": {
+      "description": "Defines the reward probability structure for a dynamic foraging task.\n\nReward probabilities are defined as pairs (p_left, p_right) normalized by\nbase_reward_sum. Pairs are drawn from a family representing a difficulty level:\n\n    Family 0:   [[8, 1], [6, 1], [3, 1], [1, 1]]\n    Family 1:  [[8, 1], [1, 1]]\n    Family 2:  [[1.0, 0.0], [0.9, 0.1], [0.8, 0.2], [0.7, 0.3], [0.6, 0.4], [0.5, 0.5]]\n    Family 3:  [[6, 1], [3, 1], [1, 1]]",
       "properties": {
         "base_reward_sum": {
           "default": 0.8,
-          "title": "Sum of p_reward",
+          "description": "Total reward probability shared between the two sides. Each reward pair is normalized to sum to this value.",
+          "title": "Base Reward Sum",
           "type": "number"
         },
-        "family": {
-          "default": 1,
-          "title": "Reward family",
-          "type": "integer"
-        },
-        "pairs_n": {
-          "default": 1,
-          "title": "Number of pairs",
-          "type": "integer"
+        "reward_pairs": {
+          "default": [
+            [
+              8,
+              1
+            ]
+          ],
+          "description": "List of (left, right) reward ratio pairs to sample from during block transitions. ",
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "title": "Reward Pairs",
+          "type": "array"
         }
       },
-      "title": "RewardProbability",
+      "title": "RewardProbabilityParameters",
       "type": "object"
     },
     "RewardSize": {
       "properties": {
         "right_value_volume": {
-          "default": 3.0,
           "title": "Right reward size (uL)",
           "type": "number"
         },
         "left_value_volume": {
-          "default": 3.0,
           "title": "Left reward size (uL)",
           "type": "number"
         }
       },
+      "required": [
+        "right_value_volume",
+        "left_value_volume"
+      ],
       "title": "RewardSize",
       "type": "object"
     },
@@ -1742,6 +2023,58 @@
         "water_valve_right"
       ],
       "title": "RigCalibration",
+      "type": "object"
+    },
+    "Scalar": {
+      "description": "A scalar distribution that returns a constant value.\n\nUseful for fixed parameters that don't vary across trials or samples.",
+      "properties": {
+        "family": {
+          "const": "Scalar",
+          "default": "Scalar",
+          "title": "Family",
+          "type": "string"
+        },
+        "distribution_parameters": {
+          "$ref": "#/$defs/ScalarDistributionParameter",
+          "default": {
+            "family": "Scalar",
+            "value": 0.0
+          },
+          "description": "Parameters of the distribution"
+        },
+        "truncation_parameters": {
+          "const": null,
+          "default": null,
+          "title": "Truncation Parameters",
+          "type": "null"
+        },
+        "scaling_parameters": {
+          "const": null,
+          "default": null,
+          "title": "Scaling Parameters",
+          "type": "null"
+        }
+      },
+      "title": "Scalar",
+      "type": "object"
+    },
+    "ScalarDistributionParameter": {
+      "description": "Parameters for a scalar (constant) distribution.\n\nRepresents a deterministic value that always returns the same number.",
+      "properties": {
+        "family": {
+          "const": "Scalar",
+          "default": "Scalar",
+          "title": "Family",
+          "type": "string"
+        },
+        "value": {
+          "default": 0,
+          "description": "The static value of the distribution",
+          "title": "Value",
+          "type": "number"
+        }
+      },
+      "title": "ScalarDistributionParameter",
       "type": "object"
     },
     "ScalingParameters": {
@@ -1780,14 +2113,14 @@
     "Session": {
       "properties": {
         "aind_behavior_services_pkg_version": {
-          "default": "0.13.0",
+          "default": "0.13.2",
           "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
           "title": "aind_behavior_services package version",
           "type": "string"
         },
         "version": {
-          "const": "0.13.0",
-          "default": "0.13.0",
+          "const": "0.13.2",
+          "default": "0.13.2",
           "title": "Version",
           "type": "string"
         },
@@ -2674,13 +3007,13 @@
           "type": "integer"
         },
         "container_extension": {
-          "default": "mp4",
+          "default": "mkv",
           "description": "Container extension",
           "title": "Container Extension",
           "type": "string"
         },
         "output_arguments": {
-          "default": "-vf \"scale=out_color_matrix=bt709:out_range=full,format=bgr24,scale=out_range=full\" -c:v h264_nvenc -pix_fmt yuv420p -color_range full -colorspace bt709 -color_trc linear -tune hq -preset p4 -rc vbr -cq 12 -b:v 0M -metadata author=\"Allen Institute for Neural Dynamics\" -maxrate 700M -bufsize 350M",
+          "default": "-vf \"scale=out_range=full,setparams=range=full:colorspace=bt709:color_primaries=bt709:color_trc=linear\" -c:v h264_nvenc -pix_fmt yuv420p -color_range full -colorspace bt709 -color_trc linear -tune hq -preset p3 -rc vbr -cq 18 -b:v 0M -metadata author=\"Allen Institute for Neural Dynamics\" -maxrate 700M -bufsize 350M -f matroska -write_crc32 0",
           "description": "Output arguments",
           "title": "Output Arguments",
           "type": "string"
@@ -2727,40 +3060,22 @@
       "title": "VideoWriterOpenCv",
       "type": "object"
     },
-    "Warmup": {
-      "properties": {
-        "min_trial": {
-          "default": 50,
-          "title": "Warmup finish criteria: minimal trials",
-          "type": "integer"
-        },
-        "max_choice_ratio_bias": {
-          "default": 0.1,
-          "title": "Warmup finish criteria: maximal choice ratio bias from 0.5",
-          "type": "number"
-        },
-        "min_finish_ratio": {
-          "default": 0.8,
-          "title": "Warmup finish criteria: minimal finish ratio",
-          "type": "number"
-        },
-        "windowsize": {
-          "default": 20,
-          "title": "Warmup finish criteria: window size to compute the bias and ratio",
-          "type": "integer"
-        }
-      },
-      "title": "Warmup",
-      "type": "object"
-    },
     "WaterValveCalibration": {
       "description": "Represents a water valve calibration.",
       "properties": {
         "date": {
+          "default": null,
           "description": "Date of the calibration",
-          "format": "date-time",
-          "title": "Date",
-          "type": "string"
+          "oneOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Date"
         },
         "measurements": {
           "default": [],
@@ -2928,74 +3243,6 @@
         }
       },
       "title": "WebCamera",
-      "type": "object"
-    },
-    "aind_behavior_dynamic_foraging__task_logic__AutoWater": {
-      "properties": {
-        "auto_water_type": {
-          "default": "Natural",
-          "enum": [
-            "Natural",
-            "Both",
-            "High pro"
-          ],
-          "title": "Auto water mode",
-          "type": "string"
-        },
-        "multiplier": {
-          "default": 0.8,
-          "title": "Multiplier for auto reward",
-          "type": "number"
-        },
-        "unrewarded": {
-          "default": 200,
-          "title": "Number of unrewarded trials before auto water",
-          "type": "integer"
-        },
-        "ignored": {
-          "default": 100,
-          "title": "Number of ignored trials before auto water",
-          "type": "integer"
-        },
-        "include_reward": {
-          "default": false,
-          "description": "Include auto water in total rewards.",
-          "title": "Include Reward",
-          "type": "boolean"
-        }
-      },
-      "title": "AutoWater",
-      "type": "object"
-    },
-    "aind_behavior_dynamic_foraging__task_logic__trial_generators__coupled_trial_generator__AutoWater": {
-      "properties": {
-        "auto_water_type": {
-          "default": "Natural",
-          "enum": [
-            "Natural",
-            "Both",
-            "High pro"
-          ],
-          "title": "Auto water mode",
-          "type": "string"
-        },
-        "multiplier": {
-          "default": 0.8,
-          "title": "Multiplier for auto reward",
-          "type": "number"
-        },
-        "unrewarded": {
-          "default": 200,
-          "title": "Number of unrewarded trials before auto water",
-          "type": "integer"
-        },
-        "ignored": {
-          "default": 100,
-          "title": "Number of ignored trials before auto water",
-          "type": "integer"
-        }
-      },
-      "title": "AutoWater",
       "type": "object"
     }
   }

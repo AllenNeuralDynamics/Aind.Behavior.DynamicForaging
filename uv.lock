@@ -71,7 +71,7 @@ docs = [
 
 [package.metadata]
 requires-dist = [
-    { name = "aind-behavior-services", specifier = "<0.14" },
+    { name = "aind-behavior-services", specifier = ">=0.13.2" },
     { name = "contraqctor", marker = "extra == 'data'", specifier = ">=0.5.3" },
     { name = "pydantic-settings" },
 ]
@@ -94,7 +94,7 @@ docs = [
 
 [[package]]
 name = "aind-behavior-services"
-version = "0.13.0"
+version = "0.13.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aind-behavior-curriculum" },
@@ -103,9 +103,9 @@ dependencies = [
     { name = "pydantic" },
     { name = "semver" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e8/52/169fe25fb69cb249ac86408cad77bcce0950e60cc6491e0117c26f206e91/aind_behavior_services-0.13.0.tar.gz", hash = "sha256:21874c1a4555ab2a3c2afef895f279dda48ea0cc3dbc6a7a2ee6fbd7139dc544", size = 25839, upload-time = "2026-01-29T17:13:41.928Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/fb/4b/3a5153a56ba92bf4cb8503b3670c58b0ce2dc1a38152a6888a654b2faefc/aind_behavior_services-0.13.2.tar.gz", hash = "sha256:506e9551c74db57026750f085b5f0034ba9896d9d7d496bf17977d4fc55b5f0f", size = 27357, upload-time = "2026-02-27T18:28:45.264Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/9b/35/6df8230287d3747ff04192b16bd61aec4bbf4867271c619960f5f66ea222/aind_behavior_services-0.13.0-py3-none-any.whl", hash = "sha256:9b0fe77c0a4ecddf9fcf1b1d8e791de2e16ad36425d053fc587f195f88bb7286", size = 35478, upload-time = "2026-01-29T17:13:40.979Z" },
+    { url = "https://files.pythonhosted.org/packages/49/ad/01b1da25639b2261159975b08e40e3fde74f73c01216cd83c1751ab23829/aind_behavior_services-0.13.2-py3-none-any.whl", hash = "sha256:2003a19aea0b0669088f02c8453c630bb0f0b3eb278c71d1107b972ac9171c8a", size = 37296, upload-time = "2026-02-27T18:28:44.055Z" },
 ]
 
 [[package]]

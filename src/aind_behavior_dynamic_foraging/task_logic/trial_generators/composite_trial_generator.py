@@ -62,7 +62,7 @@ class TrialGeneratorComposite(ITrialGenerator):
         # Finally, return None if all generators got consumed
         return None
 
-    def update(self, outcome: TrialOutcome) -> None:
+    def update(self, outcome: TrialOutcome | str) -> None:
         """
         Update the current active generator with the trial outcome.
 
