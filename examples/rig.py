@@ -10,10 +10,8 @@ from aind_behavior_services.rig.aind_manipulator import (
 )
 from aind_behavior_services.rig.harp import (
     HarpBehavior,
-    HarpLicketySplit,
-    HarpSniffDetector,
+    HarpEnvironmentSensor,
     HarpWhiteRabbit,
-    HarpEnvironmentSensor
 )
 from aind_behavior_services.rig.water_valve import Measurement, calibrate_water_valves
 
@@ -55,7 +53,6 @@ rig = AindDynamicForagingRig(
             "SideCamera": cameras.SpinnakerCamera(
                 serial_number="23349424", binning=1, exposure=1000, gain=8, video_writer=None
             ),
-            
         },
     ),
     monitoring_camera_controller=None,
@@ -69,7 +66,7 @@ rig = AindDynamicForagingRig(
         water_valve_right=water_valve_calibration,
     ),
     harp_sound_card=DynamicForagingSoundCard(port_name="COM4"),
-    harp_environment_sensor=HarpEnvironmentSensor(port_name="COM10")
+    harp_environment_sensor=HarpEnvironmentSensor(port_name="COM10"),
 )
 
 
