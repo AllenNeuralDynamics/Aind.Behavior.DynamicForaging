@@ -88,7 +88,9 @@ class BlockBasedTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
 
     kernel_size: int = Field(default=2, description="Kernel to evaluate choice fraction.")
     reward_probability_parameters: RewardProbabilityParameters = Field(
-        default=RewardProbabilityParameters(), description="Parameters defining the reward probability structure."
+        default=RewardProbabilityParameters(),
+        description="Parameters defining the reward probability structure.",
+        validate_defaults=True,
     )
 
     is_baiting: bool = Field(default=False, description="Whether uncollected rewards carry over to the next trial.")
