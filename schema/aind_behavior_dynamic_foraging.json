@@ -956,7 +956,8 @@
               ]
             ]
           },
-          "description": "Parameters defining the reward probability structure."
+          "description": "Parameters defining the reward probability structure.",
+          "validate_defaults": true
         },
         "is_baiting": {
           "default": false,
@@ -3196,7 +3197,8 @@
               ]
             ]
           },
-          "description": "Parameters defining the reward probability structure."
+          "description": "Parameters defining the reward probability structure.",
+          "validate_defaults": true
         },
         "is_baiting": {
           "const": true,
