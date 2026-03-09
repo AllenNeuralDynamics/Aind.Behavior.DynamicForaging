@@ -251,6 +251,13 @@ def make_dataset(
                                 ),
                             ),
                             SoftwareEvents(
+                                name="InitialManipulatorPosition",
+                                description="An event emitted at the start of the experiment to indicate the initial manipulator position.",
+                                reader_params=SoftwareEvents.make_params(
+                                    root_path / "behavior/SoftwareEvents/InitialManipulatorPosition.json"
+                                ),
+                            ),
+                            SoftwareEvents(
                                 name="EndExperiment",
                                 description="An event emitted when the experiment ends.",
                                 reader_params=SoftwareEvents.make_params(

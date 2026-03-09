@@ -290,7 +290,7 @@
             </Expression>
             <Expression xsi:type="beh:Format">
               <harp:MessageType>Write</harp:MessageType>
-              <harp:Register xsi:type="beh:Camera0Frequency" />
+              <harp:Register xsi:type="beh:Camera1Frequency" />
             </Expression>
             <Expression xsi:type="MulticastSubject">
               <Name>HarpBehaviorCommands</Name>
@@ -305,7 +305,7 @@
               </Combinator>
             </Expression>
             <Expression xsi:type="beh:Parse">
-              <harp:Register xsi:type="beh:TimestampedCamera0Frame" />
+              <harp:Register xsi:type="beh:TimestampedCamera1Frame" />
             </Expression>
             <Expression xsi:type="MemberSelector">
               <Selector>Value</Selector>

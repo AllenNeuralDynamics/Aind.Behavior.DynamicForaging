@@ -1,4 +1,4 @@
-from typing import Literal, Optional
+from typing import Literal
 
 from aind_behavior_services.task import Task, TaskParameters
 from pydantic import BaseModel, Field
@@ -12,8 +12,8 @@ from .trial_generators import IntegrationTestTrialGeneratorSpec, TrialGeneratorS
 
 
 class RewardSize(BaseModel):
-    right_value_volume: float = Field(default=3.00, title="Right reward size (uL)")
-    left_value_volume: float = Field(default=3.00, title="Left reward size (uL)")
+    right_value_volume: float = Field(title="Right reward size (uL)")
+    left_value_volume: float = Field(title="Left reward size (uL)")
 
 
 # ==================== MAIN TASK LOGIC CLASSES ====================
@@ -28,8 +28,9 @@ class AindDynamicForagingTaskParameters(TaskParameters):
     and numerical updaters for dynamic parameter modification.
     """
 
-    reward_size: RewardSize = Field(default=RewardSize(), description="Parameters describing reward size.")
-    lick_spout_retraction: Optional[bool] = Field(default=False, description="Lick spout retraction enabled.")
+    reward_size: RewardSize = Field(
+        default=RewardSize(left_value_volume=3, right_value_volume=3), description="Parameters describing reward size."
+    )
     trial_generator: TrialGeneratorSpec = Field(
         default=IntegrationTestTrialGeneratorSpec(),
         description="Trial generator model for generating trials in the task.",

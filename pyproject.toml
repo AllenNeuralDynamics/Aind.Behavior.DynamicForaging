@@ -15,11 +15,11 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Operating System :: Microsoft :: Windows",
 ]
-version = "0.0.2rc9"
+version = "0.0.2rc16"
 readme = {file = "README.md", content-type = "text/markdown"}
 
 dependencies = [
-    "aind_behavior_services@ git+https://github.com/AllenNeuralDynamics/Aind.Behavior.Services.git@v0.13.2rc1",
+    "aind_behavior_services>=0.13.2",
     "pydantic-settings",
 ]
 
@@ -39,6 +39,7 @@ dev = [
     "ruff",
     "codespell",
     "aind-behavior-dynamic-foraging[data]",
+    "aind-clabe[aind-services]>=0.10"
 ]
 
 docs = [

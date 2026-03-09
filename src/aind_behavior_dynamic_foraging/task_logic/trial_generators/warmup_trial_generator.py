@@ -117,10 +117,8 @@ class WarmupTrialGenerator(BlockBasedTrialGenerator):
         # warmup switches block each choice
         logger.info("Switching block.")
         self.trials_in_block = 0
-        self.block = self.generate_next_block(
-            reward_families=self.spec.reward_family,
-            reward_family_index=self.spec.reward_probability_parameters.family,
-            reward_pairs_n=self.spec.reward_probability_parameters.pairs_n,
+        self.block = self._generate_next_block(
+            reward_pairs=self.spec.reward_probability_parameters.reward_pairs,
             base_reward_sum=self.spec.reward_probability_parameters.base_reward_sum,
             current_block=self.block,
             block_len=self.spec.block_len,

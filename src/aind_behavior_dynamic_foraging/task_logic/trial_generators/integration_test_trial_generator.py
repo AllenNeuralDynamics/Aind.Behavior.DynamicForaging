@@ -69,5 +69,5 @@ class IntegrationTestTrialGenerator(ITrialGenerator):
             return None
         return self.trial_opts[self._idx]
 
-    def update(self, outcome: TrialOutcome) -> None:
+    def update(self, outcome: TrialOutcome | str) -> None:
         self._idx += 1
