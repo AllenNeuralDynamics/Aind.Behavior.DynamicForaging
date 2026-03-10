@@ -36,9 +36,7 @@
       <Expression xsi:type="rx:BehaviorSubject">
         <Name>SelectedControllerCamera</Name>
       </Expression>
-      <Expression xsi:type="VisualizerMapping">
-        <VisualizerType xsi:type="TypeMapping" TypeArguments="gui:ListBoxDataSourceVisualizer" />
-      </Expression>
+      <Expression xsi:type="VisualizerMapping" />
       <Expression xsi:type="SubscribeSubject">
         <Name>SelectedControllerCamera</Name>
       </Expression>
@@ -120,9 +118,7 @@
         <p3:Maximum>254</p3:Maximum>
         <p3:OverlayAlpha>1</p3:OverlayAlpha>
       </Expression>
-      <Expression xsi:type="VisualizerMapping">
-        <VisualizerType xsi:type="TypeMapping" TypeArguments="p2:IplImageSaturationVisualizer" />
-      </Expression>
+      <Expression xsi:type="VisualizerMapping" />
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="BooleanProperty">
           <Value>false</Value>

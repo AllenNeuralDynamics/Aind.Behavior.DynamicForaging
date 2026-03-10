@@ -20,7 +20,7 @@ class DataQcCli(BaseSettings, cli_kebab_case=True):
     def cli_cmd(self):
         """Run data quality checks on the dataset located at the specified path."""
         from ..data_contract import dataset
-        from ._suite import make_qc_runner
+        from .suite import make_qc_runner
 
         this_dataset = dataset(Path(self.data_path), self.version)
         runner = make_qc_runner(this_dataset)

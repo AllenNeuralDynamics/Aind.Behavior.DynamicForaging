@@ -1,5 +1,3 @@
-from datetime import timedelta
-
 from aind_behavior_curriculum import Stage
 from aind_behavior_services.task.distributions import (
     ExponentialDistribution,
@@ -73,8 +71,8 @@ s_stage_1_warmup = Stage(
                     CoupledTrialGeneratorSpec(
                         trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
                             max_trial=1000,
-                            max_time=timedelta(minutes=75),
-                            min_time=timedelta(minutes=30),
+                            max_time=75,
+                            min_time=30,
                             ignore_win=20000,
                             ignore_ratio_threshold=1,
                         ),
@@ -121,8 +119,8 @@ s_stage_1 = Stage(
             trial_generator=CoupledTrialGeneratorSpec(
                 trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
                     max_trial=1000,
-                    max_time=timedelta(minutes=75),
-                    min_time=timedelta(minutes=30),
+                    max_time=75,
+                    min_time=30,
                     ignore_win=20000,
                     ignore_ratio_threshold=1,
                 ),
@@ -167,8 +165,8 @@ s_stage_2 = Stage(
             trial_generator=CoupledTrialGeneratorSpec(
                 trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
                     max_trial=1000,
-                    max_time=timedelta(minutes=75),
-                    min_time=timedelta(minutes=30),
+                    max_time=75,
+                    min_time=30,
                     ignore_win=30,
                     ignore_ratio_threshold=0.83,
                 ),
@@ -213,8 +211,8 @@ s_stage_3 = Stage(
             trial_generator=CoupledTrialGeneratorSpec(
                 trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
                     max_trial=1000,
-                    max_time=timedelta(minutes=75),
-                    min_time=timedelta(minutes=30),
+                    max_time=75,
+                    min_time=30,
                     ignore_win=30,
                     ignore_ratio_threshold=0.83,
                 ),
@@ -259,8 +257,8 @@ s_final = Stage(
             trial_generator=CoupledTrialGeneratorSpec(
                 trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
                     max_trial=1000,
-                    max_time=timedelta(minutes=75),
-                    min_time=timedelta(minutes=30),
+                    max_time=75,
+                    min_time=30,
                     ignore_win=30,
                     ignore_ratio_threshold=0.83,
                 ),
@@ -301,8 +299,8 @@ s_graduated = Stage(
             trial_generator=CoupledTrialGeneratorSpec(
                 trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
                     max_trial=1000,
-                    max_time=timedelta(minutes=75),
-                    min_time=timedelta(minutes=30),
+                    max_time=75,
+                    min_time=30,
                     ignore_win=30,
                     ignore_ratio_threshold=0.83,
                 ),
