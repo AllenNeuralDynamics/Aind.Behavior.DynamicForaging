@@ -1,5 +1,5 @@
-from aind_behavior_dynamic_foraging.curricula.coupled_baiting import TRAINER
-from aind_behavior_dynamic_foraging.curricula.metrics import DynamicForagingMetrics
+from aind_behavior_dynamic_foraging_curricula.coupled_baiting import TRAINER
+from aind_behavior_dynamic_foraging_curricula.metrics import DynamicForagingMetrics
 
 
 def main():

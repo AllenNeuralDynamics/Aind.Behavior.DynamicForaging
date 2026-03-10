@@ -1,12 +1,4 @@
-from aind_behavior_curriculum import Stage
-from aind_behavior_services.task.distributions import (
-    ExponentialDistribution,
-    ExponentialDistributionParameters,
-    TruncationParameters,
-    UniformDistribution,
-    UniformDistributionParameters,
-)
-
+from aind_behavior_curriculum import MetricsProvider, Stage
 from aind_behavior_dynamic_foraging.task_logic import (
     AindDynamicForagingTaskLogic,
     AindDynamicForagingTaskParameters,
@@ -27,6 +19,15 @@ from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_ge
 from aind_behavior_dynamic_foraging.task_logic.trial_generators.warmup_trial_generator import (
     WarmupTrialGenerationEndConditions,
 )
+from aind_behavior_services.task.distributions import (
+    ExponentialDistribution,
+    ExponentialDistributionParameters,
+    TruncationParameters,
+    UniformDistribution,
+    UniformDistributionParameters,
+)
+
+from ..metrics import metrics_from_dataset
 
 # --- STAGES ---
 
@@ -108,6 +109,7 @@ s_stage_1_warmup = Stage(
             ),
         )
     ),
+    metrics_provider=MetricsProvider(metrics_from_dataset),
 )
 
 s_stage_1 = Stage(
@@ -154,6 +156,7 @@ s_stage_1 = Stage(
             ),
         )
     ),
+    metrics_provider=MetricsProvider(metrics_from_dataset),
 )
 
 s_stage_2 = Stage(
@@ -200,6 +203,7 @@ s_stage_2 = Stage(
             ),
         )
     ),
+    metrics_provider=MetricsProvider(metrics_from_dataset),
 )
 
 s_stage_3 = Stage(
@@ -246,6 +250,7 @@ s_stage_3 = Stage(
             ),
         )
     ),
+    metrics_provider=MetricsProvider(metrics_from_dataset),
 )
 
 s_final = Stage(
@@ -288,6 +293,7 @@ s_final = Stage(
             ),
         )
     ),
+    metrics_provider=MetricsProvider(metrics_from_dataset),
 )
 
 s_graduated = Stage(
@@ -330,4 +336,5 @@ s_graduated = Stage(
             ),
         )
     ),
+    metrics_provider=MetricsProvider(metrics_from_dataset),
 )
