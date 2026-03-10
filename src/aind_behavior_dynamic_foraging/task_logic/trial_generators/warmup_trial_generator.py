@@ -110,7 +110,7 @@ class WarmupTrialGenerator(BlockBasedTrialGenerator):
             if outcome.is_right_choice:
                 logger.debug("Resesting right bait.")
                 self.is_right_baited = False
-            elif not outcome.is_right_choice:
+            elif outcome.is_right_choice is False:
                 logger.debug("Resesting left bait.")
                 self.is_left_baited = False
 

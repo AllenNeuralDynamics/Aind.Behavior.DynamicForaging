@@ -90,7 +90,7 @@ class BlockBasedTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
     reward_probability_parameters: RewardProbabilityParameters = Field(
         default=RewardProbabilityParameters(),
         description="Parameters defining the reward probability structure.",
-        validate_defaults=True,
+        validate_default=True,
     )
 
     is_baiting: bool = Field(default=False, description="Whether uncollected rewards carry over to the next trial.")
