@@ -5,6 +5,7 @@ from aind_behavior_services.task.distributions import (
     ExponentialDistribution,
     ExponentialDistributionParameters,
     TruncationParameters,
+    Distribution
 )
 from pydantic import BaseModel, Field
 
@@ -39,7 +40,7 @@ class WarmupTrialGenerationEndConditions(BaseModel):
 class WarmupTrialGeneratorSpec(BlockBasedTrialGeneratorSpec):
     type: Literal["WarmupTrialGenerator"] = "WarmupTrialGenerator"
 
-    block_len: ExponentialDistribution = Field(default=
+    block_len: Distribution = Field(default=
         ExponentialDistribution(
             distribution_parameters=ExponentialDistributionParameters(rate=1),
             truncation_parameters=TruncationParameters(min=1, max=2),
