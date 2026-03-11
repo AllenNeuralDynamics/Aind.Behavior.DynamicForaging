@@ -2824,11 +2824,15 @@
         "mapping": {
           "CoupledTrialGenerator": "#/$defs/CoupledTrialGeneratorSpec",
           "IntegrationTestTrialGenerator": "#/$defs/IntegrationTestTrialGeneratorSpec",
-          "TrialGeneratorComposite": "#/$defs/TrialGeneratorCompositeSpec_TrialGeneratorSpec_"
+          "TrialGeneratorComposite": "#/$defs/TrialGeneratorCompositeSpec_TrialGeneratorSpec_",
+          "WarmupTrialGenerator": "#/$defs/WarmupTrialGeneratorSpec"
         },
         "propertyName": "type"
       },
       "oneOf": [
+        {
+          "$ref": "#/$defs/WarmupTrialGeneratorSpec"
+        },
         {
           "$ref": "#/$defs/CoupledTrialGeneratorSpec"
         },
@@ -3058,6 +3062,161 @@
         }
       },
       "title": "VideoWriterOpenCv",
+      "type": "object"
+    },
+    "WarmupTrialGenerationEndConditions": {
+      "properties": {
+        "min_trial": {
+          "default": 50,
+          "description": "Minimum trials in generator.",
+          "minimum": 0,
+          "title": "Min Trial",
+          "type": "integer"
+        },
+        "max_choice_bias": {
+          "default": 0.1,
+          "description": "Maximum allowed deviation from 50/50 choice ratio to end trial generation.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Max Choice Bias",
+          "type": "number"
+        },
+        "min_response_rate": {
+          "default": 0.8,
+          "description": "Minimum fraction of trials with a choice (non-ignored) to end trial generation.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Min Response Rate",
+          "type": "number"
+        },
+        "evaluation_window": {
+          "default": 20,
+          "description": "Number of most recent trials to evaluate the end criteria.",
+          "minimum": 0,
+          "title": "Evaluation Window",
+          "type": "integer"
+        }
+      },
+      "title": "WarmupTrialGenerationEndConditions",
+      "type": "object"
+    },
+    "WarmupTrialGeneratorSpec": {
+      "properties": {
+        "type": {
+          "const": "WarmupTrialGenerator",
+          "default": "WarmupTrialGenerator",
+          "title": "Type",
+          "type": "string"
+        },
+        "quiescent_duration": {
+          "$ref": "#/$defs/Distribution",
+          "default": {
+            "family": "Exponential",
+            "distribution_parameters": {
+              "family": "Exponential",
+              "rate": 1.0
+            },
+            "truncation_parameters": {
+              "max": 1.0,
+              "min": 0.0,
+              "truncation_mode": "exclude"
+            },
+            "scaling_parameters": null
+          },
+          "description": "Distribution describing the quiescence period before trial starts (in seconds). Each lick resets the timer."
+        },
+        "response_duration": {
+          "default": 1.0,
+          "description": "Duration after go cue for animal response.",
+          "minimum": 0,
+          "title": "Response Duration",
+          "type": "number"
+        },
+        "reward_consumption_duration": {
+          "default": 3.0,
+          "description": "Duration of reward consumption before transition to ITI (in seconds).",
+          "minimum": 0,
+          "title": "Reward Consumption Duration",
+          "type": "number"
+        },
+        "inter_trial_interval_duration": {
+          "$ref": "#/$defs/Distribution",
+          "default": {
+            "family": "Exponential",
+            "distribution_parameters": {
+              "family": "Exponential",
+              "rate": 0.5
+            },
+            "truncation_parameters": {
+              "max": 8.0,
+              "min": 1.0,
+              "truncation_mode": "exclude"
+            },
+            "scaling_parameters": null
+          },
+          "description": "Distribution describing the inter-trial interval (in seconds)."
+        },
+        "block_len": {
+          "$ref": "#/$defs/Distribution",
+          "default": {
+            "family": "Exponential",
+            "distribution_parameters": {
+              "family": "Exponential",
+              "rate": 1.0
+            },
+            "truncation_parameters": {
+              "max": 2.0,
+              "min": 1.0,
+              "truncation_mode": "exclude"
+            },
+            "scaling_parameters": null
+          },
+          "description": "Distribution describing block length."
+        },
+        "min_block_reward": {
+          "const": 1,
+          "default": 1,
+          "title": "Minimal rewards in a block to switch",
+          "type": "integer"
+        },
+        "kernel_size": {
+          "default": 2,
+          "description": "Kernel to evaluate choice fraction.",
+          "title": "Kernel Size",
+          "type": "integer"
+        },
+        "reward_probability_parameters": {
+          "$ref": "#/$defs/RewardProbabilityParameters",
+          "default": {
+            "base_reward_sum": 0.8,
+            "reward_pairs": [
+              [
+                8.0,
+                1.0
+              ]
+            ]
+          },
+          "description": "Parameters defining the reward probability structure."
+        },
+        "is_baiting": {
+          "const": true,
+          "default": true,
+          "description": "Whether uncollected rewards carry over to the next trial.",
+          "title": "Is Baiting",
+          "type": "integer"
+        },
+        "trial_generation_end_parameters": {
+          "$ref": "#/$defs/WarmupTrialGenerationEndConditions",
+          "default": {
+            "min_trial": 50,
+            "max_choice_bias": 0.1,
+            "min_response_rate": 0.8,
+            "evaluation_window": 20
+          },
+          "description": "Conditions to end trial generation."
+        }
+      },
+      "title": "WarmupTrialGeneratorSpec",
       "type": "object"
     },
     "WaterValveCalibration": {
