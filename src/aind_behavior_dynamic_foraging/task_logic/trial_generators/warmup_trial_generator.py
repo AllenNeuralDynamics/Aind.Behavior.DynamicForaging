@@ -94,7 +94,7 @@ class WarmupTrialGenerator(BlockBasedTrialGenerator):
 
         return False
 
-    def update(self, outcome: TrialOutcome) -> None:
+    def update(self, outcome: TrialOutcome | str) -> None:
         """
         Warmup switches block every update
 
@@ -102,6 +102,9 @@ class WarmupTrialGenerator(BlockBasedTrialGenerator):
         """
 
         logger.info(f"Updating Warmup trial generator with trial outcome of {outcome}")
+        
+        if isinstance(outcome, str):
+            outcome = TrialOutcome.model_validate_json(outcome)
 
         self.is_right_choice_history.append(outcome.is_right_choice)
         self.reward_history.append(outcome.is_rewarded)
