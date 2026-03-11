@@ -2,6 +2,7 @@ import logging
 from typing import Literal
 
 from aind_behavior_services.task.distributions import (
+    Distribution,
     ExponentialDistribution,
     ExponentialDistributionParameters,
     TruncationParameters,
@@ -39,8 +40,8 @@ class WarmupTrialGenerationEndConditions(BaseModel):
 class WarmupTrialGeneratorSpec(BlockBasedTrialGeneratorSpec):
     type: Literal["WarmupTrialGenerator"] = "WarmupTrialGenerator"
 
-    block_len: ExponentialDistribution = Field(
-        ExponentialDistribution(
+    block_len: Distribution = Field(
+        default=ExponentialDistribution(
             distribution_parameters=ExponentialDistributionParameters(rate=1),
             truncation_parameters=TruncationParameters(min=1, max=1),
         ),
@@ -50,7 +51,7 @@ class WarmupTrialGeneratorSpec(BlockBasedTrialGeneratorSpec):
     trial_generation_end_parameters: WarmupTrialGenerationEndConditions = Field(
         default=WarmupTrialGenerationEndConditions(), description="Conditions to end trial generation."
     )
-    min_block_reward: Literal[1] = Field(1, title="Minimal rewards in a block to switch")
+    min_block_reward: Literal[1] = Field(default=1, title="Minimal rewards in a block to switch")
     is_baiting: Literal[True] = Field(
         default=True, description="Whether uncollected rewards carry over to the next trial."
     )
@@ -110,7 +111,7 @@ class WarmupTrialGenerator(BlockBasedTrialGenerator):
             if outcome.is_right_choice:
                 logger.debug("Resesting right bait.")
                 self.is_right_baited = False
-            elif not outcome.is_right_choice:
+            elif outcome.is_right_choice is False:
                 logger.debug("Resesting left bait.")
                 self.is_left_baited = False
 

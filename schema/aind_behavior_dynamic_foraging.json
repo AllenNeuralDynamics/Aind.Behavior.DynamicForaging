@@ -3157,7 +3157,7 @@
           "description": "Distribution describing the inter-trial interval (in seconds)."
         },
         "block_len": {
-          "$ref": "#/$defs/ExponentialDistribution",
+          "$ref": "#/$defs/Distribution",
           "default": {
             "family": "Exponential",
             "distribution_parameters": {

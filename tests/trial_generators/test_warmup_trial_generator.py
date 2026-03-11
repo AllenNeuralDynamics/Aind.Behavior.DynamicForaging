@@ -67,6 +67,13 @@ class TestWarmupEndConditions(unittest.TestCase):
         self.generator.update(make_outcome(is_right_choice=False, is_rewarded=True))
         self.assertFalse(self.generator.is_left_baited)
 
+    def test_bait_on_no_choice(self):
+        self.generator.is_left_baited = True
+        self.generator.is_right_baited = True
+        self.generator.update(make_outcome(is_right_choice=None, is_rewarded=True))
+        self.assertTrue(self.generator.is_left_baited)
+        self.assertTrue(self.generator.is_right_baited)
+
 
 if __name__ == "__main__":
     unittest.main()

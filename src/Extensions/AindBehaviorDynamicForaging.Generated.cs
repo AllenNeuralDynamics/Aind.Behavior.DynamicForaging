@@ -8480,7 +8480,7 @@ namespace AindDynamicForagingDataSchema
     
         private Distribution _interTrialIntervalDuration;
     
-        private ExponentialDistribution _blockLen;
+        private Distribution _blockLen;
     
         private int _minBlockReward;
     
@@ -8498,7 +8498,7 @@ namespace AindDynamicForagingDataSchema
             _responseDuration = 1D;
             _rewardConsumptionDuration = 3D;
             _interTrialIntervalDuration = new Distribution();
-            _blockLen = new ExponentialDistribution();
+            _blockLen = new Distribution();
             _minBlockReward = 1;
             _kernelSize = 2;
             _rewardProbabilityParameters = new RewardProbabilityParameters();
@@ -8597,7 +8597,7 @@ namespace AindDynamicForagingDataSchema
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("block_len")]
         [System.ComponentModel.DescriptionAttribute("Distribution describing block length.")]
-        public ExponentialDistribution BlockLen
+        public Distribution BlockLen
         {
             get
             {

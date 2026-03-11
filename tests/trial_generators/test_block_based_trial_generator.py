@@ -27,6 +27,7 @@ class ConcreteBlockBasedTrialGeneratorSpec(BlockBasedTrialGeneratorSpec):
 
 class TestBlockBasedTrialGenerator(unittest.TestCase):
     def setUp(self):
+        np.random.seed(42)
         self.spec = ConcreteBlockBasedTrialGeneratorSpec()
         self.generator = self.spec.create_generator()
 
