@@ -74,6 +74,11 @@ class TestWarmupEndConditions(unittest.TestCase):
         self.assertTrue(self.generator.is_left_baited)
         self.assertTrue(self.generator.is_right_baited)
 
+    #### test update ####
+    def test_string_trial_outcome(self):
+        string_outcome = TrialOutcome(trial=Trial(), is_right_choice=True, is_rewarded=True).model_dump_json()
+        self.generator.update(string_outcome)
+
 
 if __name__ == "__main__":
     unittest.main()

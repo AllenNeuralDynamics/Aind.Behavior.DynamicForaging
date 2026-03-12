@@ -102,7 +102,7 @@ class WarmupTrialGenerator(BlockBasedTrialGenerator):
         """
 
         logger.info(f"Updating Warmup trial generator with trial outcome of {outcome}")
-        
+
         if isinstance(outcome, str):
             outcome = TrialOutcome.model_validate_json(outcome)
 

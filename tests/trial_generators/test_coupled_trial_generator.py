@@ -219,6 +219,10 @@ class TestCoupledTrialGenerator(unittest.TestCase):
     def _make_outcome(self, is_right_choice, is_rewarded):
         return TrialOutcome(trial=Trial(), is_right_choice=is_right_choice, is_rewarded=is_rewarded)
 
+    def test_string_trial_outcome(self):
+        string_outcome = self._make_outcome(True, True).model_dump_json()
+        self.generator.update(string_outcome)
+
     def test_update_appends_to_history(self):
         self.generator.update(self._make_outcome(True, True))
         self.assertEqual(len(self.generator.is_right_choice_history), 1)
