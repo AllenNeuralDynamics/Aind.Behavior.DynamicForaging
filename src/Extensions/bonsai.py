@@ -9,23 +9,38 @@ if TYPE_CHECKING:
 
 import logging
 import logging.config
+from datetime import datetime
 
 logging_config = {
-    "version": 1, 
+    "version": 1,
     "disable_existing_loggers": False,
+    "formatters": {
+        "standard": {
+            "format": "%(asctime)s:%(name)s:%(levelname)s: %(message)s"
+        },
+    },
     "handlers": {
         "console": {
+            "level": "DEBUG",
+            "formatter": "standard",
             "class": "logging.StreamHandler",
             "stream": "ext://sys.stdout"
         },
+        "file": {
+            "level": "DEBUG",
+            "formatter": "standard",
+            "class": "logging.FileHandler",
+            "mode": "a",
+            "filename": f"logs_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log"
+        },
     },
     "root": {
-        "handlers": ["console"]
+        "level": "DEBUG",
+        "handlers": ["console", "file",]
     }
 }
-
 logging.config.dictConfig(logging_config)
-logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 def resolve_generator(spec: TrialGeneratorSpec | str) -> "ITrialGenerator":
     """Resolves and creates the trial generator instance based on the task logic's trial generator model."""
