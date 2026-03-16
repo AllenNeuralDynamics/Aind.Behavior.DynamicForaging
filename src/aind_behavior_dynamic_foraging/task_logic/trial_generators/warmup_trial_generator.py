@@ -52,9 +52,6 @@ class WarmupTrialGeneratorSpec(BlockBasedTrialGeneratorSpec):
         default=WarmupTrialGenerationEndConditions(), description="Conditions to end trial generation."
     )
     min_block_reward: Literal[1] = Field(default=1, title="Minimal rewards in a block to switch")
-    is_baiting: Literal[True] = Field(
-        default=True, description="Whether uncollected rewards carry over to the next trial."
-    )
 
     def create_generator(self) -> "WarmupTrialGenerator":
         return WarmupTrialGenerator(self)
