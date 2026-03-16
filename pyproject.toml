@@ -19,7 +19,7 @@ version = "0.0.2rc21"
 readme = {file = "README.md", content-type = "text/markdown"}
 
 dependencies = [
-    "aind_behavior_services>=0.13.2",
+    "aind_behavior_services>=0.13.4",
     "pydantic-settings",
 ]
 
