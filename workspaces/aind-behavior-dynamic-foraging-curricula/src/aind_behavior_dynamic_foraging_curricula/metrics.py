@@ -24,7 +24,7 @@ def metrics_from_dataset(data_directory: os.PathLike) -> DynamicForagingMetrics:
     
     could maybe do UPath do be able to do local and remote files.
 
-    docdb_path = https://api.allenneuraldynamics.org/v1/metadata_index/data_assets    
+    docdb_path = https://api.allenneuraldynamics.org/v1/metadata_index/data_assets
     """
 
     return DynamicForagingMetrics(
