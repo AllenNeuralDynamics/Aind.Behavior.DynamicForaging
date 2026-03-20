@@ -21,7 +21,7 @@ class DynamicForagingMetrics(Metrics):
 def metrics_from_dataset(data_directory: os.PathLike) -> DynamicForagingMetrics:
     """TODO: query docdb for metrics from the previous session
     https://github.com/AllenNeuralDynamics/aind-physio-arch/blob/dyf-curriculum-doc/doc/curriculum/architecture.md
-    
+
     could maybe do UPath do be able to do local and remote files.
 
     docdb_path = https://api.allenneuraldynamics.org/v1/metadata_index/data_assets
