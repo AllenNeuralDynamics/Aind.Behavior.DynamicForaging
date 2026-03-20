@@ -43,8 +43,11 @@ class ListKnownCurricula(RootModel):
 
 
 class CurriculumCliArgs(BaseSettings):
+    previous_metrics: t.Optional[os.PathLike] = Field(
+        default=None, description="Path to serialized metrics of previous session."
+    )
     data_directory: os.PathLike = Field(description="Path to the session data directory.")
-    input_trainer_state: os.PathLike = Field(description="Path to a deserialized trainer state.")
+    input_trainer_state: os.PathLike = Field(description="Path to a serialized trainer state.")
     mute_suggestion: CliImplicitFlag[bool] = Field(default=False, description="Disables the suggestion output")
     output_suggestion: t.Optional[os.PathLike] = Field(
         default=None,
