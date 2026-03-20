@@ -21,11 +21,7 @@ readme = {file = "README.md", content-type = "text/markdown"}
 dependencies = [
     "aind_behavior_services>=0.13.2",
     "pydantic-settings",
-    "aind-behavior-dynamic-foraging-curricula"
 ]
-
-[tool.uv.sources]
-aind-behavior-dynamic-foraging-curricula = { workspace = true }
 
 [tool.uv.workspace]
 members = ["workspaces/*"]
