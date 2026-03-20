@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import Any, TypeVar
+from typing import Any, Optional, TypeVar
 
 import pydantic
 from aind_behavior_curriculum import Curriculum, Metrics, Trainer, TrainerState
@@ -18,11 +18,16 @@ def trainer_state_from_file(path: str | os.PathLike, trainer: Trainer[TCurriculu
     return model_from_json_file(path, trainer.trainer_state_model)
 
 
-def metrics_from_dataset_path(dataset_path: str | os.PathLike, trainer_state: TrainerState[Any]) -> Metrics:
+def metrics_from_dataset_path(
+    stage_changed: bool,
+    previous_metrics: Optional[os.PathLike],
+    dataset_path: str | os.PathLike,
+    trainer_state: TrainerState[Any],
+) -> Metrics:
     stage = trainer_state.stage
     if stage is None:
         raise ValueError("Trainer state does not have a stage")
     if stage.metrics_provider is None:
         raise ValueError("Stage does not have a metrics provider")
     metrics_provider = stage.metrics_provider
-    return metrics_provider.callable(dataset_path)
+    return metrics_provider.callable(dataset_path, previous_metrics, stage_changed)

@@ -41,12 +41,7 @@ uv run curriculum list
 **Example output:**
 ```
 Available curricula:
- - depletion
- - depletion_stops_offset
- - depletion_stops_rate
- - operant_conditioning
- - single_site_matching
- - template
+  coupled_baiting
 ```
 
 ### `init` - Initialize a Curriculum
@@ -65,19 +60,19 @@ Creates an initial trainer state for enrolling a subject in a curriculum. This g
 Initialize the depletion curriculum (starts at first stage):
 
 ```bash
-uv run curriculum init --curriculum depletion --output initial_state.json
+uv run curriculum init --curriculum coupled_baiting --output initial_state.json
 ```
 
 Initialize at a specific stage:
 
 ```bash
-uv run curriculum init --curriculum depletion --stage stage_one_odor_no_depletion --output initial_state.json
+uv run curriculum init --curriculum coupled_baiting --stage s_stage_1 --output initial_state.json
 ```
 
 Print to stdout without saving:
 
 ```bash
-uv run curriculum init --curriculum operant_conditioning
+uv run curriculum init --curriculum coupled_baiting
 ```
 
 ### `run` - Run a Curriculum
@@ -89,6 +84,8 @@ Evaluates a curriculum based on session data and the current trainer state, prod
 - `--input-trainer-state <path>`: Path to the current trainer state JSON file
 
 **Optional Arguments:**
+- `--stage_changed <bool>`: Flag to indicate whether stage in previous session differs from current session. Default is false.
+- `--previous_metrics <path>`: Path to the previous session metrics JSON file
 - `--curriculum <name>`: Forces the use of a specific curriculum, bypassing automatic detection
 - `--output-suggestion <path>`: Directory path to save the suggestion as `suggestion.json`
 - `--mute-suggestion`: Disables printing the suggestion to stdout (useful when only saving to file)

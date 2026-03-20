@@ -18,12 +18,13 @@ class DynamicForagingMetrics(Metrics):
         min_length=1, description="Full history of trials finished per session"
     )
     total_sessions: int = Field(ge=0, description="Total sessions completed.")
-    sessions_at_current_stage: int = Field(ge=0, escription="Last consecutive sessions at current stage.")
+    consecutive_sessions_at_current_stage: int = Field(ge=0, escription="Last consecutive sessions at current stage.")
 
 
 def metrics_from_dataset(
     data_directory: os.PathLike,
     previous_metrics: Optional[os.PathLike] = None,
+    stage_changed: bool = False,
 ) -> DynamicForagingMetrics:
     """
     Create metrics for completed session.
@@ -35,6 +36,10 @@ def metrics_from_dataset(
 
         previous_metrics (Optional[os.PathLike]):
             Path to a previously computed metrics file as metrics depend on previous sessions. If not provided, metrics will be based only on current session.
+
+        stage_changed (bool):
+            Flag to indicate whether stage in previous session differs from current session
+
     Returns:
         DynamicForagingMetrics:
             Metrics for session
@@ -72,15 +77,17 @@ def metrics_from_dataset(
         metrics = None
 
     foraging_efficiency_per_session = [] if not metrics else metrics.foraging_efficiency_per_session
-    unignored_trials_per_session = [] if not metrics else metrics.foraging_efficiency_per_session
-    total_sessions = 0 if not metrics else metrics.foraging_efficiency_per_session
-    sessions_at_current_stage = 0 if not metrics else metrics.foraging_efficiency_per_session
+    unignored_trials_per_session = [] if not metrics else metrics.unignored_trials_per_session
+    total_sessions = 0 if not metrics else metrics.total_sessions
+    consecutive_sessions_at_current_stage = (
+        0 if not metrics or stage_changed else metrics.consecutive_sessions_at_current_stage
+    )
 
     return DynamicForagingMetrics(
         foraging_efficiency_per_session=foraging_efficiency_per_session + [foraging_efficiency],
         unignored_trials_per_session=unignored_trials_per_session + [sum(x is not None for x in is_right_choice)],
         total_sessions=total_sessions + 1,
-        sessions_at_current_stage=sessions_at_current_stage + 1,
+        consecutive_sessions_at_current_stage=consecutive_sessions_at_current_stage + 1,
     )
 
 
@@ -132,10 +139,11 @@ def compute_foraging_efficiency(
         p_max = np.maximum(p_left_reward, p_right_reward)
         p_min = np.minimum(p_left_reward, p_right_reward)
 
-        optimal_visit_ratio = np.floor(np.log(1 - p_max) / np.log(1 - p_min))
-        optimal_general_reward_rates = p_max + (1 - (1 - p_min) ** (optimal_visit_ratio + 1) - p_max**2) / (
-            optimal_visit_ratio + 1
-        )
+        with np.errstate(divide="ignore", invalid="ignore"):
+            optimal_visit_ratio = np.floor(np.log(1 - p_max) / np.log(1 - p_min))
+            optimal_general_reward_rates = p_max + (1 - (1 - p_min) ** (optimal_visit_ratio + 1) - p_max**2) / (
+                optimal_visit_ratio + 1
+            )
 
         simple_case = (p_min == 0) | (p_max >= 1)
         optimal_reward_per_trial = np.where(simple_case, p_max, optimal_general_reward_rates)

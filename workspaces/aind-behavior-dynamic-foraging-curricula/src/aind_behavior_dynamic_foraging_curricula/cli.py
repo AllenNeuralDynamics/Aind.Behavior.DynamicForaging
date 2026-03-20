@@ -43,6 +43,9 @@ class ListKnownCurricula(RootModel):
 
 
 class CurriculumCliArgs(BaseSettings):
+    stage_changed: t.Optional[bool] = Field(
+        default=False, description="Flag to indicate whether stage in previous session differs from current session"
+    )
     previous_metrics: t.Optional[os.PathLike] = Field(
         default=None, description="Path to serialized metrics of previous session."
     )

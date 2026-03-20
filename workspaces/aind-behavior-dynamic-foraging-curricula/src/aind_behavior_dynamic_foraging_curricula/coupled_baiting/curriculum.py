@@ -25,7 +25,7 @@ TModel = TypeVar("TModel", bound=pydantic.BaseModel)
 # warmup
 @StageTransition
 def st_stage_1_warmup_to_stage_1(metrics: DynamicForagingMetrics) -> bool:
-    return metrics.sessions_at_current_stage >= 1
+    return metrics.consecutive_sessions_at_current_stage >= 1
 
 
 @StageTransition
@@ -66,7 +66,7 @@ def st_stage_3_to_stage_2(metrics: DynamicForagingMetrics) -> bool:
 def st_final_to_graduated(metrics: DynamicForagingMetrics) -> bool:
     return (
         metrics.total_sessions >= 10
-        and metrics.sessions_at_current_stage >= 5
+        and metrics.consecutive_sessions_at_current_stage >= 5
         and np.mean(metrics.unignored_trials_per_session[-5:]) >= 450
         and np.mean(metrics.foraging_efficiency_per_session[-5:]) >= 0.7
     )
@@ -81,7 +81,6 @@ def st_final_to_stage_3(metrics: DynamicForagingMetrics) -> bool:
 
 
 # --- CURRICULUM ---
-
 curriculum_class: Type[Curriculum[AindDynamicForagingTaskLogic]] = create_curriculum(
     CURRICULUM_NAME, __semver__, (AindDynamicForagingTaskLogic,), pkg_location=PKG_LOCATION
 )
@@ -119,6 +118,11 @@ TRAINER = Trainer(CURRICULUM)
 
 def run_curriculum(args: CurriculumCliArgs) -> CurriculumSuggestion[TrainerState[Any], Any]:
     trainer_state = trainer_state_from_file(args.input_trainer_state, TRAINER)
-    metrics: Metrics = metrics_from_dataset_path(args.data_directory, trainer_state)
+    metrics: Metrics = metrics_from_dataset_path(
+        stage_changed=args.stage_changed,
+        previous_metrics=args.previous_metrics,
+        dataset_path=args.data_directory,
+        trainer_state=trainer_state,
+    )
     trainer_state = TRAINER.evaluate(trainer_state, metrics)
     return CurriculumSuggestion(trainer_state=trainer_state, metrics=metrics, version=__semver__)
