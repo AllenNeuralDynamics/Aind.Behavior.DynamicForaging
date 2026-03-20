@@ -50,7 +50,6 @@ name = "aind-behavior-dynamic-foraging"
 version = "0.0.2rc17"
 source = { editable = "." }
 dependencies = [
-    { name = "aind-behavior-dynamic-foraging-curricula" },
     { name = "aind-behavior-services" },
     { name = "pydantic-settings" },
 ]
@@ -79,7 +78,6 @@ docs = [
 
 [package.metadata]
 requires-dist = [
-    { name = "aind-behavior-dynamic-foraging-curricula", editable = "workspaces/aind-behavior-dynamic-foraging-curricula" },
     { name = "aind-behavior-services", specifier = ">=0.13.2" },
     { name = "contraqctor", marker = "extra == 'data'", specifier = ">=0.5.3" },
     { name = "pydantic-settings" },
