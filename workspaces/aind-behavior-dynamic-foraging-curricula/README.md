@@ -84,8 +84,6 @@ Evaluates a curriculum based on session data and the current trainer state, prod
 - `--input-trainer-state <path>`: Path to the current trainer state JSON file
 
 **Optional Arguments:**
-- `--stage_changed <bool>`: Flag to indicate whether stage in previous session differs from current session. Default is false.
-- `--previous_metrics <path>`: Path to the previous session metrics JSON file
 - `--curriculum <name>`: Forces the use of a specific curriculum, bypassing automatic detection
 - `--output-suggestion <path>`: Directory path to save the suggestion as `suggestion.json`
 - `--mute-suggestion`: Disables printing the suggestion to stdout (useful when only saving to file)

@@ -7,7 +7,7 @@ from contraqctor.contract.harp import (
     DeviceYmlByFile,
     HarpDevice,
 )
-from contraqctor.contract.json import PydanticModel, SoftwareEvents
+from contraqctor.contract.json import Json, PydanticModel, SoftwareEvents
 from contraqctor.contract.mux import MapFromPaths
 
 from .. import __semver__
@@ -58,6 +58,18 @@ def make_dataset(
                 name="Behavior",
                 description="Data from the Behavior modality",
                 data_streams=[
+                    Json(
+                        name="PreviousMetrics",
+                        reader_params=Json.make_params(
+                            path=root_path / "behavior/previous_metrics.json",
+                        ),
+                    ),
+                    Json(
+                        name="TrainerState",
+                        reader_params=Json.make_params(
+                            path=root_path / "behavior/trainer_state.json",
+                        ),
+                    ),
                     HarpDevice(
                         name="HarpBehavior",
                         reader_params=HarpDevice.make_params(

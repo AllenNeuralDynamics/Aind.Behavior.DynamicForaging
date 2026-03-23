@@ -2,8 +2,8 @@ import unittest
 
 from aind_behavior_dynamic_foraging_curricula.coupled_baiting import CURRICULUM, TRAINER
 from aind_behavior_dynamic_foraging_curricula.coupled_baiting.stages import (
-    make_s_stage_1_warmup,
     make_s_stage_1,
+    make_s_stage_1_warmup,
     make_s_stage_2,
     make_s_stage_3,
     make_s_stage_final,

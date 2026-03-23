@@ -1,11 +1,12 @@
 import os
-from pathlib import Path
-from typing import List, Optional
+from typing import List, Literal
 
 import numpy as np
 from aind_behavior_curriculum import Metrics
 from aind_behavior_dynamic_foraging.data_contract import dataset as df_foraging_dataset
 from pydantic import Field
+
+STAGE_NAMES = Literal["stage_1_warmup", "stage_1", "stage_2", "stage_3", "final", "graduated"]
 
 
 class DynamicForagingMetrics(Metrics):
@@ -18,13 +19,14 @@ class DynamicForagingMetrics(Metrics):
         min_length=1, description="Full history of trials finished per session"
     )
     total_sessions: int = Field(ge=0, description="Total sessions completed.")
-    consecutive_sessions_at_current_stage: int = Field(ge=0, escription="Last consecutive sessions at current stage.")
+    consecutive_sessions_at_current_stage: int = Field(ge=0, description="Last consecutive sessions at current stage.")
+    stage_name: STAGE_NAMES = Field(
+        description="Stage name of session."
+    )
 
 
 def metrics_from_dataset(
     data_directory: os.PathLike,
-    previous_metrics: Optional[os.PathLike] = None,
-    stage_changed: bool = False,
 ) -> DynamicForagingMetrics:
     """
     Create metrics for completed session.
@@ -32,13 +34,7 @@ def metrics_from_dataset(
     Args:
         data_directory (os.PathLike):
             Path to the directory containing the dataset to analyze. This
-            directory is expected to include all required behavioral data files.
-
-        previous_metrics (Optional[os.PathLike]):
-            Path to a previously computed metrics file as metrics depend on previous sessions. If not provided, metrics will be based only on current session.
-
-        stage_changed (bool):
-            Flag to indicate whether stage in previous session differs from current session
+            directory is expected to include all required behavioral data files. Also includes metrics and trainer state
 
     Returns:
         DynamicForagingMetrics:
@@ -70,17 +66,20 @@ def metrics_from_dataset(
     foraging_efficiency = compute_foraging_efficiency(
         is_baiting=is_baiting, is_rewarded=is_rewarded, p_left_reward=p_left_reward, p_right_reward=p_right_reward
     )
+    try: 
+        prev_metrics = DynamicForagingMetrics(**dataset["Behavior"]["PreviousMetrics"].data)
+        prev_stage = prev_metrics.stage_name
+    except FileNotFoundError:
+        prev_metrics = None
+        prev_stage = None
 
-    if previous_metrics:
-        metrics = DynamicForagingMetrics.model_validate_json(Path(previous_metrics).read_text())
-    else:
-        metrics = None
-
-    foraging_efficiency_per_session = [] if not metrics else metrics.foraging_efficiency_per_session
-    unignored_trials_per_session = [] if not metrics else metrics.unignored_trials_per_session
-    total_sessions = 0 if not metrics else metrics.total_sessions
+    foraging_efficiency_per_session = [] if not prev_metrics else prev_metrics.foraging_efficiency_per_session
+    unignored_trials_per_session = [] if not prev_metrics else prev_metrics.unignored_trials_per_session
+    total_sessions = 0 if not prev_metrics else prev_metrics.total_sessions
+    
+    stage_name = dataset["Behavior"]["TrainerState"].data["stage"]["name"]
     consecutive_sessions_at_current_stage = (
-        0 if not metrics or stage_changed else metrics.consecutive_sessions_at_current_stage
+        0 if not prev_metrics or stage_name != prev_stage else prev_metrics.consecutive_sessions_at_current_stage
     )
 
     return DynamicForagingMetrics(
@@ -88,6 +87,7 @@ def metrics_from_dataset(
         unignored_trials_per_session=unignored_trials_per_session + [sum(x is not None for x in is_right_choice)],
         total_sessions=total_sessions + 1,
         consecutive_sessions_at_current_stage=consecutive_sessions_at_current_stage + 1,
+        stage_name=stage_name
     )
 
 

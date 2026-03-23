@@ -11,7 +11,15 @@ from .. import __semver__
 from ..cli import CurriculumCliArgs, CurriculumSuggestion
 from ..metrics import DynamicForagingMetrics
 from ..utils import metrics_from_dataset_path, trainer_state_from_file
-from .stages import  make_s_stage_1_warmup, make_s_stage_1, make_s_stage_2, make_s_stage_3, make_s_stage_final, make_s_stage_graduated
+from .stages import (
+    make_s_stage_1,
+    make_s_stage_1_warmup,
+    make_s_stage_2,
+    make_s_stage_3,
+    make_s_stage_final,
+    make_s_stage_graduated,
+)
+
 CURRICULUM_NAME = "CoupledBaiting"
 PKG_LOCATION = ".".join(__name__.split(".")[:-1])
 
@@ -118,8 +126,6 @@ TRAINER = Trainer(CURRICULUM)
 def run_curriculum(args: CurriculumCliArgs) -> CurriculumSuggestion[TrainerState[Any], Any]:
     trainer_state = trainer_state_from_file(args.input_trainer_state, TRAINER)
     metrics: Metrics = metrics_from_dataset_path(
-        stage_changed=args.stage_changed,
-        previous_metrics=args.previous_metrics,
         dataset_path=args.data_directory,
         trainer_state=trainer_state,
     )

@@ -43,12 +43,6 @@ class ListKnownCurricula(RootModel):
 
 
 class CurriculumCliArgs(BaseSettings):
-    stage_changed: t.Optional[bool] = Field(
-        default=False, description="Flag to indicate whether stage in previous session differs from current session"
-    )
-    previous_metrics: t.Optional[os.PathLike] = Field(
-        default=None, description="Path to serialized metrics of previous session."
-    )
     data_directory: os.PathLike = Field(description="Path to the session data directory.")
     input_trainer_state: os.PathLike = Field(description="Path to a serialized trainer state.")
     mute_suggestion: CliImplicitFlag[bool] = Field(default=False, description="Disables the suggestion output")

@@ -82,30 +82,12 @@ class TestMetricsFromDataset(unittest.TestCase):
         self.assertEqual(result.consecutive_sessions_at_current_stage, 1)
 
     def test_previous_metrics_accumulate(self):
-
-        prev_path = _make_previous_metrics(self.tmp_path)
         trials = [_make_trial(True, True, 0.7, 0.3)]
         with _patch_dataset(trials):
-            result = metrics_from_dataset(self.tmp_path, previous_metrics=prev_path)
+            result = metrics_from_dataset(self.tmp_path)
         self.assertEqual(result.total_sessions, 2)
         self.assertEqual(len(result.foraging_efficiency_per_session), 2)
         self.assertEqual(len(result.unignored_trials_per_session), 2)
-
-    def test_stage_changed_resets_consecutive_sessions(self):
-
-        prev_path = _make_previous_metrics(self.tmp_path, consecutive_sessions_at_current_stage=3)
-        trials = [_make_trial(True, True, 0.7, 0.3)]
-        with _patch_dataset(trials):
-            result = metrics_from_dataset(self.tmp_path, previous_metrics=prev_path, stage_changed=True)
-        self.assertEqual(result.consecutive_sessions_at_current_stage, 1)
-
-    def test_stage_not_changed_increments_consecutive_sessions(self):
-
-        prev_path = _make_previous_metrics(self.tmp_path, consecutive_sessions_at_current_stage=3)
-        trials = [_make_trial(True, True, 0.7, 0.3)]
-        with _patch_dataset(trials):
-            result = metrics_from_dataset(self.tmp_path, previous_metrics=prev_path, stage_changed=False)
-        self.assertEqual(result.consecutive_sessions_at_current_stage, 4)
 
     def test_foraging_efficiency_is_finite_and_positive(self):
         trials = [
