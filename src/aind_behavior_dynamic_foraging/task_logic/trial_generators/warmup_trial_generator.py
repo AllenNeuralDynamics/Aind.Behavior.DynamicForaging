@@ -40,11 +40,8 @@ class WarmupTrialGenerationEndConditions(BaseModel):
 class WarmupTrialGeneratorSpec(BlockBasedTrialGeneratorSpec):
     type: Literal["WarmupTrialGenerator"] = "WarmupTrialGenerator"
 
-    block_len: Distribution = Field(
-        default=ExponentialDistribution(
-            distribution_parameters=ExponentialDistributionParameters(rate=1),
-            truncation_parameters=TruncationParameters(min=1, max=1),
-        ),
+    block_len: Literal[1] = Field(
+        default=1,
         description="Distribution describing block length.",
     )
 

@@ -11,8 +11,7 @@ from .. import __semver__
 from ..cli import CurriculumCliArgs, CurriculumSuggestion
 from ..metrics import DynamicForagingMetrics
 from ..utils import metrics_from_dataset_path, trainer_state_from_file
-from .stages import s_final, s_graduated, s_stage_1, s_stage_1_warmup, s_stage_2, s_stage_3
-
+from .stages import  make_s_stage_1_warmup, make_s_stage_1, make_s_stage_2, make_s_stage_3, make_s_stage_final, make_s_stage_graduated
 CURRICULUM_NAME = "CoupledBaiting"
 PKG_LOCATION = ".".join(__name__.split(".")[:-1])
 
@@ -87,31 +86,31 @@ curriculum_class: Type[Curriculum[AindDynamicForagingTaskLogic]] = create_curric
 CURRICULUM = curriculum_class()
 
 # add stages
-CURRICULUM.add_stage(s_stage_1_warmup)
-CURRICULUM.add_stage(s_stage_1)
-CURRICULUM.add_stage(s_stage_2)
-CURRICULUM.add_stage(s_stage_3)
-CURRICULUM.add_stage(s_final)
-CURRICULUM.add_stage(s_graduated)
+CURRICULUM.add_stage(make_s_stage_1_warmup())
+CURRICULUM.add_stage(make_s_stage_1())
+CURRICULUM.add_stage(make_s_stage_2())
+CURRICULUM.add_stage(make_s_stage_3())
+CURRICULUM.add_stage(make_s_stage_final())
+CURRICULUM.add_stage(make_s_stage_graduated())
 
 # add stage transitions
 # warmup
 CURRICULUM.add_stage_transition(
-    s_stage_1_warmup, s_stage_2, st_stage_1_warmup_to_stage_2
+    make_s_stage_1_warmup(), make_s_stage_2(), st_stage_1_warmup_to_stage_2
 )  # add 2 first to take priority
 
-CURRICULUM.add_stage_transition(s_stage_1_warmup, s_stage_1, st_stage_1_warmup_to_stage_1)
+CURRICULUM.add_stage_transition(make_s_stage_1_warmup(), make_s_stage_1(), st_stage_1_warmup_to_stage_1)
 # stage 1
-CURRICULUM.add_stage_transition(s_stage_1, s_stage_2, st_stage_1_to_stage_2)
+CURRICULUM.add_stage_transition(make_s_stage_1(), make_s_stage_2(), st_stage_1_to_stage_2)
 # stage 2
-CURRICULUM.add_stage_transition(s_stage_2, s_stage_3, st_stage_2_to_stage_3)
-CURRICULUM.add_stage_transition(s_stage_2, s_stage_1, st_stage_2_to_stage_1)
+CURRICULUM.add_stage_transition(make_s_stage_2(), make_s_stage_3(), st_stage_2_to_stage_3)
+CURRICULUM.add_stage_transition(make_s_stage_2(), make_s_stage_1(), st_stage_2_to_stage_1)
 # stage 3
-CURRICULUM.add_stage_transition(s_stage_3, s_final, st_stage_3_to_final)
-CURRICULUM.add_stage_transition(s_stage_3, s_stage_2, st_stage_3_to_stage_2)
+CURRICULUM.add_stage_transition(make_s_stage_3(), make_s_stage_final(), st_stage_3_to_final)
+CURRICULUM.add_stage_transition(make_s_stage_3(), make_s_stage_2(), st_stage_3_to_stage_2)
 # final
-CURRICULUM.add_stage_transition(s_final, s_graduated, st_final_to_graduated)
-CURRICULUM.add_stage_transition(s_final, s_stage_3, st_final_to_stage_3)
+CURRICULUM.add_stage_transition(make_s_stage_final(), make_s_stage_graduated(), st_final_to_graduated)
+CURRICULUM.add_stage_transition(make_s_stage_final(), make_s_stage_3(), st_final_to_stage_3)
 
 TRAINER = Trainer(CURRICULUM)
 

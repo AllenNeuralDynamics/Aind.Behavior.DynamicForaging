@@ -31,12 +31,13 @@ from ..metrics import metrics_from_dataset
 
 # --- STAGES ---
 
-s_stage_1_warmup = Stage(
+
+def make_s_stage_1_warmup():
+    return Stage(
     name="stage_1_warmup",
     task=AindDynamicForagingTaskLogic(
         task_parameters=AindDynamicForagingTaskParameters(
             reward_size=RewardSize(right_value_volume=4.0, left_value_volume=4.0),
-            lick_spout_retraction=False,
             trial_generator=TrialGeneratorCompositeSpec(
                 generators=[
                     WarmupTrialGeneratorSpec(
@@ -48,8 +49,7 @@ s_stage_1_warmup = Stage(
                         ),
                         reward_probability_parameters=RewardProbabilityParameters(
                             base_reward_sum=1,
-                            family=3,
-                            pairs_n=1,
+                            reward_pairs=[[1.0, 0.0]]
                         ),
                         block_len=ExponentialDistribution(
                             distribution_parameters=ExponentialDistributionParameters(rate=1),
@@ -84,8 +84,7 @@ s_stage_1_warmup = Stage(
                         ),
                         reward_probability_parameters=RewardProbabilityParameters(
                             base_reward_sum=0.8,
-                            family=3,
-                            pairs_n=1,
+                            reward_pairs=[[1.0, 0.0]]
                         ),
                         block_len=ExponentialDistribution(
                             distribution_parameters=ExponentialDistributionParameters(rate=1 / 5),
@@ -112,7 +111,8 @@ s_stage_1_warmup = Stage(
     metrics_provider=MetricsProvider(metrics_from_dataset),
 )
 
-s_stage_1 = Stage(
+def make_s_stage_1():
+    return Stage(
     name="stage_1",
     task=AindDynamicForagingTaskLogic(
         task_parameters=AindDynamicForagingTaskParameters(
@@ -133,8 +133,7 @@ s_stage_1 = Stage(
                 ),
                 reward_probability_parameters=RewardProbabilityParameters(
                     base_reward_sum=0.8,
-                    family=3,
-                    pairs_n=1,
+                    reward_pairs=[[1.0, 0.0]]
                 ),
                 block_len=ExponentialDistribution(
                     distribution_parameters=ExponentialDistributionParameters(rate=1 / 5),
@@ -159,7 +158,8 @@ s_stage_1 = Stage(
     metrics_provider=MetricsProvider(metrics_from_dataset),
 )
 
-s_stage_2 = Stage(
+def make_s_stage_2():
+    return Stage(
     name="stage_2",
     task=AindDynamicForagingTaskLogic(
         task_parameters=AindDynamicForagingTaskParameters(
@@ -180,8 +180,7 @@ s_stage_2 = Stage(
                 ),
                 reward_probability_parameters=RewardProbabilityParameters(
                     base_reward_sum=0.6,
-                    family=1,
-                    pairs_n=1,
+                    reward_pairs=[[8, 1]]
                 ),
                 block_len=ExponentialDistribution(
                     distribution_parameters=ExponentialDistributionParameters(rate=1 / 10),
@@ -206,7 +205,8 @@ s_stage_2 = Stage(
     metrics_provider=MetricsProvider(metrics_from_dataset),
 )
 
-s_stage_3 = Stage(
+def make_s_stage_3():
+    return Stage(
     name="stage_3",
     task=AindDynamicForagingTaskLogic(
         task_parameters=AindDynamicForagingTaskParameters(
@@ -227,8 +227,7 @@ s_stage_3 = Stage(
                 ),
                 reward_probability_parameters=RewardProbabilityParameters(
                     base_reward_sum=0.45,
-                    family=1,
-                    pairs_n=1,
+                    reward_pairs=[[8, 1]]
                 ),
                 block_len=ExponentialDistribution(
                     distribution_parameters=ExponentialDistributionParameters(rate=1 / 20),
@@ -252,8 +251,8 @@ s_stage_3 = Stage(
     ),
     metrics_provider=MetricsProvider(metrics_from_dataset),
 )
-
-s_final = Stage(
+def make_s_stage_final():
+    return Stage(
     name="final",
     task=AindDynamicForagingTaskLogic(
         task_parameters=AindDynamicForagingTaskParameters(
@@ -270,8 +269,7 @@ s_final = Stage(
                 behavior_stability_parameters=None,
                 reward_probability_parameters=RewardProbabilityParameters(
                     base_reward_sum=0.45,
-                    family=1,
-                    pairs_n=4,
+                    reward_pairs= [[8, 1], [6, 1], [3, 1], [1, 1]]
                 ),
                 block_len=ExponentialDistribution(
                     distribution_parameters=ExponentialDistributionParameters(rate=1 / 20),
@@ -296,7 +294,8 @@ s_final = Stage(
     metrics_provider=MetricsProvider(metrics_from_dataset),
 )
 
-s_graduated = Stage(
+def make_s_stage_graduated():
+    return Stage(
     name="graduated",
     task=AindDynamicForagingTaskLogic(
         task_parameters=AindDynamicForagingTaskParameters(
@@ -313,8 +312,7 @@ s_graduated = Stage(
                 behavior_stability_parameters=None,
                 reward_probability_parameters=RewardProbabilityParameters(
                     base_reward_sum=0.45,
-                    family=1,
-                    pairs_n=4,
+                    reward_pairs= [[8, 1], [6, 1], [3, 1], [1, 1]]
                 ),
                 block_len=ExponentialDistribution(
                     distribution_parameters=ExponentialDistributionParameters(rate=1 / 20),
