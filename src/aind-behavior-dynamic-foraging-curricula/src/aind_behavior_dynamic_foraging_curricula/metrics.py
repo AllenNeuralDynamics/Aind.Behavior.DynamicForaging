@@ -67,7 +67,7 @@ def metrics_from_dataset(
     foraging_efficiency = compute_foraging_efficiency(
         is_baiting=is_baiting, is_rewarded=is_rewarded, p_left_reward=p_left_reward, p_right_reward=p_right_reward
     )
-    logger.debug(f"Calculated foraging efficency as {foraging_efficiency}")
+    logger.debug(f"Calculated foraging efficiency as {foraging_efficiency}")
 
     try:
         prev_metrics = DynamicForagingMetrics(**dataset["Behavior"]["PreviousMetrics"].data)
@@ -137,10 +137,10 @@ def compute_foraging_efficiency(
     """
 
     if not is_baiting:
-        logger.debug("Caluculated non baiting foraging efficiency.")
+        logger.debug("Calculated non baiting foraging efficiency.")
         optimal_rewards_per_session = np.nanmean(np.max([p_right_reward], axis=0)) * len(p_left_reward)
     else:
-        logger.debug("Caluculated baiting foraging efficiency.")
+        logger.debug("Calculated baiting foraging efficiency.")
         p_max = np.maximum(p_left_reward, p_right_reward)
         p_min = np.minimum(p_left_reward, p_right_reward)
 
