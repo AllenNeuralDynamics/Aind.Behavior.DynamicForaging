@@ -155,4 +155,4 @@ def compute_foraging_efficiency(
 
         optimal_rewards_per_session = np.nanmean(optimal_reward_per_trial) * len(p_left_reward)
 
-    return is_rewarded.count(True) / optimal_rewards_per_session
+    return float(is_rewarded.count(True) / optimal_rewards_per_session)
