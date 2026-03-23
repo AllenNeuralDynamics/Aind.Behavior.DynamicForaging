@@ -16,7 +16,7 @@ def main():
         consecutive_sessions_at_current_stage=1,
         unignored_trials_per_session=[250],
         foraging_efficiency_per_session=[0.65],
-        previous_stage_name="stage_1_warmup",
+        stage_name="stage_1_warmup",
     )
 
     # evaluate
