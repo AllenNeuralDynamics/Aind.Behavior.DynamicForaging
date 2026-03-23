@@ -53,7 +53,7 @@ def make_s_stage_1_warmup():
                             ),
                             block_len=Scalar(value=1),
                             inter_trial_interval_duration=ExponentialDistribution(
-                                distribution_parameters=ExponentialDistributionParameters(rate=1 / 3),
+                                distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
                                 truncation_parameters=TruncationParameters(min=1, max=7),
                             ),
                             quiescent_duration=UniformDistribution(
@@ -83,11 +83,11 @@ def make_s_stage_1_warmup():
                                 base_reward_sum=0.8, reward_pairs=[[1.0, 0.0]]
                             ),
                             block_len=ExponentialDistribution(
-                                distribution_parameters=ExponentialDistributionParameters(rate=1 / 5),
+                                distribution_parameters=ExponentialDistributionParameters(rate=0.2),
                                 truncation_parameters=TruncationParameters(min=10, max=20),
                             ),
                             inter_trial_interval_duration=ExponentialDistribution(
-                                distribution_parameters=ExponentialDistributionParameters(rate=1 / 3),
+                                distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
                                 truncation_parameters=TruncationParameters(min=1, max=7),
                             ),
                             quiescent_duration=UniformDistribution(
@@ -132,11 +132,11 @@ def make_s_stage_1():
                         base_reward_sum=0.8, reward_pairs=[[1.0, 0.0]]
                     ),
                     block_len=ExponentialDistribution(
-                        distribution_parameters=ExponentialDistributionParameters(rate=1 / 5),
+                        distribution_parameters=ExponentialDistributionParameters(rate=0.2),
                         truncation_parameters=TruncationParameters(min=10, max=20),
                     ),
                     inter_trial_interval_duration=ExponentialDistribution(
-                        distribution_parameters=ExponentialDistributionParameters(rate=1 / 3),
+                        distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
                         truncation_parameters=TruncationParameters(min=1, max=7),
                     ),
                     quiescent_duration=UniformDistribution(
@@ -179,11 +179,11 @@ def make_s_stage_2():
                         base_reward_sum=0.6, reward_pairs=[[8, 1]]
                     ),
                     block_len=ExponentialDistribution(
-                        distribution_parameters=ExponentialDistributionParameters(rate=1 / 10),
+                        distribution_parameters=ExponentialDistributionParameters(rate=0.1),
                         truncation_parameters=TruncationParameters(min=10, max=40),
                     ),
                     inter_trial_interval_duration=ExponentialDistribution(
-                        distribution_parameters=ExponentialDistributionParameters(rate=1 / 5),
+                        distribution_parameters=ExponentialDistributionParameters(rate=0.2),
                         truncation_parameters=TruncationParameters(min=1, max=10),
                     ),
                     quiescent_duration=UniformDistribution(
@@ -226,11 +226,11 @@ def make_s_stage_3():
                         base_reward_sum=0.45, reward_pairs=[[8, 1]]
                     ),
                     block_len=ExponentialDistribution(
-                        distribution_parameters=ExponentialDistributionParameters(rate=1 / 20),
+                        distribution_parameters=ExponentialDistributionParameters(rate=0.05),
                         truncation_parameters=TruncationParameters(min=20, max=60),
                     ),
                     inter_trial_interval_duration=ExponentialDistribution(
-                        distribution_parameters=ExponentialDistributionParameters(rate=1 / 3),
+                        distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
                         truncation_parameters=TruncationParameters(min=1, max=15),
                     ),
                     quiescent_duration=UniformDistribution(
@@ -269,11 +269,11 @@ def make_s_stage_final():
                         base_reward_sum=0.45, reward_pairs=[[8, 1], [6, 1], [3, 1], [1, 1]]
                     ),
                     block_len=ExponentialDistribution(
-                        distribution_parameters=ExponentialDistributionParameters(rate=1 / 20),
+                        distribution_parameters=ExponentialDistributionParameters(rate=0.05),
                         truncation_parameters=TruncationParameters(min=20, max=60),
                     ),
                     inter_trial_interval_duration=ExponentialDistribution(
-                        distribution_parameters=ExponentialDistributionParameters(rate=1 / 3),
+                        distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
                         truncation_parameters=TruncationParameters(min=1, max=30),
                     ),
                     quiescent_duration=UniformDistribution(
@@ -312,11 +312,11 @@ def make_s_stage_graduated():
                         base_reward_sum=0.45, reward_pairs=[[8, 1], [6, 1], [3, 1], [1, 1]]
                     ),
                     block_len=ExponentialDistribution(
-                        distribution_parameters=ExponentialDistributionParameters(rate=1 / 20),
+                        distribution_parameters=ExponentialDistributionParameters(rate=0.05),
                         truncation_parameters=TruncationParameters(min=20, max=60),
                     ),
                     inter_trial_interval_duration=ExponentialDistribution(
-                        distribution_parameters=ExponentialDistributionParameters(rate=1 / 3),
+                        distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
                         truncation_parameters=TruncationParameters(min=1, max=30),
                     ),
                     quiescent_duration=UniformDistribution(
