@@ -2,12 +2,12 @@ import unittest
 
 from aind_behavior_dynamic_foraging_curricula.coupled_baiting import CURRICULUM, TRAINER
 from aind_behavior_dynamic_foraging_curricula.coupled_baiting.stages import (
-    s_final,
-    s_graduated,
-    s_stage_1,
-    s_stage_1_warmup,
-    s_stage_2,
-    s_stage_3,
+    make_s_stage_1_warmup,
+    make_s_stage_1,
+    make_s_stage_2,
+    make_s_stage_3,
+    make_s_stage_final,
+    make_s_stage_graduated,
 )
 from aind_behavior_dynamic_foraging_curricula.metrics import DynamicForagingMetrics
 
@@ -19,7 +19,7 @@ def make_metrics(
     consecutive_sessions_at_current_stage: int = 1,
 ) -> DynamicForagingMetrics:
     return DynamicForagingMetrics(
-        foraging_efficiency_per_session=unignored_trials_per_session or [0.0],
+        foraging_efficiency_per_session=foraging_efficiency_per_session or [0.0],
         unignored_trials_per_session=unignored_trials_per_session or [0],
         total_sessions=total_sessions,
         consecutive_sessions_at_current_stage=consecutive_sessions_at_current_stage,
@@ -44,7 +44,7 @@ class TestCurriculumStructure(unittest.TestCase):
 
 class TestWarmupTransitions(unittest.TestCase):
     def setUp(self):
-        self.trainer_state = TRAINER.create_trainer_state(stage=s_stage_1_warmup)
+        self.trainer_state = TRAINER.create_trainer_state(stage=make_s_stage_1_warmup())
 
     def test_warmup_to_stage_2_on_good_performance(self):
         metrics = make_metrics(unignored_trials_per_session=[250], foraging_efficiency_per_session=[0.65])
@@ -72,7 +72,7 @@ class TestWarmupTransitions(unittest.TestCase):
 
 class TestStage1Transitions(unittest.TestCase):
     def setUp(self):
-        self.trainer_state = TRAINER.create_trainer_state(stage=s_stage_1)
+        self.trainer_state = TRAINER.create_trainer_state(stage=make_s_stage_1())
 
     def test_stage_1_to_stage_2_on_good_performance(self):
         metrics = make_metrics(unignored_trials_per_session=[200], foraging_efficiency_per_session=[0.6])
@@ -87,7 +87,7 @@ class TestStage1Transitions(unittest.TestCase):
 
 class TestStage2Transitions(unittest.TestCase):
     def setUp(self):
-        self.trainer_state = TRAINER.create_trainer_state(stage=s_stage_2)
+        self.trainer_state = TRAINER.create_trainer_state(stage=make_s_stage_2())
 
     def test_stage_2_to_stage_3_on_good_performance(self):
         metrics = make_metrics(unignored_trials_per_session=[300], foraging_efficiency_per_session=[0.65])
@@ -112,7 +112,7 @@ class TestStage2Transitions(unittest.TestCase):
 
 class TestStage3Transitions(unittest.TestCase):
     def setUp(self):
-        self.trainer_state = TRAINER.create_trainer_state(stage=s_stage_3)
+        self.trainer_state = TRAINER.create_trainer_state(stage=make_s_stage_3())
 
     def test_stage_3_to_final_on_good_performance(self):
         metrics = make_metrics(unignored_trials_per_session=[400], foraging_efficiency_per_session=[0.7])
@@ -137,7 +137,7 @@ class TestStage3Transitions(unittest.TestCase):
 
 class TestFinalTransitions(unittest.TestCase):
     def setUp(self):
-        self.trainer_state = TRAINER.create_trainer_state(stage=s_final)
+        self.trainer_state = TRAINER.create_trainer_state(stage=make_s_stage_final())
 
     def test_final_to_graduated_on_excellent_performance(self):
         metrics = make_metrics(
@@ -170,7 +170,7 @@ class TestFinalTransitions(unittest.TestCase):
         self.assertNotEqual(updated.stage.name, "graduated")
 
     def test_graduated_is_absorbing(self):
-        trainer_state = TRAINER.create_trainer_state(stage=s_graduated)
+        trainer_state = TRAINER.create_trainer_state(stage=make_s_stage_graduated())
         metrics = make_metrics(
             unignored_trials_per_session=[500] * 5,
             foraging_efficiency_per_session=[0.9] * 5,

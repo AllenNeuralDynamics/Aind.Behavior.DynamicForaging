@@ -51,10 +51,7 @@ def make_s_stage_1_warmup():
                             base_reward_sum=1,
                             reward_pairs=[[1.0, 0.0]]
                         ),
-                        block_len=ExponentialDistribution(
-                            distribution_parameters=ExponentialDistributionParameters(rate=1),
-                            truncation_parameters=TruncationParameters(min=1, max=1),
-                        ),
+                        block_len=1,
                         inter_trial_interval_duration=ExponentialDistribution(
                             distribution_parameters=ExponentialDistributionParameters(rate=1 / 3),
                             truncation_parameters=TruncationParameters(min=1, max=7),
