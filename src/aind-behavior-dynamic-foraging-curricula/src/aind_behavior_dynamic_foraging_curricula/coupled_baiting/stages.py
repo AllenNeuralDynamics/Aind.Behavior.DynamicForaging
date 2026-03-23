@@ -22,6 +22,7 @@ from aind_behavior_dynamic_foraging.task_logic.trial_generators.warmup_trial_gen
 from aind_behavior_services.task.distributions import (
     ExponentialDistribution,
     ExponentialDistributionParameters,
+    Scalar,
     TruncationParameters,
     UniformDistribution,
     UniformDistributionParameters,
@@ -50,7 +51,7 @@ def make_s_stage_1_warmup():
                             reward_probability_parameters=RewardProbabilityParameters(
                                 base_reward_sum=1, reward_pairs=[[1.0, 0.0]]
                             ),
-                            block_len=1,
+                            block_len=Scalar(value=1),
                             inter_trial_interval_duration=ExponentialDistribution(
                                 distribution_parameters=ExponentialDistributionParameters(rate=1 / 3),
                                 truncation_parameters=TruncationParameters(min=1, max=7),

@@ -1,6 +1,7 @@
 import logging
 from typing import Literal
 
+from aind_behavior_services.task.distributions import Distribution, Scalar
 from pydantic import BaseModel, Field
 
 from ..trial_models import TrialOutcome
@@ -34,8 +35,8 @@ class WarmupTrialGenerationEndConditions(BaseModel):
 class WarmupTrialGeneratorSpec(BlockBasedTrialGeneratorSpec):
     type: Literal["WarmupTrialGenerator"] = "WarmupTrialGenerator"
 
-    block_len: Literal[1] = Field(
-        default=1,
+    block_len: Distribution = Field(
+        default=Scalar(value=1),
         description="Distribution describing block length.",
     )
 

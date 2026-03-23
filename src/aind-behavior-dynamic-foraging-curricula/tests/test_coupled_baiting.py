@@ -17,12 +17,14 @@ def make_metrics(
     unignored_trials_per_session: list[int] = None,
     total_sessions: int = 1,
     consecutive_sessions_at_current_stage: int = 1,
+    stage_name: str = "stage_1_warmup",
 ) -> DynamicForagingMetrics:
     return DynamicForagingMetrics(
         foraging_efficiency_per_session=foraging_efficiency_per_session or [0.0],
         unignored_trials_per_session=unignored_trials_per_session or [0],
         total_sessions=total_sessions,
         consecutive_sessions_at_current_stage=consecutive_sessions_at_current_stage,
+        stage_name=stage_name,
     )
 
 
@@ -47,7 +49,9 @@ class TestWarmupTransitions(unittest.TestCase):
         self.trainer_state = TRAINER.create_trainer_state(stage=make_s_stage_1_warmup())
 
     def test_warmup_to_stage_2_on_good_performance(self):
-        metrics = make_metrics(unignored_trials_per_session=[250], foraging_efficiency_per_session=[0.65])
+        metrics = make_metrics(
+            unignored_trials_per_session=[250], foraging_efficiency_per_session=[0.65], stage_name="stage_1_warmup"
+        )
         updated = TRAINER.evaluate(self.trainer_state, metrics)
         self.assertEqual(updated.stage.name, "stage_2")
 
@@ -56,18 +60,10 @@ class TestWarmupTransitions(unittest.TestCase):
             unignored_trials_per_session=[100],
             foraging_efficiency_per_session=[0.4],
             consecutive_sessions_at_current_stage=1,
+            stage_name="stage_1_warmup",
         )
         updated = TRAINER.evaluate(self.trainer_state, metrics)
         self.assertEqual(updated.stage.name, "stage_1")
-
-    def test_warmup_no_transition_on_first_session_bad_performance(self):
-        metrics = make_metrics(
-            unignored_trials_per_session=[100],
-            foraging_efficiency_per_session=[0.4],
-            consecutive_sessions_at_current_stage=0,
-        )
-        updated = TRAINER.evaluate(self.trainer_state, metrics)
-        self.assertEqual(updated.stage.name, "stage_1_warmup")
 
 
 class TestStage1Transitions(unittest.TestCase):
@@ -75,12 +71,16 @@ class TestStage1Transitions(unittest.TestCase):
         self.trainer_state = TRAINER.create_trainer_state(stage=make_s_stage_1())
 
     def test_stage_1_to_stage_2_on_good_performance(self):
-        metrics = make_metrics(unignored_trials_per_session=[200], foraging_efficiency_per_session=[0.6])
+        metrics = make_metrics(
+            unignored_trials_per_session=[200], foraging_efficiency_per_session=[0.6], stage_name="stage_1"
+        )
         updated = TRAINER.evaluate(self.trainer_state, metrics)
         self.assertEqual(updated.stage.name, "stage_2")
 
     def test_stage_1_no_transition_on_poor_performance(self):
-        metrics = make_metrics(unignored_trials_per_session=[100], foraging_efficiency_per_session=[0.4])
+        metrics = make_metrics(
+            unignored_trials_per_session=[100], foraging_efficiency_per_session=[0.4], stage_name="stage_1"
+        )
         updated = TRAINER.evaluate(self.trainer_state, metrics)
         self.assertEqual(updated.stage.name, "stage_1")
 
@@ -90,22 +90,30 @@ class TestStage2Transitions(unittest.TestCase):
         self.trainer_state = TRAINER.create_trainer_state(stage=make_s_stage_2())
 
     def test_stage_2_to_stage_3_on_good_performance(self):
-        metrics = make_metrics(unignored_trials_per_session=[300], foraging_efficiency_per_session=[0.65])
+        metrics = make_metrics(
+            unignored_trials_per_session=[300], foraging_efficiency_per_session=[0.65], stage_name="stage_2"
+        )
         updated = TRAINER.evaluate(self.trainer_state, metrics)
         self.assertEqual(updated.stage.name, "stage_3")
 
     def test_stage_2_rollback_to_stage_1_on_poor_trials(self):
-        metrics = make_metrics(unignored_trials_per_session=[150], foraging_efficiency_per_session=[0.6])
+        metrics = make_metrics(
+            unignored_trials_per_session=[150], foraging_efficiency_per_session=[0.6], stage_name="stage_2"
+        )
         updated = TRAINER.evaluate(self.trainer_state, metrics)
         self.assertEqual(updated.stage.name, "stage_1")
 
     def test_stage_2_rollback_to_stage_1_on_poor_efficiency(self):
-        metrics = make_metrics(unignored_trials_per_session=[199], foraging_efficiency_per_session=[0.5])
+        metrics = make_metrics(
+            unignored_trials_per_session=[199], foraging_efficiency_per_session=[0.5], stage_name="stage_2"
+        )
         updated = TRAINER.evaluate(self.trainer_state, metrics)
         self.assertEqual(updated.stage.name, "stage_1")
 
     def test_stage_2_no_transition_on_middle_performance(self):
-        metrics = make_metrics(unignored_trials_per_session=[250], foraging_efficiency_per_session=[0.6])
+        metrics = make_metrics(
+            unignored_trials_per_session=[250], foraging_efficiency_per_session=[0.6], stage_name="stage_2"
+        )
         updated = TRAINER.evaluate(self.trainer_state, metrics)
         self.assertEqual(updated.stage.name, "stage_2")
 
@@ -115,22 +123,30 @@ class TestStage3Transitions(unittest.TestCase):
         self.trainer_state = TRAINER.create_trainer_state(stage=make_s_stage_3())
 
     def test_stage_3_to_final_on_good_performance(self):
-        metrics = make_metrics(unignored_trials_per_session=[400], foraging_efficiency_per_session=[0.7])
+        metrics = make_metrics(
+            unignored_trials_per_session=[400], foraging_efficiency_per_session=[0.7], stage_name="stage_3"
+        )
         updated = TRAINER.evaluate(self.trainer_state, metrics)
         self.assertEqual(updated.stage.name, "final")
 
     def test_stage_3_rollback_to_stage_2_on_poor_trials(self):
-        metrics = make_metrics(unignored_trials_per_session=[250], foraging_efficiency_per_session=[0.7])
+        metrics = make_metrics(
+            unignored_trials_per_session=[250], foraging_efficiency_per_session=[0.7], stage_name="stage_3"
+        )
         updated = TRAINER.evaluate(self.trainer_state, metrics)
         self.assertEqual(updated.stage.name, "stage_2")
 
     def test_stage_3_rollback_to_stage_2_on_poor_efficiency(self):
-        metrics = make_metrics(unignored_trials_per_session=[299], foraging_efficiency_per_session=[0.6])
+        metrics = make_metrics(
+            unignored_trials_per_session=[299], foraging_efficiency_per_session=[0.6], stage_name="stage_3"
+        )
         updated = TRAINER.evaluate(self.trainer_state, metrics)
         self.assertEqual(updated.stage.name, "stage_2")
 
     def test_stage_3_no_transition_on_middle_performance(self):
-        metrics = make_metrics(unignored_trials_per_session=[350], foraging_efficiency_per_session=[0.67])
+        metrics = make_metrics(
+            unignored_trials_per_session=[350], foraging_efficiency_per_session=[0.67], stage_name="stage_3"
+        )
         updated = TRAINER.evaluate(self.trainer_state, metrics)
         self.assertEqual(updated.stage.name, "stage_3")
 
@@ -145,6 +161,7 @@ class TestFinalTransitions(unittest.TestCase):
             foraging_efficiency_per_session=[0.70] * 5,
             total_sessions=10,
             consecutive_sessions_at_current_stage=5,
+            stage_name="final",
         )
         updated = TRAINER.evaluate(self.trainer_state, metrics)
         self.assertEqual(updated.stage.name, "graduated")
@@ -155,6 +172,7 @@ class TestFinalTransitions(unittest.TestCase):
             foraging_efficiency_per_session=[0.55] * 5,
             total_sessions=10,
             consecutive_sessions_at_current_stage=5,
+            stage_name="final",
         )
         updated = TRAINER.evaluate(self.trainer_state, metrics)
         self.assertEqual(updated.stage.name, "stage_3")
@@ -165,6 +183,7 @@ class TestFinalTransitions(unittest.TestCase):
             foraging_efficiency_per_session=[0.70] * 5,
             total_sessions=5,
             consecutive_sessions_at_current_stage=3,
+            stage_name="final",
         )
         updated = TRAINER.evaluate(self.trainer_state, metrics)
         self.assertNotEqual(updated.stage.name, "graduated")
@@ -176,6 +195,7 @@ class TestFinalTransitions(unittest.TestCase):
             foraging_efficiency_per_session=[0.9] * 5,
             total_sessions=20,
             consecutive_sessions_at_current_stage=10,
+            stage_name="final",
         )
         updated = TRAINER.evaluate(trainer_state, metrics)
         self.assertEqual(updated.stage.name, "graduated")

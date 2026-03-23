@@ -1,3 +1,4 @@
+import logging
 import os
 from typing import List, Literal
 
@@ -7,6 +8,8 @@ from aind_behavior_dynamic_foraging.data_contract import dataset as df_foraging_
 from pydantic import Field
 
 STAGE_NAMES = Literal["stage_1_warmup", "stage_1", "stage_2", "stage_3", "final", "graduated"]
+
+logger = logging.getLogger(__name__)
 
 
 class DynamicForagingMetrics(Metrics):
@@ -20,9 +23,7 @@ class DynamicForagingMetrics(Metrics):
     )
     total_sessions: int = Field(ge=0, description="Total sessions completed.")
     consecutive_sessions_at_current_stage: int = Field(ge=0, description="Last consecutive sessions at current stage.")
-    stage_name: STAGE_NAMES = Field(
-        description="Stage name of session."
-    )
+    stage_name: STAGE_NAMES = Field(description="Stage name of session.")
 
 
 def metrics_from_dataset(
@@ -66,17 +67,20 @@ def metrics_from_dataset(
     foraging_efficiency = compute_foraging_efficiency(
         is_baiting=is_baiting, is_rewarded=is_rewarded, p_left_reward=p_left_reward, p_right_reward=p_right_reward
     )
-    try: 
+    logger.debug(f"Calculated foraging efficency as {foraging_efficiency}")
+
+    try:
         prev_metrics = DynamicForagingMetrics(**dataset["Behavior"]["PreviousMetrics"].data)
         prev_stage = prev_metrics.stage_name
     except FileNotFoundError:
+        logger.info("No previous metrics found.")
         prev_metrics = None
         prev_stage = None
 
     foraging_efficiency_per_session = [] if not prev_metrics else prev_metrics.foraging_efficiency_per_session
     unignored_trials_per_session = [] if not prev_metrics else prev_metrics.unignored_trials_per_session
     total_sessions = 0 if not prev_metrics else prev_metrics.total_sessions
-    
+
     stage_name = dataset["Behavior"]["TrainerState"].data["stage"]["name"]
     consecutive_sessions_at_current_stage = (
         0 if not prev_metrics or stage_name != prev_stage else prev_metrics.consecutive_sessions_at_current_stage
@@ -87,7 +91,7 @@ def metrics_from_dataset(
         unignored_trials_per_session=unignored_trials_per_session + [sum(x is not None for x in is_right_choice)],
         total_sessions=total_sessions + 1,
         consecutive_sessions_at_current_stage=consecutive_sessions_at_current_stage + 1,
-        stage_name=stage_name
+        stage_name=stage_name,
     )
 
 
@@ -133,9 +137,10 @@ def compute_foraging_efficiency(
     """
 
     if not is_baiting:
+        logger.debug("Caluculated non baiting foraging efficiency.")
         optimal_rewards_per_session = np.nanmean(np.max([p_right_reward], axis=0)) * len(p_left_reward)
-
     else:
+        logger.debug("Caluculated baiting foraging efficiency.")
         p_max = np.maximum(p_left_reward, p_right_reward)
         p_min = np.minimum(p_left_reward, p_right_reward)
 

@@ -5415,10 +5415,10 @@ namespace AindDynamicForagingDataSchema
     ///Reward probabilities are defined as pairs (p_left, p_right) normalized by
     ///base_reward_sum. Pairs are drawn from a family representing a difficulty level:
     ///
-    ///    Family 0:   [[8, 1], [6, 1], [3, 1], [1, 1]]
-    ///    Family 1:  [[8, 1], [1, 1]]
-    ///    Family 2:  [[1.0, 0.0], [0.9, 0.1], [0.8, 0.2], [0.7, 0.3], [0.6, 0.4], [0.5, 0.5]]
-    ///    Family 3:  [[6, 1], [3, 1], [1, 1]]
+    ///    Family 1:   [[8, 1], [6, 1], [3, 1], [1, 1]]
+    ///    Family 2:  [[8, 1], [1, 1]]
+    ///    Family 3:  [[1.0, 0.0], [0.9, 0.1], [0.8, 0.2], [0.7, 0.3], [0.6, 0.4], [0.5, 0.5]]
+    ///    Family 4:  [[6, 1], [3, 1], [1, 1]]
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute(@"Defines the reward probability structure for a dynamic foraging task.
@@ -5426,10 +5426,10 @@ namespace AindDynamicForagingDataSchema
     Reward probabilities are defined as pairs (p_left, p_right) normalized by
     base_reward_sum. Pairs are drawn from a family representing a difficulty level:
 
-        Family 0:   [[8, 1], [6, 1], [3, 1], [1, 1]]
-        Family 1:  [[8, 1], [1, 1]]
-        Family 2:  [[1.0, 0.0], [0.9, 0.1], [0.8, 0.2], [0.7, 0.3], [0.6, 0.4], [0.5, 0.5]]
-        Family 3:  [[6, 1], [3, 1], [1, 1]]")]
+        Family 1:   [[8, 1], [6, 1], [3, 1], [1, 1]]
+        Family 2:  [[8, 1], [1, 1]]
+        Family 3:  [[1.0, 0.0], [0.9, 0.1], [0.8, 0.2], [0.7, 0.3], [0.6, 0.4], [0.5, 0.5]]
+        Family 4:  [[6, 1], [3, 1], [1, 1]]")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class RewardProbabilityParameters

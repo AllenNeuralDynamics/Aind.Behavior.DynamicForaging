@@ -24,7 +24,7 @@ dependencies = [
 ]
 
 [tool.uv.workspace]
-members = ["workspaces/*"]
+members = ["src/aind-behavior-dynamic-foraging-curricula"]
 
 [project.urls]
 Documentation = "https://allenneuraldynamics.github.io/Aind.Behavior.DynamicForaging/"
