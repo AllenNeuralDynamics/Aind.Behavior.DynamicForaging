@@ -24,13 +24,12 @@ from aind_behavior_services.task.distributions import (
     ExponentialDistributionParameters,
     Scalar,
     TruncationParameters,
-    UniformDistribution,
-    UniformDistributionParameters,
 )
 
 from ..metrics import metrics_from_dataset
 
 # --- STAGES ---
+# adapted from https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/curriculums/coupled_baiting_2p3.py
 
 
 def make_s_stage_1_warmup():
@@ -56,9 +55,7 @@ def make_s_stage_1_warmup():
                                 distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
                                 truncation_parameters=TruncationParameters(min=1, max=7),
                             ),
-                            quiescent_duration=UniformDistribution(
-                                distribution_parameters=UniformDistributionParameters(min=0.1, max=0.1),
-                            ),
+                            quiescent_duration=Scalar(value=0.1),
                             min_block_reward=1,
                             is_baiting=True,
                             response_duration=5.0,
@@ -90,9 +87,7 @@ def make_s_stage_1_warmup():
                                 distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
                                 truncation_parameters=TruncationParameters(min=1, max=7),
                             ),
-                            quiescent_duration=UniformDistribution(
-                                distribution_parameters=UniformDistributionParameters(min=0.1, max=0.1),
-                            ),
+                            quiescent_duration=Scalar(value=0.1),
                             min_block_reward=0,
                             is_baiting=True,
                             extend_block_on_no_response=True,
@@ -139,9 +134,7 @@ def make_s_stage_1():
                         distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
                         truncation_parameters=TruncationParameters(min=1, max=7),
                     ),
-                    quiescent_duration=UniformDistribution(
-                        distribution_parameters=UniformDistributionParameters(min=0.1, max=0.1),
-                    ),
+                    quiescent_duration=Scalar(value=0.1),
                     min_block_reward=0,
                     is_baiting=False,
                     extend_block_on_no_response=True,
@@ -186,9 +179,7 @@ def make_s_stage_2():
                         distribution_parameters=ExponentialDistributionParameters(rate=0.2),
                         truncation_parameters=TruncationParameters(min=1, max=10),
                     ),
-                    quiescent_duration=UniformDistribution(
-                        distribution_parameters=UniformDistributionParameters(min=0.3, max=0.3),
-                    ),
+                    quiescent_duration=Scalar(value=0.3),
                     min_block_reward=0,
                     is_baiting=True,
                     extend_block_on_no_response=True,
@@ -233,9 +224,7 @@ def make_s_stage_3():
                         distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
                         truncation_parameters=TruncationParameters(min=1, max=15),
                     ),
-                    quiescent_duration=UniformDistribution(
-                        distribution_parameters=UniformDistributionParameters(min=0.5, max=0.5),
-                    ),
+                    quiescent_duration=Scalar(value=0.5),
                     min_block_reward=0,
                     is_baiting=True,
                     extend_block_on_no_response=True,
@@ -276,9 +265,7 @@ def make_s_stage_final():
                         distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
                         truncation_parameters=TruncationParameters(min=1, max=30),
                     ),
-                    quiescent_duration=UniformDistribution(
-                        distribution_parameters=UniformDistributionParameters(min=1.0, max=1.0),
-                    ),
+                    quiescent_duration=Scalar(value=1),
                     min_block_reward=0,
                     is_baiting=True,
                     extend_block_on_no_response=True,
@@ -319,9 +306,7 @@ def make_s_stage_graduated():
                         distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
                         truncation_parameters=TruncationParameters(min=1, max=30),
                     ),
-                    quiescent_duration=UniformDistribution(
-                        distribution_parameters=UniformDistributionParameters(min=1.0, max=1.0),
-                    ),
+                    quiescent_duration=Scalar(value=1),
                     min_block_reward=0,
                     is_baiting=True,
                     extend_block_on_no_response=True,
