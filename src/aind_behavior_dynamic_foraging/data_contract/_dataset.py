@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from aind_behavior_curriculum import TrainerState
 from aind_behavior_services.session import Session
 from contraqctor.contract import Dataset, DataStreamCollection
 from contraqctor.contract.camera import Camera
@@ -64,9 +65,10 @@ def make_dataset(
                             path=root_path / "behavior/previous_metrics.json",
                         ),
                     ),
-                    Json(
+                    PydanticModel(
                         name="TrainerState",
-                        reader_params=Json.make_params(
+                        reader_params=PydanticModel.make_params(
+                            model=TrainerState,
                             path=root_path / "behavior/trainer_state.json",
                         ),
                     ),
