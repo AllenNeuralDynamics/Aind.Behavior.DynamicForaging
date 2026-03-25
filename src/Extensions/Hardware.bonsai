@@ -4,13 +4,11 @@
                  xmlns:harp="clr-namespace:Bonsai.Harp;assembly=Bonsai.Harp"
                  xmlns:p1="clr-namespace:AllenNeuralDynamics.WhiteRabbit;assembly=AllenNeuralDynamics.WhiteRabbit"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
-                 xmlns:p2="clr-namespace:AindDynamicForagingDataSchema;assembly=Extensions"
-                 xmlns:p3="clr-namespace:AllenNeuralDynamics.AindManipulator;assembly=AllenNeuralDynamics.AindManipulator"
                  xmlns:beh="clr-namespace:Harp.Behavior;assembly=Harp.Behavior"
                  xmlns:sys="clr-namespace:System;assembly=mscorlib"
                  xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
-                 xmlns:p4="clr-namespace:OpenCV.Net;assembly=OpenCV.Net"
-                 xmlns:p5="clr-namespace:AllenNeuralDynamics.Core;assembly=AllenNeuralDynamics.Core"
+                 xmlns:p2="clr-namespace:OpenCV.Net;assembly=OpenCV.Net"
+                 xmlns:p3="clr-namespace:AllenNeuralDynamics.Core;assembly=AllenNeuralDynamics.Core"
                  xmlns:spk="clr-namespace:Bonsai.Spinnaker;assembly=Bonsai.Spinnaker"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
@@ -136,14 +134,6 @@
             <Expression xsi:type="MemberSelector">
               <Selector>Manipulator.Calibration</Selector>
             </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p2:SerializeToJson">
-                <p2:Formatting>None</p2:Formatting>
-              </Combinator>
-            </Expression>
-            <Expression xsi:type="p3:DeserializeFromJson">
-              <p3:Type xsi:type="TypeMapping" TypeArguments="p3:AindManipulatorCalibrationInput" />
-            </Expression>
             <Expression xsi:type="SubscribeSubject">
               <Name>RigSchema</Name>
             </Expression>
@@ -238,26 +228,24 @@
             <Edge From="30" To="31" Label="Source1" />
             <Edge From="31" To="32" Label="Source2" />
             <Edge From="33" To="34" Label="Source1" />
-            <Edge From="34" To="35" Label="Source1" />
+            <Edge From="34" To="38" Label="Source1" />
             <Edge From="35" To="36" Label="Source1" />
-            <Edge From="36" To="40" Label="Source1" />
-            <Edge From="37" To="38" Label="Source1" />
-            <Edge From="38" To="39" Label="Source1" />
-            <Edge From="39" To="40" Label="Source2" />
+            <Edge From="36" To="37" Label="Source1" />
+            <Edge From="37" To="38" Label="Source2" />
+            <Edge From="39" To="40" Label="Source1" />
+            <Edge From="40" To="41" Label="Source1" />
             <Edge From="41" To="42" Label="Source1" />
-            <Edge From="42" To="43" Label="Source1" />
+            <Edge From="42" To="46" Label="Source1" />
             <Edge From="43" To="44" Label="Source1" />
-            <Edge From="44" To="48" Label="Source1" />
-            <Edge From="45" To="46" Label="Source1" />
-            <Edge From="46" To="47" Label="Source1" />
-            <Edge From="47" To="48" Label="Source2" />
+            <Edge From="44" To="45" Label="Source1" />
+            <Edge From="45" To="46" Label="Source2" />
+            <Edge From="47" To="48" Label="Source1" />
+            <Edge From="48" To="49" Label="Source1" />
             <Edge From="49" To="50" Label="Source1" />
-            <Edge From="50" To="51" Label="Source1" />
+            <Edge From="50" To="54" Label="Source1" />
             <Edge From="51" To="52" Label="Source1" />
-            <Edge From="52" To="56" Label="Source1" />
-            <Edge From="53" To="54" Label="Source1" />
-            <Edge From="54" To="55" Label="Source1" />
-            <Edge From="55" To="56" Label="Source2" />
+            <Edge From="52" To="53" Label="Source1" />
+            <Edge From="53" To="54" Label="Source2" />
           </Edges>
         </Workflow>
       </Expression>
@@ -411,7 +399,7 @@
                       <Property Name="Value" Selector="X,Y,Width,Height" />
                     </PropertyMappings>
                   </Expression>
-                  <Expression xsi:type="PropertySource" TypeArguments="cv:Crop,p4:Rect">
+                  <Expression xsi:type="PropertySource" TypeArguments="cv:Crop,p2:Rect">
                     <MemberName>RegionOfInterest</MemberName>
                     <Value>
                       <X>0</X>
@@ -426,21 +414,21 @@
                     </PropertyMappings>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p5:AindSpinnakerCapture">
+                    <Combinator xsi:type="p3:AindSpinnakerCapture">
                       <spk:Index xsi:nil="true" />
                       <spk:ColorProcessing>Default</spk:ColorProcessing>
-                      <p5:ExposureTime>19000</p5:ExposureTime>
-                      <p5:Gain>0</p5:Gain>
-                      <p5:Binning>1</p5:Binning>
-                      <p5:Gamma xsi:nil="true" />
-                      <p5:PixelFormat>Mono8</p5:PixelFormat>
-                      <p5:RegionOfInterest>
-                        <p5:X>0</p5:X>
-                        <p5:Y>0</p5:Y>
-                        <p5:Width>0</p5:Width>
-                        <p5:Height>0</p5:Height>
-                      </p5:RegionOfInterest>
-                      <p5:AdcBitDepth xsi:nil="true" />
+                      <p3:ExposureTime>19000</p3:ExposureTime>
+                      <p3:Gain>0</p3:Gain>
+                      <p3:Binning>1</p3:Binning>
+                      <p3:Gamma xsi:nil="true" />
+                      <p3:PixelFormat>Mono8</p3:PixelFormat>
+                      <p3:RegionOfInterest>
+                        <p3:X>0</p3:X>
+                        <p3:Y>0</p3:Y>
+                        <p3:Width>0</p3:Width>
+                        <p3:Height>0</p3:Height>
+                      </p3:RegionOfInterest>
+                      <p3:AdcBitDepth xsi:nil="true" />
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="SubscribeSubject">
