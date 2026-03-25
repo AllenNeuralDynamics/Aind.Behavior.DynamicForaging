@@ -1060,6 +1060,116 @@ namespace AindDynamicForagingDataSchema
     }
 
 
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class AutoWaterParameters
+    {
+    
+        private int _minIgnoredTrials;
+    
+        private int _minUnrewardedTrials;
+    
+        private double _rewardFraction;
+    
+        public AutoWaterParameters()
+        {
+            _minIgnoredTrials = 3;
+            _minUnrewardedTrials = 3;
+            _rewardFraction = 0.8D;
+        }
+    
+        protected AutoWaterParameters(AutoWaterParameters other)
+        {
+            _minIgnoredTrials = other._minIgnoredTrials;
+            _minUnrewardedTrials = other._minUnrewardedTrials;
+            _rewardFraction = other._rewardFraction;
+        }
+    
+        /// <summary>
+        /// Minimum consecutive ignored trials before auto water is triggered.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("min_ignored_trials")]
+        [System.ComponentModel.DescriptionAttribute("Minimum consecutive ignored trials before auto water is triggered.")]
+        public int MinIgnoredTrials
+        {
+            get
+            {
+                return _minIgnoredTrials;
+            }
+            set
+            {
+                _minIgnoredTrials = value;
+            }
+        }
+    
+        /// <summary>
+        /// Minimum consecutive unrewarded trials before auto water is triggered.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("min_unrewarded_trials")]
+        [System.ComponentModel.DescriptionAttribute("Minimum consecutive unrewarded trials before auto water is triggered.")]
+        public int MinUnrewardedTrials
+        {
+            get
+            {
+                return _minUnrewardedTrials;
+            }
+            set
+            {
+                _minUnrewardedTrials = value;
+            }
+        }
+    
+        /// <summary>
+        /// Fraction of full reward volume delivered during auto water (0=none, 1=full).
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("reward_fraction")]
+        [System.ComponentModel.DescriptionAttribute("Fraction of full reward volume delivered during auto water (0=none, 1=full).")]
+        public double RewardFraction
+        {
+            get
+            {
+                return _rewardFraction;
+            }
+            set
+            {
+                _rewardFraction = value;
+            }
+        }
+    
+        public System.IObservable<AutoWaterParameters> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new AutoWaterParameters(this)));
+        }
+    
+        public System.IObservable<AutoWaterParameters> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new AutoWaterParameters(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("MinIgnoredTrials = " + _minIgnoredTrials + ", ");
+            stringBuilder.Append("MinUnrewardedTrials = " + _minUnrewardedTrials + ", ");
+            stringBuilder.Append("RewardFraction = " + _rewardFraction);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
     /// <summary>
     /// Motor axis available
     /// </summary>
@@ -2416,6 +2526,8 @@ namespace AindDynamicForagingDataSchema
     
         private RewardProbabilityParameters _rewardProbabilityParameters;
     
+        private AutoWaterParameters _autowaterParameters;
+    
         private bool _isBaiting;
     
         private CoupledTrialGenerationEndConditions _trialGenerationEndParameters;
@@ -2434,6 +2546,7 @@ namespace AindDynamicForagingDataSchema
             _minBlockReward = 1;
             _kernelSize = 2;
             _rewardProbabilityParameters = new RewardProbabilityParameters();
+            _autowaterParameters = new AutoWaterParameters();
             _isBaiting = false;
             _trialGenerationEndParameters = new CoupledTrialGenerationEndConditions();
             _behaviorStabilityParameters = new BehaviorStabilityParameters();
@@ -2451,6 +2564,7 @@ namespace AindDynamicForagingDataSchema
             _minBlockReward = other._minBlockReward;
             _kernelSize = other._kernelSize;
             _rewardProbabilityParameters = other._rewardProbabilityParameters;
+            _autowaterParameters = other._autowaterParameters;
             _isBaiting = other._isBaiting;
             _trialGenerationEndParameters = other._trialGenerationEndParameters;
             _behaviorStabilityParameters = other._behaviorStabilityParameters;
@@ -2595,6 +2709,25 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
+        /// Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("autowater_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Auto water settings. If set, free water is delivered when the animal exceeds the " +
+            "ignored or unrewarded trial thresholds.")]
+        public AutoWaterParameters AutowaterParameters
+        {
+            get
+            {
+                return _autowaterParameters;
+            }
+            set
+            {
+                _autowaterParameters = value;
+            }
+        }
+    
+        /// <summary>
         /// Whether uncollected rewards carry over to the next trial.
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("is_baiting")]
@@ -2690,6 +2823,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("MinBlockReward = " + _minBlockReward + ", ");
             stringBuilder.Append("KernelSize = " + _kernelSize + ", ");
             stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters + ", ");
+            stringBuilder.Append("AutowaterParameters = " + _autowaterParameters + ", ");
             stringBuilder.Append("IsBaiting = " + _isBaiting + ", ");
             stringBuilder.Append("TrialGenerationEndParameters = " + _trialGenerationEndParameters + ", ");
             stringBuilder.Append("BehaviorStabilityParameters = " + _behaviorStabilityParameters + ", ");
@@ -9899,6 +10033,11 @@ namespace AindDynamicForagingDataSchema
             return Process<AuditorySecondaryReinforcer>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<AutoWaterParameters> source)
+        {
+            return Process<AutoWaterParameters>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<AxisConfiguration> source)
         {
             return Process<AxisConfiguration>(source);
@@ -10234,6 +10373,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AindManipulator>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AindManipulatorCalibration>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AuditorySecondaryReinforcer>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AutoWaterParameters>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AxisConfiguration>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BaseModel>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BehaviorStabilityParameters>))]
