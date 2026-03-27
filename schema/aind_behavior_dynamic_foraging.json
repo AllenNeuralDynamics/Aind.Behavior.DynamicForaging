@@ -63,7 +63,7 @@
           ]
         },
         "harp_lickometer_right": {
-          "defulat": null,
+          "default": null,
           "description": "Harp right lickometer",
           "oneOf": [
             {
@@ -121,7 +121,6 @@
         "data_directory",
         "triggered_camera_controller",
         "harp_behavior",
-        "harp_lickometer_right",
         "harp_clock_generator",
         "harp_sound_card",
         "manipulator",

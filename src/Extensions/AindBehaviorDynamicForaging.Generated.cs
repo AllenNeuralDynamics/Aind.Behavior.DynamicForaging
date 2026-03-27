@@ -232,7 +232,7 @@ namespace AindDynamicForagingDataSchema
         /// Harp right lickometer
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("harp_lickometer_right", Required=Newtonsoft.Json.Required.AllowNull)]
+        [Newtonsoft.Json.JsonPropertyAttribute("harp_lickometer_right")]
         [System.ComponentModel.DescriptionAttribute("Harp right lickometer")]
         public HarpLicketySplit HarpLickometerRight
         {
