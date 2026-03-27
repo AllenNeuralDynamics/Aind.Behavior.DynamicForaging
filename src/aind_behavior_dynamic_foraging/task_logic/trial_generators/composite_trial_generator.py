@@ -5,7 +5,7 @@ from pydantic import Field, SerializeAsAny
 from ..trial_models import Trial, TrialOutcome
 from ._base import BaseTrialGeneratorSpecModel, ITrialGenerator
 
-_TSpec = TypeVar("_TSpec", bound=BaseTrialGeneratorSpecModel)
+_TSpec = TypeVar("_TSpec", bound=BaseTrialGeneratorSpecModel, covariant=True)
 
 
 class TrialGeneratorCompositeSpec(BaseTrialGeneratorSpecModel, Generic[_TSpec]):

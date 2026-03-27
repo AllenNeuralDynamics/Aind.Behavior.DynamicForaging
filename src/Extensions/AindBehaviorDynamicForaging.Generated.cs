@@ -9,7 +9,7 @@ namespace AindDynamicForagingDataSchema
 {
     #pragma warning disable // Disable all warnings
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class AindDynamicForagingRig
@@ -407,7 +407,7 @@ namespace AindDynamicForagingDataSchema
     ///specification for the dynamic foraging behavioral experiment.
     ///It includes all task parameters, environment specifications, and control settings.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute(@"Main task logic model for the AIND Dynamic Foraging task.
 
     This is the top-level class that encapsulates the complete task logic
@@ -433,7 +433,7 @@ namespace AindDynamicForagingDataSchema
             _name = "AindDynamicForaging";
             _description = "";
             _taskParameters = new AindDynamicForagingTaskParameters();
-            _version = "0.0.2-rc17";
+            _version = "0.0.2-rc24";
         }
     
         protected AindDynamicForagingTaskLogic(AindDynamicForagingTaskLogic other)
@@ -569,7 +569,7 @@ namespace AindDynamicForagingDataSchema
     ///including environment structure, task mode settings, operation control,
     ///and numerical updaters for dynamic parameter modification.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute(@"Complete parameter specification for the AIND Dynamic Foraging task.
 
     This class contains all configurable parameters for the Dynamic Foraging task,
@@ -1188,7 +1188,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class ConnectedClockOutput
@@ -1808,11 +1808,9 @@ namespace AindDynamicForagingDataSchema
     
         private SoundCardCalibration _calibration;
     
-        private int _whoAmI;
-    
         private string _serialNumber;
     
-        private string _portName;
+        private int _binning;
     
         public DynamicForagingSoundCard()
         {
@@ -1825,9 +1823,16 @@ namespace AindDynamicForagingDataSchema
         {
             _deviceType = other._deviceType;
             _calibration = other._calibration;
-            _whoAmI = other._whoAmI;
             _serialNumber = other._serialNumber;
-            _portName = other._portName;
+            _binning = other._binning;
+            _colorProcessing = other._colorProcessing;
+            _exposure = other._exposure;
+            _gain = other._gain;
+            _gamma = other._gamma;
+            _adcBitDepth = other._adcBitDepth;
+            _pixelFormat = other._pixelFormat;
+            _regionOfInterest = other._regionOfInterest;
+            _videoWriter = other._videoWriter;
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("device_type")]
@@ -1861,24 +1866,11 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
-        [Newtonsoft.Json.JsonPropertyAttribute("who_am_i")]
-        public int WhoAmI
-        {
-            get
-            {
-                return _whoAmI;
-            }
-            set
-            {
-                _whoAmI = value;
-            }
-        }
-    
         /// <summary>
-        /// Device serial number
+        /// Camera serial number
         /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("serial_number")]
-        [System.ComponentModel.DescriptionAttribute("Device serial number")]
+        [Newtonsoft.Json.JsonPropertyAttribute("serial_number", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("Camera serial number")]
         public string SerialNumber
         {
             get
@@ -1892,15 +1884,32 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Device port name
+        /// Binning
         /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("port_name", Required=Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DescriptionAttribute("Device port name")]
-        public string PortName
+        [Newtonsoft.Json.JsonPropertyAttribute("binning")]
+        [System.ComponentModel.DescriptionAttribute("Binning")]
+        public int Binning
         {
             get
             {
-                return _portName;
+                return _binning;
+            }
+            set
+            {
+                _binning = value;
+            }
+        }
+    
+        /// <summary>
+        /// Color processing
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("color_processing")]
+        [System.ComponentModel.DescriptionAttribute("Color processing")]
+        public SpinnakerCameraColorProcessing ColorProcessing
+        {
+            get
+            {
+                return _colorProcessing;
             }
             set
             {
@@ -1974,81 +1983,88 @@ namespace AindDynamicForagingDataSchema
             _portName = other._portName;
         }
     
-        [Newtonsoft.Json.JsonPropertyAttribute("device_type")]
-        public string DeviceType
+        /// <summary>
+        /// Exposure time
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("exposure")]
+        [System.ComponentModel.DescriptionAttribute("Exposure time")]
+        public int Exposure
         {
             get
             {
-                return _deviceType;
+                return _exposure;
             }
             set
             {
-                _deviceType = value;
+                _exposure = value;
             }
         }
     
         /// <summary>
-        /// Calibration for the device.
+        /// Gain
         /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("calibration")]
-        [System.ComponentModel.DescriptionAttribute("Calibration for the device.")]
-        public BaseModel Calibration
+        [Newtonsoft.Json.JsonPropertyAttribute("gain")]
+        [System.ComponentModel.DescriptionAttribute("Gain")]
+        public double Gain
         {
             get
             {
-                return _calibration;
+                return _gain;
             }
             set
             {
-                _calibration = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("who_am_i")]
-        public int WhoAmI
-        {
-            get
-            {
-                return _whoAmI;
-            }
-            set
-            {
-                _whoAmI = value;
+                _gain = value;
             }
         }
     
         /// <summary>
-        /// Device serial number
+        /// Gamma. If None, will disable gamma correction.
         /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("serial_number")]
-        [System.ComponentModel.DescriptionAttribute("Device serial number")]
-        public string SerialNumber
+        [Newtonsoft.Json.JsonPropertyAttribute("gamma")]
+        [System.ComponentModel.DescriptionAttribute("Gamma. If None, will disable gamma correction.")]
+        public double? Gamma
         {
             get
             {
-                return _serialNumber;
+                return _gamma;
             }
             set
             {
-                _serialNumber = value;
+                _gamma = value;
             }
         }
     
         /// <summary>
-        /// Device port name
+        /// ADC bit depth. If None will be left as default.
         /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("port_name", Required=Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DescriptionAttribute("Device port name")]
-        public string PortName
+        [Newtonsoft.Json.JsonPropertyAttribute("adc_bit_depth")]
+        [System.ComponentModel.DescriptionAttribute("ADC bit depth. If None will be left as default.")]
+        public SpinnakerCameraAdcBitDepth? AdcBitDepth
         {
             get
             {
-                return _portName;
+                return _adcBitDepth;
             }
             set
             {
-                _portName = value;
+                _adcBitDepth = value;
+            }
+        }
+    
+        /// <summary>
+        /// Pixel format. If None will be left as default.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("pixel_format")]
+        [System.ComponentModel.DescriptionAttribute("Pixel format. If None will be left as default.")]
+        public SpinnakerCameraPixelFormat? PixelFormat
+        {
+            get
+            {
+                return _pixelFormat;
+            }
+            set
+            {
+                _pixelFormat = value;
             }
         }
     
@@ -4481,334 +4497,89 @@ namespace AindDynamicForagingDataSchema
     
         private object _extraMetadata;
     
-        public Trial()
-        {
-            _pRewardLeft = 1D;
-            _pRewardRight = 1D;
-            _rewardConsumptionDuration = 5D;
-            _rewardDelayDuration = 0D;
-            _responseDeadlineDuration = 5D;
-            _enableFastRetract = false;
-            _quiescencePeriodDuration = 0.5D;
-            _interTrialIntervalDuration = 5D;
-            _lickspoutOffsetDelta = 0D;
-        }
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="124")]
+        Coord3dA8 = 124,
     
-        protected Trial(Trial other)
-        {
-            _pRewardLeft = other._pRewardLeft;
-            _pRewardRight = other._pRewardRight;
-            _rewardConsumptionDuration = other._rewardConsumptionDuration;
-            _rewardDelayDuration = other._rewardDelayDuration;
-            _secondaryReinforcer = other._secondaryReinforcer;
-            _responseDeadlineDuration = other._responseDeadlineDuration;
-            _enableFastRetract = other._enableFastRetract;
-            _quiescencePeriodDuration = other._quiescencePeriodDuration;
-            _interTrialIntervalDuration = other._interTrialIntervalDuration;
-            _isAutoResponseRight = other._isAutoResponseRight;
-            _lickspoutOffsetDelta = other._lickspoutOffsetDelta;
-            _extraMetadata = other._extraMetadata;
-        }
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="125")]
+        Coord3dA10p = 125,
     
-        /// <summary>
-        /// The probability of reward on the left side if response is made.
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("p_reward_left")]
-        [System.ComponentModel.DescriptionAttribute("The probability of reward on the left side if response is made.")]
-        public double PRewardLeft
-        {
-            get
-            {
-                return _pRewardLeft;
-            }
-            set
-            {
-                _pRewardLeft = value;
-            }
-        }
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="126")]
+        Coord3dA12p = 126,
     
-        /// <summary>
-        /// The probability of reward on the right side if response is made.
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("p_reward_right")]
-        [System.ComponentModel.DescriptionAttribute("The probability of reward on the right side if response is made.")]
-        public double PRewardRight
-        {
-            get
-            {
-                return _pRewardRight;
-            }
-            set
-            {
-                _pRewardRight = value;
-            }
-        }
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="127")]
+        Coord3dA16 = 127,
     
-        /// <summary>
-        /// Duration of reward consumption before transition to ITI (in seconds).
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("reward_consumption_duration")]
-        [System.ComponentModel.DescriptionAttribute("Duration of reward consumption before transition to ITI (in seconds).")]
-        public double RewardConsumptionDuration
-        {
-            get
-            {
-                return _rewardConsumptionDuration;
-            }
-            set
-            {
-                _rewardConsumptionDuration = value;
-            }
-        }
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="128")]
+        Coord3dA32f = 128,
     
-        /// <summary>
-        /// Delay before reward is delivered after the secondary reinforcer (in seconds).
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("reward_delay_duration")]
-        [System.ComponentModel.DescriptionAttribute("Delay before reward is delivered after the secondary reinforcer (in seconds).")]
-        public double RewardDelayDuration
-        {
-            get
-            {
-                return _rewardDelayDuration;
-            }
-            set
-            {
-                _rewardDelayDuration = value;
-            }
-        }
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="129")]
+        Coord3dB8 = 129,
     
-        /// <summary>
-        /// Defines the secondary reinforcer used in the trial.
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("secondary_reinforcer")]
-        [System.ComponentModel.DescriptionAttribute("Defines the secondary reinforcer used in the trial.")]
-        public AuditorySecondaryReinforcer SecondaryReinforcer
-        {
-            get
-            {
-                return _secondaryReinforcer;
-            }
-            set
-            {
-                _secondaryReinforcer = value;
-            }
-        }
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="130")]
+        Coord3dB10p = 130,
     
-        /// <summary>
-        /// Time allowed for the subject to make a response (in seconds).
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("response_deadline_duration")]
-        [System.ComponentModel.DescriptionAttribute("Time allowed for the subject to make a response (in seconds).")]
-        public double ResponseDeadlineDuration
-        {
-            get
-            {
-                return _responseDeadlineDuration;
-            }
-            set
-            {
-                _responseDeadlineDuration = value;
-            }
-        }
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="131")]
+        Coord3dB12p = 131,
     
-        /// <summary>
-        /// If true, the opposite lickspout retracts quickly after a response is made.
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("enable_fast_retract")]
-        [System.ComponentModel.DescriptionAttribute("If true, the opposite lickspout retracts quickly after a response is made.")]
-        public bool EnableFastRetract
-        {
-            get
-            {
-                return _enableFastRetract;
-            }
-            set
-            {
-                _enableFastRetract = value;
-            }
-        }
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="132")]
+        Coord3dB16 = 132,
     
-        /// <summary>
-        /// Duration of the quiescence period before trial starts (in seconds). Each lick resets the timer.
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("quiescence_period_duration")]
-        [System.ComponentModel.DescriptionAttribute("Duration of the quiescence period before trial starts (in seconds). Each lick res" +
-            "ets the timer.")]
-        public double QuiescencePeriodDuration
-        {
-            get
-            {
-                return _quiescencePeriodDuration;
-            }
-            set
-            {
-                _quiescencePeriodDuration = value;
-            }
-        }
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="133")]
+        Coord3dB32f = 133,
     
-        /// <summary>
-        /// Duration of the inter-trial interval (in seconds).
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("inter_trial_interval_duration")]
-        [System.ComponentModel.DescriptionAttribute("Duration of the inter-trial interval (in seconds).")]
-        public double InterTrialIntervalDuration
-        {
-            get
-            {
-                return _interTrialIntervalDuration;
-            }
-            set
-            {
-                _interTrialIntervalDuration = value;
-            }
-        }
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="134")]
+        Coord3dC8 = 134,
     
-        /// <summary>
-        /// If set, the trial will automatically (and immediately) register a response to the right (True) or left (False).
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("is_auto_response_right")]
-        [System.ComponentModel.DescriptionAttribute("If set, the trial will automatically (and immediately) register a response to the" +
-            " right (True) or left (False).")]
-        public bool? IsAutoResponseRight
-        {
-            get
-            {
-                return _isAutoResponseRight;
-            }
-            set
-            {
-                _isAutoResponseRight = value;
-            }
-        }
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="135")]
+        Coord3dC10p = 135,
     
-        /// <summary>
-        /// Horizontal delta offset of the lickspouts (in mm) applied in this trial. Positive values move the lickspouts right.
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("lickspout_offset_delta")]
-        [System.ComponentModel.DescriptionAttribute("Horizontal delta offset of the lickspouts (in mm) applied in this trial. Positive" +
-            " values move the lickspouts right.")]
-        public double LickspoutOffsetDelta
-        {
-            get
-            {
-                return _lickspoutOffsetDelta;
-            }
-            set
-            {
-                _lickspoutOffsetDelta = value;
-            }
-        }
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="136")]
+        Coord3dC12p = 136,
     
-        /// <summary>
-        /// Additional metadata to include with the trial. This field will NOT be used or validated by the task engine.
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("extra_metadata")]
-        [System.ComponentModel.DescriptionAttribute("Additional metadata to include with the trial. This field will NOT be used or val" +
-            "idated by the task engine.")]
-        public object ExtraMetadata
-        {
-            get
-            {
-                return _extraMetadata;
-            }
-            set
-            {
-                _extraMetadata = value;
-            }
-        }
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="137")]
+        Coord3dC16 = 137,
     
-        public System.IObservable<Trial> Generate()
-        {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new Trial(this)));
-        }
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="138")]
+        Coord3dC32f = 138,
     
-        public System.IObservable<Trial> Generate<TSource>(System.IObservable<TSource> source)
-        {
-            return System.Reactive.Linq.Observable.Select(source, _ => new Trial(this));
-        }
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="139")]
+        Confidence1 = 139,
     
-        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
-        {
-            stringBuilder.Append("PRewardLeft = " + _pRewardLeft + ", ");
-            stringBuilder.Append("PRewardRight = " + _pRewardRight + ", ");
-            stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
-            stringBuilder.Append("RewardDelayDuration = " + _rewardDelayDuration + ", ");
-            stringBuilder.Append("SecondaryReinforcer = " + _secondaryReinforcer + ", ");
-            stringBuilder.Append("ResponseDeadlineDuration = " + _responseDeadlineDuration + ", ");
-            stringBuilder.Append("EnableFastRetract = " + _enableFastRetract + ", ");
-            stringBuilder.Append("QuiescencePeriodDuration = " + _quiescencePeriodDuration + ", ");
-            stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
-            stringBuilder.Append("IsAutoResponseRight = " + _isAutoResponseRight + ", ");
-            stringBuilder.Append("LickspoutOffsetDelta = " + _lickspoutOffsetDelta + ", ");
-            stringBuilder.Append("ExtraMetadata = " + _extraMetadata);
-            return true;
-        }
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="140")]
+        Confidence1p = 140,
     
-        public override string ToString()
-        {
-            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
-            stringBuilder.Append(GetType().Name);
-            stringBuilder.Append(" { ");
-            if (PrintMembers(stringBuilder))
-            {
-                stringBuilder.Append(" ");
-            }
-            stringBuilder.Append("}");
-            return stringBuilder.ToString();
-        }
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="141")]
+        Confidence8 = 141,
+    
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="142")]
+        Confidence16 = 142,
+    
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="143")]
+        Confidence32f = 143,
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    /// <summary>
+    /// Represents a single trial that can be instantiated by the Bonsai state machine.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.ComponentModel.DescriptionAttribute("Represents a single trial that can be instantiated by the Bonsai state machine.")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
-    public partial class TrialGeneratorCompositeSpecTrialGeneratorSpec : TrialGeneratorSpec
+    public partial class Trial
     {
     
-        private System.Collections.Generic.List<TrialGeneratorSpec> _generators;
+        private double _pRewardLeft;
     
-        public TrialGeneratorCompositeSpecTrialGeneratorSpec()
-        {
-            _generators = new System.Collections.Generic.List<TrialGeneratorSpec>();
-        }
+        private double _pRewardRight;
     
-        protected TrialGeneratorCompositeSpecTrialGeneratorSpec(TrialGeneratorCompositeSpecTrialGeneratorSpec other) : 
-                base(other)
-        {
-            _generators = other._generators;
-        }
+        private double _rewardConsumptionDuration;
     
-        /// <summary>
-        /// List of trial generator specifications to concatenate. When one generator returns None, the next one is concatenated.
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("generators", Required=Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DescriptionAttribute("List of trial generator specifications to concatenate. When one generator returns" +
-            " None, the next one is concatenated.")]
-        public System.Collections.Generic.List<TrialGeneratorSpec> Generators
-        {
-            get
-            {
-                return _generators;
-            }
-            set
-            {
-                _generators = value;
-            }
-        }
+        private double _rewardDelayDuration;
     
-        public System.IObservable<TrialGeneratorCompositeSpecTrialGeneratorSpec> Generate()
-        {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new TrialGeneratorCompositeSpecTrialGeneratorSpec(this)));
-        }
+        private AuditorySecondaryReinforcer _secondaryReinforcer;
     
-        public System.IObservable<TrialGeneratorCompositeSpecTrialGeneratorSpec> Generate<TSource>(System.IObservable<TSource> source)
-        {
-            return System.Reactive.Linq.Observable.Select(source, _ => new TrialGeneratorCompositeSpecTrialGeneratorSpec(this));
-        }
+        private double _responseDeadlineDuration;
     
         protected override bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
@@ -4988,7 +4759,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// FFMPEG video writer configuration.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Newtonsoft.Json.JsonConverter(typeof(JsonInheritanceConverter), "video_writer_type")]
     [JsonInheritanceAttribute("FFMPEG", typeof(VideoWriterFfmpeg))]
     [JsonInheritanceAttribute("OPENCV", typeof(VideoWriterOpenCv))]
@@ -5039,7 +4810,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// FFMPEG video writer configuration.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("FFMPEG video writer configuration.")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
@@ -5167,7 +4938,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// OpenCV video writer configuration.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("OpenCV video writer configuration.")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
@@ -5270,7 +5041,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class WarmupTrialGenerationEndConditions
@@ -5402,21 +5173,21 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class WarmupTrialGeneratorSpec : TrialGeneratorSpec
     {
     
-        private Distribution _quiescentDuration;
+        private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _quiescentDuration;
     
         private double _responseDuration;
     
         private double _rewardConsumptionDuration;
     
-        private Distribution _interTrialIntervalDuration;
+        private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _interTrialIntervalDuration;
     
-        private Distribution _blockLen;
+        private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _blockLen;
     
         private int _minBlockReward;
     
@@ -5430,11 +5201,11 @@ namespace AindDynamicForagingDataSchema
     
         public WarmupTrialGeneratorSpec()
         {
-            _quiescentDuration = new Distribution();
+            _quiescentDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _responseDuration = 1D;
             _rewardConsumptionDuration = 3D;
-            _interTrialIntervalDuration = new Distribution();
-            _blockLen = new Distribution();
+            _interTrialIntervalDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
+            _blockLen = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _minBlockReward = 1;
             _kernelSize = 2;
             _rewardProbabilityParameters = new RewardProbabilityParameters();
@@ -5464,7 +5235,7 @@ namespace AindDynamicForagingDataSchema
         [Newtonsoft.Json.JsonPropertyAttribute("quiescent_duration")]
         [System.ComponentModel.DescriptionAttribute("Distribution describing the quiescence period before trial starts (in seconds). E" +
             "ach lick resets the timer.")]
-        public Distribution QuiescentDuration
+        public AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution QuiescentDuration
         {
             get
             {
@@ -5516,7 +5287,7 @@ namespace AindDynamicForagingDataSchema
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("inter_trial_interval_duration")]
         [System.ComponentModel.DescriptionAttribute("Distribution describing the inter-trial interval (in seconds).")]
-        public Distribution InterTrialIntervalDuration
+        public AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution InterTrialIntervalDuration
         {
             get
             {
@@ -5534,7 +5305,7 @@ namespace AindDynamicForagingDataSchema
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("block_len")]
         [System.ComponentModel.DescriptionAttribute("Distribution describing block length.")]
-        public Distribution BlockLen
+        public AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution BlockLen
         {
             get
             {
@@ -5663,7 +5434,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// Represents a water valve calibration.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Represents a water valve calibration.")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
@@ -5864,7 +5635,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// Model for a waveform to be played on the sound card.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Model for a waveform to be played on the sound card.")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
@@ -5997,7 +5768,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// Web camera device configuration.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Web camera device configuration.")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
@@ -6276,18 +6047,18 @@ namespace AindDynamicForagingDataSchema
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
     [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    public enum SpinnakerCameraColorProcessing
+    public enum BehaviorStabilityParametersBehaviorEvaluationMode
     {
     
-        [System.Runtime.Serialization.EnumMemberAttribute(Value="Default")]
-        Default = 0,
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="end")]
+        End = 0,
     
-        [System.Runtime.Serialization.EnumMemberAttribute(Value="NoColorProcessing")]
-        NoColorProcessing = 1,
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="anytime")]
+        Anytime = 1,
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     public enum WaveformType
     {
@@ -6529,7 +6300,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DefaultPropertyAttribute("Type")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Combinator)]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriterFfmpeg>))]
@@ -6570,85 +6341,7 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
-    [System.ComponentModel.DefaultPropertyAttribute("Type")]
-    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Combinator)]
-    public partial class MatchInterTrialIntervalDuration : Bonsai.Expressions.SingleArgumentExpressionBuilder
-    {
-    
-        public Bonsai.Expressions.TypeMapping Type { get; set; }
-
-        public override System.Linq.Expressions.Expression Build(System.Collections.Generic.IEnumerable<System.Linq.Expressions.Expression> arguments)
-        {
-            var typeMapping = Type;
-            var returnType = typeMapping != null ? typeMapping.GetType().GetGenericArguments()[0] : typeof(InterTrialIntervalDuration);
-            return System.Linq.Expressions.Expression.Call(
-                typeof(MatchInterTrialIntervalDuration),
-                "Process",
-                new System.Type[] { returnType },
-                System.Linq.Enumerable.Single(arguments));
-        }
-
-    
-        private static System.IObservable<TResult> Process<TResult>(System.IObservable<InterTrialIntervalDuration> source)
-            where TResult : InterTrialIntervalDuration
-        {
-            return System.Reactive.Linq.Observable.Create<TResult>(observer =>
-            {
-                var sourceObserver = System.Reactive.Observer.Create<InterTrialIntervalDuration>(
-                    value =>
-                    {
-                        var match = value as TResult;
-                        if (match != null) observer.OnNext(match);
-                    },
-                    observer.OnError,
-                    observer.OnCompleted);
-                return System.ObservableExtensions.SubscribeSafe(source, sourceObserver);
-            });
-        }
-    }
-
-
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
-    [System.ComponentModel.DefaultPropertyAttribute("Type")]
-    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Combinator)]
-    public partial class MatchBlockLen : Bonsai.Expressions.SingleArgumentExpressionBuilder
-    {
-    
-        public Bonsai.Expressions.TypeMapping Type { get; set; }
-
-        public override System.Linq.Expressions.Expression Build(System.Collections.Generic.IEnumerable<System.Linq.Expressions.Expression> arguments)
-        {
-            var typeMapping = Type;
-            var returnType = typeMapping != null ? typeMapping.GetType().GetGenericArguments()[0] : typeof(BlockLen);
-            return System.Linq.Expressions.Expression.Call(
-                typeof(MatchBlockLen),
-                "Process",
-                new System.Type[] { returnType },
-                System.Linq.Enumerable.Single(arguments));
-        }
-
-    
-        private static System.IObservable<TResult> Process<TResult>(System.IObservable<BlockLen> source)
-            where TResult : BlockLen
-        {
-            return System.Reactive.Linq.Observable.Create<TResult>(observer =>
-            {
-                var sourceObserver = System.Reactive.Observer.Create<BlockLen>(
-                    value =>
-                    {
-                        var match = value as TResult;
-                        if (match != null) observer.OnNext(match);
-                    },
-                    observer.OnError,
-                    observer.OnCompleted);
-                return System.ObservableExtensions.SubscribeSafe(source, sourceObserver);
-            });
-        }
-    }
-
-
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DefaultPropertyAttribute("Type")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Combinator)]
     public partial class MatchAnonymous : Bonsai.Expressions.SingleArgumentExpressionBuilder
@@ -6690,7 +6383,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// Serializes a sequence of data model objects into JSON strings.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Serializes a sequence of data model objects into JSON strings.")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
     [Bonsai.CombinatorAttribute()]
@@ -6758,11 +6451,6 @@ namespace AindDynamicForagingDataSchema
         public System.IObservable<string> Process(System.IObservable<CoupledTrialGeneratorSpec> source)
         {
             return Process<CoupledTrialGeneratorSpec>(source);
-        }
-
-        public System.IObservable<string> Process(System.IObservable<Distribution> source)
-        {
-            return Process<Distribution>(source);
         }
 
         public System.IObservable<string> Process(System.IObservable<DynamicForagingSoundCard> source)
@@ -6900,16 +6588,6 @@ namespace AindDynamicForagingDataSchema
             return Process<WebCamera>(source);
         }
 
-        public System.IObservable<string> Process(System.IObservable<InterTrialIntervalDuration> source)
-        {
-            return Process<InterTrialIntervalDuration>(source);
-        }
-
-        public System.IObservable<string> Process(System.IObservable<BlockLen> source)
-        {
-            return Process<BlockLen>(source);
-        }
-
         public System.IObservable<string> Process(System.IObservable<Anonymous> source)
         {
             return Process<Anonymous>(source);
@@ -6920,7 +6598,7 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// Deserializes a sequence of JSON strings into data model objects.
     /// </summary>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.7.2.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("Deserializes a sequence of JSON strings into data model objects.")]
     [System.ComponentModel.DefaultPropertyAttribute("Type")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
@@ -6935,7 +6613,6 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<ConnectedClockOutput>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CoupledTrialGenerationEndConditions>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CoupledTrialGeneratorSpec>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Distribution>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<DynamicForagingSoundCard>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpBehavior>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpEnvironmentSensor>))]
@@ -6963,8 +6640,6 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WaterValveCalibration>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Waveform>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WebCamera>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<InterTrialIntervalDuration>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BlockLen>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Anonymous>))]
     public partial class DeserializeFromJson : Bonsai.Expressions.SingleArgumentExpressionBuilder
     {
