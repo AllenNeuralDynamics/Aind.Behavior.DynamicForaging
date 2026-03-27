@@ -19,7 +19,7 @@ version = "0.0.2rc23"
 readme = {file = "README.md", content-type = "text/markdown"}
 
 dependencies = [
-    "aind_behavior_services>=0.13.2",
+    "aind_behavior_services>=0.13.5",
     "pydantic-settings",
 ]
 
@@ -71,4 +71,3 @@ ignore-words-list = 'nd'
 [tool.uv]
 default-groups = ['dev']
 required-version = '>=0.8.4'
-
