@@ -80,8 +80,7 @@ def metrics_from_dataset(
     foraging_efficiency_per_session = [] if not prev_metrics else prev_metrics.foraging_efficiency_per_session
     unignored_trials_per_session = [] if not prev_metrics else prev_metrics.unignored_trials_per_session
     total_sessions = 0 if not prev_metrics else prev_metrics.total_sessions
-
-    stage_name = dataset["Behavior"]["TrainerState"].data["stage"]["name"]
+    stage_name = dataset["Behavior"]["TrainerState"].data.stage.name
     consecutive_sessions_at_current_stage = (
         0 if not prev_metrics or stage_name != prev_stage else prev_metrics.consecutive_sessions_at_current_stage
     )
