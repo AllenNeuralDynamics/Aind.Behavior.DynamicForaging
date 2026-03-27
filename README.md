@@ -6,7 +6,7 @@
 [![ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
 
-A repository for the Dynamic Foraging task.
+A repository for the Dynamic Foraging task and its associated curricula.
 
 ---
 
@@ -34,7 +34,7 @@ from the root of the repository.
 
 ## ⚙️ Generating settings files
 
-The Dynamic Foraging tasks is instantiated by a set of three settings files that strictly follow a DSL schema. These files are:
+The Dynamic Foraging task is instantiated by a set of three settings files that strictly follow a DSL schema. These files are:
 
 - `task_logic.json`
 - `rig.json`
@@ -52,6 +52,8 @@ However, for a better experiment management user experience, it is recommended t
 
 ## [> ] CLI tools
 
+### Task CLI
+
 The platform exposes a few CLI tools to facilitate various tasks. Tools are available via:
 
 ```powershell
@@ -66,6 +68,103 @@ uv run dynamic-foraging -h
 
 You may need to install optional dependencies depending on the sub-commands you run.
 
+### Curriculum CLI
+
+Curricula are available via the `curriculum` CLI entry point. For a full list of commands:
+
+```powershell
+uv run curriculum -h
+```
+
+#### `list` - List Available Curricula
+
+```bash
+uv run curriculum list
+```
+
+#### `init` - Initialize a Curriculum
+
+Creates an initial trainer state for enrolling a subject in a curriculum.
+
+```bash
+# Start at the first stage
+uv run curriculum init --curriculum coupled_baiting --output initial_state.json
+
+# Start at a specific stage
+uv run curriculum init --curriculum coupled_baiting --stage s_stage_1 --output initial_state.json
+```
+
+#### `run` - Run a Curriculum
+
+Evaluates a curriculum based on session data and current trainer state.
+
+```bash
+uv run curriculum run \
+  --data-directory /path/to/session/data \
+  --input-trainer-state current_state.json \
+  --output-suggestion /path/to/output
+```
+
+Force a specific curriculum:
+
+```bash
+uv run curriculum run \
+  --data-directory /path/to/session/data \
+  --input-trainer-state current_state.json \
+  --curriculum coupled_baiting \
+  --output-suggestion /path/to/output
+```
+
+#### `version` / `dsl-version` - Show Versions
+
+```bash
+uv run curriculum version      # Package version
+uv run curriculum dsl-version  # Underlying DSL library version
+```
+
+---
+
+## Typical curriculum workflow
+
+1. **List available curricula:**
+   ```bash
+   uv run curriculum list
+   ```
+
+2. **Initialize a subject:**
+   ```bash
+   uv run curriculum init --curriculum coupled_baiting --output trainer_state.json
+   ```
+
+3. **After a session, evaluate progress:**
+   ```bash
+   uv run curriculum run \
+     --data-directory /path/to/session/data \
+     --input-trainer-state trainer_state.json \
+     --output-suggestion /path/to/output
+   ```
+
+4. **Use the suggestion for the next session:**
+   The `suggestion.json` output can be passed as `--input-trainer-state` for the next session.
+
+---
+
+## Style guide
+
+To keep things clear, the following naming conventions are recommended:
+
+- **Policies** should start with `p_` (e.g., `p_identity_policy`)
+- **Policy transitions** should start with `pt_`
+- **Stages** should start with `s_` (e.g., `s_stage1`)
+- **Stage transitions** should start with `st_` and be named after the stages they transition between (e.g., `st_s_stage1_s_stage2`)
+
+Define the following modules within a curriculum:
+
+- **metrics**: Defines (or imports) metrics classes and how to calculate them from data
+- **stages**: Defines the different stages of the task, including task settings and optionally policies
+- **curriculum**: Defines transitions between stages and generates the entry point to the application
+
+---
 
 ## 🎮 Experiment launcher (temporarily CLABE)
 

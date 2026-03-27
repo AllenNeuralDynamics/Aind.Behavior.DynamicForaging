@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from aind_behavior_curriculum import TrainerState
 from aind_behavior_services.session import Session
 from contraqctor.contract import Dataset, DataStreamCollection
 from contraqctor.contract.camera import Camera
@@ -7,7 +8,7 @@ from contraqctor.contract.harp import (
     DeviceYmlByFile,
     HarpDevice,
 )
-from contraqctor.contract.json import PydanticModel, SoftwareEvents
+from contraqctor.contract.json import Json, PydanticModel, SoftwareEvents
 from contraqctor.contract.mux import MapFromPaths
 
 from .. import __semver__
@@ -58,6 +59,19 @@ def make_dataset(
                 name="Behavior",
                 description="Data from the Behavior modality",
                 data_streams=[
+                    Json(
+                        name="PreviousMetrics",
+                        reader_params=Json.make_params(
+                            path=root_path / "behavior/previous_metrics.json",
+                        ),
+                    ),
+                    PydanticModel(
+                        name="TrainerState",
+                        reader_params=PydanticModel.make_params(
+                            model=TrainerState,
+                            path=root_path / "behavior/trainer_state.json",
+                        ),
+                    ),
                     HarpDevice(
                         name="HarpBehavior",
                         reader_params=HarpDevice.make_params(

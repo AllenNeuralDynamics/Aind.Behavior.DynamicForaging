@@ -23,6 +23,9 @@ dependencies = [
     "pydantic-settings",
 ]
 
+[tool.uv.workspace]
+members = ["src/aind_behavior_dynamic_foraging_curricula"]
+
 [project.urls]
 Documentation = "https://allenneuraldynamics.github.io/Aind.Behavior.DynamicForaging/"
 Repository = "https://github.com/AllenNeuralDynamics/Aind.Behavior.DynamicForaging/"
