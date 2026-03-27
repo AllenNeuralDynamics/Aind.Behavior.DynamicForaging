@@ -24,7 +24,7 @@ dependencies = [
     "aind-behavior-curriculum >= 0.0.38",
     "numpy>=2.4.2",
     "pydantic-settings",
-    "aind-behavior-dynamic-foraging"
+    "aind-behavior-dynamic-foraging==0.0.2rc24"
 ]
 
 [tool.uv.sources]
