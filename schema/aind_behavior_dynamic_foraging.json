@@ -3241,8 +3241,7 @@
           "description": "Parameters defining the reward probability structure."
         },
         "is_baiting": {
-          "const": true,
-          "default": true,
+          "default": false,
           "description": "Whether uncollected rewards carry over to the next trial.",
           "title": "Is Baiting",
           "type": "boolean"

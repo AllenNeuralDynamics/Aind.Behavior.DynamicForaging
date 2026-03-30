@@ -52,9 +52,6 @@ class WarmupTrialGeneratorSpec(BlockBasedTrialGeneratorSpec):
         default=WarmupTrialGenerationEndConditions(), description="Conditions to end trial generation."
     )
     min_block_reward: Literal[1] = Field(default=1, title="Minimal rewards in a block to switch")
-    is_baiting: Literal[True] = Field(
-        default=True, description="Whether uncollected rewards carry over to the next trial."
-    )
 
     def create_generator(self) -> "WarmupTrialGenerator":
         return WarmupTrialGenerator(self)
@@ -69,7 +66,8 @@ class WarmupTrialGenerator(BlockBasedTrialGenerator):
         """
 
         end_conditions = self.spec.trial_generation_end_parameters
-        choice_history = self.is_right_choice_history
+        win = end_conditions.evaluation_window
+        choice_history = self.is_right_choice_history[-win:] if win > 0 else self.is_right_choice_history
 
         choice_len = len(choice_history)
         left_choices = choice_history.count(False)
@@ -80,18 +78,24 @@ class WarmupTrialGenerator(BlockBasedTrialGenerator):
         choice_ratio = 0 if unignored == 0 else right_choices / (unignored)
 
         if (
-            choice_len >= end_conditions.min_trial
+            len(self.is_right_choice_history) >= end_conditions.min_trial
             and finish_ratio >= end_conditions.min_response_rate
             and abs(choice_ratio - 0.5) <= end_conditions.max_choice_bias
         ):
             logger.debug(
                 "Warmup trial generation end conditions met: "
-                f"total trials={choice_len}, "
+                f"total trials={len(self.is_right_choice_history)}, "
                 f"finish ratio={finish_ratio}, "
                 f"choice bias={abs(choice_ratio - 0.5)}"
             )
             return True
 
+        logger.debug(
+            "Warmup trial generation end conditions are not met: "
+            f"total trials={len(self.is_right_choice_history)}, "
+            f"finish ratio={finish_ratio}, "
+            f"choice bias={abs(choice_ratio - 0.5)}"
+        )
         return False
 
     def update(self, outcome: TrialOutcome | str) -> None:

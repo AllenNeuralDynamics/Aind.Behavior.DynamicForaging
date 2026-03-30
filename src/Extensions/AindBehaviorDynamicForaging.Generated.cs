@@ -5383,7 +5383,7 @@ namespace AindDynamicForagingDataSchema
             _minBlockReward = 1;
             _kernelSize = 2;
             _rewardProbabilityParameters = new RewardProbabilityParameters();
-            _isBaiting = true;
+            _isBaiting = false;
             _trialGenerationEndParameters = new WarmupTrialGenerationEndConditions();
         }
     
