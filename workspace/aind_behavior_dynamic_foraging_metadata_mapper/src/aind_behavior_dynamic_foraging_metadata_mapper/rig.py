@@ -1,19 +1,23 @@
-from datetime import date
 import os
+from datetime import date
 
-from aind_data_schema.core.instrument import Instrument
+from aind_behavior_dynamic_foraging.data_contract import dataset as df_foraging_dataset
 from aind_behavior_dynamic_foraging.rig import AindDynamicForagingRig
+from aind_data_schema.components.connections import Connection
+from aind_data_schema.components.coordinates import Axis, AxisName, CoordinateSystem, Direction, Origin
 from aind_data_schema.components.devices import (
+    AnatomicalRelative,
     Camera,
     CameraAssembly,
     CameraTarget,
+    DataInterface,
     HarpDevice,
+    HarpDeviceType,
+    Lens,
     MotorizedStage,
-    Speaker,
-    Computer,
+    SizeUnit,
 )
-from aind_data_schema.components.connections import Connection
-from aind_data_schema.components.coordinates import CoordinateSystem
+from aind_data_schema.core.instrument import Instrument
 from aind_data_schema_models.modalities import Modality
 from aind_data_schema_models.organizations import Organization
 
@@ -41,133 +45,127 @@ def instrument_from_dataset(
             If the dataset is malformed or missing required fields for
             computing metrics.
     """
-    
+
+    dataset = df_foraging_dataset(data_directory)
+    input_schemas = dataset["Behavior"]["InputSchemas"]
     rig = AindDynamicForagingRig.model_validate(input_schemas["Rig"].data)
-    
+
     components = []
     connections = []
 
-    # --- Triggered cameras wrapped in CameraAssembly (required for BEHAVIOR_VIDEOS) ---
+    # cameras
     for name, cam in rig.triggered_camera_controller.cameras.items():
         camera = Camera(
             name=name,
             serial_number=cam.serial_number,
-            # manufacturer=Organization.FLIR,  # TODO
-            # model="Blackfly S BFS-U3-16S2M",  # TODO
+            manufacturer=Organization.SPINNAKER,
+            data_interface=DataInterface.COAX,
         )
         assembly = CameraAssembly(
             name=f"{name}Assembly",
             camera=camera,
-            target=CameraTarget.BODY,  # TODO: adjust per camera (FACE, SIDE, etc.)
-            # lens=Lens(...),  # TODO if needed
+            target=CameraTarget.BODY if "Body" in name else CameraTarget.FACE,
+            lens=Lens(name="Lens A", manufacturer=Organization.FUJINON),
+            relative_position=[AnatomicalRelative.RIGHT if "Body" in name else AnatomicalRelative.SUPERIOR],
         )
         components.append(assembly)
 
-    # --- Monitoring cameras (optional) ---
-    if rig.monitoring_camera_controller:
-        for name, cam in rig.monitoring_camera_controller.cameras.items():
-            camera = Camera(
-                name=name,
-                serial_number=getattr(cam, "serial_number", None),
-                # manufacturer=...,  # TODO
-            )
-            assembly = CameraAssembly(
-                name=f"{name}Assembly",
-                camera=camera,
-                target=CameraTarget.OTHER,  # TODO: requires notes on Instrument
-            )
-            components.append(assembly)
-
-    # --- Harp behavior board ---
+    # behavior board
     components.append(
         HarpDevice(
             name="BehaviorBoard",
+            harp_device_type=HarpDeviceType.BEHAVIOR,
             serial_number=rig.harp_behavior.serial_number,
-            who_am_i=rig.harp_behavior.who_am_i,
-            port_name=rig.harp_behavior.port_name,
-            # manufacturer=Organization.HARP_TECH,  # TODO
+            manufacturer=Organization.CHAMPALIMAUD,
+            is_clock_generator=False,
         )
     )
 
-    # --- Harp clock generator ---
+    # clock generator
     components.append(
         HarpDevice(
             name="ClockGenerator",
+            harp_device_type=HarpDeviceType.WHITERABBIT,
             serial_number=rig.harp_clock_generator.serial_number,
-            who_am_i=rig.harp_clock_generator.who_am_i,
-            port_name=rig.harp_clock_generator.port_name,
             is_clock_generator=True,
         )
     )
 
-    # --- Harp sound card ---
+    # sound card
     components.append(
         HarpDevice(
             name="SoundCard",
+            harp_device_type=HarpDeviceType.SOUNDCARD,
             serial_number=rig.harp_sound_card.serial_number,
-            who_am_i=rig.harp_sound_card.who_am_i,
-            port_name=rig.harp_sound_card.port_name,
+            manufacturer=Organization.CHAMPALIMAUD,
+            is_clock_generator=False,
         )
     )
 
-    # --- Optional harp devices ---
+    # optional harp devices
     if rig.harp_lickometer_left:
-        components.append(HarpDevice(
-            name="LickometerLeft",
-            serial_number=rig.harp_lickometer_left.serial_number,
-            who_am_i=rig.harp_lickometer_left.who_am_i,
-            port_name=rig.harp_lickometer_left.port_name,
-        ))
-    if rig.harp_lickometer_right:
-        components.append(HarpDevice(
-            name="LickometerRight",
-            serial_number=rig.harp_lickometer_right.serial_number,
-            who_am_i=rig.harp_lickometer_right.who_am_i,
-            port_name=rig.harp_lickometer_right.port_name,
-        ))
-    if rig.harp_sniff_detector:
-        components.append(HarpDevice(
-            name="SniffDetector",
-            serial_number=rig.harp_sniff_detector.serial_number,
-            who_am_i=rig.harp_sniff_detector.who_am_i,
-            port_name=rig.harp_sniff_detector.port_name,
-        ))
-    if rig.harp_environment_sensor:
-        components.append(HarpDevice(
-            name="EnvironmentSensor",
-            serial_number=rig.harp_environment_sensor.serial_number,
-            who_am_i=rig.harp_environment_sensor.who_am_i,
-            port_name=rig.harp_environment_sensor.port_name,
-        ))
-
-    # --- Manipulator (no dedicated type, use MotorizedStage) ---
-    components.append(
-        MotorizedStage(
-            name="Manipulator",
-            serial_number=rig.manipulator.serial_number,
-            # manufacturer=...,  # TODO
-            # model="AindManipulator",  # TODO
+        components.append(
+            HarpDevice(
+                name="LickometerLeft",
+                harp_device_type=HarpDeviceType.LICKETYSPLIT,
+                serial_number=rig.harp_lickometer_left.serial_number,
+                is_clock_generator=False,
+            )
         )
-    )
+    if rig.harp_lickometer_right:
+        components.append(
+            HarpDevice(
+                name="LickometerRight",
+                serial_number=rig.harp_lickometer_right.serial_number,
+                harp_device_type=HarpDeviceType.LICKETYSPLIT,
+                is_clock_generator=False,
+            )
+        )
+    if rig.harp_sniff_detector:
+        components.append(
+            HarpDevice(
+                name="SniffDetector",
+                harp_device_type=HarpDeviceType.SNIFFDETECTOR,
+                serial_number=rig.harp_sniff_detector.serial_number,
+                is_clock_generator=False,
+            )
+        )
+    if rig.harp_environment_sensor:
+        components.append(
+            HarpDevice(
+                name="EnvironmentSensor",
+                harp_device_type=HarpDeviceType.ENVIRONMENTSENSOR,
+                serial_number=rig.harp_environment_sensor.serial_number,
+                is_clock_generator=False,
+            )
+        )
 
-    # --- Connections: BehaviorBoard triggers cameras ---
+    # manipulator
+    components.append(MotorizedStage(name="Manipulator", serial_number=rig.manipulator.serial_number, travel=0.0))
+
+    # connections
     for name in rig.triggered_camera_controller.cameras:
-        connections.append(Connection(
-            source_device="BehaviorBoard",
-            target_device=name,
-        ))
+        connections.append(
+            Connection(
+                source_device="BehaviorBoard",
+                target_device=name,
+            )
+        )
 
     return Instrument(
-        instrument_id=instrument_id,
-        modification_date=date.today(),  # TODO: use actual last-modified date
-        modalities=[Modality.BEHAVIOR_VIDEOS],  # TODO: add others if applicable
+        instrument_id=rig.rig_name,
+        modification_date=date.today(),
+        modalities=[Modality.BEHAVIOR, Modality.BEHAVIOR_VIDEOS],
         coordinate_system=CoordinateSystem(
-            name="RigCoordinateSystem",  # TODO: fill in properly
-            # origin=...,
-            # axes=...,
+            name="RigCoordinateSystem",
+            origin=Origin.ORIGIN,
+            axes=[
+                Axis(name=AxisName.X, direction=Direction.LR),
+                Axis(name=AxisName.Y, direction=Direction.FB),
+                Axis(name=AxisName.Z, direction=Direction.DU),
+            ],
+            axis_unit=SizeUnit.MM,
         ),
         components=components,
         connections=connections,
-        # location="447",  # TODO: room/lab location
-        # notes="...",     # Required if any CameraTarget.OTHER is used
     )

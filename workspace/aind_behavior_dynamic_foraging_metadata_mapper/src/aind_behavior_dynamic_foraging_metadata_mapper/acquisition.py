@@ -12,9 +12,9 @@ from aind_data_schema.core.acquisition import (
     Code,
     DataStream,
     DetectorConfig,
+    PerformanceMetrics,
     StimulusEpoch,
     StimulusModality,
-    PerformanceMetrics
 )
 from aind_data_schema_models.modalities import Modality
 
@@ -69,7 +69,7 @@ def acqusition_from_dataset(
     for name, camera in rig.triggered_camera_controller.cameras.items():
         cam_configs.append(
             DetectorConfig(
-                device_name=name, 
+                device_name=name,
                 exposure_time=camera.exposure,
                 trigger_type=TriggerType.EXTERNAL,
                 crop_offset_x=camera.region_of_interest.x,
@@ -110,13 +110,12 @@ def acqusition_from_dataset(
         code=Code(
             url=r"https://github.com/AllenNeuralDynamics/Aind.Behavior.DynamicForaging/tree/feat-adding-curriculum",
             parameters=input_schemas["TaskLogic"].data.model_dump(),
-            core_dependency=Software(name="bonsai")
+            core_dependency=Software(name="bonsai"),
         ),
         stimulus_modalities=[StimulusModality.AUDITORY],
         performance_metrics=performance_metrics,
-        curriculum_status = trainer_state.stage.name
+        curriculum_status=trainer_state.stage.name,
     )
-
 
     return Acquisition(
         subject_id=subject_id,
