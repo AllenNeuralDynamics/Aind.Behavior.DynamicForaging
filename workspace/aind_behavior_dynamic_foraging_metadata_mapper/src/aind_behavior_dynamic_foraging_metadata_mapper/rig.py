@@ -26,7 +26,7 @@ def instrument_from_dataset(
     data_directory: os.PathLike,
 ) -> Instrument:
     """
-    Create acquisition model for completed session.
+    Create Instrument model for completed session.
 
     Args:
         data_directory (os.PathLike):
@@ -34,8 +34,8 @@ def instrument_from_dataset(
             directory is expected to include all required behavioral data files.
 
     Returns:
-        Acquisition:
-            Acquisition model for session
+        Instrument:
+            Instrument model for session
 
     Raises:
         FileNotFoundError:
