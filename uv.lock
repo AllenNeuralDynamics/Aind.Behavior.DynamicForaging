@@ -17,6 +17,7 @@ resolution-markers = [
 members = [
     "aind-behavior-dynamic-foraging",
     "aind-behavior-dynamic-foraging-curricula",
+    "aind-behavior-dynamic-foraging-metadata-mapper",
 ]
 
 [[package]]
@@ -103,7 +104,7 @@ docs = [
 [[package]]
 name = "aind-behavior-dynamic-foraging-curricula"
 version = "0.2.1"
-source = { editable = "src/aind_behavior_dynamic_foraging_curricula" }
+source = { editable = "workspace/aind_behavior_dynamic_foraging_curricula" }
 dependencies = [
     { name = "aind-behavior-curriculum" },
     { name = "aind-behavior-dynamic-foraging" },
@@ -130,6 +131,55 @@ docs = [
 requires-dist = [
     { name = "aind-behavior-curriculum", specifier = ">=0.0.38" },
     { name = "aind-behavior-dynamic-foraging", editable = "." },
+    { name = "numpy", specifier = ">=2.4.2" },
+    { name = "pydantic-settings" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "codespell" },
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "ruff" },
+]
+docs = [
+    { name = "mkdocs" },
+    { name = "mkdocs-material" },
+    { name = "mkdocstrings", extras = ["python"] },
+    { name = "pymdown-extensions" },
+    { name = "ruff" },
+]
+
+[[package]]
+name = "aind-behavior-dynamic-foraging-metadata-mapper"
+version = "0.0.1"
+source = { editable = "workspace/aind_behavior_dynamic_foraging_metadata_mapper" }
+dependencies = [
+    { name = "aind-behavior-dynamic-foraging" },
+    { name = "aind-data-schema" },
+    { name = "numpy" },
+    { name = "pydantic-settings" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "codespell" },
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "ruff" },
+]
+docs = [
+    { name = "mkdocs" },
+    { name = "mkdocs-material" },
+    { name = "mkdocstrings", extra = ["python"] },
+    { name = "pymdown-extensions" },
+    { name = "ruff" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "aind-behavior-dynamic-foraging", editable = "." },
+    { name = "aind-data-schema", specifier = ">=2.6.0" },
     { name = "numpy", specifier = ">=2.4.2" },
     { name = "pydantic-settings" },
 ]
@@ -1642,9 +1692,9 @@ name = "msal"
 version = "1.35.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "cryptography" },
-    { name = "pyjwt", extra = ["crypto"] },
-    { name = "requests" },
+    { name = "cryptography", marker = "sys_platform == 'win32'" },
+    { name = "pyjwt", extra = ["crypto"], marker = "sys_platform == 'win32'" },
+    { name = "requests", marker = "sys_platform == 'win32'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/3c/aa/5a646093ac218e4a329391d5a31e5092a89db7d2ef1637a90b82cd0b6f94/msal-1.35.1.tar.gz", hash = "sha256:70cac18ab80a053bff86219ba64cfe3da1f307c74b009e2da57ef040eb1b5656", size = 165658, upload-time = "2026-03-04T23:38:51.812Z" }
 wheels = [
@@ -2195,7 +2245,7 @@ wheels = [
 
 [package.optional-dependencies]
 crypto = [
-    { name = "cryptography" },
+    { name = "cryptography", marker = "sys_platform == 'win32'" },
 ]
 
 [[package]]
