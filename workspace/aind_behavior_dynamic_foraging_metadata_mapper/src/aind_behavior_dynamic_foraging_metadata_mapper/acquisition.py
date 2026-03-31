@@ -1,5 +1,7 @@
 import os
+from pathlib import Path
 from datetime import datetime, timezone
+from cyclopts import App
 
 from aind_behavior_dynamic_foraging.data_contract import dataset as df_foraging_dataset
 from aind_behavior_dynamic_foraging.rig import AindDynamicForagingRig
@@ -18,9 +20,11 @@ from aind_data_schema.core.acquisition import (
 )
 from aind_data_schema_models.modalities import Modality
 
+app = App()
 
+@app.default
 def acqusition_from_dataset(
-    data_directory: os.PathLike,
+    data_directory: Path,
 ) -> Acquisition:
     """
     Create acquisition model for completed session.
@@ -117,7 +121,7 @@ def acqusition_from_dataset(
         curriculum_status=trainer_state.stage.name,
     )
 
-    return Acquisition(
+    acq =  Acquisition(
         subject_id=subject_id,
         instrument_id=instrument_id,
         experimenters=experimenter,
@@ -128,3 +132,6 @@ def acqusition_from_dataset(
         data_streams=[data_stream],
         stimulus_epochs=[stimulus_epoch],
     )
+
+    print(acq)
+    return acq

@@ -1,3 +1,3 @@
-from .rig import instrument_from_dataset
+from .instrument import instrument_from_dataset
 from .acquisition import acqusition_from_dataset
 from .data_description import data_description_from_dataset

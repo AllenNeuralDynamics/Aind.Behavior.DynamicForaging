@@ -1,4 +1,5 @@
-import os
+from pathlib import Path
+from cyclopts import App
 
 from aind_behavior_dynamic_foraging.data_contract import dataset as df_foraging_dataset
 from aind_behavior_services.session import Session
@@ -8,9 +9,11 @@ from aind_data_schema_models.data_name_patterns import DataLevel, Group
 from aind_data_schema_models.modalities import Modality
 from aind_data_schema_models.organizations import Organization
 
+app = App()
 
+@app.default
 def data_description_from_dataset(
-    data_directory: os.PathLike,
+    data_directory: Path,
 ) -> DataDescription:
     """
     Create acquisition model for completed session.
@@ -40,7 +43,7 @@ def data_description_from_dataset(
     input_schemas = dataset["Behavior"]["InputSchemas"]
     session = Session.model_validate(input_schemas["Session"].data)
 
-    return DataDescription(
+    data_description = DataDescription(
         subject_id=session.subject,
         creation_time=session.date,
         institution=Organization.AIND,
@@ -58,3 +61,6 @@ def data_description_from_dataset(
         ],
         group=Group.BEHAVIOR,
     )
+
+    print(data_description)
+    return data_description

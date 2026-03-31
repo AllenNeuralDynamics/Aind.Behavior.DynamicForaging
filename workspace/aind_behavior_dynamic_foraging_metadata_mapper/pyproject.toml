@@ -25,6 +25,7 @@ dependencies = [
     "pydantic-settings",
     "aind-behavior-dynamic-foraging==0.0.2rc24",
     "aind-data-schema>=2.6.0",
+    "cyclopts>=4.10.0"
 ]
 
 [tool.uv.sources]
@@ -72,4 +73,6 @@ python_classes = ["Test*"]
 python_functions = ["test_*"]
 
 [project.scripts]
-mapper = "aind_behavior_dynamic_foraging_metadata_mapper.cli:main"
+acquisition = "aind_behavior_dynamic_foraging_metadata_mapper.acquisition:app"
+instrument = "aind_behavior_dynamic_foraging_metadata_mapper.instrument:app"
+data_description = "aind_behavior_dynamic_foraging_metadata_mapper.data_description:app"
