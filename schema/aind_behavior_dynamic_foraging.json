@@ -3137,6 +3137,12 @@
           "minimum": 0,
           "title": "Evaluation Window",
           "type": "integer"
+        },
+        "is_baiting": {
+          "default": true,
+          "description": "Whether uncollected rewards carry over to the next trial.",
+          "title": "Is Baiting",
+          "type": "boolean"
         }
       },
       "title": "WarmupTrialGenerationEndConditions",
@@ -3252,7 +3258,8 @@
             "min_trial": 50,
             "max_choice_bias": 0.1,
             "min_response_rate": 0.8,
-            "evaluation_window": 20
+            "evaluation_window": 20,
+            "is_baiting": true
           },
           "description": "Conditions to end trial generation."
         }

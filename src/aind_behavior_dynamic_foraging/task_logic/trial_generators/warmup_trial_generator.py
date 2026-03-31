@@ -38,6 +38,7 @@ class WarmupTrialGenerationEndConditions(BaseModel):
 
     is_baiting: bool = Field(default=True, description="Whether uncollected rewards carry over to the next trial.")
 
+
 class WarmupTrialGeneratorSpec(BlockBasedTrialGeneratorSpec):
     type: Literal["WarmupTrialGenerator"] = "WarmupTrialGenerator"
 

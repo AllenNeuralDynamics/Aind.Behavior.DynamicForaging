@@ -5229,12 +5229,15 @@ namespace AindDynamicForagingDataSchema
     
         private int _evaluationWindow;
     
+        private bool _isBaiting;
+    
         public WarmupTrialGenerationEndConditions()
         {
             _minTrial = 50;
             _maxChoiceBias = 0.1D;
             _minResponseRate = 0.8D;
             _evaluationWindow = 20;
+            _isBaiting = true;
         }
     
         protected WarmupTrialGenerationEndConditions(WarmupTrialGenerationEndConditions other)
@@ -5243,6 +5246,7 @@ namespace AindDynamicForagingDataSchema
             _maxChoiceBias = other._maxChoiceBias;
             _minResponseRate = other._minResponseRate;
             _evaluationWindow = other._evaluationWindow;
+            _isBaiting = other._isBaiting;
         }
     
         /// <summary>
@@ -5313,6 +5317,23 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
+        /// <summary>
+        /// Whether uncollected rewards carry over to the next trial.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("is_baiting")]
+        [System.ComponentModel.DescriptionAttribute("Whether uncollected rewards carry over to the next trial.")]
+        public bool IsBaiting
+        {
+            get
+            {
+                return _isBaiting;
+            }
+            set
+            {
+                _isBaiting = value;
+            }
+        }
+    
         public System.IObservable<WarmupTrialGenerationEndConditions> Generate()
         {
             return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new WarmupTrialGenerationEndConditions(this)));
@@ -5328,7 +5349,8 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("MinTrial = " + _minTrial + ", ");
             stringBuilder.Append("MaxChoiceBias = " + _maxChoiceBias + ", ");
             stringBuilder.Append("MinResponseRate = " + _minResponseRate + ", ");
-            stringBuilder.Append("EvaluationWindow = " + _evaluationWindow);
+            stringBuilder.Append("EvaluationWindow = " + _evaluationWindow + ", ");
+            stringBuilder.Append("IsBaiting = " + _isBaiting);
             return true;
         }
     
