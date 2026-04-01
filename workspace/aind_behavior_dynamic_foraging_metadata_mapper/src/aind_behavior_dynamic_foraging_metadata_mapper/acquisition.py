@@ -103,7 +103,7 @@ def acqusition_from_dataset(
     )
 
     # populate behavior epoch
-    metrics = dataset["Behavior"]["PreviousMetrics"].data
+    metrics = dataset["Behavior"]["Metrics"].data
     trainer_state = dataset["Behavior"]["TrainerState"].data
     performance_metrics = PerformanceMetrics(output_parameters=metrics)
 
