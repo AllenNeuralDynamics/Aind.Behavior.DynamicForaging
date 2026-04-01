@@ -63,7 +63,7 @@
           ]
         },
         "harp_lickometer_right": {
-          "defulat": null,
+          "default": null,
           "description": "Harp right lickometer",
           "oneOf": [
             {
@@ -121,7 +121,6 @@
         "data_directory",
         "triggered_camera_controller",
         "harp_behavior",
-        "harp_lickometer_right",
         "harp_clock_generator",
         "harp_sound_card",
         "manipulator",
@@ -1983,7 +1982,7 @@
       "type": "object"
     },
     "RewardProbabilityParameters": {
-      "description": "Defines the reward probability structure for a dynamic foraging task.\n\nReward probabilities are defined as pairs (p_left, p_right) normalized by\nbase_reward_sum. Pairs are drawn from a family representing a difficulty level:\n\n    Family 0:   [[8, 1], [6, 1], [3, 1], [1, 1]]\n    Family 1:  [[8, 1], [1, 1]]\n    Family 2:  [[1.0, 0.0], [0.9, 0.1], [0.8, 0.2], [0.7, 0.3], [0.6, 0.4], [0.5, 0.5]]\n    Family 3:  [[6, 1], [3, 1], [1, 1]]",
+      "description": "Defines the reward probability structure for a dynamic foraging task.\n\nReward probabilities are defined as pairs (p_left, p_right) normalized by\nbase_reward_sum. Pairs are drawn from a family representing a difficulty level:\n\n    Family 1:   [[8, 1], [6, 1], [3, 1], [1, 1]]\n    Family 2:  [[8, 1], [1, 1]]\n    Family 3:  [[1.0, 0.0], [0.9, 0.1], [0.8, 0.2], [0.7, 0.3], [0.6, 0.4], [0.5, 0.5]]\n    Family 4:  [[6, 1], [3, 1], [1, 1]]",
       "properties": {
         "base_reward_sum": {
           "default": 0.8,
@@ -3201,16 +3200,12 @@
         "block_len": {
           "$ref": "#/$defs/Distribution",
           "default": {
-            "family": "Exponential",
+            "family": "Scalar",
             "distribution_parameters": {
-              "family": "Exponential",
-              "rate": 1.0
+              "family": "Scalar",
+              "value": 0.0
             },
-            "truncation_parameters": {
-              "max": 2.0,
-              "min": 1.0,
-              "truncation_mode": "exclude"
-            },
+            "truncation_parameters": null,
             "scaling_parameters": null
           },
           "description": "Distribution describing block length."
