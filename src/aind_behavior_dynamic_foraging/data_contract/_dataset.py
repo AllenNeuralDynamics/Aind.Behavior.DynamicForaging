@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from aind_behavior_curriculum import TrainerState, Metrics
+from aind_behavior_curriculum import Metrics, TrainerState
 from aind_behavior_services.session import Session
 from contraqctor.contract import Dataset, DataStreamCollection
 from contraqctor.contract.camera import Camera

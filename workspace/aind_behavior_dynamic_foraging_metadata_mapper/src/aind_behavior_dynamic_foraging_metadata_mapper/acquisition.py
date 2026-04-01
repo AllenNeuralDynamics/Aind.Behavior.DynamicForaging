@@ -1,7 +1,6 @@
 import os
-from pathlib import Path
 from datetime import datetime, timezone
-from cyclopts import App
+from pathlib import Path
 
 from aind_behavior_dynamic_foraging.data_contract import dataset as df_foraging_dataset
 from aind_behavior_dynamic_foraging.rig import AindDynamicForagingRig
@@ -19,8 +18,10 @@ from aind_data_schema.core.acquisition import (
     StimulusModality,
 )
 from aind_data_schema_models.modalities import Modality
+from cyclopts import App
 
 app = App()
+
 
 @app.default
 def acqusition_from_dataset(
@@ -121,7 +122,7 @@ def acqusition_from_dataset(
         curriculum_status=trainer_state.stage.name,
     )
 
-    acq =  Acquisition(
+    acq = Acquisition(
         subject_id=subject_id,
         instrument_id=instrument_id,
         experimenters=experimenter,

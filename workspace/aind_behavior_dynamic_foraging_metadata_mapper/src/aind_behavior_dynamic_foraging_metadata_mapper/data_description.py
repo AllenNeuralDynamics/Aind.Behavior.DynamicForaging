@@ -1,5 +1,4 @@
 from pathlib import Path
-from cyclopts import App
 
 from aind_behavior_dynamic_foraging.data_contract import dataset as df_foraging_dataset
 from aind_behavior_services.session import Session
@@ -8,8 +7,10 @@ from aind_data_schema.core.data_description import DataDescription, Funding
 from aind_data_schema_models.data_name_patterns import DataLevel, Group
 from aind_data_schema_models.modalities import Modality
 from aind_data_schema_models.organizations import Organization
+from cyclopts import App
 
 app = App()
+
 
 @app.default
 def data_description_from_dataset(

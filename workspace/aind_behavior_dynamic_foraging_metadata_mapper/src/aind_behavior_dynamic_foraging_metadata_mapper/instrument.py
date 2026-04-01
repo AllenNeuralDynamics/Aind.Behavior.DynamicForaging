@@ -1,6 +1,5 @@
-from pathlib import Path
 from datetime import date
-from cyclopts import App
+from pathlib import Path
 
 from aind_behavior_dynamic_foraging.data_contract import dataset as df_foraging_dataset
 from aind_behavior_dynamic_foraging.rig import AindDynamicForagingRig
@@ -21,8 +20,10 @@ from aind_data_schema.components.devices import (
 from aind_data_schema.core.instrument import Instrument
 from aind_data_schema_models.modalities import Modality
 from aind_data_schema_models.organizations import Organization
+from cyclopts import App
 
 app = App()
+
 
 @app.default
 def instrument_from_dataset(
@@ -155,7 +156,7 @@ def instrument_from_dataset(
             )
         )
 
-    inst =  Instrument(
+    inst = Instrument(
         instrument_id=rig.rig_name,
         modification_date=date.today(),
         modalities=[Modality.BEHAVIOR, Modality.BEHAVIOR_VIDEOS],
