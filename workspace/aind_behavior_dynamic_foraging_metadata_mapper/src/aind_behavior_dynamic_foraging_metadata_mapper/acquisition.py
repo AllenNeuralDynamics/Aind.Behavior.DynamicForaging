@@ -134,4 +134,3 @@ def acqusition_from_dataset(
     )
 
     print(acq.model_dump_json(indent=3))
-    return acq
