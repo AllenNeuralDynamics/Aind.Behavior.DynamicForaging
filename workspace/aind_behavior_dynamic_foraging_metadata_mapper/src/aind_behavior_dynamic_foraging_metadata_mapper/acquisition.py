@@ -105,7 +105,7 @@ def acqusition_from_dataset(
     # populate behavior epoch
     metrics = dataset["Behavior"]["Metrics"].data
     trainer_state = dataset["Behavior"]["TrainerState"].data
-    performance_metrics = PerformanceMetrics(output_parameters=metrics)
+    performance_metrics = PerformanceMetrics(output_parameters=metrics.model_dump())
 
     stimulus_epoch = StimulusEpoch(
         stimulus_start_time=acquisition_start_time,
