@@ -54,7 +54,8 @@ def metrics_from_dataset(
     software_events = dataset["Behavior"]["SoftwareEvents"]
     software_events.load_all()
 
-    is_baiting = software_events["TrialGeneratorSpec"].data["data"].iloc[-1]["is_baiting"]
+    trial_generator_spec = software_events["TrialGeneratorSpec"].data["data"].iloc[-1]
+    is_baiting = trial_generator_spec.get("trial_generator_spec", False)
     trial_outcomes = software_events["TrialOutcome"].data["data"].iloc
     # exclude auto response and ignored trials
     filtered = [

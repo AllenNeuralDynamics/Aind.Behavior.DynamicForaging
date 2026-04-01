@@ -103,7 +103,7 @@ docs = [
 [[package]]
 name = "aind-behavior-dynamic-foraging-curricula"
 version = "0.2.1"
-source = { editable = "src/aind_behavior_dynamic_foraging_curricula" }
+source = { editable = "workspace/aind_behavior_dynamic_foraging_curricula" }
 dependencies = [
     { name = "aind-behavior-curriculum" },
     { name = "aind-behavior-dynamic-foraging" },
