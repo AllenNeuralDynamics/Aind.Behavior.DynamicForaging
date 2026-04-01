@@ -172,5 +172,5 @@ def instrument_from_dataset(
         components=components,
         connections=connections,
     )
-    print(inst)
+    print(inst.model_dump_json(indent=3))
     return inst

@@ -133,5 +133,5 @@ def acqusition_from_dataset(
         stimulus_epochs=[stimulus_epoch],
     )
 
-    print(acq)
+    print(acq.model_dump_json(indent=3))
     return acq

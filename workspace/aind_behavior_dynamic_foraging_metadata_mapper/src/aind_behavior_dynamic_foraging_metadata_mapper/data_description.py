@@ -62,5 +62,5 @@ def data_description_from_dataset(
         group=Group.BEHAVIOR,
     )
 
-    print(data_description)
+    print(data_description.model_dump_json(indent=3))
     return data_description
