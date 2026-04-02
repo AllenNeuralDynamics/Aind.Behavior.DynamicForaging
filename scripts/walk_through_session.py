@@ -2,7 +2,9 @@ import logging
 import os
 
 from aind_behavior_dynamic_foraging.data_contract import dataset as df_foraging_dataset
-from aind_behavior_dynamic_foraging.task_logic.trial_generators import WarmupTrialGeneratorSpec, CoupledTrialGeneratorSpec
+from aind_behavior_dynamic_foraging.task_logic.trial_generators import (
+    CoupledTrialGeneratorSpec,
+)
 from aind_behavior_dynamic_foraging.task_logic.trial_models import TrialOutcome
 
 logging.basicConfig(
