@@ -17,6 +17,7 @@
     <PackageReference Include="AllenNeuralDynamics.AindBehaviorServices" Version="0.13.4" />
     <PackageReference Include="AllenNeuralDynamics.AindBehaviorServices.Distributions" Version="0.2.0" />
     <PackageReference Include="AllenNeuralDynamics.AindManipulator" Version="0.3.0" />
+    <PackageReference Include="Rx-Core" Version="2.2.5" />
 
   </ItemGroup>
 </Project>

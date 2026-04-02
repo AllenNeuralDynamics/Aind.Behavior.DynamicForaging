@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Annotated, Any, Literal, Optional, TypeAliasType, Union
 
+from aind_behavior_services.task.distributions import Distribution
 from pydantic import BaseModel, Field, SerializeAsAny
 
 
@@ -18,6 +19,23 @@ else:
             Union[(AuditorySecondaryReinforcer,)],
             Field(discriminator="type", description="Type of secondary reinforcer"),
         ],
+    )
+
+
+class QuickRetractSettings(BaseModel):
+    """Settings for the quick retract feature."""
+
+    enable_during_quiescence: bool = Field(
+        default=False, description="If true, the quick retract feature is enabled during the quiescence period."
+    )
+    time_to_reset_during_quiescence: Distribution = Field(
+        default=1.0,
+        ge=0,
+        description="If enable_during_quiescence is true, this is the time the spout will take to reset. If the quiescence period is shorter than this time, the spout will retract at the end of the period.",
+    )
+    enable_on_response: bool = Field(
+        default=False,
+        description="If true, the quick retract feature is enabled immediately after a response is registered.",
     )
 
 
@@ -42,8 +60,9 @@ class Trial(BaseModel):
     response_deadline_duration: float = Field(
         default=5.0, ge=0, description="Time allowed for the subject to make a response (in seconds)."
     )
-    enable_fast_retract: bool = Field(
-        default=False, description="If true, the opposite lickspout retracts quickly after a response is made."
+    fast_retract_settings: Optional[QuickRetractSettings] = Field(
+        default=None,
+        description="Settings for the quick retract feature. If null, the feature will be disabled for this trial.",
     )
     quiescence_period_duration: float = Field(
         default=0.5,
