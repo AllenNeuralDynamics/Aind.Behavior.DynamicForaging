@@ -168,7 +168,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             p_reward_left = 1 if is_left_baited else p_reward_left
 
             is_right_baited = self.block.p_right_reward > random_numbers[1] or self.is_right_baited
-            logger.debug(f"Right baited: {is_left_baited}")
+            logger.debug(f"Right baited: {is_right_baited}")
             p_reward_right = 1 if is_right_baited else p_reward_right
 
         return Trial(
@@ -195,7 +195,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
         reward_pairs: list[list[float, float]],
         base_reward_sum: float,
         block_len: Union[UniformDistribution, ExponentialDistribution],
-        current_block: Optional[None] = None,
+        current_block: Optional[Block] = None,
     ) -> Block:
         """Generates the next block, avoiding repeating the current block's side bias.
 
