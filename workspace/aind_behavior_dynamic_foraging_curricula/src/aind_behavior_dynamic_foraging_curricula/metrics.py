@@ -138,7 +138,7 @@ def compute_foraging_efficiency(
 
     if not is_baiting:
         logger.debug("Calculated non baiting foraging efficiency.")
-        optimal_rewards_per_session = np.nanmean(np.max([p_right_reward], axis=0)) * len(p_left_reward)
+        optimal_rewards_per_session = np.nanmean(np.max([p_right_reward, p_left_reward], axis=0)) * len(p_left_reward)
     else:
         logger.debug("Calculated baiting foraging efficiency.")
         p_max = np.maximum(p_left_reward, p_right_reward)
