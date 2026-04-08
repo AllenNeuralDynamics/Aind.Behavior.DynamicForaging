@@ -44,7 +44,7 @@ def data_description_from_dataset(
     input_schemas = dataset["Behavior"]["InputSchemas"]
     session = Session.model_validate(input_schemas["Session"].data)
 
-    data_description = DataDescription(
+    return DataDescription(
         subject_id=session.subject,
         creation_time=session.date,
         institution=Organization.AIND,
@@ -63,4 +63,3 @@ def data_description_from_dataset(
         group=Group.BEHAVIOR,
     )
 
-    print(data_description.model_dump_json(indent=3))

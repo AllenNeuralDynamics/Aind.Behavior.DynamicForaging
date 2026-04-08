@@ -156,7 +156,7 @@ def instrument_from_dataset(
             )
         )
 
-    inst = Instrument(
+    return Instrument(
         instrument_id=rig.rig_name,
         modification_date=date.today(),
         modalities=[Modality.BEHAVIOR, Modality.BEHAVIOR_VIDEOS],
@@ -173,4 +173,3 @@ def instrument_from_dataset(
         components=components,
         connections=connections,
     )
-    print(inst.model_dump_json(indent=3))
