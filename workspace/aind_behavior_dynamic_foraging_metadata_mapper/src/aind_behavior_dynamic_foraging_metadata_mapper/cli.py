@@ -18,7 +18,7 @@ class DataMapperCli(BaseSettings, cli_kebab_case=True):
         default=None,
         description="End time of the session in ISO format. If not provided, will use the time the data mapping is run.",
     )
-    suffix: t.Optional[str] = Field(default="dynamicforaging", description="Suffix to append to the output filenames.")
+    suffix: t.Optional[str] = Field(default="", description="Suffix to append to the output filenames.")
 
     def cli_cmd(self):
         """Generate aind-data-schema metadata for the Dynamic Foraging dataset located at the specified path."""
