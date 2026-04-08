@@ -4,13 +4,13 @@ import typing as t
 from pathlib import Path
 
 from pydantic import AwareDatetime, Field
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, CliApp
 
 logger = logging.getLogger(__name__)
 
 
 class DataMapperCli(BaseSettings, cli_kebab_case=True):
-    data_path: os.PathLike = Field(description="Path to the session data directory.")
+    data_directory: os.PathLike = Field(description="Path to the session data directory.")
     repo_path: os.PathLike = Field(
         default=Path("."), description="Path to the repository. By default it will use the current directory."
     )
@@ -27,19 +27,26 @@ class DataMapperCli(BaseSettings, cli_kebab_case=True):
         from .data_description import data_description_from_dataset
 
         acquisition = acqusition_from_dataset(
-            data_directory=Path(self.data_path),
+            data_directory=Path(self.data_directory),
             repo_path=Path(self.repo_path),
             end_time=self.session_end_time,
         )
 
-        instrument = instrument_from_dataset(data_directory=Path(self.data_path))
-        data_description = data_description_from_dataset(data_directory=Path(self.data_path))
+        instrument = instrument_from_dataset(data_directory=Path(self.data_directory))
+        data_description = data_description_from_dataset(data_directory=Path(self.data_directory))
 
-        acquisition.write_standard_file(output_directory=Path(self.data_path), filename_suffix=self.suffix)
-        instrument.write_standard_file(output_directory=Path(self.data_path), filename_suffix=self.suffix)
-        data_description.write_standard_file(output_directory=Path(self.data_path), filename_suffix=self.suffix)
+        acquisition.write_standard_file(output_directory=Path(self.data_directory), filename_suffix=self.suffix)
+        instrument.write_standard_file(output_directory=Path(self.data_directory), filename_suffix=self.suffix)
+        data_description.write_standard_file(output_directory=Path(self.data_directory), filename_suffix=self.suffix)
 
         logger.info(
             "Mapping completed! Saved acquisition.json, instrument.json, data_description.json to %s",
-            self.data_path,
+            self.data_directory,
         )
+        
+def main():
+    CliApp.run(DataMapperCli)
+
+
+if __name__ == "__main__":
+    main()
