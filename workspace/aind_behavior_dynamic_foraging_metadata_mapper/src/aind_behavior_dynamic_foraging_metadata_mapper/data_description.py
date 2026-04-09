@@ -62,4 +62,3 @@ def data_description_from_dataset(
         ],
         group=Group.BEHAVIOR,
     )
-

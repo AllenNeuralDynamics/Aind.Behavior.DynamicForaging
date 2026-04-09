@@ -16,8 +16,6 @@ from aind_behavior_services.rig import water_valve as abs_water_valve
 from aind_behavior_services.session import Session
 from aind_behavior_services.utils import get_fields_of_type, utcnow
 from aind_data_schema.components.configs import TriggerType
-from aind_data_schema.components.connections import Connection
-from aind_data_schema.components.identifiers import Software
 from aind_data_schema.components.measurements import CalibrationFit, FitType, GenericModel, VolumeCalibration
 from aind_data_schema.core.acquisition import (
     Acquisition,
@@ -25,7 +23,6 @@ from aind_data_schema.core.acquisition import (
     Code,
     DataStream,
     DetectorConfig,
-    GenericModel,
     PerformanceMetrics,
     StimulusEpoch,
     StimulusModality,
@@ -199,6 +196,7 @@ def _get_cameras_config(name: str, camera: abs_camera.CameraTypes, repository: g
     cameras = data_mapper_helpers.get_cameras(AindDynamicForagingTaskLogic, exclude_without_video_writer=True)
 
     return list(map(camera, cameras.keys(), cameras.values()))
+
 
 def _get_bonsai_as_code(repository: git.Repo) -> Code:
     bonsai_folder = Path(Path(repository.working_tree_dir) / "bonsai" / "bonsai.exe").parent
