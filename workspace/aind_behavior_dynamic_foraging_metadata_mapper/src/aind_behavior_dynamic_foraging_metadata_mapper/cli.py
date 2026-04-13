@@ -23,7 +23,6 @@ class DataMapperCli(BaseSettings, cli_kebab_case=True):
     def cli_cmd(self):
         """Generate aind-data-schema metadata for the Dynamic Foraging dataset located at the specified path."""
         from .acquisition import acqusition_from_dataset
-        from .data_description import data_description_from_dataset
         from .instrument import instrument_from_dataset
 
         acquisition = acqusition_from_dataset(
@@ -31,16 +30,13 @@ class DataMapperCli(BaseSettings, cli_kebab_case=True):
             repo_path=Path(self.repo_path),
             end_time=self.session_end_time,
         )
-
         instrument = instrument_from_dataset(data_directory=Path(self.data_directory))
-        data_description = data_description_from_dataset(data_directory=Path(self.data_directory))
 
         acquisition.write_standard_file(output_directory=Path(self.data_directory), filename_suffix=self.suffix)
         instrument.write_standard_file(output_directory=Path(self.data_directory), filename_suffix=self.suffix)
-        data_description.write_standard_file(output_directory=Path(self.data_directory), filename_suffix=self.suffix)
 
         logger.info(
-            "Mapping completed! Saved acquisition.json, instrument.json, data_description.json to %s",
+            "Mapping completed! Saved acquisition.json, instrument.json to %s",
             self.data_directory,
         )
 

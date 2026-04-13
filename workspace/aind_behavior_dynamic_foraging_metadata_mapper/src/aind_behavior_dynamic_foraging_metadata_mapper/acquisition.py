@@ -220,7 +220,7 @@ def _get_python_as_code(repository: git.Repo) -> Code:
         semver += f"-{v.releaselevel}.{v.serial}"
     return Code(
         url=repository.remote().url,
-        name="aind-behavior-vr-foraging",
+        name="aind-behavior-dynamic-foraging",
         version=repository.head.commit.hexsha,
         language="Python",
         language_version=semver,
