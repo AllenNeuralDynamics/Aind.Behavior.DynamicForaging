@@ -187,12 +187,11 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             logger.debug(f"Left baited: {is_left_baited}, Right baited: {is_right_baited}")
 
         # determine autowater
-        is_autowater_trial = self._are_autowater_conditions_met()
-        is_left_autowater = is_left_baited and is_autowater_trial
-        is_right_autowater = is_right_baited and is_autowater_trial
-
-        p_reward_left = 1 if (is_left_baited or is_left_autowater) else self.block.p_left_reward
-        p_reward_right = 1 if (is_right_baited or is_right_autowater) else self.block.p_right_reward
+        if self._are_autowater_conditions_met():
+            is_right_autowater = True if self.block.p_right_reward > self.block.p_right_reward else False
+        
+        p_reward_left = 1 if is_left_baited else self.block.p_left_reward
+        p_reward_right = 1 if is_right_baited else self.block.p_right_reward
         
         return Trial(
             p_reward_left=p_reward_left,
