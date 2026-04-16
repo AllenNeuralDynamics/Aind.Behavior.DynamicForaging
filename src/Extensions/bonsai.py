@@ -7,7 +7,7 @@ from pydantic import TypeAdapter
 logging.basicConfig(
     stream=sys.stdout,
     level=logging.DEBUG,
-    format='{"level": %(levelno)d, "msg": "%(message)s"}',
+    format='{"name": "%(name)s", "level": %(levelno)d, "msg": "%(message)s"}',
 )
 
 from aind_behavior_dynamic_foraging.task_logic import TrialGeneratorSpec  # noqa
