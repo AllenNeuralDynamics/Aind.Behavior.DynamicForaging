@@ -154,8 +154,6 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
             outcome: The TrialOutcome from the most recently completed trial.
         """
 
-        logger.info(f"Updating coupled trial generator with trial outcome of {outcome}")
-
         if isinstance(outcome, str):
             outcome = TrialOutcome.model_validate_json(outcome)
 
