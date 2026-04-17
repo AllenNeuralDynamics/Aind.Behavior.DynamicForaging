@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Annotated, Any, Literal, Optional, TypeAliasType, Union
 
-from aind_behavior_services.task.distributions import Distribution
+from aind_behavior_services.task.distributions import Distribution, Scalar
 from pydantic import BaseModel, Field, SerializeAsAny
 
 
@@ -29,7 +29,7 @@ class QuickRetractSettings(BaseModel):
         default=False, description="If true, the quick retract feature is enabled during the quiescence period."
     )
     time_to_reset_during_quiescence: Distribution = Field(
-        default=1.0,
+        default=Scalar(1.0),
         ge=0,
         description="If enable_during_quiescence is true, this is the time the spout will take to reset. If the quiescence period is shorter than this time, the spout will retract at the end of the period.",
     )
