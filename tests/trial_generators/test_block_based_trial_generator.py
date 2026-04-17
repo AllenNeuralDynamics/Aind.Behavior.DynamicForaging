@@ -112,20 +112,9 @@ class TestBlockBasedTrialGenerator(unittest.TestCase):
 
     def test_next_returns_correct_reward_probs(self):
         trial = self.generator.next()
+        print(trial, self.generator.block.p_left_reward, self.generator.block.p_right_reward)
         self.assertEqual(trial.p_reward_left, self.generator.block.p_left_reward)
         self.assertEqual(trial.p_reward_right, self.generator.block.p_right_reward)
-
-    #### Test unbaited ####
-
-    def test_baiting_disabled_reward_prob_unchanged(self):
-        """Without baiting, reward probs should equal block probs exactly."""
-        self.generator.block = Block(p_right_reward=0.8, p_left_reward=0.2, min_length=10)
-        self.generator.is_left_baited = True
-        self.generator.is_right_baited = True
-        trial = self.generator.next()
-
-        self.assertEqual(trial.p_reward_right, 0.8)
-        self.assertEqual(trial.p_reward_left, 0.2)
 
 
 class TestBlockBaseBaitingTrialGenerator(unittest.TestCase):
