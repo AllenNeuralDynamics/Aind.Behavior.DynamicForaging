@@ -1,6 +1,6 @@
 from typing import Literal
 
-from ..trial_models import Trial, TrialOutcome
+from ..trial_models import Trial, TrialOutcome, QuickRetractSettings
 from ._base import BaseTrialGeneratorSpecModel, ITrialGenerator
 
 
@@ -49,7 +49,7 @@ class IntegrationTestTrialGenerator(ITrialGenerator):
                 p_reward_left=0.0, p_reward_right=0.0, is_auto_response_right=False
             ),  # 12: no reward, auto response left,
             # fast retract
-            Trial(enable_fast_retract=True),  # 13: enable fast retract
+            Trial(quick_retract_settings=QuickRetractSettings(enable_during_quiescence=True, enable_on_response=True)),  # 13: enable fast retract
             # secondary reinforcer
             # Trial(secondary_reinforcer=SecondaryReinforcer()),   # 14: enable secondary reinforcer
             # no reward consumption duration
