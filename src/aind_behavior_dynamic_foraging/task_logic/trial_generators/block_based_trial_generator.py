@@ -195,7 +195,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
         reward_pairs: list[list[float, float]],
         base_reward_sum: float,
         block_len: Union[UniformDistribution, ExponentialDistribution],
-        current_block: Optional[None] = None,
+        current_block: Optional[Block] = None,
     ) -> Block:
         """Generates the next block, avoiding repeating the current block's side bias.
 
