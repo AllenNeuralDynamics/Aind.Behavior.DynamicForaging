@@ -41,10 +41,10 @@ class RewardProbabilityParameters(BaseModel):
     Reward probabilities are defined as pairs (p_left, p_right) normalized by
     base_reward_sum. Pairs are drawn from a family representing a difficulty level:
 
-        Family 0:   [[8, 1], [6, 1], [3, 1], [1, 1]]
-        Family 1:  [[8, 1], [1, 1]]
-        Family 2:  [[1.0, 0.0], [0.9, 0.1], [0.8, 0.2], [0.7, 0.3], [0.6, 0.4], [0.5, 0.5]]
-        Family 3:  [[6, 1], [3, 1], [1, 1]]
+        Family 1:   [[8, 1], [6, 1], [3, 1], [1, 1]]
+        Family 2:  [[8, 1], [1, 1]]
+        Family 3:  [[1.0, 0.0], [0.9, 0.1], [0.8, 0.2], [0.7, 0.3], [0.6, 0.4], [0.5, 0.5]]
+        Family 4:  [[6, 1], [3, 1], [1, 1]]
 
     """
 
@@ -103,7 +103,9 @@ class BlockBasedTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
 
     kernel_size: int = Field(default=2, description="Kernel to evaluate choice fraction.")
     reward_probability_parameters: RewardProbabilityParameters = Field(
-        default=RewardProbabilityParameters(), description="Parameters defining the reward probability structure."
+        default=RewardProbabilityParameters(),
+        description="Parameters defining the reward probability structure.",
+        validate_default=True,
     )
 
     autowater_parameters: Optional[AutoWaterParameters] = Field(
@@ -189,10 +191,10 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
         # determine autowater
         if self._are_autowater_conditions_met():
             is_right_autowater = True if self.block.p_right_reward > self.block.p_right_reward else False
-        
+
         p_reward_left = 1 if is_left_baited else self.block.p_left_reward
         p_reward_right = 1 if is_right_baited else self.block.p_right_reward
-        
+
         return Trial(
             p_reward_left=p_reward_left,
             p_reward_right=p_reward_right,
@@ -200,7 +202,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             response_deadline_duration=self.spec.response_duration,
             quiescence_period_duration=quiescent,
             inter_trial_interval_duration=iti,
-            is_auto_response_right=is_right_autowater, 
+            is_auto_response_right=is_right_autowater,
         )
 
     def _are_autowater_conditions_met(self) -> bool:
@@ -223,7 +225,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
         is_unrewarded = [not reward for reward in self.reward_history]
         if all(is_unrewarded[-min_unreward:]):
             return True
-        
+
         return False
 
     @abstractmethod

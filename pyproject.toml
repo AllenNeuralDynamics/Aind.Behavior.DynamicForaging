@@ -15,13 +15,16 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Operating System :: Microsoft :: Windows",
 ]
-version = "0.0.2rc17"
+version = "0.0.2rc25"
 readme = {file = "README.md", content-type = "text/markdown"}
 
 dependencies = [
-    "aind_behavior_services>=0.13.2",
+    "aind_behavior_services>=0.13.5",
     "pydantic-settings",
 ]
+
+[tool.uv.workspace]
+members = ["workspace/*"]
 
 [project.urls]
 Documentation = "https://allenneuraldynamics.github.io/Aind.Behavior.DynamicForaging/"
@@ -71,4 +74,3 @@ ignore-words-list = 'nd'
 [tool.uv]
 default-groups = ['dev']
 required-version = '>=0.8.4'
-
