@@ -4531,7 +4531,7 @@ namespace AindDynamicForagingDataSchema
     
         private double _responseDeadlineDuration;
     
-        private QuickRetractSettings _fastRetractSettings;
+        private QuickRetractSettings _quickRetractSettings;
     
         private double _quiescencePeriodDuration;
     
@@ -4563,7 +4563,7 @@ namespace AindDynamicForagingDataSchema
             _rewardDelayDuration = other._rewardDelayDuration;
             _secondaryReinforcer = other._secondaryReinforcer;
             _responseDeadlineDuration = other._responseDeadlineDuration;
-            _fastRetractSettings = other._fastRetractSettings;
+            _quickRetractSettings = other._quickRetractSettings;
             _quiescencePeriodDuration = other._quiescencePeriodDuration;
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
             _isAutoResponseRight = other._isAutoResponseRight;
@@ -4678,18 +4678,18 @@ namespace AindDynamicForagingDataSchema
         /// Settings for the quick retract feature. If null, the feature will be disabled for this trial.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("fast_retract_settings")]
+        [Newtonsoft.Json.JsonPropertyAttribute("quick_retract_settings")]
         [System.ComponentModel.DescriptionAttribute("Settings for the quick retract feature. If null, the feature will be disabled for" +
             " this trial.")]
-        public QuickRetractSettings FastRetractSettings
+        public QuickRetractSettings QuickRetractSettings
         {
             get
             {
-                return _fastRetractSettings;
+                return _quickRetractSettings;
             }
             set
             {
-                _fastRetractSettings = value;
+                _quickRetractSettings = value;
             }
         }
     
@@ -4801,7 +4801,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("RewardDelayDuration = " + _rewardDelayDuration + ", ");
             stringBuilder.Append("SecondaryReinforcer = " + _secondaryReinforcer + ", ");
             stringBuilder.Append("ResponseDeadlineDuration = " + _responseDeadlineDuration + ", ");
-            stringBuilder.Append("FastRetractSettings = " + _fastRetractSettings + ", ");
+            stringBuilder.Append("QuickRetractSettings = " + _quickRetractSettings + ", ");
             stringBuilder.Append("QuiescencePeriodDuration = " + _quiescencePeriodDuration + ", ");
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
             stringBuilder.Append("IsAutoResponseRight = " + _isAutoResponseRight + ", ");

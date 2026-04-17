@@ -2752,7 +2752,7 @@
           "title": "Response Deadline Duration",
           "type": "number"
         },
-        "fast_retract_settings": {
+        "quick_retract_settings": {
           "default": null,
           "description": "Settings for the quick retract feature. If null, the feature will be disabled for this trial.",
           "oneOf": [

@@ -60,7 +60,7 @@ class Trial(BaseModel):
     response_deadline_duration: float = Field(
         default=5.0, ge=0, description="Time allowed for the subject to make a response (in seconds)."
     )
-    fast_retract_settings: Optional[QuickRetractSettings] = Field(
+    quick_retract_settings: Optional[QuickRetractSettings] = Field(
         default=None,
         description="Settings for the quick retract feature. If null, the feature will be disabled for this trial.",
     )
