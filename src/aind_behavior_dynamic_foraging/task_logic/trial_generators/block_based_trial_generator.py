@@ -190,7 +190,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
 
         # determine autowater
         if self._are_autowater_conditions_met():
-            is_right_autowater = True if self.block.p_right_reward > self.block.p_right_reward else False
+            is_right_autowater = True if self.block.p_right_reward > self.block.p_left_reward else False
 
         p_reward_left = 1 if is_left_baited else self.block.p_left_reward
         p_reward_right = 1 if is_right_baited else self.block.p_right_reward
