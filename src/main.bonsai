@@ -647,7 +647,7 @@
                                       <Name>ThisTrial</Name>
                                     </Expression>
                                     <Expression xsi:type="MemberSelector">
-                                      <Selector>FastRetractSettings</Selector>
+                                      <Selector>QuickRetractSettings</Selector>
                                     </Expression>
                                     <Expression xsi:type="MemberSelector">
                                       <Selector>TimeToResetDuringQuiescence</Selector>
@@ -707,7 +707,7 @@
                                 <Name>ThisTrial</Name>
                               </Expression>
                               <Expression xsi:type="MemberSelector">
-                                <Selector>FastRetractSettings</Selector>
+                                <Selector>QuickRetractSettings</Selector>
                               </Expression>
                               <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:FilterNotNull.bonsai" />
                               <Expression xsi:type="Combinator">
@@ -960,7 +960,7 @@
                                 <Selector>Item2</Selector>
                               </Expression>
                               <Expression xsi:type="MemberSelector">
-                                <Selector>FastRetractSettings</Selector>
+                                <Selector>QuickRetractSettings</Selector>
                               </Expression>
                               <Expression xsi:type="scr:ExpressionTransform">
                                 <scr:Expression>(it != null) &amp;&amp; (it.EnableOnResponse)</scr:Expression>
@@ -1092,7 +1092,7 @@
                                 <Selector>Item2</Selector>
                               </Expression>
                               <Expression xsi:type="MemberSelector">
-                                <Selector>FastRetractSettings</Selector>
+                                <Selector>QuickRetractSettings</Selector>
                               </Expression>
                               <Expression xsi:type="scr:ExpressionTransform">
                                 <scr:Expression>(it != null) &amp;&amp; (it.EnableOnResponse)</scr:Expression>
@@ -1717,7 +1717,7 @@
                                 <Name>ThisTrial</Name>
                               </Expression>
                               <Expression xsi:type="MemberSelector">
-                                <Selector>FastRetractSettings</Selector>
+                                <Selector>QuickRetractSettings</Selector>
                               </Expression>
                               <Expression xsi:type="scr:ExpressionCondition">
                                 <scr:Name>EnableOnResponse?</scr:Name>
