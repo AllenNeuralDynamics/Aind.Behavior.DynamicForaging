@@ -157,23 +157,18 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
         iti = draw_sample(self.spec.inter_trial_interval_duration)
         quiescent = draw_sample(self.spec.quiescent_duration)
 
-        p_reward_left = self.block.p_left_reward
-        p_reward_right = self.block.p_right_reward
-
         if self.spec.is_baiting:
             random_numbers = np.random.random(2)
 
-            is_left_baited = self.block.p_left_reward > random_numbers[0] or self.is_left_baited
-            logger.debug(f"Left baited: {is_left_baited}")
-            p_reward_left = 1 if is_left_baited else p_reward_left
+            self.is_left_baited = self.block.p_left_reward > random_numbers[0] or self.is_left_baited
+            logger.debug(f"Left baited: {self.is_left_baited}")
 
-            is_right_baited = self.block.p_right_reward > random_numbers[1] or self.is_right_baited
-            logger.debug(f"Right baited: {is_left_baited}")
-            p_reward_right = 1 if is_right_baited else p_reward_right
+            self.is_right_baited = self.block.p_right_reward > random_numbers[1] or self.is_right_baited
+            logger.debug(f"Right baited: {self.is_right_baited}")
 
         return Trial(
-            p_reward_left=p_reward_left,
-            p_reward_right=p_reward_right,
+            p_reward_left=1 if self.is_left_baited else self.block.p_left_reward,
+            p_reward_right=1 if self.is_right_baited else self.block.p_right_reward,
             reward_consumption_duration=self.spec.reward_consumption_duration,
             response_deadline_duration=self.spec.response_duration,
             quiescence_period_duration=quiescent,
@@ -195,7 +190,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
         reward_pairs: list[list[float, float]],
         base_reward_sum: float,
         block_len: Union[UniformDistribution, ExponentialDistribution],
-        current_block: Optional[None] = None,
+        current_block: Optional[Block] = None,
     ) -> Block:
         """Generates the next block, avoiding repeating the current block's side bias.
 

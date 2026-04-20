@@ -134,6 +134,13 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
             logger.debug("Maximum trial count exceeded.")
             return True
 
+        logger.debug(
+            "Trial generation end conditions are not met: "
+            f"total trials={len(self.is_right_choice_history)}, "
+            f"time elapsed={time_elapsed},"
+            f"ignored trial={choice_history[-win:].count(None)},"
+        )
+
         return False
 
     def update(self, outcome: TrialOutcome | str) -> None:
@@ -146,8 +153,6 @@ class CoupledTrialGenerator(BlockBasedTrialGenerator):
         Args:
             outcome: The TrialOutcome from the most recently completed trial.
         """
-
-        logger.info(f"Updating coupled trial generator with trial outcome of {outcome}")
 
         if isinstance(outcome, str):
             outcome = TrialOutcome.model_validate_json(outcome)

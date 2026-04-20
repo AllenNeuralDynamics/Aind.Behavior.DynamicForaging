@@ -71,7 +71,7 @@ def metrics_from_dataset(
     logger.debug(f"Calculated foraging efficiency as {foraging_efficiency}")
 
     try:
-        prev_metrics = DynamicForagingMetrics(**dataset["Behavior"]["PreviousMetrics"].data)
+        prev_metrics = DynamicForagingMetrics.model_validate(dataset["Behavior"]["PreviousMetrics"].data)
         prev_stage = prev_metrics.stage_name
     except FileNotFoundError:
         logger.info("No previous metrics found.")
@@ -138,7 +138,7 @@ def compute_foraging_efficiency(
 
     if not is_baiting:
         logger.debug("Calculated non baiting foraging efficiency.")
-        optimal_rewards_per_session = np.nanmean(np.max([p_right_reward], axis=0)) * len(p_left_reward)
+        optimal_rewards_per_session = np.nanmean(np.max([p_right_reward, p_left_reward], axis=0)) * len(p_left_reward)
     else:
         logger.debug("Calculated baiting foraging efficiency.")
         p_max = np.maximum(p_left_reward, p_right_reward)

@@ -1,8 +1,16 @@
+import logging
+import sys
 from typing import TYPE_CHECKING
 
 from pydantic import TypeAdapter
 
-from aind_behavior_dynamic_foraging.task_logic import TrialGeneratorSpec
+logging.basicConfig(
+    stream=sys.stdout,
+    level=logging.DEBUG,
+    format='{"name": "%(name)s", "level": %(levelno)d, "msg": "%(message)s"}',
+)
+
+from aind_behavior_dynamic_foraging.task_logic import TrialGeneratorSpec  # noqa
 
 if TYPE_CHECKING:
     from aind_behavior_dynamic_foraging.task_logic.trial_generators._base import ITrialGenerator
