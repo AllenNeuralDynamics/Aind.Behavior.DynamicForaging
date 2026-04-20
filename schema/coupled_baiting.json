@@ -141,7 +141,7 @@
                             ]
                         }
                     },
-                    "version": "0.0.2-rc25",
+                    "version": "0.0.2-rc26",
                     "stage_name": null
                 },
                 "graph": {
@@ -230,7 +230,7 @@
                         },
                         "lick_spout_retraction": false
                     },
-                    "version": "0.0.2-rc25",
+                    "version": "0.0.2-rc26",
                     "stage_name": null
                 },
                 "graph": {
@@ -319,7 +319,7 @@
                         },
                         "lick_spout_retraction": false
                     },
-                    "version": "0.0.2-rc25",
+                    "version": "0.0.2-rc26",
                     "stage_name": null
                 },
                 "graph": {
@@ -408,7 +408,7 @@
                         },
                         "lick_spout_retraction": false
                     },
-                    "version": "0.0.2-rc25",
+                    "version": "0.0.2-rc26",
                     "stage_name": null
                 },
                 "graph": {
@@ -505,7 +505,7 @@
                         },
                         "lick_spout_retraction": false
                     },
-                    "version": "0.0.2-rc25",
+                    "version": "0.0.2-rc26",
                     "stage_name": null
                 },
                 "graph": {
@@ -602,7 +602,7 @@
                         },
                         "lick_spout_retraction": false
                     },
-                    "version": "0.0.2-rc25",
+                    "version": "0.0.2-rc26",
                     "stage_name": null
                 },
                 "graph": {
