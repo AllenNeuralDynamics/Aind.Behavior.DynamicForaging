@@ -1,7 +1,7 @@
 import unittest
 
-from aind_behavior_dynamic_foraging.task_logic.trial_generators.warmup_trial_generator import (
-    WarmupTrialGeneratorSpec,
+from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_warmup_trial_generator import (
+    CoupledWarmupTrialGeneratorSpec,
 )
 from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial, TrialOutcome
 
@@ -12,7 +12,7 @@ def make_outcome(is_right_choice: bool | None, is_rewarded: bool) -> TrialOutcom
 
 class TestWarmupEndConditions(unittest.TestCase):
     def setUp(self):
-        self.spec = WarmupTrialGeneratorSpec()
+        self.spec = CoupledWarmupTrialGeneratorSpec()
         self.generator = self.spec.create_generator()
 
     def test_end_conditions_not_met_too_few_trials(self):

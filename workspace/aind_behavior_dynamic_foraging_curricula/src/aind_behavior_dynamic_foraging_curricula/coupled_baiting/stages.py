@@ -7,17 +7,15 @@ from aind_behavior_dynamic_foraging.task_logic import (
 from aind_behavior_dynamic_foraging.task_logic.trial_generators import (
     CoupledTrialGeneratorSpec,
     TrialGeneratorCompositeSpec,
-    WarmupTrialGeneratorSpec,
-)
-from aind_behavior_dynamic_foraging.task_logic.trial_generators.block_based_trial_generator import (
-    RewardProbabilityParameters,
+    CoupledWarmupTrialGeneratorSpec,
 )
 from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generator import (
     BehaviorStabilityParameters,
     CoupledTrialGenerationEndConditions,
 )
-from aind_behavior_dynamic_foraging.task_logic.trial_generators.warmup_trial_generator import (
-    WarmupTrialGenerationEndConditions,
+from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_warmup_trial_generator import (
+    CoupledWarmupTrialGenerationEndConditions,
+    RewardProbabilityParameters
 )
 from aind_behavior_services.task.distributions import (
     ExponentialDistribution,
@@ -40,8 +38,8 @@ def make_s_stage_1_warmup():
                 reward_size=RewardSize(right_value_volume=4.0, left_value_volume=4.0),
                 trial_generator=TrialGeneratorCompositeSpec(
                     generators=[
-                        WarmupTrialGeneratorSpec(
-                            trial_generation_end_parameters=WarmupTrialGenerationEndConditions(
+                        CoupledWarmupTrialGeneratorSpec(
+                            trial_generation_end_parameters=CoupledWarmupTrialGenerationEndConditions(
                                 min_trial=50,
                                 max_choice_bias=0.1,
                                 min_response_rate=0.8,
