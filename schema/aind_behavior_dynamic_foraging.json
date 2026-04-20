@@ -1,0 +1,3445 @@
+{
+  "$defs": {
+    "AindDynamicForagingRig": {
+      "properties": {
+        "aind_behavior_services_pkg_version": {
+          "default": "0.13.5",
+          "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
+          "title": "aind_behavior_services package version",
+          "type": "string"
+        },
+        "version": {
+          "const": "0.0.2-rc25",
+          "default": "0.0.2-rc25",
+          "title": "Version",
+          "type": "string"
+        },
+        "computer_name": {
+          "description": "Computer name",
+          "title": "Computer Name",
+          "type": "string"
+        },
+        "rig_name": {
+          "description": "Rig name",
+          "title": "Rig Name",
+          "type": "string"
+        },
+        "data_directory": {
+          "description": "Directory where data will be saved to",
+          "format": "path",
+          "title": "Data Directory",
+          "type": "string"
+        },
+        "triggered_camera_controller": {
+          "$ref": "#/$defs/CameraController_SpinnakerCamera_",
+          "description": "Required camera controller to triggered cameras."
+        },
+        "monitoring_camera_controller": {
+          "default": null,
+          "description": "Optional camera controller for monitoring cameras.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/CameraController_WebCamera_"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "harp_behavior": {
+          "$ref": "#/$defs/HarpBehavior",
+          "description": "Harp behavior"
+        },
+        "harp_lickometer_left": {
+          "default": null,
+          "description": "Harp left lickometer",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/HarpLicketySplit"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "harp_lickometer_right": {
+          "default": null,
+          "description": "Harp right lickometer",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/HarpLicketySplit"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "harp_clock_generator": {
+          "$ref": "#/$defs/HarpWhiteRabbit",
+          "description": "Harp clock generator"
+        },
+        "harp_sound_card": {
+          "$ref": "#/$defs/DynamicForagingSoundCard",
+          "description": "Harp sound card"
+        },
+        "harp_sniff_detector": {
+          "default": null,
+          "description": "Harp sniff detector",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/HarpSniffDetector"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "harp_environment_sensor": {
+          "default": null,
+          "description": "Harp environment sensor",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/HarpEnvironmentSensor"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "manipulator": {
+          "$ref": "#/$defs/AindManipulator",
+          "description": "Manipulator"
+        },
+        "calibration": {
+          "$ref": "#/$defs/RigCalibration",
+          "description": "Calibration models"
+        }
+      },
+      "required": [
+        "computer_name",
+        "rig_name",
+        "data_directory",
+        "triggered_camera_controller",
+        "harp_behavior",
+        "harp_clock_generator",
+        "harp_sound_card",
+        "manipulator",
+        "calibration"
+      ],
+      "title": "AindDynamicForagingRig",
+      "type": "object"
+    },
+    "AindDynamicForagingTaskLogic": {
+      "additionalProperties": false,
+      "description": "Main task logic model for the AIND Dynamic Foraging task.\n\nThis is the top-level class that encapsulates the complete task logic\nspecification for the dynamic foraging behavioral experiment.\nIt includes all task parameters, environment specifications, and control settings.",
+      "properties": {
+        "name": {
+          "const": "AindDynamicForaging",
+          "default": "AindDynamicForaging",
+          "description": "Name of the task logic",
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "description": "Description of the task.",
+          "title": "Description",
+          "type": "string"
+        },
+        "task_parameters": {
+          "$ref": "#/$defs/AindDynamicForagingTaskParameters",
+          "description": "Parameters of the task logic"
+        },
+        "version": {
+          "const": "0.0.2-rc25",
+          "default": "0.0.2-rc25",
+          "title": "Version",
+          "type": "string"
+        },
+        "stage_name": {
+          "default": null,
+          "description": "Optional stage name the `Task` object instance represents.",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Stage Name"
+        }
+      },
+      "required": [
+        "task_parameters"
+      ],
+      "title": "AindDynamicForagingTaskLogic",
+      "type": "object"
+    },
+    "AindDynamicForagingTaskParameters": {
+      "additionalProperties": true,
+      "description": "Complete parameter specification for the AIND Dynamic Foraging task.\n\nThis class contains all configurable parameters for the Dynamic Foraging task,\nincluding environment structure, task mode settings, operation control,\nand numerical updaters for dynamic parameter modification.",
+      "properties": {
+        "rng_seed": {
+          "default": null,
+          "description": "Seed of the random number generator",
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Rng Seed"
+        },
+        "aind_behavior_services_pkg_version": {
+          "default": "0.13.5",
+          "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
+          "title": "aind_behavior_services package version",
+          "type": "string"
+        },
+        "reward_size": {
+          "$ref": "#/$defs/RewardSize",
+          "default": {
+            "right_value_volume": 3.0,
+            "left_value_volume": 3.0
+          },
+          "description": "Parameters describing reward size."
+        },
+        "trial_generator": {
+          "$ref": "#/$defs/TrialGeneratorSpec",
+          "default": {
+            "type": "IntegrationTestTrialGenerator"
+          },
+          "description": "Trial generator model for generating trials in the task."
+        }
+      },
+      "title": "AindDynamicForagingTaskParameters",
+      "type": "object"
+    },
+    "AindManipulator": {
+      "description": "AindManipulator device definition",
+      "properties": {
+        "device_type": {
+          "const": "StepperDriver",
+          "default": "StepperDriver",
+          "title": "Device Type",
+          "type": "string"
+        },
+        "calibration": {
+          "$ref": "#/$defs/AindManipulatorCalibration",
+          "default": {
+            "description": "AindManipulator calibration and settings",
+            "full_step_to_mm": {
+              "x": 0.01,
+              "y1": 0.01,
+              "y2": 0.01,
+              "z": 0.01
+            },
+            "axis_configuration": [
+              {
+                "axis": 2,
+                "max_limit": 25.0,
+                "maximum_step_interval": 2000,
+                "microstep_resolution": 0,
+                "min_limit": -0.01,
+                "motor_operation_mode": 0,
+                "step_acceleration_interval": 100,
+                "step_interval": 100
+              },
+              {
+                "axis": 3,
+                "max_limit": 25.0,
+                "maximum_step_interval": 2000,
+                "microstep_resolution": 0,
+                "min_limit": -0.01,
+                "motor_operation_mode": 0,
+                "step_acceleration_interval": 100,
+                "step_interval": 100
+              },
+              {
+                "axis": 1,
+                "max_limit": 25.0,
+                "maximum_step_interval": 2000,
+                "microstep_resolution": 0,
+                "min_limit": -0.01,
+                "motor_operation_mode": 0,
+                "step_acceleration_interval": 100,
+                "step_interval": 100
+              },
+              {
+                "axis": 4,
+                "max_limit": 25.0,
+                "maximum_step_interval": 2000,
+                "microstep_resolution": 0,
+                "min_limit": -0.01,
+                "motor_operation_mode": 0,
+                "step_acceleration_interval": 100,
+                "step_interval": 100
+              }
+            ],
+            "homing_order": [
+              2,
+              3,
+              1,
+              4
+            ],
+            "initial_position": {
+              "x": 0.0,
+              "y1": 0.0,
+              "y2": 0.0,
+              "z": 0.0
+            }
+          },
+          "description": "Calibration for the device."
+        },
+        "who_am_i": {
+          "const": 1130,
+          "default": 1130,
+          "title": "Who Am I",
+          "type": "integer"
+        },
+        "serial_number": {
+          "default": null,
+          "description": "Device serial number",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Serial Number"
+        },
+        "port_name": {
+          "description": "Device port name",
+          "title": "Port Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "port_name"
+      ],
+      "title": "AindManipulator",
+      "type": "object",
+      "x-sgen-typename": "AllenNeuralDynamics.AindManipulator.AindManipulator"
+    },
+    "AindManipulatorCalibration": {
+      "description": "AindManipulator calibration class",
+      "properties": {
+        "description": {
+          "const": "AindManipulator calibration and settings",
+          "default": "AindManipulator calibration and settings",
+          "title": "Description",
+          "type": "string"
+        },
+        "full_step_to_mm": {
+          "$ref": "#/$defs/ManipulatorPosition",
+          "default": {
+            "x": 0.01,
+            "y1": 0.01,
+            "y2": 0.01,
+            "z": 0.01
+          },
+          "title": "Full step to mm. Used to convert steps to SI Units"
+        },
+        "axis_configuration": {
+          "default": [
+            {
+              "axis": 2,
+              "step_acceleration_interval": 100,
+              "step_interval": 100,
+              "microstep_resolution": 0,
+              "maximum_step_interval": 2000,
+              "motor_operation_mode": 0,
+              "max_limit": 25.0,
+              "min_limit": -0.01
+            },
+            {
+              "axis": 3,
+              "step_acceleration_interval": 100,
+              "step_interval": 100,
+              "microstep_resolution": 0,
+              "maximum_step_interval": 2000,
+              "motor_operation_mode": 0,
+              "max_limit": 25.0,
+              "min_limit": -0.01
+            },
+            {
+              "axis": 1,
+              "step_acceleration_interval": 100,
+              "step_interval": 100,
+              "microstep_resolution": 0,
+              "maximum_step_interval": 2000,
+              "motor_operation_mode": 0,
+              "max_limit": 25.0,
+              "min_limit": -0.01
+            },
+            {
+              "axis": 4,
+              "step_acceleration_interval": 100,
+              "step_interval": 100,
+              "microstep_resolution": 0,
+              "maximum_step_interval": 2000,
+              "motor_operation_mode": 0,
+              "max_limit": 25.0,
+              "min_limit": -0.01
+            }
+          ],
+          "items": {
+            "$ref": "#/$defs/AxisConfiguration"
+          },
+          "title": "Axes configuration. Only the axes that are configured will be enabled.",
+          "type": "array"
+        },
+        "homing_order": {
+          "default": [
+            2,
+            3,
+            1,
+            4
+          ],
+          "items": {
+            "$ref": "#/$defs/Axis"
+          },
+          "title": "Homing order",
+          "type": "array"
+        },
+        "initial_position": {
+          "$ref": "#/$defs/ManipulatorPosition",
+          "default": {
+            "x": 0.0,
+            "y1": 0.0,
+            "y2": 0.0,
+            "z": 0.0
+          }
+        }
+      },
+      "title": "AindManipulatorCalibration",
+      "type": "object",
+      "x-sgen-typename": "AllenNeuralDynamics.AindManipulator.AindManipulatorCalibration"
+    },
+    "AuditorySecondaryReinforcer": {
+      "description": "Represents an auditory secondary reinforcer.",
+      "properties": {
+        "type": {
+          "const": "Auditory",
+          "default": "Auditory",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "title": "AuditorySecondaryReinforcer",
+      "type": "object"
+    },
+    "Axis": {
+      "description": "Motor axis available",
+      "enum": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "title": "Axis",
+      "type": "integer",
+      "x-enumNames": [
+        "None",
+        "X",
+        "Y1",
+        "Y2",
+        "Z"
+      ],
+      "x-sgen-typename": "AllenNeuralDynamics.AindManipulator.Axis"
+    },
+    "AxisConfiguration": {
+      "description": "Axis configuration",
+      "properties": {
+        "axis": {
+          "$ref": "#/$defs/Axis",
+          "title": "Axis to be configured"
+        },
+        "step_acceleration_interval": {
+          "default": 100,
+          "description": "Acceleration of the step interval in microseconds",
+          "maximum": 2000,
+          "minimum": 2,
+          "title": "Acceleration",
+          "type": "integer"
+        },
+        "step_interval": {
+          "default": 100,
+          "description": "Step interval in microseconds.",
+          "maximum": 20000,
+          "minimum": 100,
+          "title": "Step interval",
+          "type": "integer"
+        },
+        "microstep_resolution": {
+          "$ref": "#/$defs/MicrostepResolution",
+          "default": 0,
+          "title": "Microstep resolution"
+        },
+        "maximum_step_interval": {
+          "default": 2000,
+          "maximum": 20000,
+          "minimum": 100,
+          "title": "Configures the time between step motor pulses (us) used when starting or stopping a movement",
+          "type": "integer"
+        },
+        "motor_operation_mode": {
+          "$ref": "#/$defs/MotorOperationMode",
+          "default": 0,
+          "title": "Motor operation mode"
+        },
+        "max_limit": {
+          "default": 25,
+          "title": "Maximum limit in SI units. A value of 0 disables this limit.",
+          "type": "number"
+        },
+        "min_limit": {
+          "default": -0.01,
+          "title": "Minimum limit in SI units. A value of 0 disables this limit.",
+          "type": "number"
+        }
+      },
+      "required": [
+        "axis"
+      ],
+      "title": "AxisConfiguration",
+      "type": "object",
+      "x-sgen-typename": "AllenNeuralDynamics.AindManipulator.AxisConfiguration"
+    },
+    "BaseModel": {
+      "properties": {},
+      "title": "BaseModel",
+      "type": "object"
+    },
+    "BehaviorStabilityParameters": {
+      "description": "Parameters controlling when behavior is considered stable enough to switch blocks.",
+      "properties": {
+        "behavior_evaluation_mode": {
+          "default": "end",
+          "description": "When to evaluate stability \u2014 at the end of the block (end) or at any point during the block (anytime).",
+          "enum": [
+            "end",
+            "anytime"
+          ],
+          "title": "Behavior Evaluation Mode",
+          "type": "string"
+        },
+        "behavior_stability_fraction": {
+          "default": 0.5,
+          "description": "Fraction scaling reward-probability difference for behavior.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Behavior Stability Fraction",
+          "type": "number"
+        },
+        "min_consecutive_stable_trials": {
+          "default": 5,
+          "description": "Minimum number of consecutive trials satisfying the behavioral stability fraction.",
+          "minimum": 0,
+          "title": "Min Consecutive Stable Trials",
+          "type": "integer"
+        }
+      },
+      "title": "BehaviorStabilityParameters",
+      "type": "object"
+    },
+    "BetaDistribution": {
+      "description": "A beta probability distribution.\n\nContinuous distribution bounded between 0 and 1. Commonly used\nfor modeling probabilities and proportions.",
+      "properties": {
+        "family": {
+          "const": "Beta",
+          "default": "Beta",
+          "title": "Family",
+          "type": "string"
+        },
+        "distribution_parameters": {
+          "$ref": "#/$defs/BetaDistributionParameters",
+          "default": {
+            "family": "Beta",
+            "alpha": 5.0,
+            "beta": 5.0
+          },
+          "description": "Parameters of the distribution"
+        },
+        "truncation_parameters": {
+          "default": null,
+          "description": "Truncation parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TruncationParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scaling_parameters": {
+          "default": null,
+          "description": "Scaling parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ScalingParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "title": "BetaDistribution",
+      "type": "object",
+      "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.BetaDistribution"
+    },
+    "BetaDistributionParameters": {
+      "description": "Parameters for a beta distribution.\n\nDefined by alpha and beta shape parameters.",
+      "properties": {
+        "family": {
+          "const": "Beta",
+          "default": "Beta",
+          "title": "Family",
+          "type": "string"
+        },
+        "alpha": {
+          "default": 5,
+          "description": "Alpha parameter of the distribution",
+          "minimum": 0,
+          "title": "Alpha",
+          "type": "number"
+        },
+        "beta": {
+          "default": 5,
+          "description": "Beta parameter of the distribution",
+          "minimum": 0,
+          "title": "Beta",
+          "type": "number"
+        }
+      },
+      "title": "BetaDistributionParameters",
+      "type": "object",
+      "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.BetaDistributionParameters"
+    },
+    "BinomialDistribution": {
+      "description": "A binomial probability distribution.\n\nModels the number of successes in a fixed number of independent\nBernoulli trials with constant success probability.",
+      "properties": {
+        "family": {
+          "const": "Binomial",
+          "default": "Binomial",
+          "title": "Family",
+          "type": "string"
+        },
+        "distribution_parameters": {
+          "$ref": "#/$defs/BinomialDistributionParameters",
+          "default": {
+            "family": "Binomial",
+            "n": 1,
+            "p": 0.5
+          },
+          "description": "Parameters of the distribution"
+        },
+        "truncation_parameters": {
+          "default": null,
+          "description": "Truncation parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TruncationParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scaling_parameters": {
+          "default": null,
+          "description": "Scaling parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ScalingParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "title": "BinomialDistribution",
+      "type": "object",
+      "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.BinomialDistribution"
+    },
+    "BinomialDistributionParameters": {
+      "description": "Parameters for a binomial distribution.\n\nDefined by number of trials (n) and success probability (p).",
+      "properties": {
+        "family": {
+          "const": "Binomial",
+          "default": "Binomial",
+          "title": "Family",
+          "type": "string"
+        },
+        "n": {
+          "default": 1,
+          "description": "Number of trials",
+          "minimum": 0,
+          "title": "N",
+          "type": "integer"
+        },
+        "p": {
+          "default": 0.5,
+          "description": "Probability of success",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "P",
+          "type": "number"
+        }
+      },
+      "title": "BinomialDistributionParameters",
+      "type": "object",
+      "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.BinomialDistributionParameters"
+    },
+    "CameraController_SpinnakerCamera_": {
+      "properties": {
+        "device_type": {
+          "const": "CameraController",
+          "default": "CameraController",
+          "title": "Device Type",
+          "type": "string"
+        },
+        "calibration": {
+          "default": null,
+          "description": "Calibration for the device.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/BaseModel"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "cameras": {
+          "additionalProperties": {
+            "$ref": "#/$defs/SpinnakerCamera"
+          },
+          "description": "Cameras to be instantiated",
+          "title": "Cameras",
+          "type": "object"
+        },
+        "frame_rate": {
+          "default": 30,
+          "description": "Frame rate of the trigger to all cameras",
+          "oneOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Frame Rate"
+        }
+      },
+      "required": [
+        "cameras"
+      ],
+      "title": "CameraController[SpinnakerCamera]",
+      "type": "object"
+    },
+    "CameraController_WebCamera_": {
+      "properties": {
+        "device_type": {
+          "const": "CameraController",
+          "default": "CameraController",
+          "title": "Device Type",
+          "type": "string"
+        },
+        "calibration": {
+          "default": null,
+          "description": "Calibration for the device.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/BaseModel"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "cameras": {
+          "additionalProperties": {
+            "$ref": "#/$defs/WebCamera"
+          },
+          "description": "Cameras to be instantiated",
+          "title": "Cameras",
+          "type": "object"
+        },
+        "frame_rate": {
+          "default": 30,
+          "description": "Frame rate of the trigger to all cameras",
+          "oneOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Frame Rate"
+        }
+      },
+      "required": [
+        "cameras"
+      ],
+      "title": "CameraController[WebCamera]",
+      "type": "object"
+    },
+    "ConnectedClockOutput": {
+      "properties": {
+        "target_device": {
+          "default": null,
+          "description": "Optional device name to provide user additional information",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Target Device"
+        },
+        "output_channel": {
+          "description": "Output channel",
+          "minimum": 0,
+          "title": "Output Channel",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "output_channel"
+      ],
+      "title": "ConnectedClockOutput",
+      "type": "object"
+    },
+    "CoupledTrialGenerationEndConditions": {
+      "description": "Defines the conditions under which a foraging session should terminate.",
+      "properties": {
+        "ignore_win": {
+          "default": 30,
+          "description": "Number of recent trials to check for ignored responses.",
+          "minimum": 0,
+          "title": "Ignore Win",
+          "type": "integer"
+        },
+        "ignore_ratio_threshold": {
+          "default": 0.8,
+          "description": "Maximum fraction of ignored trials within the window before the session is ended.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Ignore Ratio Threshold",
+          "type": "number"
+        },
+        "max_trial": {
+          "default": 1000,
+          "description": "Maximum number of trials allowed in a session.",
+          "minimum": 0,
+          "title": "Max Trial",
+          "type": "integer"
+        },
+        "max_time": {
+          "default": 4500,
+          "description": "Maximum session duration (sec).",
+          "title": "Max Time",
+          "type": "number"
+        },
+        "min_time": {
+          "default": 1800,
+          "description": "Minimum session duration (sec)",
+          "title": "Min Time",
+          "type": "number"
+        }
+      },
+      "title": "CoupledTrialGenerationEndConditions",
+      "type": "object"
+    },
+    "CoupledTrialGeneratorSpec": {
+      "properties": {
+        "type": {
+          "const": "CoupledTrialGenerator",
+          "default": "CoupledTrialGenerator",
+          "title": "Type",
+          "type": "string"
+        },
+        "quiescent_duration": {
+          "$ref": "#/$defs/Distribution",
+          "default": {
+            "family": "Exponential",
+            "distribution_parameters": {
+              "family": "Exponential",
+              "rate": 1.0
+            },
+            "truncation_parameters": {
+              "max": 1.0,
+              "min": 0.0,
+              "truncation_mode": "exclude"
+            },
+            "scaling_parameters": null
+          },
+          "description": "Distribution describing the quiescence period before trial starts (in seconds). Each lick resets the timer."
+        },
+        "response_duration": {
+          "default": 1.0,
+          "description": "Duration after go cue for animal response.",
+          "minimum": 0,
+          "title": "Response Duration",
+          "type": "number"
+        },
+        "reward_consumption_duration": {
+          "default": 3.0,
+          "description": "Duration of reward consumption before transition to ITI (in seconds).",
+          "minimum": 0,
+          "title": "Reward Consumption Duration",
+          "type": "number"
+        },
+        "inter_trial_interval_duration": {
+          "$ref": "#/$defs/Distribution",
+          "default": {
+            "family": "Exponential",
+            "distribution_parameters": {
+              "family": "Exponential",
+              "rate": 0.5
+            },
+            "truncation_parameters": {
+              "max": 8.0,
+              "min": 1.0,
+              "truncation_mode": "exclude"
+            },
+            "scaling_parameters": null
+          },
+          "description": "Distribution describing the inter-trial interval (in seconds)."
+        },
+        "block_len": {
+          "$ref": "#/$defs/Distribution",
+          "default": {
+            "family": "Exponential",
+            "distribution_parameters": {
+              "family": "Exponential",
+              "rate": 0.05
+            },
+            "truncation_parameters": {
+              "max": 60.0,
+              "min": 20.0,
+              "truncation_mode": "exclude"
+            },
+            "scaling_parameters": null
+          },
+          "description": "Distribution describing block length."
+        },
+        "min_block_reward": {
+          "default": 1,
+          "minimum": 0,
+          "title": "Minimal rewards in a block to switch",
+          "type": "integer"
+        },
+        "kernel_size": {
+          "default": 2,
+          "description": "Kernel to evaluate choice fraction.",
+          "title": "Kernel Size",
+          "type": "integer"
+        },
+        "reward_probability_parameters": {
+          "$ref": "#/$defs/RewardProbabilityParameters",
+          "default": {
+            "base_reward_sum": 0.8,
+            "reward_pairs": [
+              [
+                8.0,
+                1.0
+              ]
+            ]
+          },
+          "description": "Parameters defining the reward probability structure."
+        },
+        "is_baiting": {
+          "default": false,
+          "description": "Whether uncollected rewards carry over to the next trial.",
+          "title": "Is Baiting",
+          "type": "boolean"
+        },
+        "trial_generation_end_parameters": {
+          "$ref": "#/$defs/CoupledTrialGenerationEndConditions",
+          "default": {
+            "ignore_win": 30,
+            "ignore_ratio_threshold": 0.8,
+            "max_trial": 1000,
+            "max_time": 4500.0,
+            "min_time": 1800.0
+          },
+          "description": "Conditions to end trial generation."
+        },
+        "behavior_stability_parameters": {
+          "default": {
+            "behavior_evaluation_mode": "end",
+            "behavior_stability_fraction": 0.5,
+            "min_consecutive_stable_trials": 5
+          },
+          "description": "Parameters controlling behavior-dependent block switching. If None, block switches rely only on length and reward criteria.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/BehaviorStabilityParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "extend_block_on_no_response": {
+          "default": true,
+          "description": "Whether to extend the minimum block length by one trial when the animal does not respond.",
+          "title": "Extend Block On No Response",
+          "type": "boolean"
+        }
+      },
+      "title": "CoupledTrialGeneratorSpec",
+      "type": "object"
+    },
+    "Distribution": {
+      "description": "Available distributions",
+      "discriminator": {
+        "mapping": {
+          "Beta": "#/$defs/BetaDistribution",
+          "Binomial": "#/$defs/BinomialDistribution",
+          "Exponential": "#/$defs/ExponentialDistribution",
+          "Gamma": "#/$defs/GammaDistribution",
+          "LogNormal": "#/$defs/LogNormalDistribution",
+          "Normal": "#/$defs/NormalDistribution",
+          "Pdf": "#/$defs/PdfDistribution",
+          "Poisson": "#/$defs/PoissonDistribution",
+          "Scalar": "#/$defs/Scalar",
+          "Uniform": "#/$defs/UniformDistribution"
+        },
+        "propertyName": "family"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/Scalar"
+        },
+        {
+          "$ref": "#/$defs/NormalDistribution"
+        },
+        {
+          "$ref": "#/$defs/LogNormalDistribution"
+        },
+        {
+          "$ref": "#/$defs/ExponentialDistribution"
+        },
+        {
+          "$ref": "#/$defs/UniformDistribution"
+        },
+        {
+          "$ref": "#/$defs/PoissonDistribution"
+        },
+        {
+          "$ref": "#/$defs/BinomialDistribution"
+        },
+        {
+          "$ref": "#/$defs/BetaDistribution"
+        },
+        {
+          "$ref": "#/$defs/GammaDistribution"
+        },
+        {
+          "$ref": "#/$defs/PdfDistribution"
+        }
+      ],
+      "title": "Distribution",
+      "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution"
+    },
+    "DynamicForagingSoundCard": {
+      "description": "A calibrated sound card for the dynamic foraging rig. This is a subclass of the HarpSoundCard that includes the sound card calibration.",
+      "properties": {
+        "device_type": {
+          "const": "SoundCard",
+          "default": "SoundCard",
+          "title": "Device Type",
+          "type": "string"
+        },
+        "calibration": {
+          "$ref": "#/$defs/SoundCardCalibration",
+          "default": {
+            "go_cue": {
+              "duration": 0.1,
+              "frequency": 7500.0,
+              "index": 3,
+              "waveform_type": "sine"
+            },
+            "cs_plus": {
+              "duration": 0.1,
+              "frequency": 13000.0,
+              "index": 4,
+              "waveform_type": "sine"
+            },
+            "cs_minus": {
+              "duration": 0.1,
+              "frequency": null,
+              "index": 5,
+              "waveform_type": "white_noise"
+            }
+          },
+          "description": "Sound card calibration"
+        },
+        "who_am_i": {
+          "const": 1280,
+          "default": 1280,
+          "title": "Who Am I",
+          "type": "integer"
+        },
+        "serial_number": {
+          "default": null,
+          "description": "Device serial number",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Serial Number"
+        },
+        "port_name": {
+          "description": "Device port name",
+          "title": "Port Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "port_name"
+      ],
+      "title": "DynamicForagingSoundCard",
+      "type": "object"
+    },
+    "ExponentialDistribution": {
+      "description": "An exponential probability distribution.\n\nModels time between events in a Poisson process. Commonly used\nfor wait times and inter-event intervals.",
+      "properties": {
+        "family": {
+          "const": "Exponential",
+          "default": "Exponential",
+          "title": "Family",
+          "type": "string"
+        },
+        "distribution_parameters": {
+          "$ref": "#/$defs/ExponentialDistributionParameters",
+          "default": {
+            "family": "Exponential",
+            "rate": 0.0
+          },
+          "description": "Parameters of the distribution"
+        },
+        "truncation_parameters": {
+          "default": null,
+          "description": "Truncation parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TruncationParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scaling_parameters": {
+          "default": null,
+          "description": "Scaling parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ScalingParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "title": "ExponentialDistribution",
+      "type": "object",
+      "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.ExponentialDistribution"
+    },
+    "ExponentialDistributionParameters": {
+      "description": "Parameters for an exponential distribution.\n\nDefined by the rate parameter (inverse of mean).",
+      "properties": {
+        "family": {
+          "const": "Exponential",
+          "default": "Exponential",
+          "title": "Family",
+          "type": "string"
+        },
+        "rate": {
+          "default": 0,
+          "description": "Rate parameter of the distribution",
+          "minimum": 0,
+          "title": "Rate",
+          "type": "number"
+        }
+      },
+      "title": "ExponentialDistributionParameters",
+      "type": "object",
+      "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.ExponentialDistributionParameters"
+    },
+    "GammaDistribution": {
+      "description": "A gamma probability distribution.\n\nGeneralizes the exponential distribution. Used for modeling\npositive continuous variables with right-skewed distributions.",
+      "properties": {
+        "family": {
+          "const": "Gamma",
+          "default": "Gamma",
+          "title": "Family",
+          "type": "string"
+        },
+        "distribution_parameters": {
+          "$ref": "#/$defs/GammaDistributionParameters",
+          "default": {
+            "family": "Gamma",
+            "shape": 1.0,
+            "rate": 1.0
+          },
+          "description": "Parameters of the distribution"
+        },
+        "truncation_parameters": {
+          "default": null,
+          "description": "Truncation parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TruncationParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scaling_parameters": {
+          "default": null,
+          "description": "Scaling parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ScalingParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "title": "GammaDistribution",
+      "type": "object",
+      "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.GammaDistribution"
+    },
+    "GammaDistributionParameters": {
+      "description": "Parameters for a gamma distribution.\n\nDefined by shape (k) and rate (\u03b8\u207b\u00b9) parameters.",
+      "properties": {
+        "family": {
+          "const": "Gamma",
+          "default": "Gamma",
+          "title": "Family",
+          "type": "string"
+        },
+        "shape": {
+          "default": 1,
+          "description": "Shape parameter of the distribution",
+          "minimum": 0,
+          "title": "Shape",
+          "type": "number"
+        },
+        "rate": {
+          "default": 1,
+          "description": "Rate parameter of the distribution",
+          "minimum": 0,
+          "title": "Rate",
+          "type": "number"
+        }
+      },
+      "title": "GammaDistributionParameters",
+      "type": "object",
+      "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.GammaDistributionParameters"
+    },
+    "HarpBehavior": {
+      "properties": {
+        "device_type": {
+          "const": "Behavior",
+          "default": "Behavior",
+          "title": "Device Type",
+          "type": "string"
+        },
+        "calibration": {
+          "default": null,
+          "description": "Calibration for the device.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/BaseModel"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "who_am_i": {
+          "const": 1216,
+          "default": 1216,
+          "title": "Who Am I",
+          "type": "integer"
+        },
+        "serial_number": {
+          "default": null,
+          "description": "Device serial number",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Serial Number"
+        },
+        "port_name": {
+          "description": "Device port name",
+          "title": "Port Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "port_name"
+      ],
+      "title": "HarpBehavior",
+      "type": "object"
+    },
+    "HarpEnvironmentSensor": {
+      "properties": {
+        "device_type": {
+          "const": "EnvironmentSensor",
+          "default": "EnvironmentSensor",
+          "title": "Device Type",
+          "type": "string"
+        },
+        "calibration": {
+          "default": null,
+          "description": "Calibration for the device.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/BaseModel"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "who_am_i": {
+          "const": 1405,
+          "default": 1405,
+          "title": "Who Am I",
+          "type": "integer"
+        },
+        "serial_number": {
+          "default": null,
+          "description": "Device serial number",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Serial Number"
+        },
+        "port_name": {
+          "description": "Device port name",
+          "title": "Port Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "port_name"
+      ],
+      "title": "HarpEnvironmentSensor",
+      "type": "object"
+    },
+    "HarpLicketySplit": {
+      "properties": {
+        "device_type": {
+          "const": "LicketySplit",
+          "default": "LicketySplit",
+          "title": "Device Type",
+          "type": "string"
+        },
+        "calibration": {
+          "default": null,
+          "description": "Calibration for the device.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/BaseModel"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "who_am_i": {
+          "const": 1400,
+          "default": 1400,
+          "title": "Who Am I",
+          "type": "integer"
+        },
+        "serial_number": {
+          "default": null,
+          "description": "Device serial number",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Serial Number"
+        },
+        "port_name": {
+          "description": "Device port name",
+          "title": "Port Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "port_name"
+      ],
+      "title": "HarpLicketySplit",
+      "type": "object"
+    },
+    "HarpSniffDetector": {
+      "properties": {
+        "device_type": {
+          "const": "SniffDetector",
+          "default": "SniffDetector",
+          "title": "Device Type",
+          "type": "string"
+        },
+        "calibration": {
+          "default": null,
+          "description": "Calibration for the device.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/BaseModel"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "who_am_i": {
+          "const": 1401,
+          "default": 1401,
+          "title": "Who Am I",
+          "type": "integer"
+        },
+        "serial_number": {
+          "default": null,
+          "description": "Device serial number",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Serial Number"
+        },
+        "port_name": {
+          "description": "Device port name",
+          "title": "Port Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "port_name"
+      ],
+      "title": "HarpSniffDetector",
+      "type": "object"
+    },
+    "HarpWhiteRabbit": {
+      "properties": {
+        "device_type": {
+          "const": "WhiteRabbit",
+          "default": "WhiteRabbit",
+          "title": "Device Type",
+          "type": "string"
+        },
+        "calibration": {
+          "default": null,
+          "description": "Calibration for the device.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/BaseModel"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "who_am_i": {
+          "const": 1404,
+          "default": 1404,
+          "title": "Who Am I",
+          "type": "integer"
+        },
+        "serial_number": {
+          "default": null,
+          "description": "Device serial number",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Serial Number"
+        },
+        "port_name": {
+          "description": "Device port name",
+          "title": "Port Name",
+          "type": "string"
+        },
+        "connected_clock_outputs": {
+          "default": [],
+          "description": "Connected clock outputs",
+          "items": {
+            "$ref": "#/$defs/ConnectedClockOutput"
+          },
+          "title": "Connected Clock Outputs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "port_name"
+      ],
+      "title": "HarpWhiteRabbit",
+      "type": "object"
+    },
+    "IntegrationTestTrialGeneratorSpec": {
+      "properties": {
+        "type": {
+          "const": "IntegrationTestTrialGenerator",
+          "default": "IntegrationTestTrialGenerator",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "title": "IntegrationTestTrialGeneratorSpec",
+      "type": "object"
+    },
+    "LogNormalDistribution": {
+      "description": "A log-normal probability distribution.\n\nDistribution where the logarithm of the variable is normally distributed.\nAlways produces positive values and is right-skewed.",
+      "properties": {
+        "family": {
+          "const": "LogNormal",
+          "default": "LogNormal",
+          "title": "Family",
+          "type": "string"
+        },
+        "distribution_parameters": {
+          "$ref": "#/$defs/LogNormalDistributionParameters",
+          "default": {
+            "family": "LogNormal",
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "description": "Parameters of the distribution"
+        },
+        "truncation_parameters": {
+          "default": null,
+          "description": "Truncation parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TruncationParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scaling_parameters": {
+          "default": null,
+          "description": "Scaling parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ScalingParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "title": "LogNormalDistribution",
+      "type": "object",
+      "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.LogNormalDistribution"
+    },
+    "LogNormalDistributionParameters": {
+      "description": "Parameters for a log-normal distribution.\n\nDefined by the mean and standard deviation of the underlying normal distribution.",
+      "properties": {
+        "family": {
+          "const": "LogNormal",
+          "default": "LogNormal",
+          "title": "Family",
+          "type": "string"
+        },
+        "mean": {
+          "default": 0,
+          "description": "Mean of the distribution",
+          "title": "Mean",
+          "type": "number"
+        },
+        "std": {
+          "default": 0,
+          "description": "Standard deviation of the distribution",
+          "title": "Std",
+          "type": "number"
+        }
+      },
+      "title": "LogNormalDistributionParameters",
+      "type": "object",
+      "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.LogNormalDistributionParameters"
+    },
+    "ManipulatorPosition": {
+      "description": "Represents a position in the manipulator coordinate system",
+      "properties": {
+        "x": {
+          "title": "X coordinate",
+          "type": "number"
+        },
+        "y1": {
+          "title": "Y1 coordinate",
+          "type": "number"
+        },
+        "y2": {
+          "title": "Y2 coordinate",
+          "type": "number"
+        },
+        "z": {
+          "title": "Z coordinate",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y1",
+        "y2",
+        "z"
+      ],
+      "title": "ManipulatorPosition",
+      "type": "object",
+      "x-sgen-typename": "AllenNeuralDynamics.AindManipulator.ManipulatorPosition"
+    },
+    "Measurement": {
+      "description": "Input for water valve calibration class",
+      "properties": {
+        "valve_open_interval": {
+          "description": "Time between two consecutive valve openings (s)",
+          "exclusiveMinimum": 0,
+          "title": "Valve open interval",
+          "type": "number"
+        },
+        "valve_open_time": {
+          "description": "Valve open interval (s)",
+          "exclusiveMinimum": 0,
+          "title": "Valve open time",
+          "type": "number"
+        },
+        "water_weight": {
+          "description": "Weight of water delivered (g)",
+          "items": {
+            "exclusiveMinimum": 0,
+            "type": "number"
+          },
+          "minItems": 1,
+          "title": "Water weight",
+          "type": "array"
+        },
+        "repeat_count": {
+          "description": "Number of times the valve opened.",
+          "minimum": 0,
+          "title": "Repeat count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "valve_open_interval",
+        "valve_open_time",
+        "water_weight",
+        "repeat_count"
+      ],
+      "title": "Measurement",
+      "type": "object"
+    },
+    "MicrostepResolution": {
+      "description": "Microstep resolution available",
+      "enum": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "title": "MicrostepResolution",
+      "type": "integer",
+      "x-enumNames": [
+        "Microstep8",
+        "Microstep16",
+        "Microstep32",
+        "Microstep64"
+      ],
+      "x-sgen-typename": "AllenNeuralDynamics.AindManipulator.MicrostepResolution"
+    },
+    "MotorOperationMode": {
+      "description": "Motor operation mode",
+      "enum": [
+        0,
+        1
+      ],
+      "title": "MotorOperationMode",
+      "type": "integer",
+      "x-enumNames": [
+        "Quiet",
+        "Dynamic"
+      ],
+      "x-sgen-typename": "AllenNeuralDynamics.AindManipulator.MotorOperationMode"
+    },
+    "NormalDistribution": {
+      "description": "A normal (Gaussian) probability distribution.\n\nBell-shaped distribution symmetric around the mean, commonly used\nfor modeling naturally occurring random variables.",
+      "properties": {
+        "family": {
+          "const": "Normal",
+          "default": "Normal",
+          "title": "Family",
+          "type": "string"
+        },
+        "distribution_parameters": {
+          "$ref": "#/$defs/NormalDistributionParameters",
+          "default": {
+            "family": "Normal",
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "description": "Parameters of the distribution"
+        },
+        "truncation_parameters": {
+          "default": null,
+          "description": "Truncation parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TruncationParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scaling_parameters": {
+          "default": null,
+          "description": "Scaling parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ScalingParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "title": "NormalDistribution",
+      "type": "object",
+      "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.NormalDistribution"
+    },
+    "NormalDistributionParameters": {
+      "description": "Parameters for a normal (Gaussian) distribution.\n\nDefined by mean (center) and standard deviation (spread).",
+      "properties": {
+        "family": {
+          "const": "Normal",
+          "default": "Normal",
+          "title": "Family",
+          "type": "string"
+        },
+        "mean": {
+          "default": 0,
+          "description": "Mean of the distribution",
+          "title": "Mean",
+          "type": "number"
+        },
+        "std": {
+          "default": 0,
+          "description": "Standard deviation of the distribution",
+          "title": "Std",
+          "type": "number"
+        }
+      },
+      "title": "NormalDistributionParameters",
+      "type": "object",
+      "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.NormalDistributionParameters"
+    },
+    "PdfDistribution": {
+      "description": "A custom probability density function distribution.\n\nAllows defining arbitrary discrete distributions by specifying\nprobability values and their corresponding indices.",
+      "properties": {
+        "family": {
+          "const": "Pdf",
+          "default": "Pdf",
+          "title": "Family",
+          "type": "string"
+        },
+        "distribution_parameters": {
+          "$ref": "#/$defs/PdfDistributionParameters",
+          "default": {
+            "family": "Pdf",
+            "pdf": [
+              1.0
+            ],
+            "index": [
+              0.0
+            ]
+          },
+          "description": "Parameters of the distribution"
+        },
+        "truncation_parameters": {
+          "default": null,
+          "description": "Truncation parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TruncationParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scaling_parameters": {
+          "default": null,
+          "description": "Scaling parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ScalingParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "title": "PdfDistribution",
+      "type": "object",
+      "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.PdfDistribution"
+    },
+    "PdfDistributionParameters": {
+      "description": "Parameters for a custom probability density function distribution.\n\nDefined by explicit probability values and their corresponding indices.\nProbabilities are automatically normalized to sum to 1.",
+      "properties": {
+        "family": {
+          "const": "Pdf",
+          "default": "Pdf",
+          "title": "Family",
+          "type": "string"
+        },
+        "pdf": {
+          "default": [
+            1
+          ],
+          "description": "The probability density function",
+          "items": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "title": "Pdf",
+          "type": "array"
+        },
+        "index": {
+          "default": [
+            0
+          ],
+          "description": "The index of the probability density function",
+          "items": {
+            "type": "number"
+          },
+          "title": "Index",
+          "type": "array"
+        }
+      },
+      "title": "PdfDistributionParameters",
+      "type": "object",
+      "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.PdfDistributionParameters"
+    },
+    "PoissonDistribution": {
+      "description": "A Poisson probability distribution.\n\nModels the number of events occurring in a fixed interval of time or space\nwhen events occur independently at a constant rate.",
+      "properties": {
+        "family": {
+          "const": "Poisson",
+          "default": "Poisson",
+          "title": "Family",
+          "type": "string"
+        },
+        "distribution_parameters": {
+          "$ref": "#/$defs/PoissonDistributionParameters",
+          "default": {
+            "family": "Poisson",
+            "rate": 1.0
+          },
+          "description": "Parameters of the distribution"
+        },
+        "truncation_parameters": {
+          "default": null,
+          "description": "Truncation parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TruncationParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scaling_parameters": {
+          "default": null,
+          "description": "Scaling parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ScalingParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "title": "PoissonDistribution",
+      "type": "object",
+      "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.PoissonDistribution"
+    },
+    "PoissonDistributionParameters": {
+      "description": "Parameters for a Poisson distribution.\n\nDefined by the rate parameter (average number of events).",
+      "properties": {
+        "family": {
+          "const": "Poisson",
+          "default": "Poisson",
+          "title": "Family",
+          "type": "string"
+        },
+        "rate": {
+          "default": 1,
+          "description": "Rate parameter of the Poisson process that generates the distribution",
+          "minimum": 0,
+          "title": "Rate",
+          "type": "number"
+        }
+      },
+      "title": "PoissonDistributionParameters",
+      "type": "object",
+      "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.PoissonDistributionParameters"
+    },
+    "Rect": {
+      "description": "Represents a rectangle defined by its top-left corner, width, and height.",
+      "properties": {
+        "x": {
+          "default": 0,
+          "description": "X coordinate of the top-left corner",
+          "minimum": 0,
+          "title": "X",
+          "type": "integer"
+        },
+        "y": {
+          "default": 0,
+          "description": "Y coordinate of the top-left corner",
+          "minimum": 0,
+          "title": "Y",
+          "type": "integer"
+        },
+        "width": {
+          "default": 0,
+          "description": "Width of the rectangle",
+          "minimum": 0,
+          "title": "Width",
+          "type": "integer"
+        },
+        "height": {
+          "default": 0,
+          "description": "Height of the rectangle",
+          "minimum": 0,
+          "title": "Height",
+          "type": "integer"
+        }
+      },
+      "title": "Rect",
+      "type": "object"
+    },
+    "RewardProbabilityParameters": {
+      "description": "Defines the reward probability structure for a dynamic foraging task.\n\nReward probabilities are defined as pairs (p_left, p_right) normalized by\nbase_reward_sum. Pairs are drawn from a family representing a difficulty level:\n\n    Family 1:   [[8, 1], [6, 1], [3, 1], [1, 1]]\n    Family 2:  [[8, 1], [1, 1]]\n    Family 3:  [[1.0, 0.0], [0.9, 0.1], [0.8, 0.2], [0.7, 0.3], [0.6, 0.4], [0.5, 0.5]]\n    Family 4:  [[6, 1], [3, 1], [1, 1]]",
+      "properties": {
+        "base_reward_sum": {
+          "default": 0.8,
+          "description": "Total reward probability shared between the two sides. Each reward pair is normalized to sum to this value.",
+          "title": "Base Reward Sum",
+          "type": "number"
+        },
+        "reward_pairs": {
+          "default": [
+            [
+              8,
+              1
+            ]
+          ],
+          "description": "List of (left, right) reward ratio pairs to sample from during block transitions. ",
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "title": "Reward Pairs",
+          "type": "array"
+        }
+      },
+      "title": "RewardProbabilityParameters",
+      "type": "object"
+    },
+    "RewardSize": {
+      "properties": {
+        "right_value_volume": {
+          "title": "Right reward size (uL)",
+          "type": "number"
+        },
+        "left_value_volume": {
+          "title": "Left reward size (uL)",
+          "type": "number"
+        }
+      },
+      "required": [
+        "right_value_volume",
+        "left_value_volume"
+      ],
+      "title": "RewardSize",
+      "type": "object"
+    },
+    "RigCalibration": {
+      "description": "Container class for calibration models. In a future release these will be moved to the respective devices",
+      "properties": {
+        "water_valve_left": {
+          "$ref": "#/$defs/WaterValveCalibration",
+          "description": "Left water valve calibration"
+        },
+        "water_valve_right": {
+          "$ref": "#/$defs/WaterValveCalibration",
+          "description": "Right water valve calibration"
+        }
+      },
+      "required": [
+        "water_valve_left",
+        "water_valve_right"
+      ],
+      "title": "RigCalibration",
+      "type": "object"
+    },
+    "Scalar": {
+      "description": "A scalar distribution that returns a constant value.\n\nUseful for fixed parameters that don't vary across trials or samples.",
+      "properties": {
+        "family": {
+          "const": "Scalar",
+          "default": "Scalar",
+          "title": "Family",
+          "type": "string"
+        },
+        "distribution_parameters": {
+          "$ref": "#/$defs/ScalarDistributionParameter",
+          "default": {
+            "family": "Scalar",
+            "value": 0.0
+          },
+          "description": "Parameters of the distribution"
+        },
+        "truncation_parameters": {
+          "default": null,
+          "description": "Truncation parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TruncationParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scaling_parameters": {
+          "default": null,
+          "description": "Scaling parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ScalingParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "title": "Scalar",
+      "type": "object",
+      "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.Scalar"
+    },
+    "ScalarDistributionParameter": {
+      "description": "Parameters for a scalar (constant) distribution.\n\nRepresents a deterministic value that always returns the same number.",
+      "properties": {
+        "family": {
+          "const": "Scalar",
+          "default": "Scalar",
+          "title": "Family",
+          "type": "string"
+        },
+        "value": {
+          "default": 0,
+          "description": "The static value of the distribution",
+          "title": "Value",
+          "type": "number"
+        }
+      },
+      "title": "ScalarDistributionParameter",
+      "type": "object",
+      "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.ScalarDistributionParameter"
+    },
+    "ScalingParameters": {
+      "description": "Parameters for scaling and offsetting sampled distribution values.\nScaling is applied as (value * scale + offset).\n\nApplies linear transformation: result = (value * scale) + offset.",
+      "properties": {
+        "scale": {
+          "default": 1,
+          "description": "Scaling factor to apply on the sampled distribution",
+          "title": "Scale",
+          "type": "number"
+        },
+        "offset": {
+          "default": 0,
+          "description": "Offset factor to apply on the sampled distribution",
+          "title": "Offset",
+          "type": "number"
+        }
+      },
+      "title": "ScalingParameters",
+      "type": "object",
+      "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.ScalingParameters"
+    },
+    "SecondaryReinforcer": {
+      "description": "Type of secondary reinforcer",
+      "discriminator": {
+        "mapping": {
+          "Auditory": "#/$defs/AuditorySecondaryReinforcer"
+        },
+        "propertyName": "type"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/AuditorySecondaryReinforcer"
+        }
+      ]
+    },
+    "Session": {
+      "properties": {
+        "aind_behavior_services_pkg_version": {
+          "default": "0.13.5",
+          "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
+          "title": "aind_behavior_services package version",
+          "type": "string"
+        },
+        "version": {
+          "const": "0.13.5",
+          "default": "0.13.5",
+          "title": "Version",
+          "type": "string"
+        },
+        "experiment": {
+          "default": null,
+          "description": "Name of the experiment",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Experiment"
+        },
+        "experimenter": {
+          "default": [],
+          "description": "Name of the experimenter",
+          "items": {
+            "type": "string"
+          },
+          "title": "Experimenter",
+          "type": "array"
+        },
+        "date": {
+          "description": "Date of the experiment",
+          "format": "date-time",
+          "title": "Date",
+          "type": "string"
+        },
+        "session_name": {
+          "default": null,
+          "description": "Name of the session. This will be used to create a folder in the root path. If not provided, it will be generated using subject and date.",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Session Name"
+        },
+        "subject": {
+          "description": "Name of the subject",
+          "title": "Subject",
+          "type": "string"
+        },
+        "notes": {
+          "default": null,
+          "description": "Notes about the experiment",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Notes"
+        },
+        "commit_hash": {
+          "default": null,
+          "description": "Commit hash of the repository",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Commit Hash"
+        },
+        "allow_dirty_repo": {
+          "default": false,
+          "description": "Allow running from a dirty repository",
+          "title": "Allow Dirty Repo",
+          "type": "boolean"
+        },
+        "skip_hardware_validation": {
+          "default": false,
+          "description": "Skip hardware validation",
+          "title": "Skip Hardware Validation",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "subject"
+      ],
+      "title": "Session",
+      "type": "object"
+    },
+    "SoundCardCalibration": {
+      "description": "Calibration model for the sound card. Contains the waveforms to play for each cue.",
+      "properties": {
+        "go_cue": {
+          "$ref": "#/$defs/Waveform",
+          "default": {
+            "waveform_type": "sine",
+            "index": 3,
+            "duration": 0.1,
+            "frequency": 7500.0
+          },
+          "description": "Waveform to play for go cue"
+        },
+        "cs_plus": {
+          "$ref": "#/$defs/Waveform",
+          "default": {
+            "waveform_type": "sine",
+            "index": 4,
+            "duration": 0.1,
+            "frequency": 13000.0
+          },
+          "description": "Waveform to play for CS+ cue"
+        },
+        "cs_minus": {
+          "$ref": "#/$defs/Waveform",
+          "default": {
+            "waveform_type": "white_noise",
+            "index": 5,
+            "duration": 0.1,
+            "frequency": null
+          },
+          "description": "Waveform to play for CS- cue"
+        }
+      },
+      "title": "SoundCardCalibration",
+      "type": "object"
+    },
+    "SpinnakerCamera": {
+      "description": "Spinnaker camera device configuration.",
+      "properties": {
+        "device_type": {
+          "const": "SpinnakerCamera",
+          "default": "SpinnakerCamera",
+          "title": "Device Type",
+          "type": "string"
+        },
+        "calibration": {
+          "default": null,
+          "description": "Calibration for the device.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/BaseModel"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "serial_number": {
+          "description": "Camera serial number",
+          "title": "Serial Number",
+          "type": "string"
+        },
+        "binning": {
+          "default": 1,
+          "description": "Binning",
+          "minimum": 1,
+          "title": "Binning",
+          "type": "integer"
+        },
+        "color_processing": {
+          "default": "Default",
+          "description": "Color processing",
+          "enum": [
+            "Default",
+            "NoColorProcessing"
+          ],
+          "title": "Color Processing",
+          "type": "string"
+        },
+        "exposure": {
+          "default": 1000,
+          "description": "Exposure time",
+          "minimum": 100,
+          "title": "Exposure",
+          "type": "integer"
+        },
+        "gain": {
+          "default": 0,
+          "description": "Gain",
+          "minimum": 0,
+          "title": "Gain",
+          "type": "number"
+        },
+        "gamma": {
+          "default": null,
+          "description": "Gamma. If None, will disable gamma correction.",
+          "oneOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Gamma"
+        },
+        "adc_bit_depth": {
+          "default": 0,
+          "description": "ADC bit depth. If None will be left as default.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/SpinnakerCameraAdcBitDepth"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "pixel_format": {
+          "default": 0,
+          "description": "Pixel format. If None will be left as default.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/SpinnakerCameraPixelFormat"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "region_of_interest": {
+          "$ref": "#/$defs/Rect",
+          "default": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0
+          },
+          "description": "Region of interest"
+        },
+        "video_writer": {
+          "default": null,
+          "description": "Video writer. If not provided, no video will be saved.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/VideoWriter"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "serial_number"
+      ],
+      "title": "SpinnakerCamera",
+      "type": "object"
+    },
+    "SpinnakerCameraAdcBitDepth": {
+      "description": "ADC bit depth options for Spinnaker cameras.",
+      "enum": [
+        0,
+        1,
+        2
+      ],
+      "title": "SpinnakerCameraAdcBitDepth",
+      "type": "integer",
+      "x-enumNames": [
+        "Adc8bit",
+        "Adc10bit",
+        "Adc12bit"
+      ]
+    },
+    "SpinnakerCameraPixelFormat": {
+      "description": "Pixel format options for Spinnaker cameras.",
+      "enum": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122,
+        123,
+        124,
+        125,
+        126,
+        127,
+        128,
+        129,
+        130,
+        131,
+        132,
+        133,
+        134,
+        135,
+        136,
+        137,
+        138,
+        139,
+        140,
+        141,
+        142,
+        143
+      ],
+      "title": "SpinnakerCameraPixelFormat",
+      "type": "integer",
+      "x-enumNames": [
+        "Mono8",
+        "Mono16",
+        "Rgb8packed",
+        "Bayergr8",
+        "Bayerrg8",
+        "Bayergb8",
+        "Bayerbg8",
+        "Bayergr16",
+        "Bayerrg16",
+        "Bayergb16",
+        "Bayerbg16",
+        "Mono12packed",
+        "Bayergr12packed",
+        "Bayerrg12packed",
+        "Bayergb12packed",
+        "Bayerbg12packed",
+        "Yuv411packed",
+        "Yuv422packed",
+        "Yuv444packed",
+        "Mono12p",
+        "Bayergr12p",
+        "Bayerrg12p",
+        "Bayergb12p",
+        "Bayerbg12p",
+        "Ycbcr8",
+        "Ycbcr4228",
+        "Ycbcr4118",
+        "Bgr8",
+        "Bgra8",
+        "Mono10packed",
+        "Bayergr10packed",
+        "Bayerrg10packed",
+        "Bayergb10packed",
+        "Bayerbg10packed",
+        "Mono10p",
+        "Bayergr10p",
+        "Bayerrg10p",
+        "Bayergb10p",
+        "Bayerbg10p",
+        "Mono1p",
+        "Mono2p",
+        "Mono4p",
+        "Mono8s",
+        "Mono10",
+        "Mono12",
+        "Mono14",
+        "Mono16s",
+        "Mono32f",
+        "Bayerbg10",
+        "Bayerbg12",
+        "Bayergb10",
+        "Bayergb12",
+        "Bayergr10",
+        "Bayergr12",
+        "Bayerrg10",
+        "Bayerrg12",
+        "Rgba8",
+        "Rgba10",
+        "Rgba10p",
+        "Rgba12",
+        "Rgba12p",
+        "Rgba14",
+        "Rgba16",
+        "Rgb8",
+        "Rgb8Planar",
+        "Rgb10",
+        "Rgb10Planar",
+        "Rgb10p",
+        "Rgb10p32",
+        "Rgb12",
+        "Rgb12Planar",
+        "Rgb12p",
+        "Rgb14",
+        "Rgb16",
+        "Rgb16s",
+        "Rgb32f",
+        "Rgb16Planar",
+        "Rgb565p",
+        "Bgra10",
+        "Bgra10p",
+        "Bgra12",
+        "Bgra12p",
+        "Bgra14",
+        "Bgra16",
+        "Rgba32f",
+        "Bgr10",
+        "Bgr10p",
+        "Bgr12",
+        "Bgr12p",
+        "Bgr14",
+        "Bgr16",
+        "Bgr565p",
+        "R8",
+        "R10",
+        "R12",
+        "R16",
+        "G8",
+        "G10",
+        "G12",
+        "G16",
+        "B8",
+        "B10",
+        "B12",
+        "B16",
+        "Coord3dAbc8",
+        "Coord3dAbc8Planar",
+        "Coord3dAbc10p",
+        "Coord3dAbc10pPlanar",
+        "Coord3dAbc12p",
+        "Coord3dAbc12pPlanar",
+        "Coord3dAbc16",
+        "Coord3dAbc16Planar",
+        "Coord3dAbc32f",
+        "Coord3dAbc32fPlanar",
+        "Coord3dAc8",
+        "Coord3dAc8Planar",
+        "Coord3dAc10p",
+        "Coord3dAc10pPlanar",
+        "Coord3dAc12p",
+        "Coord3dAc12pPlanar",
+        "Coord3dAc16",
+        "Coord3dAc16Planar",
+        "Coord3dAc32f",
+        "Coord3dAc32fPlanar",
+        "Coord3dA8",
+        "Coord3dA10p",
+        "Coord3dA12p",
+        "Coord3dA16",
+        "Coord3dA32f",
+        "Coord3dB8",
+        "Coord3dB10p",
+        "Coord3dB12p",
+        "Coord3dB16",
+        "Coord3dB32f",
+        "Coord3dC8",
+        "Coord3dC10p",
+        "Coord3dC12p",
+        "Coord3dC16",
+        "Coord3dC32f",
+        "Confidence1",
+        "Confidence1p",
+        "Confidence8",
+        "Confidence16",
+        "Confidence32f"
+      ]
+    },
+    "Trial": {
+      "description": "Represents a single trial that can be instantiated by the Bonsai state machine.",
+      "properties": {
+        "p_reward_left": {
+          "default": 1.0,
+          "description": "The probability of reward on the left side if response is made.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "P Reward Left",
+          "type": "number"
+        },
+        "p_reward_right": {
+          "default": 1.0,
+          "description": "The probability of reward on the right side if response is made.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "P Reward Right",
+          "type": "number"
+        },
+        "reward_consumption_duration": {
+          "default": 5.0,
+          "description": "Duration of reward consumption before transition to ITI (in seconds).",
+          "minimum": 0,
+          "title": "Reward Consumption Duration",
+          "type": "number"
+        },
+        "reward_delay_duration": {
+          "default": 0.0,
+          "description": "Delay before reward is delivered after the secondary reinforcer (in seconds).",
+          "minimum": 0,
+          "title": "Reward Delay Duration",
+          "type": "number"
+        },
+        "secondary_reinforcer": {
+          "default": null,
+          "description": "Defines the secondary reinforcer used in the trial.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/SecondaryReinforcer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "response_deadline_duration": {
+          "default": 5.0,
+          "description": "Time allowed for the subject to make a response (in seconds).",
+          "minimum": 0,
+          "title": "Response Deadline Duration",
+          "type": "number"
+        },
+        "enable_fast_retract": {
+          "default": false,
+          "description": "If true, the opposite lickspout retracts quickly after a response is made.",
+          "title": "Enable Fast Retract",
+          "type": "boolean"
+        },
+        "quiescence_period_duration": {
+          "default": 0.5,
+          "description": "Duration of the quiescence period before trial starts (in seconds). Each lick resets the timer.",
+          "minimum": 0,
+          "title": "Quiescence Period Duration",
+          "type": "number"
+        },
+        "inter_trial_interval_duration": {
+          "default": 5.0,
+          "description": "Duration of the inter-trial interval (in seconds).",
+          "minimum": 0.5,
+          "title": "Inter Trial Interval Duration",
+          "type": "number"
+        },
+        "is_auto_response_right": {
+          "default": null,
+          "description": "If set, the trial will automatically (and immediately) register a response to the right (True) or left (False).",
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Is Auto Response Right"
+        },
+        "lickspout_offset_delta": {
+          "default": 0.0,
+          "description": "Horizontal delta offset of the lickspouts (in mm) applied in this trial. Positive values move the lickspouts right.",
+          "title": "Lickspout Offset Delta",
+          "type": "number"
+        },
+        "extra_metadata": {
+          "default": null,
+          "description": "Additional metadata to include with the trial. This field will NOT be used or validated by the task engine.",
+          "oneOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Extra Metadata"
+        }
+      },
+      "title": "Trial",
+      "type": "object"
+    },
+    "TrialGeneratorCompositeSpec_TrialGeneratorSpec_": {
+      "properties": {
+        "type": {
+          "const": "TrialGeneratorComposite",
+          "default": "TrialGeneratorComposite",
+          "title": "Type",
+          "type": "string"
+        },
+        "generators": {
+          "description": "List of trial generator specifications to concatenate. When one generator returns None, the next one is concatenated.",
+          "items": {
+            "$ref": "#/$defs/TrialGeneratorSpec"
+          },
+          "minItems": 1,
+          "title": "Generators",
+          "type": "array"
+        }
+      },
+      "required": [
+        "generators"
+      ],
+      "title": "TrialGeneratorCompositeSpec[TrialGeneratorSpec]",
+      "type": "object"
+    },
+    "TrialGeneratorSpec": {
+      "description": "Type of trial generator",
+      "discriminator": {
+        "mapping": {
+          "CoupledTrialGenerator": "#/$defs/CoupledTrialGeneratorSpec",
+          "IntegrationTestTrialGenerator": "#/$defs/IntegrationTestTrialGeneratorSpec",
+          "TrialGeneratorComposite": "#/$defs/TrialGeneratorCompositeSpec_TrialGeneratorSpec_",
+          "WarmupTrialGenerator": "#/$defs/WarmupTrialGeneratorSpec"
+        },
+        "propertyName": "type"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/WarmupTrialGeneratorSpec"
+        },
+        {
+          "$ref": "#/$defs/CoupledTrialGeneratorSpec"
+        },
+        {
+          "$ref": "#/$defs/IntegrationTestTrialGeneratorSpec"
+        },
+        {
+          "$ref": "#/$defs/TrialGeneratorCompositeSpec_TrialGeneratorSpec_"
+        }
+      ]
+    },
+    "TrialOutcome": {
+      "description": "Represents the outcome of a single trial.",
+      "properties": {
+        "trial": {
+          "$ref": "#/$defs/Trial",
+          "description": "The trial associated with this outcome."
+        },
+        "is_right_choice": {
+          "description": "Reports the choice made by the subject. True for right, False for left, None for no choice.",
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Is Right Choice"
+        },
+        "is_rewarded": {
+          "description": "Indicates whether the subject received a reward on this trial.",
+          "title": "Is Rewarded",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "trial",
+        "is_right_choice",
+        "is_rewarded"
+      ],
+      "title": "TrialOutcome",
+      "type": "object"
+    },
+    "TruncationParameters": {
+      "description": "Parameters for truncating a distribution to a specified range. Truncation should\nbe applied after sampling and scaling.\n\nThe truncation_mode determines how out-of-bounds values are handled:\n- \"exclude\": Resample until a value within [min, max] is obtained.\nIf after a certain number of attempts no valid value is found, it\nwill use the average of sampled values and pick the closest bound.\n- \"clamp\": Clamp values to the nearest bound within [min, max].\nUsed to constrain sampled values within minimum and maximum bounds.",
+      "properties": {
+        "truncation_mode": {
+          "default": "exclude",
+          "description": "Mode of truncation to apply",
+          "enum": [
+            "exclude",
+            "clamp"
+          ],
+          "title": "Truncation Mode",
+          "type": "string"
+        },
+        "min": {
+          "default": 0,
+          "description": "Minimum value of the sampled distribution",
+          "title": "Min",
+          "type": "number"
+        },
+        "max": {
+          "default": 0,
+          "description": "Maximum value of the sampled distribution",
+          "title": "Max",
+          "type": "number"
+        }
+      },
+      "title": "TruncationParameters",
+      "type": "object",
+      "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.TruncationParameters"
+    },
+    "UniformDistribution": {
+      "description": "A uniform probability distribution.\n\nAll values between min and max have equal probability of being sampled.",
+      "properties": {
+        "family": {
+          "const": "Uniform",
+          "default": "Uniform",
+          "title": "Family",
+          "type": "string"
+        },
+        "distribution_parameters": {
+          "$ref": "#/$defs/UniformDistributionParameters",
+          "default": {
+            "family": "Uniform",
+            "min": 0.0,
+            "max": 0.0
+          },
+          "description": "Parameters of the distribution"
+        },
+        "truncation_parameters": {
+          "default": null,
+          "description": "Truncation parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TruncationParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scaling_parameters": {
+          "default": null,
+          "description": "Scaling parameters of the distribution",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ScalingParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "title": "UniformDistribution",
+      "type": "object",
+      "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.UniformDistribution"
+    },
+    "UniformDistributionParameters": {
+      "description": "Parameters for a uniform distribution.\n\nDefined by minimum and maximum bounds of the distribution.",
+      "properties": {
+        "family": {
+          "const": "Uniform",
+          "default": "Uniform",
+          "title": "Family",
+          "type": "string"
+        },
+        "min": {
+          "default": 0,
+          "description": "Minimum value of the distribution",
+          "title": "Min",
+          "type": "number"
+        },
+        "max": {
+          "default": 0,
+          "description": "Maximum value of the distribution",
+          "title": "Max",
+          "type": "number"
+        }
+      },
+      "title": "UniformDistributionParameters",
+      "type": "object",
+      "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.UniformDistributionParameters"
+    },
+    "VideoWriter": {
+      "discriminator": {
+        "mapping": {
+          "FFMPEG": "#/$defs/VideoWriterFfmpeg",
+          "OPENCV": "#/$defs/VideoWriterOpenCv"
+        },
+        "propertyName": "video_writer_type"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/VideoWriterFfmpeg"
+        },
+        {
+          "$ref": "#/$defs/VideoWriterOpenCv"
+        }
+      ]
+    },
+    "VideoWriterFfmpeg": {
+      "description": "FFMPEG video writer configuration.",
+      "properties": {
+        "video_writer_type": {
+          "const": "FFMPEG",
+          "default": "FFMPEG",
+          "title": "Video Writer Type",
+          "type": "string"
+        },
+        "frame_rate": {
+          "default": 30,
+          "description": "Encoding frame rate",
+          "minimum": 0,
+          "title": "Frame Rate",
+          "type": "integer"
+        },
+        "container_extension": {
+          "default": "mkv",
+          "description": "Container extension",
+          "title": "Container Extension",
+          "type": "string"
+        },
+        "output_arguments": {
+          "default": "-vf \"scale=out_range=full,setparams=range=full:colorspace=bt709:color_primaries=bt709:color_trc=linear\" -c:v h264_nvenc -pix_fmt yuv420p -color_range full -colorspace bt709 -color_trc linear -tune hq -preset p3 -rc vbr -cq 18 -b:v 0M -metadata author=\"Allen Institute for Neural Dynamics\" -maxrate 700M -bufsize 350M -f matroska -write_crc32 0",
+          "description": "Output arguments",
+          "title": "Output Arguments",
+          "type": "string"
+        },
+        "input_arguments": {
+          "default": "-colorspace bt709 -color_primaries bt709 -color_range full -color_trc linear",
+          "description": "Input arguments",
+          "title": "Input Arguments",
+          "type": "string"
+        }
+      },
+      "title": "VideoWriterFfmpeg",
+      "type": "object"
+    },
+    "VideoWriterOpenCv": {
+      "description": "OpenCV video writer configuration.",
+      "properties": {
+        "video_writer_type": {
+          "const": "OPENCV",
+          "default": "OPENCV",
+          "title": "Video Writer Type",
+          "type": "string"
+        },
+        "frame_rate": {
+          "default": 30,
+          "description": "Encoding frame rate",
+          "minimum": 0,
+          "title": "Frame Rate",
+          "type": "integer"
+        },
+        "container_extension": {
+          "default": "avi",
+          "description": "Container extension",
+          "title": "Container Extension",
+          "type": "string"
+        },
+        "four_cc": {
+          "default": "FMP4",
+          "description": "Four character code",
+          "title": "Four Cc",
+          "type": "string"
+        }
+      },
+      "title": "VideoWriterOpenCv",
+      "type": "object"
+    },
+    "WarmupTrialGenerationEndConditions": {
+      "properties": {
+        "min_trial": {
+          "default": 50,
+          "description": "Minimum trials in generator.",
+          "minimum": 0,
+          "title": "Min Trial",
+          "type": "integer"
+        },
+        "max_choice_bias": {
+          "default": 0.1,
+          "description": "Maximum allowed deviation from 50/50 choice ratio to end trial generation.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Max Choice Bias",
+          "type": "number"
+        },
+        "min_response_rate": {
+          "default": 0.8,
+          "description": "Minimum fraction of trials with a choice (non-ignored) to end trial generation.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Min Response Rate",
+          "type": "number"
+        },
+        "evaluation_window": {
+          "default": 20,
+          "description": "Number of most recent trials to evaluate the end criteria.",
+          "minimum": 0,
+          "title": "Evaluation Window",
+          "type": "integer"
+        }
+      },
+      "title": "WarmupTrialGenerationEndConditions",
+      "type": "object"
+    },
+    "WarmupTrialGeneratorSpec": {
+      "properties": {
+        "type": {
+          "const": "WarmupTrialGenerator",
+          "default": "WarmupTrialGenerator",
+          "title": "Type",
+          "type": "string"
+        },
+        "quiescent_duration": {
+          "$ref": "#/$defs/Distribution",
+          "default": {
+            "family": "Exponential",
+            "distribution_parameters": {
+              "family": "Exponential",
+              "rate": 1.0
+            },
+            "truncation_parameters": {
+              "max": 1.0,
+              "min": 0.0,
+              "truncation_mode": "exclude"
+            },
+            "scaling_parameters": null
+          },
+          "description": "Distribution describing the quiescence period before trial starts (in seconds). Each lick resets the timer."
+        },
+        "response_duration": {
+          "default": 1.0,
+          "description": "Duration after go cue for animal response.",
+          "minimum": 0,
+          "title": "Response Duration",
+          "type": "number"
+        },
+        "reward_consumption_duration": {
+          "default": 3.0,
+          "description": "Duration of reward consumption before transition to ITI (in seconds).",
+          "minimum": 0,
+          "title": "Reward Consumption Duration",
+          "type": "number"
+        },
+        "inter_trial_interval_duration": {
+          "$ref": "#/$defs/Distribution",
+          "default": {
+            "family": "Exponential",
+            "distribution_parameters": {
+              "family": "Exponential",
+              "rate": 0.5
+            },
+            "truncation_parameters": {
+              "max": 8.0,
+              "min": 1.0,
+              "truncation_mode": "exclude"
+            },
+            "scaling_parameters": null
+          },
+          "description": "Distribution describing the inter-trial interval (in seconds)."
+        },
+        "block_len": {
+          "$ref": "#/$defs/Distribution",
+          "default": {
+            "family": "Scalar",
+            "distribution_parameters": {
+              "family": "Scalar",
+              "value": 0.0
+            },
+            "truncation_parameters": null,
+            "scaling_parameters": null
+          },
+          "description": "Distribution describing block length."
+        },
+        "min_block_reward": {
+          "const": 1,
+          "default": 1,
+          "title": "Minimal rewards in a block to switch",
+          "type": "integer"
+        },
+        "kernel_size": {
+          "default": 2,
+          "description": "Kernel to evaluate choice fraction.",
+          "title": "Kernel Size",
+          "type": "integer"
+        },
+        "reward_probability_parameters": {
+          "$ref": "#/$defs/RewardProbabilityParameters",
+          "default": {
+            "base_reward_sum": 0.8,
+            "reward_pairs": [
+              [
+                8.0,
+                1.0
+              ]
+            ]
+          },
+          "description": "Parameters defining the reward probability structure."
+        },
+        "is_baiting": {
+          "const": true,
+          "default": true,
+          "description": "Whether uncollected rewards carry over to the next trial.",
+          "title": "Is Baiting",
+          "type": "boolean"
+        },
+        "trial_generation_end_parameters": {
+          "$ref": "#/$defs/WarmupTrialGenerationEndConditions",
+          "default": {
+            "min_trial": 50,
+            "max_choice_bias": 0.1,
+            "min_response_rate": 0.8,
+            "evaluation_window": 20
+          },
+          "description": "Conditions to end trial generation."
+        }
+      },
+      "title": "WarmupTrialGeneratorSpec",
+      "type": "object"
+    },
+    "WaterValveCalibration": {
+      "description": "Represents a water valve calibration.",
+      "properties": {
+        "date": {
+          "default": null,
+          "description": "Date of the calibration",
+          "oneOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Date"
+        },
+        "measurements": {
+          "default": [],
+          "description": "List of measurements",
+          "items": {
+            "$ref": "#/$defs/Measurement"
+          },
+          "title": "Measurements",
+          "type": "array"
+        },
+        "interval_average": {
+          "default": null,
+          "description": "Dictionary keyed by measured valve interval and corresponding average single event volume.",
+          "oneOf": [
+            {
+              "additionalProperties": {
+                "exclusiveMinimum": 0,
+                "type": "number"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Interval average"
+        },
+        "slope": {
+          "description": "Slope of the linear regression : Volume(g) = Slope(g/s) * time(s) + offset(g)",
+          "title": "Regression slope",
+          "type": "number"
+        },
+        "offset": {
+          "description": "Offset of the linear regression : Volume(g) = Slope(g/s) * time(s) + offset(g)",
+          "title": "Regression offset",
+          "type": "number"
+        },
+        "r2": {
+          "default": null,
+          "description": "R2 metric from the linear model.",
+          "oneOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "R2"
+        },
+        "valid_domain": {
+          "default": null,
+          "description": "The optional time-intervals the calibration curve was calculated on.",
+          "oneOf": [
+            {
+              "items": {
+                "exclusiveMinimum": 0,
+                "type": "number"
+              },
+              "minItems": 2,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Valid domain"
+        }
+      },
+      "required": [
+        "slope",
+        "offset"
+      ],
+      "title": "WaterValveCalibration",
+      "type": "object"
+    },
+    "Waveform": {
+      "description": "Model for a waveform to be played on the sound card.",
+      "properties": {
+        "waveform_type": {
+          "default": "sine",
+          "description": "Type of the waveform",
+          "enum": [
+            "sine",
+            "white_noise"
+          ],
+          "title": "Waveform Type",
+          "type": "string"
+        },
+        "index": {
+          "description": "Index of the waveform on the sound card",
+          "maximum": 31,
+          "minimum": 3,
+          "title": "Index",
+          "type": "integer"
+        },
+        "duration": {
+          "description": "Duration of the waveform in seconds",
+          "exclusiveMinimum": 0,
+          "title": "Duration",
+          "type": "number"
+        },
+        "frequency": {
+          "default": null,
+          "description": "Frequency of the sine wave in Hz. Required if waveform_type is 'sine'.",
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Frequency"
+        }
+      },
+      "required": [
+        "index",
+        "duration"
+      ],
+      "title": "Waveform",
+      "type": "object"
+    },
+    "WebCamera": {
+      "description": "Web camera device configuration.",
+      "properties": {
+        "device_type": {
+          "const": "WebCamera",
+          "default": "WebCamera",
+          "title": "Device Type",
+          "type": "string"
+        },
+        "calibration": {
+          "default": null,
+          "description": "Calibration for the device.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/BaseModel"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "index": {
+          "default": 0,
+          "description": "Camera index",
+          "minimum": 0,
+          "title": "Index",
+          "type": "integer"
+        },
+        "video_writer": {
+          "default": null,
+          "description": "Video writer. If not provided, no video will be saved.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/VideoWriter"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "title": "WebCamera",
+      "type": "object"
+    }
+  }
+}
