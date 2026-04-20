@@ -50,10 +50,9 @@ def _patch_dataset(
     )
 
     # trainer state
-    mock_trainer_state = MagicMock()
-    mock_trainer_state.data = MagicMock()  # {"stage": {"name": stage_name}}
-    mock_trainer_state.data.stage = MagicMock()
-    mock_trainer_state.data.stage.name = stage_name
+    mock_trainer_state = MagicMock(**{
+        "data.stage.name": stage_name
+    })
 
     # previous metrics
     mock_previous_metrics = MagicMock()
