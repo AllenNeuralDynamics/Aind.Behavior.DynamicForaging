@@ -5,6 +5,7 @@ from unittest.mock import MagicMock, PropertyMock, patch
 
 import numpy as np
 
+from aind_behavior_curriculum import TrainerState
 from aind_behavior_dynamic_foraging_curricula.metrics import (
     metrics_from_dataset,
 )
@@ -51,7 +52,9 @@ def _patch_dataset(
 
     # trainer state
     mock_trainer_state = MagicMock()
-    mock_trainer_state.data = {"stage": {"name": stage_name}}
+    mock_trainer_state.data = MagicMock()#{"stage": {"name": stage_name}}
+    mock_trainer_state.data.stage = MagicMock()
+    mock_trainer_state.data.stage.name = stage_name
 
     # previous metrics
     mock_previous_metrics = MagicMock()
