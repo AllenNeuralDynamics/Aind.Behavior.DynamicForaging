@@ -43,7 +43,7 @@ jobs:
           enable-cache: true
 
       - name: Install python dependencies
-        run: uv sync
+        run: uv sync --all-packages
 
       - name: Run ruff format
         run: uv run ruff format
