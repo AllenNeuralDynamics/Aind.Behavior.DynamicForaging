@@ -117,6 +117,9 @@ jobs:
       - name: Regenerate schemas
         run: uv run dynamic-foraging regenerate
 
+      - name: Regenerate curriculum schema
+        run: uv run workspace/aind_behavior_dynamic_foraging_curricula/src/aind_behavior_dynamic_foraging_curricula/_schema.py
+
       - name: Commit version and schema changes
         run: |
           git config --global user.name "github-actions[bot]"
