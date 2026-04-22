@@ -2,6 +2,8 @@
 <WorkflowBuilder Version="2.9.0"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:harp="clr-namespace:Bonsai.Harp;assembly=Bonsai.Harp"
+                 xmlns:p1="clr-namespace:Harp.StepperDriver;assembly=Harp.StepperDriver"
+                 xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
@@ -38,6 +40,80 @@
       <Expression xsi:type="MulticastSubject">
         <Name>StepperDriverCommands</Name>
       </Expression>
+      <Expression xsi:type="p1:CreateMessage">
+        <harp:MessageType>Write</harp:MessageType>
+        <harp:Payload xsi:type="p1:CreateMotor1QuickMovementInitialSpeedPayload">
+          <p1:Motor1QuickMovementInitialSpeed>4</p1:Motor1QuickMovementInitialSpeed>
+        </harp:Payload>
+      </Expression>
+      <Expression xsi:type="p1:CreateMessage">
+        <harp:MessageType>Write</harp:MessageType>
+        <harp:Payload xsi:type="p1:CreateMotor1QuickMovementNominalSpeedPayload">
+          <p1:Motor1QuickMovementNominalSpeed>90</p1:Motor1QuickMovementNominalSpeed>
+        </harp:Payload>
+      </Expression>
+      <Expression xsi:type="p1:CreateMessage">
+        <harp:MessageType>Write</harp:MessageType>
+        <harp:Payload xsi:type="p1:CreateMotor1QuickMovementAccelerationPayload">
+          <p1:Motor1QuickMovementAcceleration>1</p1:Motor1QuickMovementAcceleration>
+        </harp:Payload>
+      </Expression>
+      <Expression xsi:type="p1:CreateMessage">
+        <harp:MessageType>Write</harp:MessageType>
+        <harp:Payload xsi:type="p1:CreateMotor1QuickMovementPulseDistancePayload">
+          <p1:Motor1QuickMovementPulseDistance>2.5</p1:Motor1QuickMovementPulseDistance>
+        </harp:Payload>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:Merge" />
+      </Expression>
+      <Expression xsi:type="p1:CreateMessage">
+        <harp:MessageType>Write</harp:MessageType>
+        <harp:Payload xsi:type="p1:CreateMotor2QuickMovementInitialSpeedPayload">
+          <p1:Motor2QuickMovementInitialSpeed>4</p1:Motor2QuickMovementInitialSpeed>
+        </harp:Payload>
+      </Expression>
+      <Expression xsi:type="p1:CreateMessage">
+        <harp:MessageType>Write</harp:MessageType>
+        <harp:Payload xsi:type="p1:CreateMotor2QuickMovementNominalSpeedPayload">
+          <p1:Motor2QuickMovementNominalSpeed>90</p1:Motor2QuickMovementNominalSpeed>
+        </harp:Payload>
+      </Expression>
+      <Expression xsi:type="p1:CreateMessage">
+        <harp:MessageType>Write</harp:MessageType>
+        <harp:Payload xsi:type="p1:CreateMotor2QuickMovementAccelerationPayload">
+          <p1:Motor2QuickMovementAcceleration>1</p1:Motor2QuickMovementAcceleration>
+        </harp:Payload>
+      </Expression>
+      <Expression xsi:type="p1:CreateMessage">
+        <harp:MessageType>Write</harp:MessageType>
+        <harp:Payload xsi:type="p1:CreateMotor2QuickMovementPulseDistancePayload">
+          <p1:Motor2QuickMovementPulseDistance>2.5</p1:Motor2QuickMovementPulseDistance>
+        </harp:Payload>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:Merge" />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:Merge" />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:Take">
+          <rx:Count>8</rx:Count>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>StepperDriverEvents</Name>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:Zip" />
+      </Expression>
+      <Expression xsi:type="MemberSelector">
+        <Selector>Item1</Selector>
+      </Expression>
+      <Expression xsi:type="MulticastSubject">
+        <Name>StepperDriverCommands</Name>
+      </Expression>
     </Nodes>
     <Edges>
       <Edge From="0" To="2" Label="Source1" />
@@ -45,6 +121,21 @@
       <Edge From="2" To="3" Label="Source1" />
       <Edge From="4" To="5" Label="Source1" />
       <Edge From="5" To="6" Label="Source1" />
+      <Edge From="7" To="11" Label="Source1" />
+      <Edge From="8" To="11" Label="Source2" />
+      <Edge From="9" To="11" Label="Source3" />
+      <Edge From="10" To="11" Label="Source4" />
+      <Edge From="11" To="17" Label="Source1" />
+      <Edge From="12" To="16" Label="Source1" />
+      <Edge From="13" To="16" Label="Source2" />
+      <Edge From="14" To="16" Label="Source3" />
+      <Edge From="15" To="16" Label="Source4" />
+      <Edge From="16" To="17" Label="Source2" />
+      <Edge From="17" To="18" Label="Source1" />
+      <Edge From="18" To="20" Label="Source1" />
+      <Edge From="19" To="20" Label="Source2" />
+      <Edge From="20" To="21" Label="Source1" />
+      <Edge From="21" To="22" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>

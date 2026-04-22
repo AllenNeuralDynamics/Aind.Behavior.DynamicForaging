@@ -2932,6 +2932,123 @@ namespace AindDynamicForagingDataSchema
 
 
     /// <summary>
+    /// Settings for the quick retract feature.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.ComponentModel.DescriptionAttribute("Settings for the quick retract feature.")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class QuickRetractSettings
+    {
+    
+        private bool _enableDuringQuiescence;
+    
+        private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _timeToResetDuringQuiescence;
+    
+        private bool _enableOnResponse;
+    
+        public QuickRetractSettings()
+        {
+            _enableDuringQuiescence = false;
+            _enableOnResponse = false;
+        }
+    
+        protected QuickRetractSettings(QuickRetractSettings other)
+        {
+            _enableDuringQuiescence = other._enableDuringQuiescence;
+            _timeToResetDuringQuiescence = other._timeToResetDuringQuiescence;
+            _enableOnResponse = other._enableOnResponse;
+        }
+    
+        /// <summary>
+        /// If true, the quick retract feature is enabled during the quiescence period.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("enable_during_quiescence")]
+        [System.ComponentModel.DescriptionAttribute("If true, the quick retract feature is enabled during the quiescence period.")]
+        public bool EnableDuringQuiescence
+        {
+            get
+            {
+                return _enableDuringQuiescence;
+            }
+            set
+            {
+                _enableDuringQuiescence = value;
+            }
+        }
+    
+        /// <summary>
+        /// If enable_during_quiescence is true, this is the time the spout will take to reset. If the quiescence period is shorter than this time, the spout will retract at the end of the period.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("time_to_reset_during_quiescence")]
+        [System.ComponentModel.DescriptionAttribute("If enable_during_quiescence is true, this is the time the spout will take to rese" +
+            "t. If the quiescence period is shorter than this time, the spout will retract at" +
+            " the end of the period.")]
+        public AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution TimeToResetDuringQuiescence
+        {
+            get
+            {
+                return _timeToResetDuringQuiescence;
+            }
+            set
+            {
+                _timeToResetDuringQuiescence = value;
+            }
+        }
+    
+        /// <summary>
+        /// If true, the quick retract feature is enabled immediately after a response is registered.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("enable_on_response")]
+        [System.ComponentModel.DescriptionAttribute("If true, the quick retract feature is enabled immediately after a response is reg" +
+            "istered.")]
+        public bool EnableOnResponse
+        {
+            get
+            {
+                return _enableOnResponse;
+            }
+            set
+            {
+                _enableOnResponse = value;
+            }
+        }
+    
+        public System.IObservable<QuickRetractSettings> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new QuickRetractSettings(this)));
+        }
+    
+        public System.IObservable<QuickRetractSettings> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new QuickRetractSettings(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("EnableDuringQuiescence = " + _enableDuringQuiescence + ", ");
+            stringBuilder.Append("TimeToResetDuringQuiescence = " + _timeToResetDuringQuiescence + ", ");
+            stringBuilder.Append("EnableOnResponse = " + _enableOnResponse);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    /// <summary>
     /// Represents a rectangle defined by its top-left corner, width, and height.
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
@@ -4548,7 +4665,7 @@ namespace AindDynamicForagingDataSchema
     
         private double _responseDeadlineDuration;
     
-        private bool _enableFastRetract;
+        private QuickRetractSettings _quickRetractSettings;
     
         private double _quiescencePeriodDuration;
     
@@ -4567,7 +4684,6 @@ namespace AindDynamicForagingDataSchema
             _rewardConsumptionDuration = 5D;
             _rewardDelayDuration = 0D;
             _responseDeadlineDuration = 5D;
-            _enableFastRetract = false;
             _quiescencePeriodDuration = 0.5D;
             _interTrialIntervalDuration = 5D;
             _lickspoutOffsetDelta = 0D;
@@ -4581,7 +4697,7 @@ namespace AindDynamicForagingDataSchema
             _rewardDelayDuration = other._rewardDelayDuration;
             _secondaryReinforcer = other._secondaryReinforcer;
             _responseDeadlineDuration = other._responseDeadlineDuration;
-            _enableFastRetract = other._enableFastRetract;
+            _quickRetractSettings = other._quickRetractSettings;
             _quiescencePeriodDuration = other._quiescencePeriodDuration;
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
             _isAutoResponseRight = other._isAutoResponseRight;
@@ -4693,19 +4809,21 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// If true, the opposite lickspout retracts quickly after a response is made.
+        /// Settings for the quick retract feature. If null, the feature will be disabled for this trial.
         /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("enable_fast_retract")]
-        [System.ComponentModel.DescriptionAttribute("If true, the opposite lickspout retracts quickly after a response is made.")]
-        public bool EnableFastRetract
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("quick_retract_settings")]
+        [System.ComponentModel.DescriptionAttribute("Settings for the quick retract feature. If null, the feature will be disabled for" +
+            " this trial.")]
+        public QuickRetractSettings QuickRetractSettings
         {
             get
             {
-                return _enableFastRetract;
+                return _quickRetractSettings;
             }
             set
             {
-                _enableFastRetract = value;
+                _quickRetractSettings = value;
             }
         }
     
@@ -4817,7 +4935,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("RewardDelayDuration = " + _rewardDelayDuration + ", ");
             stringBuilder.Append("SecondaryReinforcer = " + _secondaryReinforcer + ", ");
             stringBuilder.Append("ResponseDeadlineDuration = " + _responseDeadlineDuration + ", ");
-            stringBuilder.Append("EnableFastRetract = " + _enableFastRetract + ", ");
+            stringBuilder.Append("QuickRetractSettings = " + _quickRetractSettings + ", ");
             stringBuilder.Append("QuiescencePeriodDuration = " + _quiescencePeriodDuration + ", ");
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
             stringBuilder.Append("IsAutoResponseRight = " + _isAutoResponseRight + ", ");
@@ -6275,6 +6393,51 @@ namespace AindDynamicForagingDataSchema
 
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Newtonsoft.Json.JsonConverter(typeof(JsonInheritanceConverter), "family")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class TimeToResetDuringQuiescence
+    {
+    
+        public TimeToResetDuringQuiescence()
+        {
+        }
+    
+        protected TimeToResetDuringQuiescence(TimeToResetDuringQuiescence other)
+        {
+        }
+    
+        public System.IObservable<TimeToResetDuringQuiescence> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new TimeToResetDuringQuiescence(this)));
+        }
+    
+        public System.IObservable<TimeToResetDuringQuiescence> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new TimeToResetDuringQuiescence(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            return false;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     public enum BehaviorStabilityParametersBehaviorEvaluationMode
     {
@@ -6573,6 +6736,45 @@ namespace AindDynamicForagingDataSchema
     }
 
 
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.ComponentModel.DefaultPropertyAttribute("Type")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Combinator)]
+    public partial class MatchTimeToResetDuringQuiescence : Bonsai.Expressions.SingleArgumentExpressionBuilder
+    {
+    
+        public Bonsai.Expressions.TypeMapping Type { get; set; }
+
+        public override System.Linq.Expressions.Expression Build(System.Collections.Generic.IEnumerable<System.Linq.Expressions.Expression> arguments)
+        {
+            var typeMapping = Type;
+            var returnType = typeMapping != null ? typeMapping.GetType().GetGenericArguments()[0] : typeof(TimeToResetDuringQuiescence);
+            return System.Linq.Expressions.Expression.Call(
+                typeof(MatchTimeToResetDuringQuiescence),
+                "Process",
+                new System.Type[] { returnType },
+                System.Linq.Enumerable.Single(arguments));
+        }
+
+    
+        private static System.IObservable<TResult> Process<TResult>(System.IObservable<TimeToResetDuringQuiescence> source)
+            where TResult : TimeToResetDuringQuiescence
+        {
+            return System.Reactive.Linq.Observable.Create<TResult>(observer =>
+            {
+                var sourceObserver = System.Reactive.Observer.Create<TimeToResetDuringQuiescence>(
+                    value =>
+                    {
+                        var match = value as TResult;
+                        if (match != null) observer.OnNext(match);
+                    },
+                    observer.OnError,
+                    observer.OnCompleted);
+                return System.ObservableExtensions.SubscribeSafe(source, sourceObserver);
+            });
+        }
+    }
+
+
     /// <summary>
     /// Serializes a sequence of data model objects into JSON strings.
     /// </summary>
@@ -6691,6 +6893,11 @@ namespace AindDynamicForagingDataSchema
             return Process<Measurement>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<QuickRetractSettings> source)
+        {
+            return Process<QuickRetractSettings>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<Rect> source)
         {
             return Process<Rect>(source);
@@ -6790,6 +6997,11 @@ namespace AindDynamicForagingDataSchema
         {
             return Process<Anonymous>(source);
         }
+
+        public System.IObservable<string> Process(System.IObservable<TimeToResetDuringQuiescence> source)
+        {
+            return Process<TimeToResetDuringQuiescence>(source);
+        }
     }
 
 
@@ -6820,6 +7032,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpWhiteRabbit>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<IntegrationTestTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Measurement>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<QuickRetractSettings>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Rect>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<RewardProbabilityParameters>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<RewardSize>))]
@@ -6840,6 +7053,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Waveform>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WebCamera>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Anonymous>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TimeToResetDuringQuiescence>))]
     public partial class DeserializeFromJson : Bonsai.Expressions.SingleArgumentExpressionBuilder
     {
     
