@@ -112,7 +112,6 @@ class TestBlockBasedTrialGenerator(unittest.TestCase):
 
     def test_next_returns_correct_reward_probs(self):
         trial = self.generator.next()
-        print(trial, self.generator.block.p_left_reward, self.generator.block.p_right_reward)
         self.assertEqual(trial.p_reward_left, self.generator.block.p_left_reward)
         self.assertEqual(trial.p_reward_right, self.generator.block.p_right_reward)
 
