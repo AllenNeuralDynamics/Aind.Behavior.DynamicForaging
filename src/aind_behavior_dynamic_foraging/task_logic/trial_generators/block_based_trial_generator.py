@@ -20,6 +20,21 @@ from ._base import BaseTrialGeneratorSpecModel, ITrialGenerator
 logger = logging.getLogger(__name__)
 
 
+class AutoWaterParameters(BaseModel):
+    min_ignored_trials: int = Field(
+        default=3, ge=0, description="Minimum consecutive ignored trials before auto water is triggered."
+    )
+    min_unrewarded_trials: int = Field(
+        default=3, ge=0, description="Minimum consecutive unrewarded trials before auto water is triggered."
+    )
+    reward_fraction: float = Field(
+        default=0.8,
+        ge=0,
+        le=1,
+        description="Fraction of full reward volume delivered during auto water (0=none, 1=full).",
+    )
+
+
 class RewardProbabilityParameters(BaseModel):
     """Defines the reward probability structure for a dynamic foraging task.
 
@@ -93,6 +108,12 @@ class BlockBasedTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
         validate_default=True,
     )
 
+    autowater_parameters: Optional[AutoWaterParameters] = Field(
+        default=AutoWaterParameters(),
+        validate_default=True,
+        description="Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
+    )
+
     is_baiting: bool = Field(default=False, description="Whether uncollected rewards carry over to the next trial.")
 
     def create_generator(self) -> "BlockBasedTrialGenerator":
@@ -157,28 +178,52 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
         iti = draw_sample(self.spec.inter_trial_interval_duration)
         quiescent = draw_sample(self.spec.quiescent_duration)
 
-        p_reward_left = self.block.p_left_reward
-        p_reward_right = self.block.p_right_reward
-
+        # determine baiting
         if self.spec.is_baiting:
             random_numbers = np.random.random(2)
 
-            is_left_baited = self.block.p_left_reward > random_numbers[0] or self.is_left_baited
-            logger.debug(f"Left baited: {is_left_baited}")
-            p_reward_left = 1 if is_left_baited else p_reward_left
+            self.is_left_baited = self.block.p_left_reward > random_numbers[0] or self.is_left_baited
+            logger.debug(f"Left baited: {self.is_left_baited}")
 
-            is_right_baited = self.block.p_right_reward > random_numbers[1] or self.is_right_baited
-            logger.debug(f"Right baited: {is_left_baited}")
-            p_reward_right = 1 if is_right_baited else p_reward_right
+            self.is_right_baited = self.block.p_right_reward > random_numbers[1] or self.is_right_baited
+            logger.debug(f"Right baited: {self.is_right_baited}")
+
+        # determine autowater
+        if self._are_autowater_conditions_met():
+            is_right_autowater = True if self.block.p_right_reward > self.block.p_left_reward else False
 
         return Trial(
-            p_reward_left=p_reward_left,
-            p_reward_right=p_reward_right,
+            p_reward_left=1 if (self.is_left_baited and self.spec.is_baiting) else self.block.p_left_reward,
+            p_reward_right=1 if (self.is_right_baited and self.spec.is_baiting) else self.block.p_right_reward,
             reward_consumption_duration=self.spec.reward_consumption_duration,
             response_deadline_duration=self.spec.response_duration,
             quiescence_period_duration=quiescent,
             inter_trial_interval_duration=iti,
+            is_auto_response_right=is_right_autowater,
         )
+
+    def _are_autowater_conditions_met(self) -> bool:
+        """Checks whether autowater should be given.
+
+        Returns:
+            True if autowater conditions are met, False otherwise.
+        """
+
+        if self.spec.autowater_parameters is None:  # autowater disabled
+            return False
+
+        min_ignore = self.spec.autowater_parameters.min_ignored_trials
+        min_unreward = self.spec.autowater_parameters.min_unrewarded_trials
+
+        is_ignored = [choice is None for choice in self.is_right_choice_history]
+        if all(is_ignored[-min_ignore:]):
+            return True
+
+        is_unrewarded = [not reward for reward in self.reward_history]
+        if all(is_unrewarded[-min_unreward:]):
+            return True
+
+        return False
 
     @abstractmethod
     def _are_end_conditions_met(self) -> bool:
@@ -195,7 +240,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
         reward_pairs: list[list[float, float]],
         base_reward_sum: float,
         block_len: Union[UniformDistribution, ExponentialDistribution],
-        current_block: Optional[None] = None,
+        current_block: Optional[Block] = None,
     ) -> Block:
         """Generates the next block, avoiding repeating the current block's side bias.
 

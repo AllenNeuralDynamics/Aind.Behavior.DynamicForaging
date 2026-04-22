@@ -434,6 +434,34 @@
       "title": "AuditorySecondaryReinforcer",
       "type": "object"
     },
+    "AutoWaterParameters": {
+      "properties": {
+        "min_ignored_trials": {
+          "default": 3,
+          "description": "Minimum consecutive ignored trials before auto water is triggered.",
+          "minimum": 0,
+          "title": "Min Ignored Trials",
+          "type": "integer"
+        },
+        "min_unrewarded_trials": {
+          "default": 3,
+          "description": "Minimum consecutive unrewarded trials before auto water is triggered.",
+          "minimum": 0,
+          "title": "Min Unrewarded Trials",
+          "type": "integer"
+        },
+        "reward_fraction": {
+          "default": 0.8,
+          "description": "Fraction of full reward volume delivered during auto water (0=none, 1=full).",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Reward Fraction",
+          "type": "number"
+        }
+      },
+      "title": "AutoWaterParameters",
+      "type": "object"
+    },
     "Axis": {
       "description": "Motor axis available",
       "enum": [
@@ -964,6 +992,22 @@
             ]
           },
           "description": "Parameters defining the reward probability structure."
+        },
+        "autowater_parameters": {
+          "default": {
+            "min_ignored_trials": 3,
+            "min_unrewarded_trials": 3,
+            "reward_fraction": 0.8
+          },
+          "description": "Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/AutoWaterParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "is_baiting": {
           "default": false,
@@ -3234,6 +3278,22 @@
             ]
           },
           "description": "Parameters defining the reward probability structure."
+        },
+        "autowater_parameters": {
+          "default": {
+            "min_ignored_trials": 3,
+            "min_unrewarded_trials": 3,
+            "reward_fraction": 0.8
+          },
+          "description": "Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/AutoWaterParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "is_baiting": {
           "const": true,
