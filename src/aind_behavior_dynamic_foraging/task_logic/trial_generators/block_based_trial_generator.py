@@ -1,7 +1,6 @@
 import logging
-import random
 from abc import ABC, abstractmethod
-from typing import Literal, Optional, Union
+from typing import Literal, Optional
 
 import numpy as np
 from aind_behavior_services.task.distributions import (
@@ -9,25 +8,24 @@ from aind_behavior_services.task.distributions import (
     ExponentialDistribution,
     ExponentialDistributionParameters,
     TruncationParameters,
-    UniformDistribution,
 )
 from aind_behavior_services.task.distributions_utils import draw_sample
 from pydantic import BaseModel, Field
 
 from ..trial_models import Trial
-from ._base import BaseTrialGeneratorSpecModel, ITrialGenerator
+from ._base import BaseTrialGeneratorSpecModel, ITrialGenerator, TrialOutcome
 
 logger = logging.getLogger(__name__)
-
 
 
 class Block(BaseModel):
     p_right_reward: Optional[float] = Field(ge=0, le=1, description="Reward probability for right side during block.")
     p_left_reward: Optional[float] = Field(ge=0, le=1, description="Reward probability for left side during block.")
-    min_length: int = Field(ge=0, description="Minimum number of trials in block.")
+    right_length: int = Field(ge=0, description="Minimum number of trials in block.")
+    left_length: int = Field(ge=0, description="Minimum number of trials in block.")
 
 
-class TwoArmedBanditTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
+class BlockBasedTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
     type: Literal["BlockBasedTrialGenerator"] = "BlockBasedTrialGenerator"
 
     quiescent_duration: Distribution = Field(
@@ -68,7 +66,7 @@ class TwoArmedBanditTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
         return BlockBasedTrialGenerator(self)
 
 
-class TwoArmedBanditTrialGenerator(ITrialGenerator, ABC):
+class BlockBasedTrialGenerator(ITrialGenerator, ABC):
     """Abstract trial generator for block-based dynamic foraging tasks.
 
     Manages block transitions, baiting logic, and trial generation. Subclasses
@@ -79,29 +77,45 @@ class TwoArmedBanditTrialGenerator(ITrialGenerator, ABC):
         is_right_choice_history: Record of whether each trial was a right choice.
             None indicates no choice was made (e.g. missed trial).
         reward_history: Record of whether each trial resulted in a reward.
-        block_history: Record of all completed blocks.
-        block: The currently active block.
-        trials_in_block: Number of trials elapsed in the current block.
         is_left_baited: Whether the left port currently has a baited reward.
         is_right_baited: Whether the right port currently has a baited reward.
+        p_left_reward: Current probability of reward on left side
+        p_right_reward: Current probability of reward on right side
     """
 
-    def __init__(self, spec: TwoArmedBanditTrialGeneratorSpec) -> None:
+    def __init__(self, spec: BlockBasedTrialGeneratorSpec) -> None:
         """Initializes the generator and generates the first block.
 
         Args:
-            spec: The TwoArmedBanditTrialGeneratorSpec defining task parameters.
+            spec: The BlockBasedTrialGenerator defining task parameters.
         """
 
         self.spec = spec
         self.is_right_choice_history: list[bool | None] = []
         self.reward_history: list[bool] = []
-        self.trials_in_block = 0
         self.is_left_baited: bool = False
         self.is_right_baited: bool = False
-        self.p_left_reward: float
-        self.p_right_reward: float
         self.block: Block
+
+    def update(self, outcome: TrialOutcome | str):
+        """Updates generator state from the previous trial outcome. Records choice and reward history and manages baiting state.
+        Args:
+            outcome: The TrialOutcome from the most recently completed trial.
+        """
+        logger.debug("Updating trial generator.")
+        if isinstance(outcome, str):
+            outcome = TrialOutcome.model_validate_json(outcome)
+
+        self.is_right_choice_history.append(outcome.is_right_choice)
+        self.reward_history.append(outcome.is_rewarded)
+
+        if self.spec.is_baiting:
+            if outcome.is_right_choice:
+                logger.debug("Resesting right bait.")
+                self.is_right_baited = False
+            elif outcome.is_right_choice is False:
+                logger.debug("Resesting left bait.")
+                self.is_left_baited = False
 
     def next(self) -> Trial | None:
         """Generates the next trial in the session.
@@ -126,22 +140,21 @@ class TwoArmedBanditTrialGenerator(ITrialGenerator, ABC):
         if self.spec.is_baiting:
             random_numbers = np.random.random(2)
 
-            self.is_left_baited = self.p_left_reward > random_numbers[0] or self.is_left_baited
+            self.is_left_baited = self.block.p_left_reward > random_numbers[0] or self.is_left_baited
             logger.debug(f"Left baited: {self.is_left_baited}")
 
-            self.is_right_baited = self.p_right_reward > random_numbers[1] or self.is_right_baited
+            self.is_right_baited = self.block.p_right_reward > random_numbers[1] or self.is_right_baited
             logger.debug(f"Right baited: {self.is_right_baited}")
 
-
         return Trial(
-            p_reward_left=1 if (self.is_left_baited and self.spec.is_baiting) else self.p_left_reward,
-            p_reward_right=1 if (self.is_right_baited and self.spec.is_baiting) else self.p_right_reward,
+            p_reward_left=1 if (self.is_left_baited and self.spec.is_baiting) else self.block.p_left_reward,
+            p_reward_right=1 if (self.is_right_baited and self.spec.is_baiting) else self.block.p_right_reward,
             reward_consumption_duration=self.spec.reward_consumption_duration,
             response_deadline_duration=self.spec.response_duration,
             quiescence_period_duration=quiescent,
             inter_trial_interval_duration=iti,
         )
-    
+
     @abstractmethod
     def _are_end_conditions_met(self) -> bool:
         """Checks whether the session should end.
@@ -151,8 +164,7 @@ class TwoArmedBanditTrialGenerator(ITrialGenerator, ABC):
             generated, False otherwise.
         """
         pass
-    
-    @staticmethod
+
     @abstractmethod
     def _generate_next_block(*args, **kwargs) -> Block:
         """Abstract method. Subclasses must implement their own block switching logic.
@@ -165,7 +177,6 @@ class TwoArmedBanditTrialGenerator(ITrialGenerator, ABC):
 
     @abstractmethod
     def _is_block_switch_allowed(self) -> bool:
-
         """Determines whether all criteria are met to switch to the next block.
 
         Returns:

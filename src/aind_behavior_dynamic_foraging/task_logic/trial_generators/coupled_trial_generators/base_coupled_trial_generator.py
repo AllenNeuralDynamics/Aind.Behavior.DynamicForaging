@@ -1,39 +1,17 @@
 import logging
-from typing import Literal, Optional
-import numpy as np
 import random
+from typing import Literal, Optional
+
+import numpy as np
+from aind_behavior_services.task.distributions import Distribution
+from aind_behavior_services.task.distributions_utils import draw_sample
 from pydantic import BaseModel, Field
 
-from aind_behavior_services.task.distributions import Distribution, Scalar
-from aind_behavior_services.task.distributions_utils import draw_sample
-
-from ..trial_models import TrialOutcome
-from .block_based_trial_generator import (
-    BlockBasedTrialGenerator,
-    BlockBasedTrialGeneratorSpec,
-    Block
-)
+from ...trial_models import TrialOutcome
+from ..block_based_trial_generator import Block, BlockBasedTrialGenerator, BlockBasedTrialGeneratorSpec
 
 logger = logging.getLogger(__name__)
 
-
-class CoupledWarmupTrialGenerationEndConditions(BaseModel):
-    min_trial: int = Field(default=50, ge=0, description="Minimum trials in generator.")
-    max_choice_bias: float = Field(
-        default=0.1,
-        ge=0,
-        le=1,
-        description="Maximum allowed deviation from 50/50 choice ratio to end trial generation.",
-    )
-    min_response_rate: float = Field(
-        default=0.8,
-        ge=0,
-        le=1,
-        description="Minimum fraction of trials with a choice (non-ignored) to end trial generation.",
-    )
-    evaluation_window: int = Field(
-        default=20, ge=0, description="Number of most recent trials to evaluate the end criteria."
-    )
 
 class RewardProbabilityParameters(BaseModel):
     """Defines the reward probability structure for a dynamic foraging task.
@@ -57,38 +35,28 @@ class RewardProbabilityParameters(BaseModel):
         description="List of (left, right) reward ratio pairs to sample from during block transitions. ",
     )
 
-class CoupledWarmupTrialGeneratorSpec(BlockBasedTrialGeneratorSpec):
-    type: Literal["CoupledWarmupTrialGenerator"] = "CoupledWarmupTrialGenerator"
 
-    block_len: Distribution = Field(
-        default=Scalar(value=1),
-        description="Distribution describing block length.",
-    )
+class BaseCoupledTrialGeneratorSpec(BlockBasedTrialGeneratorSpec):
+    type: Literal["BaseCoupledTrialGenerator"] = "BaseCoupledTrialGenerator"
 
-    trial_generation_end_parameters: CoupledWarmupTrialGenerationEndConditions = Field(
-        default=CoupledWarmupTrialGenerationEndConditions(), description="Conditions to end trial generation."
-    )
-    is_baiting: Literal[True] = Field(
-        default=True, description="Whether uncollected rewards carry over to the next trial."
-    )
     reward_probability_parameters: RewardProbabilityParameters = Field(
         default=RewardProbabilityParameters(),
         description="Parameters defining the reward probability structure.",
         validate_default=True,
     )
 
-    def create_generator(self) -> "CoupledWarmupTrialGenerator":
-        return CoupledWarmupTrialGenerator(self)
+    def create_generator(self) -> "BaseCoupledTrialGenerator":
+        return BaseCoupledTrialGenerator(self)
 
 
-class CoupledWarmupTrialGenerator(BlockBasedTrialGenerator):
-    spec: CoupledWarmupTrialGeneratorSpec
+class BaseCoupledTrialGenerator(BlockBasedTrialGenerator):
+    spec: BaseCoupledTrialGeneratorSpec
 
-    def __init__(self, spec: CoupledWarmupTrialGeneratorSpec) -> None:
+    def __init__(self, spec: BaseCoupledTrialGeneratorSpec) -> None:
         """Initializes the generator and generates the first block.
 
         Args:
-            spec: The CoupledWarmupTrialGeneratorSpec defining task parameters.
+            spec: The BaseCoupledTrialGeneratorSpec defining task parameters.
         """
 
         super().__init__(spec)
@@ -98,43 +66,10 @@ class CoupledWarmupTrialGenerator(BlockBasedTrialGenerator):
             base_reward_sum=self.spec.reward_probability_parameters.base_reward_sum,
             block_len=self.spec.block_len,
         )
-
-    def _are_end_conditions_met(self) -> bool:
-        """
-        Check if end conditions are met to stop session
-        """
-
-        end_conditions = self.spec.trial_generation_end_parameters
-        win = end_conditions.evaluation_window
-        choice_history = self.is_right_choice_history[-win:] if win > 0 else self.is_right_choice_history
-
-        choice_len = len(choice_history)
-        left_choices = choice_history.count(False)
-        right_choices = choice_history.count(True)
-        unignored = left_choices + right_choices
-
-        finish_ratio = 0 if choice_len == 0 else (unignored) / choice_len
-        choice_ratio = 0 if unignored == 0 else right_choices / (unignored)
-        if (
-            len(self.is_right_choice_history) >= end_conditions.min_trial
-            and finish_ratio >= end_conditions.min_response_rate
-            and abs(choice_ratio - 0.5) <= end_conditions.max_choice_bias
-        ):
-            logger.debug(
-                "Warmup trial generation end conditions met: "
-                f"total trials={len(self.is_right_choice_history)}, "
-                f"finish ratio={finish_ratio}, "
-                f"choice bias={abs(choice_ratio - 0.5)}"
-            )
-            return True
-
-        logger.debug(
-            "Warmup trial generation end conditions are not met: "
-            f"total trials={len(self.is_right_choice_history)}, "
-            f"finish ratio={finish_ratio}, "
-            f"choice bias={abs(choice_ratio - 0.5)}"
-        )
-        return False
+        self.p_right_reward = self.block.p_right_reward
+        self.p_left_reward = self.block.p_left_reward
+        self.block_history = []
+        self.trials_in_block = 0
 
     def update(self, outcome: TrialOutcome | str) -> None:
         """
@@ -143,27 +78,11 @@ class CoupledWarmupTrialGenerator(BlockBasedTrialGenerator):
         are satisfied.
         :param outcome: trial outcome of previous trial
         """
+        super().update(outcome)
 
-        logger.debug(f"Updating trial generator.")
-
-        if isinstance(outcome, str):
-            outcome = TrialOutcome.model_validate_json(outcome)
-
-        self.is_right_choice_history.append(outcome.is_right_choice)
-        self.reward_history.append(outcome.is_rewarded)
         self.trials_in_block += 1
 
-        if self.spec.is_baiting:
-            if outcome.is_right_choice:
-                logger.debug("Resesting right bait.")
-                self.is_right_baited = False
-            elif outcome.is_right_choice is False:
-                logger.debug("Resesting left bait.")
-                self.is_left_baited = False
-
-        switch_block = self._is_block_switch_allowed()
-
-        if switch_block:
+        if self._is_block_switch_allowed():
             logger.info("Switching block.")
             self.trials_in_block = 0
             self.block = self._generate_next_block(
@@ -173,17 +92,6 @@ class CoupledWarmupTrialGenerator(BlockBasedTrialGenerator):
                 block_len=self.spec.block_len,
             )
             self.block_history.append(self.block)
-
-    def _is_block_switch_allowed(self) -> True:
-
-        """
-        Warmup switches block every update
-
-        Returns:
-            True
-        """
-
-        return True
 
     @staticmethod
     def _generate_next_block(
@@ -250,5 +158,6 @@ class CoupledWarmupTrialGenerator(BlockBasedTrialGenerator):
         return Block(
             p_right_reward=p_right_reward,
             p_left_reward=p_left_reward,
-            min_length=next_block_len,
+            right_length=next_block_len,
+            left_length=next_block_len,
         )

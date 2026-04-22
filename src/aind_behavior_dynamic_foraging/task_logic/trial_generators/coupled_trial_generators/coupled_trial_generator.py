@@ -5,10 +5,9 @@ from typing import Literal, Optional
 import numpy as np
 from pydantic import BaseModel, Field
 
-from ..trial_models import TrialOutcome
-from .coupled_warmup_trial_generator import (
-    CoupledWarmupTrialGenerator,
-    CoupledWarmupTrialGeneratorSpec,
+from .base_coupled_trial_generator import (
+    BaseCoupledTrialGenerator,
+    BaseCoupledTrialGeneratorSpec,
 )
 
 logger = logging.getLogger(__name__)
@@ -55,7 +54,7 @@ class BehaviorStabilityParameters(BaseModel):
     )
 
 
-class CoupledTrialGeneratorSpec(CoupledWarmupTrialGeneratorSpec):
+class CoupledTrialGeneratorSpec(BaseCoupledTrialGeneratorSpec):
     type: Literal["CoupledTrialGenerator"] = "CoupledTrialGenerator"
 
     trial_generation_end_parameters: CoupledTrialGenerationEndConditions = Field(
@@ -81,10 +80,10 @@ class CoupledTrialGeneratorSpec(CoupledWarmupTrialGeneratorSpec):
         return CoupledTrialGenerator(self)
 
 
-class CoupledTrialGenerator(CoupledWarmupTrialGenerator):
+class CoupledTrialGenerator(BaseCoupledTrialGenerator):
     """Trial generator for a coupled block-based dynamic foraging task.
 
-    Extends BlockBasedTrialGenerator with session end conditions, baiting state
+    Extends TwoArmedBanditTrialGenerator with session end conditions, baiting state
     management, and behavior-dependent block switching.
 
     Attributes:
@@ -271,10 +270,11 @@ class CoupledTrialGenerator(CoupledWarmupTrialGenerator):
 
         if self.spec.extend_block_on_no_response and self.is_right_choice_history[-1] is None:
             logger.info("Extending minimum block length due to ignored trial.")
-            self.block.min_length += 1
+            self.block.right_length += 1
+            self.block.left_length += 1
 
         # has planned block length been reached?
-        block_length_ok = self.trials_in_block >= self.block.min_length
+        block_length_ok = self.trials_in_block >= self.block.right_length  # right and left lenght are coupled
         logger.debug(f"Planned block length reached: {block_length_ok}")
 
         # is behavior qualified to switch?
