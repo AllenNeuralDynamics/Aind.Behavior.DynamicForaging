@@ -59,7 +59,8 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
     spec: UncoupledTrialGeneratorSpec
 
     def __init__(self, spec: UncoupledTrialGeneratorSpec) -> None:
-        """Initializes the generator and records the session start time.
+        """Records the session start time, calculates right and left block stagger, and generates first block. 
+        Code adapted from https://github.com/AllenNeuralDynamics/dynamic-foraging-task/blob/develop/src/foraging_gui/reward_schedules/uncoupled_block.py
 
         Args:
             spec: The UncoupledTrialGeneratorSpec defining task parameters.

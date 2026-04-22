@@ -274,7 +274,7 @@ class CoupledTrialGenerator(BaseCoupledTrialGenerator):
             self.block.left_length += 1
 
         # has planned block length been reached?
-        block_length_ok = self.trials_in_block >= self.block.right_length  # right and left lenght are coupled
+        block_length_ok = self.trials_in_block >= self.block.right_length  # right and left length are coupled
         logger.debug(f"Planned block length reached: {block_length_ok}")
 
         # is behavior qualified to switch?
