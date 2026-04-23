@@ -50,7 +50,7 @@ namespace AindDynamicForagingDataSchema
         public AindDynamicForagingRig()
         {
             _aindBehaviorServicesPkgVersion = "0.13.5";
-            _version = "0.0.2-rc25";
+            _version = "0.0.2-rc27";
             _triggeredCameraController = new CameraControllerSpinnakerCamera();
             _harpBehavior = new HarpBehavior();
             _harpClockGenerator = new HarpWhiteRabbit();
@@ -433,7 +433,7 @@ namespace AindDynamicForagingDataSchema
             _name = "AindDynamicForaging";
             _description = "";
             _taskParameters = new AindDynamicForagingTaskParameters();
-            _version = "0.0.2-rc25";
+            _version = "0.0.2-rc27";
         }
     
         protected AindDynamicForagingTaskLogic(AindDynamicForagingTaskLogic other)
@@ -772,6 +772,116 @@ namespace AindDynamicForagingDataSchema
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class AutoWaterParameters
+    {
+    
+        private int _minIgnoredTrials;
+    
+        private int _minUnrewardedTrials;
+    
+        private double _rewardFraction;
+    
+        public AutoWaterParameters()
+        {
+            _minIgnoredTrials = 3;
+            _minUnrewardedTrials = 3;
+            _rewardFraction = 0.8D;
+        }
+    
+        protected AutoWaterParameters(AutoWaterParameters other)
+        {
+            _minIgnoredTrials = other._minIgnoredTrials;
+            _minUnrewardedTrials = other._minUnrewardedTrials;
+            _rewardFraction = other._rewardFraction;
+        }
+    
+        /// <summary>
+        /// Minimum consecutive ignored trials before auto water is triggered.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("min_ignored_trials")]
+        [System.ComponentModel.DescriptionAttribute("Minimum consecutive ignored trials before auto water is triggered.")]
+        public int MinIgnoredTrials
+        {
+            get
+            {
+                return _minIgnoredTrials;
+            }
+            set
+            {
+                _minIgnoredTrials = value;
+            }
+        }
+    
+        /// <summary>
+        /// Minimum consecutive unrewarded trials before auto water is triggered.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("min_unrewarded_trials")]
+        [System.ComponentModel.DescriptionAttribute("Minimum consecutive unrewarded trials before auto water is triggered.")]
+        public int MinUnrewardedTrials
+        {
+            get
+            {
+                return _minUnrewardedTrials;
+            }
+            set
+            {
+                _minUnrewardedTrials = value;
+            }
+        }
+    
+        /// <summary>
+        /// Fraction of full reward volume delivered during auto water (0=none, 1=full).
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("reward_fraction")]
+        [System.ComponentModel.DescriptionAttribute("Fraction of full reward volume delivered during auto water (0=none, 1=full).")]
+        public double RewardFraction
+        {
+            get
+            {
+                return _rewardFraction;
+            }
+            set
+            {
+                _rewardFraction = value;
+            }
+        }
+    
+        public System.IObservable<AutoWaterParameters> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new AutoWaterParameters(this)));
+        }
+    
+        public System.IObservable<AutoWaterParameters> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new AutoWaterParameters(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("MinIgnoredTrials = " + _minIgnoredTrials + ", ");
+            stringBuilder.Append("MinUnrewardedTrials = " + _minUnrewardedTrials + ", ");
+            stringBuilder.Append("RewardFraction = " + _rewardFraction);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class BaseCoupledTrialGeneratorSpec : TrialGeneratorSpec
     {
     
@@ -785,9 +895,15 @@ namespace AindDynamicForagingDataSchema
     
         private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _blockLen;
     
-        private bool _isBaiting;
+        private int _minBlockReward;
+    
+        private int _kernelSize;
     
         private RewardProbabilityParameters _rewardProbabilityParameters;
+    
+        private AutoWaterParameters _autowaterParameters;
+    
+        private bool _isBaiting;
     
         public BaseCoupledTrialGeneratorSpec()
         {
@@ -796,8 +912,11 @@ namespace AindDynamicForagingDataSchema
             _rewardConsumptionDuration = 3D;
             _interTrialIntervalDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _blockLen = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
-            _isBaiting = false;
+            _minBlockReward = 1;
+            _kernelSize = 2;
             _rewardProbabilityParameters = new RewardProbabilityParameters();
+            _autowaterParameters = new AutoWaterParameters();
+            _isBaiting = false;
         }
     
         protected BaseCoupledTrialGeneratorSpec(BaseCoupledTrialGeneratorSpec other) : 
@@ -808,8 +927,11 @@ namespace AindDynamicForagingDataSchema
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
             _blockLen = other._blockLen;
-            _isBaiting = other._isBaiting;
+            _minBlockReward = other._minBlockReward;
+            _kernelSize = other._kernelSize;
             _rewardProbabilityParameters = other._rewardProbabilityParameters;
+            _autowaterParameters = other._autowaterParameters;
+            _isBaiting = other._isBaiting;
         }
     
         /// <summary>
@@ -901,20 +1023,33 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
-        /// <summary>
-        /// Whether uncollected rewards carry over to the next trial.
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("is_baiting")]
-        [System.ComponentModel.DescriptionAttribute("Whether uncollected rewards carry over to the next trial.")]
-        public bool IsBaiting
+        [Newtonsoft.Json.JsonPropertyAttribute("min_block_reward")]
+        public int MinBlockReward
         {
             get
             {
-                return _isBaiting;
+                return _minBlockReward;
             }
             set
             {
-                _isBaiting = value;
+                _minBlockReward = value;
+            }
+        }
+    
+        /// <summary>
+        /// Kernel to evaluate choice fraction.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("kernel_size")]
+        [System.ComponentModel.DescriptionAttribute("Kernel to evaluate choice fraction.")]
+        public int KernelSize
+        {
+            get
+            {
+                return _kernelSize;
+            }
+            set
+            {
+                _kernelSize = value;
             }
         }
     
@@ -933,6 +1068,42 @@ namespace AindDynamicForagingDataSchema
             set
             {
                 _rewardProbabilityParameters = value;
+            }
+        }
+    
+        /// <summary>
+        /// Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("autowater_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Auto water settings. If set, free water is delivered when the animal exceeds the " +
+            "ignored or unrewarded trial thresholds.")]
+        public AutoWaterParameters AutowaterParameters
+        {
+            get
+            {
+                return _autowaterParameters;
+            }
+            set
+            {
+                _autowaterParameters = value;
+            }
+        }
+    
+        /// <summary>
+        /// Whether uncollected rewards carry over to the next trial.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("is_baiting")]
+        [System.ComponentModel.DescriptionAttribute("Whether uncollected rewards carry over to the next trial.")]
+        public bool IsBaiting
+        {
+            get
+            {
+                return _isBaiting;
+            }
+            set
+            {
+                _isBaiting = value;
             }
         }
     
@@ -957,8 +1128,11 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
             stringBuilder.Append("BlockLen = " + _blockLen + ", ");
-            stringBuilder.Append("IsBaiting = " + _isBaiting + ", ");
-            stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters);
+            stringBuilder.Append("MinBlockReward = " + _minBlockReward + ", ");
+            stringBuilder.Append("KernelSize = " + _kernelSize + ", ");
+            stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters + ", ");
+            stringBuilder.Append("AutowaterParameters = " + _autowaterParameters + ", ");
+            stringBuilder.Append("IsBaiting = " + _isBaiting);
             return true;
         }
     }
@@ -1644,19 +1818,21 @@ namespace AindDynamicForagingDataSchema
     
         private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _blockLen;
     
-        private bool _isBaiting;
+        private int _minBlockReward;
+    
+        private int _kernelSize;
     
         private RewardProbabilityParameters _rewardProbabilityParameters;
+    
+        private AutoWaterParameters _autowaterParameters;
+    
+        private bool _isBaiting;
     
         private CoupledTrialGenerationEndConditions _trialGenerationEndParameters;
     
         private BehaviorStabilityParameters _behaviorStabilityParameters;
     
         private bool _extendBlockOnNoResponse;
-    
-        private int _minBlockReward;
-    
-        private int _kernelSize;
     
         public CoupledTrialGeneratorSpec()
         {
@@ -1665,13 +1841,14 @@ namespace AindDynamicForagingDataSchema
             _rewardConsumptionDuration = 3D;
             _interTrialIntervalDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _blockLen = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
-            _isBaiting = false;
+            _minBlockReward = 1;
+            _kernelSize = 2;
             _rewardProbabilityParameters = new RewardProbabilityParameters();
+            _autowaterParameters = new AutoWaterParameters();
+            _isBaiting = false;
             _trialGenerationEndParameters = new CoupledTrialGenerationEndConditions();
             _behaviorStabilityParameters = new BehaviorStabilityParameters();
             _extendBlockOnNoResponse = true;
-            _minBlockReward = 1;
-            _kernelSize = 2;
         }
     
         protected CoupledTrialGeneratorSpec(CoupledTrialGeneratorSpec other) : 
@@ -1682,13 +1859,14 @@ namespace AindDynamicForagingDataSchema
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
             _blockLen = other._blockLen;
-            _isBaiting = other._isBaiting;
+            _minBlockReward = other._minBlockReward;
+            _kernelSize = other._kernelSize;
             _rewardProbabilityParameters = other._rewardProbabilityParameters;
+            _autowaterParameters = other._autowaterParameters;
+            _isBaiting = other._isBaiting;
             _trialGenerationEndParameters = other._trialGenerationEndParameters;
             _behaviorStabilityParameters = other._behaviorStabilityParameters;
             _extendBlockOnNoResponse = other._extendBlockOnNoResponse;
-            _minBlockReward = other._minBlockReward;
-            _kernelSize = other._kernelSize;
         }
     
         /// <summary>
@@ -1780,20 +1958,33 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
-        /// <summary>
-        /// Whether uncollected rewards carry over to the next trial.
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("is_baiting")]
-        [System.ComponentModel.DescriptionAttribute("Whether uncollected rewards carry over to the next trial.")]
-        public bool IsBaiting
+        [Newtonsoft.Json.JsonPropertyAttribute("min_block_reward")]
+        public int MinBlockReward
         {
             get
             {
-                return _isBaiting;
+                return _minBlockReward;
             }
             set
             {
-                _isBaiting = value;
+                _minBlockReward = value;
+            }
+        }
+    
+        /// <summary>
+        /// Kernel to evaluate choice fraction.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("kernel_size")]
+        [System.ComponentModel.DescriptionAttribute("Kernel to evaluate choice fraction.")]
+        public int KernelSize
+        {
+            get
+            {
+                return _kernelSize;
+            }
+            set
+            {
+                _kernelSize = value;
             }
         }
     
@@ -1812,6 +2003,42 @@ namespace AindDynamicForagingDataSchema
             set
             {
                 _rewardProbabilityParameters = value;
+            }
+        }
+    
+        /// <summary>
+        /// Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("autowater_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Auto water settings. If set, free water is delivered when the animal exceeds the " +
+            "ignored or unrewarded trial thresholds.")]
+        public AutoWaterParameters AutowaterParameters
+        {
+            get
+            {
+                return _autowaterParameters;
+            }
+            set
+            {
+                _autowaterParameters = value;
+            }
+        }
+    
+        /// <summary>
+        /// Whether uncollected rewards carry over to the next trial.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("is_baiting")]
+        [System.ComponentModel.DescriptionAttribute("Whether uncollected rewards carry over to the next trial.")]
+        public bool IsBaiting
+        {
+            get
+            {
+                return _isBaiting;
+            }
+            set
+            {
+                _isBaiting = value;
             }
         }
     
@@ -1870,36 +2097,6 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
-        [Newtonsoft.Json.JsonPropertyAttribute("min_block_reward")]
-        public int MinBlockReward
-        {
-            get
-            {
-                return _minBlockReward;
-            }
-            set
-            {
-                _minBlockReward = value;
-            }
-        }
-    
-        /// <summary>
-        /// Kernel to evaluate choice fraction.
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("kernel_size")]
-        [System.ComponentModel.DescriptionAttribute("Kernel to evaluate choice fraction.")]
-        public int KernelSize
-        {
-            get
-            {
-                return _kernelSize;
-            }
-            set
-            {
-                _kernelSize = value;
-            }
-        }
-    
         public System.IObservable<CoupledTrialGeneratorSpec> Generate()
         {
             return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new CoupledTrialGeneratorSpec(this)));
@@ -1921,13 +2118,14 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
             stringBuilder.Append("BlockLen = " + _blockLen + ", ");
-            stringBuilder.Append("IsBaiting = " + _isBaiting + ", ");
+            stringBuilder.Append("MinBlockReward = " + _minBlockReward + ", ");
+            stringBuilder.Append("KernelSize = " + _kernelSize + ", ");
             stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters + ", ");
+            stringBuilder.Append("AutowaterParameters = " + _autowaterParameters + ", ");
+            stringBuilder.Append("IsBaiting = " + _isBaiting + ", ");
             stringBuilder.Append("TrialGenerationEndParameters = " + _trialGenerationEndParameters + ", ");
             stringBuilder.Append("BehaviorStabilityParameters = " + _behaviorStabilityParameters + ", ");
-            stringBuilder.Append("ExtendBlockOnNoResponse = " + _extendBlockOnNoResponse + ", ");
-            stringBuilder.Append("MinBlockReward = " + _minBlockReward + ", ");
-            stringBuilder.Append("KernelSize = " + _kernelSize);
+            stringBuilder.Append("ExtendBlockOnNoResponse = " + _extendBlockOnNoResponse);
             return true;
         }
     }
@@ -2081,9 +2279,15 @@ namespace AindDynamicForagingDataSchema
     
         private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _blockLen;
     
-        private bool _isBaiting;
+        private int _minBlockReward;
+    
+        private int _kernelSize;
     
         private RewardProbabilityParameters _rewardProbabilityParameters;
+    
+        private AutoWaterParameters _autowaterParameters;
+    
+        private bool _isBaiting;
     
         private CoupledWarmupTrialGenerationEndConditions _trialGenerationEndParameters;
     
@@ -2094,8 +2298,11 @@ namespace AindDynamicForagingDataSchema
             _rewardConsumptionDuration = 3D;
             _interTrialIntervalDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _blockLen = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
-            _isBaiting = true;
+            _minBlockReward = 1;
+            _kernelSize = 2;
             _rewardProbabilityParameters = new RewardProbabilityParameters();
+            _autowaterParameters = new AutoWaterParameters();
+            _isBaiting = true;
             _trialGenerationEndParameters = new CoupledWarmupTrialGenerationEndConditions();
         }
     
@@ -2107,8 +2314,11 @@ namespace AindDynamicForagingDataSchema
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
             _blockLen = other._blockLen;
-            _isBaiting = other._isBaiting;
+            _minBlockReward = other._minBlockReward;
+            _kernelSize = other._kernelSize;
             _rewardProbabilityParameters = other._rewardProbabilityParameters;
+            _autowaterParameters = other._autowaterParameters;
+            _isBaiting = other._isBaiting;
             _trialGenerationEndParameters = other._trialGenerationEndParameters;
         }
     
@@ -2201,20 +2411,33 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
-        /// <summary>
-        /// Whether uncollected rewards carry over to the next trial.
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("is_baiting")]
-        [System.ComponentModel.DescriptionAttribute("Whether uncollected rewards carry over to the next trial.")]
-        public bool IsBaiting
+        [Newtonsoft.Json.JsonPropertyAttribute("min_block_reward")]
+        public int MinBlockReward
         {
             get
             {
-                return _isBaiting;
+                return _minBlockReward;
             }
             set
             {
-                _isBaiting = value;
+                _minBlockReward = value;
+            }
+        }
+    
+        /// <summary>
+        /// Kernel to evaluate choice fraction.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("kernel_size")]
+        [System.ComponentModel.DescriptionAttribute("Kernel to evaluate choice fraction.")]
+        public int KernelSize
+        {
+            get
+            {
+                return _kernelSize;
+            }
+            set
+            {
+                _kernelSize = value;
             }
         }
     
@@ -2233,6 +2456,42 @@ namespace AindDynamicForagingDataSchema
             set
             {
                 _rewardProbabilityParameters = value;
+            }
+        }
+    
+        /// <summary>
+        /// Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("autowater_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Auto water settings. If set, free water is delivered when the animal exceeds the " +
+            "ignored or unrewarded trial thresholds.")]
+        public AutoWaterParameters AutowaterParameters
+        {
+            get
+            {
+                return _autowaterParameters;
+            }
+            set
+            {
+                _autowaterParameters = value;
+            }
+        }
+    
+        /// <summary>
+        /// Whether uncollected rewards carry over to the next trial.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("is_baiting")]
+        [System.ComponentModel.DescriptionAttribute("Whether uncollected rewards carry over to the next trial.")]
+        public bool IsBaiting
+        {
+            get
+            {
+                return _isBaiting;
+            }
+            set
+            {
+                _isBaiting = value;
             }
         }
     
@@ -2275,8 +2534,11 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
             stringBuilder.Append("BlockLen = " + _blockLen + ", ");
-            stringBuilder.Append("IsBaiting = " + _isBaiting + ", ");
+            stringBuilder.Append("MinBlockReward = " + _minBlockReward + ", ");
+            stringBuilder.Append("KernelSize = " + _kernelSize + ", ");
             stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters + ", ");
+            stringBuilder.Append("AutowaterParameters = " + _autowaterParameters + ", ");
+            stringBuilder.Append("IsBaiting = " + _isBaiting + ", ");
             stringBuilder.Append("TrialGenerationEndParameters = " + _trialGenerationEndParameters);
             return true;
         }
@@ -6610,6 +6872,11 @@ namespace AindDynamicForagingDataSchema
             return Process<AuditorySecondaryReinforcer>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<AutoWaterParameters> source)
+        {
+            return Process<AutoWaterParameters>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<BaseCoupledTrialGeneratorSpec> source)
         {
             return Process<BaseCoupledTrialGeneratorSpec>(source);
@@ -6803,6 +7070,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AindDynamicForagingTaskLogic>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AindDynamicForagingTaskParameters>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AuditorySecondaryReinforcer>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AutoWaterParameters>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BaseCoupledTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BaseModel>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BehaviorStabilityParameters>))]

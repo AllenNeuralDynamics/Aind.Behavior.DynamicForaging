@@ -9,8 +9,8 @@
           "type": "string"
         },
         "version": {
-          "const": "0.0.2-rc25",
-          "default": "0.0.2-rc25",
+          "const": "0.0.2-rc27",
+          "default": "0.0.2-rc27",
           "title": "Version",
           "type": "string"
         },
@@ -151,8 +151,8 @@
           "description": "Parameters of the task logic"
         },
         "version": {
-          "const": "0.0.2-rc25",
-          "default": "0.0.2-rc25",
+          "const": "0.0.2-rc27",
+          "default": "0.0.2-rc27",
           "title": "Version",
           "type": "string"
         },
@@ -434,6 +434,34 @@
       "title": "AuditorySecondaryReinforcer",
       "type": "object"
     },
+    "AutoWaterParameters": {
+      "properties": {
+        "min_ignored_trials": {
+          "default": 3,
+          "description": "Minimum consecutive ignored trials before auto water is triggered.",
+          "minimum": 0,
+          "title": "Min Ignored Trials",
+          "type": "integer"
+        },
+        "min_unrewarded_trials": {
+          "default": 3,
+          "description": "Minimum consecutive unrewarded trials before auto water is triggered.",
+          "minimum": 0,
+          "title": "Min Unrewarded Trials",
+          "type": "integer"
+        },
+        "reward_fraction": {
+          "default": 0.8,
+          "description": "Fraction of full reward volume delivered during auto water (0=none, 1=full).",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Reward Fraction",
+          "type": "number"
+        }
+      },
+      "title": "AutoWaterParameters",
+      "type": "object"
+    },
     "Axis": {
       "description": "Motor axis available",
       "enum": [
@@ -585,11 +613,17 @@
           },
           "description": "Distribution describing block length."
         },
-        "is_baiting": {
-          "default": false,
-          "description": "Whether uncollected rewards carry over to the next trial.",
-          "title": "Is Baiting",
-          "type": "boolean"
+        "min_block_reward": {
+          "default": 1,
+          "minimum": 0,
+          "title": "Minimal rewards in a block to switch",
+          "type": "integer"
+        },
+        "kernel_size": {
+          "default": 2,
+          "description": "Kernel to evaluate choice fraction.",
+          "title": "Kernel Size",
+          "type": "integer"
         },
         "reward_probability_parameters": {
           "$ref": "#/$defs/RewardProbabilityParameters",
@@ -603,6 +637,28 @@
             ]
           },
           "description": "Parameters defining the reward probability structure."
+        },
+        "autowater_parameters": {
+          "default": {
+            "min_ignored_trials": 3,
+            "min_unrewarded_trials": 3,
+            "reward_fraction": 0.8
+          },
+          "description": "Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/AutoWaterParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "is_baiting": {
+          "default": false,
+          "description": "Whether uncollected rewards carry over to the next trial.",
+          "title": "Is Baiting",
+          "type": "boolean"
         }
       },
       "title": "BaseCoupledTrialGeneratorSpec",
@@ -1036,11 +1092,17 @@
           },
           "description": "Distribution describing block length."
         },
-        "is_baiting": {
-          "default": false,
-          "description": "Whether uncollected rewards carry over to the next trial.",
-          "title": "Is Baiting",
-          "type": "boolean"
+        "min_block_reward": {
+          "default": 1,
+          "minimum": 0,
+          "title": "Minimal rewards in a block to switch",
+          "type": "integer"
+        },
+        "kernel_size": {
+          "default": 2,
+          "description": "Kernel to evaluate choice fraction.",
+          "title": "Kernel Size",
+          "type": "integer"
         },
         "reward_probability_parameters": {
           "$ref": "#/$defs/RewardProbabilityParameters",
@@ -1054,6 +1116,28 @@
             ]
           },
           "description": "Parameters defining the reward probability structure."
+        },
+        "autowater_parameters": {
+          "default": {
+            "min_ignored_trials": 3,
+            "min_unrewarded_trials": 3,
+            "reward_fraction": 0.8
+          },
+          "description": "Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/AutoWaterParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "is_baiting": {
+          "default": false,
+          "description": "Whether uncollected rewards carry over to the next trial.",
+          "title": "Is Baiting",
+          "type": "boolean"
         },
         "trial_generation_end_parameters": {
           "$ref": "#/$defs/CoupledTrialGenerationEndConditions",
@@ -1087,18 +1171,6 @@
           "description": "Whether to extend the minimum block length by one trial when the animal does not respond.",
           "title": "Extend Block On No Response",
           "type": "boolean"
-        },
-        "min_block_reward": {
-          "default": 1,
-          "minimum": 0,
-          "title": "Minimal rewards in a block to switch",
-          "type": "integer"
-        },
-        "kernel_size": {
-          "default": 2,
-          "description": "Kernel to evaluate choice fraction.",
-          "title": "Kernel Size",
-          "type": "integer"
         }
       },
       "title": "CoupledTrialGeneratorSpec",
@@ -1209,12 +1281,17 @@
           },
           "description": "Distribution describing block length."
         },
-        "is_baiting": {
-          "const": true,
-          "default": true,
-          "description": "Whether uncollected rewards carry over to the next trial.",
-          "title": "Is Baiting",
-          "type": "boolean"
+        "min_block_reward": {
+          "default": 1,
+          "minimum": 0,
+          "title": "Minimal rewards in a block to switch",
+          "type": "integer"
+        },
+        "kernel_size": {
+          "default": 2,
+          "description": "Kernel to evaluate choice fraction.",
+          "title": "Kernel Size",
+          "type": "integer"
         },
         "reward_probability_parameters": {
           "$ref": "#/$defs/RewardProbabilityParameters",
@@ -1228,6 +1305,29 @@
             ]
           },
           "description": "Parameters defining the reward probability structure."
+        },
+        "autowater_parameters": {
+          "default": {
+            "min_ignored_trials": 3,
+            "min_unrewarded_trials": 3,
+            "reward_fraction": 0.8
+          },
+          "description": "Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/AutoWaterParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "is_baiting": {
+          "const": true,
+          "default": true,
+          "description": "Whether uncollected rewards carry over to the next trial.",
+          "title": "Is Baiting",
+          "type": "boolean"
         },
         "trial_generation_end_parameters": {
           "$ref": "#/$defs/CoupledWarmupTrialGenerationEndConditions",
