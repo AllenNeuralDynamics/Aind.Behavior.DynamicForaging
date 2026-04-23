@@ -47,7 +47,7 @@ class UncoupledTrialGeneratorSpec(BlockBasedTrialGeneratorSpec):
     reward_probabilities: list[float] = Field(
         default=[0.1, 0.5, 0.9],
         min_length=2,
-        description="Reward probabilites to use during session.",
+        description="Reward probabilities to use during session.",
     )
     maximum_dominance_streak: float = Field(
         default=3,
@@ -190,15 +190,15 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
         dominated for too many consecutive blocks.
         """
         if self.block.p_right_reward > self.block.p_left_reward:
-            logger.info("Increminting right dominance streak and reseting left.")
+            logger.info("Incrementing right dominance streak and resetting left.")
             self.right_dominance_streak += 1
             self.left_dominance_streak = 0
         elif self.block.p_left_reward > self.block.p_right_reward:
-            logger.info("Increminting left dominance streak and reseting right.")
+            logger.info("Incrementing left dominance streak and resetting right.")
             self.left_dominance_streak += 1
             self.right_dominance_streak = 0
         else:
-            logger.info("Increminting right and left dominance streak.")
+            logger.info("Incrementing right and left dominance streak.")
             self.right_dominance_streak += 1
             self.left_dominance_streak += 1
 
@@ -279,7 +279,7 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
                 to the minimum reward probability.
             reward_probabilities: List of candidate probabilities to sample from.
                 Should already exclude the previous block's probability to prevent repeats.
-            block_len: Disribution used to calculate trials in block.
+            block_len: Distribution used to calculate trials in block.
             block_stagger: Number of trials to stagger right and left block length.
 
         Returns:
