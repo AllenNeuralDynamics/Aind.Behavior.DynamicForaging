@@ -24,6 +24,8 @@ from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_ge
     CoupledWarmupTrialGenerationEndConditions,
 )
 from aind_behavior_services.task.distributions import (
+    UniformDistribution,
+    UniformDistributionParameters,
     ExponentialDistribution,
     ExponentialDistributionParameters,
     Scalar,
@@ -205,7 +207,7 @@ def make_s_stage_3():
                 reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
                 lick_spout_retraction=False,
                 trial_generator=UncoupledTrialGeneratorSpec(
-                    trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
+                    trial_generation_end_parameters=UncoupledTrialGenerationEndConditions(
                         max_trial=1000,
                         max_time=75,
                         min_time=30,
@@ -213,9 +215,8 @@ def make_s_stage_3():
                         ignore_ratio_threshold=0.83,
                     ),
                     reward_probabilities=[0.1, 0.4, 0.7],
-                    block_len=ExponentialDistribution(
-                        distribution_parameters=ExponentialDistributionParameters(rate=0.1),
-                        truncation_parameters=TruncationParameters(min=20, max=35),
+                    block_len=UniformDistribution(
+                        distribution_parameters=UniformDistributionParameters(min=20, max=35),
                     ),
                     inter_trial_interval_duration=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
@@ -241,7 +242,7 @@ def make_s_stage_final():
                 reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
                 lick_spout_retraction=False,
                 trial_generator=UncoupledTrialGeneratorSpec(
-                    trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
+                    trial_generation_end_parameters=UncoupledTrialGenerationEndConditions(
                         max_trial=1000,
                         max_time=75,
                         min_time=30,
@@ -249,9 +250,8 @@ def make_s_stage_final():
                         ignore_ratio_threshold=0.83,
                     ),
                     reward_probabilities=[0.1, 0.4, 0.7],
-                    block_len=ExponentialDistribution(
-                        distribution_parameters=ExponentialDistributionParameters(rate=0.1),
-                        truncation_parameters=TruncationParameters(min=20, max=35),
+                    block_len=UniformDistribution(
+                        distribution_parameters=UniformDistributionParameters(min=20, max=35),
                     ),
                     inter_trial_interval_duration=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
@@ -277,7 +277,7 @@ def make_s_stage_graduated():
                 reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
                 lick_spout_retraction=False,
                 trial_generator=UncoupledTrialGeneratorSpec(
-                    trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
+                    trial_generation_end_parameters=UncoupledTrialGenerationEndConditions(
                         max_trial=1000,
                         max_time=75,
                         min_time=30,
@@ -285,9 +285,8 @@ def make_s_stage_graduated():
                         ignore_ratio_threshold=0.83,
                     ),
                     reward_probabilities=[0.1, 0.4, 0.7],
-                    block_len=ExponentialDistribution(
-                        distribution_parameters=ExponentialDistributionParameters(rate=0.1),
-                        truncation_parameters=TruncationParameters(min=20, max=35),
+                    block_len=UniformDistribution(
+                        distribution_parameters=UniformDistributionParameters(min=20, max=35),
                     ),
                     inter_trial_interval_duration=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
