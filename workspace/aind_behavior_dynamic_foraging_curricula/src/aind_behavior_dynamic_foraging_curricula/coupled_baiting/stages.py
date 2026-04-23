@@ -10,7 +10,7 @@ from aind_behavior_dynamic_foraging.task_logic.trial_generators import (
     TrialGeneratorCompositeSpec,
 )
 from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generators.base_coupled_trial_generator import (
-    RewardProbabilityParameters
+    RewardProbabilityParameters,
 )
 from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generators.coupled_trial_generator import (
     BehaviorStabilityParameters,
