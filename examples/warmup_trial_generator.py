@@ -3,7 +3,9 @@ import random
 
 import numpy as np
 
-from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generators.coupled_warmup_trial_generator import CoupledWarmupTrialGeneratorSpec
+from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generators.coupled_warmup_trial_generator import (
+    CoupledWarmupTrialGeneratorSpec,
+)
 from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial, TrialOutcome
 
 

@@ -83,8 +83,7 @@ class CoupledTrialGeneratorSpec(BaseCoupledTrialGeneratorSpec):
 class CoupledTrialGenerator(BaseCoupledTrialGenerator):
     """Trial generator for a coupled block-based dynamic foraging task.
 
-    Extends TwoArmedBanditTrialGenerator with session end conditions, baiting state
-    management, and behavior-dependent block switching.
+    Extends BaseCoupledTrialGenerator with session end conditions and behavior-dependent block switching.
 
     Attributes:
         spec: The CoupledTrialGeneratorSpec defining task parameters.

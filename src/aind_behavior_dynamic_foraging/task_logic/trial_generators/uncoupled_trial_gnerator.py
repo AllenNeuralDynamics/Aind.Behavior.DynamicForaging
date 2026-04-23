@@ -152,7 +152,6 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
         self.trials_in_left_block += 1
         self.trials_in_right_block += 1
 
-
         switches = []
         if left_switching := self._is_block_switch_allowed(self.trials_in_left_block, self.block.left_length):
             switches.append(False)
@@ -161,7 +160,7 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
 
         if right_switching or left_switching:
             self._update_dominance_streak()  # update dominant block counts before switching
-            for switch in switches: 
+            for switch in switches:
                 new_block = self._generate_next_block(
                     right_switching=switch,
                     right_dominance_streak=self.right_dominance_streak,

@@ -1,5 +1,6 @@
 import logging
 import unittest
+
 import numpy as np
 
 from aind_behavior_dynamic_foraging.task_logic.trial_generators.uncoupled_trial_gnerator import (
