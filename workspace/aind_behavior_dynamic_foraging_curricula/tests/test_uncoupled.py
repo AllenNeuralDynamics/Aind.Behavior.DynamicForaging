@@ -1,8 +1,8 @@
 import unittest
 
 from aind_behavior_dynamic_foraging_curricula.metrics import DynamicForagingMetrics
-from aind_behavior_dynamic_foraging_curricula.uncoupled_baiting import CURRICULUM, TRAINER
-from aind_behavior_dynamic_foraging_curricula.uncoupled_baiting.stages import (
+from aind_behavior_dynamic_foraging_curricula.uncoupled import CURRICULUM, TRAINER
+from aind_behavior_dynamic_foraging_curricula.uncoupled.stages import (
     make_s_stage_1,
     make_s_stage_1_warmup,
     make_s_stage_2,
