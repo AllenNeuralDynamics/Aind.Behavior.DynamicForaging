@@ -11,7 +11,11 @@ from aind_behavior_services.task.distributions_utils import draw_sample
 from pydantic import BaseModel, Field
 
 from ..trial_models import TrialOutcome
-from .block_based_trial_generator import Block, BlockBasedTrialGenerator, BlockBasedTrialGeneratorSpec
+from .block_based_trial_generator import (
+    Block,
+    BlockBasedTrialGenerator,
+    BlockBasedTrialGeneratorSpec,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -41,10 +45,13 @@ class UncoupledTrialGeneratorSpec(BlockBasedTrialGeneratorSpec):
     )
 
     reward_probabilities: list[float] = Field(
-        default=[0.1, 0.5, 0.9], min_length=2, description="Reward probabilites to use during session."
+        default=[0.1, 0.5, 0.9],
+        min_length=2,
+        description="Reward probabilites to use during session.",
     )
     maximum_dominance_streak: float = Field(
-        default=3, description="Maximum number of consecutive blocks a side can have the higher probability."
+        default=3,
+        description="Maximum number of consecutive blocks a side can have the higher probability.",
     )
 
     block_len: UniformDistribution = Field(
@@ -72,6 +79,9 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
     def __init__(self, spec: UncoupledTrialGeneratorSpec) -> None:
         """Records the session start time, calculates right and left block stagger, and generates first block.
         Code adapted from https://github.com/AllenNeuralDynamics/dynamic-foraging-task/blob/develop/src/foraging_gui/reward_schedules/uncoupled_block.py
+        Right and left reward probabilities evolve independently in separate blocks.
+        Block lengths are staggered. A dominance streak counter prevents one side from
+        holding the higher reward probability for too many consecutive blocks.
 
         Args:
             spec: The UncoupledTrialGeneratorSpec defining task parameters.
@@ -142,12 +152,16 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
         self.trials_in_left_block += 1
         self.trials_in_right_block += 1
 
-        right_switching = self._is_block_switch_allowed(self.trials_in_right_block, self.block.right_length)
-        left_switching = self._is_block_switch_allowed(self.trials_in_left_block, self.block.left_length)
+
+        switches = []
+        if left_switching := self._is_block_switch_allowed(self.trials_in_left_block, self.block.left_length):
+            switches.append(False)
+        if right_switching := self._is_block_switch_allowed(self.trials_in_right_block, self.block.right_length):
+            switches.append(True)
 
         if right_switching or left_switching:
             self._update_dominance_streak()  # update dominant block counts before switching
-            for switch in ([False] if left_switching else []) + ([True] if right_switching else []):
+            for switch in switches: 
                 new_block = self._generate_next_block(
                     right_switching=switch,
                     right_dominance_streak=self.right_dominance_streak,
@@ -158,17 +172,24 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
                     block_stagger=self.block_length_stagger,
                     block=self.block,
                 )
+            # reset the counter for any side whose probability changed
             if new_block.p_right_reward != self.block.p_right_reward:
                 self.trials_in_right_block = 0
             if new_block.p_left_reward != self.block.p_left_reward:
                 self.trials_in_left_block = 0
             self.block = new_block
             logger.info(
-                f"New block generated: p_right_reward={self.block.p_right_reward}, p_left_reward={self.block.p_left_reward}, right_length={self.block.right_length}, left_length={self.block.left_length}"
+                f"New block generated: p_right_reward={self.block.p_right_reward}, p_left_reward={self.block.p_left_reward}, right_length={self.block.right_length}, left_length={self.block.left_length}."
             )
 
     def _update_dominance_streak(self) -> None:
+        """Update the per-side dominance streak counters based on the current block.
 
+        The streak for the dominant side increments and the other side resets to zero.
+        If probabilities are equal, both streaks increment. These counters are used by
+        _generate_next_block to force a side to the minimum probability once it has
+        dominated for too many consecutive blocks.
+        """
         if self.block.p_right_reward > self.block.p_left_reward:
             logger.info("Increminting right dominance streak and reseting left.")
             self.right_dominance_streak += 1
@@ -183,7 +204,7 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
             self.left_dominance_streak += 1
 
     def _is_block_switch_allowed(self, trials_in_block: int, block_len: int) -> bool:
-
+        """Return True if the trial counter has exceeded the current block length."""
         return trials_in_block > block_len
 
     def _generate_first_block(self) -> Block:
@@ -194,6 +215,7 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
             A Block with valid initial reward probabilities and staggered block lengths.
         """
 
+        logger.info("Generating first block.")
         p_left_reward = np.random.choice(self.spec.reward_probabilities)
         p_right_reward = np.random.choice(self.spec.reward_probabilities)
         right_length = round(draw_sample(self.spec.block_len))
@@ -242,7 +264,7 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
 
         Updates the reward probability and length for the switching side. If the switching
         side is right (right_switching=True), the right side is updated; otherwise the left
-        side is updated. After updating, if both sides would be at the minimum reward
+        side is updated. After updating, if both sides are at the minimum reward
         probability, the switching side's block is staggered and the non-switching side is
         resampled to a non-minimum probability to ensure the task remains rewarding.
 
