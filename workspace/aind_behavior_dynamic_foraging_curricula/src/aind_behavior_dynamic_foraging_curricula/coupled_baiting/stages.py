@@ -9,13 +9,15 @@ from aind_behavior_dynamic_foraging.task_logic.trial_generators import (
     CoupledWarmupTrialGeneratorSpec,
     TrialGeneratorCompositeSpec,
 )
-from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generator import (
+from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generators.base_coupled_trial_generator import (
+    RewardProbabilityParameters
+)
+from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generators.coupled_trial_generator import (
     BehaviorStabilityParameters,
     CoupledTrialGenerationEndConditions,
 )
-from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_warmup_trial_generator import (
+from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generators.coupled_warmup_trial_generator import (
     CoupledWarmupTrialGenerationEndConditions,
-    RewardProbabilityParameters,
 )
 from aind_behavior_services.task.distributions import (
     ExponentialDistribution,
