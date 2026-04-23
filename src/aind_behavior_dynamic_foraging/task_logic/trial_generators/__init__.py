@@ -4,13 +4,13 @@ from pydantic import Field
 
 from ._base import BaseTrialGeneratorSpecModel as BaseTrialGeneratorSpecModel
 from ._base import ITrialGenerator as ITrialGenerator
-from .composite_trial_generator import TrialGeneratorCompositeSpec
 from .block_based_trial_generator import BlockBasedTrialGeneratorSpec
-from .uncoupled_trial_gnerator import UncoupledTrialGeneratorSpec
+from .composite_trial_generator import TrialGeneratorCompositeSpec
 from .coupled_trial_generators.base_coupled_trial_generator import BaseCoupledTrialGeneratorSpec
 from .coupled_trial_generators.coupled_trial_generator import CoupledTrialGeneratorSpec
 from .coupled_trial_generators.coupled_warmup_trial_generator import CoupledWarmupTrialGeneratorSpec
 from .integration_test_trial_generator import IntegrationTestTrialGeneratorSpec
+from .uncoupled_trial_gnerator import UncoupledTrialGeneratorSpec
 
 if TYPE_CHECKING:
     TrialGeneratorSpec = Union[
@@ -29,7 +29,8 @@ else:
         "TrialGeneratorSpec",
         Annotated[
             Union[
-                (   UncoupledTrialGeneratorSpec,
+                (
+                    UncoupledTrialGeneratorSpec,
                     BlockBasedTrialGeneratorSpec,
                     BaseCoupledTrialGeneratorSpec,
                     CoupledWarmupTrialGeneratorSpec,

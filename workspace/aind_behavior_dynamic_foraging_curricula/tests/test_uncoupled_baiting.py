@@ -1,7 +1,7 @@
 import unittest
 
-from aind_behavior_dynamic_foraging_curricula.uncoupled import CURRICULUM, TRAINER
 from aind_behavior_dynamic_foraging_curricula.metrics import DynamicForagingMetrics
+from aind_behavior_dynamic_foraging_curricula.uncoupled import CURRICULUM, TRAINER
 from aind_behavior_dynamic_foraging_curricula.uncoupled.stages import (
     make_s_stage_1,
     make_s_stage_1_warmup,
@@ -10,6 +10,7 @@ from aind_behavior_dynamic_foraging_curricula.uncoupled.stages import (
     make_s_stage_final,
     make_s_stage_graduated,
 )
+
 
 def make_metrics(
     foraging_efficiency_per_session: list[float] = None,
@@ -127,6 +128,7 @@ class TestStage3Transitions(unittest.TestCase):
         )
         updated = TRAINER.evaluate(self.trainer_state, metrics)
         self.assertEqual(updated.stage.name, "final")
+
 
 class TestFinalTransitions(unittest.TestCase):
     def setUp(self):

@@ -9,10 +9,6 @@ from aind_behavior_dynamic_foraging.task_logic.trial_generators import (
     CoupledWarmupTrialGeneratorSpec,
     TrialGeneratorCompositeSpec,
 )
-from aind_behavior_dynamic_foraging.task_logic.trial_generators.uncoupled_trial_gnerator import (
-    UncoupledTrialGenerationEndConditions,
-    UncoupledTrialGeneratorSpec,
-)
 from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generators.base_coupled_trial_generator import (
     RewardProbabilityParameters,
 )
@@ -23,13 +19,17 @@ from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_ge
 from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generators.coupled_warmup_trial_generator import (
     CoupledWarmupTrialGenerationEndConditions,
 )
+from aind_behavior_dynamic_foraging.task_logic.trial_generators.uncoupled_trial_gnerator import (
+    UncoupledTrialGenerationEndConditions,
+    UncoupledTrialGeneratorSpec,
+)
 from aind_behavior_services.task.distributions import (
-    UniformDistribution,
-    UniformDistributionParameters,
     ExponentialDistribution,
     ExponentialDistributionParameters,
     Scalar,
     TruncationParameters,
+    UniformDistribution,
+    UniformDistributionParameters,
 )
 
 from ..metrics import metrics_from_dataset
