@@ -6,18 +6,18 @@ from aind_behavior_dynamic_foraging.task_logic import (
 )
 from aind_behavior_dynamic_foraging.task_logic.trial_generators import (
     CoupledTrialGeneratorSpec,
+    CoupledWarmupTrialGeneratorSpec,
     TrialGeneratorCompositeSpec,
-    WarmupTrialGeneratorSpec,
 )
-from aind_behavior_dynamic_foraging.task_logic.trial_generators.block_based_trial_generator import (
+from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generators.base_coupled_trial_generator import (
     RewardProbabilityParameters,
 )
-from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generator import (
+from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generators.coupled_trial_generator import (
     BehaviorStabilityParameters,
     CoupledTrialGenerationEndConditions,
 )
-from aind_behavior_dynamic_foraging.task_logic.trial_generators.warmup_trial_generator import (
-    WarmupTrialGenerationEndConditions,
+from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generators.coupled_warmup_trial_generator import (
+    CoupledWarmupTrialGenerationEndConditions,
 )
 from aind_behavior_services.task.distributions import (
     ExponentialDistribution,
@@ -40,8 +40,8 @@ def make_s_stage_1_warmup():
                 reward_size=RewardSize(right_value_volume=4.0, left_value_volume=4.0),
                 trial_generator=TrialGeneratorCompositeSpec(
                     generators=[
-                        WarmupTrialGeneratorSpec(
-                            trial_generation_end_parameters=WarmupTrialGenerationEndConditions(
+                        CoupledWarmupTrialGeneratorSpec(
+                            trial_generation_end_parameters=CoupledWarmupTrialGenerationEndConditions(
                                 min_trial=50,
                                 max_choice_bias=0.1,
                                 min_response_rate=0.8,
@@ -50,7 +50,7 @@ def make_s_stage_1_warmup():
                             reward_probability_parameters=RewardProbabilityParameters(
                                 base_reward_sum=1, reward_pairs=[[1.0, 0.0]]
                             ),
-                            block_len=Scalar(value=1),
+                            block_length=Scalar(value=1),
                             inter_trial_interval_duration=ExponentialDistribution(
                                 distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
                                 truncation_parameters=TruncationParameters(min=1, max=7),
@@ -68,7 +68,7 @@ def make_s_stage_1_warmup():
                                 max_trial=1000,
                                 max_time=75,
                                 min_time=30,
-                                ignore_win=20000,
+                                ignore_window_length=20000,
                                 ignore_ratio_threshold=1,
                             ),
                             behavior_stability_parameters=BehaviorStabilityParameters(
@@ -79,7 +79,7 @@ def make_s_stage_1_warmup():
                             reward_probability_parameters=RewardProbabilityParameters(
                                 base_reward_sum=0.8, reward_pairs=[[1.0, 0.0]]
                             ),
-                            block_len=ExponentialDistribution(
+                            block_length=ExponentialDistribution(
                                 distribution_parameters=ExponentialDistributionParameters(rate=0.2),
                                 truncation_parameters=TruncationParameters(min=10, max=20),
                             ),
@@ -115,7 +115,7 @@ def make_s_stage_1():
                         max_trial=1000,
                         max_time=75,
                         min_time=30,
-                        ignore_win=20000,
+                        ignore_window_length=20000,
                         ignore_ratio_threshold=1,
                     ),
                     behavior_stability_parameters=BehaviorStabilityParameters(
@@ -126,7 +126,7 @@ def make_s_stage_1():
                     reward_probability_parameters=RewardProbabilityParameters(
                         base_reward_sum=0.8, reward_pairs=[[1.0, 0.0]]
                     ),
-                    block_len=ExponentialDistribution(
+                    block_length=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=0.2),
                         truncation_parameters=TruncationParameters(min=10, max=20),
                     ),
@@ -160,7 +160,7 @@ def make_s_stage_2():
                         max_trial=1000,
                         max_time=75,
                         min_time=30,
-                        ignore_win=30,
+                        ignore_window_length=30,
                         ignore_ratio_threshold=0.83,
                     ),
                     behavior_stability_parameters=BehaviorStabilityParameters(
@@ -171,7 +171,7 @@ def make_s_stage_2():
                     reward_probability_parameters=RewardProbabilityParameters(
                         base_reward_sum=0.6, reward_pairs=[[8, 1]]
                     ),
-                    block_len=ExponentialDistribution(
+                    block_length=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=0.1),
                         truncation_parameters=TruncationParameters(min=10, max=40),
                     ),
@@ -205,7 +205,7 @@ def make_s_stage_3():
                         max_trial=1000,
                         max_time=75,
                         min_time=30,
-                        ignore_win=30,
+                        ignore_window_length=30,
                         ignore_ratio_threshold=0.83,
                     ),
                     behavior_stability_parameters=BehaviorStabilityParameters(
@@ -216,7 +216,7 @@ def make_s_stage_3():
                     reward_probability_parameters=RewardProbabilityParameters(
                         base_reward_sum=0.45, reward_pairs=[[8, 1]]
                     ),
-                    block_len=ExponentialDistribution(
+                    block_length=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=0.05),
                         truncation_parameters=TruncationParameters(min=20, max=60),
                     ),
@@ -250,14 +250,14 @@ def make_s_stage_final():
                         max_trial=1000,
                         max_time=75,
                         min_time=30,
-                        ignore_win=30,
+                        ignore_window_length=30,
                         ignore_ratio_threshold=0.83,
                     ),
                     behavior_stability_parameters=None,
                     reward_probability_parameters=RewardProbabilityParameters(
                         base_reward_sum=0.45, reward_pairs=[[8, 1], [6, 1], [3, 1], [1, 1]]
                     ),
-                    block_len=ExponentialDistribution(
+                    block_length=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=0.05),
                         truncation_parameters=TruncationParameters(min=20, max=60),
                     ),
@@ -291,14 +291,14 @@ def make_s_stage_graduated():
                         max_trial=1000,
                         max_time=75,
                         min_time=30,
-                        ignore_win=30,
+                        ignore_window_length=30,
                         ignore_ratio_threshold=0.83,
                     ),
                     behavior_stability_parameters=None,
                     reward_probability_parameters=RewardProbabilityParameters(
                         base_reward_sum=0.45, reward_pairs=[[8, 1], [6, 1], [3, 1], [1, 1]]
                     ),
-                    block_len=ExponentialDistribution(
+                    block_length=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=0.05),
                         truncation_parameters=TruncationParameters(min=20, max=60),
                     ),

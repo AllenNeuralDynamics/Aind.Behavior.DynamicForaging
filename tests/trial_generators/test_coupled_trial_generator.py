@@ -2,8 +2,12 @@ import logging
 import unittest
 from datetime import timedelta
 
+import numpy as np
+
 from aind_behavior_dynamic_foraging.task_logic.trial_generators import CoupledTrialGeneratorSpec
 from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial, TrialOutcome
+
+from .util import simulate_response
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -12,6 +16,28 @@ class TestCoupledTrialGenerator(unittest.TestCase):
     def setUp(self):
         self.spec = CoupledTrialGeneratorSpec()
         self.generator = self.spec.create_generator()
+
+    def test_session(self):
+        """Simulates a full experimental session to verify generator stability."""
+
+        trial = Trial()
+        outcome = TrialOutcome(
+            trial=trial,
+            is_right_choice=np.random.choice([True, False, None]),
+            is_rewarded=np.random.choice([True, False]),
+        )
+        for i in range(500):
+            trial = self.generator.next()
+            self.generator.update(outcome)
+            outcome = simulate_response(
+                previous_reward=outcome.is_rewarded,
+                previous_choice=outcome.is_right_choice,
+                previous_left_bait=False,
+                previous_right_bait=False,
+            )
+
+        if not trial:
+            return
 
     ##### Tests _is_behavior_stable #####
 
@@ -144,74 +170,49 @@ class TestCoupledTrialGenerator(unittest.TestCase):
     def test_block_switch_all_conditions_met_switches(self):
         self.generator.block.p_right_reward = 0.8
         self.generator.block.p_left_reward = 0.2
-        self.generator.block.min_length = 20
+        self.generator.block.right_length = 20
         self.generator.trials_in_block = 20
         self.generator.reward_history = [True] * 5
+        self.generator.is_right_choice_history = [True] * 20
+        self.generator.spec.min_block_reward = 1
 
-        result = self.generator._is_block_switch_allowed(
-            trials_in_block=self.generator.trials_in_block,
-            min_block_reward=1,
-            choice_history=[True] * 20,
-            p_right_reward=self.generator.block.p_right_reward,
-            p_left_reward=self.generator.block.p_left_reward,
-            beh_stability_params=self.generator.spec.behavior_stability_parameters,
-            block_length=self.generator.block.min_length,
-            kernel_size=self.generator.spec.kernel_size,
-        )
+        result = self.generator._is_block_switch_allowed()
         self.assertTrue(result)
 
     def test_block_switch_block_length_not_reached(self):
         self.generator.block.p_right_reward = 0.8
         self.generator.block.p_left_reward = 0.2
-        self.generator.block.min_length = 20
+        self.generator.block.right_length = 20
         self.generator.reward_history = [True] * 5
+        self.generator.is_right_choice_history = [True] * 10
+        self.generator.trials_in_block = 10
+        self.generator.spec.min_block_reward = 1
 
-        result = self.generator._is_block_switch_allowed(
-            trials_in_block=10,  # below min_length
-            min_block_reward=1,
-            choice_history=[True] * 10,
-            p_right_reward=self.generator.block.p_right_reward,
-            p_left_reward=self.generator.block.p_left_reward,
-            beh_stability_params=self.generator.spec.behavior_stability_parameters,
-            block_length=self.generator.block.min_length,
-            kernel_size=self.generator.spec.kernel_size,
-        )
+        result = self.generator._is_block_switch_allowed()
         self.assertFalse(result)
 
     def test_block_switch_reward_not_met(self):
         self.generator.block.p_right_reward = 0.8
         self.generator.block.p_left_reward = 0.2
-        self.generator.block.min_length = 20
+        self.generator.block.right_length = 20
         self.generator.reward_history = []  # no rewards
+        self.generator.is_right_choice_history = [True] * 20
+        self.generator.trials_in_block = 20
+        self.generator.spec.min_block_reward = 5
 
-        result = self.generator._is_block_switch_allowed(
-            trials_in_block=20,
-            min_block_reward=5,
-            choice_history=[True] * 20,
-            p_right_reward=self.generator.block.p_right_reward,
-            p_left_reward=self.generator.block.p_left_reward,
-            beh_stability_params=self.generator.spec.behavior_stability_parameters,
-            block_length=self.generator.block.min_length,
-            kernel_size=self.generator.spec.kernel_size,
-        )
+        result = self.generator._is_block_switch_allowed()
         self.assertFalse(result)
 
     def test_block_switch_behavior_not_stable(self):
         self.generator.block.p_right_reward = 0.8
         self.generator.block.p_left_reward = 0.2
-        self.generator.block.min_length = 20
+        self.generator.block.right_length = 20
         self.generator.reward_history = [True] * 5
+        self.generator.is_right_choice_history = [False] * 20
+        self.generator.trials_in_block = 20
+        self.generator.spec.min_block_reward = 1
 
-        result = self.generator._is_block_switch_allowed(
-            trials_in_block=20,
-            min_block_reward=1,
-            choice_history=[False] * 20,  # always choosing low-reward side
-            p_right_reward=self.generator.block.p_right_reward,
-            p_left_reward=self.generator.block.p_left_reward,
-            beh_stability_params=self.generator.spec.behavior_stability_parameters,
-            block_length=self.generator.block.min_length,
-            kernel_size=self.generator.spec.kernel_size,
-        )
+        result = self.generator._is_block_switch_allowed()
         self.assertFalse(result)
 
     #### Test update ####
@@ -229,19 +230,19 @@ class TestCoupledTrialGenerator(unittest.TestCase):
         self.assertEqual(len(self.generator.reward_history), 1)
 
     def test_update_ignored_trial_extends_block_length(self):
-        original_length = self.generator.block.min_length
+        original_length = self.generator.block.right_length
         self.generator.update(self._make_outcome(None, False))
-        self.assertEqual(self.generator.block.min_length, original_length + 1)
+        self.assertEqual(self.generator.block.right_length, original_length + 1)
 
     def test_update_non_ignored_trial_does_not_extend_block(self):
-        original_length = self.generator.block.min_length
+        original_length = self.generator.block.right_length
         self.generator.update(self._make_outcome(True, True))
-        self.assertEqual(self.generator.block.min_length, original_length)
+        self.assertEqual(self.generator.block.right_length, original_length)
 
     def test_update_block_switches_after_conditions_met(self):
         self.generator.block.p_right_reward = 0.8
         self.generator.block.p_left_reward = 0.2
-        self.generator.block.min_length = 5
+        self.generator.block.right_length = 5
         self.generator.trials_in_block = 0
 
         initial_block = self.generator.block
@@ -255,10 +256,10 @@ class TestCoupledTrialGenerator(unittest.TestCase):
 
         self.assertIsNot(self.generator.block, initial_block)
 
-    def test_update_block_does_not_switch_before_min_length(self):
+    def test_update_block_does_not_switch_before_right_length(self):
         self.generator.block.p_right_reward = 0.8
         self.generator.block.p_left_reward = 0.2
-        self.generator.block.min_length = 100
+        self.generator.block.right_length = 100
         self.generator.trials_in_block = 0
 
         initial_block = self.generator.block
