@@ -6018,43 +6018,43 @@ namespace AindDynamicForagingDataSchema
     /// <summary>
     /// Configuration specification for the Uncoupled Trial Generator.
     ///
-    ///This class defines the parameters for generating trials where reward 
-    ///probabilities for the left and right sides are drawn independently 
+    ///This class defines the parameters for generating trials where reward
+    ///probabilities for the left and right sides are drawn independently
     ///from a set of predefined values.
     ///
     ///Attributes:
-    ///    type (Literal["UncoupledTrialGenerator"]): Discriminator for the 
+    ///    type (Literal["UncoupledTrialGenerator"]): Discriminator for the
     ///        generator type. Defaults to "UncoupledTrialGenerator".
-    ///    trial_generation_end_parameters (UncoupledTrialGenerationEndConditions): 
+    ///    trial_generation_end_parameters (UncoupledTrialGenerationEndConditions):
     ///        Defines the criteria for terminating the trial generation process.
-    ///    reward_probabilities (list[float]): A list of available probability 
-    ///        values (e.g., [0.1, 0.4, 0.7]) used to assign reward rates to 
+    ///    reward_probabilities (list[float]): A list of available probability
+    ///        values (e.g., [0.1, 0.4, 0.7]) used to assign reward rates to
     ///        each side during a block.
-    ///    maximum_dominance_streak (float): The maximum number of consecutive 
-    ///        blocks allowed where one specific side (e.g., Right) is assigned 
+    ///    maximum_dominance_streak (float): The maximum number of consecutive
+    ///        blocks allowed where one specific side (e.g., Right) is assigned
     ///        a higher reward probability than the other.
-    ///    block_length (Distribution): A distribution object (typically 
+    ///    block_length (Distribution): A distribution object (typically
     ///        Uniform) that determines the number of trials within each block.
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute(@"Configuration specification for the Uncoupled Trial Generator.
 
-    This class defines the parameters for generating trials where reward 
-    probabilities for the left and right sides are drawn independently 
+    This class defines the parameters for generating trials where reward
+    probabilities for the left and right sides are drawn independently
     from a set of predefined values.
 
     Attributes:
-        type (Literal[""UncoupledTrialGenerator""]): Discriminator for the 
+        type (Literal[""UncoupledTrialGenerator""]): Discriminator for the
             generator type. Defaults to ""UncoupledTrialGenerator"".
-        trial_generation_end_parameters (UncoupledTrialGenerationEndConditions): 
+        trial_generation_end_parameters (UncoupledTrialGenerationEndConditions):
             Defines the criteria for terminating the trial generation process.
-        reward_probabilities (list[float]): A list of available probability 
-            values (e.g., [0.1, 0.4, 0.7]) used to assign reward rates to 
+        reward_probabilities (list[float]): A list of available probability
+            values (e.g., [0.1, 0.4, 0.7]) used to assign reward rates to
             each side during a block.
-        maximum_dominance_streak (float): The maximum number of consecutive 
-            blocks allowed where one specific side (e.g., Right) is assigned 
+        maximum_dominance_streak (float): The maximum number of consecutive
+            blocks allowed where one specific side (e.g., Right) is assigned
             a higher reward probability than the other.
-        block_length (Distribution): A distribution object (typically 
+        block_length (Distribution): A distribution object (typically
             Uniform) that determines the number of trials within each block.")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
