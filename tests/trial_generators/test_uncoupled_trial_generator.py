@@ -11,6 +11,8 @@ from aind_behavior_dynamic_foraging.task_logic.trial_generators.uncoupled_trial_
 )
 from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial
 
+from .util import simulate_response
+
 logging.basicConfig(level=logging.DEBUG)
 
 
@@ -21,6 +23,28 @@ class TestUncoupledTrialGenerator(unittest.TestCase):
         np.random.seed(42)
         self.spec = UncoupledTrialGeneratorSpec()
         self.generator = UncoupledTrialGenerator(self.spec)
+
+    def test_session(self):
+        """Simulates a full experimental session to verify generator stability."""
+
+        trial = Trial()
+        outcome = TrialOutcome(
+            trial=trial,
+            is_right_choice=np.random.choice([True, False, None]),
+            is_rewarded=np.random.choice([True, False]),
+        )
+        for i in range(500):
+            trial = self.generator.next()
+            self.generator.update(outcome)
+            outcome = simulate_response(
+                previous_reward=outcome.is_rewarded,
+                previous_choice=outcome.is_right_choice,
+                previous_left_bait=False,
+                previous_right_bait=False,
+            )
+
+        if not trial:
+            return
 
     ### Test _generate_first_block ###
 

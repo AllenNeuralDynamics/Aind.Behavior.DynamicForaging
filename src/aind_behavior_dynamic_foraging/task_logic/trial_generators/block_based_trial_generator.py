@@ -33,32 +33,9 @@ class AutoWaterParameters(BaseModel):
     )
 
 
-class RewardProbabilityParameters(BaseModel):
-    """Defines the reward probability structure for a dynamic foraging task.
-
-    Reward probabilities are defined as pairs (p_left, p_right) normalized by
-    base_reward_sum. Pairs are drawn from a family representing a difficulty level:
-
-        Family 1:   [[8, 1], [6, 1], [3, 1], [1, 1]]
-        Family 2:  [[8, 1], [1, 1]]
-        Family 3:  [[1.0, 0.0], [0.9, 0.1], [0.8, 0.2], [0.7, 0.3], [0.6, 0.4], [0.5, 0.5]]
-        Family 4:  [[6, 1], [3, 1], [1, 1]]
-
-    """
-
-    base_reward_sum: float = Field(
-        default=0.8,
-        description="Total reward probability shared between the two sides. Each reward pair is normalized to sum to this value.",
-    )
-    reward_pairs: list[list[float, float]] = Field(
-        default=[[8, 1]],
-        description="List of (left, right) reward ratio pairs to sample from during block transitions. ",
-    )
-
-
 class Block(BaseModel):
-    p_right_reward: Optional[float] = Field(ge=0, le=1, description="Reward probability for right side during block.")
-    p_left_reward: Optional[float] = Field(ge=0, le=1, description="Reward probability for left side during block.")
+    p_right_reward: float = Field(ge=0, le=1, description="Reward probability for right side during block.")
+    p_left_reward: float = Field(ge=0, le=1, description="Reward probability for left side during block.")
     right_length: int = Field(ge=0, description="Minimum number of trials in block.")
     left_length: int = Field(ge=0, description="Minimum number of trials in block.")
 
@@ -90,21 +67,12 @@ class BlockBasedTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
         description="Distribution describing the inter-trial interval (in seconds).",
     )
 
-    block_len: Distribution = Field(
+    block_length: Distribution = Field(
         default=ExponentialDistribution(
             distribution_parameters=ExponentialDistributionParameters(rate=1 / 20),
             truncation_parameters=TruncationParameters(min=20, max=60),
         ),
         description="Distribution describing block length.",
-    )
-
-    min_block_reward: int = Field(default=1, ge=0, title="Minimal rewards in a block to switch")
-
-    kernel_size: int = Field(default=2, description="Kernel to evaluate choice fraction.")
-    reward_probability_parameters: RewardProbabilityParameters = Field(
-        default=RewardProbabilityParameters(),
-        description="Parameters defining the reward probability structure.",
-        validate_default=True,
     )
 
     autowater_parameters: Optional[AutoWaterParameters] = Field(
@@ -194,12 +162,18 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             random_numbers = np.random.random(2)
 
             self.is_left_baited = self.block.p_left_reward > random_numbers[0] or self.is_left_baited
-            logger.debug(f"Left baited: {self.is_left_baited}")
+            logger.debug("Left baited: %s" % self.is_left_baited)
 
             self.is_right_baited = self.block.p_right_reward > random_numbers[1] or self.is_right_baited
-            logger.debug(f"Right baited: {self.is_right_baited}")
+            logger.debug("Right baited: %s" % self.is_right_baited)
+        else:
+            # Non-baiting, reward availability is memoryless.
+            # If a reward was present but not collected in the previous trial, it
+            # does not carry over to the current trial.
+            pass
 
         # determine autowater
+        is_right_autowater = None
         if self._are_autowater_conditions_met():
             is_right_autowater = True if self.block.p_right_reward > self.block.p_left_reward else False
 

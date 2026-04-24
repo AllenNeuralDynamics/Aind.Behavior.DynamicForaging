@@ -596,7 +596,7 @@
           },
           "description": "Distribution describing the inter-trial interval (in seconds)."
         },
-        "block_len": {
+        "block_length": {
           "$ref": "#/$defs/Distribution",
           "default": {
             "family": "Exponential",
@@ -612,31 +612,6 @@
             "scaling_parameters": null
           },
           "description": "Distribution describing block length."
-        },
-        "min_block_reward": {
-          "default": 1,
-          "minimum": 0,
-          "title": "Minimal rewards in a block to switch",
-          "type": "integer"
-        },
-        "kernel_size": {
-          "default": 2,
-          "description": "Kernel to evaluate choice fraction.",
-          "title": "Kernel Size",
-          "type": "integer"
-        },
-        "reward_probability_parameters": {
-          "$ref": "#/$defs/RewardProbabilityParameters",
-          "default": {
-            "base_reward_sum": 0.8,
-            "reward_pairs": [
-              [
-                8.0,
-                1.0
-              ]
-            ]
-          },
-          "description": "Parameters defining the reward probability structure."
         },
         "autowater_parameters": {
           "default": {
@@ -659,6 +634,19 @@
           "description": "Whether uncollected rewards carry over to the next trial.",
           "title": "Is Baiting",
           "type": "boolean"
+        },
+        "reward_probability_parameters": {
+          "$ref": "#/$defs/RewardProbabilityParameters",
+          "default": {
+            "base_reward_sum": 0.8,
+            "reward_pairs": [
+              [
+                8.0,
+                1.0
+              ]
+            ]
+          },
+          "description": "Parameters defining the reward probability structure."
         }
       },
       "title": "BaseCoupledTrialGeneratorSpec",
@@ -908,7 +896,7 @@
           },
           "description": "Distribution describing the inter-trial interval (in seconds)."
         },
-        "block_len": {
+        "block_length": {
           "$ref": "#/$defs/Distribution",
           "default": {
             "family": "Exponential",
@@ -924,31 +912,6 @@
             "scaling_parameters": null
           },
           "description": "Distribution describing block length."
-        },
-        "min_block_reward": {
-          "default": 1,
-          "minimum": 0,
-          "title": "Minimal rewards in a block to switch",
-          "type": "integer"
-        },
-        "kernel_size": {
-          "default": 2,
-          "description": "Kernel to evaluate choice fraction.",
-          "title": "Kernel Size",
-          "type": "integer"
-        },
-        "reward_probability_parameters": {
-          "$ref": "#/$defs/RewardProbabilityParameters",
-          "default": {
-            "base_reward_sum": 0.8,
-            "reward_pairs": [
-              [
-                8.0,
-                1.0
-              ]
-            ]
-          },
-          "description": "Parameters defining the reward probability structure."
         },
         "autowater_parameters": {
           "default": {
@@ -1105,11 +1068,11 @@
     "CoupledTrialGenerationEndConditions": {
       "description": "Defines the conditions under which a foraging session should terminate.",
       "properties": {
-        "ignore_win": {
+        "ignore_window_length": {
           "default": 30,
           "description": "Number of recent trials to check for ignored responses.",
           "minimum": 0,
-          "title": "Ignore Win",
+          "title": "Ignore Window Length",
           "type": "integer"
         },
         "ignore_ratio_threshold": {
@@ -1199,7 +1162,7 @@
           },
           "description": "Distribution describing the inter-trial interval (in seconds)."
         },
-        "block_len": {
+        "block_length": {
           "$ref": "#/$defs/Distribution",
           "default": {
             "family": "Exponential",
@@ -1215,31 +1178,6 @@
             "scaling_parameters": null
           },
           "description": "Distribution describing block length."
-        },
-        "min_block_reward": {
-          "default": 1,
-          "minimum": 0,
-          "title": "Minimal rewards in a block to switch",
-          "type": "integer"
-        },
-        "kernel_size": {
-          "default": 2,
-          "description": "Kernel to evaluate choice fraction.",
-          "title": "Kernel Size",
-          "type": "integer"
-        },
-        "reward_probability_parameters": {
-          "$ref": "#/$defs/RewardProbabilityParameters",
-          "default": {
-            "base_reward_sum": 0.8,
-            "reward_pairs": [
-              [
-                8.0,
-                1.0
-              ]
-            ]
-          },
-          "description": "Parameters defining the reward probability structure."
         },
         "autowater_parameters": {
           "default": {
@@ -1263,10 +1201,23 @@
           "title": "Is Baiting",
           "type": "boolean"
         },
+        "reward_probability_parameters": {
+          "$ref": "#/$defs/RewardProbabilityParameters",
+          "default": {
+            "base_reward_sum": 0.8,
+            "reward_pairs": [
+              [
+                8.0,
+                1.0
+              ]
+            ]
+          },
+          "description": "Parameters defining the reward probability structure."
+        },
         "trial_generation_end_parameters": {
           "$ref": "#/$defs/CoupledTrialGenerationEndConditions",
           "default": {
-            "ignore_win": 30,
+            "ignore_window_length": 30,
             "ignore_ratio_threshold": 0.8,
             "max_trial": 1000,
             "max_time": 4500.0,
@@ -1295,6 +1246,18 @@
           "description": "Whether to extend the minimum block length by one trial when the animal does not respond.",
           "title": "Extend Block On No Response",
           "type": "boolean"
+        },
+        "min_block_reward": {
+          "default": 1,
+          "minimum": 0,
+          "title": "Minimal rewards in a block to switch",
+          "type": "integer"
+        },
+        "kernel_size": {
+          "default": 2,
+          "description": "Kernel to evaluate choice fraction.",
+          "title": "Kernel Size",
+          "type": "integer"
         }
       },
       "title": "CoupledTrialGeneratorSpec",
@@ -1392,7 +1355,7 @@
           },
           "description": "Distribution describing the inter-trial interval (in seconds)."
         },
-        "block_len": {
+        "block_length": {
           "$ref": "#/$defs/Distribution",
           "default": {
             "family": "Scalar",
@@ -1404,31 +1367,6 @@
             "scaling_parameters": null
           },
           "description": "Distribution describing block length."
-        },
-        "min_block_reward": {
-          "default": 1,
-          "minimum": 0,
-          "title": "Minimal rewards in a block to switch",
-          "type": "integer"
-        },
-        "kernel_size": {
-          "default": 2,
-          "description": "Kernel to evaluate choice fraction.",
-          "title": "Kernel Size",
-          "type": "integer"
-        },
-        "reward_probability_parameters": {
-          "$ref": "#/$defs/RewardProbabilityParameters",
-          "default": {
-            "base_reward_sum": 0.8,
-            "reward_pairs": [
-              [
-                8.0,
-                1.0
-              ]
-            ]
-          },
-          "description": "Parameters defining the reward probability structure."
         },
         "autowater_parameters": {
           "default": {
@@ -1452,6 +1390,19 @@
           "description": "Whether uncollected rewards carry over to the next trial.",
           "title": "Is Baiting",
           "type": "boolean"
+        },
+        "reward_probability_parameters": {
+          "$ref": "#/$defs/RewardProbabilityParameters",
+          "default": {
+            "base_reward_sum": 0.8,
+            "reward_pairs": [
+              [
+                8.0,
+                1.0
+              ]
+            ]
+          },
+          "description": "Parameters defining the reward probability structure."
         },
         "trial_generation_end_parameters": {
           "$ref": "#/$defs/CoupledWarmupTrialGenerationEndConditions",
@@ -2458,9 +2409,12 @@
           ],
           "description": "List of (left, right) reward ratio pairs to sample from during block transitions. ",
           "items": {
+            "description": "Reward ratio pairs ordered left, right.",
             "items": {
               "type": "number"
             },
+            "maxItems": 2,
+            "minItems": 2,
             "type": "array"
           },
           "title": "Reward Pairs",
@@ -3419,11 +3373,11 @@
     "UncoupledTrialGenerationEndConditions": {
       "description": "Defines the conditions under which a foraging session should terminate.",
       "properties": {
-        "ignore_win": {
+        "ignore_window_length": {
           "default": 30,
           "description": "Number of recent trials to check for ignored responses.",
           "minimum": 0,
-          "title": "Ignore Win",
+          "title": "Ignore Window Length",
           "type": "integer"
         },
         "ignore_ratio_threshold": {
@@ -3444,12 +3398,14 @@
         "max_time": {
           "default": 4500,
           "description": "Maximum session duration (sec).",
+          "minimum": 0,
           "title": "Max Time",
           "type": "number"
         },
         "min_time": {
           "default": 1800,
           "description": "Minimum session duration (sec)",
+          "minimum": 0,
           "title": "Min Time",
           "type": "number"
         }
@@ -3458,6 +3414,7 @@
       "type": "object"
     },
     "UncoupledTrialGeneratorSpec": {
+      "description": "Configuration specification for the Uncoupled Trial Generator.\n\nThis class defines the parameters for generating trials where reward \nprobabilities for the left and right sides are drawn independently \nfrom a set of predefined values.\n\nAttributes:\n    type (Literal[\"UncoupledTrialGenerator\"]): Discriminator for the \n        generator type. Defaults to \"UncoupledTrialGenerator\".\n    trial_generation_end_parameters (UncoupledTrialGenerationEndConditions): \n        Defines the criteria for terminating the trial generation process.\n    reward_probabilities (list[float]): A list of available probability \n        values (e.g., [0.1, 0.4, 0.7]) used to assign reward rates to \n        each side during a block.\n    maximum_dominance_streak (float): The maximum number of consecutive \n        blocks allowed where one specific side (e.g., Right) is assigned \n        a higher reward probability than the other.\n    block_length (Distribution): A distribution object (typically \n        Uniform) that determines the number of trials within each block.",
       "properties": {
         "type": {
           "const": "UncoupledTrialGenerator",
@@ -3513,8 +3470,8 @@
           },
           "description": "Distribution describing the inter-trial interval (in seconds)."
         },
-        "block_len": {
-          "$ref": "#/$defs/UniformDistribution",
+        "block_length": {
+          "$ref": "#/$defs/Distribution",
           "default": {
             "family": "Uniform",
             "distribution_parameters": {
@@ -3522,35 +3479,14 @@
               "max": 60.0,
               "min": 20.0
             },
-            "truncation_parameters": null,
+            "truncation_parameters": {
+              "max": 60.0,
+              "min": 20.0,
+              "truncation_mode": "exclude"
+            },
             "scaling_parameters": null
           },
           "description": "Distribution describing block length."
-        },
-        "min_block_reward": {
-          "default": 1,
-          "minimum": 0,
-          "title": "Minimal rewards in a block to switch",
-          "type": "integer"
-        },
-        "kernel_size": {
-          "default": 2,
-          "description": "Kernel to evaluate choice fraction.",
-          "title": "Kernel Size",
-          "type": "integer"
-        },
-        "reward_probability_parameters": {
-          "$ref": "#/$defs/RewardProbabilityParameters",
-          "default": {
-            "base_reward_sum": 0.8,
-            "reward_pairs": [
-              [
-                8.0,
-                1.0
-              ]
-            ]
-          },
-          "description": "Parameters defining the reward probability structure."
         },
         "autowater_parameters": {
           "default": {
@@ -3577,7 +3513,7 @@
         "trial_generation_end_parameters": {
           "$ref": "#/$defs/UncoupledTrialGenerationEndConditions",
           "default": {
-            "ignore_win": 30,
+            "ignore_window_length": 30,
             "ignore_ratio_threshold": 0.8,
             "max_trial": 1000,
             "max_time": 4500.0,

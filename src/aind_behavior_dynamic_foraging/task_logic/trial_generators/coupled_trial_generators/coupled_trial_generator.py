@@ -21,7 +21,9 @@ BlockBehaviorEvaluationMode = Literal[
 class CoupledTrialGenerationEndConditions(BaseModel):
     """Defines the conditions under which a foraging session should terminate."""
 
-    ignore_win: int = Field(default=30, ge=0, description="Number of recent trials to check for ignored responses.")
+    ignore_window_length: int = Field(
+        default=30, ge=0, description="Number of recent trials to check for ignored responses."
+    )
     ignore_ratio_threshold: float = Field(
         default=0.8,
         ge=0,
@@ -119,7 +121,7 @@ class CoupledTrialGenerator(BaseCoupledTrialGenerator):
 
         time_elapsed = datetime.now() - self.start_time
         frac = end_conditions.ignore_ratio_threshold
-        win = end_conditions.ignore_win
+        win = end_conditions.ignore_window_length
 
         if (
             time_elapsed > timedelta(seconds=end_conditions.min_time)
@@ -178,21 +180,22 @@ class CoupledTrialGenerator(BaseCoupledTrialGenerator):
         if not beh_stability_params or p_left_reward == p_right_reward or len(choice_history) < kernel_size:
             logger.debug(
                 "Behavior stability evaluation skipped: "
-                f"parameters_missing={not bool(beh_stability_params)}, "
-                f"rewards_equal={p_left_reward == p_right_reward}, "
-                f"trials_available={len(choice_history)} < kernel_size({kernel_size})"
+                "behavior_check=%s, "
+                "rewards_equal=%s, "
+                "trials_available={%s} < kernel_size(%s)"
+                % (not bool(beh_stability_params), p_left_reward == p_right_reward, len(choice_history), kernel_size)
             )
             return True
 
         # compute fraction of right choices with running average using a sliding window
         block_history = choice_history[-(trials_in_block + kernel_size - 1) :]
         block_choice_frac = self.compute_choice_fraction(kernel_size, block_history)
-        logger.debug(f"Choice fraction of block is {block_choice_frac}.")
+        logger.debug("Choice fraction of block is %s." % block_choice_frac)
 
         # margin based on right and left probabilities and scaled by switch threshold. Window for evaluating behavior
         delta = abs((p_left_reward - p_right_reward) * float(beh_stability_params.behavior_stability_fraction))
         threshold = [0, p_left_reward - delta] if p_left_reward > p_right_reward else [p_left_reward + delta, 1]
-        logger.debug(f"Behavior stability threshold applied: {threshold}")
+        logger.debug("Behavior stability threshold applied: %s" % threshold)
 
         # block_choice_fractions above threshold
         points_above_threshold = np.logical_and(
@@ -205,17 +208,17 @@ class CoupledTrialGenerator(BaseCoupledTrialGenerator):
         mode = beh_stability_params.behavior_evaluation_mode
         if mode == "end":
             # requires consecutive trials at end of trial
-            logger.info(f"Evaluating last {min_stable} trials for end-of-block stability.")
+            logger.info("Evaluating last %s trials for end-of-block stability." % min_stable)
             if len(points_above_threshold) < min_stable:
                 logger.info("Not enough trials to evaluate stability at block end.")
                 return False
             stable = np.all(points_above_threshold[-min_stable:])
-            logger.info(f"Behavior stable at block end: {stable}")
+            logger.info("Behavior stable at block end: %s" % stable)
             return stable
 
         elif mode == "anytime":
             # allows consecutive trials any time in the behavior
-            logger.info(f"Evaluating block for stability anytime over {min_stable} consecutive trials.")
+            logger.info("Evaluating block for stability anytime over %s consecutive trials." % min_stable)
             run_len = 0
             for i, v in enumerate(points_above_threshold):
                 if v:
@@ -223,13 +226,13 @@ class CoupledTrialGenerator(BaseCoupledTrialGenerator):
                 else:
                     run_len = 0
                 if run_len >= min_stable:
-                    logger.info(f"Behavior stable at trial index {i}.")
+                    logger.info("Behavior stable at trial index %s." % i)
                     return True
             logger.info("Behavior not stable in block anytime evaluation.")
             return False
 
         else:
-            raise ValueError(f"Behavior evaluation mode {mode} not recognized.")
+            raise ValueError("Behavior evaluation mode %s not recognized." % mode)
 
     @staticmethod
     def compute_choice_fraction(kernel_size: int, choice_history: list[int | None]):
@@ -274,7 +277,7 @@ class CoupledTrialGenerator(BaseCoupledTrialGenerator):
 
         # has planned block length been reached?
         block_length_ok = self.trials_in_block >= self.block.right_length  # right and left length are coupled
-        logger.debug(f"Planned block length reached: {block_length_ok}")
+        logger.debug("Planned block length reached: %s" % block_length_ok)
 
         # is behavior qualified to switch?
         behavior_ok = self._is_behavior_stable(
@@ -285,11 +288,11 @@ class CoupledTrialGenerator(BaseCoupledTrialGenerator):
             self.trials_in_block,
             self.spec.kernel_size,
         )
-        logger.debug(f"Behavior meets stability criteria: {behavior_ok}")
+        logger.debug("Behavior meets stability criteria: %s" % behavior_ok)
 
         # has reward criteria been met?
         reward_ok = self.reward_history.count(False) + self.reward_history.count(True) >= self.spec.min_block_reward
-        logger.debug(f"Reward criterion satisfied: {reward_ok}")
+        logger.debug("Reward criterion satisfied: %s" % reward_ok)
 
         # conditions to switch:
         #   - planned block length reached

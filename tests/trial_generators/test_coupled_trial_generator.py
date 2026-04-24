@@ -2,8 +2,12 @@ import logging
 import unittest
 from datetime import timedelta
 
+import numpy as np
+
 from aind_behavior_dynamic_foraging.task_logic.trial_generators import CoupledTrialGeneratorSpec
 from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial, TrialOutcome
+
+from .util import simulate_response
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -12,6 +16,28 @@ class TestCoupledTrialGenerator(unittest.TestCase):
     def setUp(self):
         self.spec = CoupledTrialGeneratorSpec()
         self.generator = self.spec.create_generator()
+
+    def test_session(self):
+        """Simulates a full experimental session to verify generator stability."""
+
+        trial = Trial()
+        outcome = TrialOutcome(
+            trial=trial,
+            is_right_choice=np.random.choice([True, False, None]),
+            is_rewarded=np.random.choice([True, False]),
+        )
+        for i in range(500):
+            trial = self.generator.next()
+            self.generator.update(outcome)
+            outcome = simulate_response(
+                previous_reward=outcome.is_rewarded,
+                previous_choice=outcome.is_right_choice,
+                previous_left_bait=False,
+                previous_right_bait=False,
+            )
+
+        if not trial:
+            return
 
     ##### Tests _is_behavior_stable #####
 

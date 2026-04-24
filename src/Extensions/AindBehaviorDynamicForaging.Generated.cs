@@ -893,17 +893,13 @@ namespace AindDynamicForagingDataSchema
     
         private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _interTrialIntervalDuration;
     
-        private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _blockLen;
-    
-        private int _minBlockReward;
-    
-        private int _kernelSize;
-    
-        private RewardProbabilityParameters _rewardProbabilityParameters;
+        private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _blockLength;
     
         private AutoWaterParameters _autowaterParameters;
     
         private bool _isBaiting;
+    
+        private RewardProbabilityParameters _rewardProbabilityParameters;
     
         public BaseCoupledTrialGeneratorSpec()
         {
@@ -911,12 +907,10 @@ namespace AindDynamicForagingDataSchema
             _responseDuration = 1D;
             _rewardConsumptionDuration = 3D;
             _interTrialIntervalDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
-            _blockLen = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
-            _minBlockReward = 1;
-            _kernelSize = 2;
-            _rewardProbabilityParameters = new RewardProbabilityParameters();
+            _blockLength = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _autowaterParameters = new AutoWaterParameters();
             _isBaiting = false;
+            _rewardProbabilityParameters = new RewardProbabilityParameters();
         }
     
         protected BaseCoupledTrialGeneratorSpec(BaseCoupledTrialGeneratorSpec other) : 
@@ -926,12 +920,10 @@ namespace AindDynamicForagingDataSchema
             _responseDuration = other._responseDuration;
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
-            _blockLen = other._blockLen;
-            _minBlockReward = other._minBlockReward;
-            _kernelSize = other._kernelSize;
-            _rewardProbabilityParameters = other._rewardProbabilityParameters;
+            _blockLength = other._blockLength;
             _autowaterParameters = other._autowaterParameters;
             _isBaiting = other._isBaiting;
+            _rewardProbabilityParameters = other._rewardProbabilityParameters;
         }
     
         /// <summary>
@@ -1009,65 +1001,17 @@ namespace AindDynamicForagingDataSchema
         /// Distribution describing block length.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("block_len")]
+        [Newtonsoft.Json.JsonPropertyAttribute("block_length")]
         [System.ComponentModel.DescriptionAttribute("Distribution describing block length.")]
-        public AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution BlockLen
+        public AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution BlockLength
         {
             get
             {
-                return _blockLen;
+                return _blockLength;
             }
             set
             {
-                _blockLen = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("min_block_reward")]
-        public int MinBlockReward
-        {
-            get
-            {
-                return _minBlockReward;
-            }
-            set
-            {
-                _minBlockReward = value;
-            }
-        }
-    
-        /// <summary>
-        /// Kernel to evaluate choice fraction.
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("kernel_size")]
-        [System.ComponentModel.DescriptionAttribute("Kernel to evaluate choice fraction.")]
-        public int KernelSize
-        {
-            get
-            {
-                return _kernelSize;
-            }
-            set
-            {
-                _kernelSize = value;
-            }
-        }
-    
-        /// <summary>
-        /// Parameters defining the reward probability structure.
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("reward_probability_parameters")]
-        [System.ComponentModel.DescriptionAttribute("Parameters defining the reward probability structure.")]
-        public RewardProbabilityParameters RewardProbabilityParameters
-        {
-            get
-            {
-                return _rewardProbabilityParameters;
-            }
-            set
-            {
-                _rewardProbabilityParameters = value;
+                _blockLength = value;
             }
         }
     
@@ -1107,6 +1051,24 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
+        /// <summary>
+        /// Parameters defining the reward probability structure.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("reward_probability_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Parameters defining the reward probability structure.")]
+        public RewardProbabilityParameters RewardProbabilityParameters
+        {
+            get
+            {
+                return _rewardProbabilityParameters;
+            }
+            set
+            {
+                _rewardProbabilityParameters = value;
+            }
+        }
+    
         public System.IObservable<BaseCoupledTrialGeneratorSpec> Generate()
         {
             return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new BaseCoupledTrialGeneratorSpec(this)));
@@ -1127,12 +1089,10 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("ResponseDuration = " + _responseDuration + ", ");
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
-            stringBuilder.Append("BlockLen = " + _blockLen + ", ");
-            stringBuilder.Append("MinBlockReward = " + _minBlockReward + ", ");
-            stringBuilder.Append("KernelSize = " + _kernelSize + ", ");
-            stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters + ", ");
+            stringBuilder.Append("BlockLength = " + _blockLength + ", ");
             stringBuilder.Append("AutowaterParameters = " + _autowaterParameters + ", ");
-            stringBuilder.Append("IsBaiting = " + _isBaiting);
+            stringBuilder.Append("IsBaiting = " + _isBaiting + ", ");
+            stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters);
             return true;
         }
     }
@@ -1313,13 +1273,7 @@ namespace AindDynamicForagingDataSchema
     
         private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _interTrialIntervalDuration;
     
-        private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _blockLen;
-    
-        private int _minBlockReward;
-    
-        private int _kernelSize;
-    
-        private RewardProbabilityParameters _rewardProbabilityParameters;
+        private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _blockLength;
     
         private AutoWaterParameters _autowaterParameters;
     
@@ -1331,10 +1285,7 @@ namespace AindDynamicForagingDataSchema
             _responseDuration = 1D;
             _rewardConsumptionDuration = 3D;
             _interTrialIntervalDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
-            _blockLen = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
-            _minBlockReward = 1;
-            _kernelSize = 2;
-            _rewardProbabilityParameters = new RewardProbabilityParameters();
+            _blockLength = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _autowaterParameters = new AutoWaterParameters();
             _isBaiting = false;
         }
@@ -1346,10 +1297,7 @@ namespace AindDynamicForagingDataSchema
             _responseDuration = other._responseDuration;
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
-            _blockLen = other._blockLen;
-            _minBlockReward = other._minBlockReward;
-            _kernelSize = other._kernelSize;
-            _rewardProbabilityParameters = other._rewardProbabilityParameters;
+            _blockLength = other._blockLength;
             _autowaterParameters = other._autowaterParameters;
             _isBaiting = other._isBaiting;
         }
@@ -1429,65 +1377,17 @@ namespace AindDynamicForagingDataSchema
         /// Distribution describing block length.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("block_len")]
+        [Newtonsoft.Json.JsonPropertyAttribute("block_length")]
         [System.ComponentModel.DescriptionAttribute("Distribution describing block length.")]
-        public AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution BlockLen
+        public AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution BlockLength
         {
             get
             {
-                return _blockLen;
+                return _blockLength;
             }
             set
             {
-                _blockLen = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("min_block_reward")]
-        public int MinBlockReward
-        {
-            get
-            {
-                return _minBlockReward;
-            }
-            set
-            {
-                _minBlockReward = value;
-            }
-        }
-    
-        /// <summary>
-        /// Kernel to evaluate choice fraction.
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("kernel_size")]
-        [System.ComponentModel.DescriptionAttribute("Kernel to evaluate choice fraction.")]
-        public int KernelSize
-        {
-            get
-            {
-                return _kernelSize;
-            }
-            set
-            {
-                _kernelSize = value;
-            }
-        }
-    
-        /// <summary>
-        /// Parameters defining the reward probability structure.
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("reward_probability_parameters")]
-        [System.ComponentModel.DescriptionAttribute("Parameters defining the reward probability structure.")]
-        public RewardProbabilityParameters RewardProbabilityParameters
-        {
-            get
-            {
-                return _rewardProbabilityParameters;
-            }
-            set
-            {
-                _rewardProbabilityParameters = value;
+                _blockLength = value;
             }
         }
     
@@ -1547,10 +1447,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("ResponseDuration = " + _responseDuration + ", ");
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
-            stringBuilder.Append("BlockLen = " + _blockLen + ", ");
-            stringBuilder.Append("MinBlockReward = " + _minBlockReward + ", ");
-            stringBuilder.Append("KernelSize = " + _kernelSize + ", ");
-            stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters + ", ");
+            stringBuilder.Append("BlockLength = " + _blockLength + ", ");
             stringBuilder.Append("AutowaterParameters = " + _autowaterParameters + ", ");
             stringBuilder.Append("IsBaiting = " + _isBaiting);
             return true;
@@ -1912,7 +1809,7 @@ namespace AindDynamicForagingDataSchema
     public partial class CoupledTrialGenerationEndConditions
     {
     
-        private int _ignoreWin;
+        private int _ignoreWindowLength;
     
         private double _ignoreRatioThreshold;
     
@@ -1924,7 +1821,7 @@ namespace AindDynamicForagingDataSchema
     
         public CoupledTrialGenerationEndConditions()
         {
-            _ignoreWin = 30;
+            _ignoreWindowLength = 30;
             _ignoreRatioThreshold = 0.8D;
             _maxTrial = 1000;
             _maxTime = 4500D;
@@ -1933,7 +1830,7 @@ namespace AindDynamicForagingDataSchema
     
         protected CoupledTrialGenerationEndConditions(CoupledTrialGenerationEndConditions other)
         {
-            _ignoreWin = other._ignoreWin;
+            _ignoreWindowLength = other._ignoreWindowLength;
             _ignoreRatioThreshold = other._ignoreRatioThreshold;
             _maxTrial = other._maxTrial;
             _maxTime = other._maxTime;
@@ -1943,17 +1840,17 @@ namespace AindDynamicForagingDataSchema
         /// <summary>
         /// Number of recent trials to check for ignored responses.
         /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("ignore_win")]
+        [Newtonsoft.Json.JsonPropertyAttribute("ignore_window_length")]
         [System.ComponentModel.DescriptionAttribute("Number of recent trials to check for ignored responses.")]
-        public int IgnoreWin
+        public int IgnoreWindowLength
         {
             get
             {
-                return _ignoreWin;
+                return _ignoreWindowLength;
             }
             set
             {
-                _ignoreWin = value;
+                _ignoreWindowLength = value;
             }
         }
     
@@ -2038,7 +1935,7 @@ namespace AindDynamicForagingDataSchema
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("IgnoreWin = " + _ignoreWin + ", ");
+            stringBuilder.Append("IgnoreWindowLength = " + _ignoreWindowLength + ", ");
             stringBuilder.Append("IgnoreRatioThreshold = " + _ignoreRatioThreshold + ", ");
             stringBuilder.Append("MaxTrial = " + _maxTrial + ", ");
             stringBuilder.Append("MaxTime = " + _maxTime + ", ");
@@ -2075,17 +1972,13 @@ namespace AindDynamicForagingDataSchema
     
         private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _interTrialIntervalDuration;
     
-        private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _blockLen;
-    
-        private int _minBlockReward;
-    
-        private int _kernelSize;
-    
-        private RewardProbabilityParameters _rewardProbabilityParameters;
+        private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _blockLength;
     
         private AutoWaterParameters _autowaterParameters;
     
         private bool _isBaiting;
+    
+        private RewardProbabilityParameters _rewardProbabilityParameters;
     
         private CoupledTrialGenerationEndConditions _trialGenerationEndParameters;
     
@@ -2093,21 +1986,25 @@ namespace AindDynamicForagingDataSchema
     
         private bool _extendBlockOnNoResponse;
     
+        private int _minBlockReward;
+    
+        private int _kernelSize;
+    
         public CoupledTrialGeneratorSpec()
         {
             _quiescentDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _responseDuration = 1D;
             _rewardConsumptionDuration = 3D;
             _interTrialIntervalDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
-            _blockLen = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
-            _minBlockReward = 1;
-            _kernelSize = 2;
-            _rewardProbabilityParameters = new RewardProbabilityParameters();
+            _blockLength = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _autowaterParameters = new AutoWaterParameters();
             _isBaiting = false;
+            _rewardProbabilityParameters = new RewardProbabilityParameters();
             _trialGenerationEndParameters = new CoupledTrialGenerationEndConditions();
             _behaviorStabilityParameters = new BehaviorStabilityParameters();
             _extendBlockOnNoResponse = true;
+            _minBlockReward = 1;
+            _kernelSize = 2;
         }
     
         protected CoupledTrialGeneratorSpec(CoupledTrialGeneratorSpec other) : 
@@ -2117,15 +2014,15 @@ namespace AindDynamicForagingDataSchema
             _responseDuration = other._responseDuration;
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
-            _blockLen = other._blockLen;
-            _minBlockReward = other._minBlockReward;
-            _kernelSize = other._kernelSize;
-            _rewardProbabilityParameters = other._rewardProbabilityParameters;
+            _blockLength = other._blockLength;
             _autowaterParameters = other._autowaterParameters;
             _isBaiting = other._isBaiting;
+            _rewardProbabilityParameters = other._rewardProbabilityParameters;
             _trialGenerationEndParameters = other._trialGenerationEndParameters;
             _behaviorStabilityParameters = other._behaviorStabilityParameters;
             _extendBlockOnNoResponse = other._extendBlockOnNoResponse;
+            _minBlockReward = other._minBlockReward;
+            _kernelSize = other._kernelSize;
         }
     
         /// <summary>
@@ -2203,65 +2100,17 @@ namespace AindDynamicForagingDataSchema
         /// Distribution describing block length.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("block_len")]
+        [Newtonsoft.Json.JsonPropertyAttribute("block_length")]
         [System.ComponentModel.DescriptionAttribute("Distribution describing block length.")]
-        public AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution BlockLen
+        public AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution BlockLength
         {
             get
             {
-                return _blockLen;
+                return _blockLength;
             }
             set
             {
-                _blockLen = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("min_block_reward")]
-        public int MinBlockReward
-        {
-            get
-            {
-                return _minBlockReward;
-            }
-            set
-            {
-                _minBlockReward = value;
-            }
-        }
-    
-        /// <summary>
-        /// Kernel to evaluate choice fraction.
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("kernel_size")]
-        [System.ComponentModel.DescriptionAttribute("Kernel to evaluate choice fraction.")]
-        public int KernelSize
-        {
-            get
-            {
-                return _kernelSize;
-            }
-            set
-            {
-                _kernelSize = value;
-            }
-        }
-    
-        /// <summary>
-        /// Parameters defining the reward probability structure.
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("reward_probability_parameters")]
-        [System.ComponentModel.DescriptionAttribute("Parameters defining the reward probability structure.")]
-        public RewardProbabilityParameters RewardProbabilityParameters
-        {
-            get
-            {
-                return _rewardProbabilityParameters;
-            }
-            set
-            {
-                _rewardProbabilityParameters = value;
+                _blockLength = value;
             }
         }
     
@@ -2298,6 +2147,24 @@ namespace AindDynamicForagingDataSchema
             set
             {
                 _isBaiting = value;
+            }
+        }
+    
+        /// <summary>
+        /// Parameters defining the reward probability structure.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("reward_probability_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Parameters defining the reward probability structure.")]
+        public RewardProbabilityParameters RewardProbabilityParameters
+        {
+            get
+            {
+                return _rewardProbabilityParameters;
+            }
+            set
+            {
+                _rewardProbabilityParameters = value;
             }
         }
     
@@ -2356,6 +2223,36 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
+        [Newtonsoft.Json.JsonPropertyAttribute("min_block_reward")]
+        public int MinBlockReward
+        {
+            get
+            {
+                return _minBlockReward;
+            }
+            set
+            {
+                _minBlockReward = value;
+            }
+        }
+    
+        /// <summary>
+        /// Kernel to evaluate choice fraction.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("kernel_size")]
+        [System.ComponentModel.DescriptionAttribute("Kernel to evaluate choice fraction.")]
+        public int KernelSize
+        {
+            get
+            {
+                return _kernelSize;
+            }
+            set
+            {
+                _kernelSize = value;
+            }
+        }
+    
         public System.IObservable<CoupledTrialGeneratorSpec> Generate()
         {
             return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new CoupledTrialGeneratorSpec(this)));
@@ -2376,15 +2273,15 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("ResponseDuration = " + _responseDuration + ", ");
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
-            stringBuilder.Append("BlockLen = " + _blockLen + ", ");
-            stringBuilder.Append("MinBlockReward = " + _minBlockReward + ", ");
-            stringBuilder.Append("KernelSize = " + _kernelSize + ", ");
-            stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters + ", ");
+            stringBuilder.Append("BlockLength = " + _blockLength + ", ");
             stringBuilder.Append("AutowaterParameters = " + _autowaterParameters + ", ");
             stringBuilder.Append("IsBaiting = " + _isBaiting + ", ");
+            stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters + ", ");
             stringBuilder.Append("TrialGenerationEndParameters = " + _trialGenerationEndParameters + ", ");
             stringBuilder.Append("BehaviorStabilityParameters = " + _behaviorStabilityParameters + ", ");
-            stringBuilder.Append("ExtendBlockOnNoResponse = " + _extendBlockOnNoResponse);
+            stringBuilder.Append("ExtendBlockOnNoResponse = " + _extendBlockOnNoResponse + ", ");
+            stringBuilder.Append("MinBlockReward = " + _minBlockReward + ", ");
+            stringBuilder.Append("KernelSize = " + _kernelSize);
             return true;
         }
     }
@@ -2536,17 +2433,13 @@ namespace AindDynamicForagingDataSchema
     
         private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _interTrialIntervalDuration;
     
-        private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _blockLen;
-    
-        private int _minBlockReward;
-    
-        private int _kernelSize;
-    
-        private RewardProbabilityParameters _rewardProbabilityParameters;
+        private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _blockLength;
     
         private AutoWaterParameters _autowaterParameters;
     
         private bool _isBaiting;
+    
+        private RewardProbabilityParameters _rewardProbabilityParameters;
     
         private CoupledWarmupTrialGenerationEndConditions _trialGenerationEndParameters;
     
@@ -2556,12 +2449,10 @@ namespace AindDynamicForagingDataSchema
             _responseDuration = 1D;
             _rewardConsumptionDuration = 3D;
             _interTrialIntervalDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
-            _blockLen = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
-            _minBlockReward = 1;
-            _kernelSize = 2;
-            _rewardProbabilityParameters = new RewardProbabilityParameters();
+            _blockLength = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _autowaterParameters = new AutoWaterParameters();
             _isBaiting = true;
+            _rewardProbabilityParameters = new RewardProbabilityParameters();
             _trialGenerationEndParameters = new CoupledWarmupTrialGenerationEndConditions();
         }
     
@@ -2572,12 +2463,10 @@ namespace AindDynamicForagingDataSchema
             _responseDuration = other._responseDuration;
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
-            _blockLen = other._blockLen;
-            _minBlockReward = other._minBlockReward;
-            _kernelSize = other._kernelSize;
-            _rewardProbabilityParameters = other._rewardProbabilityParameters;
+            _blockLength = other._blockLength;
             _autowaterParameters = other._autowaterParameters;
             _isBaiting = other._isBaiting;
+            _rewardProbabilityParameters = other._rewardProbabilityParameters;
             _trialGenerationEndParameters = other._trialGenerationEndParameters;
         }
     
@@ -2656,65 +2545,17 @@ namespace AindDynamicForagingDataSchema
         /// Distribution describing block length.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("block_len")]
+        [Newtonsoft.Json.JsonPropertyAttribute("block_length")]
         [System.ComponentModel.DescriptionAttribute("Distribution describing block length.")]
-        public AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution BlockLen
+        public AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution BlockLength
         {
             get
             {
-                return _blockLen;
+                return _blockLength;
             }
             set
             {
-                _blockLen = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("min_block_reward")]
-        public int MinBlockReward
-        {
-            get
-            {
-                return _minBlockReward;
-            }
-            set
-            {
-                _minBlockReward = value;
-            }
-        }
-    
-        /// <summary>
-        /// Kernel to evaluate choice fraction.
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("kernel_size")]
-        [System.ComponentModel.DescriptionAttribute("Kernel to evaluate choice fraction.")]
-        public int KernelSize
-        {
-            get
-            {
-                return _kernelSize;
-            }
-            set
-            {
-                _kernelSize = value;
-            }
-        }
-    
-        /// <summary>
-        /// Parameters defining the reward probability structure.
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("reward_probability_parameters")]
-        [System.ComponentModel.DescriptionAttribute("Parameters defining the reward probability structure.")]
-        public RewardProbabilityParameters RewardProbabilityParameters
-        {
-            get
-            {
-                return _rewardProbabilityParameters;
-            }
-            set
-            {
-                _rewardProbabilityParameters = value;
+                _blockLength = value;
             }
         }
     
@@ -2751,6 +2592,24 @@ namespace AindDynamicForagingDataSchema
             set
             {
                 _isBaiting = value;
+            }
+        }
+    
+        /// <summary>
+        /// Parameters defining the reward probability structure.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("reward_probability_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Parameters defining the reward probability structure.")]
+        public RewardProbabilityParameters RewardProbabilityParameters
+        {
+            get
+            {
+                return _rewardProbabilityParameters;
+            }
+            set
+            {
+                _rewardProbabilityParameters = value;
             }
         }
     
@@ -2792,12 +2651,10 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("ResponseDuration = " + _responseDuration + ", ");
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
-            stringBuilder.Append("BlockLen = " + _blockLen + ", ");
-            stringBuilder.Append("MinBlockReward = " + _minBlockReward + ", ");
-            stringBuilder.Append("KernelSize = " + _kernelSize + ", ");
-            stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters + ", ");
+            stringBuilder.Append("BlockLength = " + _blockLength + ", ");
             stringBuilder.Append("AutowaterParameters = " + _autowaterParameters + ", ");
             stringBuilder.Append("IsBaiting = " + _isBaiting + ", ");
+            stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters + ", ");
             stringBuilder.Append("TrialGenerationEndParameters = " + _trialGenerationEndParameters);
             return true;
         }
@@ -6009,7 +5866,7 @@ namespace AindDynamicForagingDataSchema
     public partial class UncoupledTrialGenerationEndConditions
     {
     
-        private int _ignoreWin;
+        private int _ignoreWindowLength;
     
         private double _ignoreRatioThreshold;
     
@@ -6021,7 +5878,7 @@ namespace AindDynamicForagingDataSchema
     
         public UncoupledTrialGenerationEndConditions()
         {
-            _ignoreWin = 30;
+            _ignoreWindowLength = 30;
             _ignoreRatioThreshold = 0.8D;
             _maxTrial = 1000;
             _maxTime = 4500D;
@@ -6030,7 +5887,7 @@ namespace AindDynamicForagingDataSchema
     
         protected UncoupledTrialGenerationEndConditions(UncoupledTrialGenerationEndConditions other)
         {
-            _ignoreWin = other._ignoreWin;
+            _ignoreWindowLength = other._ignoreWindowLength;
             _ignoreRatioThreshold = other._ignoreRatioThreshold;
             _maxTrial = other._maxTrial;
             _maxTime = other._maxTime;
@@ -6040,17 +5897,17 @@ namespace AindDynamicForagingDataSchema
         /// <summary>
         /// Number of recent trials to check for ignored responses.
         /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("ignore_win")]
+        [Newtonsoft.Json.JsonPropertyAttribute("ignore_window_length")]
         [System.ComponentModel.DescriptionAttribute("Number of recent trials to check for ignored responses.")]
-        public int IgnoreWin
+        public int IgnoreWindowLength
         {
             get
             {
-                return _ignoreWin;
+                return _ignoreWindowLength;
             }
             set
             {
-                _ignoreWin = value;
+                _ignoreWindowLength = value;
             }
         }
     
@@ -6135,7 +5992,7 @@ namespace AindDynamicForagingDataSchema
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("IgnoreWin = " + _ignoreWin + ", ");
+            stringBuilder.Append("IgnoreWindowLength = " + _ignoreWindowLength + ", ");
             stringBuilder.Append("IgnoreRatioThreshold = " + _ignoreRatioThreshold + ", ");
             stringBuilder.Append("MaxTrial = " + _maxTrial + ", ");
             stringBuilder.Append("MaxTime = " + _maxTime + ", ");
@@ -6158,7 +6015,47 @@ namespace AindDynamicForagingDataSchema
     }
 
 
+    /// <summary>
+    /// Configuration specification for the Uncoupled Trial Generator.
+    ///
+    ///This class defines the parameters for generating trials where reward 
+    ///probabilities for the left and right sides are drawn independently 
+    ///from a set of predefined values.
+    ///
+    ///Attributes:
+    ///    type (Literal["UncoupledTrialGenerator"]): Discriminator for the 
+    ///        generator type. Defaults to "UncoupledTrialGenerator".
+    ///    trial_generation_end_parameters (UncoupledTrialGenerationEndConditions): 
+    ///        Defines the criteria for terminating the trial generation process.
+    ///    reward_probabilities (list[float]): A list of available probability 
+    ///        values (e.g., [0.1, 0.4, 0.7]) used to assign reward rates to 
+    ///        each side during a block.
+    ///    maximum_dominance_streak (float): The maximum number of consecutive 
+    ///        blocks allowed where one specific side (e.g., Right) is assigned 
+    ///        a higher reward probability than the other.
+    ///    block_length (Distribution): A distribution object (typically 
+    ///        Uniform) that determines the number of trials within each block.
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.ComponentModel.DescriptionAttribute(@"Configuration specification for the Uncoupled Trial Generator.
+
+    This class defines the parameters for generating trials where reward 
+    probabilities for the left and right sides are drawn independently 
+    from a set of predefined values.
+
+    Attributes:
+        type (Literal[""UncoupledTrialGenerator""]): Discriminator for the 
+            generator type. Defaults to ""UncoupledTrialGenerator"".
+        trial_generation_end_parameters (UncoupledTrialGenerationEndConditions): 
+            Defines the criteria for terminating the trial generation process.
+        reward_probabilities (list[float]): A list of available probability 
+            values (e.g., [0.1, 0.4, 0.7]) used to assign reward rates to 
+            each side during a block.
+        maximum_dominance_streak (float): The maximum number of consecutive 
+            blocks allowed where one specific side (e.g., Right) is assigned 
+            a higher reward probability than the other.
+        block_length (Distribution): A distribution object (typically 
+            Uniform) that determines the number of trials within each block.")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class UncoupledTrialGeneratorSpec : TrialGeneratorSpec
@@ -6172,13 +6069,7 @@ namespace AindDynamicForagingDataSchema
     
         private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _interTrialIntervalDuration;
     
-        private AllenNeuralDynamics.AindBehaviorServices.Distributions.UniformDistribution _blockLen;
-    
-        private int _minBlockReward;
-    
-        private int _kernelSize;
-    
-        private RewardProbabilityParameters _rewardProbabilityParameters;
+        private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _blockLength;
     
         private AutoWaterParameters _autowaterParameters;
     
@@ -6196,10 +6087,7 @@ namespace AindDynamicForagingDataSchema
             _responseDuration = 1D;
             _rewardConsumptionDuration = 3D;
             _interTrialIntervalDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
-            _blockLen = new AllenNeuralDynamics.AindBehaviorServices.Distributions.UniformDistribution();
-            _minBlockReward = 1;
-            _kernelSize = 2;
-            _rewardProbabilityParameters = new RewardProbabilityParameters();
+            _blockLength = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _autowaterParameters = new AutoWaterParameters();
             _isBaiting = false;
             _trialGenerationEndParameters = new UncoupledTrialGenerationEndConditions();
@@ -6214,10 +6102,7 @@ namespace AindDynamicForagingDataSchema
             _responseDuration = other._responseDuration;
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
-            _blockLen = other._blockLen;
-            _minBlockReward = other._minBlockReward;
-            _kernelSize = other._kernelSize;
-            _rewardProbabilityParameters = other._rewardProbabilityParameters;
+            _blockLength = other._blockLength;
             _autowaterParameters = other._autowaterParameters;
             _isBaiting = other._isBaiting;
             _trialGenerationEndParameters = other._trialGenerationEndParameters;
@@ -6300,65 +6185,17 @@ namespace AindDynamicForagingDataSchema
         /// Distribution describing block length.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("block_len")]
+        [Newtonsoft.Json.JsonPropertyAttribute("block_length")]
         [System.ComponentModel.DescriptionAttribute("Distribution describing block length.")]
-        public AllenNeuralDynamics.AindBehaviorServices.Distributions.UniformDistribution BlockLen
+        public AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution BlockLength
         {
             get
             {
-                return _blockLen;
+                return _blockLength;
             }
             set
             {
-                _blockLen = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("min_block_reward")]
-        public int MinBlockReward
-        {
-            get
-            {
-                return _minBlockReward;
-            }
-            set
-            {
-                _minBlockReward = value;
-            }
-        }
-    
-        /// <summary>
-        /// Kernel to evaluate choice fraction.
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("kernel_size")]
-        [System.ComponentModel.DescriptionAttribute("Kernel to evaluate choice fraction.")]
-        public int KernelSize
-        {
-            get
-            {
-                return _kernelSize;
-            }
-            set
-            {
-                _kernelSize = value;
-            }
-        }
-    
-        /// <summary>
-        /// Parameters defining the reward probability structure.
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("reward_probability_parameters")]
-        [System.ComponentModel.DescriptionAttribute("Parameters defining the reward probability structure.")]
-        public RewardProbabilityParameters RewardProbabilityParameters
-        {
-            get
-            {
-                return _rewardProbabilityParameters;
-            }
-            set
-            {
-                _rewardProbabilityParameters = value;
+                _blockLength = value;
             }
         }
     
@@ -6471,10 +6308,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("ResponseDuration = " + _responseDuration + ", ");
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
-            stringBuilder.Append("BlockLen = " + _blockLen + ", ");
-            stringBuilder.Append("MinBlockReward = " + _minBlockReward + ", ");
-            stringBuilder.Append("KernelSize = " + _kernelSize + ", ");
-            stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters + ", ");
+            stringBuilder.Append("BlockLength = " + _blockLength + ", ");
             stringBuilder.Append("AutowaterParameters = " + _autowaterParameters + ", ");
             stringBuilder.Append("IsBaiting = " + _isBaiting + ", ");
             stringBuilder.Append("TrialGenerationEndParameters = " + _trialGenerationEndParameters + ", ");

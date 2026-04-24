@@ -34,7 +34,7 @@ class CoupledWarmupTrialGenerationEndConditions(BaseModel):
 class CoupledWarmupTrialGeneratorSpec(BaseCoupledTrialGeneratorSpec):
     type: Literal["CoupledWarmupTrialGenerator"] = "CoupledWarmupTrialGenerator"
 
-    block_len: Distribution = Field(
+    block_length: Distribution = Field(
         default=Scalar(value=1),
         description="Distribution describing block length.",
     )
@@ -76,17 +76,17 @@ class CoupledWarmupTrialGenerator(BaseCoupledTrialGenerator):
         ):
             logger.debug(
                 "Warmup trial generation end conditions met: "
-                f"total trials={len(self.is_right_choice_history)}, "
-                f"finish ratio={finish_ratio}, "
-                f"choice bias={abs(choice_ratio - 0.5)}"
+                "total trials=%s, "
+                "finish ratio=%s, "
+                "choice bias=%s" % (len(self.is_right_choice_history), finish_ratio, abs(choice_ratio - 0.5))
             )
             return True
 
         logger.debug(
             "Warmup trial generation end conditions are not met: "
-            f"total trials={len(self.is_right_choice_history)}, "
-            f"finish ratio={finish_ratio}, "
-            f"choice bias={abs(choice_ratio - 0.5)}"
+            "total trials=%s, "
+            "finish ratio=%s, "
+            "choice bias=%s" % (len(self.is_right_choice_history), finish_ratio, abs(choice_ratio - 0.5))
         )
         return False
 
