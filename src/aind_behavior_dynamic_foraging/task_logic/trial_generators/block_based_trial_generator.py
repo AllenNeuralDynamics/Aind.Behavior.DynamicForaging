@@ -136,6 +136,11 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             elif outcome.is_right_choice is False:
                 logger.debug("Resesting left bait.")
                 self.is_left_baited = False
+        else:
+            # Non-baiting, reward availability is memoryless.
+            # If a reward was present but not collected in the previous trial, it
+            # does not carry over to the current trial.
+            pass
 
     def next(self) -> Trial | None:
         """Generates the next trial in the session.
@@ -166,11 +171,6 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
 
             self.is_right_baited = self.block.p_right_reward > random_numbers[1] or self.is_right_baited
             logger.debug("Right baited: %s" % self.is_right_baited)
-        else:
-            # Non-baiting, reward availability is memoryless.
-            # If a reward was present but not collected in the previous trial, it
-            # does not carry over to the current trial.
-            pass
 
         # determine autowater
         is_right_autowater = None

@@ -4,8 +4,6 @@ from typing import Literal
 
 import numpy as np
 from aind_behavior_services.task.distributions import (
-    Distribution,
-    TruncationParameters,
     UniformDistribution,
     UniformDistributionParameters,
 )
@@ -80,10 +78,9 @@ class UncoupledTrialGeneratorSpec(BlockBasedTrialGeneratorSpec):
         description="Maximum number of consecutive blocks a side can have the higher probability.",
     )
 
-    block_length: Distribution = Field(
+    block_length: UniformDistribution = Field(
         default=UniformDistribution(
             distribution_parameters=UniformDistributionParameters(min=20, max=60),
-            truncation_parameters=TruncationParameters(min=20, max=60),
         ),
         description="Distribution describing block length.",
     )
@@ -117,8 +114,8 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
         super().__init__(spec)
         self.start_time = datetime.now()
 
-        block_length_min = spec.block_length.truncation_parameters.min
-        block_length_max = spec.block_length.truncation_parameters.max
+        block_length_min = spec.block_length.distribution_parameters.min
+        block_length_max = spec.block_length.distribution_parameters.max
         self.block_length_stagger = (round(block_length_max - block_length_min - 0.5) / 2 + block_length_min) / 2
 
         self.block = self._generate_first_block()
@@ -283,7 +280,7 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
         left_dominance_streak: int,
         max_dominance_streak: int,
         reward_probabilities: list[float],
-        block_length: Distribution,
+        block_length: UniformDistribution,
         block_stagger: int,
         block: Block,
     ) -> Block:
