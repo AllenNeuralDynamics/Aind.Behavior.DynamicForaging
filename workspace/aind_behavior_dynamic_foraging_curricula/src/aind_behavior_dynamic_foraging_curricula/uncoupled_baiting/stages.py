@@ -72,8 +72,8 @@ def make_s_stage_1_warmup():
                         CoupledTrialGeneratorSpec(
                             trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
                                 max_trial=1000,
-                                max_time=75,
-                                min_time=30,
+                                max_time=4500,
+                                min_time=1800,
                                 ignore_win=20000,
                                 ignore_ratio_threshold=1,
                             ),
@@ -119,8 +119,8 @@ def make_s_stage_1():
                 trial_generator=CoupledTrialGeneratorSpec(
                     trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
                         max_trial=1000,
-                        max_time=75,
-                        min_time=30,
+                        max_time=4500,
+                        min_time=1800,
                         ignore_win=20000,
                         ignore_ratio_threshold=1,
                     ),
@@ -164,8 +164,8 @@ def make_s_stage_2():
                 trial_generator=CoupledTrialGeneratorSpec(
                     trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
                         max_trial=1000,
-                        max_time=75,
-                        min_time=30,
+                        max_time=4500,
+                        min_time=1800,
                         ignore_win=30,
                         ignore_ratio_threshold=0.83,
                     ),
@@ -209,8 +209,8 @@ def make_s_stage_3():
                 trial_generator=UncoupledTrialGeneratorSpec(
                     trial_generation_end_parameters=UncoupledTrialGenerationEndConditions(
                         max_trial=1000,
-                        max_time=75,
-                        min_time=30,
+                        max_time=4500,
+                        min_time=1800,
                         ignore_win=30,
                         ignore_ratio_threshold=0.83,
                     ),
@@ -244,8 +244,8 @@ def make_s_stage_final():
                 trial_generator=UncoupledTrialGeneratorSpec(
                     trial_generation_end_parameters=UncoupledTrialGenerationEndConditions(
                         max_trial=1000,
-                        max_time=75,
-                        min_time=30,
+                        max_time=4500,
+                        min_time=1800,
                         ignore_win=30,
                         ignore_ratio_threshold=0.83,
                     ),
@@ -279,8 +279,8 @@ def make_s_stage_graduated():
                 trial_generator=UncoupledTrialGeneratorSpec(
                     trial_generation_end_parameters=UncoupledTrialGenerationEndConditions(
                         max_trial=1000,
-                        max_time=75,
-                        min_time=30,
+                        max_time=4500,
+                        min_time=1800,
                         ignore_win=30,
                         ignore_ratio_threshold=0.83,
                     ),
