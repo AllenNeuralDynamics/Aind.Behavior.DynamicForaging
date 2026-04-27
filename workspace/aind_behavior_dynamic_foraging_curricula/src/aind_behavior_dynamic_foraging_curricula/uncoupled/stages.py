@@ -9,6 +9,9 @@ from aind_behavior_dynamic_foraging.task_logic.trial_generators import (
     CoupledWarmupTrialGeneratorSpec,
     TrialGeneratorCompositeSpec,
 )
+from aind_behavior_dynamic_foraging.task_logic.trial_generators.block_based_trial_generator import (
+    AutoWaterParameters,
+)
 from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generators.base_coupled_trial_generator import (
     RewardProbabilityParameters,
 )
@@ -47,6 +50,9 @@ def make_s_stage_1_warmup():
                 trial_generator=TrialGeneratorCompositeSpec(
                     generators=[
                         CoupledWarmupTrialGeneratorSpec(
+                            autowater_parameters=AutoWaterParameters(
+                                reward_fraction=0.5, min_ignored_trials=3, min_unrewarded_trials=3
+                            ),
                             trial_generation_end_parameters=CoupledWarmupTrialGenerationEndConditions(
                                 min_trial=50,
                                 max_choice_bias=0.1,
@@ -70,6 +76,9 @@ def make_s_stage_1_warmup():
                             extend_block_on_no_response=True,
                         ),
                         CoupledTrialGeneratorSpec(
+                            autowater_parameters=AutoWaterParameters(
+                                reward_fraction=0.5, min_ignored_trials=3, min_unrewarded_trials=3
+                            ),
                             trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
                                 max_trial=1000,
                                 max_time=75,
@@ -117,6 +126,9 @@ def make_s_stage_1():
                 reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
                 lick_spout_retraction=False,
                 trial_generator=CoupledTrialGeneratorSpec(
+                    autowater_parameters=AutoWaterParameters(
+                        reward_fraction=0.5, min_ignored_trials=5, min_unrewarded_trials=5
+                    ),
                     trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
                         max_trial=1000,
                         max_time=75,
@@ -162,6 +174,9 @@ def make_s_stage_2():
                 reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
                 lick_spout_retraction=False,
                 trial_generator=CoupledTrialGeneratorSpec(
+                    autowater_parameters=AutoWaterParameters(
+                        reward_fraction=0.5, min_ignored_trials=7, min_unrewarded_trials=7
+                    ),
                     trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
                         max_trial=1000,
                         max_time=75,
@@ -207,6 +222,9 @@ def make_s_stage_3():
                 reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
                 lick_spout_retraction=False,
                 trial_generator=UncoupledTrialGeneratorSpec(
+                    autowater_parameters=AutoWaterParameters(
+                        reward_fraction=0.5, min_ignored_trials=10, min_unrewarded_trials=10
+                    ),
                     trial_generation_end_parameters=UncoupledTrialGenerationEndConditions(
                         max_trial=1000,
                         max_time=75,
@@ -241,6 +259,7 @@ def make_s_stage_final():
             task_parameters=AindDynamicForagingTaskParameters(
                 reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
                 lick_spout_retraction=False,
+                autowater_parameters=None,
                 trial_generator=UncoupledTrialGeneratorSpec(
                     trial_generation_end_parameters=UncoupledTrialGenerationEndConditions(
                         max_trial=1000,
@@ -277,6 +296,7 @@ def make_s_stage_graduated():
                 reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
                 lick_spout_retraction=False,
                 trial_generator=UncoupledTrialGeneratorSpec(
+                    autowater_parameters=None,
                     trial_generation_end_parameters=UncoupledTrialGenerationEndConditions(
                         max_trial=1000,
                         max_time=75,
