@@ -3471,7 +3471,7 @@
           "description": "Distribution describing the inter-trial interval (in seconds)."
         },
         "block_length": {
-          "$ref": "#/$defs/Distribution",
+          "$ref": "#/$defs/UniformDistribution",
           "default": {
             "family": "Uniform",
             "distribution_parameters": {
@@ -3479,11 +3479,7 @@
               "max": 60.0,
               "min": 20.0
             },
-            "truncation_parameters": {
-              "max": 60.0,
-              "min": 20.0,
-              "truncation_mode": "exclude"
-            },
+            "truncation_parameters": null,
             "scaling_parameters": null
           },
           "description": "Distribution describing block length."

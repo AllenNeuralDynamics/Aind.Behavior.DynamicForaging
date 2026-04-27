@@ -6069,7 +6069,7 @@ namespace AindDynamicForagingDataSchema
     
         private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _interTrialIntervalDuration;
     
-        private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _blockLength;
+        private AllenNeuralDynamics.AindBehaviorServices.Distributions.UniformDistribution _blockLength;
     
         private AutoWaterParameters _autowaterParameters;
     
@@ -6087,7 +6087,7 @@ namespace AindDynamicForagingDataSchema
             _responseDuration = 1D;
             _rewardConsumptionDuration = 3D;
             _interTrialIntervalDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
-            _blockLength = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
+            _blockLength = new AllenNeuralDynamics.AindBehaviorServices.Distributions.UniformDistribution();
             _autowaterParameters = new AutoWaterParameters();
             _isBaiting = false;
             _trialGenerationEndParameters = new UncoupledTrialGenerationEndConditions();
@@ -6187,7 +6187,7 @@ namespace AindDynamicForagingDataSchema
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("block_length")]
         [System.ComponentModel.DescriptionAttribute("Distribution describing block length.")]
-        public AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution BlockLength
+        public AllenNeuralDynamics.AindBehaviorServices.Distributions.UniformDistribution BlockLength
         {
             get
             {
