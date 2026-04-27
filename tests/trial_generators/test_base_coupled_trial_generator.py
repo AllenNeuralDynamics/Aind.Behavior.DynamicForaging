@@ -35,7 +35,7 @@ class TestBaseCoupledTrialGenerator(unittest.TestCase):
         next_block = self.generator._generate_next_block(
             reward_pairs=self.spec.reward_probability_parameters.reward_pairs,
             base_reward_sum=self.spec.reward_probability_parameters.base_reward_sum,
-            block_len=self.spec.block_len,
+            block_length=self.spec.block_length,
             current_block=current,
         )
         self.assertNotEqual(
@@ -48,7 +48,7 @@ class TestBaseCoupledTrialGenerator(unittest.TestCase):
         next_block = self.generator._generate_next_block(
             reward_pairs=self.spec.reward_probability_parameters.reward_pairs,
             base_reward_sum=self.spec.reward_probability_parameters.base_reward_sum,
-            block_len=self.spec.block_len,
+            block_length=self.spec.block_length,
             current_block=current,
         )
         current_high_is_right = current.p_right_reward > current.p_left_reward
@@ -67,7 +67,7 @@ class TestBaseCoupledTrialGenerator(unittest.TestCase):
         next_block = generator._generate_next_block(
             reward_pairs=spec.reward_probability_parameters.reward_pairs,
             base_reward_sum=spec.reward_probability_parameters.base_reward_sum,
-            block_len=spec.block_len,
+            block_length=spec.block_length,
             current_block=current,
         )
 
@@ -88,7 +88,7 @@ class TestBaseCoupledTrialGenerator(unittest.TestCase):
             next_block = generator._generate_next_block(
                 reward_pairs=spec.reward_probability_parameters.reward_pairs,
                 base_reward_sum=spec.reward_probability_parameters.base_reward_sum,
-                block_len=spec.block_len,
+                block_length=spec.block_length,
                 current_block=current,
             )
             self.assertNotEqual(
