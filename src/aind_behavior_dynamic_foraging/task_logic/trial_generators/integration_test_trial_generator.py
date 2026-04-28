@@ -1,8 +1,11 @@
 from typing import Literal
 
+from aind_behavior_services.task import distributions
+
 from ..trial_models import QuickRetractSettings, Trial, TrialOutcome
 from ._base import BaseTrialGeneratorSpecModel, ITrialGenerator
-from aind_behavior_services.task import distributions
+
+
 class IntegrationTestTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
     type: Literal["IntegrationTestTrialGenerator"] = "IntegrationTestTrialGenerator"
 
@@ -48,8 +51,15 @@ class IntegrationTestTrialGenerator(ITrialGenerator):
             #     p_reward_left=0.0, p_reward_right=0.0, is_auto_response_right=False
             # ),  # 12: no reward, auto response left,
             # fast retract
-            Trial(quiescence_period_duration=60,
-                quick_retract_settings=QuickRetractSettings(enable_during_quiescence=True, enable_on_response=True, time_to_reset_during_quiescence=distributions.Scalar(distribution_parameters=distributions.ScalarDistributionParameter(value=2)))
+            Trial(
+                quiescence_period_duration=60,
+                quick_retract_settings=QuickRetractSettings(
+                    enable_during_quiescence=True,
+                    enable_on_response=True,
+                    time_to_reset_during_quiescence=distributions.Scalar(
+                        distribution_parameters=distributions.ScalarDistributionParameter(value=2)
+                    ),
+                ),
             ),  # 13: enable fast retract
             # secondary reinforcer
             # Trial(secondary_reinforcer=SecondaryReinforcer()),   # 14: enable secondary reinforcer

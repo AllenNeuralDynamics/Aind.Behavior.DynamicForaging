@@ -876,7 +876,7 @@
           "type": "string"
         },
         "quiescent_duration": {
-          "$ref": "#/$defs/aind_behavior_services__task__distributions__Distribution__1",
+          "$ref": "#/$defs/Distribution",
           "default": {
             "family": "Exponential",
             "distribution_parameters": {
@@ -907,7 +907,7 @@
           "type": "number"
         },
         "inter_trial_interval_duration": {
-          "$ref": "#/$defs/aind_behavior_services__task__distributions__Distribution__1",
+          "$ref": "#/$defs/Distribution",
           "default": {
             "family": "Exponential",
             "distribution_parameters": {
@@ -924,7 +924,7 @@
           "description": "Distribution describing the inter-trial interval (in seconds)."
         },
         "block_len": {
-          "$ref": "#/$defs/aind_behavior_services__task__distributions__Distribution__1",
+          "$ref": "#/$defs/Distribution",
           "default": {
             "family": "Exponential",
             "distribution_parameters": {
@@ -1007,6 +1007,58 @@
       },
       "title": "CoupledTrialGeneratorSpec",
       "type": "object"
+    },
+    "Distribution": {
+      "description": "Available distributions",
+      "discriminator": {
+        "mapping": {
+          "Beta": "#/$defs/BetaDistribution",
+          "Binomial": "#/$defs/BinomialDistribution",
+          "Exponential": "#/$defs/ExponentialDistribution",
+          "Gamma": "#/$defs/GammaDistribution",
+          "LogNormal": "#/$defs/LogNormalDistribution",
+          "Normal": "#/$defs/NormalDistribution",
+          "Pdf": "#/$defs/PdfDistribution",
+          "Poisson": "#/$defs/PoissonDistribution",
+          "Scalar": "#/$defs/Scalar",
+          "Uniform": "#/$defs/UniformDistribution"
+        },
+        "propertyName": "family"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/Scalar"
+        },
+        {
+          "$ref": "#/$defs/NormalDistribution"
+        },
+        {
+          "$ref": "#/$defs/LogNormalDistribution"
+        },
+        {
+          "$ref": "#/$defs/ExponentialDistribution"
+        },
+        {
+          "$ref": "#/$defs/UniformDistribution"
+        },
+        {
+          "$ref": "#/$defs/PoissonDistribution"
+        },
+        {
+          "$ref": "#/$defs/BinomialDistribution"
+        },
+        {
+          "$ref": "#/$defs/BetaDistribution"
+        },
+        {
+          "$ref": "#/$defs/GammaDistribution"
+        },
+        {
+          "$ref": "#/$defs/PdfDistribution"
+        }
+      ],
+      "title": "Distribution",
+      "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution"
     },
     "DynamicForagingSoundCard": {
       "description": "A calibrated sound card for the dynamic foraging rig. This is a subclass of the HarpSoundCard that includes the sound card calibration.",
@@ -1904,11 +1956,17 @@
           "type": "boolean"
         },
         "time_to_reset_during_quiescence": {
-          "$ref": "#/$defs/aind_behavior_services__task__distributions__Distribution__2",
-          "default": 1.0,
-          "description": "If enable_during_quiescence is true, this is the time the spout will take to reset. If the quiescence period is shorter than this time, the spout will retract at the end of the period.",
-          "ge": 0,
-          "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution"
+          "$ref": "#/$defs/Distribution",
+          "default": {
+            "family": "Scalar",
+            "distribution_parameters": {
+              "family": "Scalar",
+              "value": 1.0
+            },
+            "truncation_parameters": null,
+            "scaling_parameters": null
+          },
+          "description": "If enable_during_quiescence is true, this is the time the spout will take to reset. If the quiescence period is shorter than this time, the spout will retract at the end of the period."
         },
         "enable_on_response": {
           "default": false,
@@ -3130,7 +3188,7 @@
           "type": "string"
         },
         "quiescent_duration": {
-          "$ref": "#/$defs/aind_behavior_services__task__distributions__Distribution__1",
+          "$ref": "#/$defs/Distribution",
           "default": {
             "family": "Exponential",
             "distribution_parameters": {
@@ -3161,7 +3219,7 @@
           "type": "number"
         },
         "inter_trial_interval_duration": {
-          "$ref": "#/$defs/aind_behavior_services__task__distributions__Distribution__1",
+          "$ref": "#/$defs/Distribution",
           "default": {
             "family": "Exponential",
             "distribution_parameters": {
@@ -3178,7 +3236,7 @@
           "description": "Distribution describing the inter-trial interval (in seconds)."
         },
         "block_len": {
-          "$ref": "#/$defs/aind_behavior_services__task__distributions__Distribution__1",
+          "$ref": "#/$defs/Distribution",
           "default": {
             "family": "Scalar",
             "distribution_parameters": {
@@ -3420,109 +3478,6 @@
       },
       "title": "WebCamera",
       "type": "object"
-    },
-    "aind_behavior_services__task__distributions__Distribution__1": {
-      "description": "Available distributions",
-      "discriminator": {
-        "mapping": {
-          "Beta": "#/$defs/BetaDistribution",
-          "Binomial": "#/$defs/BinomialDistribution",
-          "Exponential": "#/$defs/ExponentialDistribution",
-          "Gamma": "#/$defs/GammaDistribution",
-          "LogNormal": "#/$defs/LogNormalDistribution",
-          "Normal": "#/$defs/NormalDistribution",
-          "Pdf": "#/$defs/PdfDistribution",
-          "Poisson": "#/$defs/PoissonDistribution",
-          "Scalar": "#/$defs/Scalar",
-          "Uniform": "#/$defs/UniformDistribution"
-        },
-        "propertyName": "family"
-      },
-      "oneOf": [
-        {
-          "$ref": "#/$defs/Scalar"
-        },
-        {
-          "$ref": "#/$defs/NormalDistribution"
-        },
-        {
-          "$ref": "#/$defs/LogNormalDistribution"
-        },
-        {
-          "$ref": "#/$defs/ExponentialDistribution"
-        },
-        {
-          "$ref": "#/$defs/UniformDistribution"
-        },
-        {
-          "$ref": "#/$defs/PoissonDistribution"
-        },
-        {
-          "$ref": "#/$defs/BinomialDistribution"
-        },
-        {
-          "$ref": "#/$defs/BetaDistribution"
-        },
-        {
-          "$ref": "#/$defs/GammaDistribution"
-        },
-        {
-          "$ref": "#/$defs/PdfDistribution"
-        }
-      ],
-      "title": "Distribution",
-      "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution"
-    },
-    "aind_behavior_services__task__distributions__Distribution__2": {
-      "description": "Available distributions",
-      "discriminator": {
-        "mapping": {
-          "Beta": "#/$defs/BetaDistribution",
-          "Binomial": "#/$defs/BinomialDistribution",
-          "Exponential": "#/$defs/ExponentialDistribution",
-          "Gamma": "#/$defs/GammaDistribution",
-          "LogNormal": "#/$defs/LogNormalDistribution",
-          "Normal": "#/$defs/NormalDistribution",
-          "Pdf": "#/$defs/PdfDistribution",
-          "Poisson": "#/$defs/PoissonDistribution",
-          "Scalar": "#/$defs/Scalar",
-          "Uniform": "#/$defs/UniformDistribution"
-        },
-        "propertyName": "family"
-      },
-      "oneOf": [
-        {
-          "$ref": "#/$defs/Scalar"
-        },
-        {
-          "$ref": "#/$defs/NormalDistribution"
-        },
-        {
-          "$ref": "#/$defs/LogNormalDistribution"
-        },
-        {
-          "$ref": "#/$defs/ExponentialDistribution"
-        },
-        {
-          "$ref": "#/$defs/UniformDistribution"
-        },
-        {
-          "$ref": "#/$defs/PoissonDistribution"
-        },
-        {
-          "$ref": "#/$defs/BinomialDistribution"
-        },
-        {
-          "$ref": "#/$defs/BetaDistribution"
-        },
-        {
-          "$ref": "#/$defs/GammaDistribution"
-        },
-        {
-          "$ref": "#/$defs/PdfDistribution"
-        }
-      ],
-      "title": "Distribution"
     }
   }
 }

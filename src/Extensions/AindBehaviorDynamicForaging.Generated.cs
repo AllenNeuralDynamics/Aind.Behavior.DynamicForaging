@@ -2816,6 +2816,7 @@ namespace AindDynamicForagingDataSchema
         public QuickRetractSettings()
         {
             _enableDuringQuiescence = false;
+            _timeToResetDuringQuiescence = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _enableOnResponse = false;
         }
     
@@ -6235,51 +6236,6 @@ namespace AindDynamicForagingDataSchema
 
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
-    [Newtonsoft.Json.JsonConverter(typeof(JsonInheritanceConverter), "family")]
-    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    [Bonsai.CombinatorAttribute(MethodName="Generate")]
-    public partial class TimeToResetDuringQuiescence
-    {
-    
-        public TimeToResetDuringQuiescence()
-        {
-        }
-    
-        protected TimeToResetDuringQuiescence(TimeToResetDuringQuiescence other)
-        {
-        }
-    
-        public System.IObservable<TimeToResetDuringQuiescence> Generate()
-        {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new TimeToResetDuringQuiescence(this)));
-        }
-    
-        public System.IObservable<TimeToResetDuringQuiescence> Generate<TSource>(System.IObservable<TSource> source)
-        {
-            return System.Reactive.Linq.Observable.Select(source, _ => new TimeToResetDuringQuiescence(this));
-        }
-    
-        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
-        {
-            return false;
-        }
-    
-        public override string ToString()
-        {
-            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
-            stringBuilder.Append(GetType().Name);
-            stringBuilder.Append(" { ");
-            if (PrintMembers(stringBuilder))
-            {
-                stringBuilder.Append(" ");
-            }
-            stringBuilder.Append("}");
-            return stringBuilder.ToString();
-        }
-    }
-
-
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     public enum BehaviorStabilityParametersBehaviorEvaluationMode
     {
@@ -6578,45 +6534,6 @@ namespace AindDynamicForagingDataSchema
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
-    [System.ComponentModel.DefaultPropertyAttribute("Type")]
-    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Combinator)]
-    public partial class MatchTimeToResetDuringQuiescence : Bonsai.Expressions.SingleArgumentExpressionBuilder
-    {
-    
-        public Bonsai.Expressions.TypeMapping Type { get; set; }
-
-        public override System.Linq.Expressions.Expression Build(System.Collections.Generic.IEnumerable<System.Linq.Expressions.Expression> arguments)
-        {
-            var typeMapping = Type;
-            var returnType = typeMapping != null ? typeMapping.GetType().GetGenericArguments()[0] : typeof(TimeToResetDuringQuiescence);
-            return System.Linq.Expressions.Expression.Call(
-                typeof(MatchTimeToResetDuringQuiescence),
-                "Process",
-                new System.Type[] { returnType },
-                System.Linq.Enumerable.Single(arguments));
-        }
-
-    
-        private static System.IObservable<TResult> Process<TResult>(System.IObservable<TimeToResetDuringQuiescence> source)
-            where TResult : TimeToResetDuringQuiescence
-        {
-            return System.Reactive.Linq.Observable.Create<TResult>(observer =>
-            {
-                var sourceObserver = System.Reactive.Observer.Create<TimeToResetDuringQuiescence>(
-                    value =>
-                    {
-                        var match = value as TResult;
-                        if (match != null) observer.OnNext(match);
-                    },
-                    observer.OnError,
-                    observer.OnCompleted);
-                return System.ObservableExtensions.SubscribeSafe(source, sourceObserver);
-            });
-        }
-    }
-
-
     /// <summary>
     /// Serializes a sequence of data model objects into JSON strings.
     /// </summary>
@@ -6834,11 +6751,6 @@ namespace AindDynamicForagingDataSchema
         {
             return Process<Anonymous>(source);
         }
-
-        public System.IObservable<string> Process(System.IObservable<TimeToResetDuringQuiescence> source)
-        {
-            return Process<TimeToResetDuringQuiescence>(source);
-        }
     }
 
 
@@ -6889,7 +6801,6 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Waveform>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WebCamera>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Anonymous>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TimeToResetDuringQuiescence>))]
     public partial class DeserializeFromJson : Bonsai.Expressions.SingleArgumentExpressionBuilder
     {
     

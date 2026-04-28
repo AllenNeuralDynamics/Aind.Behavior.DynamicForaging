@@ -1,7 +1,12 @@
 from typing import TYPE_CHECKING, Annotated, Any, Literal, Optional, TypeAliasType, Union
 
-from aind_behavior_services.task.distributions import Distribution, Scalar
+from aind_behavior_services.task.distributions import Distribution, Scalar, ScalarDistributionParameter
 from pydantic import BaseModel, Field, SerializeAsAny
+
+
+def scalar(value: float) -> Scalar:
+    """Helper function to create a Scalar distribution."""
+    return Scalar(distribution_parameters=ScalarDistributionParameter(value=value))
 
 
 class AuditorySecondaryReinforcer(BaseModel):
@@ -29,8 +34,7 @@ class QuickRetractSettings(BaseModel):
         default=False, description="If true, the quick retract feature is enabled during the quiescence period."
     )
     time_to_reset_during_quiescence: Distribution = Field(
-        default=Scalar(value=1.0),
-        ge=0,
+        default=scalar(1.0),
         description="If enable_during_quiescence is true, this is the time the spout will take to reset. If the quiescence period is shorter than this time, the spout will retract at the end of the period.",
     )
     enable_on_response: bool = Field(
