@@ -20,7 +20,7 @@
         <VisualIndicators>On</VisualIndicators>
         <Heartbeat>Enabled</Heartbeat>
         <IgnoreErrors>false</IgnoreErrors>
-        <PortName>COM9</PortName>
+        <PortName>COMX</PortName>
       </Expression>
       <Expression xsi:type="WorkflowOutput" />
       <Expression xsi:type="SubscribeSubject">
