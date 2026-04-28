@@ -109,11 +109,6 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:Merge" />
       </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:Take">
-          <rx:Count>8</rx:Count>
-        </Combinator>
-      </Expression>
       <Expression xsi:type="SubscribeSubject">
         <Name>StepperDriverEvents</Name>
       </Expression>
@@ -145,11 +140,10 @@
       <Edge From="16" To="18" Label="Source4" />
       <Edge From="17" To="18" Label="Source5" />
       <Edge From="18" To="19" Label="Source2" />
-      <Edge From="19" To="20" Label="Source1" />
-      <Edge From="20" To="22" Label="Source1" />
-      <Edge From="21" To="22" Label="Source2" />
+      <Edge From="19" To="21" Label="Source1" />
+      <Edge From="20" To="21" Label="Source2" />
+      <Edge From="21" To="22" Label="Source1" />
       <Edge From="22" To="23" Label="Source1" />
-      <Edge From="23" To="24" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>
