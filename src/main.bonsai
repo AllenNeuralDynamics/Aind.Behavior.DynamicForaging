@@ -357,35 +357,23 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:SubscribeWhen" />
       </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="IncludeWorkflow" Path="Extensions\Logging.bonsai" />
+      <Expression xsi:type="IncludeWorkflow" Path="Extensions\Logging.bonsai" />
+      <Expression xsi:type="SubscribeSubject">
+        <Name>EndExperiment</Name>
       </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="SubscribeSubject">
-          <Name>EndExperiment</Name>
-        </Builder>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:Delay">
+          <rx:DueTime>PT1S</rx:DueTime>
+        </Combinator>
       </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="Combinator">
-          <Combinator xsi:type="rx:Delay">
-            <rx:DueTime>PT1S</rx:DueTime>
-          </Combinator>
-        </Builder>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:TakeUntil" />
       </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="Combinator">
-          <Combinator xsi:type="rx:TakeUntil" />
-        </Builder>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>StartLogging</Name>
       </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="SubscribeSubject">
-          <Name>StartLogging</Name>
-        </Builder>
-      </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="Combinator">
-          <Combinator xsi:type="rx:SubscribeWhen" />
-        </Builder>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:SubscribeWhen" />
       </Expression>
       <Expression xsi:type="SubscribeSubject">
         <Name>EndExperiment</Name>
