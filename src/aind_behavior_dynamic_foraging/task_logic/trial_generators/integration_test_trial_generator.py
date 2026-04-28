@@ -78,6 +78,7 @@ class IntegrationTestTrialGenerator(ITrialGenerator):
     def next(self) -> Trial | None:
         if self._idx >= len(self.trial_opts):
             return None
+        return self.trial_opts[self._idx]
 
     def update(self, outcome: TrialOutcome | str) -> None:
         self._idx += 1
