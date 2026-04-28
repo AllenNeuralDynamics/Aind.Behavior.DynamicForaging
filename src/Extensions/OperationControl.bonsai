@@ -639,11 +639,12 @@
               <rx:Name>IsRightTriggerQuickRetract</rx:Name>
             </Expression>
             <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Description />
               <scr:Expression>it ? 2 : 4</scr:Expression>
             </Expression>
             <Expression xsi:type="p2:Format">
               <harp:MessageType>Write</harp:MessageType>
-              <harp:Register xsi:type="p2:EnableDriver" />
+              <harp:Register xsi:type="p2:TriggerQuickMovement" />
             </Expression>
             <Expression xsi:type="MulticastSubject">
               <Name>StepperDriverCommands</Name>
@@ -1083,7 +1084,7 @@
             <Expression xsi:type="p6:CreateMessage">
               <harp:MessageType>Write</harp:MessageType>
               <harp:Payload xsi:type="p6:CreatePlaySoundOrFrequencyPayload">
-                <p6:PlaySoundOrFrequency>0</p6:PlaySoundOrFrequency>
+                <p6:PlaySoundOrFrequency>4</p6:PlaySoundOrFrequency>
               </harp:Payload>
             </Expression>
             <Expression xsi:type="MulticastSubject">
