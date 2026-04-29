@@ -43,7 +43,7 @@ jobs:
           enable-cache: true
 
       - name: Install python dependencies
-        run: uv sync
+        run: uv sync --all-packages
 
       - name: Run ruff format
         run: uv run ruff format
@@ -116,6 +116,9 @@ jobs:
 
       - name: Regenerate schemas
         run: uv run dynamic-foraging regenerate
+
+      - name: Regenerate curriculum schema
+        run: uv run --package aind-behavior-dynamic-foraging-curricula python -m aind_behavior_dynamic_foraging_curricula._schema
 
       - name: Commit version and schema changes
         run: |

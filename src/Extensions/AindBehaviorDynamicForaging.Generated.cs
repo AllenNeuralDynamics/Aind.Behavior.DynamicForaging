@@ -50,7 +50,7 @@ namespace AindDynamicForagingDataSchema
         public AindDynamicForagingRig()
         {
             _aindBehaviorServicesPkgVersion = "0.13.5";
-            _version = "0.0.2-rc24";
+            _version = "0.0.2-rc30";
             _triggeredCameraController = new CameraControllerSpinnakerCamera();
             _harpBehavior = new HarpBehavior();
             _harpClockGenerator = new HarpWhiteRabbit();
@@ -433,7 +433,7 @@ namespace AindDynamicForagingDataSchema
             _name = "AindDynamicForaging";
             _description = "";
             _taskParameters = new AindDynamicForagingTaskParameters();
-            _version = "0.0.2-rc24";
+            _version = "0.0.2-rc30";
         }
     
         protected AindDynamicForagingTaskLogic(AindDynamicForagingTaskLogic other)
@@ -751,6 +751,116 @@ namespace AindDynamicForagingDataSchema
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
             stringBuilder.Append("Type = " + _type);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class AutoWaterParameters
+    {
+    
+        private int _minIgnoredTrials;
+    
+        private int _minUnrewardedTrials;
+    
+        private double _rewardFraction;
+    
+        public AutoWaterParameters()
+        {
+            _minIgnoredTrials = 3;
+            _minUnrewardedTrials = 3;
+            _rewardFraction = 0.8D;
+        }
+    
+        protected AutoWaterParameters(AutoWaterParameters other)
+        {
+            _minIgnoredTrials = other._minIgnoredTrials;
+            _minUnrewardedTrials = other._minUnrewardedTrials;
+            _rewardFraction = other._rewardFraction;
+        }
+    
+        /// <summary>
+        /// Minimum consecutive ignored trials before auto water is triggered.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("min_ignored_trials")]
+        [System.ComponentModel.DescriptionAttribute("Minimum consecutive ignored trials before auto water is triggered.")]
+        public int MinIgnoredTrials
+        {
+            get
+            {
+                return _minIgnoredTrials;
+            }
+            set
+            {
+                _minIgnoredTrials = value;
+            }
+        }
+    
+        /// <summary>
+        /// Minimum consecutive unrewarded trials before auto water is triggered.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("min_unrewarded_trials")]
+        [System.ComponentModel.DescriptionAttribute("Minimum consecutive unrewarded trials before auto water is triggered.")]
+        public int MinUnrewardedTrials
+        {
+            get
+            {
+                return _minUnrewardedTrials;
+            }
+            set
+            {
+                _minUnrewardedTrials = value;
+            }
+        }
+    
+        /// <summary>
+        /// Fraction of full reward volume delivered during auto water (0=none, 1=full).
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("reward_fraction")]
+        [System.ComponentModel.DescriptionAttribute("Fraction of full reward volume delivered during auto water (0=none, 1=full).")]
+        public double RewardFraction
+        {
+            get
+            {
+                return _rewardFraction;
+            }
+            set
+            {
+                _rewardFraction = value;
+            }
+        }
+    
+        public System.IObservable<AutoWaterParameters> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new AutoWaterParameters(this)));
+        }
+    
+        public System.IObservable<AutoWaterParameters> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new AutoWaterParameters(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("MinIgnoredTrials = " + _minIgnoredTrials + ", ");
+            stringBuilder.Append("MinUnrewardedTrials = " + _minUnrewardedTrials + ", ");
+            stringBuilder.Append("RewardFraction = " + _rewardFraction);
             return true;
         }
     
@@ -1455,6 +1565,8 @@ namespace AindDynamicForagingDataSchema
     
         private RewardProbabilityParameters _rewardProbabilityParameters;
     
+        private AutoWaterParameters _autowaterParameters;
+    
         private bool _isBaiting;
     
         private CoupledTrialGenerationEndConditions _trialGenerationEndParameters;
@@ -1473,6 +1585,7 @@ namespace AindDynamicForagingDataSchema
             _minBlockReward = 1;
             _kernelSize = 2;
             _rewardProbabilityParameters = new RewardProbabilityParameters();
+            _autowaterParameters = new AutoWaterParameters();
             _isBaiting = false;
             _trialGenerationEndParameters = new CoupledTrialGenerationEndConditions();
             _behaviorStabilityParameters = new BehaviorStabilityParameters();
@@ -1490,6 +1603,7 @@ namespace AindDynamicForagingDataSchema
             _minBlockReward = other._minBlockReward;
             _kernelSize = other._kernelSize;
             _rewardProbabilityParameters = other._rewardProbabilityParameters;
+            _autowaterParameters = other._autowaterParameters;
             _isBaiting = other._isBaiting;
             _trialGenerationEndParameters = other._trialGenerationEndParameters;
             _behaviorStabilityParameters = other._behaviorStabilityParameters;
@@ -1634,6 +1748,25 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
+        /// Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("autowater_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Auto water settings. If set, free water is delivered when the animal exceeds the " +
+            "ignored or unrewarded trial thresholds.")]
+        public AutoWaterParameters AutowaterParameters
+        {
+            get
+            {
+                return _autowaterParameters;
+            }
+            set
+            {
+                _autowaterParameters = value;
+            }
+        }
+    
+        /// <summary>
         /// Whether uncollected rewards carry over to the next trial.
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("is_baiting")]
@@ -1729,6 +1862,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("MinBlockReward = " + _minBlockReward + ", ");
             stringBuilder.Append("KernelSize = " + _kernelSize + ", ");
             stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters + ", ");
+            stringBuilder.Append("AutowaterParameters = " + _autowaterParameters + ", ");
             stringBuilder.Append("IsBaiting = " + _isBaiting + ", ");
             stringBuilder.Append("TrialGenerationEndParameters = " + _trialGenerationEndParameters + ", ");
             stringBuilder.Append("BehaviorStabilityParameters = " + _behaviorStabilityParameters + ", ");
@@ -2779,6 +2913,124 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("ValveOpenTime = " + _valveOpenTime + ", ");
             stringBuilder.Append("WaterWeight = " + _waterWeight + ", ");
             stringBuilder.Append("RepeatCount = " + _repeatCount);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    /// <summary>
+    /// Settings for the quick retract feature.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.ComponentModel.DescriptionAttribute("Settings for the quick retract feature.")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class QuickRetractSettings
+    {
+    
+        private bool _enableDuringQuiescence;
+    
+        private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _timeToResetDuringQuiescence;
+    
+        private bool _enableOnResponse;
+    
+        public QuickRetractSettings()
+        {
+            _enableDuringQuiescence = false;
+            _timeToResetDuringQuiescence = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
+            _enableOnResponse = false;
+        }
+    
+        protected QuickRetractSettings(QuickRetractSettings other)
+        {
+            _enableDuringQuiescence = other._enableDuringQuiescence;
+            _timeToResetDuringQuiescence = other._timeToResetDuringQuiescence;
+            _enableOnResponse = other._enableOnResponse;
+        }
+    
+        /// <summary>
+        /// If true, the quick retract feature is enabled during the quiescence period.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("enable_during_quiescence")]
+        [System.ComponentModel.DescriptionAttribute("If true, the quick retract feature is enabled during the quiescence period.")]
+        public bool EnableDuringQuiescence
+        {
+            get
+            {
+                return _enableDuringQuiescence;
+            }
+            set
+            {
+                _enableDuringQuiescence = value;
+            }
+        }
+    
+        /// <summary>
+        /// If enable_during_quiescence is true, this is the time the spout will take to reset. If the quiescence period is shorter than this time, the spout will retract at the end of the period.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("time_to_reset_during_quiescence")]
+        [System.ComponentModel.DescriptionAttribute("If enable_during_quiescence is true, this is the time the spout will take to rese" +
+            "t. If the quiescence period is shorter than this time, the spout will retract at" +
+            " the end of the period.")]
+        public AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution TimeToResetDuringQuiescence
+        {
+            get
+            {
+                return _timeToResetDuringQuiescence;
+            }
+            set
+            {
+                _timeToResetDuringQuiescence = value;
+            }
+        }
+    
+        /// <summary>
+        /// If true, the quick retract feature is enabled immediately after a response is registered.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("enable_on_response")]
+        [System.ComponentModel.DescriptionAttribute("If true, the quick retract feature is enabled immediately after a response is reg" +
+            "istered.")]
+        public bool EnableOnResponse
+        {
+            get
+            {
+                return _enableOnResponse;
+            }
+            set
+            {
+                _enableOnResponse = value;
+            }
+        }
+    
+        public System.IObservable<QuickRetractSettings> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new QuickRetractSettings(this)));
+        }
+    
+        public System.IObservable<QuickRetractSettings> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new QuickRetractSettings(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("EnableDuringQuiescence = " + _enableDuringQuiescence + ", ");
+            stringBuilder.Append("TimeToResetDuringQuiescence = " + _timeToResetDuringQuiescence + ", ");
+            stringBuilder.Append("EnableOnResponse = " + _enableOnResponse);
             return true;
         }
     
@@ -4414,7 +4666,7 @@ namespace AindDynamicForagingDataSchema
     
         private double _responseDeadlineDuration;
     
-        private bool _enableFastRetract;
+        private QuickRetractSettings _quickRetractSettings;
     
         private double _quiescencePeriodDuration;
     
@@ -4433,7 +4685,6 @@ namespace AindDynamicForagingDataSchema
             _rewardConsumptionDuration = 5D;
             _rewardDelayDuration = 0D;
             _responseDeadlineDuration = 5D;
-            _enableFastRetract = false;
             _quiescencePeriodDuration = 0.5D;
             _interTrialIntervalDuration = 5D;
             _lickspoutOffsetDelta = 0D;
@@ -4447,7 +4698,7 @@ namespace AindDynamicForagingDataSchema
             _rewardDelayDuration = other._rewardDelayDuration;
             _secondaryReinforcer = other._secondaryReinforcer;
             _responseDeadlineDuration = other._responseDeadlineDuration;
-            _enableFastRetract = other._enableFastRetract;
+            _quickRetractSettings = other._quickRetractSettings;
             _quiescencePeriodDuration = other._quiescencePeriodDuration;
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
             _isAutoResponseRight = other._isAutoResponseRight;
@@ -4559,19 +4810,21 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// If true, the opposite lickspout retracts quickly after a response is made.
+        /// Settings for the quick retract feature. If null, the feature will be disabled for this trial.
         /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("enable_fast_retract")]
-        [System.ComponentModel.DescriptionAttribute("If true, the opposite lickspout retracts quickly after a response is made.")]
-        public bool EnableFastRetract
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("quick_retract_settings")]
+        [System.ComponentModel.DescriptionAttribute("Settings for the quick retract feature. If null, the feature will be disabled for" +
+            " this trial.")]
+        public QuickRetractSettings QuickRetractSettings
         {
             get
             {
-                return _enableFastRetract;
+                return _quickRetractSettings;
             }
             set
             {
-                _enableFastRetract = value;
+                _quickRetractSettings = value;
             }
         }
     
@@ -4683,7 +4936,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("RewardDelayDuration = " + _rewardDelayDuration + ", ");
             stringBuilder.Append("SecondaryReinforcer = " + _secondaryReinforcer + ", ");
             stringBuilder.Append("ResponseDeadlineDuration = " + _responseDeadlineDuration + ", ");
-            stringBuilder.Append("EnableFastRetract = " + _enableFastRetract + ", ");
+            stringBuilder.Append("QuickRetractSettings = " + _quickRetractSettings + ", ");
             stringBuilder.Append("QuiescencePeriodDuration = " + _quiescencePeriodDuration + ", ");
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
             stringBuilder.Append("IsAutoResponseRight = " + _isAutoResponseRight + ", ");
@@ -5369,6 +5622,8 @@ namespace AindDynamicForagingDataSchema
     
         private RewardProbabilityParameters _rewardProbabilityParameters;
     
+        private AutoWaterParameters _autowaterParameters;
+    
         private bool _isBaiting;
     
         private WarmupTrialGenerationEndConditions _trialGenerationEndParameters;
@@ -5383,6 +5638,7 @@ namespace AindDynamicForagingDataSchema
             _minBlockReward = 1;
             _kernelSize = 2;
             _rewardProbabilityParameters = new RewardProbabilityParameters();
+            _autowaterParameters = new AutoWaterParameters();
             _isBaiting = true;
             _trialGenerationEndParameters = new WarmupTrialGenerationEndConditions();
         }
@@ -5398,6 +5654,7 @@ namespace AindDynamicForagingDataSchema
             _minBlockReward = other._minBlockReward;
             _kernelSize = other._kernelSize;
             _rewardProbabilityParameters = other._rewardProbabilityParameters;
+            _autowaterParameters = other._autowaterParameters;
             _isBaiting = other._isBaiting;
             _trialGenerationEndParameters = other._trialGenerationEndParameters;
         }
@@ -5540,6 +5797,25 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
+        /// Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("autowater_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Auto water settings. If set, free water is delivered when the animal exceeds the " +
+            "ignored or unrewarded trial thresholds.")]
+        public AutoWaterParameters AutowaterParameters
+        {
+            get
+            {
+                return _autowaterParameters;
+            }
+            set
+            {
+                _autowaterParameters = value;
+            }
+        }
+    
+        /// <summary>
         /// Whether uncollected rewards carry over to the next trial.
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("is_baiting")]
@@ -5598,6 +5874,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("MinBlockReward = " + _minBlockReward + ", ");
             stringBuilder.Append("KernelSize = " + _kernelSize + ", ");
             stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters + ", ");
+            stringBuilder.Append("AutowaterParameters = " + _autowaterParameters + ", ");
             stringBuilder.Append("IsBaiting = " + _isBaiting + ", ");
             stringBuilder.Append("TrialGenerationEndParameters = " + _trialGenerationEndParameters);
             return true;
@@ -6453,6 +6730,11 @@ namespace AindDynamicForagingDataSchema
             return Process<AuditorySecondaryReinforcer>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<AutoWaterParameters> source)
+        {
+            return Process<AutoWaterParameters>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<BaseModel> source)
         {
             return Process<BaseModel>(source);
@@ -6526,6 +6808,11 @@ namespace AindDynamicForagingDataSchema
         public System.IObservable<string> Process(System.IObservable<Measurement> source)
         {
             return Process<Measurement>(source);
+        }
+
+        public System.IObservable<string> Process(System.IObservable<QuickRetractSettings> source)
+        {
+            return Process<QuickRetractSettings>(source);
         }
 
         public System.IObservable<string> Process(System.IObservable<Rect> source)
@@ -6641,6 +6928,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AindDynamicForagingTaskLogic>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AindDynamicForagingTaskParameters>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AuditorySecondaryReinforcer>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AutoWaterParameters>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BaseModel>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BehaviorStabilityParameters>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CameraControllerSpinnakerCamera>))]
@@ -6656,6 +6944,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpWhiteRabbit>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<IntegrationTestTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Measurement>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<QuickRetractSettings>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Rect>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<RewardProbabilityParameters>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<RewardSize>))]

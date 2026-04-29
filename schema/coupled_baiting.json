@@ -1,0 +1,701 @@
+{
+    "pkg_location": "aind_behavior_dynamic_foraging_curricula.coupled_baiting",
+    "name": "CoupledBaiting",
+    "version": "0.2.1",
+    "graph": {
+        "nodes": {
+            "0": {
+                "name": "stage_1_warmup",
+                "task": {
+                    "name": "AindDynamicForaging",
+                    "description": "",
+                    "task_parameters": {
+                        "rng_seed": null,
+                        "aind_behavior_services_pkg_version": "0.13.5",
+                        "reward_size": {
+                            "right_value_volume": 4.0,
+                            "left_value_volume": 4.0
+                        },
+                        "trial_generator": {
+                            "type": "TrialGeneratorComposite",
+                            "generators": [
+                                {
+                                    "type": "WarmupTrialGenerator",
+                                    "quiescent_duration": {
+                                        "family": "Scalar",
+                                        "distribution_parameters": {
+                                            "family": "Scalar",
+                                            "value": 0.0
+                                        },
+                                        "truncation_parameters": null,
+                                        "scaling_parameters": null
+                                    },
+                                    "response_duration": 5.0,
+                                    "reward_consumption_duration": 1.0,
+                                    "inter_trial_interval_duration": {
+                                        "family": "Exponential",
+                                        "distribution_parameters": {
+                                            "family": "Exponential",
+                                            "rate": 0.3333333333333333
+                                        },
+                                        "truncation_parameters": {
+                                            "truncation_mode": "exclude",
+                                            "min": 1.0,
+                                            "max": 7.0
+                                        },
+                                        "scaling_parameters": null
+                                    },
+                                    "block_len": {
+                                        "family": "Scalar",
+                                        "distribution_parameters": {
+                                            "family": "Scalar",
+                                            "value": 0.0
+                                        },
+                                        "truncation_parameters": null,
+                                        "scaling_parameters": null
+                                    },
+                                    "min_block_reward": 1,
+                                    "kernel_size": 2,
+                                    "reward_probability_parameters": {
+                                        "base_reward_sum": 1.0,
+                                        "reward_pairs": [
+                                            [
+                                                1.0,
+                                                0.0
+                                            ]
+                                        ]
+                                    },
+                                    "autowater_parameters": {
+                                        "min_ignored_trials": 3,
+                                        "min_unrewarded_trials": 3,
+                                        "reward_fraction": 0.8
+                                    },
+                                    "is_baiting": true,
+                                    "trial_generation_end_parameters": {
+                                        "min_trial": 50,
+                                        "max_choice_bias": 0.1,
+                                        "min_response_rate": 0.8,
+                                        "evaluation_window": 20
+                                    }
+                                },
+                                {
+                                    "type": "CoupledTrialGenerator",
+                                    "quiescent_duration": {
+                                        "family": "Scalar",
+                                        "distribution_parameters": {
+                                            "family": "Scalar",
+                                            "value": 0.0
+                                        },
+                                        "truncation_parameters": null,
+                                        "scaling_parameters": null
+                                    },
+                                    "response_duration": 5.0,
+                                    "reward_consumption_duration": 1.0,
+                                    "inter_trial_interval_duration": {
+                                        "family": "Exponential",
+                                        "distribution_parameters": {
+                                            "family": "Exponential",
+                                            "rate": 0.3333333333333333
+                                        },
+                                        "truncation_parameters": {
+                                            "truncation_mode": "exclude",
+                                            "min": 1.0,
+                                            "max": 7.0
+                                        },
+                                        "scaling_parameters": null
+                                    },
+                                    "block_len": {
+                                        "family": "Exponential",
+                                        "distribution_parameters": {
+                                            "family": "Exponential",
+                                            "rate": 0.2
+                                        },
+                                        "truncation_parameters": {
+                                            "truncation_mode": "exclude",
+                                            "min": 10.0,
+                                            "max": 20.0
+                                        },
+                                        "scaling_parameters": null
+                                    },
+                                    "min_block_reward": 0,
+                                    "kernel_size": 2,
+                                    "reward_probability_parameters": {
+                                        "base_reward_sum": 0.8,
+                                        "reward_pairs": [
+                                            [
+                                                1.0,
+                                                0.0
+                                            ]
+                                        ]
+                                    },
+                                    "autowater_parameters": {
+                                        "min_ignored_trials": 3,
+                                        "min_unrewarded_trials": 3,
+                                        "reward_fraction": 0.8
+                                    },
+                                    "is_baiting": true,
+                                    "trial_generation_end_parameters": {
+                                        "ignore_win": 20000,
+                                        "ignore_ratio_threshold": 1.0,
+                                        "max_trial": 1000,
+                                        "max_time": 75.0,
+                                        "min_time": 30.0
+                                    },
+                                    "behavior_stability_parameters": {
+                                        "behavior_evaluation_mode": "end",
+                                        "behavior_stability_fraction": 0.5,
+                                        "min_consecutive_stable_trials": 5
+                                    },
+                                    "extend_block_on_no_response": true
+                                }
+                            ]
+                        }
+                    },
+                    "version": "0.0.2-rc30",
+                    "stage_name": null
+                },
+                "graph": {
+                    "nodes": {},
+                    "graph": {}
+                },
+                "start_policies": [],
+                "metrics_provider": "aind_behavior_dynamic_foraging_curricula.metrics.metrics_from_dataset"
+            },
+            "1": {
+                "name": "stage_1",
+                "task": {
+                    "name": "AindDynamicForaging",
+                    "description": "",
+                    "task_parameters": {
+                        "rng_seed": null,
+                        "aind_behavior_services_pkg_version": "0.13.5",
+                        "reward_size": {
+                            "right_value_volume": 2.0,
+                            "left_value_volume": 2.0
+                        },
+                        "trial_generator": {
+                            "type": "CoupledTrialGenerator",
+                            "quiescent_duration": {
+                                "family": "Scalar",
+                                "distribution_parameters": {
+                                    "family": "Scalar",
+                                    "value": 0.0
+                                },
+                                "truncation_parameters": null,
+                                "scaling_parameters": null
+                            },
+                            "response_duration": 5.0,
+                            "reward_consumption_duration": 1.0,
+                            "inter_trial_interval_duration": {
+                                "family": "Exponential",
+                                "distribution_parameters": {
+                                    "family": "Exponential",
+                                    "rate": 0.3333333333333333
+                                },
+                                "truncation_parameters": {
+                                    "truncation_mode": "exclude",
+                                    "min": 1.0,
+                                    "max": 7.0
+                                },
+                                "scaling_parameters": null
+                            },
+                            "block_len": {
+                                "family": "Exponential",
+                                "distribution_parameters": {
+                                    "family": "Exponential",
+                                    "rate": 0.2
+                                },
+                                "truncation_parameters": {
+                                    "truncation_mode": "exclude",
+                                    "min": 10.0,
+                                    "max": 20.0
+                                },
+                                "scaling_parameters": null
+                            },
+                            "min_block_reward": 0,
+                            "kernel_size": 2,
+                            "reward_probability_parameters": {
+                                "base_reward_sum": 0.8,
+                                "reward_pairs": [
+                                    [
+                                        1.0,
+                                        0.0
+                                    ]
+                                ]
+                            },
+                            "autowater_parameters": {
+                                "min_ignored_trials": 3,
+                                "min_unrewarded_trials": 3,
+                                "reward_fraction": 0.8
+                            },
+                            "is_baiting": false,
+                            "trial_generation_end_parameters": {
+                                "ignore_win": 20000,
+                                "ignore_ratio_threshold": 1.0,
+                                "max_trial": 1000,
+                                "max_time": 75.0,
+                                "min_time": 30.0
+                            },
+                            "behavior_stability_parameters": {
+                                "behavior_evaluation_mode": "end",
+                                "behavior_stability_fraction": 0.5,
+                                "min_consecutive_stable_trials": 5
+                            },
+                            "extend_block_on_no_response": true
+                        },
+                        "lick_spout_retraction": false
+                    },
+                    "version": "0.0.2-rc30",
+                    "stage_name": null
+                },
+                "graph": {
+                    "nodes": {},
+                    "graph": {}
+                },
+                "start_policies": [],
+                "metrics_provider": "aind_behavior_dynamic_foraging_curricula.metrics.metrics_from_dataset"
+            },
+            "2": {
+                "name": "stage_2",
+                "task": {
+                    "name": "AindDynamicForaging",
+                    "description": "",
+                    "task_parameters": {
+                        "rng_seed": null,
+                        "aind_behavior_services_pkg_version": "0.13.5",
+                        "reward_size": {
+                            "right_value_volume": 2.0,
+                            "left_value_volume": 2.0
+                        },
+                        "trial_generator": {
+                            "type": "CoupledTrialGenerator",
+                            "quiescent_duration": {
+                                "family": "Scalar",
+                                "distribution_parameters": {
+                                    "family": "Scalar",
+                                    "value": 0.0
+                                },
+                                "truncation_parameters": null,
+                                "scaling_parameters": null
+                            },
+                            "response_duration": 3.0,
+                            "reward_consumption_duration": 1.0,
+                            "inter_trial_interval_duration": {
+                                "family": "Exponential",
+                                "distribution_parameters": {
+                                    "family": "Exponential",
+                                    "rate": 0.2
+                                },
+                                "truncation_parameters": {
+                                    "truncation_mode": "exclude",
+                                    "min": 1.0,
+                                    "max": 10.0
+                                },
+                                "scaling_parameters": null
+                            },
+                            "block_len": {
+                                "family": "Exponential",
+                                "distribution_parameters": {
+                                    "family": "Exponential",
+                                    "rate": 0.1
+                                },
+                                "truncation_parameters": {
+                                    "truncation_mode": "exclude",
+                                    "min": 10.0,
+                                    "max": 40.0
+                                },
+                                "scaling_parameters": null
+                            },
+                            "min_block_reward": 0,
+                            "kernel_size": 2,
+                            "reward_probability_parameters": {
+                                "base_reward_sum": 0.6,
+                                "reward_pairs": [
+                                    [
+                                        8.0,
+                                        1.0
+                                    ]
+                                ]
+                            },
+                            "autowater_parameters": {
+                                "min_ignored_trials": 3,
+                                "min_unrewarded_trials": 3,
+                                "reward_fraction": 0.8
+                            },
+                            "is_baiting": true,
+                            "trial_generation_end_parameters": {
+                                "ignore_win": 30,
+                                "ignore_ratio_threshold": 0.83,
+                                "max_trial": 1000,
+                                "max_time": 75.0,
+                                "min_time": 30.0
+                            },
+                            "behavior_stability_parameters": {
+                                "behavior_evaluation_mode": "end",
+                                "behavior_stability_fraction": 0.6,
+                                "min_consecutive_stable_trials": 5
+                            },
+                            "extend_block_on_no_response": true
+                        },
+                        "lick_spout_retraction": false
+                    },
+                    "version": "0.0.2-rc30",
+                    "stage_name": null
+                },
+                "graph": {
+                    "nodes": {},
+                    "graph": {}
+                },
+                "start_policies": [],
+                "metrics_provider": "aind_behavior_dynamic_foraging_curricula.metrics.metrics_from_dataset"
+            },
+            "3": {
+                "name": "stage_3",
+                "task": {
+                    "name": "AindDynamicForaging",
+                    "description": "",
+                    "task_parameters": {
+                        "rng_seed": null,
+                        "aind_behavior_services_pkg_version": "0.13.5",
+                        "reward_size": {
+                            "right_value_volume": 2.0,
+                            "left_value_volume": 2.0
+                        },
+                        "trial_generator": {
+                            "type": "CoupledTrialGenerator",
+                            "quiescent_duration": {
+                                "family": "Scalar",
+                                "distribution_parameters": {
+                                    "family": "Scalar",
+                                    "value": 0.0
+                                },
+                                "truncation_parameters": null,
+                                "scaling_parameters": null
+                            },
+                            "response_duration": 2.0,
+                            "reward_consumption_duration": 1.0,
+                            "inter_trial_interval_duration": {
+                                "family": "Exponential",
+                                "distribution_parameters": {
+                                    "family": "Exponential",
+                                    "rate": 0.3333333333333333
+                                },
+                                "truncation_parameters": {
+                                    "truncation_mode": "exclude",
+                                    "min": 1.0,
+                                    "max": 15.0
+                                },
+                                "scaling_parameters": null
+                            },
+                            "block_len": {
+                                "family": "Exponential",
+                                "distribution_parameters": {
+                                    "family": "Exponential",
+                                    "rate": 0.05
+                                },
+                                "truncation_parameters": {
+                                    "truncation_mode": "exclude",
+                                    "min": 20.0,
+                                    "max": 60.0
+                                },
+                                "scaling_parameters": null
+                            },
+                            "min_block_reward": 0,
+                            "kernel_size": 2,
+                            "reward_probability_parameters": {
+                                "base_reward_sum": 0.45,
+                                "reward_pairs": [
+                                    [
+                                        8.0,
+                                        1.0
+                                    ]
+                                ]
+                            },
+                            "autowater_parameters": {
+                                "min_ignored_trials": 3,
+                                "min_unrewarded_trials": 3,
+                                "reward_fraction": 0.8
+                            },
+                            "is_baiting": true,
+                            "trial_generation_end_parameters": {
+                                "ignore_win": 30,
+                                "ignore_ratio_threshold": 0.83,
+                                "max_trial": 1000,
+                                "max_time": 75.0,
+                                "min_time": 30.0
+                            },
+                            "behavior_stability_parameters": {
+                                "behavior_evaluation_mode": "end",
+                                "behavior_stability_fraction": 0.6,
+                                "min_consecutive_stable_trials": 5
+                            },
+                            "extend_block_on_no_response": true
+                        },
+                        "lick_spout_retraction": false
+                    },
+                    "version": "0.0.2-rc30",
+                    "stage_name": null
+                },
+                "graph": {
+                    "nodes": {},
+                    "graph": {}
+                },
+                "start_policies": [],
+                "metrics_provider": "aind_behavior_dynamic_foraging_curricula.metrics.metrics_from_dataset"
+            },
+            "4": {
+                "name": "final",
+                "task": {
+                    "name": "AindDynamicForaging",
+                    "description": "",
+                    "task_parameters": {
+                        "rng_seed": null,
+                        "aind_behavior_services_pkg_version": "0.13.5",
+                        "reward_size": {
+                            "right_value_volume": 2.0,
+                            "left_value_volume": 2.0
+                        },
+                        "trial_generator": {
+                            "type": "CoupledTrialGenerator",
+                            "quiescent_duration": {
+                                "family": "Scalar",
+                                "distribution_parameters": {
+                                    "family": "Scalar",
+                                    "value": 0.0
+                                },
+                                "truncation_parameters": null,
+                                "scaling_parameters": null
+                            },
+                            "response_duration": 1.0,
+                            "reward_consumption_duration": 3.0,
+                            "inter_trial_interval_duration": {
+                                "family": "Exponential",
+                                "distribution_parameters": {
+                                    "family": "Exponential",
+                                    "rate": 0.3333333333333333
+                                },
+                                "truncation_parameters": {
+                                    "truncation_mode": "exclude",
+                                    "min": 1.0,
+                                    "max": 30.0
+                                },
+                                "scaling_parameters": null
+                            },
+                            "block_len": {
+                                "family": "Exponential",
+                                "distribution_parameters": {
+                                    "family": "Exponential",
+                                    "rate": 0.05
+                                },
+                                "truncation_parameters": {
+                                    "truncation_mode": "exclude",
+                                    "min": 20.0,
+                                    "max": 60.0
+                                },
+                                "scaling_parameters": null
+                            },
+                            "min_block_reward": 0,
+                            "kernel_size": 2,
+                            "reward_probability_parameters": {
+                                "base_reward_sum": 0.45,
+                                "reward_pairs": [
+                                    [
+                                        8.0,
+                                        1.0
+                                    ],
+                                    [
+                                        6.0,
+                                        1.0
+                                    ],
+                                    [
+                                        3.0,
+                                        1.0
+                                    ],
+                                    [
+                                        1.0,
+                                        1.0
+                                    ]
+                                ]
+                            },
+                            "autowater_parameters": {
+                                "min_ignored_trials": 3,
+                                "min_unrewarded_trials": 3,
+                                "reward_fraction": 0.8
+                            },
+                            "is_baiting": true,
+                            "trial_generation_end_parameters": {
+                                "ignore_win": 30,
+                                "ignore_ratio_threshold": 0.83,
+                                "max_trial": 1000,
+                                "max_time": 75.0,
+                                "min_time": 30.0
+                            },
+                            "behavior_stability_parameters": null,
+                            "extend_block_on_no_response": true
+                        },
+                        "lick_spout_retraction": false
+                    },
+                    "version": "0.0.2-rc30",
+                    "stage_name": null
+                },
+                "graph": {
+                    "nodes": {},
+                    "graph": {}
+                },
+                "start_policies": [],
+                "metrics_provider": "aind_behavior_dynamic_foraging_curricula.metrics.metrics_from_dataset"
+            },
+            "5": {
+                "name": "graduated",
+                "task": {
+                    "name": "AindDynamicForaging",
+                    "description": "",
+                    "task_parameters": {
+                        "rng_seed": null,
+                        "aind_behavior_services_pkg_version": "0.13.5",
+                        "reward_size": {
+                            "right_value_volume": 2.0,
+                            "left_value_volume": 2.0
+                        },
+                        "trial_generator": {
+                            "type": "CoupledTrialGenerator",
+                            "quiescent_duration": {
+                                "family": "Scalar",
+                                "distribution_parameters": {
+                                    "family": "Scalar",
+                                    "value": 0.0
+                                },
+                                "truncation_parameters": null,
+                                "scaling_parameters": null
+                            },
+                            "response_duration": 1.0,
+                            "reward_consumption_duration": 3.0,
+                            "inter_trial_interval_duration": {
+                                "family": "Exponential",
+                                "distribution_parameters": {
+                                    "family": "Exponential",
+                                    "rate": 0.3333333333333333
+                                },
+                                "truncation_parameters": {
+                                    "truncation_mode": "exclude",
+                                    "min": 1.0,
+                                    "max": 30.0
+                                },
+                                "scaling_parameters": null
+                            },
+                            "block_len": {
+                                "family": "Exponential",
+                                "distribution_parameters": {
+                                    "family": "Exponential",
+                                    "rate": 0.05
+                                },
+                                "truncation_parameters": {
+                                    "truncation_mode": "exclude",
+                                    "min": 20.0,
+                                    "max": 60.0
+                                },
+                                "scaling_parameters": null
+                            },
+                            "min_block_reward": 0,
+                            "kernel_size": 2,
+                            "reward_probability_parameters": {
+                                "base_reward_sum": 0.45,
+                                "reward_pairs": [
+                                    [
+                                        8.0,
+                                        1.0
+                                    ],
+                                    [
+                                        6.0,
+                                        1.0
+                                    ],
+                                    [
+                                        3.0,
+                                        1.0
+                                    ],
+                                    [
+                                        1.0,
+                                        1.0
+                                    ]
+                                ]
+                            },
+                            "autowater_parameters": {
+                                "min_ignored_trials": 3,
+                                "min_unrewarded_trials": 3,
+                                "reward_fraction": 0.8
+                            },
+                            "is_baiting": true,
+                            "trial_generation_end_parameters": {
+                                "ignore_win": 30,
+                                "ignore_ratio_threshold": 0.83,
+                                "max_trial": 1000,
+                                "max_time": 75.0,
+                                "min_time": 30.0
+                            },
+                            "behavior_stability_parameters": null,
+                            "extend_block_on_no_response": true
+                        },
+                        "lick_spout_retraction": false
+                    },
+                    "version": "0.0.2-rc30",
+                    "stage_name": null
+                },
+                "graph": {
+                    "nodes": {},
+                    "graph": {}
+                },
+                "start_policies": [],
+                "metrics_provider": "aind_behavior_dynamic_foraging_curricula.metrics.metrics_from_dataset"
+            }
+        },
+        "graph": {
+            "0": [
+                [
+                    "aind_behavior_dynamic_foraging_curricula.coupled_baiting.curriculum.st_stage_1_warmup_to_stage_2",
+                    2
+                ],
+                [
+                    "aind_behavior_dynamic_foraging_curricula.coupled_baiting.curriculum.st_stage_1_warmup_to_stage_1",
+                    1
+                ]
+            ],
+            "1": [
+                [
+                    "aind_behavior_dynamic_foraging_curricula.coupled_baiting.curriculum.st_stage_1_to_stage_2",
+                    2
+                ]
+            ],
+            "2": [
+                [
+                    "aind_behavior_dynamic_foraging_curricula.coupled_baiting.curriculum.st_stage_2_to_stage_3",
+                    3
+                ],
+                [
+                    "aind_behavior_dynamic_foraging_curricula.coupled_baiting.curriculum.st_stage_2_to_stage_1",
+                    1
+                ]
+            ],
+            "3": [
+                [
+                    "aind_behavior_dynamic_foraging_curricula.coupled_baiting.curriculum.st_stage_3_to_final",
+                    4
+                ],
+                [
+                    "aind_behavior_dynamic_foraging_curricula.coupled_baiting.curriculum.st_stage_3_to_stage_2",
+                    2
+                ]
+            ],
+            "4": [
+                [
+                    "aind_behavior_dynamic_foraging_curricula.coupled_baiting.curriculum.st_final_to_graduated",
+                    5
+                ],
+                [
+                    "aind_behavior_dynamic_foraging_curricula.coupled_baiting.curriculum.st_final_to_stage_3",
+                    3
+                ]
+            ],
+            "5": []
+        }
+    }
+}
