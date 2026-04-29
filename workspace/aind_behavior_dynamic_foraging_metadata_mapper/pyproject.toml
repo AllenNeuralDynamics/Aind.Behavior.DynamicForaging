@@ -23,7 +23,7 @@ readme = {file = "README.md", content-type = "text/markdown"}
 dependencies = [
     "numpy>=2.4.2",
     "pydantic-settings",
-    "aind-behavior-dynamic-foraging==0.0.2rc24",
+    "aind-behavior-dynamic-foraging==0.0.2rc30",
     "aind-data-schema>=2.6.0",
     "cyclopts>=4.10.0"
 ]
