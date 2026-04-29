@@ -151,7 +151,7 @@
                             ]
                         }
                     },
-                    "version": "0.0.2-rc27",
+                    "version": "0.0.2-rc31",
                     "stage_name": null
                 },
                 "graph": {
@@ -245,7 +245,7 @@
                         },
                         "lick_spout_retraction": false
                     },
-                    "version": "0.0.2-rc27",
+                    "version": "0.0.2-rc31",
                     "stage_name": null
                 },
                 "graph": {
@@ -339,7 +339,7 @@
                         },
                         "lick_spout_retraction": false
                     },
-                    "version": "0.0.2-rc27",
+                    "version": "0.0.2-rc31",
                     "stage_name": null
                 },
                 "graph": {
@@ -433,7 +433,7 @@
                         },
                         "lick_spout_retraction": false
                     },
-                    "version": "0.0.2-rc27",
+                    "version": "0.0.2-rc31",
                     "stage_name": null
                 },
                 "graph": {
@@ -535,7 +535,7 @@
                         },
                         "lick_spout_retraction": false
                     },
-                    "version": "0.0.2-rc27",
+                    "version": "0.0.2-rc31",
                     "stage_name": null
                 },
                 "graph": {
@@ -637,7 +637,7 @@
                         },
                         "lick_spout_retraction": false
                     },
-                    "version": "0.0.2-rc27",
+                    "version": "0.0.2-rc31",
                     "stage_name": null
                 },
                 "graph": {
