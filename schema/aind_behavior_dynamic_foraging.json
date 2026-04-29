@@ -9,8 +9,8 @@
           "type": "string"
         },
         "version": {
-          "const": "0.0.2-rc27",
-          "default": "0.0.2-rc27",
+          "const": "0.0.2-rc31",
+          "default": "0.0.2-rc31",
           "title": "Version",
           "type": "string"
         },
@@ -151,8 +151,8 @@
           "description": "Parameters of the task logic"
         },
         "version": {
-          "const": "0.0.2-rc27",
-          "default": "0.0.2-rc27",
+          "const": "0.0.2-rc31",
+          "default": "0.0.2-rc31",
           "title": "Version",
           "type": "string"
         },
@@ -2356,6 +2356,38 @@
       "type": "object",
       "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.PoissonDistributionParameters"
     },
+    "QuickRetractSettings": {
+      "description": "Settings for the quick retract feature.",
+      "properties": {
+        "enable_during_quiescence": {
+          "default": false,
+          "description": "If true, the quick retract feature is enabled during the quiescence period.",
+          "title": "Enable During Quiescence",
+          "type": "boolean"
+        },
+        "time_to_reset_during_quiescence": {
+          "$ref": "#/$defs/Distribution",
+          "default": {
+            "family": "Scalar",
+            "distribution_parameters": {
+              "family": "Scalar",
+              "value": 1.0
+            },
+            "truncation_parameters": null,
+            "scaling_parameters": null
+          },
+          "description": "If enable_during_quiescence is true, this is the time the spout will take to reset. If the quiescence period is shorter than this time, the spout will retract at the end of the period."
+        },
+        "enable_on_response": {
+          "default": false,
+          "description": "If true, the quick retract feature is enabled immediately after a response is registered.",
+          "title": "Enable On Response",
+          "type": "boolean"
+        }
+      },
+      "title": "QuickRetractSettings",
+      "type": "object"
+    },
     "Rect": {
       "description": "Represents a rectangle defined by its top-left corner, width, and height.",
       "properties": {
@@ -3191,11 +3223,17 @@
           "title": "Response Deadline Duration",
           "type": "number"
         },
-        "enable_fast_retract": {
-          "default": false,
-          "description": "If true, the opposite lickspout retracts quickly after a response is made.",
-          "title": "Enable Fast Retract",
-          "type": "boolean"
+        "quick_retract_settings": {
+          "default": null,
+          "description": "Settings for the quick retract feature. If null, the feature will be disabled for this trial.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/QuickRetractSettings"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "quiescence_period_duration": {
           "default": 0.5,
