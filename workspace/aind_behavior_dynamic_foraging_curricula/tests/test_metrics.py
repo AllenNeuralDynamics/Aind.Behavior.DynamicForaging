@@ -3,8 +3,6 @@ from pathlib import Path
 from typing import Optional
 from unittest.mock import MagicMock, PropertyMock, patch
 
-import numpy as np
-
 from aind_behavior_dynamic_foraging_curricula.metrics import (
     metrics_from_dataset,
 )
@@ -109,6 +107,7 @@ class TestMetricsFromDataset(unittest.TestCase):
         self.assertEqual(result.total_sessions, 2)
         self.assertEqual(len(result.foraging_efficiency_per_session), 2)
         self.assertEqual(len(result.unignored_trials_per_session), 2)
+
 
 if __name__ == "__main__":
     unittest.main()
