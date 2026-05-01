@@ -55,11 +55,11 @@ def metrics_from_dataset(
     software_events.load_all()
 
     trial_generator_spec = software_events["TrialGeneratorSpec"].data["data"].iloc[-1]
-    is_baiting = trial_generator_spec.get("trial_generator_spec", False)
+    is_baiting = trial_generator_spec.get("is_baiting", False)
     trial_outcomes = software_events["TrialOutcome"].data["data"].iloc
     # exclude auto response and ignored trials
     filtered = [
-        t for t in trial_outcomes if t["is_right_choice"] is not None and not t["trial"]["is_auto_response_right"]
+        t for t in trial_outcomes if t["is_right_choice"] is not None and t["trial"]["is_auto_response_right"] is None
     ]
     is_right_choice = [to["is_right_choice"] for to in filtered]
     is_rewarded = [to["is_rewarded"] for to in filtered]

@@ -1,19 +1,45 @@
 import unittest
 
-from aind_behavior_dynamic_foraging.task_logic.trial_generators.warmup_trial_generator import (
-    WarmupTrialGeneratorSpec,
+import numpy as np
+
+from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generators.coupled_warmup_trial_generator import (
+    CoupledWarmupTrialGeneratorSpec,
 )
 from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial, TrialOutcome
+
+from .util import simulate_response
 
 
 def make_outcome(is_right_choice: bool | None, is_rewarded: bool) -> TrialOutcome:
     return TrialOutcome(trial=Trial(), is_right_choice=is_right_choice, is_rewarded=is_rewarded)
 
 
-class TestWarmupEndConditions(unittest.TestCase):
+class TestWarmup(unittest.TestCase):
     def setUp(self):
-        self.spec = WarmupTrialGeneratorSpec()
+        self.spec = CoupledWarmupTrialGeneratorSpec()
         self.generator = self.spec.create_generator()
+
+    def test_session(self):
+        """Simulates a full experimental session to verify generator stability."""
+
+        trial = Trial()
+        outcome = TrialOutcome(
+            trial=trial,
+            is_right_choice=np.random.choice([True, False, None]),
+            is_rewarded=np.random.choice([True, False]),
+        )
+        for i in range(500):
+            trial = self.generator.next()
+            self.generator.update(outcome)
+            outcome = simulate_response(
+                previous_reward=outcome.is_rewarded,
+                previous_choice=outcome.is_right_choice,
+                previous_left_bait=False,
+                previous_right_bait=False,
+            )
+
+        if not trial:
+            return
 
     def test_end_conditions_not_met_too_few_trials(self):
         self.generator.is_right_choice_history.append([True] * 5)

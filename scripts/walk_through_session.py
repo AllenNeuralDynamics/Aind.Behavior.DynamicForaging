@@ -1,10 +1,11 @@
 import logging
 import os
 
-from aind_behavior_dynamic_foraging.data_contract import dataset as df_foraging_dataset
-from aind_behavior_dynamic_foraging.task_logic.trial_generators import (
-    CoupledTrialGeneratorSpec,
+from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generators.coupled_warmup_trial_generator import (
+    CoupledWarmupTrialGeneratorSpec,
 )
+
+from aind_behavior_dynamic_foraging.data_contract import dataset as df_foraging_dataset
 from aind_behavior_dynamic_foraging.task_logic.trial_models import TrialOutcome
 
 logging.basicConfig(
@@ -19,7 +20,7 @@ def walk_through_session(data_directory: os.PathLike):
     software_events.load_all()
 
     trial_outcomes = software_events["TrialOutcome"].data["data"].iloc
-    trial_generator = CoupledTrialGeneratorSpec().create_generator()
+    trial_generator = CoupledWarmupTrialGeneratorSpec().create_generator()
     for i, outcome in enumerate(trial_outcomes):
         trial_generator.update(TrialOutcome.model_validate(outcome))
         trial = trial_generator.next()
