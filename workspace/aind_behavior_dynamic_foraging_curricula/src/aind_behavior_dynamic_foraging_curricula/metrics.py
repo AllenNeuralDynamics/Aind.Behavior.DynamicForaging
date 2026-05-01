@@ -71,7 +71,7 @@ def metrics_from_dataset(
     logger.debug(f"Calculated foraging efficiency as {foraging_efficiency}")
 
     try:
-        prev_metrics = DynamicForagingMetrics(**dataset["Behavior"]["PreviousMetrics"].data)
+        prev_metrics = DynamicForagingMetrics.model_validate(dataset["Behavior"]["PreviousMetrics"].data)
         prev_stage = prev_metrics.stage_name
     except FileNotFoundError:
         logger.info("No previous metrics found.")

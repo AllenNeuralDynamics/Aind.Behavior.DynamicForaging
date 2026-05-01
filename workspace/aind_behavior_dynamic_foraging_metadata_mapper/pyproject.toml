@@ -3,14 +3,14 @@ requires = ["uv_build>=0.8.22"]
 build-backend = "uv_build"
 
 [project]
-name = "aind-behavior-dynamic-foraging-curricula"
-description = "A library of curricula for the Dynamic Foraging task."
+name = "aind-behavior-dynamic-foraging-metadata-mapper"
+description = "A library of mapping for the Dynamic Foraging task."
 authors = [
     {name = "Bruno Cruz", email = "bruno.cruz@alleninstitute.org"},
     {name = "Micah Woodard", email = "micah.woodard@alleninstitute.org"}
     ]
 license = "MIT"
-version = "0.2.1"
+version = "0.0.1"
 requires-python = ">=3.11"
 classifiers = [
     "Programming Language :: Python :: 3.11",
@@ -21,10 +21,11 @@ classifiers = [
 readme = {file = "README.md", content-type = "text/markdown"}
 
 dependencies = [
-    "aind-behavior-curriculum >= 0.0.38",
     "numpy>=2.4.2",
     "pydantic-settings",
-    "aind-behavior-dynamic-foraging==0.0.2rc30"
+    "aind-behavior-dynamic-foraging==0.0.2rc30",
+    "aind-data-schema>=2.6.0",
+    "cyclopts>=4.10.0"
 ]
 
 [tool.uv.sources]
@@ -72,4 +73,6 @@ python_classes = ["Test*"]
 python_functions = ["test_*"]
 
 [project.scripts]
-curriculum = "aind_behavior_dynamic_foraging_curricula.cli:main"
+acquisition = "aind_behavior_dynamic_foraging_metadata_mapper.acquisition:app"
+instrument = "aind_behavior_dynamic_foraging_metadata_mapper.instrument:app"
+mapper = "aind_behavior_dynamic_foraging_metadata_mapper.cli:main"

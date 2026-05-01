@@ -46,7 +46,7 @@ class CoupledWarmupTrialGeneratorSpec(BaseCoupledTrialGeneratorSpec):
         default=True, description="Whether uncollected rewards carry over to the next trial."
     )
 
-    def create_generator(self) -> "CoupledWarmupTrialGeneratorSpec":
+    def create_generator(self) -> "CoupledWarmupTrialGenerator":
         return CoupledWarmupTrialGenerator(self)
 
 
