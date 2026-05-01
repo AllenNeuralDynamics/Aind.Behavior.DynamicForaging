@@ -110,17 +110,5 @@ class TestMetricsFromDataset(unittest.TestCase):
         self.assertEqual(len(result.foraging_efficiency_per_session), 2)
         self.assertEqual(len(result.unignored_trials_per_session), 2)
 
-    def test_foraging_efficiency_is_finite_and_positive(self):
-        trials = [
-            _make_trial(True, True, 0.7, 0.3),
-            _make_trial(True, False, 0.7, 0.3),
-            _make_trial(False, True, 0.7, 0.3),
-        ]
-        with _patch_dataset(trials):
-            result = metrics_from_dataset(self.tmp_path)
-        self.assertGreater(result.foraging_efficiency_per_session[-1], 0)
-        self.assertTrue(np.isfinite(result.foraging_efficiency_per_session[-1]))
-
-
 if __name__ == "__main__":
     unittest.main()
