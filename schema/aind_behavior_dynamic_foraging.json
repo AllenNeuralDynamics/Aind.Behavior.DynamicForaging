@@ -540,6 +540,118 @@
       "type": "object",
       "x-sgen-typename": "AllenNeuralDynamics.AindManipulator.AxisConfiguration"
     },
+    "BaseCoupledTrialGeneratorSpec": {
+      "properties": {
+        "type": {
+          "const": "BaseCoupledTrialGenerator",
+          "default": "BaseCoupledTrialGenerator",
+          "title": "Type",
+          "type": "string"
+        },
+        "quiescent_duration": {
+          "$ref": "#/$defs/Distribution",
+          "default": {
+            "family": "Exponential",
+            "distribution_parameters": {
+              "family": "Exponential",
+              "rate": 1.0
+            },
+            "truncation_parameters": {
+              "max": 1.0,
+              "min": 0.0,
+              "truncation_mode": "exclude"
+            },
+            "scaling_parameters": null
+          },
+          "description": "Distribution describing the quiescence period before trial starts (in seconds). Each lick resets the timer."
+        },
+        "response_duration": {
+          "default": 1.0,
+          "description": "Duration after go cue for animal response.",
+          "minimum": 0,
+          "title": "Response Duration",
+          "type": "number"
+        },
+        "reward_consumption_duration": {
+          "default": 3.0,
+          "description": "Duration of reward consumption before transition to ITI (in seconds).",
+          "minimum": 0,
+          "title": "Reward Consumption Duration",
+          "type": "number"
+        },
+        "inter_trial_interval_duration": {
+          "$ref": "#/$defs/Distribution",
+          "default": {
+            "family": "Exponential",
+            "distribution_parameters": {
+              "family": "Exponential",
+              "rate": 0.5
+            },
+            "truncation_parameters": {
+              "max": 8.0,
+              "min": 1.0,
+              "truncation_mode": "exclude"
+            },
+            "scaling_parameters": null
+          },
+          "description": "Distribution describing the inter-trial interval (in seconds)."
+        },
+        "block_length": {
+          "$ref": "#/$defs/Distribution",
+          "default": {
+            "family": "Exponential",
+            "distribution_parameters": {
+              "family": "Exponential",
+              "rate": 0.05
+            },
+            "truncation_parameters": {
+              "max": 60.0,
+              "min": 20.0,
+              "truncation_mode": "exclude"
+            },
+            "scaling_parameters": null
+          },
+          "description": "Distribution describing block length."
+        },
+        "autowater_parameters": {
+          "default": {
+            "min_ignored_trials": 3,
+            "min_unrewarded_trials": 3,
+            "reward_fraction": 0.8
+          },
+          "description": "Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/AutoWaterParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "is_baiting": {
+          "default": false,
+          "description": "Whether uncollected rewards carry over to the next trial.",
+          "title": "Is Baiting",
+          "type": "boolean"
+        },
+        "reward_probability_parameters": {
+          "$ref": "#/$defs/RewardProbabilityParameters",
+          "default": {
+            "base_reward_sum": 0.8,
+            "reward_pairs": [
+              [
+                8.0,
+                1.0
+              ]
+            ]
+          },
+          "description": "Parameters defining the reward probability structure."
+        }
+      },
+      "title": "BaseCoupledTrialGeneratorSpec",
+      "type": "object"
+    },
     "BaseModel": {
       "properties": {},
       "title": "BaseModel",
@@ -728,6 +840,105 @@
       "type": "object",
       "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.BinomialDistributionParameters"
     },
+    "BlockBasedTrialGeneratorSpec": {
+      "properties": {
+        "type": {
+          "const": "BlockBasedTrialGenerator",
+          "default": "BlockBasedTrialGenerator",
+          "title": "Type",
+          "type": "string"
+        },
+        "quiescent_duration": {
+          "$ref": "#/$defs/Distribution",
+          "default": {
+            "family": "Exponential",
+            "distribution_parameters": {
+              "family": "Exponential",
+              "rate": 1.0
+            },
+            "truncation_parameters": {
+              "max": 1.0,
+              "min": 0.0,
+              "truncation_mode": "exclude"
+            },
+            "scaling_parameters": null
+          },
+          "description": "Distribution describing the quiescence period before trial starts (in seconds). Each lick resets the timer."
+        },
+        "response_duration": {
+          "default": 1.0,
+          "description": "Duration after go cue for animal response.",
+          "minimum": 0,
+          "title": "Response Duration",
+          "type": "number"
+        },
+        "reward_consumption_duration": {
+          "default": 3.0,
+          "description": "Duration of reward consumption before transition to ITI (in seconds).",
+          "minimum": 0,
+          "title": "Reward Consumption Duration",
+          "type": "number"
+        },
+        "inter_trial_interval_duration": {
+          "$ref": "#/$defs/Distribution",
+          "default": {
+            "family": "Exponential",
+            "distribution_parameters": {
+              "family": "Exponential",
+              "rate": 0.5
+            },
+            "truncation_parameters": {
+              "max": 8.0,
+              "min": 1.0,
+              "truncation_mode": "exclude"
+            },
+            "scaling_parameters": null
+          },
+          "description": "Distribution describing the inter-trial interval (in seconds)."
+        },
+        "block_length": {
+          "$ref": "#/$defs/Distribution",
+          "default": {
+            "family": "Exponential",
+            "distribution_parameters": {
+              "family": "Exponential",
+              "rate": 0.05
+            },
+            "truncation_parameters": {
+              "max": 60.0,
+              "min": 20.0,
+              "truncation_mode": "exclude"
+            },
+            "scaling_parameters": null
+          },
+          "description": "Distribution describing block length."
+        },
+        "autowater_parameters": {
+          "default": {
+            "min_ignored_trials": 3,
+            "min_unrewarded_trials": 3,
+            "reward_fraction": 0.8
+          },
+          "description": "Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/AutoWaterParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "is_baiting": {
+          "default": false,
+          "description": "Whether uncollected rewards carry over to the next trial.",
+          "title": "Is Baiting",
+          "type": "boolean"
+        }
+      },
+      "title": "BlockBasedTrialGeneratorSpec",
+      "type": "object"
+    },
     "CameraController_SpinnakerCamera_": {
       "properties": {
         "device_type": {
@@ -857,11 +1068,11 @@
     "CoupledTrialGenerationEndConditions": {
       "description": "Defines the conditions under which a foraging session should terminate.",
       "properties": {
-        "ignore_win": {
+        "ignore_window_length": {
           "default": 30,
           "description": "Number of recent trials to check for ignored responses.",
           "minimum": 0,
-          "title": "Ignore Win",
+          "title": "Ignore Window Length",
           "type": "integer"
         },
         "ignore_ratio_threshold": {
@@ -951,7 +1162,7 @@
           },
           "description": "Distribution describing the inter-trial interval (in seconds)."
         },
-        "block_len": {
+        "block_length": {
           "$ref": "#/$defs/Distribution",
           "default": {
             "family": "Exponential",
@@ -967,31 +1178,6 @@
             "scaling_parameters": null
           },
           "description": "Distribution describing block length."
-        },
-        "min_block_reward": {
-          "default": 1,
-          "minimum": 0,
-          "title": "Minimal rewards in a block to switch",
-          "type": "integer"
-        },
-        "kernel_size": {
-          "default": 2,
-          "description": "Kernel to evaluate choice fraction.",
-          "title": "Kernel Size",
-          "type": "integer"
-        },
-        "reward_probability_parameters": {
-          "$ref": "#/$defs/RewardProbabilityParameters",
-          "default": {
-            "base_reward_sum": 0.8,
-            "reward_pairs": [
-              [
-                8.0,
-                1.0
-              ]
-            ]
-          },
-          "description": "Parameters defining the reward probability structure."
         },
         "autowater_parameters": {
           "default": {
@@ -1015,10 +1201,23 @@
           "title": "Is Baiting",
           "type": "boolean"
         },
+        "reward_probability_parameters": {
+          "$ref": "#/$defs/RewardProbabilityParameters",
+          "default": {
+            "base_reward_sum": 0.8,
+            "reward_pairs": [
+              [
+                8.0,
+                1.0
+              ]
+            ]
+          },
+          "description": "Parameters defining the reward probability structure."
+        },
         "trial_generation_end_parameters": {
           "$ref": "#/$defs/CoupledTrialGenerationEndConditions",
           "default": {
-            "ignore_win": 30,
+            "ignore_window_length": 30,
             "ignore_ratio_threshold": 0.8,
             "max_trial": 1000,
             "max_time": 4500.0,
@@ -1047,9 +1246,176 @@
           "description": "Whether to extend the minimum block length by one trial when the animal does not respond.",
           "title": "Extend Block On No Response",
           "type": "boolean"
+        },
+        "min_block_reward": {
+          "default": 1,
+          "minimum": 0,
+          "title": "Minimal rewards in a block to switch",
+          "type": "integer"
+        },
+        "kernel_size": {
+          "default": 2,
+          "description": "Kernel to evaluate choice fraction.",
+          "title": "Kernel Size",
+          "type": "integer"
         }
       },
       "title": "CoupledTrialGeneratorSpec",
+      "type": "object"
+    },
+    "CoupledWarmupTrialGenerationEndConditions": {
+      "properties": {
+        "min_trial": {
+          "default": 50,
+          "description": "Minimum trials in generator.",
+          "minimum": 0,
+          "title": "Min Trial",
+          "type": "integer"
+        },
+        "max_choice_bias": {
+          "default": 0.1,
+          "description": "Maximum allowed deviation from 50/50 choice ratio to end trial generation.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Max Choice Bias",
+          "type": "number"
+        },
+        "min_response_rate": {
+          "default": 0.8,
+          "description": "Minimum fraction of trials with a choice (non-ignored) to end trial generation.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Min Response Rate",
+          "type": "number"
+        },
+        "evaluation_window": {
+          "default": 20,
+          "description": "Number of most recent trials to evaluate the end criteria.",
+          "minimum": 0,
+          "title": "Evaluation Window",
+          "type": "integer"
+        }
+      },
+      "title": "CoupledWarmupTrialGenerationEndConditions",
+      "type": "object"
+    },
+    "CoupledWarmupTrialGeneratorSpec": {
+      "properties": {
+        "type": {
+          "const": "CoupledWarmupTrialGenerator",
+          "default": "CoupledWarmupTrialGenerator",
+          "title": "Type",
+          "type": "string"
+        },
+        "quiescent_duration": {
+          "$ref": "#/$defs/Distribution",
+          "default": {
+            "family": "Exponential",
+            "distribution_parameters": {
+              "family": "Exponential",
+              "rate": 1.0
+            },
+            "truncation_parameters": {
+              "max": 1.0,
+              "min": 0.0,
+              "truncation_mode": "exclude"
+            },
+            "scaling_parameters": null
+          },
+          "description": "Distribution describing the quiescence period before trial starts (in seconds). Each lick resets the timer."
+        },
+        "response_duration": {
+          "default": 1.0,
+          "description": "Duration after go cue for animal response.",
+          "minimum": 0,
+          "title": "Response Duration",
+          "type": "number"
+        },
+        "reward_consumption_duration": {
+          "default": 3.0,
+          "description": "Duration of reward consumption before transition to ITI (in seconds).",
+          "minimum": 0,
+          "title": "Reward Consumption Duration",
+          "type": "number"
+        },
+        "inter_trial_interval_duration": {
+          "$ref": "#/$defs/Distribution",
+          "default": {
+            "family": "Exponential",
+            "distribution_parameters": {
+              "family": "Exponential",
+              "rate": 0.5
+            },
+            "truncation_parameters": {
+              "max": 8.0,
+              "min": 1.0,
+              "truncation_mode": "exclude"
+            },
+            "scaling_parameters": null
+          },
+          "description": "Distribution describing the inter-trial interval (in seconds)."
+        },
+        "block_length": {
+          "$ref": "#/$defs/Distribution",
+          "default": {
+            "family": "Scalar",
+            "distribution_parameters": {
+              "family": "Scalar",
+              "value": 0.0
+            },
+            "truncation_parameters": null,
+            "scaling_parameters": null
+          },
+          "description": "Distribution describing block length."
+        },
+        "autowater_parameters": {
+          "default": {
+            "min_ignored_trials": 3,
+            "min_unrewarded_trials": 3,
+            "reward_fraction": 0.8
+          },
+          "description": "Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/AutoWaterParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "is_baiting": {
+          "const": true,
+          "default": true,
+          "description": "Whether uncollected rewards carry over to the next trial.",
+          "title": "Is Baiting",
+          "type": "boolean"
+        },
+        "reward_probability_parameters": {
+          "$ref": "#/$defs/RewardProbabilityParameters",
+          "default": {
+            "base_reward_sum": 0.8,
+            "reward_pairs": [
+              [
+                8.0,
+                1.0
+              ]
+            ]
+          },
+          "description": "Parameters defining the reward probability structure."
+        },
+        "trial_generation_end_parameters": {
+          "$ref": "#/$defs/CoupledWarmupTrialGenerationEndConditions",
+          "default": {
+            "min_trial": 50,
+            "max_choice_bias": 0.1,
+            "min_response_rate": 0.8,
+            "evaluation_window": 20
+          },
+          "description": "Conditions to end trial generation."
+        }
+      },
+      "title": "CoupledWarmupTrialGeneratorSpec",
       "type": "object"
     },
     "Distribution": {
@@ -2075,9 +2441,12 @@
           ],
           "description": "List of (left, right) reward ratio pairs to sample from during block transitions. ",
           "items": {
+            "description": "Reward ratio pairs ordered left, right.",
             "items": {
               "type": "number"
             },
+            "maxItems": 2,
+            "minItems": 2,
             "type": "array"
           },
           "title": "Reward Pairs",
@@ -2942,16 +3311,28 @@
       "description": "Type of trial generator",
       "discriminator": {
         "mapping": {
+          "BaseCoupledTrialGenerator": "#/$defs/BaseCoupledTrialGeneratorSpec",
+          "BlockBasedTrialGenerator": "#/$defs/BlockBasedTrialGeneratorSpec",
           "CoupledTrialGenerator": "#/$defs/CoupledTrialGeneratorSpec",
+          "CoupledWarmupTrialGenerator": "#/$defs/CoupledWarmupTrialGeneratorSpec",
           "IntegrationTestTrialGenerator": "#/$defs/IntegrationTestTrialGeneratorSpec",
           "TrialGeneratorComposite": "#/$defs/TrialGeneratorCompositeSpec_TrialGeneratorSpec_",
-          "WarmupTrialGenerator": "#/$defs/WarmupTrialGeneratorSpec"
+          "UncoupledTrialGenerator": "#/$defs/UncoupledTrialGeneratorSpec"
         },
         "propertyName": "type"
       },
       "oneOf": [
         {
-          "$ref": "#/$defs/WarmupTrialGeneratorSpec"
+          "$ref": "#/$defs/UncoupledTrialGeneratorSpec"
+        },
+        {
+          "$ref": "#/$defs/BlockBasedTrialGeneratorSpec"
+        },
+        {
+          "$ref": "#/$defs/BaseCoupledTrialGeneratorSpec"
+        },
+        {
+          "$ref": "#/$defs/CoupledWarmupTrialGeneratorSpec"
         },
         {
           "$ref": "#/$defs/CoupledTrialGeneratorSpec"
@@ -3026,6 +3407,177 @@
       "title": "TruncationParameters",
       "type": "object",
       "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.TruncationParameters"
+    },
+    "UncoupledTrialGenerationEndConditions": {
+      "description": "Defines the conditions under which a foraging session should terminate.",
+      "properties": {
+        "ignore_window_length": {
+          "default": 30,
+          "description": "Number of recent trials to check for ignored responses.",
+          "minimum": 0,
+          "title": "Ignore Window Length",
+          "type": "integer"
+        },
+        "ignore_ratio_threshold": {
+          "default": 0.8,
+          "description": "Maximum fraction of ignored trials within the window before the session is ended.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Ignore Ratio Threshold",
+          "type": "number"
+        },
+        "max_trial": {
+          "default": 1000,
+          "description": "Maximum number of trials allowed in a session.",
+          "minimum": 0,
+          "title": "Max Trial",
+          "type": "integer"
+        },
+        "max_time": {
+          "default": 4500,
+          "description": "Maximum session duration (sec).",
+          "minimum": 0,
+          "title": "Max Time",
+          "type": "number"
+        },
+        "min_time": {
+          "default": 1800,
+          "description": "Minimum session duration (sec)",
+          "minimum": 0,
+          "title": "Min Time",
+          "type": "number"
+        }
+      },
+      "title": "UncoupledTrialGenerationEndConditions",
+      "type": "object"
+    },
+    "UncoupledTrialGeneratorSpec": {
+      "description": "Configuration specification for the Uncoupled Trial Generator.\n\nThis class defines the parameters for generating trials where reward\nprobabilities for the left and right sides are drawn independently\nfrom a set of predefined values.\n\nAttributes:\n    type (Literal[\"UncoupledTrialGenerator\"]): Discriminator for the\n        generator type. Defaults to \"UncoupledTrialGenerator\".\n    trial_generation_end_parameters (UncoupledTrialGenerationEndConditions):\n        Defines the criteria for terminating the trial generation process.\n    reward_probabilities (list[float]): A list of available probability\n        values (e.g., [0.1, 0.4, 0.7]) used to assign reward rates to\n        each side during a block.\n    maximum_dominance_streak (float): The maximum number of consecutive\n        blocks allowed where one specific side (e.g., Right) is assigned\n        a higher reward probability than the other.\n    block_length (Distribution): A distribution object (typically\n        Uniform) that determines the number of trials within each block.",
+      "properties": {
+        "type": {
+          "const": "UncoupledTrialGenerator",
+          "default": "UncoupledTrialGenerator",
+          "title": "Type",
+          "type": "string"
+        },
+        "quiescent_duration": {
+          "$ref": "#/$defs/Distribution",
+          "default": {
+            "family": "Exponential",
+            "distribution_parameters": {
+              "family": "Exponential",
+              "rate": 1.0
+            },
+            "truncation_parameters": {
+              "max": 1.0,
+              "min": 0.0,
+              "truncation_mode": "exclude"
+            },
+            "scaling_parameters": null
+          },
+          "description": "Distribution describing the quiescence period before trial starts (in seconds). Each lick resets the timer."
+        },
+        "response_duration": {
+          "default": 1.0,
+          "description": "Duration after go cue for animal response.",
+          "minimum": 0,
+          "title": "Response Duration",
+          "type": "number"
+        },
+        "reward_consumption_duration": {
+          "default": 3.0,
+          "description": "Duration of reward consumption before transition to ITI (in seconds).",
+          "minimum": 0,
+          "title": "Reward Consumption Duration",
+          "type": "number"
+        },
+        "inter_trial_interval_duration": {
+          "$ref": "#/$defs/Distribution",
+          "default": {
+            "family": "Exponential",
+            "distribution_parameters": {
+              "family": "Exponential",
+              "rate": 0.5
+            },
+            "truncation_parameters": {
+              "max": 8.0,
+              "min": 1.0,
+              "truncation_mode": "exclude"
+            },
+            "scaling_parameters": null
+          },
+          "description": "Distribution describing the inter-trial interval (in seconds)."
+        },
+        "block_length": {
+          "$ref": "#/$defs/UniformDistribution",
+          "default": {
+            "family": "Uniform",
+            "distribution_parameters": {
+              "family": "Uniform",
+              "max": 60.0,
+              "min": 20.0
+            },
+            "truncation_parameters": null,
+            "scaling_parameters": null
+          },
+          "description": "Distribution describing block length."
+        },
+        "autowater_parameters": {
+          "default": {
+            "min_ignored_trials": 3,
+            "min_unrewarded_trials": 3,
+            "reward_fraction": 0.8
+          },
+          "description": "Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/AutoWaterParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "is_baiting": {
+          "default": false,
+          "description": "Whether uncollected rewards carry over to the next trial.",
+          "title": "Is Baiting",
+          "type": "boolean"
+        },
+        "trial_generation_end_parameters": {
+          "$ref": "#/$defs/UncoupledTrialGenerationEndConditions",
+          "default": {
+            "ignore_window_length": 30,
+            "ignore_ratio_threshold": 0.8,
+            "max_trial": 1000,
+            "max_time": 4500.0,
+            "min_time": 1800.0
+          },
+          "description": "Conditions to end trial generation."
+        },
+        "reward_probabilities": {
+          "default": [
+            0.1,
+            0.5,
+            0.9
+          ],
+          "description": "Reward probabilities to use during session.",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "title": "Reward Probabilities",
+          "type": "array"
+        },
+        "maximum_dominance_streak": {
+          "default": 3,
+          "description": "Maximum number of consecutive blocks a side can have the higher probability.",
+          "title": "Maximum Dominance Streak",
+          "type": "number"
+        }
+      },
+      "title": "UncoupledTrialGeneratorSpec",
+      "type": "object"
     },
     "UniformDistribution": {
       "description": "A uniform probability distribution.\n\nAll values between min and max have equal probability of being sampled.",
@@ -3185,173 +3737,6 @@
         }
       },
       "title": "VideoWriterOpenCv",
-      "type": "object"
-    },
-    "WarmupTrialGenerationEndConditions": {
-      "properties": {
-        "min_trial": {
-          "default": 50,
-          "description": "Minimum trials in generator.",
-          "minimum": 0,
-          "title": "Min Trial",
-          "type": "integer"
-        },
-        "max_choice_bias": {
-          "default": 0.1,
-          "description": "Maximum allowed deviation from 50/50 choice ratio to end trial generation.",
-          "maximum": 1,
-          "minimum": 0,
-          "title": "Max Choice Bias",
-          "type": "number"
-        },
-        "min_response_rate": {
-          "default": 0.8,
-          "description": "Minimum fraction of trials with a choice (non-ignored) to end trial generation.",
-          "maximum": 1,
-          "minimum": 0,
-          "title": "Min Response Rate",
-          "type": "number"
-        },
-        "evaluation_window": {
-          "default": 20,
-          "description": "Number of most recent trials to evaluate the end criteria.",
-          "minimum": 0,
-          "title": "Evaluation Window",
-          "type": "integer"
-        }
-      },
-      "title": "WarmupTrialGenerationEndConditions",
-      "type": "object"
-    },
-    "WarmupTrialGeneratorSpec": {
-      "properties": {
-        "type": {
-          "const": "WarmupTrialGenerator",
-          "default": "WarmupTrialGenerator",
-          "title": "Type",
-          "type": "string"
-        },
-        "quiescent_duration": {
-          "$ref": "#/$defs/Distribution",
-          "default": {
-            "family": "Exponential",
-            "distribution_parameters": {
-              "family": "Exponential",
-              "rate": 1.0
-            },
-            "truncation_parameters": {
-              "max": 1.0,
-              "min": 0.0,
-              "truncation_mode": "exclude"
-            },
-            "scaling_parameters": null
-          },
-          "description": "Distribution describing the quiescence period before trial starts (in seconds). Each lick resets the timer."
-        },
-        "response_duration": {
-          "default": 1.0,
-          "description": "Duration after go cue for animal response.",
-          "minimum": 0,
-          "title": "Response Duration",
-          "type": "number"
-        },
-        "reward_consumption_duration": {
-          "default": 3.0,
-          "description": "Duration of reward consumption before transition to ITI (in seconds).",
-          "minimum": 0,
-          "title": "Reward Consumption Duration",
-          "type": "number"
-        },
-        "inter_trial_interval_duration": {
-          "$ref": "#/$defs/Distribution",
-          "default": {
-            "family": "Exponential",
-            "distribution_parameters": {
-              "family": "Exponential",
-              "rate": 0.5
-            },
-            "truncation_parameters": {
-              "max": 8.0,
-              "min": 1.0,
-              "truncation_mode": "exclude"
-            },
-            "scaling_parameters": null
-          },
-          "description": "Distribution describing the inter-trial interval (in seconds)."
-        },
-        "block_len": {
-          "$ref": "#/$defs/Distribution",
-          "default": {
-            "family": "Scalar",
-            "distribution_parameters": {
-              "family": "Scalar",
-              "value": 0.0
-            },
-            "truncation_parameters": null,
-            "scaling_parameters": null
-          },
-          "description": "Distribution describing block length."
-        },
-        "min_block_reward": {
-          "const": 1,
-          "default": 1,
-          "title": "Minimal rewards in a block to switch",
-          "type": "integer"
-        },
-        "kernel_size": {
-          "default": 2,
-          "description": "Kernel to evaluate choice fraction.",
-          "title": "Kernel Size",
-          "type": "integer"
-        },
-        "reward_probability_parameters": {
-          "$ref": "#/$defs/RewardProbabilityParameters",
-          "default": {
-            "base_reward_sum": 0.8,
-            "reward_pairs": [
-              [
-                8.0,
-                1.0
-              ]
-            ]
-          },
-          "description": "Parameters defining the reward probability structure."
-        },
-        "autowater_parameters": {
-          "default": {
-            "min_ignored_trials": 3,
-            "min_unrewarded_trials": 3,
-            "reward_fraction": 0.8
-          },
-          "description": "Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
-          "oneOf": [
-            {
-              "$ref": "#/$defs/AutoWaterParameters"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "is_baiting": {
-          "const": true,
-          "default": true,
-          "description": "Whether uncollected rewards carry over to the next trial.",
-          "title": "Is Baiting",
-          "type": "boolean"
-        },
-        "trial_generation_end_parameters": {
-          "$ref": "#/$defs/WarmupTrialGenerationEndConditions",
-          "default": {
-            "min_trial": 50,
-            "max_choice_bias": 0.1,
-            "min_response_rate": 0.8,
-            "evaluation_window": 20
-          },
-          "description": "Conditions to end trial generation."
-        }
-      },
-      "title": "WarmupTrialGeneratorSpec",
       "type": "object"
     },
     "WaterValveCalibration": {

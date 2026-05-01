@@ -1,7 +1,6 @@
 import logging
-import random
 from abc import ABC, abstractmethod
-from typing import Literal, Optional, Union
+from typing import Literal, Optional
 
 import numpy as np
 from aind_behavior_services.task.distributions import (
@@ -9,13 +8,12 @@ from aind_behavior_services.task.distributions import (
     ExponentialDistribution,
     ExponentialDistributionParameters,
     TruncationParameters,
-    UniformDistribution,
 )
 from aind_behavior_services.task.distributions_utils import draw_sample
 from pydantic import BaseModel, Field
 
 from ..trial_models import Trial
-from ._base import BaseTrialGeneratorSpecModel, ITrialGenerator
+from ._base import BaseTrialGeneratorSpecModel, ITrialGenerator, TrialOutcome
 
 logger = logging.getLogger(__name__)
 
@@ -35,33 +33,11 @@ class AutoWaterParameters(BaseModel):
     )
 
 
-class RewardProbabilityParameters(BaseModel):
-    """Defines the reward probability structure for a dynamic foraging task.
-
-    Reward probabilities are defined as pairs (p_left, p_right) normalized by
-    base_reward_sum. Pairs are drawn from a family representing a difficulty level:
-
-        Family 1:   [[8, 1], [6, 1], [3, 1], [1, 1]]
-        Family 2:  [[8, 1], [1, 1]]
-        Family 3:  [[1.0, 0.0], [0.9, 0.1], [0.8, 0.2], [0.7, 0.3], [0.6, 0.4], [0.5, 0.5]]
-        Family 4:  [[6, 1], [3, 1], [1, 1]]
-
-    """
-
-    base_reward_sum: float = Field(
-        default=0.8,
-        description="Total reward probability shared between the two sides. Each reward pair is normalized to sum to this value.",
-    )
-    reward_pairs: list[list[float, float]] = Field(
-        default=[[8, 1]],
-        description="List of (left, right) reward ratio pairs to sample from during block transitions. ",
-    )
-
-
 class Block(BaseModel):
     p_right_reward: float = Field(ge=0, le=1, description="Reward probability for right side during block.")
     p_left_reward: float = Field(ge=0, le=1, description="Reward probability for left side during block.")
-    min_length: int = Field(ge=0, description="Minimum number of trials in block.")
+    right_length: int = Field(ge=0, description="Minimum number of trials in block.")
+    left_length: int = Field(ge=0, description="Minimum number of trials in block.")
 
 
 class BlockBasedTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
@@ -91,21 +67,12 @@ class BlockBasedTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
         description="Distribution describing the inter-trial interval (in seconds).",
     )
 
-    block_len: Distribution = Field(
+    block_length: Distribution = Field(
         default=ExponentialDistribution(
             distribution_parameters=ExponentialDistributionParameters(rate=1 / 20),
             truncation_parameters=TruncationParameters(min=20, max=60),
         ),
         description="Distribution describing block length.",
-    )
-
-    min_block_reward: int = Field(default=1, ge=0, title="Minimal rewards in a block to switch")
-
-    kernel_size: int = Field(default=2, description="Kernel to evaluate choice fraction.")
-    reward_probability_parameters: RewardProbabilityParameters = Field(
-        default=RewardProbabilityParameters(),
-        description="Parameters defining the reward probability structure.",
-        validate_default=True,
     )
 
     autowater_parameters: Optional[AutoWaterParameters] = Field(
@@ -131,32 +98,47 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
         is_right_choice_history: Record of whether each trial was a right choice.
             None indicates no choice was made (e.g. missed trial).
         reward_history: Record of whether each trial resulted in a reward.
-        block_history: Record of all completed blocks.
-        block: The currently active block.
-        trials_in_block: Number of trials elapsed in the current block.
         is_left_baited: Whether the left port currently has a baited reward.
         is_right_baited: Whether the right port currently has a baited reward.
+
     """
 
     def __init__(self, spec: BlockBasedTrialGeneratorSpec) -> None:
         """Initializes the generator and generates the first block.
 
         Args:
-            spec: The BlockBasedTrialGeneratorSpec defining task parameters.
+            spec: The BlockBasedTrialGenerator defining task parameters.
         """
 
         self.spec = spec
         self.is_right_choice_history: list[bool | None] = []
         self.reward_history: list[bool] = []
-        self.block_history: list[Block] = []
-        self.block: Block = self._generate_next_block(
-            reward_pairs=self.spec.reward_probability_parameters.reward_pairs,
-            base_reward_sum=self.spec.reward_probability_parameters.base_reward_sum,
-            block_len=self.spec.block_len,
-        )
-        self.trials_in_block = 0
         self.is_left_baited: bool = False
         self.is_right_baited: bool = False
+        self.block: Block
+
+    def update(self, outcome: TrialOutcome | str):
+        """Updates generator state from the previous trial outcome. Records choice and reward history and manages baiting state.
+        Args:
+            outcome: The TrialOutcome from the most recently completed trial.
+        """
+        logger.debug("Updating trial generator.")
+        if isinstance(outcome, str):
+            outcome = TrialOutcome.model_validate_json(outcome)
+
+        self.is_right_choice_history.append(outcome.is_right_choice)
+        self.reward_history.append(outcome.is_rewarded)
+
+        if self.spec.is_baiting:
+            if outcome.is_right_choice:
+                logger.debug("Resesting right bait.")
+                self.is_right_baited = False
+            elif outcome.is_right_choice is False:
+                logger.debug("Resesting left bait.")
+                self.is_left_baited = False
+            else:
+                # trial ignored so current baiting state retained
+                pass
 
     def next(self) -> Trial | None:
         """Generates the next trial in the session.
@@ -183,12 +165,13 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             random_numbers = np.random.random(2)
 
             self.is_left_baited = self.block.p_left_reward > random_numbers[0] or self.is_left_baited
-            logger.debug(f"Left baited: {self.is_left_baited}")
+            logger.debug("Left baited: %s" % self.is_left_baited)
 
             self.is_right_baited = self.block.p_right_reward > random_numbers[1] or self.is_right_baited
-            logger.debug(f"Right baited: {self.is_right_baited}")
+            logger.debug("Right baited: %s" % self.is_right_baited)
 
         # determine autowater
+        is_right_autowater = None
         if self._are_autowater_conditions_met():
             is_right_autowater = True if self.block.p_right_reward > self.block.p_left_reward else False
 
@@ -235,70 +218,21 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
         """
         pass
 
-    def _generate_next_block(
-        self,
-        reward_pairs: list[list[float, float]],
-        base_reward_sum: float,
-        block_len: Union[UniformDistribution, ExponentialDistribution],
-        current_block: Optional[Block] = None,
-    ) -> Block:
-        """Generates the next block, avoiding repeating the current block's side bias.
-
-        Normalizes reward pairs by base_reward_sum, mirrors them to create a full
-        pool, optionally excludes the current block's probabilities and high-reward
-        side, then randomly samples the next block.
-
-        Args:
-            reward_pairs: List of (left, right) reward ratio pairs to draw from.
-            base_reward_sum: Total reward probability to normalize each pair to.
-            block_len: Distribution from which to sample the next block length.
-            current_block: The currently active block, used to avoid repeating the
-                same reward probabilities or high-reward side. Defaults to None.
+    def _generate_next_block(*args, **kwargs) -> Block:
+        """Abstract method. Subclasses must implement their own block switching logic.
 
         Returns:
             A new Block with sampled reward probabilities and length.
         """
 
-        logger.info("Generating next block.")
+        pass
 
-        # determine candidate reward pairs
-        reward_prob = np.array(reward_pairs, dtype=float)
-        reward_prob /= reward_prob.sum(axis=1, keepdims=True)
-        reward_prob *= float(base_reward_sum)
-        logger.info(f"Candidate reward pairs normalized and scaled: {reward_prob.tolist()}")
+    @abstractmethod
+    def _is_block_switch_allowed(self) -> bool:
+        """Determines whether all criteria are met to switch to the next block.
 
-        # create pool including all reward probabiliteis and mirrored pairs
-        reward_prob_pool = np.vstack([reward_prob, np.fliplr(reward_prob)])
+        Returns:
+            True if all switch criteria are satisfied, False otherwise.
+        """
 
-        if current_block:  # exclude previous block if history exists
-            logger.info("Excluding previous block reward probability.")
-            last_block_reward_prob = [current_block.p_right_reward, current_block.p_left_reward]
-
-            # remove blocks identical to last block
-            reward_prob_pool = reward_prob_pool[np.any(reward_prob_pool != last_block_reward_prob, axis=1)]
-            logger.debug(f"Pool after removing identical to last block: {reward_prob_pool.tolist()}")
-
-            # remove blocks with same high-reward side (if last block had a clear high side)
-            if last_block_reward_prob[0] != last_block_reward_prob[1]:
-                high_side_last = last_block_reward_prob[0] > last_block_reward_prob[1]
-                high_side_pool = reward_prob_pool[:, 0] > reward_prob_pool[:, 1]
-                reward_prob_pool = reward_prob_pool[high_side_pool != high_side_last]
-                logger.debug(f"Pool after removing same high-reward side: {reward_prob_pool.tolist()}")
-
-        # remove duplicates
-        reward_prob_pool = np.unique(reward_prob_pool, axis=0)
-        logger.debug(f"Final reward probability pool after removing duplicates: {reward_prob_pool.tolist()}")
-
-        # randomly pick next block reward probability
-        p_right_reward, p_left_reward = reward_prob_pool[random.choice(range(reward_prob_pool.shape[0]))]
-        logger.info(f"Selected next block reward probabilities: right={p_right_reward}, left={p_left_reward}")
-
-        # randomly pick block length
-        next_block_len = round(draw_sample(block_len))
-        logger.info(f"Selected next block length: {next_block_len}")
-
-        return Block(
-            p_right_reward=p_right_reward,
-            p_left_reward=p_left_reward,
-            min_length=next_block_len,
-        )
+        pass

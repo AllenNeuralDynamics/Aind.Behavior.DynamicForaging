@@ -4,15 +4,21 @@ from pydantic import Field
 
 from ._base import BaseTrialGeneratorSpecModel as BaseTrialGeneratorSpecModel
 from ._base import ITrialGenerator as ITrialGenerator
+from .block_based_trial_generator import BlockBasedTrialGeneratorSpec
 from .composite_trial_generator import TrialGeneratorCompositeSpec
-from .coupled_trial_generator import CoupledTrialGeneratorSpec
+from .coupled_trial_generators.base_coupled_trial_generator import BaseCoupledTrialGeneratorSpec
+from .coupled_trial_generators.coupled_trial_generator import CoupledTrialGeneratorSpec
+from .coupled_trial_generators.coupled_warmup_trial_generator import CoupledWarmupTrialGeneratorSpec
 from .integration_test_trial_generator import IntegrationTestTrialGeneratorSpec
-from .warmup_trial_generator import WarmupTrialGeneratorSpec
+from .uncoupled_trial_gnerator import UncoupledTrialGeneratorSpec
 
 if TYPE_CHECKING:
     TrialGeneratorSpec = Union[
         (
-            WarmupTrialGeneratorSpec,
+            UncoupledTrialGeneratorSpec,
+            BlockBasedTrialGeneratorSpec,
+            BaseCoupledTrialGeneratorSpec,
+            CoupledWarmupTrialGeneratorSpec,
             CoupledTrialGeneratorSpec,
             IntegrationTestTrialGeneratorSpec,
             TrialGeneratorCompositeSpec["TrialGeneratorSpec"],
@@ -24,7 +30,10 @@ else:
         Annotated[
             Union[
                 (
-                    WarmupTrialGeneratorSpec,
+                    UncoupledTrialGeneratorSpec,
+                    BlockBasedTrialGeneratorSpec,
+                    BaseCoupledTrialGeneratorSpec,
+                    CoupledWarmupTrialGeneratorSpec,
                     CoupledTrialGeneratorSpec,
                     IntegrationTestTrialGeneratorSpec,
                     TrialGeneratorCompositeSpec["TrialGeneratorSpec"],
