@@ -10,8 +10,9 @@ from aind_behavior_services.task.distributions import (
     TruncationParameters,
 )
 from aind_behavior_services.task.distributions_utils import draw_sample
-from aind_dynamic_foraging_models.logistic_regression import fit_logistic_regression
 from pydantic import BaseModel, Field
+
+from aind_behavior_dynamic_foraging.task_logic.utils.calculate_bias import calculate_bias
 
 from ..trial_models import Trial
 from ._base import BaseTrialGeneratorSpecModel, ITrialGenerator, TrialOutcome
@@ -140,6 +141,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
         """
 
         self.spec = spec
+        self.outcome_history: list[TrialOutcome] = []
         self.is_right_choice_history: list[bool | None] = []
         self.reward_history: list[bool] = []
         self.is_left_baited: bool = False
@@ -161,6 +163,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
         if isinstance(outcome, str):
             outcome = TrialOutcome.model_validate_json(outcome)
 
+        self.outcome_history.append(outcome)
         self.is_right_choice_history.append(outcome.is_right_choice)
         self.reward_history.append(outcome.is_rewarded)
 
@@ -271,16 +274,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
 
         if self.trials_in_bias_intervention > self.spec.antibias_parameters.intervention_interval:
             # update bias
-            choice_history = self.is_right_choice_history[-self.spec.antibias_parameters.bias_window_length :]
-            reward_history = self.reward_history[-self.spec.antibias_parameters.bias_window_length :]
-            lr = fit_logistic_regression(
-                choice_history=np.array(choice_history, dtype=float),
-                reward_history=np.array(reward_history, dtype=float),
-                n_trial_back=5,
-                cv=10,
-                fit_exponential=10,
-            )
-            self.bias = lr["df_beta"].loc["bias"]["cross_validation"].values[0]
+            self.bias = calculate_bias(outcome_history=self.outcome_history)
 
             if self.bias <= self.spec.antibias_parameters.threshold.lower:
                 logger.debug("Bias calculated below threshold: %s." % self.bias)

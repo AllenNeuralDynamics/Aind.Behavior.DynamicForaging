@@ -51,8 +51,8 @@ version = "0.0.2rc32"
 source = { editable = "." }
 dependencies = [
     { name = "aind-behavior-services" },
-    { name = "aind-dynamic-foraging-models" },
     { name = "pydantic-settings" },
+    { name = "scikit-learn" },
 ]
 
 [package.optional-dependencies]
@@ -80,9 +80,9 @@ docs = [
 [package.metadata]
 requires-dist = [
     { name = "aind-behavior-services", specifier = ">=0.13.5" },
-    { name = "aind-dynamic-foraging-models", specifier = ">=0.13.1" },
     { name = "contraqctor", marker = "extra == 'data'", specifier = ">=0.5.3" },
     { name = "pydantic-settings" },
+    { name = "scikit-learn", specifier = ">=1.8.0" },
 ]
 provides-extras = ["data"]
 
@@ -242,22 +242,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/23/51/e183dd1167b58fadf4f439b1147593176ba3d155da89ecfa83e609d39f1b/aind_data_transfer_service-2.0.3.tar.gz", hash = "sha256:fee976aea5dc68943b8815398190eb9f7cc3a6fb208feadd047bd933a5014b6d", size = 37198, upload-time = "2026-03-23T23:51:33.219Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c1/bc/c180bff4ab1ac67aeec5206afe75cc0a785980d3f38ba7482daae36231c5/aind_data_transfer_service-2.0.3-py3-none-any.whl", hash = "sha256:4429048c1896dba2fb4688f6fc2ca6bbae5e4e1d645417417e9ad45fd3736bc6", size = 23147, upload-time = "2026-03-23T23:51:32.237Z" },
-]
-
-[[package]]
-name = "aind-dynamic-foraging-models"
-version = "0.13.1"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "matplotlib" },
-    { name = "numpy" },
-    { name = "pydantic" },
-    { name = "scikit-learn" },
-    { name = "scipy" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/eb/47/a7b35997f9767cc4911ce65db39a06492192d338175487916d98b70b1640/aind_dynamic_foraging_models-0.13.1.tar.gz", hash = "sha256:260e8cacb8b55b43f12b2443f876ced4d1cde364f9938199c1b2466425cd2419", size = 6648444, upload-time = "2026-02-21T01:05:25.913Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/61/12/e299389a360dae91b07b936ebed085fa1a718e210319faa50d4766054b26/aind_dynamic_foraging_models-0.13.1-py3-none-any.whl", hash = "sha256:34602f2ee02fa1d5b48449f05980b2ddc37c4f770608a2df3989875856571a13", size = 50200, upload-time = "2026-02-21T01:05:24.632Z" },
 ]
 
 [[package]]

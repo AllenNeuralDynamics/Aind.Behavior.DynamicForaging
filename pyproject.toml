@@ -19,9 +19,9 @@ version = "0.0.2rc32"
 readme = {file = "README.md", content-type = "text/markdown"}
 
 dependencies = [
-    "aind-dynamic-foraging-models>=0.13.1",
     "aind_behavior_services>=0.13.5",
     "pydantic-settings",
+    "scikit-learn>=1.8.0",
 ]
 
 [tool.uv.workspace]

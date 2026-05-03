@@ -1,6 +1,6 @@
 import logging
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import numpy as np
 
@@ -67,13 +67,9 @@ class TestBlockBasedTrialGenerator(unittest.TestCase):
 class TestAntiBiasBlockBasedTrialGenerator(unittest.TestCase):
     def _patch_bias(self, bias_value: float) -> dict:
 
-        return_value = {"df_beta": MagicMock()}
-        return_value["df_beta"].loc = {"bias": {"cross_validation": MagicMock()}}
-        return_value["df_beta"].loc["bias"]["cross_validation"].values = [bias_value]
-
         return patch(
-            "aind_behavior_dynamic_foraging.task_logic.trial_generators.block_based_trial_generator.fit_logistic_regression",
-            return_value=return_value,
+            "aind_behavior_dynamic_foraging.task_logic.trial_generators.block_based_trial_generator.calculate_bias",
+            return_value=bias_value,
         )
 
     def _make_generator(
