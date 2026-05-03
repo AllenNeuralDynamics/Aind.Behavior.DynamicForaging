@@ -41,7 +41,7 @@ class BiasThreshold(BaseModel):
 
 class AntiBiasParameters(BaseModel):
     threshold: BiasThreshold = Field(
-        default=BiasThreshold(), validate_default=True, description="Thresholds for bias correction."
+        default=BiasThreshold(), validate_default=True, description="Thresholds for bias correction intervention."
     )
     intervention_interval: int = Field(default=10, ge=0, description="Trials between bias intervention.")
     maximum_water_corrections: int = Field(default=5, ge=0, description="Number of water correction to attempt.")
@@ -101,7 +101,7 @@ class BlockBasedTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
     antibias_parameters: Optional[AntiBiasParameters] = Field(
         default=AntiBiasParameters(),
         validate_default=True,
-        description="Antibias settings. If set, trial generator with give water and move lickspouts to combat bias.",
+        description="Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
     )
 
     is_baiting: bool = Field(default=False, description="Whether uncollected rewards carry over to the next trial.")
@@ -235,7 +235,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             True if autowater conditions are met, False otherwise.
         """
 
-        if self.spec.autowater_parameters is None:  # autowater disabled
+        if self.spec.autowater_parameters is None:
             logger.debug("Autowater not configured.")
             return False
 
@@ -261,17 +261,13 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             True if antibias conditions are met, False otherwise.
         """
 
-        if self.spec.antibias_parameters is None:  # antibias disabled
+        if self.spec.antibias_parameters is None:
             logger.debug("Anitbias not configured.")
             return False
 
         if self.trials_in_bias_intervention > self.spec.antibias_parameters.intervention_interval:
             # update bias
-            choice_history = (
-                np.array(
-                    self.is_right_choice_history[-self.spec.antibias_parameters.bias_window_length :], dtype=float
-                ),
-            )
+            choice_history = self.is_right_choice_history[-self.spec.antibias_parameters.bias_window_length :]
             reward_history = self.reward_history[-self.spec.antibias_parameters.bias_window_length :]
             lr = fit_logistic_regression(
                 choice_history=np.array(choice_history, dtype=float),
@@ -302,7 +298,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
         is_right_autowater = None
         lickspout_offset_delta = 0
         ab_delta = self.spec.antibias_parameters.lickspout_offset_delta
-        if abs(self.bias) > self.spec.antibias_parameters.threshold.upper:
+        if abs(self.bias) >= self.spec.antibias_parameters.threshold.upper:
             if self.water_corrections < self.spec.antibias_parameters.maximum_water_corrections:
                 logger.debug("Correcting bias with water.")
                 is_right_autowater = (
@@ -315,7 +311,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
                 self.water_corrections = 0
 
         elif (
-            abs(self.bias) < self.spec.antibias_parameters.threshold.lower and self.total_lickspout_offset != 0
+            abs(self.bias) <= self.spec.antibias_parameters.threshold.lower and self.total_lickspout_offset != 0
         ):  # bias below lower threshold, move back towards center
             logger.debug("Moving lickspout back toward center.")
             delta = min(ab_delta, abs(self.total_lickspout_offset))
