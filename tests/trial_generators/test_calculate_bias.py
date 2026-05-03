@@ -22,7 +22,7 @@ class TestCalculateBias(unittest.TestCase):
 
     def test_right_bias_is_positive(self):
         """Always choosing right with alternating rewards should produce positive bias."""
-        outcomes = make_outcomes(200, 0.9, 0.5)
+        outcomes = make_outcomes(100, 0.9, 0.5)
         bias = calculate_bias(outcomes)
         self.assertGreater(bias, 0)
 
@@ -30,7 +30,6 @@ class TestCalculateBias(unittest.TestCase):
         """Always choosing left with alternating rewards should produce negative bias."""
         outcomes = make_outcomes(100, 0.1, 0.5)
         bias = calculate_bias(outcomes)
-        print(bias)
         self.assertLess(bias, 0)
 
     def test_unbiased_near_zero(self):
