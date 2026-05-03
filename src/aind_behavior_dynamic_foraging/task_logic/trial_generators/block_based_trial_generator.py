@@ -47,7 +47,7 @@ class AntiBiasParameters(BaseModel):
     maximum_water_corrections: int = Field(default=5, ge=0, description="Number of water correction to attempt.")
     volume: int = Field(default=1, ge=0, description="Volume in ul of water given.")
     bias_window_length: int = Field(default=200, ge=0, description="Trials to calculate bias over.")
-    lickspout_offset_delta: float = Field(default=0.5, ge=0, description="Absolute value of delta to move stage.")
+    lickspout_offset_delta: float = Field(default=0.05, ge=0, description="Absolute value of delta (mm) to move stage.")
 
 
 class Block(BaseModel):
@@ -301,6 +301,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
 
         is_right_autowater = None
         lickspout_offset_delta = 0
+        ab_delta = self.spec.antibias_parameters.lickspout_offset_delta
         if abs(self.bias) > self.spec.antibias_parameters.threshold.upper:
             if self.water_corrections < self.spec.antibias_parameters.maximum_water_corrections:
                 logger.debug("Correcting bias with water.")
@@ -310,14 +311,14 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
                 self.water_corrections += 1
             else:
                 logger.debug("Correcting bias with lickspout offset.")
-                lickspout_offset_delta = 0.5 if self.bias < 0 else -0.5  # + values move lickspout right
+                lickspout_offset_delta = ab_delta if self.bias < 0 else -ab_delta  # + values move lickspout right
                 self.water_corrections = 0
 
         elif (
             abs(self.bias) < self.spec.antibias_parameters.threshold.lower and self.total_lickspout_offset != 0
         ):  # bias below lower threshold, move back towards center
             logger.debug("Moving lickspout back toward center.")
-            delta = min(0.5, abs(self.total_lickspout_offset))
+            delta = min(ab_delta, abs(self.total_lickspout_offset))
             lickspout_offset_delta = -delta if self.total_lickspout_offset > 0 else delta
 
         self.total_lickspout_offset += lickspout_offset_delta

@@ -703,6 +703,183 @@ namespace AindDynamicForagingDataSchema
     }
 
 
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class AntiBiasParameters
+    {
+    
+        private BiasThreshold _threshold;
+    
+        private int _interventionInterval;
+    
+        private int _maximumWaterCorrections;
+    
+        private int _volume;
+    
+        private int _biasWindowLength;
+    
+        private double _lickspoutOffsetDelta;
+    
+        public AntiBiasParameters()
+        {
+            _threshold = new BiasThreshold();
+            _interventionInterval = 10;
+            _maximumWaterCorrections = 5;
+            _volume = 1;
+            _biasWindowLength = 200;
+            _lickspoutOffsetDelta = 0.05D;
+        }
+    
+        protected AntiBiasParameters(AntiBiasParameters other)
+        {
+            _threshold = other._threshold;
+            _interventionInterval = other._interventionInterval;
+            _maximumWaterCorrections = other._maximumWaterCorrections;
+            _volume = other._volume;
+            _biasWindowLength = other._biasWindowLength;
+            _lickspoutOffsetDelta = other._lickspoutOffsetDelta;
+        }
+    
+        /// <summary>
+        /// Thresholds for bias correction.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("threshold")]
+        [System.ComponentModel.DescriptionAttribute("Thresholds for bias correction.")]
+        public BiasThreshold Threshold
+        {
+            get
+            {
+                return _threshold;
+            }
+            set
+            {
+                _threshold = value;
+            }
+        }
+    
+        /// <summary>
+        /// Trials between bias intervention.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("intervention_interval")]
+        [System.ComponentModel.DescriptionAttribute("Trials between bias intervention.")]
+        public int InterventionInterval
+        {
+            get
+            {
+                return _interventionInterval;
+            }
+            set
+            {
+                _interventionInterval = value;
+            }
+        }
+    
+        /// <summary>
+        /// Number of water correction to attempt.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("maximum_water_corrections")]
+        [System.ComponentModel.DescriptionAttribute("Number of water correction to attempt.")]
+        public int MaximumWaterCorrections
+        {
+            get
+            {
+                return _maximumWaterCorrections;
+            }
+            set
+            {
+                _maximumWaterCorrections = value;
+            }
+        }
+    
+        /// <summary>
+        /// Volume in ul of water given.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("volume")]
+        [System.ComponentModel.DescriptionAttribute("Volume in ul of water given.")]
+        public int Volume
+        {
+            get
+            {
+                return _volume;
+            }
+            set
+            {
+                _volume = value;
+            }
+        }
+    
+        /// <summary>
+        /// Trials to calculate bias over.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("bias_window_length")]
+        [System.ComponentModel.DescriptionAttribute("Trials to calculate bias over.")]
+        public int BiasWindowLength
+        {
+            get
+            {
+                return _biasWindowLength;
+            }
+            set
+            {
+                _biasWindowLength = value;
+            }
+        }
+    
+        /// <summary>
+        /// Absolute value of delta (mm) to move stage.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("lickspout_offset_delta")]
+        [System.ComponentModel.DescriptionAttribute("Absolute value of delta (mm) to move stage.")]
+        public double LickspoutOffsetDelta
+        {
+            get
+            {
+                return _lickspoutOffsetDelta;
+            }
+            set
+            {
+                _lickspoutOffsetDelta = value;
+            }
+        }
+    
+        public System.IObservable<AntiBiasParameters> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new AntiBiasParameters(this)));
+        }
+    
+        public System.IObservable<AntiBiasParameters> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new AntiBiasParameters(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("Threshold = " + _threshold + ", ");
+            stringBuilder.Append("InterventionInterval = " + _interventionInterval + ", ");
+            stringBuilder.Append("MaximumWaterCorrections = " + _maximumWaterCorrections + ", ");
+            stringBuilder.Append("Volume = " + _volume + ", ");
+            stringBuilder.Append("BiasWindowLength = " + _biasWindowLength + ", ");
+            stringBuilder.Append("LickspoutOffsetDelta = " + _lickspoutOffsetDelta);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
     /// <summary>
     /// Represents an auditory secondary reinforcer.
     /// </summary>
@@ -897,6 +1074,8 @@ namespace AindDynamicForagingDataSchema
     
         private AutoWaterParameters _autowaterParameters;
     
+        private AntiBiasParameters _antibiasParameters;
+    
         private bool _isBaiting;
     
         private RewardProbabilityParameters _rewardProbabilityParameters;
@@ -909,6 +1088,7 @@ namespace AindDynamicForagingDataSchema
             _interTrialIntervalDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _blockLength = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _autowaterParameters = new AutoWaterParameters();
+            _antibiasParameters = new AntiBiasParameters();
             _isBaiting = false;
             _rewardProbabilityParameters = new RewardProbabilityParameters();
         }
@@ -922,6 +1102,7 @@ namespace AindDynamicForagingDataSchema
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
             _blockLength = other._blockLength;
             _autowaterParameters = other._autowaterParameters;
+            _antibiasParameters = other._antibiasParameters;
             _isBaiting = other._isBaiting;
             _rewardProbabilityParameters = other._rewardProbabilityParameters;
         }
@@ -1035,6 +1216,25 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
+        /// Antibias settings. If set, trial generator with give water and move lickspouts to combat bias.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("antibias_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Antibias settings. If set, trial generator with give water and move lickspouts to" +
+            " combat bias.")]
+        public AntiBiasParameters AntibiasParameters
+        {
+            get
+            {
+                return _antibiasParameters;
+            }
+            set
+            {
+                _antibiasParameters = value;
+            }
+        }
+    
+        /// <summary>
         /// Whether uncollected rewards carry over to the next trial.
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("is_baiting")]
@@ -1091,6 +1291,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
             stringBuilder.Append("BlockLength = " + _blockLength + ", ");
             stringBuilder.Append("AutowaterParameters = " + _autowaterParameters + ", ");
+            stringBuilder.Append("AntibiasParameters = " + _antibiasParameters + ", ");
             stringBuilder.Append("IsBaiting = " + _isBaiting + ", ");
             stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters);
             return true;
@@ -1262,6 +1463,94 @@ namespace AindDynamicForagingDataSchema
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class BiasThreshold
+    {
+    
+        private double _upper;
+    
+        private double _lower;
+    
+        public BiasThreshold()
+        {
+            _upper = 0.7D;
+            _lower = 0.3D;
+        }
+    
+        protected BiasThreshold(BiasThreshold other)
+        {
+            _upper = other._upper;
+            _lower = other._lower;
+        }
+    
+        /// <summary>
+        /// Absolute value of the upper bias threshold.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("upper")]
+        [System.ComponentModel.DescriptionAttribute("Absolute value of the upper bias threshold.")]
+        public double Upper
+        {
+            get
+            {
+                return _upper;
+            }
+            set
+            {
+                _upper = value;
+            }
+        }
+    
+        /// <summary>
+        /// Absolute value of the lower bias threshold.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("lower")]
+        [System.ComponentModel.DescriptionAttribute("Absolute value of the lower bias threshold.")]
+        public double Lower
+        {
+            get
+            {
+                return _lower;
+            }
+            set
+            {
+                _lower = value;
+            }
+        }
+    
+        public System.IObservable<BiasThreshold> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new BiasThreshold(this)));
+        }
+    
+        public System.IObservable<BiasThreshold> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new BiasThreshold(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("Upper = " + _upper + ", ");
+            stringBuilder.Append("Lower = " + _lower);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class BlockBasedTrialGeneratorSpec : TrialGeneratorSpec
     {
     
@@ -1277,6 +1566,8 @@ namespace AindDynamicForagingDataSchema
     
         private AutoWaterParameters _autowaterParameters;
     
+        private AntiBiasParameters _antibiasParameters;
+    
         private bool _isBaiting;
     
         public BlockBasedTrialGeneratorSpec()
@@ -1287,6 +1578,7 @@ namespace AindDynamicForagingDataSchema
             _interTrialIntervalDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _blockLength = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _autowaterParameters = new AutoWaterParameters();
+            _antibiasParameters = new AntiBiasParameters();
             _isBaiting = false;
         }
     
@@ -1299,6 +1591,7 @@ namespace AindDynamicForagingDataSchema
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
             _blockLength = other._blockLength;
             _autowaterParameters = other._autowaterParameters;
+            _antibiasParameters = other._antibiasParameters;
             _isBaiting = other._isBaiting;
         }
     
@@ -1411,6 +1704,25 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
+        /// Antibias settings. If set, trial generator with give water and move lickspouts to combat bias.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("antibias_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Antibias settings. If set, trial generator with give water and move lickspouts to" +
+            " combat bias.")]
+        public AntiBiasParameters AntibiasParameters
+        {
+            get
+            {
+                return _antibiasParameters;
+            }
+            set
+            {
+                _antibiasParameters = value;
+            }
+        }
+    
+        /// <summary>
         /// Whether uncollected rewards carry over to the next trial.
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("is_baiting")]
@@ -1449,6 +1761,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
             stringBuilder.Append("BlockLength = " + _blockLength + ", ");
             stringBuilder.Append("AutowaterParameters = " + _autowaterParameters + ", ");
+            stringBuilder.Append("AntibiasParameters = " + _antibiasParameters + ", ");
             stringBuilder.Append("IsBaiting = " + _isBaiting);
             return true;
         }
@@ -1976,6 +2289,8 @@ namespace AindDynamicForagingDataSchema
     
         private AutoWaterParameters _autowaterParameters;
     
+        private AntiBiasParameters _antibiasParameters;
+    
         private bool _isBaiting;
     
         private RewardProbabilityParameters _rewardProbabilityParameters;
@@ -1998,6 +2313,7 @@ namespace AindDynamicForagingDataSchema
             _interTrialIntervalDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _blockLength = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _autowaterParameters = new AutoWaterParameters();
+            _antibiasParameters = new AntiBiasParameters();
             _isBaiting = false;
             _rewardProbabilityParameters = new RewardProbabilityParameters();
             _trialGenerationEndParameters = new CoupledTrialGenerationEndConditions();
@@ -2016,6 +2332,7 @@ namespace AindDynamicForagingDataSchema
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
             _blockLength = other._blockLength;
             _autowaterParameters = other._autowaterParameters;
+            _antibiasParameters = other._antibiasParameters;
             _isBaiting = other._isBaiting;
             _rewardProbabilityParameters = other._rewardProbabilityParameters;
             _trialGenerationEndParameters = other._trialGenerationEndParameters;
@@ -2130,6 +2447,25 @@ namespace AindDynamicForagingDataSchema
             set
             {
                 _autowaterParameters = value;
+            }
+        }
+    
+        /// <summary>
+        /// Antibias settings. If set, trial generator with give water and move lickspouts to combat bias.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("antibias_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Antibias settings. If set, trial generator with give water and move lickspouts to" +
+            " combat bias.")]
+        public AntiBiasParameters AntibiasParameters
+        {
+            get
+            {
+                return _antibiasParameters;
+            }
+            set
+            {
+                _antibiasParameters = value;
             }
         }
     
@@ -2275,6 +2611,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
             stringBuilder.Append("BlockLength = " + _blockLength + ", ");
             stringBuilder.Append("AutowaterParameters = " + _autowaterParameters + ", ");
+            stringBuilder.Append("AntibiasParameters = " + _antibiasParameters + ", ");
             stringBuilder.Append("IsBaiting = " + _isBaiting + ", ");
             stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters + ", ");
             stringBuilder.Append("TrialGenerationEndParameters = " + _trialGenerationEndParameters + ", ");
@@ -2437,6 +2774,8 @@ namespace AindDynamicForagingDataSchema
     
         private AutoWaterParameters _autowaterParameters;
     
+        private AntiBiasParameters _antibiasParameters;
+    
         private bool _isBaiting;
     
         private RewardProbabilityParameters _rewardProbabilityParameters;
@@ -2451,6 +2790,7 @@ namespace AindDynamicForagingDataSchema
             _interTrialIntervalDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _blockLength = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _autowaterParameters = new AutoWaterParameters();
+            _antibiasParameters = new AntiBiasParameters();
             _isBaiting = true;
             _rewardProbabilityParameters = new RewardProbabilityParameters();
             _trialGenerationEndParameters = new CoupledWarmupTrialGenerationEndConditions();
@@ -2465,6 +2805,7 @@ namespace AindDynamicForagingDataSchema
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
             _blockLength = other._blockLength;
             _autowaterParameters = other._autowaterParameters;
+            _antibiasParameters = other._antibiasParameters;
             _isBaiting = other._isBaiting;
             _rewardProbabilityParameters = other._rewardProbabilityParameters;
             _trialGenerationEndParameters = other._trialGenerationEndParameters;
@@ -2579,6 +2920,25 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
+        /// Antibias settings. If set, trial generator with give water and move lickspouts to combat bias.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("antibias_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Antibias settings. If set, trial generator with give water and move lickspouts to" +
+            " combat bias.")]
+        public AntiBiasParameters AntibiasParameters
+        {
+            get
+            {
+                return _antibiasParameters;
+            }
+            set
+            {
+                _antibiasParameters = value;
+            }
+        }
+    
+        /// <summary>
         /// Whether uncollected rewards carry over to the next trial.
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("is_baiting")]
@@ -2653,6 +3013,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
             stringBuilder.Append("BlockLength = " + _blockLength + ", ");
             stringBuilder.Append("AutowaterParameters = " + _autowaterParameters + ", ");
+            stringBuilder.Append("AntibiasParameters = " + _antibiasParameters + ", ");
             stringBuilder.Append("IsBaiting = " + _isBaiting + ", ");
             stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters + ", ");
             stringBuilder.Append("TrialGenerationEndParameters = " + _trialGenerationEndParameters);
@@ -6192,6 +6553,8 @@ namespace AindDynamicForagingDataSchema
     
         private AutoWaterParameters _autowaterParameters;
     
+        private AntiBiasParameters _antibiasParameters;
+    
         private bool _isBaiting;
     
         private UncoupledTrialGenerationEndConditions _trialGenerationEndParameters;
@@ -6208,6 +6571,7 @@ namespace AindDynamicForagingDataSchema
             _interTrialIntervalDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _blockLength = new AllenNeuralDynamics.AindBehaviorServices.Distributions.UniformDistribution();
             _autowaterParameters = new AutoWaterParameters();
+            _antibiasParameters = new AntiBiasParameters();
             _isBaiting = false;
             _trialGenerationEndParameters = new UncoupledTrialGenerationEndConditions();
             _rewardProbabilities = new System.Collections.Generic.List<double>();
@@ -6223,6 +6587,7 @@ namespace AindDynamicForagingDataSchema
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
             _blockLength = other._blockLength;
             _autowaterParameters = other._autowaterParameters;
+            _antibiasParameters = other._antibiasParameters;
             _isBaiting = other._isBaiting;
             _trialGenerationEndParameters = other._trialGenerationEndParameters;
             _rewardProbabilities = other._rewardProbabilities;
@@ -6338,6 +6703,25 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
+        /// Antibias settings. If set, trial generator with give water and move lickspouts to combat bias.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("antibias_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Antibias settings. If set, trial generator with give water and move lickspouts to" +
+            " combat bias.")]
+        public AntiBiasParameters AntibiasParameters
+        {
+            get
+            {
+                return _antibiasParameters;
+            }
+            set
+            {
+                _antibiasParameters = value;
+            }
+        }
+    
+        /// <summary>
         /// Whether uncollected rewards carry over to the next trial.
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("is_baiting")]
@@ -6429,6 +6813,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
             stringBuilder.Append("BlockLength = " + _blockLength + ", ");
             stringBuilder.Append("AutowaterParameters = " + _autowaterParameters + ", ");
+            stringBuilder.Append("AntibiasParameters = " + _antibiasParameters + ", ");
             stringBuilder.Append("IsBaiting = " + _isBaiting + ", ");
             stringBuilder.Append("TrialGenerationEndParameters = " + _trialGenerationEndParameters + ", ");
             stringBuilder.Append("RewardProbabilities = " + _rewardProbabilities + ", ");
@@ -7569,6 +7954,11 @@ namespace AindDynamicForagingDataSchema
             return Process<AindDynamicForagingTaskParameters>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<AntiBiasParameters> source)
+        {
+            return Process<AntiBiasParameters>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<AuditorySecondaryReinforcer> source)
         {
             return Process<AuditorySecondaryReinforcer>(source);
@@ -7592,6 +7982,11 @@ namespace AindDynamicForagingDataSchema
         public System.IObservable<string> Process(System.IObservable<BehaviorStabilityParameters> source)
         {
             return Process<BehaviorStabilityParameters>(source);
+        }
+
+        public System.IObservable<string> Process(System.IObservable<BiasThreshold> source)
+        {
+            return Process<BiasThreshold>(source);
         }
 
         public System.IObservable<string> Process(System.IObservable<BlockBasedTrialGeneratorSpec> source)
@@ -7791,11 +8186,13 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AindDynamicForagingRig>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AindDynamicForagingTaskLogic>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AindDynamicForagingTaskParameters>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AntiBiasParameters>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AuditorySecondaryReinforcer>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<AutoWaterParameters>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BaseCoupledTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BaseModel>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BehaviorStabilityParameters>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BiasThreshold>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BlockBasedTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CameraControllerSpinnakerCamera>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CameraControllerWebCamera>))]
