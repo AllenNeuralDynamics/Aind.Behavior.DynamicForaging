@@ -421,6 +421,55 @@
       "type": "object",
       "x-sgen-typename": "AllenNeuralDynamics.AindManipulator.AindManipulatorCalibration"
     },
+    "AntiBiasParameters": {
+      "properties": {
+        "threshold": {
+          "$ref": "#/$defs/BiasThreshold",
+          "default": {
+            "upper": 0.7,
+            "lower": 0.3
+          },
+          "description": "Thresholds for bias correction intervention."
+        },
+        "intervention_interval": {
+          "default": 10,
+          "description": "Trials between bias intervention.",
+          "minimum": 0,
+          "title": "Intervention Interval",
+          "type": "integer"
+        },
+        "maximum_water_corrections": {
+          "default": 5,
+          "description": "Number of water correction to attempt.",
+          "minimum": 0,
+          "title": "Maximum Water Corrections",
+          "type": "integer"
+        },
+        "volume": {
+          "default": 1,
+          "description": "Volume in ul of water given.",
+          "minimum": 0,
+          "title": "Volume",
+          "type": "integer"
+        },
+        "bias_window_length": {
+          "default": 200,
+          "description": "Trials to calculate bias over.",
+          "minimum": 0,
+          "title": "Bias Window Length",
+          "type": "integer"
+        },
+        "lickspout_offset_delta": {
+          "default": 0.05,
+          "description": "Distance (mm) to move the stage spouts by. This is a relative distance to the current value, not absolute.",
+          "minimum": 0,
+          "title": "Lickspout Offset Delta",
+          "type": "number"
+        }
+      },
+      "title": "AntiBiasParameters",
+      "type": "object"
+    },
     "AuditorySecondaryReinforcer": {
       "description": "Represents an auditory secondary reinforcer.",
       "properties": {
@@ -629,6 +678,28 @@
             }
           ]
         },
+        "antibias_parameters": {
+          "default": {
+            "threshold": {
+              "lower": 0.3,
+              "upper": 0.7
+            },
+            "intervention_interval": 10,
+            "maximum_water_corrections": 5,
+            "volume": 1,
+            "bias_window_length": 200,
+            "lickspout_offset_delta": 0.05
+          },
+          "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/AntiBiasParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
         "is_baiting": {
           "default": false,
           "description": "Whether uncollected rewards carry over to the next trial.",
@@ -763,6 +834,28 @@
       "title": "BetaDistributionParameters",
       "type": "object",
       "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.BetaDistributionParameters"
+    },
+    "BiasThreshold": {
+      "properties": {
+        "upper": {
+          "default": 0.7,
+          "description": "Absolute value of the upper bias threshold.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Upper",
+          "type": "number"
+        },
+        "lower": {
+          "default": 0.3,
+          "description": "Absolute value of the lower bias threshold.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Lower",
+          "type": "number"
+        }
+      },
+      "title": "BiasThreshold",
+      "type": "object"
     },
     "BinomialDistribution": {
       "description": "A binomial probability distribution.\n\nModels the number of successes in a fixed number of independent\nBernoulli trials with constant success probability.",
@@ -923,6 +1016,28 @@
           "oneOf": [
             {
               "$ref": "#/$defs/AutoWaterParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "antibias_parameters": {
+          "default": {
+            "threshold": {
+              "lower": 0.3,
+              "upper": 0.7
+            },
+            "intervention_interval": 10,
+            "maximum_water_corrections": 5,
+            "volume": 1,
+            "bias_window_length": 200,
+            "lickspout_offset_delta": 0.05
+          },
+          "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/AntiBiasParameters"
             },
             {
               "type": "null"
@@ -1195,6 +1310,28 @@
             }
           ]
         },
+        "antibias_parameters": {
+          "default": {
+            "threshold": {
+              "lower": 0.3,
+              "upper": 0.7
+            },
+            "intervention_interval": 10,
+            "maximum_water_corrections": 5,
+            "volume": 1,
+            "bias_window_length": 200,
+            "lickspout_offset_delta": 0.05
+          },
+          "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/AntiBiasParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
         "is_baiting": {
           "default": false,
           "description": "Whether uncollected rewards carry over to the next trial.",
@@ -1378,6 +1515,28 @@
           "oneOf": [
             {
               "$ref": "#/$defs/AutoWaterParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "antibias_parameters": {
+          "default": {
+            "threshold": {
+              "lower": 0.3,
+              "upper": 0.7
+            },
+            "intervention_interval": 10,
+            "maximum_water_corrections": 5,
+            "volume": 1,
+            "bias_window_length": 200,
+            "lickspout_offset_delta": 0.05
+          },
+          "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/AntiBiasParameters"
             },
             {
               "type": "null"
@@ -3532,6 +3691,28 @@
           "oneOf": [
             {
               "$ref": "#/$defs/AutoWaterParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "antibias_parameters": {
+          "default": {
+            "threshold": {
+              "lower": 0.3,
+              "upper": 0.7
+            },
+            "intervention_interval": 10,
+            "maximum_water_corrections": 5,
+            "volume": 1,
+            "bias_window_length": 200,
+            "lickspout_offset_delta": 0.05
+          },
+          "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/AntiBiasParameters"
             },
             {
               "type": "null"
