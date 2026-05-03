@@ -742,11 +742,11 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Thresholds for bias correction.
+        /// Thresholds for bias correction intervention.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("threshold")]
-        [System.ComponentModel.DescriptionAttribute("Thresholds for bias correction.")]
+        [System.ComponentModel.DescriptionAttribute("Thresholds for bias correction intervention.")]
         public BiasThreshold Threshold
         {
             get
@@ -1216,11 +1216,11 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Antibias settings. If set, trial generator with give water and move lickspouts to combat bias.
+        /// Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("antibias_parameters")]
-        [System.ComponentModel.DescriptionAttribute("Antibias settings. If set, trial generator with give water and move lickspouts to" +
+        [System.ComponentModel.DescriptionAttribute("Antibias settings. If set, trial generator will give water and move lickspouts to" +
             " combat bias.")]
         public AntiBiasParameters AntibiasParameters
         {
@@ -1704,11 +1704,11 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Antibias settings. If set, trial generator with give water and move lickspouts to combat bias.
+        /// Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("antibias_parameters")]
-        [System.ComponentModel.DescriptionAttribute("Antibias settings. If set, trial generator with give water and move lickspouts to" +
+        [System.ComponentModel.DescriptionAttribute("Antibias settings. If set, trial generator will give water and move lickspouts to" +
             " combat bias.")]
         public AntiBiasParameters AntibiasParameters
         {
@@ -2451,11 +2451,11 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Antibias settings. If set, trial generator with give water and move lickspouts to combat bias.
+        /// Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("antibias_parameters")]
-        [System.ComponentModel.DescriptionAttribute("Antibias settings. If set, trial generator with give water and move lickspouts to" +
+        [System.ComponentModel.DescriptionAttribute("Antibias settings. If set, trial generator will give water and move lickspouts to" +
             " combat bias.")]
         public AntiBiasParameters AntibiasParameters
         {
@@ -2920,11 +2920,11 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Antibias settings. If set, trial generator with give water and move lickspouts to combat bias.
+        /// Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("antibias_parameters")]
-        [System.ComponentModel.DescriptionAttribute("Antibias settings. If set, trial generator with give water and move lickspouts to" +
+        [System.ComponentModel.DescriptionAttribute("Antibias settings. If set, trial generator will give water and move lickspouts to" +
             " combat bias.")]
         public AntiBiasParameters AntibiasParameters
         {
@@ -6703,11 +6703,11 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Antibias settings. If set, trial generator with give water and move lickspouts to combat bias.
+        /// Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("antibias_parameters")]
-        [System.ComponentModel.DescriptionAttribute("Antibias settings. If set, trial generator with give water and move lickspouts to" +
+        [System.ComponentModel.DescriptionAttribute("Antibias settings. If set, trial generator will give water and move lickspouts to" +
             " combat bias.")]
         public AntiBiasParameters AntibiasParameters
         {

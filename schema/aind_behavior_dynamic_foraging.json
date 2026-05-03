@@ -429,7 +429,7 @@
             "upper": 0.7,
             "lower": 0.3
           },
-          "description": "Thresholds for bias correction."
+          "description": "Thresholds for bias correction intervention."
         },
         "intervention_interval": {
           "default": 10,
@@ -690,7 +690,7 @@
             "bias_window_length": 200,
             "lickspout_offset_delta": 0.05
           },
-          "description": "Antibias settings. If set, trial generator with give water and move lickspouts to combat bias.",
+          "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
           "oneOf": [
             {
               "$ref": "#/$defs/AntiBiasParameters"
@@ -1034,7 +1034,7 @@
             "bias_window_length": 200,
             "lickspout_offset_delta": 0.05
           },
-          "description": "Antibias settings. If set, trial generator with give water and move lickspouts to combat bias.",
+          "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
           "oneOf": [
             {
               "$ref": "#/$defs/AntiBiasParameters"
@@ -1322,7 +1322,7 @@
             "bias_window_length": 200,
             "lickspout_offset_delta": 0.05
           },
-          "description": "Antibias settings. If set, trial generator with give water and move lickspouts to combat bias.",
+          "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
           "oneOf": [
             {
               "$ref": "#/$defs/AntiBiasParameters"
@@ -1533,7 +1533,7 @@
             "bias_window_length": 200,
             "lickspout_offset_delta": 0.05
           },
-          "description": "Antibias settings. If set, trial generator with give water and move lickspouts to combat bias.",
+          "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
           "oneOf": [
             {
               "$ref": "#/$defs/AntiBiasParameters"
@@ -3709,7 +3709,7 @@
             "bias_window_length": 200,
             "lickspout_offset_delta": 0.05
           },
-          "description": "Antibias settings. If set, trial generator with give water and move lickspouts to combat bias.",
+          "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
           "oneOf": [
             {
               "$ref": "#/$defs/AntiBiasParameters"
