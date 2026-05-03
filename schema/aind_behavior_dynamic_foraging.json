@@ -461,7 +461,7 @@
         },
         "lickspout_offset_delta": {
           "default": 0.05,
-          "description": "Absolute value of delta (mm) to move stage.",
+          "description": "Distance (mm) to move the stage spouts by. This is a relative distance to the current value, not absolute.",
           "minimum": 0,
           "title": "Lickspout Offset Delta",
           "type": "number"

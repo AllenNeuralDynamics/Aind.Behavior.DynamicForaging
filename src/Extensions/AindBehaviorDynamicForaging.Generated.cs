@@ -828,10 +828,11 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Absolute value of delta (mm) to move stage.
+        /// Distance (mm) to move the stage spouts by. This is a relative distance to the current value, not absolute.
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("lickspout_offset_delta")]
-        [System.ComponentModel.DescriptionAttribute("Absolute value of delta (mm) to move stage.")]
+        [System.ComponentModel.DescriptionAttribute("Distance (mm) to move the stage spouts by. This is a relative distance to the cur" +
+            "rent value, not absolute.")]
         public double LickspoutOffsetDelta
         {
             get
