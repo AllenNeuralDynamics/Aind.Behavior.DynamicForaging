@@ -47,7 +47,11 @@ class AntiBiasParameters(BaseModel):
     maximum_water_corrections: int = Field(default=5, ge=0, description="Number of water correction to attempt.")
     volume: int = Field(default=1, ge=0, description="Volume in ul of water given.")
     bias_window_length: int = Field(default=200, ge=0, description="Trials to calculate bias over.")
-    lickspout_offset_delta: float = Field(default=0.05, ge=0, description="Distance (mm) to move the stage spouts by. This is a relative distance to the current value, not absolute.")
+    lickspout_offset_delta: float = Field(
+        default=0.05,
+        ge=0,
+        description="Distance (mm) to move the stage spouts by. This is a relative distance to the current value, not absolute.",
+    )
 
 
 class Block(BaseModel):
