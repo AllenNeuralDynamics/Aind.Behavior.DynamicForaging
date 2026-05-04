@@ -63,11 +63,11 @@ class DynamicForagingSoundCard(harp.HarpSoundCard):
 
 
 class DynamicForagingAindManipulator(aind_manipulator.AindManipulator):
-    """a calibrated manipulator for the dynamic foraging rig. This is a subclass of the AindManipulator that includes an offset of the animal position relative to the initial position."""
+    """A calibrated manipulator for the dynamic foraging rig. This is a subclass of the AindManipulator that includes an offset of the subject position relative to the initial position."""
 
-    animal_offset: aind_manipulator.ManipulatorPosition = Field(
+    subject_offset: aind_manipulator.ManipulatorPosition = Field(
         aind_manipulator.ManipulatorPosition(x=0, y1=0, y2=0, z=0),
-        description="Offset of the animal position relative to the `initial_position` parameter",
+        description="Offset of the subject position relative to the `initial_position` parameter",
         validate_default=True,
     )
 

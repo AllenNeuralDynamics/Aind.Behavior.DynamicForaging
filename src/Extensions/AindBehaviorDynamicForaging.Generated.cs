@@ -2662,12 +2662,12 @@ namespace AindDynamicForagingDataSchema
 
 
     /// <summary>
-    /// a calibrated manipulator for the dynamic foraging rig. This is a subclass of the AindManipulator that includes an offset of the animal position relative to the initial position.
+    /// a calibrated manipulator for the dynamic foraging rig. This is a subclass of the AindManipulator that includes an offset of the subject position relative to the initial position.
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("a calibrated manipulator for the dynamic foraging rig. This is a subclass of the " +
-        "AindManipulator that includes an offset of the animal position relative to the i" +
-        "nitial position.")]
+        "AindManipulator that includes an offset of the subject position relative to the " +
+        "initial position.")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class DynamicForagingAindManipulator
@@ -2683,14 +2683,14 @@ namespace AindDynamicForagingDataSchema
     
         private string _portName;
     
-        private AllenNeuralDynamics.AindManipulator.ManipulatorPosition _animalOffset;
+        private AllenNeuralDynamics.AindManipulator.ManipulatorPosition _subjectOffset;
     
         public DynamicForagingAindManipulator()
         {
             _deviceType = "StepperDriver";
             _calibration = new AllenNeuralDynamics.AindManipulator.AindManipulatorCalibration();
             _whoAmI = 1130;
-            _animalOffset = new AllenNeuralDynamics.AindManipulator.ManipulatorPosition();
+            _subjectOffset = new AllenNeuralDynamics.AindManipulator.ManipulatorPosition();
         }
     
         protected DynamicForagingAindManipulator(DynamicForagingAindManipulator other)
@@ -2700,7 +2700,7 @@ namespace AindDynamicForagingDataSchema
             _whoAmI = other._whoAmI;
             _serialNumber = other._serialNumber;
             _portName = other._portName;
-            _animalOffset = other._animalOffset;
+            _subjectOffset = other._subjectOffset;
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("device_type")]
@@ -2782,20 +2782,20 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Offset of the animal position relative to the `initial_position` parameter
+        /// Offset of the subject position relative to the `initial_position` parameter
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("animal_offset")]
-        [System.ComponentModel.DescriptionAttribute("Offset of the animal position relative to the `initial_position` parameter")]
-        public AllenNeuralDynamics.AindManipulator.ManipulatorPosition AnimalOffset
+        [Newtonsoft.Json.JsonPropertyAttribute("subject_offset")]
+        [System.ComponentModel.DescriptionAttribute("Offset of the subject position relative to the `initial_position` parameter")]
+        public AllenNeuralDynamics.AindManipulator.ManipulatorPosition SubjectOffset
         {
             get
             {
-                return _animalOffset;
+                return _subjectOffset;
             }
             set
             {
-                _animalOffset = value;
+                _subjectOffset = value;
             }
         }
     
@@ -2816,7 +2816,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("WhoAmI = " + _whoAmI + ", ");
             stringBuilder.Append("SerialNumber = " + _serialNumber + ", ");
             stringBuilder.Append("PortName = " + _portName + ", ");
-            stringBuilder.Append("AnimalOffset = " + _animalOffset);
+            stringBuilder.Append("SubjectOffset = " + _subjectOffset);
             return true;
         }
     

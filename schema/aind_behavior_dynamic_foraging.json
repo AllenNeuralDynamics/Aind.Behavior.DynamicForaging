@@ -1363,7 +1363,7 @@
       "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution"
     },
     "DynamicForagingAindManipulator": {
-      "description": "a calibrated manipulator for the dynamic foraging rig. This is a subclass of the AindManipulator that includes an offset of the animal position relative to the initial position.",
+      "description": "a calibrated manipulator for the dynamic foraging rig. This is a subclass of the AindManipulator that includes an offset of the subject position relative to the initial position.",
       "properties": {
         "device_type": {
           "const": "StepperDriver",
@@ -1462,7 +1462,7 @@
           "title": "Port Name",
           "type": "string"
         },
-        "animal_offset": {
+        "subject_offset": {
           "$ref": "#/$defs/ManipulatorPosition",
           "default": {
             "x": 0.0,
@@ -1470,7 +1470,7 @@
             "y2": 0.0,
             "z": 0.0
           },
-          "description": "Offset of the animal position relative to the `initial_position` parameter"
+          "description": "Offset of the subject position relative to the `initial_position` parameter"
         }
       },
       "required": [
