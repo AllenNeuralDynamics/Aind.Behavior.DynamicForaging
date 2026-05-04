@@ -43,7 +43,7 @@ namespace AindDynamicForagingDataSchema
     
         private HarpEnvironmentSensor _harpEnvironmentSensor;
     
-        private AllenNeuralDynamics.AindManipulator.AindManipulator _manipulator;
+        private DynamicForagingAindManipulator _manipulator;
     
         private RigCalibration _calibration;
     
@@ -55,7 +55,7 @@ namespace AindDynamicForagingDataSchema
             _harpBehavior = new HarpBehavior();
             _harpClockGenerator = new HarpWhiteRabbit();
             _harpSoundCard = new DynamicForagingSoundCard();
-            _manipulator = new AllenNeuralDynamics.AindManipulator.AindManipulator();
+            _manipulator = new DynamicForagingAindManipulator();
             _calibration = new RigCalibration();
         }
     
@@ -324,7 +324,7 @@ namespace AindDynamicForagingDataSchema
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("manipulator", Required=Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DescriptionAttribute("Manipulator")]
-        public AllenNeuralDynamics.AindManipulator.AindManipulator Manipulator
+        public DynamicForagingAindManipulator Manipulator
         {
             get
             {
@@ -2657,6 +2657,180 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters + ", ");
             stringBuilder.Append("TrialGenerationEndParameters = " + _trialGenerationEndParameters);
             return true;
+        }
+    }
+
+
+    /// <summary>
+    /// a calibrated manipulator for the dynamic foraging rig. This is a subclass of the AindManipulator that includes an offset of the animal position relative to the initial position.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.ComponentModel.DescriptionAttribute("a calibrated manipulator for the dynamic foraging rig. This is a subclass of the " +
+        "AindManipulator that includes an offset of the animal position relative to the i" +
+        "nitial position.")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class DynamicForagingAindManipulator
+    {
+    
+        private string _deviceType;
+    
+        private AllenNeuralDynamics.AindManipulator.AindManipulatorCalibration _calibration;
+    
+        private int _whoAmI;
+    
+        private string _serialNumber;
+    
+        private string _portName;
+    
+        private AllenNeuralDynamics.AindManipulator.ManipulatorPosition _animalOffset;
+    
+        public DynamicForagingAindManipulator()
+        {
+            _deviceType = "StepperDriver";
+            _calibration = new AllenNeuralDynamics.AindManipulator.AindManipulatorCalibration();
+            _whoAmI = 1130;
+            _animalOffset = new AllenNeuralDynamics.AindManipulator.ManipulatorPosition();
+        }
+    
+        protected DynamicForagingAindManipulator(DynamicForagingAindManipulator other)
+        {
+            _deviceType = other._deviceType;
+            _calibration = other._calibration;
+            _whoAmI = other._whoAmI;
+            _serialNumber = other._serialNumber;
+            _portName = other._portName;
+            _animalOffset = other._animalOffset;
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("device_type")]
+        public string DeviceType
+        {
+            get
+            {
+                return _deviceType;
+            }
+            set
+            {
+                _deviceType = value;
+            }
+        }
+    
+        /// <summary>
+        /// Calibration for the device.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("calibration")]
+        [System.ComponentModel.DescriptionAttribute("Calibration for the device.")]
+        public AllenNeuralDynamics.AindManipulator.AindManipulatorCalibration Calibration
+        {
+            get
+            {
+                return _calibration;
+            }
+            set
+            {
+                _calibration = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("who_am_i")]
+        public int WhoAmI
+        {
+            get
+            {
+                return _whoAmI;
+            }
+            set
+            {
+                _whoAmI = value;
+            }
+        }
+    
+        /// <summary>
+        /// Device serial number
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("serial_number")]
+        [System.ComponentModel.DescriptionAttribute("Device serial number")]
+        public string SerialNumber
+        {
+            get
+            {
+                return _serialNumber;
+            }
+            set
+            {
+                _serialNumber = value;
+            }
+        }
+    
+        /// <summary>
+        /// Device port name
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("port_name", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("Device port name")]
+        public string PortName
+        {
+            get
+            {
+                return _portName;
+            }
+            set
+            {
+                _portName = value;
+            }
+        }
+    
+        /// <summary>
+        /// Offset of the animal position relative to the `initial_position` parameter
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("animal_offset")]
+        [System.ComponentModel.DescriptionAttribute("Offset of the animal position relative to the `initial_position` parameter")]
+        public AllenNeuralDynamics.AindManipulator.ManipulatorPosition AnimalOffset
+        {
+            get
+            {
+                return _animalOffset;
+            }
+            set
+            {
+                _animalOffset = value;
+            }
+        }
+    
+        public System.IObservable<DynamicForagingAindManipulator> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new DynamicForagingAindManipulator(this)));
+        }
+    
+        public System.IObservable<DynamicForagingAindManipulator> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new DynamicForagingAindManipulator(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("DeviceType = " + _deviceType + ", ");
+            stringBuilder.Append("Calibration = " + _calibration + ", ");
+            stringBuilder.Append("WhoAmI = " + _whoAmI + ", ");
+            stringBuilder.Append("SerialNumber = " + _serialNumber + ", ");
+            stringBuilder.Append("PortName = " + _portName + ", ");
+            stringBuilder.Append("AnimalOffset = " + _animalOffset);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
         }
     }
 
@@ -7634,6 +7808,11 @@ namespace AindDynamicForagingDataSchema
             return Process<CoupledWarmupTrialGeneratorSpec>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<DynamicForagingAindManipulator> source)
+        {
+            return Process<DynamicForagingAindManipulator>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<DynamicForagingSoundCard> source)
         {
             return Process<DynamicForagingSoundCard>(source);
@@ -7804,6 +7983,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CoupledTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CoupledWarmupTrialGenerationEndConditions>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CoupledWarmupTrialGeneratorSpec>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<DynamicForagingAindManipulator>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<DynamicForagingSoundCard>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpBehavior>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpEnvironmentSensor>))]

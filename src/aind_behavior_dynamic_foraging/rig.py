@@ -62,6 +62,16 @@ class DynamicForagingSoundCard(harp.HarpSoundCard):
     )
 
 
+class DynamicForagingAindManipulator(aind_manipulator.AindManipulator):
+    """a calibrated manipulator for the dynamic foraging rig. This is a subclass of the AindManipulator that includes an offset of the animal position relative to the initial position."""
+
+    animal_offset: aind_manipulator.ManipulatorPosition = Field(
+        aind_manipulator.ManipulatorPosition(x=0, y1=0, y2=0, z=0),
+        description="Offset of the animal position relative to the `initial_position` parameter",
+        validate_default=True,
+    )
+
+
 class AindDynamicForagingRig(rig.Rig):
     version: Literal[__semver__] = __semver__
     triggered_camera_controller: cameras.CameraController[cameras.SpinnakerCamera] = Field(
@@ -79,5 +89,5 @@ class AindDynamicForagingRig(rig.Rig):
     harp_environment_sensor: Optional[harp.HarpEnvironmentSensor] = Field(
         default=None, description="Harp environment sensor"
     )
-    manipulator: aind_manipulator.AindManipulator = Field(description="Manipulator")
+    manipulator: DynamicForagingAindManipulator = Field(description="Manipulator")
     calibration: RigCalibration = Field(description="Calibration models")

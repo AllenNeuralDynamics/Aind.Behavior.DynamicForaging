@@ -107,7 +107,7 @@
           ]
         },
         "manipulator": {
-          "$ref": "#/$defs/AindManipulator",
+          "$ref": "#/$defs/DynamicForagingAindManipulator",
           "description": "Manipulator"
         },
         "calibration": {
@@ -217,114 +217,6 @@
       },
       "title": "AindDynamicForagingTaskParameters",
       "type": "object"
-    },
-    "AindManipulator": {
-      "description": "AindManipulator device definition",
-      "properties": {
-        "device_type": {
-          "const": "StepperDriver",
-          "default": "StepperDriver",
-          "title": "Device Type",
-          "type": "string"
-        },
-        "calibration": {
-          "$ref": "#/$defs/AindManipulatorCalibration",
-          "default": {
-            "description": "AindManipulator calibration and settings",
-            "full_step_to_mm": {
-              "x": 0.01,
-              "y1": 0.01,
-              "y2": 0.01,
-              "z": 0.01
-            },
-            "axis_configuration": [
-              {
-                "axis": 2,
-                "max_limit": 25.0,
-                "maximum_step_interval": 2000,
-                "microstep_resolution": 0,
-                "min_limit": -0.01,
-                "motor_operation_mode": 0,
-                "step_acceleration_interval": 100,
-                "step_interval": 100
-              },
-              {
-                "axis": 3,
-                "max_limit": 25.0,
-                "maximum_step_interval": 2000,
-                "microstep_resolution": 0,
-                "min_limit": -0.01,
-                "motor_operation_mode": 0,
-                "step_acceleration_interval": 100,
-                "step_interval": 100
-              },
-              {
-                "axis": 1,
-                "max_limit": 25.0,
-                "maximum_step_interval": 2000,
-                "microstep_resolution": 0,
-                "min_limit": -0.01,
-                "motor_operation_mode": 0,
-                "step_acceleration_interval": 100,
-                "step_interval": 100
-              },
-              {
-                "axis": 4,
-                "max_limit": 25.0,
-                "maximum_step_interval": 2000,
-                "microstep_resolution": 0,
-                "min_limit": -0.01,
-                "motor_operation_mode": 0,
-                "step_acceleration_interval": 100,
-                "step_interval": 100
-              }
-            ],
-            "homing_order": [
-              2,
-              3,
-              1,
-              4
-            ],
-            "initial_position": {
-              "x": 0.0,
-              "y1": 0.0,
-              "y2": 0.0,
-              "z": 0.0
-            }
-          },
-          "description": "Calibration for the device."
-        },
-        "who_am_i": {
-          "const": 1130,
-          "default": 1130,
-          "title": "Who Am I",
-          "type": "integer"
-        },
-        "serial_number": {
-          "default": null,
-          "description": "Device serial number",
-          "oneOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "title": "Serial Number"
-        },
-        "port_name": {
-          "description": "Device port name",
-          "title": "Port Name",
-          "type": "string"
-        }
-      },
-      "required": [
-        "port_name"
-      ],
-      "title": "AindManipulator",
-      "type": "object",
-      "x-sgen-typename": "AllenNeuralDynamics.AindManipulator.AindManipulator"
     },
     "AindManipulatorCalibration": {
       "description": "AindManipulator calibration class",
@@ -1469,6 +1361,123 @@
       ],
       "title": "Distribution",
       "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution"
+    },
+    "DynamicForagingAindManipulator": {
+      "description": "a calibrated manipulator for the dynamic foraging rig. This is a subclass of the AindManipulator that includes an offset of the animal position relative to the initial position.",
+      "properties": {
+        "device_type": {
+          "const": "StepperDriver",
+          "default": "StepperDriver",
+          "title": "Device Type",
+          "type": "string"
+        },
+        "calibration": {
+          "$ref": "#/$defs/AindManipulatorCalibration",
+          "default": {
+            "description": "AindManipulator calibration and settings",
+            "full_step_to_mm": {
+              "x": 0.01,
+              "y1": 0.01,
+              "y2": 0.01,
+              "z": 0.01
+            },
+            "axis_configuration": [
+              {
+                "axis": 2,
+                "max_limit": 25.0,
+                "maximum_step_interval": 2000,
+                "microstep_resolution": 0,
+                "min_limit": -0.01,
+                "motor_operation_mode": 0,
+                "step_acceleration_interval": 100,
+                "step_interval": 100
+              },
+              {
+                "axis": 3,
+                "max_limit": 25.0,
+                "maximum_step_interval": 2000,
+                "microstep_resolution": 0,
+                "min_limit": -0.01,
+                "motor_operation_mode": 0,
+                "step_acceleration_interval": 100,
+                "step_interval": 100
+              },
+              {
+                "axis": 1,
+                "max_limit": 25.0,
+                "maximum_step_interval": 2000,
+                "microstep_resolution": 0,
+                "min_limit": -0.01,
+                "motor_operation_mode": 0,
+                "step_acceleration_interval": 100,
+                "step_interval": 100
+              },
+              {
+                "axis": 4,
+                "max_limit": 25.0,
+                "maximum_step_interval": 2000,
+                "microstep_resolution": 0,
+                "min_limit": -0.01,
+                "motor_operation_mode": 0,
+                "step_acceleration_interval": 100,
+                "step_interval": 100
+              }
+            ],
+            "homing_order": [
+              2,
+              3,
+              1,
+              4
+            ],
+            "initial_position": {
+              "x": 0.0,
+              "y1": 0.0,
+              "y2": 0.0,
+              "z": 0.0
+            }
+          },
+          "description": "Calibration for the device."
+        },
+        "who_am_i": {
+          "const": 1130,
+          "default": 1130,
+          "title": "Who Am I",
+          "type": "integer"
+        },
+        "serial_number": {
+          "default": null,
+          "description": "Device serial number",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Serial Number"
+        },
+        "port_name": {
+          "description": "Device port name",
+          "title": "Port Name",
+          "type": "string"
+        },
+        "animal_offset": {
+          "$ref": "#/$defs/ManipulatorPosition",
+          "default": {
+            "x": 0.0,
+            "y1": 0.0,
+            "y2": 0.0,
+            "z": 0.0
+          },
+          "description": "Offset of the animal position relative to the `initial_position` parameter"
+        }
+      },
+      "required": [
+        "port_name"
+      ],
+      "title": "DynamicForagingAindManipulator",
+      "type": "object"
     },
     "DynamicForagingSoundCard": {
       "description": "A calibrated sound card for the dynamic foraging rig. This is a subclass of the HarpSoundCard that includes the sound card calibration.",
