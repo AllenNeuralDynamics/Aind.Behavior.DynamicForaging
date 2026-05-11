@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 from pydantic import TypeAdapter
 
 from aind_behavior_dynamic_foraging.task_logic import TrialGeneratorSpec
+from aind_behavior_dynamic_foraging.task_logic.utils import calculate_bias as calculate_bias
 
 if TYPE_CHECKING:
     from aind_behavior_dynamic_foraging.task_logic.trial_generators._base import ITrialGenerator
