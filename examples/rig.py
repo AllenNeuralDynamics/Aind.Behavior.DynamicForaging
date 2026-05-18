@@ -2,7 +2,6 @@ import os
 
 from aind_behavior_services.rig import cameras
 from aind_behavior_services.rig.aind_manipulator import (
-    AindManipulator,
     AindManipulatorCalibration,
     Axis,
     AxisConfiguration,
@@ -15,7 +14,12 @@ from aind_behavior_services.rig.harp import (
 )
 from aind_behavior_services.rig.water_valve import Measurement, calibrate_water_valves
 
-from aind_behavior_dynamic_foraging.rig import AindDynamicForagingRig, DynamicForagingSoundCard, RigCalibration
+from aind_behavior_dynamic_foraging.rig import (
+    AindDynamicForagingRig,
+    DynamicForagingAindManipulator,
+    DynamicForagingSoundCard,
+    RigCalibration,
+)
 
 manipulator_calibration = AindManipulatorCalibration(
     full_step_to_mm=(ManipulatorPosition(x=0.010, y1=0.010, y2=0.010, z=0.010)),
@@ -60,7 +64,7 @@ rig = AindDynamicForagingRig(
     harp_lickometer_left=None,
     harp_lickometer_right=None,
     harp_clock_generator=HarpWhiteRabbit(port_name="COM11"),
-    manipulator=AindManipulator(port_name="COM9", calibration=manipulator_calibration),
+    manipulator=DynamicForagingAindManipulator(port_name="COM9", calibration=manipulator_calibration),
     calibration=RigCalibration(
         water_valve_left=water_valve_calibration,
         water_valve_right=water_valve_calibration,
