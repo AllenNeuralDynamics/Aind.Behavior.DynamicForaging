@@ -2662,10 +2662,10 @@ namespace AindDynamicForagingDataSchema
 
 
     /// <summary>
-    /// a calibrated manipulator for the dynamic foraging rig. This is a subclass of the AindManipulator that includes an offset of the subject position relative to the initial position.
+    /// A calibrated manipulator for the dynamic foraging rig. This is a subclass of the AindManipulator that includes an offset of the subject position relative to the initial position.
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
-    [System.ComponentModel.DescriptionAttribute("a calibrated manipulator for the dynamic foraging rig. This is a subclass of the " +
+    [System.ComponentModel.DescriptionAttribute("A calibrated manipulator for the dynamic foraging rig. This is a subclass of the " +
         "AindManipulator that includes an offset of the subject position relative to the " +
         "initial position.")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]

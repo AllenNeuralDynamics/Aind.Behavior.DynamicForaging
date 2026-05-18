@@ -1363,7 +1363,7 @@
       "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution"
     },
     "DynamicForagingAindManipulator": {
-      "description": "a calibrated manipulator for the dynamic foraging rig. This is a subclass of the AindManipulator that includes an offset of the subject position relative to the initial position.",
+      "description": "A calibrated manipulator for the dynamic foraging rig. This is a subclass of the AindManipulator that includes an offset of the subject position relative to the initial position.",
       "properties": {
         "device_type": {
           "const": "StepperDriver",
