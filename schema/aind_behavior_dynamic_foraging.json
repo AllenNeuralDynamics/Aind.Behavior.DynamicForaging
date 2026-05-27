@@ -2105,6 +2105,54 @@
       "title": "Measurement",
       "type": "object"
     },
+    "Metadata": {
+      "description": "Metadata for trial. These fields will NOT be used by the task engine.",
+      "properties": {
+        "p_reward_left": {
+          "default": null,
+          "description": "Metadata for block probability of reward on the left side if response is made.",
+          "oneOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "P Reward Left"
+        },
+        "p_reward_right": {
+          "default": null,
+          "description": "Metadata for the probability of reward on the right side if response is made.",
+          "oneOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "P Reward Right"
+        },
+        "extra": {
+          "default": null,
+          "description": "Additional metadata to include with the trial. This field will NOT be used or validated by the task engine.",
+          "oneOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Extra"
+        }
+      },
+      "title": "Metadata",
+      "type": "object"
+    },
     "MicrostepResolution": {
       "description": "Microstep resolution available",
       "enum": [
@@ -3277,16 +3325,17 @@
           "title": "Lickspout Offset Delta",
           "type": "number"
         },
-        "extra_metadata": {
+        "metadata": {
           "default": null,
-          "description": "Additional metadata to include with the trial. This field will NOT be used or validated by the task engine.",
+          "description": "Metadata fields that will not be used by task engine such as block information.",
           "oneOf": [
-            {},
+            {
+              "$ref": "#/$defs/Metadata"
+            },
             {
               "type": "null"
             }
-          ],
-          "title": "Extra Metadata"
+          ]
         }
       },
       "title": "Trial",

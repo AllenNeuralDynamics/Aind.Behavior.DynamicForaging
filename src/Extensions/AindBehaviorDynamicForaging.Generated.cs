@@ -3895,6 +3895,119 @@ namespace AindDynamicForagingDataSchema
 
 
     /// <summary>
+    /// Metadata for trial. These fields will NOT be used by the task engine.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.ComponentModel.DescriptionAttribute("Metadata for trial. These fields will NOT be used by the task engine.")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class Metadata
+    {
+    
+        private double? _pRewardLeft;
+    
+        private double? _pRewardRight;
+    
+        private object _extra;
+    
+        public Metadata()
+        {
+        }
+    
+        protected Metadata(Metadata other)
+        {
+            _pRewardLeft = other._pRewardLeft;
+            _pRewardRight = other._pRewardRight;
+            _extra = other._extra;
+        }
+    
+        /// <summary>
+        /// Metadata for block probability of reward on the left side if response is made.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("p_reward_left")]
+        [System.ComponentModel.DescriptionAttribute("Metadata for block probability of reward on the left side if response is made.")]
+        public double? PRewardLeft
+        {
+            get
+            {
+                return _pRewardLeft;
+            }
+            set
+            {
+                _pRewardLeft = value;
+            }
+        }
+    
+        /// <summary>
+        /// Metadata for the probability of reward on the right side if response is made.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("p_reward_right")]
+        [System.ComponentModel.DescriptionAttribute("Metadata for the probability of reward on the right side if response is made.")]
+        public double? PRewardRight
+        {
+            get
+            {
+                return _pRewardRight;
+            }
+            set
+            {
+                _pRewardRight = value;
+            }
+        }
+    
+        /// <summary>
+        /// Additional metadata to include with the trial. This field will NOT be used or validated by the task engine.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("extra")]
+        [System.ComponentModel.DescriptionAttribute("Additional metadata to include with the trial. This field will NOT be used or val" +
+            "idated by the task engine.")]
+        public object Extra
+        {
+            get
+            {
+                return _extra;
+            }
+            set
+            {
+                _extra = value;
+            }
+        }
+    
+        public System.IObservable<Metadata> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new Metadata(this)));
+        }
+    
+        public System.IObservable<Metadata> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new Metadata(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("PRewardLeft = " + _pRewardLeft + ", ");
+            stringBuilder.Append("PRewardRight = " + _pRewardRight + ", ");
+            stringBuilder.Append("Extra = " + _extra);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    /// <summary>
     /// Settings for the quick retract feature.
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
@@ -5639,7 +5752,7 @@ namespace AindDynamicForagingDataSchema
     
         private double _lickspoutOffsetDelta;
     
-        private object _extraMetadata;
+        private Metadata _metadata;
     
         public Trial()
         {
@@ -5666,7 +5779,7 @@ namespace AindDynamicForagingDataSchema
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
             _isAutoResponseRight = other._isAutoResponseRight;
             _lickspoutOffsetDelta = other._lickspoutOffsetDelta;
-            _extraMetadata = other._extraMetadata;
+            _metadata = other._metadata;
         }
     
         /// <summary>
@@ -5863,21 +5976,20 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Additional metadata to include with the trial. This field will NOT be used or validated by the task engine.
+        /// Metadata fields that will not be used by task engine such as block information.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("extra_metadata")]
-        [System.ComponentModel.DescriptionAttribute("Additional metadata to include with the trial. This field will NOT be used or val" +
-            "idated by the task engine.")]
-        public object ExtraMetadata
+        [Newtonsoft.Json.JsonPropertyAttribute("metadata")]
+        [System.ComponentModel.DescriptionAttribute("Metadata fields that will not be used by task engine such as block information.")]
+        public Metadata Metadata
         {
             get
             {
-                return _extraMetadata;
+                return _metadata;
             }
             set
             {
-                _extraMetadata = value;
+                _metadata = value;
             }
         }
     
@@ -5904,7 +6016,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
             stringBuilder.Append("IsAutoResponseRight = " + _isAutoResponseRight + ", ");
             stringBuilder.Append("LickspoutOffsetDelta = " + _lickspoutOffsetDelta + ", ");
-            stringBuilder.Append("ExtraMetadata = " + _extraMetadata);
+            stringBuilder.Append("Metadata = " + _metadata);
             return true;
         }
     
@@ -7853,6 +7965,11 @@ namespace AindDynamicForagingDataSchema
             return Process<Measurement>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<Metadata> source)
+        {
+            return Process<Metadata>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<QuickRetractSettings> source)
         {
             return Process<QuickRetractSettings>(source);
@@ -7992,6 +8109,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpWhiteRabbit>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<IntegrationTestTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Measurement>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Metadata>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<QuickRetractSettings>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Rect>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<RewardProbabilityParameters>))]
