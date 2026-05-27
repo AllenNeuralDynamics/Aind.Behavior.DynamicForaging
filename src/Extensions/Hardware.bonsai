@@ -4,11 +4,12 @@
                  xmlns:harp="clr-namespace:Bonsai.Harp;assembly=Bonsai.Harp"
                  xmlns:p1="clr-namespace:AllenNeuralDynamics.WhiteRabbit;assembly=AllenNeuralDynamics.WhiteRabbit"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
+                 xmlns:p2="clr-namespace:;assembly=Extensions"
                  xmlns:beh="clr-namespace:Harp.Behavior;assembly=Harp.Behavior"
                  xmlns:sys="clr-namespace:System;assembly=mscorlib"
                  xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
-                 xmlns:p2="clr-namespace:OpenCV.Net;assembly=OpenCV.Net"
-                 xmlns:p3="clr-namespace:AllenNeuralDynamics.Core;assembly=AllenNeuralDynamics.Core"
+                 xmlns:p3="clr-namespace:OpenCV.Net;assembly=OpenCV.Net"
+                 xmlns:p4="clr-namespace:AllenNeuralDynamics.Core;assembly=AllenNeuralDynamics.Core"
                  xmlns:spk="clr-namespace:Bonsai.Spinnaker;assembly=Bonsai.Spinnaker"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
@@ -132,7 +133,10 @@
               <Name>RigSchema</Name>
             </Expression>
             <Expression xsi:type="MemberSelector">
-              <Selector>Manipulator.Calibration</Selector>
+              <Selector>Manipulator</Selector>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p2:OffsetInitialPositionWithSubject" />
             </Expression>
             <Expression xsi:type="SubscribeSubject">
               <Name>RigSchema</Name>
@@ -228,24 +232,25 @@
             <Edge From="30" To="31" Label="Source1" />
             <Edge From="31" To="32" Label="Source2" />
             <Edge From="33" To="34" Label="Source1" />
-            <Edge From="34" To="38" Label="Source1" />
-            <Edge From="35" To="36" Label="Source1" />
+            <Edge From="34" To="35" Label="Source1" />
+            <Edge From="35" To="39" Label="Source1" />
             <Edge From="36" To="37" Label="Source1" />
-            <Edge From="37" To="38" Label="Source2" />
-            <Edge From="39" To="40" Label="Source1" />
+            <Edge From="37" To="38" Label="Source1" />
+            <Edge From="38" To="39" Label="Source2" />
             <Edge From="40" To="41" Label="Source1" />
             <Edge From="41" To="42" Label="Source1" />
-            <Edge From="42" To="46" Label="Source1" />
-            <Edge From="43" To="44" Label="Source1" />
+            <Edge From="42" To="43" Label="Source1" />
+            <Edge From="43" To="47" Label="Source1" />
             <Edge From="44" To="45" Label="Source1" />
-            <Edge From="45" To="46" Label="Source2" />
-            <Edge From="47" To="48" Label="Source1" />
+            <Edge From="45" To="46" Label="Source1" />
+            <Edge From="46" To="47" Label="Source2" />
             <Edge From="48" To="49" Label="Source1" />
             <Edge From="49" To="50" Label="Source1" />
-            <Edge From="50" To="54" Label="Source1" />
-            <Edge From="51" To="52" Label="Source1" />
+            <Edge From="50" To="51" Label="Source1" />
+            <Edge From="51" To="55" Label="Source1" />
             <Edge From="52" To="53" Label="Source1" />
-            <Edge From="53" To="54" Label="Source2" />
+            <Edge From="53" To="54" Label="Source1" />
+            <Edge From="54" To="55" Label="Source2" />
           </Edges>
         </Workflow>
       </Expression>
@@ -399,7 +404,7 @@
                       <Property Name="Value" Selector="X,Y,Width,Height" />
                     </PropertyMappings>
                   </Expression>
-                  <Expression xsi:type="PropertySource" TypeArguments="cv:Crop,p2:Rect">
+                  <Expression xsi:type="PropertySource" TypeArguments="cv:Crop,p3:Rect">
                     <MemberName>RegionOfInterest</MemberName>
                     <Value>
                       <X>0</X>
@@ -414,21 +419,21 @@
                     </PropertyMappings>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p3:AindSpinnakerCapture">
+                    <Combinator xsi:type="p4:AindSpinnakerCapture">
                       <spk:Index xsi:nil="true" />
                       <spk:ColorProcessing>Default</spk:ColorProcessing>
-                      <p3:ExposureTime>19000</p3:ExposureTime>
-                      <p3:Gain>0</p3:Gain>
-                      <p3:Binning>1</p3:Binning>
-                      <p3:Gamma xsi:nil="true" />
-                      <p3:PixelFormat>Mono8</p3:PixelFormat>
-                      <p3:RegionOfInterest>
-                        <p3:X>0</p3:X>
-                        <p3:Y>0</p3:Y>
-                        <p3:Width>0</p3:Width>
-                        <p3:Height>0</p3:Height>
-                      </p3:RegionOfInterest>
-                      <p3:AdcBitDepth xsi:nil="true" />
+                      <p4:ExposureTime>19000</p4:ExposureTime>
+                      <p4:Gain>0</p4:Gain>
+                      <p4:Binning>1</p4:Binning>
+                      <p4:Gamma xsi:nil="true" />
+                      <p4:PixelFormat>Mono8</p4:PixelFormat>
+                      <p4:RegionOfInterest>
+                        <p4:X>0</p4:X>
+                        <p4:Y>0</p4:Y>
+                        <p4:Width>0</p4:Width>
+                        <p4:Height>0</p4:Height>
+                      </p4:RegionOfInterest>
+                      <p4:AdcBitDepth xsi:nil="true" />
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="SubscribeSubject">

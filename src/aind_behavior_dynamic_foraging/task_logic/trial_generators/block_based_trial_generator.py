@@ -14,10 +14,18 @@ from pydantic import BaseModel, Field
 
 from aind_behavior_dynamic_foraging.task_logic.utils.calculate_bias import calculate_bias
 
-from ..trial_models import Trial
+from aind_behavior_dynamic_foraging.task_logic.utils.calculate_bias import calculate_bias
+
+from ..trial_models import Metadata, Trial
 from ._base import BaseTrialGeneratorSpecModel, ITrialGenerator, TrialOutcome
 
 logger = logging.getLogger(__name__)
+
+
+class BlockBasedTrialMetadata(BaseModel):
+    """Metadata for block based trial. These fields will NOT be used by the task engine."""
+
+    is_autowater: bool = Field(default=False, description="Flag indicating if autowater is given for trial.")
 
 
 class AutoWaterParameters(BaseModel):
@@ -211,7 +219,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
         is_auto_response_right = None
 
         # determine autowater
-        if self._are_autowater_conditions_met():
+        if is_autowater := self._are_autowater_conditions_met():
             is_auto_response_right = True if self.block.p_right_reward > self.block.p_left_reward else False
             logger.debug("Delivering autowater: is_auto_response_right = %s" % is_auto_response_right)
 
@@ -225,14 +233,19 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             )
 
         return Trial(
-            p_reward_left=1 if (self.is_left_baited and self.spec.is_baiting) else self.block.p_left_reward,
-            p_reward_right=1 if (self.is_right_baited and self.spec.is_baiting) else self.block.p_right_reward,
+            p_reward_left=1 if (self.is_left_baited or is_auto_response_right is False) else self.block.p_left_reward,
+            p_reward_right=1 if (self.is_right_baited or is_auto_response_right) else self.block.p_right_reward,
             reward_consumption_duration=self.spec.reward_consumption_duration,
             response_deadline_duration=self.spec.response_duration,
             quiescence_period_duration=quiescent,
             inter_trial_interval_duration=iti,
-            is_auto_response_right=is_auto_response_right,
             lickspout_offset_delta=lickspout_offset_delta,
+            is_auto_response_right=is_auto_response_right,
+            metadata=Metadata(
+                p_reward_left=self.block.p_left_reward,
+                p_reward_right=self.block.p_right_reward,
+                extra=BlockBasedTrialMetadata(is_autowater=is_autowater),
+            ),
         )
 
     def _are_autowater_conditions_met(self) -> bool:
@@ -250,12 +263,12 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
         min_unreward = self.spec.autowater_parameters.min_unrewarded_trials
 
         is_ignored = [choice is None for choice in self.is_right_choice_history]
-        if all(is_ignored[-min_ignore:]):
+        if len(is_ignored) > min_ignore and all(is_ignored[-min_ignore:]):
             logger.debug("Past %s trials ignored." % min_ignore)
             return True
 
         is_unrewarded = [not reward for reward in self.reward_history]
-        if all(is_unrewarded[-min_unreward:]):
+        if len(is_unrewarded) > min_unreward and all(is_unrewarded[-min_unreward:]):
             logger.debug("Past %s trials unrewarded." % min_unreward)
             return True
 
