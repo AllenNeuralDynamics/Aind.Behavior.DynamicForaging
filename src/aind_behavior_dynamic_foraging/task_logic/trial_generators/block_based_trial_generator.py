@@ -12,7 +12,7 @@ from aind_behavior_services.task.distributions import (
 from aind_behavior_services.task.distributions_utils import draw_sample
 from pydantic import BaseModel, Field
 
-from ..trial_models import Trial, TrialMetadata
+from ..trial_models import Metadata, Trial
 from ._base import BaseTrialGeneratorSpecModel, ITrialGenerator, TrialOutcome
 
 logger = logging.getLogger(__name__)
@@ -189,7 +189,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             quiescence_period_duration=quiescent,
             inter_trial_interval_duration=iti,
             is_auto_response_right=is_auto_response_right,
-            trial_metadata=TrialMetadata(
+            metadata=Metadata(
                 block_p_reward_left=self.block.p_left_reward,
                 block_p_reward_right=self.block.p_right_reward,
                 extra=BlockBasedTrialMetadata(is_autowater=is_autowater),

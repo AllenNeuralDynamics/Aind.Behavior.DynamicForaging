@@ -43,7 +43,7 @@ class QuickRetractSettings(BaseModel):
     )
 
 
-class TrialMetadata(BaseModel):
+class Metadata(BaseModel):
     """Metadata for trial. These fields will NOT be used by the task engine."""
 
     block_p_reward_left: Optional[float] = Field(
@@ -99,8 +99,8 @@ class Trial(BaseModel):
         default=0.0,
         description="Horizontal delta offset of the lickspouts (in mm) applied in this trial. Positive values move the lickspouts right.",
     )
-    trial_metadata: TrialMetadata = Field(
-        default=TrialMetadata(),
+    metadata: Metadata = Field(
+        default=Metadata(),
         validate_default=True,
         description="Metadata fields that will not be used by task engine such as block information.",
     )

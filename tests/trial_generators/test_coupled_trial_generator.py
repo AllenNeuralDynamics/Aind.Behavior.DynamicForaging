@@ -3,10 +3,11 @@ import unittest
 from datetime import timedelta
 
 import numpy as np
-from util import simulate_response
 
 from aind_behavior_dynamic_foraging.task_logic.trial_generators import CoupledTrialGeneratorSpec
 from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial, TrialOutcome
+
+from .util import simulate_response
 
 logging.basicConfig(level=logging.DEBUG)
 

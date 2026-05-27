@@ -2105,6 +2105,54 @@
       "title": "Measurement",
       "type": "object"
     },
+    "Metadata": {
+      "description": "Metadata for trial. These fields will NOT be used by the task engine.",
+      "properties": {
+        "block_p_reward_left": {
+          "default": null,
+          "description": "The block probability of reward on the left side if response is made.",
+          "oneOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Block P Reward Left"
+        },
+        "block_p_reward_right": {
+          "default": null,
+          "description": "The block probability of reward on the right side if response is made.",
+          "oneOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Block P Reward Right"
+        },
+        "extra": {
+          "default": null,
+          "description": "Additional metadata to include with the trial. This field will NOT be used or validated by the task engine.",
+          "oneOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Extra"
+        }
+      },
+      "title": "Metadata",
+      "type": "object"
+    },
     "MicrostepResolution": {
       "description": "Microstep resolution available",
       "enum": [
@@ -3277,8 +3325,8 @@
           "title": "Lickspout Offset Delta",
           "type": "number"
         },
-        "trial_metadata": {
-          "$ref": "#/$defs/TrialMetadata",
+        "metadata": {
+          "$ref": "#/$defs/Metadata",
           "default": {
             "block_p_reward_left": null,
             "block_p_reward_right": null,
@@ -3351,54 +3399,6 @@
           "$ref": "#/$defs/TrialGeneratorCompositeSpec_TrialGeneratorSpec_"
         }
       ]
-    },
-    "TrialMetadata": {
-      "description": "Metadata for trial. These fields will NOT be used by the task engine.",
-      "properties": {
-        "block_p_reward_left": {
-          "default": null,
-          "description": "The block probability of reward on the left side if response is made.",
-          "oneOf": [
-            {
-              "maximum": 1,
-              "minimum": 0,
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "title": "Block P Reward Left"
-        },
-        "block_p_reward_right": {
-          "default": null,
-          "description": "The block probability of reward on the right side if response is made.",
-          "oneOf": [
-            {
-              "maximum": 1,
-              "minimum": 0,
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "title": "Block P Reward Right"
-        },
-        "extra": {
-          "default": null,
-          "description": "Additional metadata to include with the trial. This field will NOT be used or validated by the task engine.",
-          "oneOf": [
-            {},
-            {
-              "type": "null"
-            }
-          ],
-          "title": "Extra"
-        }
-      },
-      "title": "TrialMetadata",
-      "type": "object"
     },
     "TrialOutcome": {
       "description": "Represents the outcome of a single trial.",
