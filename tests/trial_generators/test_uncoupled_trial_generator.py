@@ -2,6 +2,7 @@ import logging
 import unittest
 
 import numpy as np
+from util import simulate_response
 
 from aind_behavior_dynamic_foraging.task_logic.trial_generators.uncoupled_trial_gnerator import (
     Block,
@@ -10,8 +11,6 @@ from aind_behavior_dynamic_foraging.task_logic.trial_generators.uncoupled_trial_
     UncoupledTrialGeneratorSpec,
 )
 from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial
-
-from .util import simulate_response
 
 logging.basicConfig(level=logging.DEBUG)
 

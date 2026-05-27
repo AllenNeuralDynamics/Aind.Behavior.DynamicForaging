@@ -5639,7 +5639,7 @@ namespace AindDynamicForagingDataSchema
     
         private double _lickspoutOffsetDelta;
     
-        private object _extraMetadata;
+        private TrialMetadata _trialMetadata;
     
         public Trial()
         {
@@ -5651,6 +5651,7 @@ namespace AindDynamicForagingDataSchema
             _quiescencePeriodDuration = 0.5D;
             _interTrialIntervalDuration = 5D;
             _lickspoutOffsetDelta = 0D;
+            _trialMetadata = new TrialMetadata();
         }
     
         protected Trial(Trial other)
@@ -5666,7 +5667,7 @@ namespace AindDynamicForagingDataSchema
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
             _isAutoResponseRight = other._isAutoResponseRight;
             _lickspoutOffsetDelta = other._lickspoutOffsetDelta;
-            _extraMetadata = other._extraMetadata;
+            _trialMetadata = other._trialMetadata;
         }
     
         /// <summary>
@@ -5863,21 +5864,20 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Additional metadata to include with the trial. This field will NOT be used or validated by the task engine.
+        /// Metadata fields that will not be used by task engine such as block information.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("extra_metadata")]
-        [System.ComponentModel.DescriptionAttribute("Additional metadata to include with the trial. This field will NOT be used or val" +
-            "idated by the task engine.")]
-        public object ExtraMetadata
+        [Newtonsoft.Json.JsonPropertyAttribute("trial_metadata")]
+        [System.ComponentModel.DescriptionAttribute("Metadata fields that will not be used by task engine such as block information.")]
+        public TrialMetadata TrialMetadata
         {
             get
             {
-                return _extraMetadata;
+                return _trialMetadata;
             }
             set
             {
-                _extraMetadata = value;
+                _trialMetadata = value;
             }
         }
     
@@ -5904,7 +5904,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
             stringBuilder.Append("IsAutoResponseRight = " + _isAutoResponseRight + ", ");
             stringBuilder.Append("LickspoutOffsetDelta = " + _lickspoutOffsetDelta + ", ");
-            stringBuilder.Append("ExtraMetadata = " + _extraMetadata);
+            stringBuilder.Append("TrialMetadata = " + _trialMetadata);
             return true;
         }
     
@@ -6018,6 +6018,119 @@ namespace AindDynamicForagingDataSchema
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
             return false;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    /// <summary>
+    /// Metadata for trial. These fields will NOT be used by the task engine.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.ComponentModel.DescriptionAttribute("Metadata for trial. These fields will NOT be used by the task engine.")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class TrialMetadata
+    {
+    
+        private double? _blockPRewardLeft;
+    
+        private double? _blockPRewardRight;
+    
+        private object _extra;
+    
+        public TrialMetadata()
+        {
+        }
+    
+        protected TrialMetadata(TrialMetadata other)
+        {
+            _blockPRewardLeft = other._blockPRewardLeft;
+            _blockPRewardRight = other._blockPRewardRight;
+            _extra = other._extra;
+        }
+    
+        /// <summary>
+        /// The block probability of reward on the left side if response is made.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("block_p_reward_left")]
+        [System.ComponentModel.DescriptionAttribute("The block probability of reward on the left side if response is made.")]
+        public double? BlockPRewardLeft
+        {
+            get
+            {
+                return _blockPRewardLeft;
+            }
+            set
+            {
+                _blockPRewardLeft = value;
+            }
+        }
+    
+        /// <summary>
+        /// The block probability of reward on the right side if response is made.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("block_p_reward_right")]
+        [System.ComponentModel.DescriptionAttribute("The block probability of reward on the right side if response is made.")]
+        public double? BlockPRewardRight
+        {
+            get
+            {
+                return _blockPRewardRight;
+            }
+            set
+            {
+                _blockPRewardRight = value;
+            }
+        }
+    
+        /// <summary>
+        /// Additional metadata to include with the trial. This field will NOT be used or validated by the task engine.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("extra")]
+        [System.ComponentModel.DescriptionAttribute("Additional metadata to include with the trial. This field will NOT be used or val" +
+            "idated by the task engine.")]
+        public object Extra
+        {
+            get
+            {
+                return _extra;
+            }
+            set
+            {
+                _extra = value;
+            }
+        }
+    
+        public System.IObservable<TrialMetadata> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new TrialMetadata(this)));
+        }
+    
+        public System.IObservable<TrialMetadata> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new TrialMetadata(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("BlockPRewardLeft = " + _blockPRewardLeft + ", ");
+            stringBuilder.Append("BlockPRewardRight = " + _blockPRewardRight + ", ");
+            stringBuilder.Append("Extra = " + _extra);
+            return true;
         }
     
         public override string ToString()
@@ -7908,6 +8021,11 @@ namespace AindDynamicForagingDataSchema
             return Process<TrialGeneratorSpec>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<TrialMetadata> source)
+        {
+            return Process<TrialMetadata>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<TrialOutcome> source)
         {
             return Process<TrialOutcome>(source);
@@ -8003,6 +8121,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Trial>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialGeneratorCompositeSpecTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialGeneratorSpec>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialMetadata>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialOutcome>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<UncoupledTrialGenerationEndConditions>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<UncoupledTrialGeneratorSpec>))]

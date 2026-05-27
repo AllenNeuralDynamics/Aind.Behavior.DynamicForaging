@@ -43,6 +43,21 @@ class QuickRetractSettings(BaseModel):
     )
 
 
+class TrialMetadata(BaseModel):
+    """Metadata for trial. These fields will NOT be used by the task engine."""
+
+    block_p_reward_left: Optional[float] = Field(
+        default=None, ge=0, le=1, description="The block probability of reward on the left side if response is made."
+    )
+    block_p_reward_right: Optional[float] = Field(
+        default=None, ge=0, le=1, description="The block probability of reward on the right side if response is made."
+    )
+    extra: Optional[SerializeAsAny[Any]] = Field(
+        default=None,
+        description="Additional metadata to include with the trial. This field will NOT be used or validated by the task engine.",
+    )
+
+
 class Trial(BaseModel):
     """Represents a single trial that can be instantiated by the Bonsai state machine."""
 
@@ -84,9 +99,10 @@ class Trial(BaseModel):
         default=0.0,
         description="Horizontal delta offset of the lickspouts (in mm) applied in this trial. Positive values move the lickspouts right.",
     )
-    extra_metadata: Optional[SerializeAsAny[Any]] = Field(
-        default=None,
-        description="Additional metadata to include with the trial. This field will NOT be used or validated by the task engine.",
+    trial_metadata: TrialMetadata = Field(
+        default=TrialMetadata(),
+        validate_default=True,
+        description="Metadata fields that will not be used by task engine such as block information.",
     )
 
 

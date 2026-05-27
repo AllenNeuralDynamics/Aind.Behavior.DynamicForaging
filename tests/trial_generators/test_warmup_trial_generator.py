@@ -1,13 +1,12 @@
 import unittest
 
 import numpy as np
+from util import simulate_response
 
 from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generators.coupled_warmup_trial_generator import (
     CoupledWarmupTrialGeneratorSpec,
 )
 from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial, TrialOutcome
-
-from .util import simulate_response
 
 
 def make_outcome(is_right_choice: bool | None, is_rewarded: bool) -> TrialOutcome:

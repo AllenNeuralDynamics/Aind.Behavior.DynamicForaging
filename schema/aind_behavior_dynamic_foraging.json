@@ -3277,16 +3277,14 @@
           "title": "Lickspout Offset Delta",
           "type": "number"
         },
-        "extra_metadata": {
-          "default": null,
-          "description": "Additional metadata to include with the trial. This field will NOT be used or validated by the task engine.",
-          "oneOf": [
-            {},
-            {
-              "type": "null"
-            }
-          ],
-          "title": "Extra Metadata"
+        "trial_metadata": {
+          "$ref": "#/$defs/TrialMetadata",
+          "default": {
+            "block_p_reward_left": null,
+            "block_p_reward_right": null,
+            "extra": null
+          },
+          "description": "Metadata fields that will not be used by task engine such as block information."
         }
       },
       "title": "Trial",
@@ -3353,6 +3351,54 @@
           "$ref": "#/$defs/TrialGeneratorCompositeSpec_TrialGeneratorSpec_"
         }
       ]
+    },
+    "TrialMetadata": {
+      "description": "Metadata for trial. These fields will NOT be used by the task engine.",
+      "properties": {
+        "block_p_reward_left": {
+          "default": null,
+          "description": "The block probability of reward on the left side if response is made.",
+          "oneOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Block P Reward Left"
+        },
+        "block_p_reward_right": {
+          "default": null,
+          "description": "The block probability of reward on the right side if response is made.",
+          "oneOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Block P Reward Right"
+        },
+        "extra": {
+          "default": null,
+          "description": "Additional metadata to include with the trial. This field will NOT be used or validated by the task engine.",
+          "oneOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Extra"
+        }
+      },
+      "title": "TrialMetadata",
+      "type": "object"
     },
     "TrialOutcome": {
       "description": "Represents the outcome of a single trial.",
