@@ -47,7 +47,7 @@ wheels = [
 
 [[package]]
 name = "aind-behavior-dynamic-foraging"
-version = "0.0.2rc33"
+version = "0.0.2rc34"
 source = { editable = "." }
 dependencies = [
     { name = "aind-behavior-services" },
