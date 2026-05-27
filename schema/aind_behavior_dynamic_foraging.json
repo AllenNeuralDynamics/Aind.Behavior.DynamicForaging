@@ -2108,9 +2108,9 @@
     "Metadata": {
       "description": "Metadata for trial. These fields will NOT be used by the task engine.",
       "properties": {
-        "block_p_reward_left": {
+        "p_reward_left": {
           "default": null,
-          "description": "The block probability of reward on the left side if response is made.",
+          "description": "Metadata for block probability of reward on the left side if response is made.",
           "oneOf": [
             {
               "maximum": 1,
@@ -2121,11 +2121,11 @@
               "type": "null"
             }
           ],
-          "title": "Block P Reward Left"
+          "title": "P Reward Left"
         },
-        "block_p_reward_right": {
+        "p_reward_right": {
           "default": null,
-          "description": "The block probability of reward on the right side if response is made.",
+          "description": "Metadata for the probability of reward on the right side if response is made.",
           "oneOf": [
             {
               "maximum": 1,
@@ -2136,7 +2136,7 @@
               "type": "null"
             }
           ],
-          "title": "Block P Reward Right"
+          "title": "P Reward Right"
         },
         "extra": {
           "default": null,
@@ -3326,13 +3326,16 @@
           "type": "number"
         },
         "metadata": {
-          "$ref": "#/$defs/Metadata",
-          "default": {
-            "block_p_reward_left": null,
-            "block_p_reward_right": null,
-            "extra": null
-          },
-          "description": "Metadata fields that will not be used by task engine such as block information."
+          "default": null,
+          "description": "Metadata fields that will not be used by task engine such as block information.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Metadata"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "title": "Trial",

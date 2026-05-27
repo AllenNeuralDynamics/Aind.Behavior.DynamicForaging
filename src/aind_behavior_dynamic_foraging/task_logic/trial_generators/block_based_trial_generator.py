@@ -190,8 +190,8 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             inter_trial_interval_duration=iti,
             is_auto_response_right=is_auto_response_right,
             metadata=Metadata(
-                block_p_reward_left=self.block.p_left_reward,
-                block_p_reward_right=self.block.p_right_reward,
+                p_reward_left=self.block.p_left_reward,
+                p_reward_right=self.block.p_right_reward,
                 extra=BlockBasedTrialMetadata(is_autowater=is_autowater),
             ),
         )

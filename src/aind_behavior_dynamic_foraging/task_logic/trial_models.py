@@ -46,11 +46,17 @@ class QuickRetractSettings(BaseModel):
 class Metadata(BaseModel):
     """Metadata for trial. These fields will NOT be used by the task engine."""
 
-    block_p_reward_left: Optional[float] = Field(
-        default=None, ge=0, le=1, description="The block probability of reward on the left side if response is made."
+    p_reward_left: Optional[float] = Field(
+        default=None,
+        ge=0,
+        le=1,
+        description="Metadata for block probability of reward on the left side if response is made.",
     )
-    block_p_reward_right: Optional[float] = Field(
-        default=None, ge=0, le=1, description="The block probability of reward on the right side if response is made."
+    p_reward_right: Optional[float] = Field(
+        default=None,
+        ge=0,
+        le=1,
+        description="Metadata for the probability of reward on the right side if response is made.",
     )
     extra: Optional[SerializeAsAny[Any]] = Field(
         default=None,
@@ -99,8 +105,8 @@ class Trial(BaseModel):
         default=0.0,
         description="Horizontal delta offset of the lickspouts (in mm) applied in this trial. Positive values move the lickspouts right.",
     )
-    metadata: Metadata = Field(
-        default=Metadata(),
+    metadata: Optional[Metadata] = Field(
+        default=None,
         validate_default=True,
         description="Metadata fields that will not be used by task engine such as block information.",
     )

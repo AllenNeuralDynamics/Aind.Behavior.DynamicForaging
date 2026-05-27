@@ -3904,9 +3904,9 @@ namespace AindDynamicForagingDataSchema
     public partial class Metadata
     {
     
-        private double? _blockPRewardLeft;
+        private double? _pRewardLeft;
     
-        private double? _blockPRewardRight;
+        private double? _pRewardRight;
     
         private object _extra;
     
@@ -3916,42 +3916,42 @@ namespace AindDynamicForagingDataSchema
     
         protected Metadata(Metadata other)
         {
-            _blockPRewardLeft = other._blockPRewardLeft;
-            _blockPRewardRight = other._blockPRewardRight;
+            _pRewardLeft = other._pRewardLeft;
+            _pRewardRight = other._pRewardRight;
             _extra = other._extra;
         }
     
         /// <summary>
-        /// The block probability of reward on the left side if response is made.
+        /// Metadata for block probability of reward on the left side if response is made.
         /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("block_p_reward_left")]
-        [System.ComponentModel.DescriptionAttribute("The block probability of reward on the left side if response is made.")]
-        public double? BlockPRewardLeft
+        [Newtonsoft.Json.JsonPropertyAttribute("p_reward_left")]
+        [System.ComponentModel.DescriptionAttribute("Metadata for block probability of reward on the left side if response is made.")]
+        public double? PRewardLeft
         {
             get
             {
-                return _blockPRewardLeft;
+                return _pRewardLeft;
             }
             set
             {
-                _blockPRewardLeft = value;
+                _pRewardLeft = value;
             }
         }
     
         /// <summary>
-        /// The block probability of reward on the right side if response is made.
+        /// Metadata for the probability of reward on the right side if response is made.
         /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("block_p_reward_right")]
-        [System.ComponentModel.DescriptionAttribute("The block probability of reward on the right side if response is made.")]
-        public double? BlockPRewardRight
+        [Newtonsoft.Json.JsonPropertyAttribute("p_reward_right")]
+        [System.ComponentModel.DescriptionAttribute("Metadata for the probability of reward on the right side if response is made.")]
+        public double? PRewardRight
         {
             get
             {
-                return _blockPRewardRight;
+                return _pRewardRight;
             }
             set
             {
-                _blockPRewardRight = value;
+                _pRewardRight = value;
             }
         }
     
@@ -3986,8 +3986,8 @@ namespace AindDynamicForagingDataSchema
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("BlockPRewardLeft = " + _blockPRewardLeft + ", ");
-            stringBuilder.Append("BlockPRewardRight = " + _blockPRewardRight + ", ");
+            stringBuilder.Append("PRewardLeft = " + _pRewardLeft + ", ");
+            stringBuilder.Append("PRewardRight = " + _pRewardRight + ", ");
             stringBuilder.Append("Extra = " + _extra);
             return true;
         }
@@ -5764,7 +5764,6 @@ namespace AindDynamicForagingDataSchema
             _quiescencePeriodDuration = 0.5D;
             _interTrialIntervalDuration = 5D;
             _lickspoutOffsetDelta = 0D;
-            _metadata = new Metadata();
         }
     
         protected Trial(Trial other)
