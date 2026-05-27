@@ -3,7 +3,7 @@ from typing import Protocol
 
 from pydantic import BaseModel
 
-from ..trial_models import Trial, TrialOutcome
+from ..trial_models import Trial, TrialOutcome, TrialMetrics
 
 
 class BaseTrialGeneratorSpecModel(BaseModel, abc.ABC):
@@ -24,3 +24,6 @@ class ITrialGenerator(Protocol):
 
     def update(self, outcome: TrialOutcome | str) -> None:
         """Update the trial generator with the outcome of the previous trial."""
+
+    def metrics(self) -> TrialMetrics:
+        """Return metrics of session at current state of the trial generator."""
