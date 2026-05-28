@@ -7,7 +7,7 @@ import numpy as np
 from aind_behavior_dynamic_foraging.task_logic.trial_generators import CoupledTrialGeneratorSpec
 from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial, TrialOutcome
 
-from .util import simulate_response
+from tests.trial_generators.util import simulate_response
 
 logging.basicConfig(level=logging.DEBUG)
 

@@ -11,7 +11,7 @@ from aind_behavior_dynamic_foraging.task_logic.trial_generators.uncoupled_trial_
 )
 from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial
 
-from .util import simulate_response
+from tests.trial_generators.util import simulate_response
 
 logging.basicConfig(level=logging.DEBUG)
 

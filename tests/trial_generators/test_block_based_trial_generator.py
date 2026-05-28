@@ -12,7 +12,7 @@ from aind_behavior_dynamic_foraging.task_logic.trial_generators.block_based_tria
     BlockBasedTrialGenerator,
     BlockBasedTrialGeneratorSpec,
 )
-from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial
+from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial, TrialOutcome
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -112,9 +112,7 @@ class TestAntiBiasBlockBasedTrialGenerator(unittest.TestCase):
         gen.trials_in_bias_intervention = 15
         gen.is_right_choice_history = [True, False] * 50
         gen.reward_history = [True] * 100
-
-        with self._patch_bias(0.5):
-            result = gen._are_antibias_conditions_met()
+        result = gen._are_antibias_conditions_met()
 
         self.assertFalse(result)
 
@@ -129,9 +127,7 @@ class TestAntiBiasBlockBasedTrialGenerator(unittest.TestCase):
         gen.trials_in_bias_intervention = 15
         gen.is_right_choice_history = [True] * 100
         gen.reward_history = [True] * 100
-
-        with self._patch_bias(0.9):
-            result = gen._are_antibias_conditions_met()
+        result = gen._are_antibias_conditions_met()
 
         self.assertTrue(result)
 
@@ -146,9 +142,7 @@ class TestAntiBiasBlockBasedTrialGenerator(unittest.TestCase):
         gen.trials_in_bias_intervention = 15
         gen.is_right_choice_history = [False] * 100
         gen.reward_history = [False] * 100
-
-        with self._patch_bias(0.9):
-            result = gen._are_antibias_conditions_met()
+        result = gen._are_antibias_conditions_met()
 
         self.assertTrue(result)
 
@@ -161,7 +155,7 @@ class TestAntiBiasBlockBasedTrialGenerator(unittest.TestCase):
         )
 
         with self._patch_bias(0.42):
-            gen._are_antibias_conditions_met()
+            gen.update(TrialOutcome(is_rewarded=True, is_right_choice=True, trial=Trial()))
 
         self.assertAlmostEqual(gen.bias, 0.42)
 
@@ -255,15 +249,13 @@ class TestAntiBiasBlockBasedTrialGenerator(unittest.TestCase):
 
     def test_next_gives_right_autowater_on_left_bias(self):
         gen = self._make_generator(bias=-0.9)
-        with self._patch_bias(-0.9):
-            trial = gen.next()
+        trial = gen.next()
         self.assertIsNotNone(trial)
         self.assertTrue(trial.is_auto_response_right)
 
     def test_next_gives_left_autowater_on_right_bias(self):
         gen = self._make_generator(bias=0.9)
-        with self._patch_bias(0.9):
-            trial = gen.next()
+        trial = gen.next()
         self.assertIsNotNone(trial)
         self.assertFalse(trial.is_auto_response_right)
 
@@ -289,9 +281,7 @@ class TestAntiBiasBlockBasedTrialGenerator(unittest.TestCase):
         gen.trials_in_bias_intervention = 15
         gen.is_right_choice_history = [None]  # ignored trial → autowater would also fire
         gen.reward_history = [False]
-
-        with self._patch_bias(-0.9):
-            trial = gen.next()
+        trial = gen.next()
 
         # Antibias (left bias → give right water) should win
         self.assertTrue(trial.is_auto_response_right)
@@ -299,9 +289,8 @@ class TestAntiBiasBlockBasedTrialGenerator(unittest.TestCase):
     def test_next_lickspout_delta_nonzero_after_corrections_exhausted(self):
         """After max water corrections, next() should produce a nonzero lickspout delta."""
         gen = self._make_generator(bias=-0.9, water_corrections=5)
-        with self._patch_bias(-0.9):
-            trial = gen.next()
-        self.assertNotEqual(trial.lickspout_offset_delta, 0)
+        trial = gen.next()
+        self.assertEqual(trial.lickspout_offset_delta, 0.05)
 
     def test_next_no_lickspout_delta_when_antibias_not_triggered(self):
         gen = self._make_generator(bias=-0.9, trials_in_bias_intervention=5)

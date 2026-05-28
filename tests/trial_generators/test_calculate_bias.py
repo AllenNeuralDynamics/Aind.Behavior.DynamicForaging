@@ -1,6 +1,6 @@
 import math
 import unittest
-
+import time
 import numpy as np
 
 from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial, TrialOutcome
@@ -67,6 +67,40 @@ class TestCalculateBias(unittest.TestCase):
         outcomes = make_outcomes(5)
         bias = calculate_bias(outcomes)
         self.assertTrue(math.isnan(bias))
+
+TIME_LIMIT_MS = 170
+N_REPEATS = 20
+
+
+class TestCalculateBiasTiming(unittest.TestCase):
+ 
+    def _assert_within_time_limit(self, n_trials: int):
+        times = []
+        for _ in range(N_REPEATS):
+            outcomes = make_outcomes(n_trials)
+            t0 = time.perf_counter()
+            calculate_bias(outcomes)
+            times.append((time.perf_counter() - t0) * 1000)
+        mean_ms = float(np.mean(times))
+        self.assertLess(
+            mean_ms,
+            TIME_LIMIT_MS,
+            f"calculate_bias with {n_trials} trials too slow: "
+            f"{mean_ms:.1f}ms (limit {TIME_LIMIT_MS}ms)"
+        )
+ 
+    def test_timing_50_trials(self):
+        self._assert_within_time_limit(50)
+ 
+    def test_timing_100_trials(self):
+        self._assert_within_time_limit(100)
+ 
+    def test_timing_200_trials(self):
+        self._assert_within_time_limit(200)
+
+    def test_timing_1000_trials(self):
+        # should be similar to 200 since only last 200 trials evaluated
+        self._assert_within_time_limit(1000)
 
 
 if __name__ == "__main__":

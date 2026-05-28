@@ -7,7 +7,7 @@ from sklearn.linear_model import LogisticRegressionCV
 from aind_behavior_dynamic_foraging.task_logic.trial_models import TrialOutcome
 
 logger = logging.getLogger(__name__)
-
+  
 
 def calculate_bias(outcomes: List[TrialOutcome]) -> float:
     """Estimate the side bias of an animal using logistic regression on recent trial history.
@@ -62,9 +62,14 @@ def calculate_bias(outcomes: List[TrialOutcome]) -> float:
 
     y = choice_signed[lag:]
 
-    if len(np.unique(y)) < 2:  # all choices are the same, return max bias in that direction
-        logger.warning("All choices are the same, cannot calculate bias.")
-        return np.nan
+    n_right_choice = np.sum(y == 1)
+    n_left_choice = np.sum(y == -1)
+    if min(n_right_choice, n_left_choice) < cv:
+        logger.warning(
+            "Not enough trials per class to fit logistic regression (need %d per class, got %d right, %d left).",
+            cv, n_right_choice, n_left_choice
+        )
+        return np.nan   
 
     logistic_reg = LogisticRegressionCV(
         solver=solver,
