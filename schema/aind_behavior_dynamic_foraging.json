@@ -337,12 +337,13 @@
           "title": "Maximum Water Corrections",
           "type": "integer"
         },
-        "volume": {
-          "default": 1,
-          "description": "Volume in ul of water given.",
+        "reward_fraction": {
+          "default": 0.8,
+          "description": "Fraction of full reward volume delivered during auto water (0=none, 1=full).",
+          "maximum": 1,
           "minimum": 0,
-          "title": "Volume",
-          "type": "integer"
+          "title": "Reward Fraction",
+          "type": "number"
         },
         "bias_window_length": {
           "default": 200,
@@ -560,7 +561,7 @@
             "min_unrewarded_trials": 3,
             "reward_fraction": 0.8
           },
-          "description": "Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
+          "description": "Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
           "oneOf": [
             {
               "$ref": "#/$defs/AutoWaterParameters"
@@ -578,7 +579,7 @@
             },
             "intervention_interval": 10,
             "maximum_water_corrections": 5,
-            "volume": 1,
+            "reward_fraction": 0.8,
             "bias_window_length": 200,
             "lickspout_offset_delta": 0.05
           },
@@ -904,7 +905,7 @@
             "min_unrewarded_trials": 3,
             "reward_fraction": 0.8
           },
-          "description": "Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
+          "description": "Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
           "oneOf": [
             {
               "$ref": "#/$defs/AutoWaterParameters"
@@ -922,7 +923,7 @@
             },
             "intervention_interval": 10,
             "maximum_water_corrections": 5,
-            "volume": 1,
+            "reward_fraction": 0.8,
             "bias_window_length": 200,
             "lickspout_offset_delta": 0.05
           },
@@ -1192,7 +1193,7 @@
             "min_unrewarded_trials": 3,
             "reward_fraction": 0.8
           },
-          "description": "Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
+          "description": "Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
           "oneOf": [
             {
               "$ref": "#/$defs/AutoWaterParameters"
@@ -1210,7 +1211,7 @@
             },
             "intervention_interval": 10,
             "maximum_water_corrections": 5,
-            "volume": 1,
+            "reward_fraction": 0.8,
             "bias_window_length": 200,
             "lickspout_offset_delta": 0.05
           },
@@ -1403,7 +1404,7 @@
             "min_unrewarded_trials": 3,
             "reward_fraction": 0.8
           },
-          "description": "Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
+          "description": "Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
           "oneOf": [
             {
               "$ref": "#/$defs/AutoWaterParameters"
@@ -1421,7 +1422,7 @@
             },
             "intervention_interval": 10,
             "maximum_water_corrections": 5,
-            "volume": 1,
+            "reward_fraction": 0.8,
             "bias_window_length": 200,
             "lickspout_offset_delta": 0.05
           },
@@ -3745,7 +3746,7 @@
             "min_unrewarded_trials": 3,
             "reward_fraction": 0.8
           },
-          "description": "Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
+          "description": "Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
           "oneOf": [
             {
               "$ref": "#/$defs/AutoWaterParameters"
@@ -3763,7 +3764,7 @@
             },
             "intervention_interval": 10,
             "maximum_water_corrections": 5,
-            "volume": 1,
+            "reward_fraction": 0.8,
             "bias_window_length": 200,
             "lickspout_offset_delta": 0.05
           },

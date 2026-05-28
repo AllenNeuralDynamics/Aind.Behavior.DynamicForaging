@@ -121,7 +121,10 @@ class TrialOutcome(BaseModel):
     )
     is_rewarded: bool = Field(description="Indicates whether the subject received a reward on this trial.")
 
+
 class TrialMetrics(BaseModel):
     """Represents metrics of session"""
 
-    bias: Optional[float] = Field(default=None, description="Bias of session. Negative values correspond to left bias, positive right.")
+    bias: Optional[float] = Field(
+        default=None, description="Bias of session. Negative values correspond to left bias, positive right."
+    )

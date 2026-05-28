@@ -6,7 +6,6 @@ from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_ge
     CoupledWarmupTrialGeneratorSpec,
 )
 from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial, TrialOutcome
-
 from tests.trial_generators.util import simulate_response
 
 

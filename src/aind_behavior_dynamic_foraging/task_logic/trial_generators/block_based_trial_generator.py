@@ -14,8 +14,6 @@ from pydantic import BaseModel, Field
 
 from aind_behavior_dynamic_foraging.task_logic.utils.calculate_bias import calculate_bias
 
-from aind_behavior_dynamic_foraging.task_logic.utils.calculate_bias import calculate_bias
-
 from ..trial_models import Metadata, Trial, TrialMetrics
 from ._base import BaseTrialGeneratorSpecModel, ITrialGenerator, TrialOutcome
 
@@ -40,7 +38,7 @@ class AutoWaterParameters(BaseModel):
         ge=0,
         le=1,
         description="Fraction of full reward volume delivered during auto water (0=none, 1=full).",
-    )   # TODO: Not implemented yet
+    )  # TODO: Not implemented yet
 
 
 class BiasThreshold(BaseModel):
@@ -59,7 +57,7 @@ class AntiBiasParameters(BaseModel):
         ge=0,
         le=1,
         description="Fraction of full reward volume delivered during auto water (0=none, 1=full).",
-    )   # TODO: Not implemented yet
+    )  # TODO: Not implemented yet
     bias_window_length: int = Field(default=200, ge=0, description="Trials to calculate bias over.")
     lickspout_offset_delta: float = Field(
         default=0.05,
@@ -190,7 +188,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             else:
                 # trial ignored so current baiting state retained
                 pass
-        
+
         self.bias = calculate_bias(outcomes=self.outcome_history)
 
     def next(self) -> Trial | None:
@@ -254,12 +252,11 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
                 extra=BlockBasedTrialMetadata(is_autowater=is_autowater),
             ),
         )
-    
+
     def metrics(self) -> TrialMetrics:
         """Return metrics of session at current state of the trial generator."""
-        
-        return TrialMetrics(bias=self.bias)
 
+        return TrialMetrics(bias=self.bias)
 
     def _are_autowater_conditions_met(self) -> bool:
         """Checks whether autowater should be given.
@@ -299,7 +296,6 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             return False
 
         if self.trials_in_bias_intervention > self.spec.antibias_parameters.intervention_interval:
-
             if self.bias <= self.spec.antibias_parameters.threshold.lower:
                 logger.debug("Bias calculated below threshold: %s." % self.bias)
                 return True

@@ -3,7 +3,7 @@ from typing import Protocol
 
 from pydantic import BaseModel
 
-from ..trial_models import Trial, TrialOutcome, TrialMetrics
+from ..trial_models import Trial, TrialMetrics, TrialOutcome
 
 
 class BaseTrialGeneratorSpecModel(BaseModel, abc.ABC):

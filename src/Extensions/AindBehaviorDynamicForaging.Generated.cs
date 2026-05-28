@@ -715,7 +715,7 @@ namespace AindDynamicForagingDataSchema
     
         private int _maximumWaterCorrections;
     
-        private int _volume;
+        private double _rewardFraction;
     
         private int _biasWindowLength;
     
@@ -726,7 +726,7 @@ namespace AindDynamicForagingDataSchema
             _threshold = new BiasThreshold();
             _interventionInterval = 10;
             _maximumWaterCorrections = 5;
-            _volume = 1;
+            _rewardFraction = 0.8D;
             _biasWindowLength = 200;
             _lickspoutOffsetDelta = 0.05D;
         }
@@ -736,7 +736,7 @@ namespace AindDynamicForagingDataSchema
             _threshold = other._threshold;
             _interventionInterval = other._interventionInterval;
             _maximumWaterCorrections = other._maximumWaterCorrections;
-            _volume = other._volume;
+            _rewardFraction = other._rewardFraction;
             _biasWindowLength = other._biasWindowLength;
             _lickspoutOffsetDelta = other._lickspoutOffsetDelta;
         }
@@ -794,19 +794,19 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Volume in ul of water given.
+        /// Fraction of full reward volume delivered during auto water (0=none, 1=full).
         /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("volume")]
-        [System.ComponentModel.DescriptionAttribute("Volume in ul of water given.")]
-        public int Volume
+        [Newtonsoft.Json.JsonPropertyAttribute("reward_fraction")]
+        [System.ComponentModel.DescriptionAttribute("Fraction of full reward volume delivered during auto water (0=none, 1=full).")]
+        public double RewardFraction
         {
             get
             {
-                return _volume;
+                return _rewardFraction;
             }
             set
             {
-                _volume = value;
+                _rewardFraction = value;
             }
         }
     
@@ -860,7 +860,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("Threshold = " + _threshold + ", ");
             stringBuilder.Append("InterventionInterval = " + _interventionInterval + ", ");
             stringBuilder.Append("MaximumWaterCorrections = " + _maximumWaterCorrections + ", ");
-            stringBuilder.Append("Volume = " + _volume + ", ");
+            stringBuilder.Append("RewardFraction = " + _rewardFraction + ", ");
             stringBuilder.Append("BiasWindowLength = " + _biasWindowLength + ", ");
             stringBuilder.Append("LickspoutOffsetDelta = " + _lickspoutOffsetDelta);
             return true;
@@ -1198,12 +1198,12 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.
+        /// Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("autowater_parameters")]
-        [System.ComponentModel.DescriptionAttribute("Auto water settings. If set, free water is delivered when the animal exceeds the " +
-            "ignored or unrewarded trial thresholds.")]
+        [System.ComponentModel.DescriptionAttribute("Autowater settings. If set, free water is delivered when the animal exceeds the i" +
+            "gnored or unrewarded trial thresholds.")]
         public AutoWaterParameters AutowaterParameters
         {
             get
@@ -1686,12 +1686,12 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.
+        /// Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("autowater_parameters")]
-        [System.ComponentModel.DescriptionAttribute("Auto water settings. If set, free water is delivered when the animal exceeds the " +
-            "ignored or unrewarded trial thresholds.")]
+        [System.ComponentModel.DescriptionAttribute("Autowater settings. If set, free water is delivered when the animal exceeds the i" +
+            "gnored or unrewarded trial thresholds.")]
         public AutoWaterParameters AutowaterParameters
         {
             get
@@ -2433,12 +2433,12 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.
+        /// Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("autowater_parameters")]
-        [System.ComponentModel.DescriptionAttribute("Auto water settings. If set, free water is delivered when the animal exceeds the " +
-            "ignored or unrewarded trial thresholds.")]
+        [System.ComponentModel.DescriptionAttribute("Autowater settings. If set, free water is delivered when the animal exceeds the i" +
+            "gnored or unrewarded trial thresholds.")]
         public AutoWaterParameters AutowaterParameters
         {
             get
@@ -2902,12 +2902,12 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.
+        /// Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("autowater_parameters")]
-        [System.ComponentModel.DescriptionAttribute("Auto water settings. If set, free water is delivered when the animal exceeds the " +
-            "ignored or unrewarded trial thresholds.")]
+        [System.ComponentModel.DescriptionAttribute("Autowater settings. If set, free water is delivered when the animal exceeds the i" +
+            "gnored or unrewarded trial thresholds.")]
         public AutoWaterParameters AutowaterParameters
         {
             get
@@ -6971,12 +6971,12 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.
+        /// Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("autowater_parameters")]
-        [System.ComponentModel.DescriptionAttribute("Auto water settings. If set, free water is delivered when the animal exceeds the " +
-            "ignored or unrewarded trial thresholds.")]
+        [System.ComponentModel.DescriptionAttribute("Autowater settings. If set, free water is delivered when the animal exceeds the i" +
+            "gnored or unrewarded trial thresholds.")]
         public AutoWaterParameters AutowaterParameters
         {
             get
