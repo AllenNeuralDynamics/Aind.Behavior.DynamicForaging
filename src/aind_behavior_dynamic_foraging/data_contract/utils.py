@@ -19,6 +19,8 @@ def calculate_consumed_water(session_path: os.PathLike) -> Optional[float]:
     is_right_choice = [to["is_right_choice"] for to in trial_outcomes]
     is_rewarded = [to["is_rewarded"] for to in trial_outcomes]
 
+    manual_water = dataset(session_path)["Behavior"]["SoftwareEvents"]["GiveManualWaterRight"].load().data["data"]
+
     task_logic_data = dataset(session_path)["Behavior"]["InputSchemas"]["TaskLogic"].load().data
     task_logic = AindDynamicForagingTaskLogic.model_validate(task_logic_data)
     right_reward_size = task_logic.task_parameters.reward_size.right_value_volume
@@ -31,4 +33,5 @@ def calculate_consumed_water(session_path: os.PathLike) -> Optional[float]:
                 total += right_reward_size * 1e-3
             if choice is False:
                 total += left_reward_size * 1e-3
+    
     return total

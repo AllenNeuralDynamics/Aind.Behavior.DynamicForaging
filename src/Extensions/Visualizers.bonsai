@@ -416,7 +416,7 @@
                                 </Combinator>
                               </Expression>
                               <Expression xsi:type="MulticastSubject">
-                                <Name>GiveRewardRight</Name>
+                                <Name>GiveManualWaterRight</Name>
                               </Expression>
                               <Expression xsi:type="WorkflowOutput" />
                             </Nodes>
@@ -447,7 +447,7 @@
                                 </Combinator>
                               </Expression>
                               <Expression xsi:type="MulticastSubject">
-                                <Name>GiveRewardRight</Name>
+                                <Name>GiveManualWaterRight</Name>
                               </Expression>
                               <Expression xsi:type="WorkflowOutput" />
                             </Nodes>
