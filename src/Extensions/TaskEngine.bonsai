@@ -1218,6 +1218,42 @@
                                 </Combinator>
                               </Expression>
                               <Expression xsi:type="rx:SelectMany">
+                                <Name>Metrics</Name>
+                                <Workflow>
+                                  <Nodes>
+                                    <Expression xsi:type="Combinator">
+                                      <Combinator xsi:type="py:GetRuntime" />
+                                    </Expression>
+                                    <Expression xsi:type="Combinator">
+                                      <Combinator xsi:type="py:Get">
+                                        <py:VariableName>trial_generator</py:VariableName>
+                                      </Combinator>
+                                    </Expression>
+                                    <Expression xsi:type="Combinator">
+                                      <Combinator xsi:type="p2:InvokeMethod">
+                                        <p2:MethodName>metrics</p2:MethodName>
+                                        <p2:AttemptSerialization>true</p2:AttemptSerialization>
+                                      </Combinator>
+                                    </Expression>
+                                    <Expression xsi:type="Combinator">
+                                      <Combinator xsi:type="p2:DeserializeFromPyObject">
+                                        <p2:Type xsi:type="TypeMapping" TypeArguments="p1:TrialMetrics" />
+                                      </Combinator>
+                                    </Expression>
+                                    <Expression xsi:type="WorkflowOutput" />
+                                  </Nodes>
+                                  <Edges>
+                                    <Edge From="0" To="1" Label="Source1" />
+                                    <Edge From="1" To="2" Label="Source1" />
+                                    <Edge From="2" To="3" Label="Source1" />
+                                    <Edge From="3" To="4" Label="Source1" />
+                                  </Edges>
+                                </Workflow>
+                              </Expression>
+                              <Expression xsi:type="MulticastSubject">
+                                <Name>GlobalTrialMetrics</Name>
+                              </Expression>
+                              <Expression xsi:type="rx:SelectMany">
                                 <Name>SampleNextTrial</Name>
                                 <Workflow>
                                   <Nodes>
@@ -1262,6 +1298,8 @@
                               <Edge From="6" To="7" Label="Source1" />
                               <Edge From="7" To="8" Label="Source1" />
                               <Edge From="8" To="9" Label="Source1" />
+                              <Edge From="9" To="10" Label="Source1" />
+                              <Edge From="10" To="11" Label="Source1" />
                             </Edges>
                           </Workflow>
                         </Expression>
@@ -1359,45 +1397,6 @@
                         </Expression>
                         <Expression xsi:type="WorkflowOutput" />
                         <Expression xsi:type="SubscribeSubject">
-                          <Name>thisTrialOutcome</Name>
-                        </Expression>
-                        <Expression xsi:type="rx:SelectMany">
-                          <Name>Metrics</Name>
-                          <Workflow>
-                            <Nodes>
-                              <Expression xsi:type="Combinator">
-                                <Combinator xsi:type="py:GetRuntime" />
-                              </Expression>
-                              <Expression xsi:type="Combinator">
-                                <Combinator xsi:type="py:Get">
-                                  <py:VariableName>trial_generator</py:VariableName>
-                                </Combinator>
-                              </Expression>
-                              <Expression xsi:type="Combinator">
-                                <Combinator xsi:type="p2:InvokeMethod">
-                                  <p2:MethodName>metrics</p2:MethodName>
-                                  <p2:AttemptSerialization>true</p2:AttemptSerialization>
-                                </Combinator>
-                              </Expression>
-                              <Expression xsi:type="Combinator">
-                                <Combinator xsi:type="p2:DeserializeFromPyObject">
-                                  <p2:Type xsi:type="TypeMapping" TypeArguments="p1:TrialMetrics" />
-                                </Combinator>
-                              </Expression>
-                              <Expression xsi:type="WorkflowOutput" />
-                            </Nodes>
-                            <Edges>
-                              <Edge From="0" To="1" Label="Source1" />
-                              <Edge From="1" To="2" Label="Source1" />
-                              <Edge From="2" To="3" Label="Source1" />
-                              <Edge From="3" To="4" Label="Source1" />
-                            </Edges>
-                          </Workflow>
-                        </Expression>
-                        <Expression xsi:type="MulticastSubject">
-                          <Name>GlobalTrialMetrics</Name>
-                        </Expression>
-                        <Expression xsi:type="SubscribeSubject">
                           <Name>ThisTrial</Name>
                         </Expression>
                         <Expression xsi:type="Combinator">
@@ -1462,13 +1461,11 @@
                         <Edge From="30" To="31" Label="Source1" />
                         <Edge From="32" To="33" Label="Source1" />
                         <Edge From="33" To="34" Label="Source1" />
+                        <Edge From="34" To="35" Label="Source1" />
                         <Edge From="35" To="36" Label="Source1" />
                         <Edge From="36" To="37" Label="Source1" />
-                        <Edge From="37" To="38" Label="Source1" />
                         <Edge From="38" To="39" Label="Source1" />
                         <Edge From="39" To="40" Label="Source1" />
-                        <Edge From="41" To="42" Label="Source1" />
-                        <Edge From="42" To="43" Label="Source1" />
                       </Edges>
                     </Workflow>
                   </Expression>
