@@ -6510,6 +6510,75 @@ namespace AindDynamicForagingDataSchema
 
 
     /// <summary>
+    /// Represents metrics of session
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.ComponentModel.DescriptionAttribute("Represents metrics of session")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class TrialMetrics
+    {
+    
+        private double? _bias;
+    
+        public TrialMetrics()
+        {
+        }
+    
+        protected TrialMetrics(TrialMetrics other)
+        {
+            _bias = other._bias;
+        }
+    
+        /// <summary>
+        /// Bias of session. Negative values correspond to left bias, positive right.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("bias")]
+        [System.ComponentModel.DescriptionAttribute("Bias of session. Negative values correspond to left bias, positive right.")]
+        public double? Bias
+        {
+            get
+            {
+                return _bias;
+            }
+            set
+            {
+                _bias = value;
+            }
+        }
+    
+        public System.IObservable<TrialMetrics> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new TrialMetrics(this)));
+        }
+    
+        public System.IObservable<TrialMetrics> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new TrialMetrics(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("Bias = " + _bias);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    /// <summary>
     /// Represents the outcome of a single trial.
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
@@ -8421,6 +8490,11 @@ namespace AindDynamicForagingDataSchema
             return Process<TrialGeneratorSpec>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<TrialMetrics> source)
+        {
+            return Process<TrialMetrics>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<TrialOutcome> source)
         {
             return Process<TrialOutcome>(source);
@@ -8519,6 +8593,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Trial>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialGeneratorCompositeSpecTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialGeneratorSpec>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialMetrics>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialOutcome>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<UncoupledTrialGenerationEndConditions>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<UncoupledTrialGeneratorSpec>))]

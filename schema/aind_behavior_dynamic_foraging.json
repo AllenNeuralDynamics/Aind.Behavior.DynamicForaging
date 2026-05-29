@@ -3563,6 +3563,26 @@
         }
       ]
     },
+    "TrialMetrics": {
+      "description": "Represents metrics of session",
+      "properties": {
+        "bias": {
+          "default": null,
+          "description": "Bias of session. Negative values correspond to left bias, positive right.",
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Bias"
+        }
+      },
+      "title": "TrialMetrics",
+      "type": "object"
+    },
     "TrialOutcome": {
       "description": "Represents the outcome of a single trial.",
       "properties": {

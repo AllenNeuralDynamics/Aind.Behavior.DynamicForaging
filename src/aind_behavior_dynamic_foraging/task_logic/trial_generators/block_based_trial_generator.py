@@ -162,7 +162,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
         # antibias parameters
         self.trials_in_bias_intervention = 0
         self.water_corrections = 0
-        self.bias: float
+        self.bias: Optional[float] = None
         self.total_lickspout_offset = 0
 
     def update(self, outcome: TrialOutcome | str):
