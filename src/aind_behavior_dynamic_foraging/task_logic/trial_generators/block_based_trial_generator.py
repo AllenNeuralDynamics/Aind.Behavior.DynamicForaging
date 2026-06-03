@@ -12,6 +12,10 @@ from aind_behavior_services.task.distributions import (
 from aind_behavior_services.task.distributions_utils import draw_sample
 from pydantic import BaseModel, Field
 
+from aind_behavior_dynamic_foraging.task_logic.interventions.bias_intervention import (
+    BiasIntervention,
+    BiasInterventionParameters,
+)
 from aind_behavior_dynamic_foraging.task_logic.utils.calculate_bias import calculate_bias
 
 from ..trial_models import Metadata, Trial, TrialMetrics
@@ -39,31 +43,6 @@ class AutoWaterParameters(BaseModel):
         le=1,
         description="Fraction of full reward volume delivered during auto water (0=none, 1=full).",
     )  # TODO: Not implemented yet
-
-
-class BiasThreshold(BaseModel):
-    upper: float = Field(default=0.7, ge=0, le=1, description="Absolute value of the upper bias threshold.")
-    lower: float = Field(default=0.3, ge=0, le=1, description="Absolute value of the lower bias threshold.")
-
-
-class AntiBiasParameters(BaseModel):
-    threshold: BiasThreshold = Field(
-        default=BiasThreshold(), validate_default=True, description="Thresholds for bias correction intervention."
-    )
-    intervention_interval: int = Field(default=10, ge=0, description="Trials between bias intervention.")
-    maximum_water_corrections: int = Field(default=5, ge=0, description="Number of water correction to attempt.")
-    reward_fraction: float = Field(
-        default=0.8,
-        ge=0,
-        le=1,
-        description="Fraction of full reward volume delivered during auto water (0=none, 1=full).",
-    )  # TODO: Not implemented yet
-    bias_window_length: int = Field(default=200, ge=0, description="Trials to calculate bias over.")
-    lickspout_offset_delta: float = Field(
-        default=0.05,
-        ge=0,
-        description="Distance (mm) to move the stage spouts by. This is a relative distance to the current value, not absolute.",
-    )
 
 
 class Block(BaseModel):
@@ -114,16 +93,13 @@ class BlockBasedTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
         description="Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
     )
 
-    antibias_parameters: Optional[AntiBiasParameters] = Field(
-        default=AntiBiasParameters(),
+    bias_intervention_parameters: Optional[BiasInterventionParameters] = Field(
+        default=BiasInterventionParameters(),
         validate_default=True,
         description="Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
     )
 
     is_baiting: bool = Field(default=False, description="Whether uncollected rewards carry over to the next trial.")
-
-    def create_generator(self) -> "BlockBasedTrialGenerator":
-        return BlockBasedTrialGenerator(self)
 
 
 class BlockBasedTrialGenerator(ITrialGenerator, ABC):
@@ -159,11 +135,8 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
         self.is_right_baited: bool = False
         self.block: Block
 
-        # antibias parameters
-        self.trials_in_bias_intervention = 0
-        self.water_corrections = 0
         self.bias: Optional[float] = None
-        self.total_lickspout_offset = 0
+        self.bias_intervention = BiasIntervention(self.spec.bias_intervention_parameters)
 
     def update(self, outcome: TrialOutcome | str):
         """Updates generator state from the previous trial outcome. Records choice and reward history and manages baiting state.
@@ -230,13 +203,14 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
 
         # determine bias correction. Overrides autowater
         lickspout_offset_delta = 0
-        if self._are_antibias_conditions_met():
-            is_auto_response_right, lickspout_offset_delta = self._determine_antibias_intervention()
+        if self.bias_intervention.are_antibias_conditions_met(self.bias):
+            is_auto_response_right, lickspout_offset_delta = self.bias_intervention.determine_antibias_intervention(
+                self.bias
+            )
             logger.debug(
                 "Performing bias intervention: is_auto_response_right = %s, lickspout_offset_delta = %s."
                 % (is_auto_response_right, lickspout_offset_delta)
             )
-            self.trials_in_bias_intervention = 0
 
         return Trial(
             p_reward_left=1 if (self.is_left_baited or is_auto_response_right is False) else self.block.p_left_reward,
@@ -284,61 +258,6 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             return True
 
         return False
-
-    def _are_antibias_conditions_met(self) -> bool:
-        """Checks whether antibias conditions are met.
-
-        Returns:
-            True if antibias conditions are met, False otherwise.
-        """
-
-        if self.spec.antibias_parameters is None:
-            logger.debug("Anitbias not configured.")
-            return False
-
-        if self.trials_in_bias_intervention > self.spec.antibias_parameters.intervention_interval:
-            if self.bias <= self.spec.antibias_parameters.threshold.lower:
-                logger.debug("Bias calculated below threshold: %s." % self.bias)
-                return True
-
-            if self.bias >= self.spec.antibias_parameters.threshold.upper:
-                logger.debug("Bias calculated above threshold: %s." % self.bias)
-                return True
-        self.trials_in_bias_intervention =+ 1
-        return False
-
-    def _determine_antibias_intervention(self) -> tuple[bool | None, float]:
-        """Determine anitbias interventions to perform: give water or move lickspouts
-
-        Returns:
-            Tuple dictating is_auto_response_right and lickspout_offset_delta of trial
-        """
-
-        is_right_autowater = None
-        lickspout_offset_delta = 0
-        ab_delta = self.spec.antibias_parameters.lickspout_offset_delta
-        if abs(self.bias) >= self.spec.antibias_parameters.threshold.upper:
-            if self.water_corrections < self.spec.antibias_parameters.maximum_water_corrections:
-                logger.debug("Correcting bias with water.")
-                is_right_autowater = (
-                    True if self.bias < 0 else False
-                )  # - bias values corresponds to left, so give right and vice versa
-                self.water_corrections += 1
-            else:
-                logger.debug("Correcting bias with lickspout offset.")
-                lickspout_offset_delta = ab_delta if self.bias < 0 else -ab_delta  # + values move lickspout right
-                self.water_corrections = 0
-
-        elif (
-            abs(self.bias) <= self.spec.antibias_parameters.threshold.lower and self.total_lickspout_offset != 0
-        ):  # bias below lower threshold, move back towards center
-            logger.debug("Moving lickspout back toward center.")
-            delta = min(ab_delta, abs(self.total_lickspout_offset))
-            lickspout_offset_delta = -delta if self.total_lickspout_offset > 0 else delta
-
-        self.total_lickspout_offset += lickspout_offset_delta
-
-        return is_right_autowater, lickspout_offset_delta
 
     @abstractmethod
     def _are_end_conditions_met(self) -> bool:

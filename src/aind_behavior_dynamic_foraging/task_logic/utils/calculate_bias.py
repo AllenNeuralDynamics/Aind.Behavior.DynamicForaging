@@ -30,7 +30,7 @@ def calculate_bias(outcomes: List[TrialOutcome]) -> float:
     """
 
     solver = "liblinear"
-    l1_ratios = (0,)    # ignored parameter with solver='liblinear'
+    l1_ratios = (0,)  # ignored parameter with solver='liblinear'
     trial_window_length = 5
     cross_val_folds = 10
     regularization_candidates = 10
