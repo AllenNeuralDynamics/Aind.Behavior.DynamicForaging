@@ -123,7 +123,7 @@ class TrialOutcome(BaseModel):
 
 
 class TrialMetrics(BaseModel):
-    """Represents metrics of session"""
+    """Represents metrics of trial"""
 
     bias: Optional[float] = Field(
         default=None, description="Bias of session. Negative values correspond to left bias, positive right."
