@@ -326,7 +326,7 @@
       "title": "AuditorySecondaryReinforcer",
       "type": "object"
     },
-    "AutoWaterParameters": {
+    "AutoWaterInterventionParameters": {
       "properties": {
         "min_ignored_trials": {
           "default": 3,
@@ -351,7 +351,7 @@
           "type": "number"
         }
       },
-      "title": "AutoWaterParameters",
+      "title": "AutoWaterInterventionParameters",
       "type": "object"
     },
     "Axis": {
@@ -505,7 +505,7 @@
           },
           "description": "Distribution describing block length."
         },
-        "autowater_parameters": {
+        "auto_water_intervention_parameters": {
           "default": {
             "min_ignored_trials": 3,
             "min_unrewarded_trials": 3,
@@ -514,7 +514,7 @@
           "description": "Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
           "oneOf": [
             {
-              "$ref": "#/$defs/AutoWaterParameters"
+              "$ref": "#/$defs/AutoWaterInterventionParameters"
             },
             {
               "type": "null"
@@ -890,7 +890,7 @@
           },
           "description": "Distribution describing block length."
         },
-        "autowater_parameters": {
+        "auto_water_intervention_parameters": {
           "default": {
             "min_ignored_trials": 3,
             "min_unrewarded_trials": 3,
@@ -899,7 +899,7 @@
           "description": "Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
           "oneOf": [
             {
-              "$ref": "#/$defs/AutoWaterParameters"
+              "$ref": "#/$defs/AutoWaterInterventionParameters"
             },
             {
               "type": "null"
@@ -1177,7 +1177,7 @@
           },
           "description": "Distribution describing block length."
         },
-        "autowater_parameters": {
+        "auto_water_intervention_parameters": {
           "default": {
             "min_ignored_trials": 3,
             "min_unrewarded_trials": 3,
@@ -1186,7 +1186,7 @@
           "description": "Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
           "oneOf": [
             {
-              "$ref": "#/$defs/AutoWaterParameters"
+              "$ref": "#/$defs/AutoWaterInterventionParameters"
             },
             {
               "type": "null"
@@ -1387,7 +1387,7 @@
           },
           "description": "Distribution describing block length."
         },
-        "autowater_parameters": {
+        "auto_water_intervention_parameters": {
           "default": {
             "min_ignored_trials": 3,
             "min_unrewarded_trials": 3,
@@ -1396,7 +1396,7 @@
           "description": "Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
           "oneOf": [
             {
-              "$ref": "#/$defs/AutoWaterParameters"
+              "$ref": "#/$defs/AutoWaterInterventionParameters"
             },
             {
               "type": "null"
@@ -3748,7 +3748,7 @@
           },
           "description": "Distribution describing block length."
         },
-        "autowater_parameters": {
+        "auto_water_intervention_parameters": {
           "default": {
             "min_ignored_trials": 3,
             "min_unrewarded_trials": 3,
@@ -3757,7 +3757,7 @@
           "description": "Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
           "oneOf": [
             {
-              "$ref": "#/$defs/AutoWaterParameters"
+              "$ref": "#/$defs/AutoWaterInterventionParameters"
             },
             {
               "type": "null"

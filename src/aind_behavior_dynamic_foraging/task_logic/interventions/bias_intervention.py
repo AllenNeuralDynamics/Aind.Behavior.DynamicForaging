@@ -3,6 +3,8 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
+from aind_behavior_dynamic_foraging.task_logic.interventions.base_intervention import BaseIntervention
+
 logger = logging.getLogger(__name__)
 
 
@@ -25,7 +27,7 @@ class BiasInterventionParameters(BaseModel):
     )
 
 
-class BiasIntervention:
+class BiasIntervention(BaseIntervention):
     """Manages bias correction interventions during a task.
 
     Tracks the animal's side bias and applies corrections — either automatic water
@@ -60,13 +62,13 @@ class BiasIntervention:
         self.water_corrections = 0
         self.total_lickspout_offset = 0
 
-    def are_antibias_conditions_met(self, bias: float) -> bool:
+    def are_intervention_conditions_met(self, bias: float) -> bool:
         """Checks whether antibias conditions are met.
 
         Intervention is only considered once ``trials_in_bias_intervention`` exceeds
         ``parameters.intervention_interval``. If the bias is outside the threshold
         range at that point, returns True and leaves the counter unchanged (the caller
-        is expected to call ``determine_antibias_intervention``, which resets it).
+        is expected to call ``determine_intervention``, which resets it).
         If conditions are not met, increments ``trials_in_bias_intervention`` by 1.
 
         Returns:
@@ -87,10 +89,10 @@ class BiasIntervention:
         self.trials_in_bias_intervention += 1
         return False
 
-    def determine_antibias_intervention(self, bias: float) -> tuple[Optional[bool], float]:
+    def determine_intervention(self, bias: float) -> tuple[Optional[bool], float]:
         """Determine anitbias interventions to perform: give water or move lickspouts
 
-        Called after ``are_antibias_conditions_met`` returns True. Resets
+        Called after ``are_intervention_conditions_met`` returns True. Resets
         ``trials_in_bias_intervention`` to 0 regardless of which intervention is applied.
 
         Water corrections are attempted first, up to ``parameters.maximum_water_corrections``
