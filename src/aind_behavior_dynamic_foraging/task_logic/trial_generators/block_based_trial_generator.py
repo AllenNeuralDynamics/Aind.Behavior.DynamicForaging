@@ -254,8 +254,8 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             ),
         )
 
-    def metrics(self) -> TrialMetrics:
-        """Return metrics of session at current state of the trial generator."""
+    def get_metrics(self) -> TrialMetrics:
+        """Return metrics at current state of the trial generator."""
 
         return TrialMetrics(bias=self.bias)
 

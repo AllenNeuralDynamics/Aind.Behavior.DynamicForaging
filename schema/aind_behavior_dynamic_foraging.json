@@ -3564,7 +3564,7 @@
       ]
     },
     "TrialMetrics": {
-      "description": "Represents metrics of session",
+      "description": "Represents metrics of trial",
       "properties": {
         "bias": {
           "default": null,

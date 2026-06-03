@@ -6510,10 +6510,10 @@ namespace AindDynamicForagingDataSchema
 
 
     /// <summary>
-    /// Represents metrics of session
+    /// Represents metrics of trial
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
-    [System.ComponentModel.DescriptionAttribute("Represents metrics of session")]
+    [System.ComponentModel.DescriptionAttribute("Represents metrics of trial")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class TrialMetrics

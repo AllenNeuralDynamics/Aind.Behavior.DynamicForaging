@@ -25,5 +25,5 @@ class ITrialGenerator(Protocol):
     def update(self, outcome: TrialOutcome | str) -> None:
         """Update the trial generator with the outcome of the previous trial."""
 
-    def metrics(self) -> TrialMetrics:
-        """Return metrics of session at current state of the trial generator."""
+    def get_metrics(self) -> TrialMetrics:
+        """Return metrics at current state of the trial generator."""

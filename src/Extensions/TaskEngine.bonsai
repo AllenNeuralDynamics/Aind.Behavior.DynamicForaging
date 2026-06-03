@@ -1231,7 +1231,7 @@
                                     </Expression>
                                     <Expression xsi:type="Combinator">
                                       <Combinator xsi:type="p2:InvokeMethod">
-                                        <p2:MethodName>metrics</p2:MethodName>
+                                        <p2:MethodName>get_metrics</p2:MethodName>
                                         <p2:AttemptSerialization>true</p2:AttemptSerialization>
                                       </Combinator>
                                     </Expression>
