@@ -236,6 +236,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
                 "Performing bias intervention: is_auto_response_right = %s, lickspout_offset_delta = %s."
                 % (is_auto_response_right, lickspout_offset_delta)
             )
+            self.trials_in_bias_intervention = 0
 
         return Trial(
             p_reward_left=1 if (self.is_left_baited or is_auto_response_right is False) else self.block.p_left_reward,
@@ -303,7 +304,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             if self.bias >= self.spec.antibias_parameters.threshold.upper:
                 logger.debug("Bias calculated above threshold: %s." % self.bias)
                 return True
-
+        self.trials_in_bias_intervention =+ 1
         return False
 
     def _determine_antibias_intervention(self) -> tuple[bool | None, float]:
