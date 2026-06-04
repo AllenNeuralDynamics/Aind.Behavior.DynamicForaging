@@ -897,6 +897,8 @@ namespace AindDynamicForagingDataSchema
     
         private AutoWaterParameters _autowaterParameters;
     
+        private BiasInterventionParameters _biasInterventionParameters;
+    
         private bool _isBaiting;
     
         private RewardProbabilityParameters _rewardProbabilityParameters;
@@ -909,6 +911,7 @@ namespace AindDynamicForagingDataSchema
             _interTrialIntervalDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _blockLength = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _autowaterParameters = new AutoWaterParameters();
+            _biasInterventionParameters = new BiasInterventionParameters();
             _isBaiting = false;
             _rewardProbabilityParameters = new RewardProbabilityParameters();
         }
@@ -922,6 +925,7 @@ namespace AindDynamicForagingDataSchema
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
             _blockLength = other._blockLength;
             _autowaterParameters = other._autowaterParameters;
+            _biasInterventionParameters = other._biasInterventionParameters;
             _isBaiting = other._isBaiting;
             _rewardProbabilityParameters = other._rewardProbabilityParameters;
         }
@@ -1016,12 +1020,12 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.
+        /// Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("autowater_parameters")]
-        [System.ComponentModel.DescriptionAttribute("Auto water settings. If set, free water is delivered when the animal exceeds the " +
-            "ignored or unrewarded trial thresholds.")]
+        [System.ComponentModel.DescriptionAttribute("Autowater settings. If set, free water is delivered when the animal exceeds the i" +
+            "gnored or unrewarded trial thresholds.")]
         public AutoWaterParameters AutowaterParameters
         {
             get
@@ -1031,6 +1035,25 @@ namespace AindDynamicForagingDataSchema
             set
             {
                 _autowaterParameters = value;
+            }
+        }
+    
+        /// <summary>
+        /// Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("bias_intervention_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Antibias settings. If set, trial generator will give water and move lickspouts to" +
+            " combat bias.")]
+        public BiasInterventionParameters BiasInterventionParameters
+        {
+            get
+            {
+                return _biasInterventionParameters;
+            }
+            set
+            {
+                _biasInterventionParameters = value;
             }
         }
     
@@ -1091,6 +1114,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
             stringBuilder.Append("BlockLength = " + _blockLength + ", ");
             stringBuilder.Append("AutowaterParameters = " + _autowaterParameters + ", ");
+            stringBuilder.Append("BiasInterventionParameters = " + _biasInterventionParameters + ", ");
             stringBuilder.Append("IsBaiting = " + _isBaiting + ", ");
             stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters);
             return true;
@@ -1262,6 +1286,250 @@ namespace AindDynamicForagingDataSchema
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class BiasInterventionParameters
+    {
+    
+        private BiasThreshold _threshold;
+    
+        private int _interventionInterval;
+    
+        private int _maximumWaterCorrections;
+    
+        private int _biasWindowLength;
+    
+        private double _lickspoutOffsetDelta;
+    
+        public BiasInterventionParameters()
+        {
+            _threshold = new BiasThreshold();
+            _interventionInterval = 10;
+            _maximumWaterCorrections = 5;
+            _biasWindowLength = 200;
+            _lickspoutOffsetDelta = 0.05D;
+        }
+    
+        protected BiasInterventionParameters(BiasInterventionParameters other)
+        {
+            _threshold = other._threshold;
+            _interventionInterval = other._interventionInterval;
+            _maximumWaterCorrections = other._maximumWaterCorrections;
+            _biasWindowLength = other._biasWindowLength;
+            _lickspoutOffsetDelta = other._lickspoutOffsetDelta;
+        }
+    
+        /// <summary>
+        /// Thresholds for bias correction intervention.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("threshold")]
+        [System.ComponentModel.DescriptionAttribute("Thresholds for bias correction intervention.")]
+        public BiasThreshold Threshold
+        {
+            get
+            {
+                return _threshold;
+            }
+            set
+            {
+                _threshold = value;
+            }
+        }
+    
+        /// <summary>
+        /// Trials between bias intervention.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("intervention_interval")]
+        [System.ComponentModel.DescriptionAttribute("Trials between bias intervention.")]
+        public int InterventionInterval
+        {
+            get
+            {
+                return _interventionInterval;
+            }
+            set
+            {
+                _interventionInterval = value;
+            }
+        }
+    
+        /// <summary>
+        /// Number of water correction to attempt.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("maximum_water_corrections")]
+        [System.ComponentModel.DescriptionAttribute("Number of water correction to attempt.")]
+        public int MaximumWaterCorrections
+        {
+            get
+            {
+                return _maximumWaterCorrections;
+            }
+            set
+            {
+                _maximumWaterCorrections = value;
+            }
+        }
+    
+        /// <summary>
+        /// Trials to calculate bias over.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("bias_window_length")]
+        [System.ComponentModel.DescriptionAttribute("Trials to calculate bias over.")]
+        public int BiasWindowLength
+        {
+            get
+            {
+                return _biasWindowLength;
+            }
+            set
+            {
+                _biasWindowLength = value;
+            }
+        }
+    
+        /// <summary>
+        /// Distance (mm) to move the stage spouts by. This is a relative distance to the current value, not absolute.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("lickspout_offset_delta")]
+        [System.ComponentModel.DescriptionAttribute("Distance (mm) to move the stage spouts by. This is a relative distance to the cur" +
+            "rent value, not absolute.")]
+        public double LickspoutOffsetDelta
+        {
+            get
+            {
+                return _lickspoutOffsetDelta;
+            }
+            set
+            {
+                _lickspoutOffsetDelta = value;
+            }
+        }
+    
+        public System.IObservable<BiasInterventionParameters> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new BiasInterventionParameters(this)));
+        }
+    
+        public System.IObservable<BiasInterventionParameters> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new BiasInterventionParameters(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("Threshold = " + _threshold + ", ");
+            stringBuilder.Append("InterventionInterval = " + _interventionInterval + ", ");
+            stringBuilder.Append("MaximumWaterCorrections = " + _maximumWaterCorrections + ", ");
+            stringBuilder.Append("BiasWindowLength = " + _biasWindowLength + ", ");
+            stringBuilder.Append("LickspoutOffsetDelta = " + _lickspoutOffsetDelta);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class BiasThreshold
+    {
+    
+        private double _upper;
+    
+        private double _lower;
+    
+        public BiasThreshold()
+        {
+            _upper = 0.7D;
+            _lower = 0.3D;
+        }
+    
+        protected BiasThreshold(BiasThreshold other)
+        {
+            _upper = other._upper;
+            _lower = other._lower;
+        }
+    
+        /// <summary>
+        /// Absolute value of the upper bias threshold.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("upper")]
+        [System.ComponentModel.DescriptionAttribute("Absolute value of the upper bias threshold.")]
+        public double Upper
+        {
+            get
+            {
+                return _upper;
+            }
+            set
+            {
+                _upper = value;
+            }
+        }
+    
+        /// <summary>
+        /// Absolute value of the lower bias threshold.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("lower")]
+        [System.ComponentModel.DescriptionAttribute("Absolute value of the lower bias threshold.")]
+        public double Lower
+        {
+            get
+            {
+                return _lower;
+            }
+            set
+            {
+                _lower = value;
+            }
+        }
+    
+        public System.IObservable<BiasThreshold> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new BiasThreshold(this)));
+        }
+    
+        public System.IObservable<BiasThreshold> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new BiasThreshold(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("Upper = " + _upper + ", ");
+            stringBuilder.Append("Lower = " + _lower);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class BlockBasedTrialGeneratorSpec : TrialGeneratorSpec
     {
     
@@ -1277,6 +1545,8 @@ namespace AindDynamicForagingDataSchema
     
         private AutoWaterParameters _autowaterParameters;
     
+        private BiasInterventionParameters _biasInterventionParameters;
+    
         private bool _isBaiting;
     
         public BlockBasedTrialGeneratorSpec()
@@ -1287,6 +1557,7 @@ namespace AindDynamicForagingDataSchema
             _interTrialIntervalDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _blockLength = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _autowaterParameters = new AutoWaterParameters();
+            _biasInterventionParameters = new BiasInterventionParameters();
             _isBaiting = false;
         }
     
@@ -1299,6 +1570,7 @@ namespace AindDynamicForagingDataSchema
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
             _blockLength = other._blockLength;
             _autowaterParameters = other._autowaterParameters;
+            _biasInterventionParameters = other._biasInterventionParameters;
             _isBaiting = other._isBaiting;
         }
     
@@ -1392,12 +1664,12 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.
+        /// Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("autowater_parameters")]
-        [System.ComponentModel.DescriptionAttribute("Auto water settings. If set, free water is delivered when the animal exceeds the " +
-            "ignored or unrewarded trial thresholds.")]
+        [System.ComponentModel.DescriptionAttribute("Autowater settings. If set, free water is delivered when the animal exceeds the i" +
+            "gnored or unrewarded trial thresholds.")]
         public AutoWaterParameters AutowaterParameters
         {
             get
@@ -1407,6 +1679,25 @@ namespace AindDynamicForagingDataSchema
             set
             {
                 _autowaterParameters = value;
+            }
+        }
+    
+        /// <summary>
+        /// Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("bias_intervention_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Antibias settings. If set, trial generator will give water and move lickspouts to" +
+            " combat bias.")]
+        public BiasInterventionParameters BiasInterventionParameters
+        {
+            get
+            {
+                return _biasInterventionParameters;
+            }
+            set
+            {
+                _biasInterventionParameters = value;
             }
         }
     
@@ -1449,6 +1740,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
             stringBuilder.Append("BlockLength = " + _blockLength + ", ");
             stringBuilder.Append("AutowaterParameters = " + _autowaterParameters + ", ");
+            stringBuilder.Append("BiasInterventionParameters = " + _biasInterventionParameters + ", ");
             stringBuilder.Append("IsBaiting = " + _isBaiting);
             return true;
         }
@@ -1976,6 +2268,8 @@ namespace AindDynamicForagingDataSchema
     
         private AutoWaterParameters _autowaterParameters;
     
+        private BiasInterventionParameters _biasInterventionParameters;
+    
         private bool _isBaiting;
     
         private RewardProbabilityParameters _rewardProbabilityParameters;
@@ -1998,6 +2292,7 @@ namespace AindDynamicForagingDataSchema
             _interTrialIntervalDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _blockLength = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _autowaterParameters = new AutoWaterParameters();
+            _biasInterventionParameters = new BiasInterventionParameters();
             _isBaiting = false;
             _rewardProbabilityParameters = new RewardProbabilityParameters();
             _trialGenerationEndParameters = new CoupledTrialGenerationEndConditions();
@@ -2016,6 +2311,7 @@ namespace AindDynamicForagingDataSchema
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
             _blockLength = other._blockLength;
             _autowaterParameters = other._autowaterParameters;
+            _biasInterventionParameters = other._biasInterventionParameters;
             _isBaiting = other._isBaiting;
             _rewardProbabilityParameters = other._rewardProbabilityParameters;
             _trialGenerationEndParameters = other._trialGenerationEndParameters;
@@ -2115,12 +2411,12 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.
+        /// Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("autowater_parameters")]
-        [System.ComponentModel.DescriptionAttribute("Auto water settings. If set, free water is delivered when the animal exceeds the " +
-            "ignored or unrewarded trial thresholds.")]
+        [System.ComponentModel.DescriptionAttribute("Autowater settings. If set, free water is delivered when the animal exceeds the i" +
+            "gnored or unrewarded trial thresholds.")]
         public AutoWaterParameters AutowaterParameters
         {
             get
@@ -2130,6 +2426,25 @@ namespace AindDynamicForagingDataSchema
             set
             {
                 _autowaterParameters = value;
+            }
+        }
+    
+        /// <summary>
+        /// Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("bias_intervention_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Antibias settings. If set, trial generator will give water and move lickspouts to" +
+            " combat bias.")]
+        public BiasInterventionParameters BiasInterventionParameters
+        {
+            get
+            {
+                return _biasInterventionParameters;
+            }
+            set
+            {
+                _biasInterventionParameters = value;
             }
         }
     
@@ -2275,6 +2590,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
             stringBuilder.Append("BlockLength = " + _blockLength + ", ");
             stringBuilder.Append("AutowaterParameters = " + _autowaterParameters + ", ");
+            stringBuilder.Append("BiasInterventionParameters = " + _biasInterventionParameters + ", ");
             stringBuilder.Append("IsBaiting = " + _isBaiting + ", ");
             stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters + ", ");
             stringBuilder.Append("TrialGenerationEndParameters = " + _trialGenerationEndParameters + ", ");
@@ -2437,6 +2753,8 @@ namespace AindDynamicForagingDataSchema
     
         private AutoWaterParameters _autowaterParameters;
     
+        private BiasInterventionParameters _biasInterventionParameters;
+    
         private bool _isBaiting;
     
         private RewardProbabilityParameters _rewardProbabilityParameters;
@@ -2451,6 +2769,7 @@ namespace AindDynamicForagingDataSchema
             _interTrialIntervalDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _blockLength = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _autowaterParameters = new AutoWaterParameters();
+            _biasInterventionParameters = new BiasInterventionParameters();
             _isBaiting = true;
             _rewardProbabilityParameters = new RewardProbabilityParameters();
             _trialGenerationEndParameters = new CoupledWarmupTrialGenerationEndConditions();
@@ -2465,6 +2784,7 @@ namespace AindDynamicForagingDataSchema
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
             _blockLength = other._blockLength;
             _autowaterParameters = other._autowaterParameters;
+            _biasInterventionParameters = other._biasInterventionParameters;
             _isBaiting = other._isBaiting;
             _rewardProbabilityParameters = other._rewardProbabilityParameters;
             _trialGenerationEndParameters = other._trialGenerationEndParameters;
@@ -2560,12 +2880,12 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.
+        /// Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("autowater_parameters")]
-        [System.ComponentModel.DescriptionAttribute("Auto water settings. If set, free water is delivered when the animal exceeds the " +
-            "ignored or unrewarded trial thresholds.")]
+        [System.ComponentModel.DescriptionAttribute("Autowater settings. If set, free water is delivered when the animal exceeds the i" +
+            "gnored or unrewarded trial thresholds.")]
         public AutoWaterParameters AutowaterParameters
         {
             get
@@ -2575,6 +2895,25 @@ namespace AindDynamicForagingDataSchema
             set
             {
                 _autowaterParameters = value;
+            }
+        }
+    
+        /// <summary>
+        /// Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("bias_intervention_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Antibias settings. If set, trial generator will give water and move lickspouts to" +
+            " combat bias.")]
+        public BiasInterventionParameters BiasInterventionParameters
+        {
+            get
+            {
+                return _biasInterventionParameters;
+            }
+            set
+            {
+                _biasInterventionParameters = value;
             }
         }
     
@@ -2653,6 +2992,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
             stringBuilder.Append("BlockLength = " + _blockLength + ", ");
             stringBuilder.Append("AutowaterParameters = " + _autowaterParameters + ", ");
+            stringBuilder.Append("BiasInterventionParameters = " + _biasInterventionParameters + ", ");
             stringBuilder.Append("IsBaiting = " + _isBaiting + ", ");
             stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters + ", ");
             stringBuilder.Append("TrialGenerationEndParameters = " + _trialGenerationEndParameters);
@@ -6148,6 +6488,75 @@ namespace AindDynamicForagingDataSchema
 
 
     /// <summary>
+    /// Represents metrics of trial
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.ComponentModel.DescriptionAttribute("Represents metrics of trial")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class TrialMetrics
+    {
+    
+        private double? _bias;
+    
+        public TrialMetrics()
+        {
+        }
+    
+        protected TrialMetrics(TrialMetrics other)
+        {
+            _bias = other._bias;
+        }
+    
+        /// <summary>
+        /// Bias of session. Negative values correspond to left bias, positive right.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("bias")]
+        [System.ComponentModel.DescriptionAttribute("Bias of session. Negative values correspond to left bias, positive right.")]
+        public double? Bias
+        {
+            get
+            {
+                return _bias;
+            }
+            set
+            {
+                _bias = value;
+            }
+        }
+    
+        public System.IObservable<TrialMetrics> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new TrialMetrics(this)));
+        }
+    
+        public System.IObservable<TrialMetrics> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new TrialMetrics(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("Bias = " + _bias);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    /// <summary>
     /// Represents the outcome of a single trial.
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
@@ -6478,6 +6887,8 @@ namespace AindDynamicForagingDataSchema
     
         private AutoWaterParameters _autowaterParameters;
     
+        private BiasInterventionParameters _biasInterventionParameters;
+    
         private bool _isBaiting;
     
         private UncoupledTrialGenerationEndConditions _trialGenerationEndParameters;
@@ -6494,6 +6905,7 @@ namespace AindDynamicForagingDataSchema
             _interTrialIntervalDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _blockLength = new AllenNeuralDynamics.AindBehaviorServices.Distributions.UniformDistribution();
             _autowaterParameters = new AutoWaterParameters();
+            _biasInterventionParameters = new BiasInterventionParameters();
             _isBaiting = false;
             _trialGenerationEndParameters = new UncoupledTrialGenerationEndConditions();
             _rewardProbabilities = new System.Collections.Generic.List<double>();
@@ -6509,6 +6921,7 @@ namespace AindDynamicForagingDataSchema
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
             _blockLength = other._blockLength;
             _autowaterParameters = other._autowaterParameters;
+            _biasInterventionParameters = other._biasInterventionParameters;
             _isBaiting = other._isBaiting;
             _trialGenerationEndParameters = other._trialGenerationEndParameters;
             _rewardProbabilities = other._rewardProbabilities;
@@ -6605,12 +7018,12 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.
+        /// Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("autowater_parameters")]
-        [System.ComponentModel.DescriptionAttribute("Auto water settings. If set, free water is delivered when the animal exceeds the " +
-            "ignored or unrewarded trial thresholds.")]
+        [System.ComponentModel.DescriptionAttribute("Autowater settings. If set, free water is delivered when the animal exceeds the i" +
+            "gnored or unrewarded trial thresholds.")]
         public AutoWaterParameters AutowaterParameters
         {
             get
@@ -6620,6 +7033,25 @@ namespace AindDynamicForagingDataSchema
             set
             {
                 _autowaterParameters = value;
+            }
+        }
+    
+        /// <summary>
+        /// Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("bias_intervention_parameters")]
+        [System.ComponentModel.DescriptionAttribute("Antibias settings. If set, trial generator will give water and move lickspouts to" +
+            " combat bias.")]
+        public BiasInterventionParameters BiasInterventionParameters
+        {
+            get
+            {
+                return _biasInterventionParameters;
+            }
+            set
+            {
+                _biasInterventionParameters = value;
             }
         }
     
@@ -6715,6 +7147,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
             stringBuilder.Append("BlockLength = " + _blockLength + ", ");
             stringBuilder.Append("AutowaterParameters = " + _autowaterParameters + ", ");
+            stringBuilder.Append("BiasInterventionParameters = " + _biasInterventionParameters + ", ");
             stringBuilder.Append("IsBaiting = " + _isBaiting + ", ");
             stringBuilder.Append("TrialGenerationEndParameters = " + _trialGenerationEndParameters + ", ");
             stringBuilder.Append("RewardProbabilities = " + _rewardProbabilities + ", ");
@@ -7880,6 +8313,16 @@ namespace AindDynamicForagingDataSchema
             return Process<BehaviorStabilityParameters>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<BiasInterventionParameters> source)
+        {
+            return Process<BiasInterventionParameters>(source);
+        }
+
+        public System.IObservable<string> Process(System.IObservable<BiasThreshold> source)
+        {
+            return Process<BiasThreshold>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<BlockBasedTrialGeneratorSpec> source)
         {
             return Process<BlockBasedTrialGeneratorSpec>(source);
@@ -8025,6 +8468,11 @@ namespace AindDynamicForagingDataSchema
             return Process<TrialGeneratorSpec>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<TrialMetrics> source)
+        {
+            return Process<TrialMetrics>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<TrialOutcome> source)
         {
             return Process<TrialOutcome>(source);
@@ -8092,6 +8540,8 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BaseCoupledTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BaseModel>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BehaviorStabilityParameters>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BiasInterventionParameters>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BiasThreshold>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BlockBasedTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CameraControllerSpinnakerCamera>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CameraControllerWebCamera>))]
@@ -8121,6 +8571,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Trial>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialGeneratorCompositeSpecTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialGeneratorSpec>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialMetrics>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialOutcome>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<UncoupledTrialGenerationEndConditions>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<UncoupledTrialGeneratorSpec>))]

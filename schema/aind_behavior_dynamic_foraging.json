@@ -511,10 +511,31 @@
             "min_unrewarded_trials": 3,
             "reward_fraction": 0.8
           },
-          "description": "Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
+          "description": "Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
           "oneOf": [
             {
               "$ref": "#/$defs/AutoWaterParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bias_intervention_parameters": {
+          "default": {
+            "threshold": {
+              "lower": 0.3,
+              "upper": 0.7
+            },
+            "intervention_interval": 10,
+            "maximum_water_corrections": 5,
+            "bias_window_length": 200,
+            "lickspout_offset_delta": 0.05
+          },
+          "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/BiasInterventionParameters"
             },
             {
               "type": "null"
@@ -655,6 +676,70 @@
       "title": "BetaDistributionParameters",
       "type": "object",
       "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.BetaDistributionParameters"
+    },
+    "BiasInterventionParameters": {
+      "properties": {
+        "threshold": {
+          "$ref": "#/$defs/BiasThreshold",
+          "default": {
+            "upper": 0.7,
+            "lower": 0.3
+          },
+          "description": "Thresholds for bias correction intervention."
+        },
+        "intervention_interval": {
+          "default": 10,
+          "description": "Trials between bias intervention.",
+          "minimum": 0,
+          "title": "Intervention Interval",
+          "type": "integer"
+        },
+        "maximum_water_corrections": {
+          "default": 5,
+          "description": "Number of water correction to attempt.",
+          "minimum": 0,
+          "title": "Maximum Water Corrections",
+          "type": "integer"
+        },
+        "bias_window_length": {
+          "default": 200,
+          "description": "Trials to calculate bias over.",
+          "minimum": 0,
+          "title": "Bias Window Length",
+          "type": "integer"
+        },
+        "lickspout_offset_delta": {
+          "default": 0.05,
+          "description": "Distance (mm) to move the stage spouts by. This is a relative distance to the current value, not absolute.",
+          "minimum": 0,
+          "title": "Lickspout Offset Delta",
+          "type": "number"
+        }
+      },
+      "title": "BiasInterventionParameters",
+      "type": "object"
+    },
+    "BiasThreshold": {
+      "properties": {
+        "upper": {
+          "default": 0.7,
+          "description": "Absolute value of the upper bias threshold.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Upper",
+          "type": "number"
+        },
+        "lower": {
+          "default": 0.3,
+          "description": "Absolute value of the lower bias threshold.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Lower",
+          "type": "number"
+        }
+      },
+      "title": "BiasThreshold",
+      "type": "object"
     },
     "BinomialDistribution": {
       "description": "A binomial probability distribution.\n\nModels the number of successes in a fixed number of independent\nBernoulli trials with constant success probability.",
@@ -811,10 +896,31 @@
             "min_unrewarded_trials": 3,
             "reward_fraction": 0.8
           },
-          "description": "Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
+          "description": "Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
           "oneOf": [
             {
               "$ref": "#/$defs/AutoWaterParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bias_intervention_parameters": {
+          "default": {
+            "threshold": {
+              "lower": 0.3,
+              "upper": 0.7
+            },
+            "intervention_interval": 10,
+            "maximum_water_corrections": 5,
+            "bias_window_length": 200,
+            "lickspout_offset_delta": 0.05
+          },
+          "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/BiasInterventionParameters"
             },
             {
               "type": "null"
@@ -1077,10 +1183,31 @@
             "min_unrewarded_trials": 3,
             "reward_fraction": 0.8
           },
-          "description": "Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
+          "description": "Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
           "oneOf": [
             {
               "$ref": "#/$defs/AutoWaterParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bias_intervention_parameters": {
+          "default": {
+            "threshold": {
+              "lower": 0.3,
+              "upper": 0.7
+            },
+            "intervention_interval": 10,
+            "maximum_water_corrections": 5,
+            "bias_window_length": 200,
+            "lickspout_offset_delta": 0.05
+          },
+          "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/BiasInterventionParameters"
             },
             {
               "type": "null"
@@ -1266,10 +1393,31 @@
             "min_unrewarded_trials": 3,
             "reward_fraction": 0.8
           },
-          "description": "Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
+          "description": "Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
           "oneOf": [
             {
               "$ref": "#/$defs/AutoWaterParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bias_intervention_parameters": {
+          "default": {
+            "threshold": {
+              "lower": 0.3,
+              "upper": 0.7
+            },
+            "intervention_interval": 10,
+            "maximum_water_corrections": 5,
+            "bias_window_length": 200,
+            "lickspout_offset_delta": 0.05
+          },
+          "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/BiasInterventionParameters"
             },
             {
               "type": "null"
@@ -3403,6 +3551,26 @@
         }
       ]
     },
+    "TrialMetrics": {
+      "description": "Represents metrics of trial",
+      "properties": {
+        "bias": {
+          "default": null,
+          "description": "Bias of session. Negative values correspond to left bias, positive right.",
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Bias"
+        }
+      },
+      "title": "TrialMetrics",
+      "type": "object"
+    },
     "TrialOutcome": {
       "description": "Represents the outcome of a single trial.",
       "properties": {
@@ -3586,10 +3754,31 @@
             "min_unrewarded_trials": 3,
             "reward_fraction": 0.8
           },
-          "description": "Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
+          "description": "Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
           "oneOf": [
             {
               "$ref": "#/$defs/AutoWaterParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bias_intervention_parameters": {
+          "default": {
+            "threshold": {
+              "lower": 0.3,
+              "upper": 0.7
+            },
+            "intervention_interval": 10,
+            "maximum_water_corrections": 5,
+            "bias_window_length": 200,
+            "lickspout_offset_delta": 0.05
+          },
+          "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/BiasInterventionParameters"
             },
             {
               "type": "null"

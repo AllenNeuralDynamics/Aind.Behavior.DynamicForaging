@@ -20,6 +20,7 @@ def main():
         Session,
         aind_behavior_dynamic_foraging.task_logic.trial_models.Trial,
         aind_behavior_dynamic_foraging.task_logic.trial_models.TrialOutcome,
+        aind_behavior_dynamic_foraging.task_logic.trial_models.TrialMetrics,
     ]
     model = pydantic.RootModel[Union[tuple(models)]]
 

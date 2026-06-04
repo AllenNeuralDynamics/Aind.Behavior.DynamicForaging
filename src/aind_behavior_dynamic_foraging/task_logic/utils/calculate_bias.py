@@ -1,0 +1,86 @@
+import logging
+from typing import List
+
+import numpy as np
+from sklearn.linear_model import LogisticRegressionCV
+
+from aind_behavior_dynamic_foraging.task_logic.trial_models import TrialOutcome
+
+logger = logging.getLogger(__name__)
+
+
+def calculate_bias(outcomes: List[TrialOutcome]) -> float:
+    """Estimate the side bias of an animal using logistic regression on recent trial history.
+
+    Fits a Su2022-style logistic regression model using rewarded and unrewarded choice
+    history as predictors. The intercept of the fitted model is returned as the bias,
+    representing the animal's baseline tendency to choose right independent of reward history.
+
+    Parameters
+    ----------
+    outcomes : List[TrialOutcome]
+        List of trial outcomes. Auto-response and ignored trials are excluded.
+        Only the most recent 200 trials are used.
+
+    Returns
+    -------
+    float
+        The logistic regression intercept, representing side bias.
+        Positive values indicate a bias toward right, negative toward left.
+    """
+
+    solver = "liblinear"
+    l1_ratios = (0,)  # ignored parameter with solver='liblinear'
+    trial_window_length = 5
+    cross_val_folds = 10
+    regularization_candidates = 10
+
+    outcomes = outcomes[-200:]
+
+    # exclude auto response and ignored trials
+    filtered = [t for t in outcomes if t.is_right_choice is not None and t.trial.is_auto_response_right is None]
+
+    if len(filtered) <= trial_window_length:
+        logger.warning("Not enough choices to calculate bias.")
+        return np.nan
+
+    is_right_choice_history = np.array([t.is_right_choice for t in filtered], dtype=float)
+    is_rewarded_history = np.array([t.is_rewarded for t in filtered], dtype=float)
+
+    # transform to +-1 space for zero centered logistic regression
+    choice_signed = 2 * is_right_choice_history - 1  # left=0 → -1, right=1 → +1
+    reward_signed = 2 * is_rewarded_history - 1  # unrewarded=0 → -1, rewarded=1 → +1
+
+    rewarded_choice = choice_signed * (reward_signed == 1)
+    unrewarded_choice = choice_signed * (reward_signed == -1)
+
+    trial_length = len(is_rewarded_history)
+    x = np.zeros((trial_length - trial_window_length, 2 * trial_window_length))
+    for i in range(trial_window_length, trial_length):
+        shift = i - trial_window_length
+        x[shift] = np.hstack([choice[shift:i] for choice in [rewarded_choice, unrewarded_choice]])
+
+    y = choice_signed[trial_window_length:]
+
+    n_right_choice = np.sum(y == 1)
+    n_left_choice = np.sum(y == -1)
+    if min(n_right_choice, n_left_choice) < cross_val_folds:
+        logger.warning(
+            "Not enough trials per class to fit logistic regression (need %d per class, got %d right, %d left).",
+            cross_val_folds,
+            n_right_choice,
+            n_left_choice,
+        )
+        return np.nan
+
+    logistic_reg = LogisticRegressionCV(
+        solver=solver,
+        l1_ratios=l1_ratios,
+        Cs=regularization_candidates,
+        cv=cross_val_folds,
+        use_legacy_attributes=True,
+    )
+    logistic_reg.fit(x, y)
+
+    bias = logistic_reg.intercept_[0]
+    return bias
