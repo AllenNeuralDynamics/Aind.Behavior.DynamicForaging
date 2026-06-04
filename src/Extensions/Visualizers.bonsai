@@ -133,7 +133,7 @@
                   </Expression>
                   <Expression xsi:type="p1:SoftwareEventVisualizerBuilder">
                     <p1:FontSize>16</p1:FontSize>
-                    <p1:TimeWindow>3600</p1:TimeWindow>
+                    <p1:TimeWindow>20</p1:TimeWindow>
                     <p1:ShadedAreaPlotters>
                       <p1:ShadedAreaPlotter>
                         <p1:EventName>QuiscentPeriod</p1:EventName>
