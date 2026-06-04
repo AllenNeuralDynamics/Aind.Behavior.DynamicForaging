@@ -5,12 +5,14 @@ from unittest.mock import patch
 
 import numpy as np
 
+from aind_behavior_dynamic_foraging.task_logic.interventions.auto_water_intervention import (
+    AutoWaterInterventionParameters,
+)
 from aind_behavior_dynamic_foraging.task_logic.interventions.bias_intervention import (
     BiasInterventionParameters,
     BiasThreshold,
 )
 from aind_behavior_dynamic_foraging.task_logic.trial_generators.block_based_trial_generator import (
-    AutoWaterParameters,
     Block,
     BlockBasedTrialGenerator,
     BlockBasedTrialGeneratorSpec,
@@ -56,7 +58,7 @@ class TestBlockBasedTrialGenerator(unittest.TestCase):
         self.assertEqual(trial.p_reward_right, self.generator.block.p_right_reward)
 
 
-class TestAntiBiasBlockBasedTrialGenerator(unittest.TestCase):
+class TestBiasInterventionBlockBasedTrialGenerator(unittest.TestCase):
     def _patch_bias(self, bias_value: float) -> Any:
 
         return patch(
@@ -107,44 +109,46 @@ class TestAntiBiasBlockBasedTrialGenerator(unittest.TestCase):
 
     #### Test next ####
 
-    def test_next_gives_right_autowater_on_left_bias(self):
+    def test_next_gives_right_auto_water_on_left_bias(self):
         gen = self._make_generator(bias=-0.9)
         trial = gen.next()
         assert trial is not None
         self.assertTrue(trial.is_auto_response_right)
 
-    def test_next_gives_left_autowater_on_right_bias(self):
+    def test_next_gives_left_auto_water_on_right_bias(self):
         gen = self._make_generator(bias=0.9)
         trial = gen.next()
         assert trial is not None
         self.assertFalse(trial.is_auto_response_right)
 
-    def test_next_no_antibias_when_below_interval(self):
-        """No antibias effect when trials_in_bias_intervention has not exceeded interval."""
+    def test_next_no_bias_intervention_when_below_interval(self):
+        """No bias intervention when trials_in_bias_intervention has not exceeded interval."""
         gen = self._make_generator(bias=-0.9, trials_in_bias_intervention=5)
         trial = gen.next()
         assert trial is not None
         self.assertIsNone(trial.is_auto_response_right)
 
-    def test_next_antibias_overrides_autowater(self):
-        """When both autowater and antibias conditions are met, antibias takes precedence."""
+    def test_next_bias_intervention_overrides_auto_water(self):
+        """When both auto-water and bias intervention conditions are met, bias intervention takes precedence."""
         bip = BiasInterventionParameters(
             intervention_interval=10,
             threshold=BiasThreshold(upper=0.7, lower=0.3),
             maximum_water_corrections=5,
             bias_window_length=5,
         )
-        aw = AutoWaterParameters(min_ignored_trials=1, min_unrewarded_trials=1, reward_fraction=0.8)
-        spec = ConcreteBlockBasedTrialGeneratorSpec(bias_intervention_parameters=bip, autowater_parameters=aw)
+        aw = AutoWaterInterventionParameters(min_ignored_trials=1, min_unrewarded_trials=1, reward_fraction=0.8)
+        spec = ConcreteBlockBasedTrialGeneratorSpec(
+            bias_intervention_parameters=bip, auto_water_intervention_parameters=aw
+        )
         gen = spec.create_generator()
         gen.block = Block(p_left_reward=0.2, p_right_reward=0.8, left_length=10, right_length=10)
         gen.bias = -0.9
         gen.bias_intervention.trials_in_bias_intervention = 15
-        gen.is_right_choice_history = [None]  # ignored trial → autowater would also fire
+        gen.is_right_choice_history = [None]  # ignored trial → auto_water would also fire
         gen.reward_history = [False]
         trial = gen.next()
 
-        # Antibias (left bias → give right water) should win
+        # bias intervention (left bias → give right water) should win
         assert trial is not None
         self.assertTrue(trial.is_auto_response_right)
 
@@ -155,7 +159,7 @@ class TestAntiBiasBlockBasedTrialGenerator(unittest.TestCase):
         assert trial is not None
         self.assertEqual(trial.lickspout_offset_delta, 0.05)
 
-    def test_next_no_lickspout_delta_when_antibias_not_triggered(self):
+    def test_next_no_lickspout_delta_when_bias_intervention_not_triggered(self):
         gen = self._make_generator(bias=-0.9, trials_in_bias_intervention=5)
         trial = gen.next()
         assert trial is not None

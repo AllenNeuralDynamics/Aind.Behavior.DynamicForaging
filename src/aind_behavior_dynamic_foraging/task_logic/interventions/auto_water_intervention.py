@@ -36,10 +36,10 @@ class AutoWaterIntervention(BaseIntervention):
     def are_intervention_conditions_met(
         self, is_right_choice_history: list[bool | None], reward_history: list[bool]
     ) -> bool:
-        """Checks whether autowater should be given.
+        """Checks whether auto-water should be given.
 
         Returns:
-            True if autowater conditions are met, False otherwise.
+            True if auto-water conditions are met, False otherwise.
         """
 
         if self.parameters is None:

@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 class BlockBasedTrialMetadata(BaseModel):
     """Metadata for block based trial. These fields will NOT be used by the task engine."""
 
-    is_autowater: bool = Field(default=False, description="Flag indicating if autowater is given for trial.")
+    is_auto_water: bool = Field(default=False, description="Flag indicating if auto-water is given for trial.")
 
 
 class Block(BaseModel):
@@ -188,16 +188,16 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
 
         is_auto_response_right = None
 
-        # determine autowater
-        if is_autowater := self.auto_water_intervention.are_intervention_conditions_met(
+        # determine auto-water
+        if is_auto_water := self.auto_water_intervention.are_intervention_conditions_met(
             self.is_right_choice_history, self.reward_history
         ):
             is_auto_response_right = self.auto_water_intervention.determine_intervention(
                 self.block.p_right_reward, self.block.p_left_reward
             )
-            logger.debug("Delivering autowater: is_auto_response_right = %s" % is_auto_response_right)
+            logger.debug("Delivering auto-water: is_auto_response_right = %s" % is_auto_response_right)
 
-        # determine bias correction. Overrides autowater
+        # determine bias correction. Overrides auto-water
         lickspout_offset_delta = 0
         if self.bias_intervention.are_intervention_conditions_met(self.bias):
             is_auto_response_right, lickspout_offset_delta = self.bias_intervention.determine_intervention(self.bias)
@@ -218,7 +218,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             metadata=Metadata(
                 p_reward_left=self.block.p_left_reward,
                 p_reward_right=self.block.p_right_reward,
-                extra=BlockBasedTrialMetadata(is_autowater=is_autowater),
+                extra=BlockBasedTrialMetadata(is_auto_water=is_auto_water),
             ),
         )
 

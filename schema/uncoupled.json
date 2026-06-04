@@ -54,7 +54,7 @@
                                         "truncation_parameters": null,
                                         "scaling_parameters": null
                                     },
-                                    "autowater_parameters": {
+                                    "auto_water_intervention_parameters_parameters": {
                                         "min_ignored_trials": 3,
                                         "min_unrewarded_trials": 3,
                                         "reward_fraction": 0.5
@@ -115,7 +115,7 @@
                                         },
                                         "scaling_parameters": null
                                     },
-                                    "autowater_parameters": {
+                                    "auto_water_intervention_parameters_parameters": {
                                         "min_ignored_trials": 3,
                                         "min_unrewarded_trials": 3,
                                         "reward_fraction": 0.5
@@ -210,7 +210,7 @@
                                 },
                                 "scaling_parameters": null
                             },
-                            "autowater_parameters": {
+                            "auto_water_intervention_parameters_parameters": {
                                 "min_ignored_trials": 5,
                                 "min_unrewarded_trials": 5,
                                 "reward_fraction": 0.5
@@ -304,7 +304,7 @@
                                 },
                                 "scaling_parameters": null
                             },
-                            "autowater_parameters": {
+                            "auto_water_intervention_parameters_parameters": {
                                 "min_ignored_trials": 7,
                                 "min_unrewarded_trials": 7,
                                 "reward_fraction": 0.5
@@ -395,7 +395,7 @@
                                 "truncation_parameters": null,
                                 "scaling_parameters": null
                             },
-                            "autowater_parameters": {
+                            "auto_water_intervention_parameters_parameters": {
                                 "min_ignored_trials": 10,
                                 "min_unrewarded_trials": 10,
                                 "reward_fraction": 0.5
@@ -475,7 +475,7 @@
                                 "truncation_parameters": null,
                                 "scaling_parameters": null
                             },
-                            "autowater_parameters": {
+                            "auto_water_intervention_parameters_parameters": {
                                 "min_ignored_trials": 3,
                                 "min_unrewarded_trials": 3,
                                 "reward_fraction": 0.8
@@ -496,7 +496,7 @@
                             "maximum_dominance_streak": 3.0
                         },
                         "lick_spout_retraction": false,
-                        "autowater_parameters": null
+                        "auto_water_intervention_parameters_parameters": null
                     },
                     "version": "0.0.2-rc33",
                     "stage_name": null
@@ -556,7 +556,7 @@
                                 "truncation_parameters": null,
                                 "scaling_parameters": null
                             },
-                            "autowater_parameters": null,
+                            "auto_water_intervention_parameters_parameters": null,
                             "is_baiting": false,
                             "trial_generation_end_parameters": {
                                 "ignore_window_length": 30,

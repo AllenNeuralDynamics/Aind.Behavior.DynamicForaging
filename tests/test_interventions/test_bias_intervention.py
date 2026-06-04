@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 class TestBiasIntervention(unittest.TestCase):
-    def test_returns_false_when_antibias_disabled(self):
+    def test_returns_false_when_bias_intervention_disabled(self):
         """Antibias should never trigger when bias_intervention_parameters is None."""
         bias_intervention = BiasIntervention(bias_intervention_parameters=None)
         self.assertFalse(bias_intervention.are_intervention_conditions_met(0.9))

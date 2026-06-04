@@ -63,7 +63,7 @@ class BiasIntervention(BaseIntervention):
         self.total_lickspout_offset = 0
 
     def are_intervention_conditions_met(self, bias: float) -> bool:
-        """Checks whether antibias conditions are met.
+        """Checks whether bias interventions conditions are met.
 
         Intervention is only considered once ``trials_in_bias_intervention`` exceeds
         ``parameters.intervention_interval``. If the bias is outside the threshold
@@ -72,7 +72,7 @@ class BiasIntervention(BaseIntervention):
         If conditions are not met, increments ``trials_in_bias_intervention`` by 1.
 
         Returns:
-            True if antibias conditions are met, False otherwise.
+            True if bias intervention conditions are met, False otherwise.
         """
         if self.parameters is None:
             logger.debug("Bias intervention not configured.")
@@ -109,14 +109,14 @@ class BiasIntervention(BaseIntervention):
             logger.debug("Bias intervention not configured.")
             return None, 0
 
-        is_right_autowater = None
+        is_right_auto_water = None
         lickspout_offset_delta = 0
         ab_delta = self.parameters.lickspout_offset_delta
         if abs(bias) >= self.parameters.threshold.upper:
             if self.water_corrections < self.parameters.maximum_water_corrections:
                 logger.debug("Correcting bias with water.")
                 # - bias values corresponds to left, so give right and vice versa
-                is_right_autowater = True if bias < 0 else False
+                is_right_auto_water = True if bias < 0 else False
                 self.water_corrections += 1
             else:
                 logger.debug("Correcting bias with lickspout offset.")
@@ -134,4 +134,4 @@ class BiasIntervention(BaseIntervention):
         self.total_lickspout_offset += lickspout_offset_delta
         self.trials_in_bias_intervention = 0
 
-        return is_right_autowater, lickspout_offset_delta
+        return is_right_auto_water, lickspout_offset_delta
