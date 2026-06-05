@@ -47,7 +47,7 @@ wheels = [
 
 [[package]]
 name = "aind-behavior-dynamic-foraging"
-version = "0.0.2rc34"
+version = "0.0.2"
 source = { editable = "." }
 dependencies = [
     { name = "aind-behavior-services" },
@@ -104,7 +104,7 @@ docs = [
 
 [[package]]
 name = "aind-behavior-dynamic-foraging-curricula"
-version = "0.2.1"
+version = "0.0.2"
 source = { editable = "workspace/aind_behavior_dynamic_foraging_curricula" }
 dependencies = [
     { name = "aind-behavior-curriculum" },
