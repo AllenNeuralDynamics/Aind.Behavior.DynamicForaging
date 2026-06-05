@@ -6,6 +6,7 @@
                  xmlns:p2="clr-namespace:AllenNeuralDynamics.Core;assembly=AllenNeuralDynamics.Core"
                  xmlns:gui="clr-namespace:Bonsai.Gui;assembly=Bonsai.Gui"
                  xmlns:p3="clr-namespace:AllenNeuralDynamics.Core.Design;assembly=AllenNeuralDynamics.Core.Design"
+                 xmlns:sys="clr-namespace:System;assembly=mscorlib"
                  xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
                  xmlns:ui="clr-namespace:Bonsai.Design;assembly=Bonsai.Design"
                  xmlns="https://bonsai-rx.org/2018/workflow">
@@ -479,6 +480,15 @@
                           <gui:CellSpans />
                         </Expression>
                         <Expression xsi:type="WorkflowOutput" />
+                        <Expression xsi:type="rx:BehaviorSubject" TypeArguments="sys:Boolean">
+                          <rx:Name>GiveManualWaterRight</rx:Name>
+                        </Expression>
+                        <Expression xsi:type="IncludeWorkflow" Path="Extensions\InlineSoftwareEvent.bonsai">
+                          <EventName>GiveManualWaterRight</EventName>
+                        </Expression>
+                        <Expression xsi:type="MulticastSubject">
+                          <Name>GiveRewardRight</Name>
+                        </Expression>
                       </Nodes>
                       <Edges>
                         <Edge From="0" To="1" Label="Source1" />
@@ -488,6 +498,8 @@
                         <Edge From="4" To="5" Label="Source1" />
                         <Edge From="5" To="6" Label="Source2" />
                         <Edge From="6" To="7" Label="Source1" />
+                        <Edge From="8" To="9" Label="Source1" />
+                        <Edge From="9" To="10" Label="Source1" />
                       </Edges>
                     </Workflow>
                   </Expression>
