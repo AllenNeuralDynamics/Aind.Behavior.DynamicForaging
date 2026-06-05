@@ -202,6 +202,13 @@ def make_dataset(
                                 ),
                             ),
                             SoftwareEvents(
+                                name="GiveManualWaterRight",
+                                description="An event emitted when manual water is given through visualizer. The value corresponds to whether water was delivered on the Right (True) or Left (False)",
+                                reader_params=SoftwareEvents.make_params(
+                                    root_path / "behavior/SoftwareEvents/GiveManualWaterRight.json"
+                                ),
+                            ),
+                            SoftwareEvents(
                                 name="TrialGeneratorSpec",
                                 description="An event emitted with the specification for the trial generator.",
                                 reader_params=SoftwareEvents.make_params(
