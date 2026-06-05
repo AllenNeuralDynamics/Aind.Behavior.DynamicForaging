@@ -9,8 +9,8 @@
           "type": "string"
         },
         "version": {
-          "const": "0.0.2-rc32",
-          "default": "0.0.2-rc32",
+          "const": "0.0.2",
+          "default": "0.0.2",
           "title": "Version",
           "type": "string"
         },
@@ -107,7 +107,7 @@
           ]
         },
         "manipulator": {
-          "$ref": "#/$defs/AindManipulator",
+          "$ref": "#/$defs/DynamicForagingAindManipulator",
           "description": "Manipulator"
         },
         "calibration": {
@@ -151,8 +151,8 @@
           "description": "Parameters of the task logic"
         },
         "version": {
-          "const": "0.0.2-rc32",
-          "default": "0.0.2-rc32",
+          "const": "0.0.2",
+          "default": "0.0.2",
           "title": "Version",
           "type": "string"
         },
@@ -217,114 +217,6 @@
       },
       "title": "AindDynamicForagingTaskParameters",
       "type": "object"
-    },
-    "AindManipulator": {
-      "description": "AindManipulator device definition",
-      "properties": {
-        "device_type": {
-          "const": "StepperDriver",
-          "default": "StepperDriver",
-          "title": "Device Type",
-          "type": "string"
-        },
-        "calibration": {
-          "$ref": "#/$defs/AindManipulatorCalibration",
-          "default": {
-            "description": "AindManipulator calibration and settings",
-            "full_step_to_mm": {
-              "x": 0.01,
-              "y1": 0.01,
-              "y2": 0.01,
-              "z": 0.01
-            },
-            "axis_configuration": [
-              {
-                "axis": 2,
-                "max_limit": 25.0,
-                "maximum_step_interval": 2000,
-                "microstep_resolution": 0,
-                "min_limit": -0.01,
-                "motor_operation_mode": 0,
-                "step_acceleration_interval": 100,
-                "step_interval": 100
-              },
-              {
-                "axis": 3,
-                "max_limit": 25.0,
-                "maximum_step_interval": 2000,
-                "microstep_resolution": 0,
-                "min_limit": -0.01,
-                "motor_operation_mode": 0,
-                "step_acceleration_interval": 100,
-                "step_interval": 100
-              },
-              {
-                "axis": 1,
-                "max_limit": 25.0,
-                "maximum_step_interval": 2000,
-                "microstep_resolution": 0,
-                "min_limit": -0.01,
-                "motor_operation_mode": 0,
-                "step_acceleration_interval": 100,
-                "step_interval": 100
-              },
-              {
-                "axis": 4,
-                "max_limit": 25.0,
-                "maximum_step_interval": 2000,
-                "microstep_resolution": 0,
-                "min_limit": -0.01,
-                "motor_operation_mode": 0,
-                "step_acceleration_interval": 100,
-                "step_interval": 100
-              }
-            ],
-            "homing_order": [
-              2,
-              3,
-              1,
-              4
-            ],
-            "initial_position": {
-              "x": 0.0,
-              "y1": 0.0,
-              "y2": 0.0,
-              "z": 0.0
-            }
-          },
-          "description": "Calibration for the device."
-        },
-        "who_am_i": {
-          "const": 1130,
-          "default": 1130,
-          "title": "Who Am I",
-          "type": "integer"
-        },
-        "serial_number": {
-          "default": null,
-          "description": "Device serial number",
-          "oneOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "title": "Serial Number"
-        },
-        "port_name": {
-          "description": "Device port name",
-          "title": "Port Name",
-          "type": "string"
-        }
-      },
-      "required": [
-        "port_name"
-      ],
-      "title": "AindManipulator",
-      "type": "object",
-      "x-sgen-typename": "AllenNeuralDynamics.AindManipulator.AindManipulator"
     },
     "AindManipulatorCalibration": {
       "description": "AindManipulator calibration class",
@@ -619,10 +511,31 @@
             "min_unrewarded_trials": 3,
             "reward_fraction": 0.8
           },
-          "description": "Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
+          "description": "Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
           "oneOf": [
             {
               "$ref": "#/$defs/AutoWaterParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bias_intervention_parameters": {
+          "default": {
+            "threshold": {
+              "lower": 0.3,
+              "upper": 0.7
+            },
+            "intervention_interval": 10,
+            "maximum_water_corrections": 5,
+            "bias_window_length": 200,
+            "lickspout_offset_delta": 0.05
+          },
+          "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/BiasInterventionParameters"
             },
             {
               "type": "null"
@@ -763,6 +676,70 @@
       "title": "BetaDistributionParameters",
       "type": "object",
       "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.BetaDistributionParameters"
+    },
+    "BiasInterventionParameters": {
+      "properties": {
+        "threshold": {
+          "$ref": "#/$defs/BiasThreshold",
+          "default": {
+            "upper": 0.7,
+            "lower": 0.3
+          },
+          "description": "Thresholds for bias correction intervention."
+        },
+        "intervention_interval": {
+          "default": 10,
+          "description": "Trials between bias intervention.",
+          "minimum": 0,
+          "title": "Intervention Interval",
+          "type": "integer"
+        },
+        "maximum_water_corrections": {
+          "default": 5,
+          "description": "Number of water correction to attempt.",
+          "minimum": 0,
+          "title": "Maximum Water Corrections",
+          "type": "integer"
+        },
+        "bias_window_length": {
+          "default": 200,
+          "description": "Trials to calculate bias over.",
+          "minimum": 0,
+          "title": "Bias Window Length",
+          "type": "integer"
+        },
+        "lickspout_offset_delta": {
+          "default": 0.05,
+          "description": "Distance (mm) to move the stage spouts by. This is a relative distance to the current value, not absolute.",
+          "minimum": 0,
+          "title": "Lickspout Offset Delta",
+          "type": "number"
+        }
+      },
+      "title": "BiasInterventionParameters",
+      "type": "object"
+    },
+    "BiasThreshold": {
+      "properties": {
+        "upper": {
+          "default": 0.7,
+          "description": "Absolute value of the upper bias threshold.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Upper",
+          "type": "number"
+        },
+        "lower": {
+          "default": 0.3,
+          "description": "Absolute value of the lower bias threshold.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Lower",
+          "type": "number"
+        }
+      },
+      "title": "BiasThreshold",
+      "type": "object"
     },
     "BinomialDistribution": {
       "description": "A binomial probability distribution.\n\nModels the number of successes in a fixed number of independent\nBernoulli trials with constant success probability.",
@@ -919,10 +896,31 @@
             "min_unrewarded_trials": 3,
             "reward_fraction": 0.8
           },
-          "description": "Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
+          "description": "Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
           "oneOf": [
             {
               "$ref": "#/$defs/AutoWaterParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bias_intervention_parameters": {
+          "default": {
+            "threshold": {
+              "lower": 0.3,
+              "upper": 0.7
+            },
+            "intervention_interval": 10,
+            "maximum_water_corrections": 5,
+            "bias_window_length": 200,
+            "lickspout_offset_delta": 0.05
+          },
+          "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/BiasInterventionParameters"
             },
             {
               "type": "null"
@@ -1185,10 +1183,31 @@
             "min_unrewarded_trials": 3,
             "reward_fraction": 0.8
           },
-          "description": "Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
+          "description": "Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
           "oneOf": [
             {
               "$ref": "#/$defs/AutoWaterParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bias_intervention_parameters": {
+          "default": {
+            "threshold": {
+              "lower": 0.3,
+              "upper": 0.7
+            },
+            "intervention_interval": 10,
+            "maximum_water_corrections": 5,
+            "bias_window_length": 200,
+            "lickspout_offset_delta": 0.05
+          },
+          "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/BiasInterventionParameters"
             },
             {
               "type": "null"
@@ -1374,10 +1393,31 @@
             "min_unrewarded_trials": 3,
             "reward_fraction": 0.8
           },
-          "description": "Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
+          "description": "Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
           "oneOf": [
             {
               "$ref": "#/$defs/AutoWaterParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bias_intervention_parameters": {
+          "default": {
+            "threshold": {
+              "lower": 0.3,
+              "upper": 0.7
+            },
+            "intervention_interval": 10,
+            "maximum_water_corrections": 5,
+            "bias_window_length": 200,
+            "lickspout_offset_delta": 0.05
+          },
+          "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/BiasInterventionParameters"
             },
             {
               "type": "null"
@@ -1469,6 +1509,123 @@
       ],
       "title": "Distribution",
       "x-sgen-typename": "AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution"
+    },
+    "DynamicForagingAindManipulator": {
+      "description": "A calibrated manipulator for the dynamic foraging rig. This is a subclass of the AindManipulator that includes an offset of the subject position relative to the initial position.",
+      "properties": {
+        "device_type": {
+          "const": "StepperDriver",
+          "default": "StepperDriver",
+          "title": "Device Type",
+          "type": "string"
+        },
+        "calibration": {
+          "$ref": "#/$defs/AindManipulatorCalibration",
+          "default": {
+            "description": "AindManipulator calibration and settings",
+            "full_step_to_mm": {
+              "x": 0.01,
+              "y1": 0.01,
+              "y2": 0.01,
+              "z": 0.01
+            },
+            "axis_configuration": [
+              {
+                "axis": 2,
+                "max_limit": 25.0,
+                "maximum_step_interval": 2000,
+                "microstep_resolution": 0,
+                "min_limit": -0.01,
+                "motor_operation_mode": 0,
+                "step_acceleration_interval": 100,
+                "step_interval": 100
+              },
+              {
+                "axis": 3,
+                "max_limit": 25.0,
+                "maximum_step_interval": 2000,
+                "microstep_resolution": 0,
+                "min_limit": -0.01,
+                "motor_operation_mode": 0,
+                "step_acceleration_interval": 100,
+                "step_interval": 100
+              },
+              {
+                "axis": 1,
+                "max_limit": 25.0,
+                "maximum_step_interval": 2000,
+                "microstep_resolution": 0,
+                "min_limit": -0.01,
+                "motor_operation_mode": 0,
+                "step_acceleration_interval": 100,
+                "step_interval": 100
+              },
+              {
+                "axis": 4,
+                "max_limit": 25.0,
+                "maximum_step_interval": 2000,
+                "microstep_resolution": 0,
+                "min_limit": -0.01,
+                "motor_operation_mode": 0,
+                "step_acceleration_interval": 100,
+                "step_interval": 100
+              }
+            ],
+            "homing_order": [
+              2,
+              3,
+              1,
+              4
+            ],
+            "initial_position": {
+              "x": 0.0,
+              "y1": 0.0,
+              "y2": 0.0,
+              "z": 0.0
+            }
+          },
+          "description": "Calibration for the device."
+        },
+        "who_am_i": {
+          "const": 1130,
+          "default": 1130,
+          "title": "Who Am I",
+          "type": "integer"
+        },
+        "serial_number": {
+          "default": null,
+          "description": "Device serial number",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Serial Number"
+        },
+        "port_name": {
+          "description": "Device port name",
+          "title": "Port Name",
+          "type": "string"
+        },
+        "subject_offset": {
+          "$ref": "#/$defs/ManipulatorPosition",
+          "default": {
+            "x": 0.0,
+            "y1": 0.0,
+            "y2": 0.0,
+            "z": 0.0
+          },
+          "description": "Offset of the subject position relative to the `initial_position` parameter"
+        }
+      },
+      "required": [
+        "port_name"
+      ],
+      "title": "DynamicForagingAindManipulator",
+      "type": "object"
     },
     "DynamicForagingSoundCard": {
       "description": "A calibrated sound card for the dynamic foraging rig. This is a subclass of the HarpSoundCard that includes the sound card calibration.",
@@ -2094,6 +2251,54 @@
         "repeat_count"
       ],
       "title": "Measurement",
+      "type": "object"
+    },
+    "Metadata": {
+      "description": "Metadata for trial. These fields will NOT be used by the task engine.",
+      "properties": {
+        "p_reward_left": {
+          "default": null,
+          "description": "Metadata for block probability of reward on the left side if response is made.",
+          "oneOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "P Reward Left"
+        },
+        "p_reward_right": {
+          "default": null,
+          "description": "Metadata for the probability of reward on the right side if response is made.",
+          "oneOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "P Reward Right"
+        },
+        "extra": {
+          "default": null,
+          "description": "Additional metadata to include with the trial. This field will NOT be used or validated by the task engine.",
+          "oneOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Extra"
+        }
+      },
+      "title": "Metadata",
       "type": "object"
     },
     "MicrostepResolution": {
@@ -3268,16 +3473,17 @@
           "title": "Lickspout Offset Delta",
           "type": "number"
         },
-        "extra_metadata": {
+        "metadata": {
           "default": null,
-          "description": "Additional metadata to include with the trial. This field will NOT be used or validated by the task engine.",
+          "description": "Metadata fields that will not be used by task engine such as block information.",
           "oneOf": [
-            {},
+            {
+              "$ref": "#/$defs/Metadata"
+            },
             {
               "type": "null"
             }
-          ],
-          "title": "Extra Metadata"
+          ]
         }
       },
       "title": "Trial",
@@ -3344,6 +3550,26 @@
           "$ref": "#/$defs/TrialGeneratorCompositeSpec_TrialGeneratorSpec_"
         }
       ]
+    },
+    "TrialMetrics": {
+      "description": "Represents metrics of trial",
+      "properties": {
+        "bias": {
+          "default": null,
+          "description": "Bias of session. Negative values correspond to left bias, positive right.",
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Bias"
+        }
+      },
+      "title": "TrialMetrics",
+      "type": "object"
     },
     "TrialOutcome": {
       "description": "Represents the outcome of a single trial.",
@@ -3528,10 +3754,31 @@
             "min_unrewarded_trials": 3,
             "reward_fraction": 0.8
           },
-          "description": "Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
+          "description": "Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
           "oneOf": [
             {
               "$ref": "#/$defs/AutoWaterParameters"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bias_intervention_parameters": {
+          "default": {
+            "threshold": {
+              "lower": 0.3,
+              "upper": 0.7
+            },
+            "intervention_interval": 10,
+            "maximum_water_corrections": 5,
+            "bias_window_length": 200,
+            "lickspout_offset_delta": 0.05
+          },
+          "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/BiasInterventionParameters"
             },
             {
               "type": "null"

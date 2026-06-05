@@ -12,10 +12,22 @@ from aind_behavior_services.task.distributions import (
 from aind_behavior_services.task.distributions_utils import draw_sample
 from pydantic import BaseModel, Field
 
-from ..trial_models import Trial
+from aind_behavior_dynamic_foraging.task_logic.interventions.bias_intervention import (
+    BiasIntervention,
+    BiasInterventionParameters,
+)
+from aind_behavior_dynamic_foraging.task_logic.utils.calculate_bias import calculate_bias
+
+from ..trial_models import Metadata, Trial, TrialMetrics
 from ._base import BaseTrialGeneratorSpecModel, ITrialGenerator, TrialOutcome
 
 logger = logging.getLogger(__name__)
+
+
+class BlockBasedTrialMetadata(BaseModel):
+    """Metadata for block based trial. These fields will NOT be used by the task engine."""
+
+    is_autowater: bool = Field(default=False, description="Flag indicating if autowater is given for trial.")
 
 
 class AutoWaterParameters(BaseModel):
@@ -30,7 +42,7 @@ class AutoWaterParameters(BaseModel):
         ge=0,
         le=1,
         description="Fraction of full reward volume delivered during auto water (0=none, 1=full).",
-    )
+    )  # TODO: Not implemented yet
 
 
 class Block(BaseModel):
@@ -78,13 +90,16 @@ class BlockBasedTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
     autowater_parameters: Optional[AutoWaterParameters] = Field(
         default=AutoWaterParameters(),
         validate_default=True,
-        description="Auto water settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
+        description="Autowater settings. If set, free water is delivered when the animal exceeds the ignored or unrewarded trial thresholds.",
+    )
+
+    bias_intervention_parameters: Optional[BiasInterventionParameters] = Field(
+        default=BiasInterventionParameters(),
+        validate_default=True,
+        description="Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
     )
 
     is_baiting: bool = Field(default=False, description="Whether uncollected rewards carry over to the next trial.")
-
-    def create_generator(self) -> "BlockBasedTrialGenerator":
-        return BlockBasedTrialGenerator(self)
 
 
 class BlockBasedTrialGenerator(ITrialGenerator, ABC):
@@ -100,7 +115,9 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
         reward_history: Record of whether each trial resulted in a reward.
         is_left_baited: Whether the left port currently has a baited reward.
         is_right_baited: Whether the right port currently has a baited reward.
-
+        trials_in_bias_intervention: trials elapsed since last bias intervention
+        water_corrections: number of water corrections applied to combat bias
+        bias: bias of session. Negative values correspond to left bias, positive right.
     """
 
     def __init__(self, spec: BlockBasedTrialGeneratorSpec) -> None:
@@ -111,11 +128,15 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
         """
 
         self.spec = spec
+        self.outcome_history: list[TrialOutcome] = []
         self.is_right_choice_history: list[bool | None] = []
         self.reward_history: list[bool] = []
         self.is_left_baited: bool = False
         self.is_right_baited: bool = False
         self.block: Block
+
+        self.bias: Optional[float] = None
+        self.bias_intervention = BiasIntervention(self.spec.bias_intervention_parameters)
 
     def update(self, outcome: TrialOutcome | str):
         """Updates generator state from the previous trial outcome. Records choice and reward history and manages baiting state.
@@ -126,6 +147,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
         if isinstance(outcome, str):
             outcome = TrialOutcome.model_validate_json(outcome)
 
+        self.outcome_history.append(outcome)
         self.is_right_choice_history.append(outcome.is_right_choice)
         self.reward_history.append(outcome.is_rewarded)
 
@@ -139,6 +161,8 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             else:
                 # trial ignored so current baiting state retained
                 pass
+
+        self.bias = calculate_bias(outcomes=self.outcome_history)
 
     def next(self) -> Trial | None:
         """Generates the next trial in the session.
@@ -170,20 +194,44 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             self.is_right_baited = self.block.p_right_reward > random_numbers[1] or self.is_right_baited
             logger.debug("Right baited: %s" % self.is_right_baited)
 
+        is_auto_response_right = None
+
         # determine autowater
-        is_right_autowater = None
-        if self._are_autowater_conditions_met():
-            is_right_autowater = True if self.block.p_right_reward > self.block.p_left_reward else False
+        if is_autowater := self._are_autowater_conditions_met():
+            is_auto_response_right = True if self.block.p_right_reward > self.block.p_left_reward else False
+            logger.debug("Delivering autowater: is_auto_response_right = %s" % is_auto_response_right)
+
+        # determine bias correction. Overrides autowater
+        lickspout_offset_delta = 0
+        if self.bias_intervention.are_antibias_conditions_met(self.bias):
+            is_auto_response_right, lickspout_offset_delta = self.bias_intervention.determine_antibias_intervention(
+                self.bias
+            )
+            logger.debug(
+                "Performing bias intervention: is_auto_response_right = %s, lickspout_offset_delta = %s."
+                % (is_auto_response_right, lickspout_offset_delta)
+            )
 
         return Trial(
-            p_reward_left=1 if (self.is_left_baited and self.spec.is_baiting) else self.block.p_left_reward,
-            p_reward_right=1 if (self.is_right_baited and self.spec.is_baiting) else self.block.p_right_reward,
+            p_reward_left=1 if (self.is_left_baited or is_auto_response_right is False) else self.block.p_left_reward,
+            p_reward_right=1 if (self.is_right_baited or is_auto_response_right) else self.block.p_right_reward,
             reward_consumption_duration=self.spec.reward_consumption_duration,
             response_deadline_duration=self.spec.response_duration,
             quiescence_period_duration=quiescent,
             inter_trial_interval_duration=iti,
-            is_auto_response_right=is_right_autowater,
+            lickspout_offset_delta=lickspout_offset_delta,
+            is_auto_response_right=is_auto_response_right,
+            metadata=Metadata(
+                p_reward_left=self.block.p_left_reward,
+                p_reward_right=self.block.p_right_reward,
+                extra=BlockBasedTrialMetadata(is_autowater=is_autowater),
+            ),
         )
+
+    def get_metrics(self) -> TrialMetrics:
+        """Return metrics at current state of the trial generator."""
+
+        return TrialMetrics(bias=self.bias)
 
     def _are_autowater_conditions_met(self) -> bool:
         """Checks whether autowater should be given.
@@ -192,18 +240,21 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             True if autowater conditions are met, False otherwise.
         """
 
-        if self.spec.autowater_parameters is None:  # autowater disabled
+        if self.spec.autowater_parameters is None:
+            logger.debug("Autowater not configured.")
             return False
 
         min_ignore = self.spec.autowater_parameters.min_ignored_trials
         min_unreward = self.spec.autowater_parameters.min_unrewarded_trials
 
         is_ignored = [choice is None for choice in self.is_right_choice_history]
-        if all(is_ignored[-min_ignore:]):
+        if len(is_ignored) > min_ignore and all(is_ignored[-min_ignore:]):
+            logger.debug("Past %s trials ignored." % min_ignore)
             return True
 
         is_unrewarded = [not reward for reward in self.reward_history]
-        if all(is_unrewarded[-min_unreward:]):
+        if len(is_unrewarded) > min_unreward and all(is_unrewarded[-min_unreward:]):
+            logger.debug("Past %s trials unrewarded." % min_unreward)
             return True
 
         return False
@@ -218,6 +269,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
         """
         pass
 
+    @abstractmethod
     def _generate_next_block(*args, **kwargs) -> Block:
         """Abstract method. Subclasses must implement their own block switching logic.
 

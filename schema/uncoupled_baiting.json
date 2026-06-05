@@ -1,7 +1,7 @@
 {
     "pkg_location": "aind_behavior_dynamic_foraging_curricula.uncoupled_baiting",
     "name": "UncoupledBaiting",
-    "version": "0.2.1",
+    "version": "0.0.2",
     "graph": {
         "nodes": {
             "0": {
@@ -58,6 +58,16 @@
                                         "min_ignored_trials": 3,
                                         "min_unrewarded_trials": 3,
                                         "reward_fraction": 0.8
+                                    },
+                                    "bias_intervention_parameters": {
+                                        "threshold": {
+                                            "upper": 0.7,
+                                            "lower": 0.3
+                                        },
+                                        "intervention_interval": 10,
+                                        "maximum_water_corrections": 5,
+                                        "bias_window_length": 200,
+                                        "lickspout_offset_delta": 0.05
                                     },
                                     "is_baiting": true,
                                     "reward_probability_parameters": {
@@ -120,6 +130,16 @@
                                         "min_unrewarded_trials": 3,
                                         "reward_fraction": 0.8
                                     },
+                                    "bias_intervention_parameters": {
+                                        "threshold": {
+                                            "upper": 0.7,
+                                            "lower": 0.3
+                                        },
+                                        "intervention_interval": 10,
+                                        "maximum_water_corrections": 5,
+                                        "bias_window_length": 200,
+                                        "lickspout_offset_delta": 0.05
+                                    },
                                     "is_baiting": true,
                                     "reward_probability_parameters": {
                                         "base_reward_sum": 0.8,
@@ -149,7 +169,7 @@
                             ]
                         }
                     },
-                    "version": "0.0.2-rc32",
+                    "version": "0.0.2",
                     "stage_name": null
                 },
                 "graph": {
@@ -215,6 +235,16 @@
                                 "min_unrewarded_trials": 3,
                                 "reward_fraction": 0.8
                             },
+                            "bias_intervention_parameters": {
+                                "threshold": {
+                                    "upper": 0.7,
+                                    "lower": 0.3
+                                },
+                                "intervention_interval": 10,
+                                "maximum_water_corrections": 5,
+                                "bias_window_length": 200,
+                                "lickspout_offset_delta": 0.05
+                            },
                             "is_baiting": true,
                             "reward_probability_parameters": {
                                 "base_reward_sum": 0.8,
@@ -243,7 +273,7 @@
                         },
                         "lick_spout_retraction": false
                     },
-                    "version": "0.0.2-rc32",
+                    "version": "0.0.2",
                     "stage_name": null
                 },
                 "graph": {
@@ -309,6 +339,16 @@
                                 "min_unrewarded_trials": 3,
                                 "reward_fraction": 0.8
                             },
+                            "bias_intervention_parameters": {
+                                "threshold": {
+                                    "upper": 0.7,
+                                    "lower": 0.3
+                                },
+                                "intervention_interval": 10,
+                                "maximum_water_corrections": 5,
+                                "bias_window_length": 200,
+                                "lickspout_offset_delta": 0.05
+                            },
                             "is_baiting": true,
                             "reward_probability_parameters": {
                                 "base_reward_sum": 0.6,
@@ -337,7 +377,7 @@
                         },
                         "lick_spout_retraction": false
                     },
-                    "version": "0.0.2-rc32",
+                    "version": "0.0.2",
                     "stage_name": null
                 },
                 "graph": {
@@ -400,6 +440,16 @@
                                 "min_unrewarded_trials": 3,
                                 "reward_fraction": 0.8
                             },
+                            "bias_intervention_parameters": {
+                                "threshold": {
+                                    "upper": 0.7,
+                                    "lower": 0.3
+                                },
+                                "intervention_interval": 10,
+                                "maximum_water_corrections": 5,
+                                "bias_window_length": 200,
+                                "lickspout_offset_delta": 0.05
+                            },
                             "is_baiting": true,
                             "trial_generation_end_parameters": {
                                 "ignore_window_length": 30,
@@ -417,7 +467,7 @@
                         },
                         "lick_spout_retraction": false
                     },
-                    "version": "0.0.2-rc32",
+                    "version": "0.0.2",
                     "stage_name": null
                 },
                 "graph": {
@@ -480,6 +530,16 @@
                                 "min_unrewarded_trials": 3,
                                 "reward_fraction": 0.8
                             },
+                            "bias_intervention_parameters": {
+                                "threshold": {
+                                    "upper": 0.7,
+                                    "lower": 0.3
+                                },
+                                "intervention_interval": 10,
+                                "maximum_water_corrections": 5,
+                                "bias_window_length": 200,
+                                "lickspout_offset_delta": 0.05
+                            },
                             "is_baiting": true,
                             "trial_generation_end_parameters": {
                                 "ignore_window_length": 30,
@@ -497,7 +557,7 @@
                         },
                         "lick_spout_retraction": false
                     },
-                    "version": "0.0.2-rc32",
+                    "version": "0.0.2",
                     "stage_name": null
                 },
                 "graph": {
@@ -560,6 +620,16 @@
                                 "min_unrewarded_trials": 3,
                                 "reward_fraction": 0.8
                             },
+                            "bias_intervention_parameters": {
+                                "threshold": {
+                                    "upper": 0.7,
+                                    "lower": 0.3
+                                },
+                                "intervention_interval": 10,
+                                "maximum_water_corrections": 5,
+                                "bias_window_length": 200,
+                                "lickspout_offset_delta": 0.05
+                            },
                             "is_baiting": true,
                             "trial_generation_end_parameters": {
                                 "ignore_window_length": 30,
@@ -577,7 +647,7 @@
                         },
                         "lick_spout_retraction": false
                     },
-                    "version": "0.0.2-rc32",
+                    "version": "0.0.2",
                     "stage_name": null
                 },
                 "graph": {

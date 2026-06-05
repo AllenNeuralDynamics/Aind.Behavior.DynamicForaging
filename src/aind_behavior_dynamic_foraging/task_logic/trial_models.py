@@ -43,6 +43,27 @@ class QuickRetractSettings(BaseModel):
     )
 
 
+class Metadata(BaseModel):
+    """Metadata for trial. These fields will NOT be used by the task engine."""
+
+    p_reward_left: Optional[float] = Field(
+        default=None,
+        ge=0,
+        le=1,
+        description="Metadata for block probability of reward on the left side if response is made.",
+    )
+    p_reward_right: Optional[float] = Field(
+        default=None,
+        ge=0,
+        le=1,
+        description="Metadata for the probability of reward on the right side if response is made.",
+    )
+    extra: Optional[SerializeAsAny[Any]] = Field(
+        default=None,
+        description="Additional metadata to include with the trial. This field will NOT be used or validated by the task engine.",
+    )
+
+
 class Trial(BaseModel):
     """Represents a single trial that can be instantiated by the Bonsai state machine."""
 
@@ -84,9 +105,10 @@ class Trial(BaseModel):
         default=0.0,
         description="Horizontal delta offset of the lickspouts (in mm) applied in this trial. Positive values move the lickspouts right.",
     )
-    extra_metadata: Optional[SerializeAsAny[Any]] = Field(
+    metadata: Optional[Metadata] = Field(
         default=None,
-        description="Additional metadata to include with the trial. This field will NOT be used or validated by the task engine.",
+        validate_default=True,
+        description="Metadata fields that will not be used by task engine such as block information.",
     )
 
 
@@ -98,3 +120,11 @@ class TrialOutcome(BaseModel):
         description="Reports the choice made by the subject. True for right, False for left, None for no choice."
     )
     is_rewarded: bool = Field(description="Indicates whether the subject received a reward on this trial.")
+
+
+class TrialMetrics(BaseModel):
+    """Represents metrics of trial"""
+
+    bias: Optional[float] = Field(
+        default=None, description="Bias of session. Negative values correspond to left bias, positive right."
+    )
