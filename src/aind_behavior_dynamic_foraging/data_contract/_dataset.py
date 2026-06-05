@@ -196,7 +196,7 @@ def make_dataset(
                         data_streams=[
                             SoftwareEvents(
                                 name="GiveManualWaterRight",
-                                description="An event emitted when manual water is given through visualizer.",
+                                description="An event emitted when manual water is given through visualizer. The value corresponds to whether water was delivered on the Right (True) or Left (False)",
                                 reader_params=SoftwareEvents.make_params(
                                     root_path / "behavior/SoftwareEvents/GiveManualWaterRigt.json"
                                 ),
