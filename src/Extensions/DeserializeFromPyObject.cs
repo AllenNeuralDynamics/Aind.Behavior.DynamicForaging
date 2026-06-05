@@ -15,6 +15,8 @@ using Bonsai.Expressions;
 [System.Xml.Serialization.XmlIncludeAttribute(typeof(TypeMapping<Trial>))]
 [System.Xml.Serialization.XmlIncludeAttribute(typeof(TypeMapping<TrialOutcome>))]
 [System.Xml.Serialization.XmlIncludeAttribute(typeof(TypeMapping<TrialGeneratorSpec>))]
+[System.Xml.Serialization.XmlIncludeAttribute(typeof(TypeMapping<TrialMetrics>))]
+
 public class DeserializeFromPyObject : SingleArgumentExpressionBuilder
 {
     public DeserializeFromPyObject()
