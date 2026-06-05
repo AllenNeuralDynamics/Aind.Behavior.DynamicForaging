@@ -1,7 +1,7 @@
 {
     "pkg_location": "aind_behavior_dynamic_foraging_curricula.uncoupled",
     "name": "Uncoupled",
-    "version": "0.2.1",
+    "version": "0.0.2",
     "graph": {
         "nodes": {
             "0": {
@@ -169,7 +169,7 @@
                             ]
                         }
                     },
-                    "version": "0.0.2-rc35",
+                    "version": "0.0.2",
                     "stage_name": null
                 },
                 "graph": {
@@ -273,7 +273,7 @@
                         },
                         "lick_spout_retraction": false
                     },
-                    "version": "0.0.2-rc35",
+                    "version": "0.0.2",
                     "stage_name": null
                 },
                 "graph": {
@@ -377,7 +377,7 @@
                         },
                         "lick_spout_retraction": false
                     },
-                    "version": "0.0.2-rc35",
+                    "version": "0.0.2",
                     "stage_name": null
                 },
                 "graph": {
@@ -467,7 +467,7 @@
                         },
                         "lick_spout_retraction": false
                     },
-                    "version": "0.0.2-rc35",
+                    "version": "0.0.2",
                     "stage_name": null
                 },
                 "graph": {
@@ -558,7 +558,7 @@
                         "lick_spout_retraction": false,
                         "autowater_parameters": null
                     },
-                    "version": "0.0.2-rc35",
+                    "version": "0.0.2",
                     "stage_name": null
                 },
                 "graph": {
@@ -644,7 +644,7 @@
                         },
                         "lick_spout_retraction": false
                     },
-                    "version": "0.0.2-rc35",
+                    "version": "0.0.2",
                     "stage_name": null
                 },
                 "graph": {
