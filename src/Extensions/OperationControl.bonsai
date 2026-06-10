@@ -357,7 +357,7 @@
                     <Selector>RewardSize.LeftValueVolume</Selector>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="rx:Zip" />
+                    <Combinator xsi:type="rx:WithLatestFrom" />
                   </Expression>
                   <Expression xsi:type="MemberSelector">
                     <Selector>Item2</Selector>
@@ -369,7 +369,7 @@
                     <Selector>Calibration.WaterValveLeft</Selector>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="rx:Zip" />
+                    <Combinator xsi:type="rx:WithLatestFrom" />
                   </Expression>
                   <Expression xsi:type="scr:ExpressionTransform">
                     <scr:Name>RewardToTime</scr:Name>
@@ -405,7 +405,7 @@
                     <Selector>RewardSize.RightValueVolume</Selector>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="rx:Zip" />
+                    <Combinator xsi:type="rx:WithLatestFrom" />
                   </Expression>
                   <Expression xsi:type="MemberSelector">
                     <Selector>Item2</Selector>
@@ -417,7 +417,7 @@
                     <Selector>Calibration.WaterValveRight</Selector>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="rx:Zip" />
+                    <Combinator xsi:type="rx:WithLatestFrom" />
                   </Expression>
                   <Expression xsi:type="scr:ExpressionTransform">
                     <scr:Name>RewardToTime</scr:Name>
