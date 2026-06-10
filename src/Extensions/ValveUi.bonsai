@@ -344,6 +344,9 @@
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Repeat" />
                   </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>SetRewardAmount</Name>
+                  </Expression>
                 </Nodes>
                 <Edges>
                   <Edge From="0" To="1" Label="Source1" />
@@ -387,6 +390,7 @@
                   <Edge From="40" To="41" Label="Source1" />
                   <Edge From="41" To="42" Label="Source1" />
                   <Edge From="42" To="43" Label="Source1" />
+                  <Edge From="43" To="44" Label="Source1" />
                 </Edges>
               </Workflow>
             </Expression>
@@ -777,6 +781,9 @@
                             <rx:Count>1</rx:Count>
                           </Combinator>
                         </Expression>
+                        <Expression xsi:type="MulticastSubject">
+                          <Name>SetRewardAmount</Name>
+                        </Expression>
                         <Expression xsi:type="WorkflowOutput" />
                       </Nodes>
                       <Edges>
@@ -808,6 +815,7 @@
                         <Edge From="25" To="26" Label="Source2" />
                         <Edge From="26" To="27" Label="Source1" />
                         <Edge From="27" To="28" Label="Source1" />
+                        <Edge From="28" To="29" Label="Source1" />
                       </Edges>
                     </Workflow>
                   </Expression>
@@ -938,6 +946,9 @@
                             <rx:Count>1</rx:Count>
                           </Combinator>
                         </Expression>
+                        <Expression xsi:type="MulticastSubject">
+                          <Name>SetRewardAmount</Name>
+                        </Expression>
                         <Expression xsi:type="WorkflowOutput" />
                       </Nodes>
                       <Edges>
@@ -969,6 +980,7 @@
                         <Edge From="25" To="26" Label="Source2" />
                         <Edge From="26" To="27" Label="Source1" />
                         <Edge From="27" To="28" Label="Source1" />
+                        <Edge From="28" To="29" Label="Source1" />
                       </Edges>
                     </Workflow>
                   </Expression>
