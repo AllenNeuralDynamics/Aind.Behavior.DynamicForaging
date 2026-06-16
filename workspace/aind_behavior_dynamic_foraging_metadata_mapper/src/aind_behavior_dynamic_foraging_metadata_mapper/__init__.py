@@ -1,7 +1,7 @@
-from .acquisition import acqusition_from_dataset
-from .instrument import instrument_from_dataset
+from .acquisition import AindAcquisitionDataMapper
+from .instrument import AindInstrumentDataMapper
 
 __all__ = [
-    "acqusition_from_dataset",
-    "instrument_from_dataset",
+    "AindAcquisitionDataMapper",
+    "AindInstrumentDataMapper",
 ]

@@ -2,6 +2,7 @@ import logging
 import os
 import sys
 from datetime import datetime, timezone
+from decimal import Decimal
 from pathlib import Path
 from typing import List, Optional
 
@@ -14,10 +15,11 @@ from aind_behavior_services.rig import Device as AbsDevice
 from aind_behavior_services.rig import cameras as abs_camera
 from aind_behavior_services.rig import water_valve as abs_water_valve
 from aind_behavior_services.session import Session
-from aind_behavior_services.utils import get_fields_of_type, utcnow
+from aind_behavior_services.utils import get_fields_of_type, model_from_json_file, utcnow
 from aind_data_schema.components.configs import TriggerType
 from aind_data_schema.components.measurements import CalibrationFit, FitType, GenericModel, VolumeCalibration
 from aind_data_schema.core.acquisition import (
+    CALIBRATIONS,
     Acquisition,
     AcquisitionSubjectDetails,
     Code,
@@ -30,147 +32,179 @@ from aind_data_schema.core.acquisition import (
 from aind_data_schema_models import units
 from aind_data_schema_models.modalities import Modality
 from clabe.data_mapper import helpers as data_mapper_helpers
-from cyclopts import App
+from clabe.data_mapper.aind_data_schema import AindDataSchemaSessionDataMapper
+from pydantic import ValidationError
 
 logger = logging.getLogger(__name__)
 
-app = App()
 
+class AindAcquisitionDataMapper(AindDataSchemaSessionDataMapper):
+    def __init__(
+        self, data_path: os.PathLike, repository_path: os.PathLike, session_end_time: Optional[datetime] = None
+    ):
+        """
+        Class to create acquisition model for completed session.
 
-@app.default
-def acqusition_from_dataset(
-    data_directory: Path, repo_path: os.PathLike, end_time: Optional[datetime] = None
-) -> Acquisition:
-    """
-    Create acquisition model for completed session.
+        Args:
+            data_path (os.PathLike):
+                Path to the directory containing the dataset to analyze. This
+                directory is expected to include all required behavioral data files.
 
-    Args:
-        data_directory (os.PathLike):
-            Path to the directory containing the dataset to analyze. This
-            directory is expected to include all required behavioral data files.
+            repository_path (os.PathLike):
+                Path to github repository.
 
-        repo_path (os.PathLike):
-            Path to github repository.
+            session_end_time: Optional[datetime]:
+                    End time of acquisition. If None, current time will be used.
+        """
 
-        end_time: Optional[datetime]:
-                End time of acquisition. If None, current time will be used.
+        self.data_path = data_path
+        self.repository_path = repository_path
+        self.session_end_time = session_end_time
 
-    Returns:
-        Acquisition:
-            Acquisition model for session
-
-    Raises:
-        FileNotFoundError:
-            If the specified data directory or required files do not exist.
-
-        ValueError:
-            If the dataset is malformed or missing required fields for
-            computing metrics.
-    """
-    dataset = df_foraging_dataset(data_directory)
-    input_schemas = dataset["Behavior"]["InputSchemas"]
-    session_model = Session.model_validate(input_schemas["Session"].data)
-    rig_model = AindDynamicForagingRig.model_validate(input_schemas["Rig"].data)
-    task_logic_model = AindDynamicForagingTaskLogic.model_validate(input_schemas["TaskLogic"].data)
-    repository = git.Repo(repo_path)
-
-    if end_time is None:
-        logger.warning("Session end time is not set. Using current time as end time.")
-        acquisition_end_time = datetime.now(tz=timezone.utc)
-
-    bonsai_code = _get_bonsai_as_code(repository)
-    python_code = _get_python_as_code(repository)
-
-    cameras = data_mapper_helpers.get_cameras(rig_model, exclude_without_video_writer=True)
-    camera_configs = [_get_cameras_config(k, v, repository) for k, v in cameras.items()]
-
-    # construct data stream
-    modalities: list[Modality] = [getattr(Modality, "BEHAVIOR")]
-    if len(camera_configs) > 0:
-        modalities.append(getattr(Modality, "BEHAVIOR_VIDEOS"))
-    modalities = list(set(modalities))
-
-    active_devices = [
-        _device[0]
-        for _device in get_fields_of_type(rig_model, AbsDevice, stop_recursion_on_type=False)
-        if _device[0] is not None and not isinstance(_device[1], abs_camera.CameraController)
-    ]
-
-    data_streams = [
-        DataStream(
-            stream_start_time=session_model.date,
-            stream_end_time=acquisition_end_time,
-            code=[bonsai_code, python_code],
-            active_devices=active_devices,
-            modalities=modalities,
-            configurations=camera_configs,
-            notes=session_model.notes,
+        self.session_model = model_from_json_file(
+            json_path=Path(self.data_path) / "behavior" / "Logs" / "session_output.json", model=Session
         )
-    ]
+        self._mapped: Optional[Acquisition] = None
 
-    # populate behavior epoch
-    metrics = dataset["Behavior"]["Metrics"].data
-    trainer_state = dataset["Behavior"]["TrainerState"].data
-    performance_metrics = PerformanceMetrics(output_parameters=metrics.model_dump())
+    def session_schema(self):
+        return self.mapped
 
-    stimulus_epoch = StimulusEpoch(
-        stimulus_start_time=session_model.date,
-        stimulus_end_time=acquisition_end_time,
-        stimulus_name="GoCue",
-        code=bonsai_code,
-        stimulus_modalities=[StimulusModality.AUDITORY],
-        performance_metrics=performance_metrics,
-        curriculum_status=trainer_state.stage.name,
-    )
+    @property
+    def session_name(self) -> str:
+        if self.session_model.session_name is None:
+            raise ValueError("Session name is not set in the session model.")
+        return self.session_model.session_name
 
-    # Construct aind-data-schema session
-    return Acquisition(
-        subject_id=session_model.subject,
-        subject_details=_get_subject_details(data_directory),
-        instrument_id=rig_model.rig_name,
-        acquisition_end_time=acquisition_end_time,
-        acquisition_start_time=session_model.date,
-        experimenters=session_model.experimenter,
-        acquisition_type=session_model.experiment or task_logic_model.name,
-        coordinate_system=None,
-        data_streams=data_streams,
-        calibrations=_get_water_calibration(rig_model),
-        stimulus_epochs=[stimulus_epoch],
-    )
+    def map(self) -> Acquisition:
+        logger.info("Mapping aind-data-schema Acquisition.")
+        try:
+            self._mapped = self._map()
+            return self._mapped
+        except (ValidationError, ValueError, IOError) as e:
+            logger.error("Failed to map to aind-data-schema Session. %s", e)
+            raise e
+
+    def _map(self) -> Acquisition:
+        """
+        Create acquisition model for completed session.
+
+        Returns:
+            Acquisition:
+                Acquisition model for session
+
+        Raises:
+            FileNotFoundError:
+                If the specified data directory or required files do not exist.
+
+            ValueError:
+                If the dataset is malformed or missing required fields for
+                computing metrics.
+        """
+        dataset = df_foraging_dataset(self.data_path)
+        input_schemas = dataset["Behavior"]["InputSchemas"]
+        session_model = Session.model_validate(input_schemas["Session"].data)
+        rig_model = AindDynamicForagingRig.model_validate(input_schemas["Rig"].data)
+        task_logic_model = AindDynamicForagingTaskLogic.model_validate(input_schemas["TaskLogic"].data)
+        repository = git.Repo(self.repository_path)
+
+        if self.session_end_time is None:
+            logger.warning("Session end time is not set. Using current time as end time.")
+            acquisition_end_time = datetime.now(tz=timezone.utc)
+
+        bonsai_code = _get_bonsai_as_code(repository)
+        python_code = _get_python_as_code(repository)
+
+        cameras = data_mapper_helpers.get_cameras(rig_model, exclude_without_video_writer=True)
+        camera_configs = [_get_camera_config(k, v, repository) for k, v in cameras.items()]
+
+        # construct data stream
+        modalities: list[Modality.ONE_OF] = [getattr(Modality, "BEHAVIOR")]
+        if len(camera_configs) > 0:
+            modalities.append(getattr(Modality, "BEHAVIOR_VIDEOS"))
+        modalities = list(set(modalities))
+
+        active_devices = [
+            _device[0]
+            for _device in get_fields_of_type(rig_model, AbsDevice, stop_recursion_on_type=False)
+            if _device[0] is not None and not isinstance(_device[1], abs_camera.CameraController)
+        ]
+
+        data_streams = [
+            DataStream(
+                stream_start_time=session_model.date,
+                stream_end_time=acquisition_end_time,
+                code=[bonsai_code, python_code],
+                active_devices=active_devices,
+                modalities=modalities,
+                configurations=camera_configs,
+                notes=session_model.notes,
+            )
+        ]
+
+        # populate behavior epoch
+        metrics = dataset["Behavior"]["Metrics"].data
+        trainer_state = dataset["Behavior"]["TrainerState"].data
+        performance_metrics = PerformanceMetrics(output_parameters=metrics.model_dump())
+
+        stimulus_epoch = StimulusEpoch(
+            stimulus_start_time=session_model.date,
+            stimulus_end_time=acquisition_end_time,
+            stimulus_name="GoCue",
+            code=bonsai_code,
+            stimulus_modalities=[StimulusModality.AUDITORY],
+            performance_metrics=performance_metrics,
+            curriculum_status=trainer_state.stage.name,
+        )
+
+        # Construct aind-data-schema session
+        return Acquisition(
+            subject_id=session_model.subject,
+            subject_details=_get_subject_details(self.data_path),
+            instrument_id=rig_model.rig_name,
+            acquisition_end_time=acquisition_end_time,
+            acquisition_start_time=session_model.date,
+            experimenters=session_model.experimenter,
+            acquisition_type=session_model.experiment or task_logic_model.name,
+            coordinate_system=None,
+            data_streams=data_streams,
+            calibrations=_get_water_calibration(rig_model),
+            stimulus_epochs=[stimulus_epoch],
+        )
 
 
-def _get_subject_details(data_directory: os.PathLike) -> AcquisitionSubjectDetails:
+def _get_subject_details(data_path: os.PathLike) -> AcquisitionSubjectDetails:
+    water = calculate_consumed_water(data_path)
     return AcquisitionSubjectDetails(
         mouse_platform_name="tube",
-        reward_consumed_total=calculate_consumed_water(data_directory),
+        reward_consumed_total=None if not water else Decimal(str(water)),
         reward_consumed_unit=units.VolumeUnit.ML,
     )
 
 
-def _get_water_calibration(rig_model: AindDynamicForagingRig) -> List[VolumeCalibration]:
+def _get_water_calibration(rig_model: AindDynamicForagingRig) -> List[CALIBRATIONS]:
 
     water_calibrations = get_fields_of_type(rig_model, abs_water_valve.WaterValveCalibration)
     vol_cal = []
-    for device_name, water_calibration in water_calibrations:
-        c = water_calibration
-        vol_cal.append(
-            VolumeCalibration(
-                device_name=device_name,
-                calibration_date=water_calibration.date if water_calibration.date else utcnow(),
-                input=list(c.interval_average.keys()),
-                output=list(c.interval_average.values()),
-                input_unit=units.TimeUnit.S,
-                output_unit=units.VolumeUnit.ML,
-                fit=CalibrationFit(
-                    fit_type=FitType.LINEAR,
-                    fit_parameters=GenericModel.model_validate(c.model_dump()),
-                ),
+    for device_name, wc in water_calibrations:
+        if device_name and wc.interval_average:
+            vol_cal.append(
+                VolumeCalibration(
+                    device_name=device_name,
+                    calibration_date=wc.date if wc.date else utcnow(),
+                    input=list(wc.interval_average.keys()),
+                    output=list(wc.interval_average.values()),
+                    input_unit=units.TimeUnit.S,
+                    output_unit=units.VolumeUnit.ML,
+                    fit=CalibrationFit(
+                        fit_type=FitType.LINEAR,
+                        fit_parameters=GenericModel.model_validate(wc.model_dump()),
+                    ),
+                )
             )
-        )
     return vol_cal
 
 
-def _get_cameras_config(name: str, camera: abs_camera.CameraTypes, repository: git.Repo) -> List[DetectorConfig]:
+def _get_camera_config(name: str, camera: abs_camera.CameraTypes, repository: git.Repo) -> DetectorConfig:
 
     if isinstance(camera.video_writer, abs_camera.VideoWriterFfmpeg):
         compression = Code(
@@ -185,17 +219,13 @@ def _get_cameras_config(name: str, camera: abs_camera.CameraTypes, repository: g
     else:
         raise ValueError("Camera does not have a valid video writer configured.")
 
-    camera = DetectorConfig(
+    return DetectorConfig(
         device_name=name,
         exposure_time=getattr(camera, "exposure", -1),
         exposure_time_unit=units.TimeUnit.US,
         trigger_type=TriggerType.EXTERNAL,
-        compression=compression(camera.video_writer),
+        compression=compression,
     )
-
-    cameras = data_mapper_helpers.get_cameras(AindDynamicForagingTaskLogic, exclude_without_video_writer=True)
-
-    return list(map(camera, cameras.keys(), cameras.values()))
 
 
 def _get_bonsai_as_code(repository: git.Repo) -> Code:

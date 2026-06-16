@@ -10,8 +10,8 @@ logger = logging.getLogger(__name__)
 
 
 class DataMapperCli(BaseSettings, cli_kebab_case=True):
-    data_directory: os.PathLike = Field(description="Path to the session data directory.")
-    repo_path: os.PathLike = Field(
+    data_path: os.PathLike = Field(description="Path to the session data directory.")
+    repository_path: os.PathLike = Field(
         default=Path("."), description="Path to the repository. By default it will use the current directory."
     )
     session_end_time: AwareDatetime | None = Field(
@@ -22,22 +22,28 @@ class DataMapperCli(BaseSettings, cli_kebab_case=True):
 
     def cli_cmd(self):
         """Generate aind-data-schema metadata for the Dynamic Foraging dataset located at the specified path."""
-        from .acquisition import acqusition_from_dataset
-        from .instrument import instrument_from_dataset
+        from .acquisition import AindAcquisitionDataMapper
+        from .instrument import AindInstrumentDataMapper
 
-        acquisition = acqusition_from_dataset(
-            data_directory=Path(self.data_directory),
-            repo_path=Path(self.repo_path),
-            end_time=self.session_end_time,
+        session_mapper = AindAcquisitionDataMapper(
+            data_path=Path(self.data_path),
+            repository_path=Path(self.repository_path),
+            session_end_time=self.session_end_time,
         )
-        instrument = instrument_from_dataset(data_directory=Path(self.data_directory))
+        acquisition = session_mapper.map()
 
-        acquisition.write_standard_file(output_directory=Path(self.data_directory), filename_suffix=self.suffix)
-        instrument.write_standard_file(output_directory=Path(self.data_directory), filename_suffix=self.suffix)
+        rig_mapper = AindInstrumentDataMapper(data_path=Path(self.data_path))
+        instrument = rig_mapper.map()
+
+        assert session_mapper.mapped is not None
+        assert rig_mapper.mapped is not None
+
+        acquisition.write_standard_file(output_directory=Path(self.repository_path), filename_suffix=self.suffix)
+        instrument.write_standard_file(output_directory=Path(self.repository_path), filename_suffix=self.suffix)
 
         logger.info(
             "Mapping completed! Saved acquisition.json, instrument.json to %s",
-            self.data_directory,
+            self.repository_path,
         )
 
 

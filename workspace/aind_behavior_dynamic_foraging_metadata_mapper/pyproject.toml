@@ -73,6 +73,4 @@ python_classes = ["Test*"]
 python_functions = ["test_*"]
 
 [project.scripts]
-acquisition = "aind_behavior_dynamic_foraging_metadata_mapper.acquisition:app"
-instrument = "aind_behavior_dynamic_foraging_metadata_mapper.instrument:app"
 mapper = "aind_behavior_dynamic_foraging_metadata_mapper.cli:main"
