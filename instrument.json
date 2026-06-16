@@ -1,0 +1,306 @@
+{
+   "object_type": "Instrument",
+   "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/core/instrument.py",
+   "schema_version": "2.2.3",
+   "location": null,
+   "instrument_id": "test_rig",
+   "modification_date": "2026-06-16",
+   "modalities": [
+      {
+         "name": "Behavior",
+         "abbreviation": "behavior"
+      },
+      {
+         "name": "Behavior videos",
+         "abbreviation": "behavior-videos"
+      }
+   ],
+   "calibrations": null,
+   "coordinate_system": {
+      "object_type": "Coordinate system",
+      "name": "RigCoordinateSystem",
+      "origin": "Origin",
+      "axes": [
+         {
+            "object_type": "Axis",
+            "name": "X",
+            "direction": "Left_to_right"
+         },
+         {
+            "object_type": "Axis",
+            "name": "Y",
+            "direction": "Front_to_back"
+         },
+         {
+            "object_type": "Axis",
+            "name": "Z",
+            "direction": "Down_to_up"
+         }
+      ],
+      "axis_unit": "millimeter"
+   },
+   "temperature_control": null,
+   "notes": null,
+   "connections": [
+      {
+         "object_type": "Connection",
+         "source_device": "BehaviorBoard",
+         "source_port": null,
+         "target_device": "BodyCamera",
+         "target_port": null,
+         "send_and_receive": false
+      },
+      {
+         "object_type": "Connection",
+         "source_device": "BehaviorBoard",
+         "source_port": null,
+         "target_device": "SideCamera",
+         "target_port": null,
+         "send_and_receive": false
+      }
+   ],
+   "components": [
+      {
+         "object_type": "Camera assembly",
+         "relative_position": [
+            "Right"
+         ],
+         "coordinate_system": null,
+         "transform": null,
+         "name": "BodyCameraAssembly",
+         "target": "Body",
+         "camera": {
+            "object_type": "Camera",
+            "name": "BodyCamera",
+            "serial_number": "23349426",
+            "manufacturer": {
+               "name": "Spinnaker",
+               "abbreviation": null,
+               "registry": null,
+               "registry_identifier": null
+            },
+            "model": null,
+            "additional_settings": null,
+            "notes": null,
+            "detector_type": "Camera",
+            "data_interface": "Coax",
+            "cooling": "No cooling",
+            "frame_rate": null,
+            "frame_rate_unit": null,
+            "immersion": null,
+            "chroma": null,
+            "sensor_width": null,
+            "sensor_height": null,
+            "size_unit": "pixel",
+            "sensor_format": null,
+            "sensor_format_unit": null,
+            "bit_depth": null,
+            "bin_mode": "No binning",
+            "bin_width": null,
+            "bin_height": null,
+            "bin_unit": "pixel",
+            "gain": null,
+            "crop_offset_x": null,
+            "crop_offset_y": null,
+            "crop_width": null,
+            "crop_height": null,
+            "crop_unit": "pixel",
+            "recording_software": null,
+            "driver": null,
+            "driver_version": null
+         },
+         "lens": {
+            "object_type": "Lens",
+            "name": "Lens A",
+            "serial_number": null,
+            "manufacturer": {
+               "name": "Fujinon",
+               "abbreviation": null,
+               "registry": null,
+               "registry_identifier": null
+            },
+            "model": null,
+            "additional_settings": null,
+            "notes": null
+         },
+         "filter": null
+      },
+      {
+         "object_type": "Camera assembly",
+         "relative_position": [
+            "Superior"
+         ],
+         "coordinate_system": null,
+         "transform": null,
+         "name": "SideCameraAssembly",
+         "target": "Face",
+         "camera": {
+            "object_type": "Camera",
+            "name": "SideCamera",
+            "serial_number": "23349424",
+            "manufacturer": {
+               "name": "Spinnaker",
+               "abbreviation": null,
+               "registry": null,
+               "registry_identifier": null
+            },
+            "model": null,
+            "additional_settings": null,
+            "notes": null,
+            "detector_type": "Camera",
+            "data_interface": "Coax",
+            "cooling": "No cooling",
+            "frame_rate": null,
+            "frame_rate_unit": null,
+            "immersion": null,
+            "chroma": null,
+            "sensor_width": null,
+            "sensor_height": null,
+            "size_unit": "pixel",
+            "sensor_format": null,
+            "sensor_format_unit": null,
+            "bit_depth": null,
+            "bin_mode": "No binning",
+            "bin_width": null,
+            "bin_height": null,
+            "bin_unit": "pixel",
+            "gain": null,
+            "crop_offset_x": null,
+            "crop_offset_y": null,
+            "crop_width": null,
+            "crop_height": null,
+            "crop_unit": "pixel",
+            "recording_software": null,
+            "driver": null,
+            "driver_version": null
+         },
+         "lens": {
+            "object_type": "Lens",
+            "name": "Lens A",
+            "serial_number": null,
+            "manufacturer": {
+               "name": "Fujinon",
+               "abbreviation": null,
+               "registry": null,
+               "registry_identifier": null
+            },
+            "model": null,
+            "additional_settings": null,
+            "notes": null
+         },
+         "filter": null
+      },
+      {
+         "object_type": "Harp device",
+         "name": "BehaviorBoard",
+         "serial_number": null,
+         "manufacturer": {
+            "name": "Champalimaud Foundation",
+            "abbreviation": "Champalimaud",
+            "registry": "Research Organization Registry (ROR)",
+            "registry_identifier": "03g001n57"
+         },
+         "model": null,
+         "additional_settings": null,
+         "notes": null,
+         "data_interface": "USB",
+         "channels": [],
+         "firmware_version": null,
+         "hardware_version": null,
+         "harp_device_type": {
+            "whoami": 1216,
+            "name": "Behavior"
+         },
+         "core_version": null,
+         "tag_version": null,
+         "is_clock_generator": false
+      },
+      {
+         "object_type": "Harp device",
+         "name": "ClockGenerator",
+         "serial_number": null,
+         "manufacturer": {
+            "name": "Open Ephys Production Site",
+            "abbreviation": "OEPS",
+            "registry": "Research Organization Registry (ROR)",
+            "registry_identifier": "007rkz355"
+         },
+         "model": null,
+         "additional_settings": null,
+         "notes": null,
+         "data_interface": "USB",
+         "channels": [],
+         "firmware_version": null,
+         "hardware_version": null,
+         "harp_device_type": {
+            "whoami": 1404,
+            "name": "WhiteRabbit"
+         },
+         "core_version": null,
+         "tag_version": null,
+         "is_clock_generator": true
+      },
+      {
+         "object_type": "Harp device",
+         "name": "SoundCard",
+         "serial_number": null,
+         "manufacturer": {
+            "name": "Champalimaud Foundation",
+            "abbreviation": "Champalimaud",
+            "registry": "Research Organization Registry (ROR)",
+            "registry_identifier": "03g001n57"
+         },
+         "model": null,
+         "additional_settings": null,
+         "notes": null,
+         "data_interface": "USB",
+         "channels": [],
+         "firmware_version": null,
+         "hardware_version": null,
+         "harp_device_type": {
+            "whoami": 1280,
+            "name": "SoundCard"
+         },
+         "core_version": null,
+         "tag_version": null,
+         "is_clock_generator": false
+      },
+      {
+         "object_type": "Harp device",
+         "name": "EnvironmentSensor",
+         "serial_number": null,
+         "manufacturer": {
+            "name": "Open Ephys Production Site",
+            "abbreviation": "OEPS",
+            "registry": "Research Organization Registry (ROR)",
+            "registry_identifier": "007rkz355"
+         },
+         "model": null,
+         "additional_settings": null,
+         "notes": null,
+         "data_interface": "USB",
+         "channels": [],
+         "firmware_version": null,
+         "hardware_version": null,
+         "harp_device_type": {
+            "whoami": 1405,
+            "name": "EnvironmentSensor"
+         },
+         "core_version": null,
+         "tag_version": null,
+         "is_clock_generator": false
+      },
+      {
+         "object_type": "Motorized stage",
+         "name": "Manipulator",
+         "serial_number": null,
+         "manufacturer": null,
+         "model": null,
+         "additional_settings": null,
+         "notes": null,
+         "travel": "30",
+         "travel_unit": "millimeter",
+         "firmware": null
+      }
+   ]
+}
