@@ -56,12 +56,9 @@ def make_s_stage_1_warmup():
                                 truncation_parameters=TruncationParameters(min=1, max=7),
                             ),
                             quiescent_duration=Scalar(value=0.1),
-                            min_block_reward=1,
                             is_baiting=True,
                             response_duration=5.0,
                             reward_consumption_duration=1.0,
-                            kernel_size=2,
-                            extend_block_on_no_response=True,
                         ),
                         CoupledTrialGeneratorSpec(
                             trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
@@ -109,7 +106,6 @@ def make_s_stage_1():
         task=AindDynamicForagingTaskLogic(
             task_parameters=AindDynamicForagingTaskParameters(
                 reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
-                lick_spout_retraction=False,
                 trial_generator=CoupledTrialGeneratorSpec(
                     trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
                         max_trial=1000,
@@ -154,7 +150,6 @@ def make_s_stage_2():
         task=AindDynamicForagingTaskLogic(
             task_parameters=AindDynamicForagingTaskParameters(
                 reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
-                lick_spout_retraction=False,
                 trial_generator=CoupledTrialGeneratorSpec(
                     trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
                         max_trial=1000,
@@ -199,7 +194,6 @@ def make_s_stage_3():
         task=AindDynamicForagingTaskLogic(
             task_parameters=AindDynamicForagingTaskParameters(
                 reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
-                lick_spout_retraction=False,
                 trial_generator=CoupledTrialGeneratorSpec(
                     trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
                         max_trial=1000,
@@ -244,7 +238,6 @@ def make_s_stage_final():
         task=AindDynamicForagingTaskLogic(
             task_parameters=AindDynamicForagingTaskParameters(
                 reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
-                lick_spout_retraction=False,
                 trial_generator=CoupledTrialGeneratorSpec(
                     trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
                         max_trial=1000,
@@ -285,7 +278,6 @@ def make_s_stage_graduated():
         task=AindDynamicForagingTaskLogic(
             task_parameters=AindDynamicForagingTaskParameters(
                 reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
-                lick_spout_retraction=False,
                 trial_generator=CoupledTrialGeneratorSpec(
                     trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
                         max_trial=1000,
