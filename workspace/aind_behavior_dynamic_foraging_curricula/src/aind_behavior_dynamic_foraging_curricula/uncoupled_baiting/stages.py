@@ -60,7 +60,7 @@ def make_s_stage_1_warmup():
                             block_length=Scalar(distribution_parameters=ScalarDistributionParameter(value=1)),
                             inter_trial_interval_duration=ExponentialDistribution(
                                 distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
-                                truncation_parameters=TruncationParameters(min=1, max=7),
+                                truncation_parameters=TruncationParameters(truncation_mode="clamp", min=1, max=7),
                             ),
                             quiescent_duration=Scalar(distribution_parameters=ScalarDistributionParameter(value=0.1)),
                             is_baiting=True,
@@ -89,7 +89,7 @@ def make_s_stage_1_warmup():
                             ),
                             inter_trial_interval_duration=ExponentialDistribution(
                                 distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
-                                truncation_parameters=TruncationParameters(min=1, max=7),
+                                truncation_parameters=TruncationParameters(truncation_mode="clamp", min=1, max=7),
                             ),
                             quiescent_duration=Scalar(distribution_parameters=ScalarDistributionParameter(value=0.1)),
                             min_block_reward=0,
@@ -135,7 +135,7 @@ def make_s_stage_1():
                     ),
                     inter_trial_interval_duration=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
-                        truncation_parameters=TruncationParameters(min=1, max=7),
+                        truncation_parameters=TruncationParameters(truncation_mode="clamp", min=1, max=7),
                     ),
                     quiescent_duration=Scalar(distribution_parameters=ScalarDistributionParameter(value=0.1)),
                     min_block_reward=0,
@@ -179,7 +179,7 @@ def make_s_stage_2():
                     ),
                     inter_trial_interval_duration=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=0.2),
-                        truncation_parameters=TruncationParameters(min=1, max=10),
+                        truncation_parameters=TruncationParameters(truncation_mode="clamp", min=1, max=10),
                     ),
                     quiescent_duration=Scalar(distribution_parameters=ScalarDistributionParameter(value=0.3)),
                     min_block_reward=0,
@@ -215,7 +215,7 @@ def make_s_stage_3():
                     ),
                     inter_trial_interval_duration=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
-                        truncation_parameters=TruncationParameters(min=1, max=15),
+                        truncation_parameters=TruncationParameters(truncation_mode="clamp", min=1, max=15),
                     ),
                     quiescent_duration=Scalar(distribution_parameters=ScalarDistributionParameter(value=0.5)),
                     is_baiting=True,
@@ -248,7 +248,7 @@ def make_s_stage_final():
                     ),
                     inter_trial_interval_duration=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
-                        truncation_parameters=TruncationParameters(min=1, max=30),
+                        truncation_parameters=TruncationParameters(truncation_mode="clamp", min=1, max=30),
                     ),
                     quiescent_duration=Scalar(distribution_parameters=ScalarDistributionParameter(value=0.5)),
                     is_baiting=True,
@@ -281,7 +281,7 @@ def make_s_stage_graduated():
                     ),
                     inter_trial_interval_duration=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
-                        truncation_parameters=TruncationParameters(min=1, max=30),
+                        truncation_parameters=TruncationParameters(truncation_mode="clamp", min=1, max=30),
                     ),
                     quiescent_duration=Scalar(distribution_parameters=ScalarDistributionParameter(value=0.5)),
                     is_baiting=True,
