@@ -22,8 +22,8 @@ from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_ge
 from aind_behavior_services.task.distributions import (
     ExponentialDistribution,
     ExponentialDistributionParameters,
-    ScalarDistributionParameter,
     Scalar,
+    ScalarDistributionParameter,
     TruncationParameters,
 )
 

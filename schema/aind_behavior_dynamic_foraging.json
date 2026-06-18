@@ -1380,7 +1380,7 @@
             "family": "Scalar",
             "distribution_parameters": {
               "family": "Scalar",
-              "value": 0.0
+              "value": 1.0
             },
             "truncation_parameters": null,
             "scaling_parameters": null
