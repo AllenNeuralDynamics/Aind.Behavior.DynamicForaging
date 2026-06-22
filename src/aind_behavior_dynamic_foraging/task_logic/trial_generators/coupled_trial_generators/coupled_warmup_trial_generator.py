@@ -1,7 +1,7 @@
 import logging
 from typing import Literal
 
-from aind_behavior_services.task.distributions import Distribution, Scalar
+from aind_behavior_services.task.distributions import Distribution, Scalar, ScalarDistributionParameter
 from pydantic import BaseModel, Field
 
 from .base_coupled_trial_generator import (
@@ -35,7 +35,7 @@ class CoupledWarmupTrialGeneratorSpec(BaseCoupledTrialGeneratorSpec):
     type: Literal["CoupledWarmupTrialGenerator"] = "CoupledWarmupTrialGenerator"
 
     block_length: Distribution = Field(
-        default=Scalar(value=1),
+        default=Scalar(distribution_parameters=ScalarDistributionParameter(value=1)),
         description="Distribution describing block length.",
     )
 
@@ -46,7 +46,7 @@ class CoupledWarmupTrialGeneratorSpec(BaseCoupledTrialGeneratorSpec):
         default=True, description="Whether uncollected rewards carry over to the next trial."
     )
 
-    def create_generator(self) -> "CoupledWarmupTrialGeneratorSpec":
+    def create_generator(self) -> "CoupledWarmupTrialGenerator":
         return CoupledWarmupTrialGenerator(self)
 
 
