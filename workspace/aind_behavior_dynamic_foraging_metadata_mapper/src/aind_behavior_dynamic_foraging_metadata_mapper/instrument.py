@@ -3,35 +3,33 @@ import os
 from datetime import date
 from decimal import Decimal
 from pathlib import Path
-import yaml
 
-from aind_behavior_services.utils import get_fields_of_type, utcnow
-from aind_behavior_services.rig import water_valve as abs_water_valve
 from aind_behavior_dynamic_foraging.data_contract import dataset as df_foraging_dataset
 from aind_behavior_dynamic_foraging.rig import AindDynamicForagingRig
+from aind_behavior_services.rig import water_valve as abs_water_valve
+from aind_behavior_services.utils import get_fields_of_type, utcnow
 from aind_data_schema.components.connections import Connection
 from aind_data_schema.components.coordinates import Axis, AxisName, CoordinateSystem, Direction, Origin
 from aind_data_schema.components.devices import (
     AnatomicalRelative,
     Camera,
     CameraAssembly,
+    CameraChroma,
     CameraTarget,
+    Cooling,
     DataInterface,
     HarpDevice,
     HarpDeviceType,
     Lens,
     MotorizedStage,
     SizeUnit,
-    CameraChroma,
-    Cooling,
 )
-from aind_data_schema.core.acquisition import CALIBRATIONS
 from aind_data_schema.components.measurements import CalibrationFit, FitType, GenericModel, VolumeCalibration
-from aind_data_schema.base import GenericModel
-from aind_data_schema_models.units import FrequencyUnit, TimeUnit, VolumeUnit
+from aind_data_schema.core.acquisition import CALIBRATIONS
 from aind_data_schema.core.instrument import Instrument
 from aind_data_schema_models.modalities import Modality
 from aind_data_schema_models.organizations import Organization
+from aind_data_schema_models.units import FrequencyUnit, TimeUnit, VolumeUnit
 from clabe.data_mapper.aind_data_schema import AindDataSchemaRigDataMapper
 
 logger = logging.getLogger(__name__)
