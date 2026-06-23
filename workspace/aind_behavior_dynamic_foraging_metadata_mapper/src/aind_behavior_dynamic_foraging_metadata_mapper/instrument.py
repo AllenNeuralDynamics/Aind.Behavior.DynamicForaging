@@ -3,7 +3,10 @@ import os
 from datetime import date
 from decimal import Decimal
 from pathlib import Path
+import yaml
 
+from aind_behavior_services.utils import get_fields_of_type, utcnow
+from aind_behavior_services.rig import water_valve as abs_water_valve
 from aind_behavior_dynamic_foraging.data_contract import dataset as df_foraging_dataset
 from aind_behavior_dynamic_foraging.rig import AindDynamicForagingRig
 from aind_data_schema.components.connections import Connection
@@ -19,7 +22,13 @@ from aind_data_schema.components.devices import (
     Lens,
     MotorizedStage,
     SizeUnit,
+    CameraChroma,
+    Cooling,
 )
+from aind_data_schema.core.acquisition import CALIBRATIONS
+from aind_data_schema.components.measurements import CalibrationFit, FitType, GenericModel, VolumeCalibration
+from aind_data_schema.base import GenericModel
+from aind_data_schema_models.units import FrequencyUnit, TimeUnit, VolumeUnit
 from aind_data_schema.core.instrument import Instrument
 from aind_data_schema_models.modalities import Modality
 from aind_data_schema_models.organizations import Organization
@@ -44,6 +53,29 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
 
         super().__init__()
         self._data_path = Path(data_path)
+
+    @staticmethod
+    def _get_water_calibration(rig_model: AindDynamicForagingRig) -> list[CALIBRATIONS]:
+
+        water_calibrations = get_fields_of_type(rig_model, abs_water_valve.WaterValveCalibration)
+        vol_cal = []
+        for device_name, wc in water_calibrations:
+            if device_name and wc.interval_average:
+                vol_cal.append(
+                    VolumeCalibration(
+                        device_name=device_name,
+                        calibration_date=wc.date if wc.date else utcnow(),
+                        input=list(wc.interval_average.keys()),
+                        output=list(wc.interval_average.values()),
+                        input_unit=TimeUnit.S,
+                        output_unit=VolumeUnit.ML,
+                        fit=CalibrationFit(
+                            fit_type=FitType.LINEAR,
+                            fit_parameters=GenericModel.model_validate(wc.model_dump()),
+                        ),
+                    )
+                )
+        return vol_cal
 
     def rig_schema(self):
         return self.mapped
@@ -82,7 +114,31 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
         connections = []
 
         # cameras
+        controller = rig.triggered_camera_controller
+        fps = float(controller.frame_rate) if controller.frame_rate else float("nan")
         for name, cam in rig.triggered_camera_controller.cameras.items():
+            Camera(
+                name=name,
+                manufacturer=Organization.FLIR,
+                chroma=CameraChroma.BW,
+                cooling=Cooling.NO_COOLING,
+                data_interface=DataInterface.USB,
+                sensor_format="1/2.9",
+                sensor_format_unit=SizeUnit.IN,
+                sensor_width=720,
+                sensor_height=540,
+                model="Blackfly S BFS-U3-04S2M",
+                frame_rate=Decimal(str(fps)),
+                frame_rate_unit=FrequencyUnit.HZ,
+                gain=Decimal(str(cam.gain) if cam.gain is not None else "0"),
+                serial_number=cam.serial_number,
+                crop_offset_x=cam.region_of_interest.x if cam.region_of_interest.x > 0 else None,
+                crop_offset_y=cam.region_of_interest.y if cam.region_of_interest.y > 0 else None,
+                crop_width=cam.region_of_interest.width if cam.region_of_interest.width > 0 else None,
+                crop_height=cam.region_of_interest.height if cam.region_of_interest.height > 0 else None,
+                crop_unit=SizeUnit.PX,
+                additional_settings=GenericModel.model_validate(cam.model_dump()),
+            )
             camera = Camera(
                 name=name,
                 serial_number=cam.serial_number,
@@ -99,6 +155,7 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
             components.append(assembly)
 
         # behavior board
+        behavior_board = dataset["Behavior"]["HarpBehavior"].load()
         components.append(
             HarpDevice(
                 name="BehaviorBoard",
@@ -106,20 +163,26 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                 serial_number=rig.harp_behavior.serial_number,
                 manufacturer=Organization.CHAMPALIMAUD,
                 is_clock_generator=False,
+                firmware_version=behavior_board.device_reader.device.firmwareVersion,
+                hardware_version=behavior_board.device_reader.device.hardwareTargets,
             )
         )
 
         # clock generator
+        clock_generator = dataset["Behavior"]["HarpClockGenerator"].load()
         components.append(
             HarpDevice(
                 name="ClockGenerator",
                 harp_device_type=HarpDeviceType.WHITERABBIT,
                 serial_number=rig.harp_clock_generator.serial_number,
                 is_clock_generator=True,
+                firmware_version=clock_generator.device_reader.device.firmwareVersion,
+                hardware_version=clock_generator.device_reader.device.hardwareTargets,
             )
         )
 
         # sound card
+        sound_card = dataset["Behavior"]["HarpSoundCard"].load()
         components.append(
             HarpDevice(
                 name="SoundCard",
@@ -127,54 +190,64 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                 serial_number=rig.harp_sound_card.serial_number,
                 manufacturer=Organization.CHAMPALIMAUD,
                 is_clock_generator=False,
+                firmware_version=sound_card.device_reader.device.firmwareVersion,
+                hardware_version=sound_card.device_reader.device.hardwareTargets,
             )
         )
 
         # optional harp devices
         if rig.harp_lickometer_left:
+            left = dataset["Behavior"]["HarpLickometerLeft"].load()
             components.append(
                 HarpDevice(
                     name="LickometerLeft",
                     harp_device_type=HarpDeviceType.LICKETYSPLIT,
                     serial_number=rig.harp_lickometer_left.serial_number,
                     is_clock_generator=False,
+                    firmware_version=left.device_reader.device.firmwareVersion,
+                    hardware_version=left.device_reader.device.hardwareTargets,
                 )
             )
         if rig.harp_lickometer_right:
+            right = dataset["Behavior"]["HarpLickometerRight"].load()
             components.append(
                 HarpDevice(
                     name="LickometerRight",
                     serial_number=rig.harp_lickometer_right.serial_number,
                     harp_device_type=HarpDeviceType.LICKETYSPLIT,
                     is_clock_generator=False,
+                    firmware_version=right.device_reader.device.firmwareVersion,
+                    hardware_version=right.device_reader.device.hardwareTargets,
                 )
             )
         if rig.harp_sniff_detector:
+            sniff = dataset["Behavior"]["HarpSniffDetector"].load()
             components.append(
                 HarpDevice(
                     name="SniffDetector",
                     harp_device_type=HarpDeviceType.SNIFFDETECTOR,
                     serial_number=rig.harp_sniff_detector.serial_number,
                     is_clock_generator=False,
+                    firmware_version=sniff.device_reader.device.firmwareVersion,
+                    hardware_version=sniff.device_reader.device.hardwareTargets,
                 )
             )
         if rig.harp_environment_sensor:
+            env_sen = dataset["Behavior"]["HarpEnvironmentSensor"].load()
             components.append(
                 HarpDevice(
                     name="EnvironmentSensor",
                     harp_device_type=HarpDeviceType.ENVIRONMENTSENSOR,
                     serial_number=rig.harp_environment_sensor.serial_number,
                     is_clock_generator=False,
+                    firmware_version=env_sen.device_reader.device.firmwareVersion,
+                    hardware_version=env_sen.device_reader.device.hardwareTargets,
                 )
             )
 
-        # manipulator
+        # manipulator\
         components.append(
-            MotorizedStage(
-                name="Manipulator",
-                serial_number=rig.manipulator.serial_number,
-                travel=Decimal("30"),
-            )
+            MotorizedStage(name="Manipulator", serial_number=rig.manipulator.serial_number, travel=Decimal("30"))
         )
 
         # connections
@@ -202,4 +275,5 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
             ),
             components=components,
             connections=connections,
+            calibrations=self._get_water_calibration(rig),
         )

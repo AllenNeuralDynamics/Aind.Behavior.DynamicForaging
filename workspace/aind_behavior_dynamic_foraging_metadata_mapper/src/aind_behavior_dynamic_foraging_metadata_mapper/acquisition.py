@@ -144,7 +144,17 @@ class AindAcquisitionDataMapper(AindDataSchemaSessionDataMapper):
         # populate behavior epoch
         metrics = dataset["Behavior"]["Metrics"].data
         trainer_state = dataset["Behavior"]["TrainerState"].data
-        performance_metrics = PerformanceMetrics(output_parameters=metrics.model_dump())
+        trial_outcomes = dataset["Behavior"]["SoftwareEvents"]["TrialOutcome"].data["data"].iloc
+        rewarded = sum(to["is_rewarded"] for to in trial_outcomes if to["trial"]["is_auto_response_right"] is None)
+        water = calculate_consumed_water(self.data_path)
+        performance_metrics = PerformanceMetrics(
+            reward_consumed_during_epoch=None if not water else Decimal(str(water)),
+            reward_consumed_unit=units.VolumeUnit.ML,
+            trials_total=trial_outcomes[:].shape[0],
+            trials_finished=metrics.unignored_trials_per_session[-1],
+            trials_rewarded=rewarded,
+            output_parameters=metrics.model_dump(),
+        )
 
         stimulus_epoch = StimulusEpoch(
             stimulus_start_time=session_model.date,
