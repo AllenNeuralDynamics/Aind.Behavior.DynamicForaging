@@ -41,7 +41,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Timer">
-                <rx:DueTime>PT2.024S</rx:DueTime>
+                <rx:DueTime>PT1.219S</rx:DueTime>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -93,7 +93,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Timer">
-                <rx:DueTime>PT2.085S</rx:DueTime>
+                <rx:DueTime>PT1.095S</rx:DueTime>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -164,7 +164,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Timer">
-                <rx:DueTime>PT2.207S</rx:DueTime>
+                <rx:DueTime>PT2.974S</rx:DueTime>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
