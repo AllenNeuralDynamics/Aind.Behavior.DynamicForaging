@@ -16,13 +16,11 @@ from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_ge
     BehaviorStabilityParameters,
     CoupledTrialGenerationEndConditions,
 )
-from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generators.coupled_warmup_trial_generator import (
-    CoupledWarmupTrialGenerationEndConditions,
-)
 from aind_behavior_services.task.distributions import (
     ExponentialDistribution,
     ExponentialDistributionParameters,
     Scalar,
+    ScalarDistributionParameter,
     TruncationParameters,
 )
 
@@ -41,27 +39,18 @@ def make_s_stage_1_warmup():
                 trial_generator=TrialGeneratorCompositeSpec(
                     generators=[
                         CoupledWarmupTrialGeneratorSpec(
-                            trial_generation_end_parameters=CoupledWarmupTrialGenerationEndConditions(
-                                min_trial=50,
-                                max_choice_bias=0.1,
-                                min_response_rate=0.8,
-                                evaluation_window=20,
-                            ),
                             reward_probability_parameters=RewardProbabilityParameters(
                                 base_reward_sum=1, reward_pairs=[[1.0, 0.0]]
                             ),
-                            block_length=Scalar(value=1),
+                            block_length=Scalar(distribution_parameters=ScalarDistributionParameter(value=1)),
                             inter_trial_interval_duration=ExponentialDistribution(
                                 distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
-                                truncation_parameters=TruncationParameters(min=1, max=7),
+                                truncation_parameters=TruncationParameters(truncation_mode="clamp", min=1, max=7),
                             ),
-                            quiescent_duration=Scalar(value=0.1),
-                            min_block_reward=1,
+                            quiescent_duration=Scalar(distribution_parameters=ScalarDistributionParameter(value=0.1)),
                             is_baiting=True,
                             response_duration=5.0,
                             reward_consumption_duration=1.0,
-                            kernel_size=2,
-                            extend_block_on_no_response=True,
                         ),
                         CoupledTrialGeneratorSpec(
                             trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
@@ -85,9 +74,9 @@ def make_s_stage_1_warmup():
                             ),
                             inter_trial_interval_duration=ExponentialDistribution(
                                 distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
-                                truncation_parameters=TruncationParameters(min=1, max=7),
+                                truncation_parameters=TruncationParameters(truncation_mode="clamp", min=1, max=7),
                             ),
-                            quiescent_duration=Scalar(value=0.1),
+                            quiescent_duration=Scalar(distribution_parameters=ScalarDistributionParameter(value=0.1)),
                             min_block_reward=0,
                             is_baiting=True,
                             extend_block_on_no_response=True,
@@ -109,7 +98,6 @@ def make_s_stage_1():
         task=AindDynamicForagingTaskLogic(
             task_parameters=AindDynamicForagingTaskParameters(
                 reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
-                lick_spout_retraction=False,
                 trial_generator=CoupledTrialGeneratorSpec(
                     trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
                         max_trial=1000,
@@ -132,9 +120,9 @@ def make_s_stage_1():
                     ),
                     inter_trial_interval_duration=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
-                        truncation_parameters=TruncationParameters(min=1, max=7),
+                        truncation_parameters=TruncationParameters(truncation_mode="clamp", min=1, max=7),
                     ),
-                    quiescent_duration=Scalar(value=0.1),
+                    quiescent_duration=Scalar(distribution_parameters=ScalarDistributionParameter(value=0.1)),
                     min_block_reward=0,
                     is_baiting=True,
                     extend_block_on_no_response=True,
@@ -154,7 +142,6 @@ def make_s_stage_2():
         task=AindDynamicForagingTaskLogic(
             task_parameters=AindDynamicForagingTaskParameters(
                 reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
-                lick_spout_retraction=False,
                 trial_generator=CoupledTrialGeneratorSpec(
                     trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
                         max_trial=1000,
@@ -177,9 +164,9 @@ def make_s_stage_2():
                     ),
                     inter_trial_interval_duration=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=0.2),
-                        truncation_parameters=TruncationParameters(min=1, max=10),
+                        truncation_parameters=TruncationParameters(truncation_mode="clamp", min=1, max=10),
                     ),
-                    quiescent_duration=Scalar(value=0.3),
+                    quiescent_duration=Scalar(distribution_parameters=ScalarDistributionParameter(value=0.3)),
                     min_block_reward=0,
                     is_baiting=True,
                     extend_block_on_no_response=True,
@@ -199,7 +186,6 @@ def make_s_stage_3():
         task=AindDynamicForagingTaskLogic(
             task_parameters=AindDynamicForagingTaskParameters(
                 reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
-                lick_spout_retraction=False,
                 trial_generator=CoupledTrialGeneratorSpec(
                     trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
                         max_trial=1000,
@@ -222,9 +208,9 @@ def make_s_stage_3():
                     ),
                     inter_trial_interval_duration=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
-                        truncation_parameters=TruncationParameters(min=1, max=15),
+                        truncation_parameters=TruncationParameters(truncation_mode="clamp", min=1, max=15),
                     ),
-                    quiescent_duration=Scalar(value=0.5),
+                    quiescent_duration=Scalar(distribution_parameters=ScalarDistributionParameter(value=0.5)),
                     min_block_reward=0,
                     is_baiting=True,
                     extend_block_on_no_response=True,
@@ -244,7 +230,6 @@ def make_s_stage_final():
         task=AindDynamicForagingTaskLogic(
             task_parameters=AindDynamicForagingTaskParameters(
                 reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
-                lick_spout_retraction=False,
                 trial_generator=CoupledTrialGeneratorSpec(
                     trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
                         max_trial=1000,
@@ -263,9 +248,9 @@ def make_s_stage_final():
                     ),
                     inter_trial_interval_duration=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
-                        truncation_parameters=TruncationParameters(min=1, max=30),
+                        truncation_parameters=TruncationParameters(truncation_mode="clamp", min=1, max=30),
                     ),
-                    quiescent_duration=Scalar(value=1),
+                    quiescent_duration=Scalar(distribution_parameters=ScalarDistributionParameter(value=1)),
                     min_block_reward=0,
                     is_baiting=True,
                     extend_block_on_no_response=True,
@@ -285,7 +270,6 @@ def make_s_stage_graduated():
         task=AindDynamicForagingTaskLogic(
             task_parameters=AindDynamicForagingTaskParameters(
                 reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
-                lick_spout_retraction=False,
                 trial_generator=CoupledTrialGeneratorSpec(
                     trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
                         max_trial=1000,
@@ -304,9 +288,9 @@ def make_s_stage_graduated():
                     ),
                     inter_trial_interval_duration=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
-                        truncation_parameters=TruncationParameters(min=1, max=30),
+                        truncation_parameters=TruncationParameters(truncation_mode="clamp", min=1, max=30),
                     ),
-                    quiescent_duration=Scalar(value=1),
+                    quiescent_duration=Scalar(distribution_parameters=ScalarDistributionParameter(value=1)),
                     min_block_reward=0,
                     is_baiting=True,
                     extend_block_on_no_response=True,
