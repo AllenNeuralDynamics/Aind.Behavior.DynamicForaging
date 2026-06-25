@@ -1,6 +1,6 @@
 import logging
 import os
-from typing import List, Literal
+from typing import List, Literal, Optional
 
 import numpy as np
 from aind_behavior_curriculum import Metrics
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 class DynamicForagingMetrics(Metrics):
     """Metrics for dynamic foraging"""
 
-    foraging_efficiency_per_session: List[float] = Field(
+    foraging_efficiency_per_session: List[Optional[float]] = Field(
         min_length=1, description="Full history of foraging efficiency per session"
     )
     unignored_trials_per_session: List[int] = Field(
@@ -97,7 +97,7 @@ def metrics_from_dataset(
 
 def compute_foraging_efficiency(
     is_baiting: bool, is_rewarded: list[bool], p_right_reward: list[float], p_left_reward: list[float]
-) -> float:
+) -> Optional[float]:
     """
     Compute foraging efficiency for a two-arm bandit task.
 
