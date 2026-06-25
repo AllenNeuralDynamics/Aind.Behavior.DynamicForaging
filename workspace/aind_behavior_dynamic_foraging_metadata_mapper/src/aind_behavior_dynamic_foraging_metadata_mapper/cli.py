@@ -38,8 +38,8 @@ class DataMapperCli(BaseSettings, cli_kebab_case=True):
         assert session_mapper.mapped is not None
         assert rig_mapper.mapped is not None
 
-        acquisition.write_standard_file(output_directory=Path(self.repository_path), filename_suffix=self.suffix)
-        instrument.write_standard_file(output_directory=Path(self.repository_path), filename_suffix=self.suffix)
+        acquisition.write_standard_file(output_directory=Path(self.data_path), filename_suffix=self.suffix)
+        instrument.write_standard_file(output_directory=Path(self.data_path), filename_suffix=self.suffix)
 
         logger.info(
             "Mapping completed! Saved acquisition.json, instrument.json to %s",
