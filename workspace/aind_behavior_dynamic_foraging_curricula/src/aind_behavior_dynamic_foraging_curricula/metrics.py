@@ -1,21 +1,30 @@
 import logging
 import os
-from typing import List, Literal, Optional
+from typing import Annotated, List, Literal, Optional
 
 import numpy as np
 from aind_behavior_curriculum import Metrics
 from aind_behavior_dynamic_foraging.data_contract import dataset as df_foraging_dataset
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
 STAGE_NAMES = Literal["stage_1_warmup", "stage_1", "stage_2", "stage_3", "final", "graduated"]
 
 logger = logging.getLogger(__name__)
 
 
+def coerce_none_to_nan(v: Optional[float]) -> float:
+    if v is None:
+        return float("nan")
+    return v
+
+
+NoneToNan = Annotated[float, BeforeValidator(coerce_none_to_nan)]
+
+
 class DynamicForagingMetrics(Metrics):
     """Metrics for dynamic foraging"""
 
-    foraging_efficiency_per_session: List[Optional[float]] = Field(
+    foraging_efficiency_per_session: List[NoneToNan] = Field(
         min_length=1, description="Full history of foraging efficiency per session"
     )
     unignored_trials_per_session: List[int] = Field(
@@ -87,7 +96,7 @@ def metrics_from_dataset(
     )
 
     return DynamicForagingMetrics(
-        foraging_efficiency_per_session=foraging_efficiency_per_session + [foraging_efficiency],
+        foraging_efficiency_per_session=foraging_efficiency_per_session + [coerce_none_to_nan(foraging_efficiency)],
         unignored_trials_per_session=unignored_trials_per_session + [sum(x is not None for x in is_right_choice)],
         total_sessions=total_sessions + 1,
         consecutive_sessions_at_current_stage=consecutive_sessions_at_current_stage + 1,
