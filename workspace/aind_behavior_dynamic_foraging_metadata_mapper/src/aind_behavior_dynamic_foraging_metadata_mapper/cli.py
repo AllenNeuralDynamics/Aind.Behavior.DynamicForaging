@@ -43,7 +43,7 @@ class DataMapperCli(BaseSettings, cli_kebab_case=True):
 
         logger.info(
             "Mapping completed! Saved acquisition.json, instrument.json to %s",
-            self.repository_path,
+            self.data_path,
         )
 
 
