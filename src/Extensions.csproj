@@ -19,5 +19,6 @@
     <PackageReference Include="AllenNeuralDynamics.AindManipulator" Version="0.3.0" />
     <PackageReference Include="Rx-Core" Version="2.2.5" />
     <PackageReference Include="Bonsai.ImPlot" Version="0.2.0" />
+    <PackageReference Include="Bonsai.Harp" Version="3.6.1" />
   </ItemGroup>
 </Project>
