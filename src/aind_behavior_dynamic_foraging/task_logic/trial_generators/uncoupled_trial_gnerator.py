@@ -73,7 +73,7 @@ class UncoupledTrialGeneratorSpec(BlockBasedTrialGeneratorSpec):
         min_length=2,
         description="Reward probabilities to use during session.",
     )
-    maximum_dominance_streak: float = Field(
+    maximum_dominance_streak: int = Field(
         default=3,
         description="Maximum number of consecutive blocks a side can have the higher probability.",
     )
@@ -116,7 +116,7 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
 
         block_length_min = spec.block_length.distribution_parameters.min
         block_length_max = spec.block_length.distribution_parameters.max
-        self.block_length_stagger = (round(block_length_max - block_length_min - 0.5) / 2 + block_length_min) / 2
+        self.block_length_stagger = (np.round(block_length_max - block_length_min - 0.5) / 2 + block_length_min) / 2
 
         self.block = self._generate_first_block()
         self.trials_in_right_block = 0
@@ -242,8 +242,8 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
         logger.info("Generating first block.")
         p_left_reward = np.random.choice(self.spec.reward_probabilities)
         p_right_reward = np.random.choice(self.spec.reward_probabilities)
-        right_length = round(draw_sample(self.spec.block_length))
-        left_length = round(draw_sample(self.spec.block_length))
+        right_length = np.round(draw_sample(self.spec.block_length))
+        left_length = np.round(draw_sample(self.spec.block_length))
         while p_right_reward == p_left_reward == min(self.spec.reward_probabilities):
             if np.random.choice([True, False]):
                 logger.debug("Right and left reward are both equal to min. Redrawing right probability.")
@@ -322,7 +322,7 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
             logger.info("Generating right block.")
             r_available = [x for x in reward_probabilities if x != p_right_reward]
             p_right_reward = np.random.choice(r_available) if right_dominance_streak < max_dominance_streak else p_min
-            right_length = round(draw_sample(block_length))
+            right_length = np.round(draw_sample(block_length))
 
             if p_right_reward == p_left_reward == p_min:
                 logger.info(
@@ -330,12 +330,12 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
                 )
                 right_length -= block_stagger
                 p_left_reward = np.random.choice([x for x in reward_probabilities if x != p_min])
-                left_length = round(draw_sample(block_length))
+                left_length = np.round(draw_sample(block_length))
         else:
             logger.info("Generating left block.")
             l_available = [x for x in reward_probabilities if x != p_left_reward]
             p_left_reward = np.random.choice(l_available) if left_dominance_streak < max_dominance_streak else p_min
-            left_length = round(draw_sample(block_length))
+            left_length = np.round(draw_sample(block_length))
 
             if p_right_reward == p_left_reward == p_min:
                 logger.info(
@@ -343,7 +343,7 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
                 )
                 left_length -= block_stagger
                 p_right_reward = np.random.choice([x for x in reward_probabilities if x != p_min])
-                right_length = round(draw_sample(block_length))
+                right_length = np.round(draw_sample(block_length))
 
         return Block(
             p_right_reward=p_right_reward,

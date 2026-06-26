@@ -156,7 +156,7 @@ class BaseCoupledTrialGenerator(BlockBasedTrialGenerator):
         logger.info("Selected next block reward probabilities: right=%s, left=%s" % (p_right_reward, p_left_reward))
 
         # randomly pick block length
-        next_block_length = round(draw_sample(block_length))
+        next_block_length = np.round(draw_sample(block_length))
         logger.info("Selected next block length: %s" % next_block_length)
 
         return Block(
