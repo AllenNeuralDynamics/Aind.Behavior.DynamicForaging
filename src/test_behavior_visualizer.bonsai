@@ -1,0 +1,698 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WorkflowBuilder Version="2.9.0"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:imvizui="clr-namespace:Bonsai.ImGui.Visualizers;assembly=Bonsai.ImGui.Visualizers.Design"
+                 xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
+                 xmlns:implot="clr-namespace:Bonsai.ImPlot;assembly=Bonsai.ImPlot"
+                 xmlns:imviz="clr-namespace:Bonsai.ImGui.Visualizers;assembly=Bonsai.ImGui.Visualizers"
+                 xmlns:p1="clr-namespace:;assembly=Extensions"
+                 xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
+                 xmlns:wie="clr-namespace:Bonsai.Windows.Input;assembly=Bonsai.Windows.Input"
+                 xmlns:num="clr-namespace:Bonsai.Numerics;assembly=Bonsai.Numerics"
+                 xmlns:p2="clr-namespace:Bonsai.Numerics.Distributions;assembly=Bonsai.Numerics"
+                 xmlns:dsp="clr-namespace:Bonsai.Dsp;assembly=Bonsai.Dsp"
+                 xmlns:p3="clr-namespace:AindDynamicForagingDataSchema;assembly=Extensions"
+                 xmlns:harp="clr-namespace:Bonsai.Harp;assembly=Bonsai.Harp"
+                 xmlns="https://bonsai-rx.org/2018/workflow">
+  <Workflow>
+    <Nodes>
+      <Expression xsi:type="imvizui:ImPlotVisualizerBuilder" />
+      <Expression xsi:type="rx:PublishSubject">
+        <Name>Frame</Name>
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>Frame</Name>
+      </Expression>
+      <Expression xsi:type="implot:PlotBuilder">
+        <implot:Name>EventPlot</implot:Name>
+        <implot:Visible>true</implot:Visible>
+        <implot:Size>
+          <implot:X>-1</implot:X>
+          <implot:Y>150</implot:Y>
+        </implot:Size>
+        <implot:Flags>NoTitle</implot:Flags>
+        <implot:FlagsX>AutoFit</implot:FlagsX>
+        <implot:FlagsY>RangeFit</implot:FlagsY>
+      </Expression>
+      <Expression xsi:type="rx:PublishSubject">
+        <Name>EventPlot</Name>
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>Frame</Name>
+      </Expression>
+      <Expression xsi:type="implot:PlotBuilder">
+        <implot:Name>ContinuousPlot</implot:Name>
+        <implot:Visible>true</implot:Visible>
+        <implot:Size>
+          <implot:X>-1</implot:X>
+          <implot:Y>150</implot:Y>
+        </implot:Size>
+        <implot:Flags>NoTitle</implot:Flags>
+        <implot:FlagsX>AutoFit</implot:FlagsX>
+        <implot:FlagsY>None</implot:FlagsY>
+      </Expression>
+      <Expression xsi:type="rx:PublishSubject">
+        <Name>ContinuousPlot</Name>
+      </Expression>
+      <Expression xsi:type="Unit" />
+      <Expression xsi:type="imviz:LatestOnNewFrame">
+        <Name>EventPlot</Name>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p1:PlotStyling">
+          <p1:TickPositions>
+            <p1:double>0</p1:double>
+            <p1:double>1</p1:double>
+          </p1:TickPositions>
+          <p1:TickLabels>
+            <p1:string>R</p1:string>
+            <p1:string>L</p1:string>
+          </p1:TickLabels>
+          <p1:ImPlotLocationFlags>West</p1:ImPlotLocationFlags>
+          <p1:ImPlotLegendFlags>None</p1:ImPlotLegendFlags>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Unit" />
+      <Expression xsi:type="imviz:LatestOnNewFrame">
+        <Name>ContinuousPlot</Name>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p1:PlotStyling">
+          <p1:TickPositions>
+            <p1:double>0</p1:double>
+            <p1:double>1</p1:double>
+          </p1:TickPositions>
+          <p1:TickLabels />
+          <p1:ImPlotLocationFlags>West</p1:ImPlotLocationFlags>
+          <p1:ImPlotLegendFlags>None</p1:ImPlotLegendFlags>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>LickLeft</Name>
+      </Expression>
+      <Expression xsi:type="MemberSelector">
+        <Selector>Value</Selector>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="DoubleProperty">
+          <Value>0.9</Value>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="scr:ExpressionTransform">
+        <scr:Expression>new(it as LickLeft)</scr:Expression>
+      </Expression>
+      <Expression xsi:type="MemberSelector">
+        <Selector>Seconds</Selector>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:Zip" />
+      </Expression>
+      <Expression xsi:type="imviz:RollingBufferBuilder">
+        <imviz:Capacity>1000</imviz:Capacity>
+        <imviz:IndexSelector>Item2</imviz:IndexSelector>
+        <imviz:ValueSelector>Item1.LickLeft</imviz:ValueSelector>
+      </Expression>
+      <Expression xsi:type="imviz:LatestOnNewFrame">
+        <Name>EventPlot</Name>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p1:ScatterStyling">
+          <p1:ImPlotMarker>Square</p1:ImPlotMarker>
+          <p1:Size>3</p1:Size>
+          <p1:FillColorR>0</p1:FillColorR>
+          <p1:FillColorG>0</p1:FillColorG>
+          <p1:FillColorB>0</p1:FillColorB>
+          <p1:FillColorA>1</p1:FillColorA>
+          <p1:OutlineColorR>0</p1:OutlineColorR>
+          <p1:OutlineColorG>0</p1:OutlineColorG>
+          <p1:OutlineColorB>0</p1:OutlineColorB>
+          <p1:OutlineColorA>1</p1:OutlineColorA>
+          <p1:OutlineWeight>1</p1:OutlineWeight>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="imviz:PlotScatterSeriesBuilder">
+        <imviz:Visible>true</imviz:Visible>
+        <imviz:Flags>None</imviz:Flags>
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>LickRight</Name>
+      </Expression>
+      <Expression xsi:type="MemberSelector">
+        <Selector>Value</Selector>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="DoubleProperty">
+          <Value>0.1</Value>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="scr:ExpressionTransform">
+        <scr:Expression>new(it as LickRight)</scr:Expression>
+      </Expression>
+      <Expression xsi:type="MemberSelector">
+        <Selector>Seconds</Selector>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:Zip" />
+      </Expression>
+      <Expression xsi:type="imviz:RollingBufferBuilder">
+        <imviz:Capacity>1000</imviz:Capacity>
+        <imviz:IndexSelector>Item2</imviz:IndexSelector>
+        <imviz:ValueSelector>Item1.LickRight</imviz:ValueSelector>
+      </Expression>
+      <Expression xsi:type="imviz:LatestOnNewFrame">
+        <Name>EventPlot</Name>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p1:ScatterStyling">
+          <p1:ImPlotMarker>Square</p1:ImPlotMarker>
+          <p1:Size>3</p1:Size>
+          <p1:FillColorR>0</p1:FillColorR>
+          <p1:FillColorG>0</p1:FillColorG>
+          <p1:FillColorB>0</p1:FillColorB>
+          <p1:FillColorA>1</p1:FillColorA>
+          <p1:OutlineColorR>0</p1:OutlineColorR>
+          <p1:OutlineColorG>0</p1:OutlineColorG>
+          <p1:OutlineColorB>0</p1:OutlineColorB>
+          <p1:OutlineColorA>1</p1:OutlineColorA>
+          <p1:OutlineWeight>1</p1:OutlineWeight>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="imviz:PlotScatterSeriesBuilder">
+        <imviz:Visible>true</imviz:Visible>
+        <imviz:Flags>None</imviz:Flags>
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>TimedTrial</Name>
+      </Expression>
+      <Expression xsi:type="imviz:RollingBufferBuilder">
+        <imviz:Capacity>1000</imviz:Capacity>
+        <imviz:IndexSelector>Seconds</imviz:IndexSelector>
+        <imviz:ValueSelector>Value.Trial.PRewardLeft</imviz:ValueSelector>
+      </Expression>
+      <Expression xsi:type="imviz:LatestOnNewFrame">
+        <Name>ContinuousPlot</Name>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p1:LineStyling">
+          <p1:ColorR>1</p1:ColorR>
+          <p1:ColorG>0</p1:ColorG>
+          <p1:ColorB>0</p1:ColorB>
+          <p1:ColorA>1</p1:ColorA>
+          <p1:LineThickness>2</p1:LineThickness>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="imviz:PlotLineSeriesBuilder">
+        <imviz:Visible>true</imviz:Visible>
+        <imviz:Flags>None</imviz:Flags>
+      </Expression>
+      <Expression xsi:type="imviz:RollingBufferBuilder">
+        <imviz:Capacity>1000</imviz:Capacity>
+        <imviz:IndexSelector>Seconds</imviz:IndexSelector>
+        <imviz:ValueSelector>Value.Trial.PRewardRight</imviz:ValueSelector>
+      </Expression>
+      <Expression xsi:type="imviz:LatestOnNewFrame">
+        <Name>ContinuousPlot</Name>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p1:LineStyling">
+          <p1:ColorR>0</p1:ColorR>
+          <p1:ColorG>0</p1:ColorG>
+          <p1:ColorB>1</p1:ColorB>
+          <p1:ColorA>1</p1:ColorA>
+          <p1:LineThickness>2</p1:LineThickness>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="imviz:PlotLineSeriesBuilder">
+        <imviz:Visible>true</imviz:Visible>
+        <imviz:Flags>None</imviz:Flags>
+      </Expression>
+      <Expression xsi:type="GroupWorkflow">
+        <Name>Data</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="wie:KeyDown">
+                <wie:Filter>A</wie:Filter>
+                <wie:SuppressRepetitions>false</wie:SuppressRepetitions>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Unit" />
+            <Expression xsi:type="IncludeWorkflow" Path="Bonsai.Harp:WithLatestTimestamp.bonsai">
+              <Name>TimeBase</Name>
+            </Expression>
+            <Expression xsi:type="rx:PublishSubject">
+              <Name>LickLeft</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="wie:KeyDown">
+                <wie:Filter>S</wie:Filter>
+                <wie:SuppressRepetitions>false</wie:SuppressRepetitions>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Unit" />
+            <Expression xsi:type="IncludeWorkflow" Path="Bonsai.Harp:WithLatestTimestamp.bonsai">
+              <Name>TimeBase</Name>
+            </Expression>
+            <Expression xsi:type="rx:PublishSubject">
+              <Name>LickRight</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="num:CreateRandom">
+                <num:Seed xsi:nil="true" />
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p2:CreateContinuousUniform">
+                <p2:Lower>0.1</p2:Lower>
+                <p2:Upper>1</p2:Upper>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="rx:BehaviorSubject">
+              <Name>Random</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Timer">
+                <rx:DueTime>PT0S</rx:DueTime>
+                <rx:Period>PT0.01S</rx:Period>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="DoubleProperty">
+                <Value>0.01</Value>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="rx:Accumulate" />
+            <Expression xsi:type="rx:PublishSubject">
+              <Name>TimeBase</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p2:CreateContinuousUniform">
+                <p2:Lower>0</p2:Lower>
+                <p2:Upper>1</p2:Upper>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p2:SampleMany">
+                <p2:Count>500</p2:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="GreaterThan">
+              <Operand xsi:type="DoubleProperty">
+                <Value>0.5</Value>
+              </Operand>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Range">
+                <rx:Start>0</rx:Start>
+                <rx:Count>500</rx:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="dsp:Rescale">
+                <dsp:Min>0</dsp:Min>
+                <dsp:Max>1</dsp:Max>
+                <dsp:RangeMin>0</dsp:RangeMin>
+                <dsp:RangeMax>0.05</dsp:RangeMax>
+                <dsp:RescaleType>Linear</dsp:RescaleType>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Add">
+              <Operand xsi:type="DoubleProperty">
+                <Value>3.14</Value>
+              </Operand>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="num:Sin" />
+            </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>(it +1) * 0.5</scr:Expression>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p2:CreateContinuousUniform">
+                <p2:Lower>0</p2:Lower>
+                <p2:Upper>1</p2:Upper>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p2:SampleMany">
+                <p2:Count>500</p2:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="GreaterThan">
+              <Operand xsi:type="DoubleProperty">
+                <Value>0.5</Value>
+              </Operand>
+            </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>it</scr:Expression>
+            </Expression>
+            <Expression xsi:type="InputMapping">
+              <PropertyMappings>
+                <Property Name="Value" Selector="it" />
+              </PropertyMappings>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p1:CreateNullableBoolean">
+                <p1:Value>true</p1:Value>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p2:CreateContinuousUniform">
+                <p2:Lower>0</p2:Lower>
+                <p2:Upper>1</p2:Upper>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p2:SampleMany">
+                <p2:Count>500</p2:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="GreaterThan">
+              <Operand xsi:type="DoubleProperty">
+                <Value>0.9</Value>
+              </Operand>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p1:CreateNullableBoolean">
+                <p1:Value xsi:nil="true" />
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Zip" />
+            </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>Item3 ?  Item2 : Item1</scr:Expression>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Range">
+                <rx:Start>0</rx:Start>
+                <rx:Count>500</rx:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="dsp:Rescale">
+                <dsp:Min>0</dsp:Min>
+                <dsp:Max>1</dsp:Max>
+                <dsp:RangeMin>0</dsp:RangeMin>
+                <dsp:RangeMax>0.05</dsp:RangeMax>
+                <dsp:RescaleType>Linear</dsp:RescaleType>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="num:Sin" />
+            </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>(it +1) * 0.5</scr:Expression>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p2:CreateContinuousUniform">
+                <p2:Lower>0</p2:Lower>
+                <p2:Upper>1</p2:Upper>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p2:SampleMany">
+                <p2:Count>500</p2:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="GreaterThan">
+              <Operand xsi:type="DoubleProperty">
+                <Value>0.5</Value>
+              </Operand>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Zip" />
+            </Expression>
+            <Expression xsi:type="InputMapping">
+              <PropertyMappings>
+                <Property Name="IsRightChoice" Selector="Item3" />
+                <Property Name="IsRewarded" Selector="Item5" />
+              </PropertyMappings>
+            </Expression>
+            <Expression xsi:type="InputMapping">
+              <PropertyMappings>
+                <Property Name="PRewardLeft" Selector="Item2" />
+                <Property Name="PRewardRight" Selector="Item4" />
+              </PropertyMappings>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p2:CreateContinuousUniform">
+                <p2:Lower>0</p2:Lower>
+                <p2:Upper>1</p2:Upper>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p2:SampleMany">
+                <p2:Count>500</p2:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="GreaterThan">
+              <Operand xsi:type="DoubleProperty">
+                <Value>0.5</Value>
+              </Operand>
+            </Expression>
+            <Expression xsi:type="InputMapping">
+              <PropertyMappings>
+                <Property Name="Value" Selector="it" />
+              </PropertyMappings>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p1:CreateNullableBoolean">
+                <p1:Value>true</p1:Value>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p1:CreateNullableBoolean">
+                <p1:Value xsi:nil="true" />
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p2:CreateContinuousUniform">
+                <p2:Lower>0</p2:Lower>
+                <p2:Upper>1</p2:Upper>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p2:SampleMany">
+                <p2:Count>500</p2:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="GreaterThan">
+              <Operand xsi:type="DoubleProperty">
+                <Value>0.05</Value>
+              </Operand>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Zip" />
+            </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>Item3 ? Item1 : Item2</scr:Expression>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Zip" />
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Item2</Selector>
+            </Expression>
+            <Expression xsi:type="PropertyMapping">
+              <PropertyMappings>
+                <Property Name="IsAutoResponseRight" />
+              </PropertyMappings>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p3:Trial">
+                <p3:PRewardLeft>0.59164587077011477</p3:PRewardLeft>
+                <p3:PRewardRight>0.40913708100521279</p3:PRewardRight>
+                <p3:RewardConsumptionDuration>5</p3:RewardConsumptionDuration>
+                <p3:RewardDelayDuration>0</p3:RewardDelayDuration>
+                <p3:ResponseDeadlineDuration>5</p3:ResponseDeadlineDuration>
+                <p3:QuiescencePeriodDuration>0.5</p3:QuiescencePeriodDuration>
+                <p3:InterTrialIntervalDuration>5</p3:InterTrialIntervalDuration>
+                <p3:IsAutoResponseRight xsi:nil="true" />
+                <p3:LickspoutOffsetDelta>0</p3:LickspoutOffsetDelta>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="PropertyMapping">
+              <PropertyMappings>
+                <Property Name="Trial" />
+              </PropertyMappings>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p3:TrialOutcome">
+                <p3:IsRightChoice>true</p3:IsRightChoice>
+                <p3:IsRewarded>false</p3:IsRewarded>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="rx:CreateObservable">
+              <Name>SampleTrial</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>Random</Name>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="p2:Sample" />
+                  </Expression>
+                  <Expression xsi:type="scr:ExpressionTransform">
+                    <scr:Expression>TimeSpan.FromSeconds(it)</scr:Expression>
+                  </Expression>
+                  <Expression xsi:type="PropertyMapping">
+                    <PropertyMappings>
+                      <Property Name="DueTime" />
+                    </PropertyMappings>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Delay">
+                      <rx:DueTime>PT0.606S</rx:DueTime>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Take">
+                      <rx:Count>1</rx:Count>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="5" Label="Source1" />
+                  <Edge From="1" To="2" Label="Source1" />
+                  <Edge From="2" To="3" Label="Source1" />
+                  <Edge From="3" To="4" Label="Source1" />
+                  <Edge From="4" To="5" Label="Source2" />
+                  <Edge From="5" To="6" Label="Source1" />
+                  <Edge From="6" To="7" Label="Source1" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Concat" />
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>TimeBase</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:WithLatestFrom" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="harp:CreateTimestamped" />
+            </Expression>
+            <Expression xsi:type="rx:BehaviorSubject">
+              <Name>TimedTrial</Name>
+            </Expression>
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="1" To="2" Label="Source1" />
+            <Edge From="2" To="3" Label="Source1" />
+            <Edge From="4" To="5" Label="Source1" />
+            <Edge From="5" To="6" Label="Source1" />
+            <Edge From="6" To="7" Label="Source1" />
+            <Edge From="8" To="9" Label="Source1" />
+            <Edge From="9" To="10" Label="Source1" />
+            <Edge From="11" To="12" Label="Source1" />
+            <Edge From="12" To="13" Label="Source1" />
+            <Edge From="13" To="14" Label="Source1" />
+            <Edge From="15" To="16" Label="Source1" />
+            <Edge From="16" To="17" Label="Source1" />
+            <Edge From="17" To="42" Label="Source1" />
+            <Edge From="18" To="19" Label="Source1" />
+            <Edge From="19" To="20" Label="Source1" />
+            <Edge From="20" To="21" Label="Source1" />
+            <Edge From="21" To="22" Label="Source1" />
+            <Edge From="22" To="42" Label="Source2" />
+            <Edge From="23" To="24" Label="Source1" />
+            <Edge From="24" To="25" Label="Source1" />
+            <Edge From="25" To="26" Label="Source1" />
+            <Edge From="26" To="27" Label="Source1" />
+            <Edge From="27" To="28" Label="Source1" />
+            <Edge From="28" To="33" Label="Source1" />
+            <Edge From="29" To="30" Label="Source1" />
+            <Edge From="30" To="31" Label="Source1" />
+            <Edge From="31" To="32" Label="Source1" />
+            <Edge From="31" To="33" Label="Source3" />
+            <Edge From="32" To="33" Label="Source2" />
+            <Edge From="33" To="34" Label="Source1" />
+            <Edge From="34" To="42" Label="Source3" />
+            <Edge From="35" To="36" Label="Source1" />
+            <Edge From="36" To="37" Label="Source1" />
+            <Edge From="37" To="38" Label="Source1" />
+            <Edge From="38" To="42" Label="Source4" />
+            <Edge From="39" To="40" Label="Source1" />
+            <Edge From="40" To="41" Label="Source1" />
+            <Edge From="41" To="42" Label="Source5" />
+            <Edge From="42" To="43" Label="Source1" />
+            <Edge From="42" To="44" Label="Source1" />
+            <Edge From="42" To="56" Label="Source1" />
+            <Edge From="43" To="61" Label="Source1" />
+            <Edge From="44" To="59" Label="Source1" />
+            <Edge From="45" To="46" Label="Source1" />
+            <Edge From="46" To="47" Label="Source1" />
+            <Edge From="47" To="48" Label="Source1" />
+            <Edge From="48" To="49" Label="Source1" />
+            <Edge From="49" To="50" Label="Source1" />
+            <Edge From="49" To="54" Label="Source2" />
+            <Edge From="50" To="54" Label="Source1" />
+            <Edge From="51" To="52" Label="Source1" />
+            <Edge From="52" To="53" Label="Source1" />
+            <Edge From="53" To="54" Label="Source3" />
+            <Edge From="54" To="55" Label="Source1" />
+            <Edge From="55" To="56" Label="Source2" />
+            <Edge From="56" To="57" Label="Source1" />
+            <Edge From="57" To="58" Label="Source1" />
+            <Edge From="58" To="59" Label="Source2" />
+            <Edge From="59" To="60" Label="Source1" />
+            <Edge From="60" To="61" Label="Source2" />
+            <Edge From="61" To="62" Label="Source1" />
+            <Edge From="62" To="63" Label="Source1" />
+            <Edge From="63" To="65" Label="Source1" />
+            <Edge From="64" To="65" Label="Source2" />
+            <Edge From="65" To="66" Label="Source1" />
+            <Edge From="66" To="67" Label="Source1" />
+          </Edges>
+        </Workflow>
+      </Expression>
+    </Nodes>
+    <Edges>
+      <Edge From="0" To="1" Label="Source1" />
+      <Edge From="2" To="3" Label="Source1" />
+      <Edge From="3" To="4" Label="Source1" />
+      <Edge From="5" To="6" Label="Source1" />
+      <Edge From="6" To="7" Label="Source1" />
+      <Edge From="8" To="9" Label="Source1" />
+      <Edge From="9" To="10" Label="Source1" />
+      <Edge From="11" To="12" Label="Source1" />
+      <Edge From="12" To="13" Label="Source1" />
+      <Edge From="14" To="15" Label="Source1" />
+      <Edge From="14" To="18" Label="Source1" />
+      <Edge From="15" To="16" Label="Source1" />
+      <Edge From="16" To="17" Label="Source1" />
+      <Edge From="17" To="19" Label="Source1" />
+      <Edge From="18" To="19" Label="Source2" />
+      <Edge From="19" To="20" Label="Source1" />
+      <Edge From="20" To="21" Label="Source1" />
+      <Edge From="21" To="22" Label="Source1" />
+      <Edge From="22" To="23" Label="Source1" />
+      <Edge From="24" To="25" Label="Source1" />
+      <Edge From="24" To="28" Label="Source1" />
+      <Edge From="25" To="26" Label="Source1" />
+      <Edge From="26" To="27" Label="Source1" />
+      <Edge From="27" To="29" Label="Source1" />
+      <Edge From="28" To="29" Label="Source2" />
+      <Edge From="29" To="30" Label="Source1" />
+      <Edge From="30" To="31" Label="Source1" />
+      <Edge From="31" To="32" Label="Source1" />
+      <Edge From="32" To="33" Label="Source1" />
+      <Edge From="34" To="35" Label="Source1" />
+      <Edge From="34" To="39" Label="Source1" />
+      <Edge From="35" To="36" Label="Source1" />
+      <Edge From="36" To="37" Label="Source1" />
+      <Edge From="37" To="38" Label="Source1" />
+      <Edge From="39" To="40" Label="Source1" />
+      <Edge From="40" To="41" Label="Source1" />
+      <Edge From="41" To="42" Label="Source1" />
+    </Edges>
+  </Workflow>
+</WorkflowBuilder>
