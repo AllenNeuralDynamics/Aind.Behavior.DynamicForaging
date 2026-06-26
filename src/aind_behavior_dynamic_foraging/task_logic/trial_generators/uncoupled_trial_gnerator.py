@@ -116,7 +116,9 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
 
         block_length_min = spec.block_length.distribution_parameters.min
         block_length_max = spec.block_length.distribution_parameters.max
-        self.block_length_stagger = (np.floor(block_length_max - block_length_min - 0.5) / 2 + block_length_min) / 2
+        self.block_length_stagger = np.floor(
+            round((block_length_max - block_length_min - 0.5) / 2 + block_length_min) / 2
+        )
 
         self.block = self._generate_first_block()
         self.trials_in_right_block = 0
