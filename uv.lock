@@ -79,7 +79,7 @@ docs = [
 [package.metadata]
 requires-dist = [
     { name = "aind-behavior-services", specifier = ">=0.13.5" },
-    { name = "contraqctor", marker = "extra == 'data'", specifier = ">=0.5.3" },
+    { name = "contraqctor", marker = "extra == 'data'", specifier = ">=0.5.8" },
     { name = "pydantic-settings" },
     { name = "scikit-learn", specifier = ">=1.8.0" },
 ]
@@ -459,7 +459,7 @@ wheels = [
 
 [[package]]
 name = "contraqctor"
-version = "0.5.3"
+version = "0.5.8"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aind-behavior-services" },
@@ -476,9 +476,9 @@ dependencies = [
     { name = "scipy" },
     { name = "semver" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/95/33/e0dfd99fc23ab1ac6162b496727edef844e9279e13a969b05a1b4b05d426/contraqctor-0.5.3.tar.gz", hash = "sha256:0d11e4cf50acf01288b5ed66053211105c3a716fe8a31d63bcc2bf423037ac20", size = 54226, upload-time = "2025-11-10T17:31:19.497Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/c1/26/c9459dc2036c902a05c9c66358bba9834d3c8d4ecee64c58b3d23d6800e6/contraqctor-0.5.8.tar.gz", hash = "sha256:a91797987f2ebc4ca1c6c4fdfc7867ef8ee7a566382e8ffe1c8c289cca61a9a8", size = 55929, upload-time = "2026-06-18T09:42:15.888Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b4/9a/94fa67d2aecf7703a68be18b97b8d1af09ec9c26c73b2c21d5e881e46353/contraqctor-0.5.3-py3-none-any.whl", hash = "sha256:9306521efd6165007409319be39d4a8d9e286028693237584dbfc9f87e974292", size = 67638, upload-time = "2025-11-10T17:31:18.482Z" },
+    { url = "https://files.pythonhosted.org/packages/19/9e/dc69736ba3f4c852e42299d4e2705202abcac44dc52b272019708628c93c/contraqctor-0.5.8-py3-none-any.whl", hash = "sha256:56d8e4ef87c3cbfe3c7dd6066c519fcb57341b6815ca4f7582290bd210ed4d65", size = 69225, upload-time = "2026-06-18T09:42:14.91Z" },
 ]
 
 [[package]]
