@@ -348,7 +348,7 @@
               <Workflow>
                 <Nodes>
                   <Expression xsi:type="SubscribeSubject">
-                    <Name>SetRightRewardAmount</Name>
+                    <Name>SetIsRightRewardAmount</Name>
                   </Expression>
                   <Expression xsi:type="rx:Condition">
                     <Name>IsLeft</Name>
@@ -407,7 +407,7 @@
                     <Name>SetIsRightValveMs</Name>
                   </Expression>
                   <Expression xsi:type="SubscribeSubject">
-                    <Name>SetRightRewardAmount</Name>
+                    <Name>SetIsRightRewardAmount</Name>
                   </Expression>
                   <Expression xsi:type="rx:Condition">
                     <Name>IsRight</Name>
