@@ -152,7 +152,7 @@
               <rx:Name>GlobalTrial</rx:Name>
             </Expression>
             <Expression xsi:type="rx:BehaviorSubject" TypeArguments="sys:Tuple(sys:Boolean,sys:Double)">
-              <rx:Name>SetRightRewardAmount</rx:Name>
+              <rx:Name>SetIsRightRewardAmount</rx:Name>
             </Expression>
             <Expression xsi:type="rx:BehaviorSubject" TypeArguments="p1:TrialMetrics">
               <rx:Name>GlobalTrialMetrics</rx:Name>
@@ -209,7 +209,7 @@
               <Name>ExperimentState</Name>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
-              <Name>SetRightRewardAmount</Name>
+              <Name>SetIsRightRewardAmount</Name>
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Take">
@@ -234,7 +234,7 @@
               <Combinator xsi:type="rx:Zip" />
             </Expression>
             <Expression xsi:type="SubscribeSubject">
-              <Name>SetRightRewardAmount</Name>
+              <Name>SetIsRightRewardAmount</Name>
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Take">

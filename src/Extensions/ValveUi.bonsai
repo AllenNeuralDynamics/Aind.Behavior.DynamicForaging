@@ -265,7 +265,7 @@
                           <Combinator xsi:type="rx:Zip" />
                         </Expression>
                         <Expression xsi:type="MulticastSubject">
-                          <Name>SetRightRewardAmount</Name>
+                          <Name>SetIsRightRewardAmount</Name>
                         </Expression>
                         <Expression xsi:type="SubscribeSubject">
                           <Name>isRightValve</Name>
@@ -379,7 +379,7 @@
                           <Combinator xsi:type="rx:Zip" />
                         </Expression>
                         <Expression xsi:type="MulticastSubject">
-                          <Name>SetRightRewardAmount</Name>
+                          <Name>SetIsRightRewardAmount</Name>
                         </Expression>
                         <Expression xsi:type="WorkflowOutput" />
                       </Nodes>
@@ -765,7 +765,7 @@
                           <Combinator xsi:type="rx:WithLatestFrom" />
                         </Expression>
                         <Expression xsi:type="MulticastSubject">
-                          <Name>SetRightRewardAmount</Name>
+                          <Name>SetIsRightRewardAmount</Name>
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="rx:Delay">
@@ -919,7 +919,7 @@
                           <Combinator xsi:type="rx:WithLatestFrom" />
                         </Expression>
                         <Expression xsi:type="MulticastSubject">
-                          <Name>SetRightRewardAmount</Name>
+                          <Name>SetIsRightRewardAmount</Name>
                         </Expression>
                         <Expression xsi:type="WorkflowOutput" />
                       </Nodes>
@@ -991,7 +991,7 @@
                           <Combinator xsi:type="rx:WithLatestFrom" />
                         </Expression>
                         <Expression xsi:type="MulticastSubject">
-                          <Name>SetRightRewardAmount</Name>
+                          <Name>SetIsRightRewardAmount</Name>
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="rx:Delay">
@@ -1145,7 +1145,7 @@
                           <Combinator xsi:type="rx:WithLatestFrom" />
                         </Expression>
                         <Expression xsi:type="MulticastSubject">
-                          <Name>SetRightRewardAmount</Name>
+                          <Name>SetIsRightRewardAmount</Name>
                         </Expression>
                         <Expression xsi:type="WorkflowOutput" />
                       </Nodes>
