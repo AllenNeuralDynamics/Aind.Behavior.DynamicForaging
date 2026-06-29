@@ -746,7 +746,7 @@
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="DoubleProperty">
-                            <Value>500</Value>
+                            <Value>50</Value>
                           </Combinator>
                         </Expression>
                         <Expression xsi:type="Combinator">
@@ -947,7 +947,7 @@
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="DoubleProperty">
-                            <Value>500</Value>
+                            <Value>50</Value>
                           </Combinator>
                         </Expression>
                         <Expression xsi:type="Combinator">
