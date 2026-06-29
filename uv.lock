@@ -51,7 +51,6 @@ version = "0.0.2"
 source = { editable = "." }
 dependencies = [
     { name = "aind-behavior-services" },
-    { name = "aind-dynamic-foraging-models" },
     { name = "pydantic-settings" },
     { name = "scikit-learn" },
 ]
@@ -80,7 +79,6 @@ docs = [
 [package.metadata]
 requires-dist = [
     { name = "aind-behavior-services", specifier = ">=0.13.5" },
-    { name = "aind-dynamic-foraging-models", specifier = ">=0.13.1" },
     { name = "contraqctor", marker = "extra == 'data'", specifier = ">=0.5.3" },
     { name = "pydantic-settings" },
     { name = "scikit-learn", specifier = ">=1.8.0" },
@@ -165,22 +163,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/36/89/17cad4b1c9c75de7f71dc735ed07334eab9ea01876ddffdf6f9f64b5978a/aind_behavior_services-0.13.5.tar.gz", hash = "sha256:f771f3d1ebfc60c17cff53a2c4ad8d0919411e26066e712ef4f6cb10cd857b57", size = 29399, upload-time = "2026-03-23T18:47:18.78Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/54/3d/a92f31e7ce1886bcaac017f25ae578589dc6ef3060f4ba10792f8c5b2e14/aind_behavior_services-0.13.5-py3-none-any.whl", hash = "sha256:bbd6ff52903a4d8d97c84f908f745a7784ded0047388225d8dee6515cd77b588", size = 39453, upload-time = "2026-03-23T18:47:19.678Z" },
-]
-
-[[package]]
-name = "aind-dynamic-foraging-models"
-version = "0.13.1"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "matplotlib" },
-    { name = "numpy" },
-    { name = "pydantic" },
-    { name = "scikit-learn" },
-    { name = "scipy" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/eb/47/a7b35997f9767cc4911ce65db39a06492192d338175487916d98b70b1640/aind_dynamic_foraging_models-0.13.1.tar.gz", hash = "sha256:260e8cacb8b55b43f12b2443f876ced4d1cde364f9938199c1b2466425cd2419", size = 6648444, upload-time = "2026-02-21T01:05:25.913Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/61/12/e299389a360dae91b07b936ebed085fa1a718e210319faa50d4766054b26/aind_dynamic_foraging_models-0.13.1-py3-none-any.whl", hash = "sha256:34602f2ee02fa1d5b48449f05980b2ddc37c4f770608a2df3989875856571a13", size = 50200, upload-time = "2026-02-21T01:05:24.632Z" },
 ]
 
 [[package]]
