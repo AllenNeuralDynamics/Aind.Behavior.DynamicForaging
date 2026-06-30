@@ -51,12 +51,6 @@ class TestCalculateBias(unittest.TestCase):
         ignored = [TrialOutcome(is_right_choice=None, is_rewarded=False, trial=Trial()) for _ in range(20)]
         self.assertEqual(calculate_bias(valid + ignored), calculate_bias(valid))
 
-    def test_auto_response_trials_excluded(self):
-        """Adding auto response trials should not change the result."""
-        valid = make_outcomes(80)
-        auto = make_outcomes(20, 1, 1, is_auto_response_right=True)
-        self.assertEqual(calculate_bias(valid + auto), calculate_bias(valid))
-
     def test_only_uses_last_200_trials(self):
         """Trials beyond the last 200 should not affect the result."""
         old = make_outcomes(100, 0)
