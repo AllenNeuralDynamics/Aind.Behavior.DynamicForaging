@@ -84,7 +84,7 @@ class BlockBasedTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
             distribution_parameters=ExponentialDistributionParameters(rate=1 / 20),
             truncation_parameters=TruncationParameters(min=20, max=60),
         ),
-        description="Distribution describing block length.",
+        description="Distribution describing block length. Block length is floored making the upper bound exclusive.",
     )
 
     autowater_parameters: Optional[AutoWaterParameters] = Field(
@@ -135,7 +135,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
         self.is_right_baited: bool = False
         self.block: Block
 
-        self.bias: Optional[float] = None
+        self.bias: float = np.nan
         self.bias_intervention = BiasIntervention(self.spec.bias_intervention_parameters)
 
     def update(self, outcome: TrialOutcome | str):

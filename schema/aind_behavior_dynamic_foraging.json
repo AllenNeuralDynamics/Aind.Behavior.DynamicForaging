@@ -503,7 +503,7 @@
             },
             "scaling_parameters": null
           },
-          "description": "Distribution describing block length."
+          "description": "Distribution describing block length. Block length is floored making the upper bound exclusive."
         },
         "autowater_parameters": {
           "default": {
@@ -888,7 +888,7 @@
             },
             "scaling_parameters": null
           },
-          "description": "Distribution describing block length."
+          "description": "Distribution describing block length. Block length is floored making the upper bound exclusive."
         },
         "autowater_parameters": {
           "default": {
@@ -1175,7 +1175,7 @@
             },
             "scaling_parameters": null
           },
-          "description": "Distribution describing block length."
+          "description": "Distribution describing block length. Block length is floored making the upper bound exclusive."
         },
         "autowater_parameters": {
           "default": {
@@ -3746,7 +3746,7 @@
             "truncation_parameters": null,
             "scaling_parameters": null
           },
-          "description": "Distribution describing block length."
+          "description": "Distribution describing block length. Block length is floored making the upper bound exclusive."
         },
         "autowater_parameters": {
           "default": {
@@ -3820,7 +3820,7 @@
           "default": 3,
           "description": "Maximum number of consecutive blocks a side can have the higher probability.",
           "title": "Maximum Dominance Streak",
-          "type": "number"
+          "type": "integer"
         }
       },
       "title": "UncoupledTrialGeneratorSpec",

@@ -1002,11 +1002,12 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Distribution describing block length.
+        /// Distribution describing block length. Block length is floored making the upper bound exclusive.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("block_length")]
-        [System.ComponentModel.DescriptionAttribute("Distribution describing block length.")]
+        [System.ComponentModel.DescriptionAttribute("Distribution describing block length. Block length is floored making the upper bo" +
+            "und exclusive.")]
         public AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution BlockLength
         {
             get
@@ -1646,11 +1647,12 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Distribution describing block length.
+        /// Distribution describing block length. Block length is floored making the upper bound exclusive.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("block_length")]
-        [System.ComponentModel.DescriptionAttribute("Distribution describing block length.")]
+        [System.ComponentModel.DescriptionAttribute("Distribution describing block length. Block length is floored making the upper bo" +
+            "und exclusive.")]
         public AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution BlockLength
         {
             get
@@ -2393,11 +2395,12 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Distribution describing block length.
+        /// Distribution describing block length. Block length is floored making the upper bound exclusive.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("block_length")]
-        [System.ComponentModel.DescriptionAttribute("Distribution describing block length.")]
+        [System.ComponentModel.DescriptionAttribute("Distribution describing block length. Block length is floored making the upper bo" +
+            "und exclusive.")]
         public AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution BlockLength
         {
             get
@@ -6895,7 +6898,7 @@ namespace AindDynamicForagingDataSchema
     
         private System.Collections.Generic.List<double> _rewardProbabilities;
     
-        private double _maximumDominanceStreak;
+        private int _maximumDominanceStreak;
     
         public UncoupledTrialGeneratorSpec()
         {
@@ -6909,7 +6912,7 @@ namespace AindDynamicForagingDataSchema
             _isBaiting = false;
             _trialGenerationEndParameters = new UncoupledTrialGenerationEndConditions();
             _rewardProbabilities = new System.Collections.Generic.List<double>();
-            _maximumDominanceStreak = 3D;
+            _maximumDominanceStreak = 3;
         }
     
         protected UncoupledTrialGeneratorSpec(UncoupledTrialGeneratorSpec other) : 
@@ -7000,11 +7003,12 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Distribution describing block length.
+        /// Distribution describing block length. Block length is floored making the upper bound exclusive.
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("block_length")]
-        [System.ComponentModel.DescriptionAttribute("Distribution describing block length.")]
+        [System.ComponentModel.DescriptionAttribute("Distribution describing block length. Block length is floored making the upper bo" +
+            "und exclusive.")]
         public AllenNeuralDynamics.AindBehaviorServices.Distributions.UniformDistribution BlockLength
         {
             get
@@ -7113,7 +7117,7 @@ namespace AindDynamicForagingDataSchema
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("maximum_dominance_streak")]
         [System.ComponentModel.DescriptionAttribute("Maximum number of consecutive blocks a side can have the higher probability.")]
-        public double MaximumDominanceStreak
+        public int MaximumDominanceStreak
         {
             get
             {

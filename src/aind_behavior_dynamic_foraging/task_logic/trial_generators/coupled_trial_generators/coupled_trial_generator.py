@@ -145,10 +145,10 @@ class CoupledTrialGenerator(BaseCoupledTrialGenerator):
         choice_history: list,
         p_right_reward: float,
         p_left_reward: float,
-        beh_stability_params: BehaviorStabilityParameters,
+        beh_stability_params: Optional[BehaviorStabilityParameters],
         trials_in_block: int,
         kernel_size: int = 2,
-    ) -> Optional[bool]:
+    ) -> bool:
         """Evaluates whether the animal's choice behavior is stable enough to allow a block switch.
 
         Computes a sliding-window choice fraction and checks whether it falls within
@@ -214,7 +214,7 @@ class CoupledTrialGenerator(BaseCoupledTrialGenerator):
                 return False
             stable = np.all(points_above_threshold[-min_stable:])
             logger.info("Behavior stable at block end: %s" % stable)
-            return stable
+            return bool(stable)
 
         elif mode == "anytime":
             # allows consecutive trials any time in the behavior

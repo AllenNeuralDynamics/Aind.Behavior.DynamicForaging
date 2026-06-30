@@ -35,7 +35,7 @@ Changelog = "https://github.com/AllenNeuralDynamics/Aind.Behavior.DynamicForagin
 
 [project.optional-dependencies]
 
-data = ["contraqctor>=0.5.3"]
+data = ["contraqctor>=0.5.8"]
 
 [dependency-groups]
 
@@ -43,7 +43,6 @@ dev = [
     "ruff",
     "codespell",
     "aind-behavior-dynamic-foraging[data]",
-    "aind-clabe[aind-services]>=0.10"
 ]
 
 docs = [

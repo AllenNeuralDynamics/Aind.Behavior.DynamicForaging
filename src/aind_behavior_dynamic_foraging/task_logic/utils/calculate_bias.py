@@ -2,7 +2,7 @@ import logging
 from typing import List
 
 import numpy as np
-from sklearn.linear_model import LogisticRegressionCV
+from sklearn.linear_model import LogisticRegression
 
 from aind_behavior_dynamic_foraging.task_logic.trial_models import TrialOutcome
 
@@ -30,15 +30,15 @@ def calculate_bias(outcomes: List[TrialOutcome]) -> float:
     """
 
     solver = "liblinear"
-    l1_ratios = (0,)  # ignored parameter with solver='liblinear'
+    l1_ratio = 0
     trial_window_length = 5
-    cross_val_folds = 10
-    regularization_candidates = 10
+    cross_val_folds = 1
+    regularization_strength = 10
 
     outcomes = outcomes[-200:]
 
     # exclude auto response and ignored trials
-    filtered = [t for t in outcomes if t.is_right_choice is not None and t.trial.is_auto_response_right is None]
+    filtered = [t for t in outcomes if t.is_right_choice is not None]
 
     if len(filtered) <= trial_window_length:
         logger.warning("Not enough choices to calculate bias.")
@@ -73,13 +73,7 @@ def calculate_bias(outcomes: List[TrialOutcome]) -> float:
         )
         return np.nan
 
-    logistic_reg = LogisticRegressionCV(
-        solver=solver,
-        l1_ratios=l1_ratios,
-        Cs=regularization_candidates,
-        cv=cross_val_folds,
-        use_legacy_attributes=True,
-    )
+    logistic_reg = LogisticRegression(solver=solver, l1_ratio=l1_ratio, C=1 / regularization_strength)
     logistic_reg.fit(x, y)
 
     bias = logistic_reg.intercept_[0]
