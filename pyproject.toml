@@ -35,7 +35,7 @@ Changelog = "https://github.com/AllenNeuralDynamics/Aind.Behavior.DynamicForagin
 
 [project.optional-dependencies]
 
-data = ["contraqctor>=0.5.8"]
+data = ["contraqctor>=0.6.0"]
 
 [dependency-groups]
 
