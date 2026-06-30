@@ -16,6 +16,7 @@
         <Property Name="LickLeftSubject" />
         <Property Name="LickRightSubject" />
         <Property Name="TrialSubject" />
+        <Property Name="FrameSubject" />
       </Expression>
       <Expression xsi:type="rx:Defer">
         <Name>BehaviorPlot</Name>
@@ -25,7 +26,7 @@
               <Property Name="Name" DisplayName="FrameSubject" />
             </Expression>
             <Expression xsi:type="SubscribeSubject">
-              <Name>Frame</Name>
+              <Name>Behavior</Name>
             </Expression>
             <Expression xsi:type="ExternalizedMapping">
               <Property Name="Name" DisplayName="PlotName" />
