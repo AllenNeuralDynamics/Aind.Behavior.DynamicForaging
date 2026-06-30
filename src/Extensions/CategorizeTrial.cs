@@ -30,11 +30,11 @@ public class CategorizeTrial
                 {
                     if (trial.IsRewarded)
                     {
-                        categorizedTrial.TrialCategory = CategorizedTrial.Category.RightRewardedAuto;
+                        categorizedTrial.TrialCategory = Category.RightRewardedAuto;
                     }
                     else
                     {
-                        categorizedTrial.TrialCategory = CategorizedTrial.Category.RightUnrewardedAuto;
+                        categorizedTrial.TrialCategory = Category.RightUnrewardedAuto;
                     }
                 }
                 else
@@ -42,11 +42,11 @@ public class CategorizeTrial
                     categorizedTrial.ChoiceCategory = Choice.RightChoice;
                     if (trial.IsRewarded)
                     {
-                        categorizedTrial.TrialCategory = CategorizedTrial.Category.RightRewarded;
+                        categorizedTrial.TrialCategory = Category.RightRewarded;
                     }
                     else
                     {
-                        categorizedTrial.TrialCategory = CategorizedTrial.Category.RightUnrewarded;
+                        categorizedTrial.TrialCategory = Category.RightUnrewarded;
                     }
                 }
             }
@@ -56,11 +56,11 @@ public class CategorizeTrial
                 {
                     if (trial.IsRewarded)
                     {
-                        categorizedTrial.TrialCategory = CategorizedTrial.Category.LeftRewardedAuto;
+                        categorizedTrial.TrialCategory = Category.LeftRewardedAuto;
                     }
                     else
                     {
-                        categorizedTrial.TrialCategory = CategorizedTrial.Category.LeftUnrewardedAuto;
+                        categorizedTrial.TrialCategory = Category.LeftUnrewardedAuto;
                     }
                 }
                 else
@@ -68,11 +68,11 @@ public class CategorizeTrial
                     categorizedTrial.ChoiceCategory = Choice.LeftChoice;
                     if (trial.IsRewarded)
                     {
-                        categorizedTrial.TrialCategory = CategorizedTrial.Category.LeftRewarded;
+                        categorizedTrial.TrialCategory = Category.LeftRewarded;
                     }
                     else
                     {
-                        categorizedTrial.TrialCategory = CategorizedTrial.Category.LeftUnrewarded;
+                        categorizedTrial.TrialCategory = Category.LeftUnrewarded;
                     }
                 }
             }
