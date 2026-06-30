@@ -288,7 +288,7 @@
               </Combinator>
             </Expression>
             <Expression xsi:type="imviz:SampleOnNewFrame">
-              <Name>Frame</Name>
+              <Name>Table</Name>
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="imviz:StoreImage">
@@ -605,7 +605,7 @@
                         </Expression>
                         <Expression xsi:type="Equal">
                           <Operand xsi:type="StringProperty">
-                            <Value>Camera2</Value>
+                            <Value>Camera1</Value>
                           </Operand>
                         </Expression>
                         <Expression xsi:type="WorkflowOutput" />
