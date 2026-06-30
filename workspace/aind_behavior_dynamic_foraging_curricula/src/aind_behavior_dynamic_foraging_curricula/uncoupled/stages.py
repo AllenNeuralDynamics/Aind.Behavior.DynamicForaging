@@ -229,7 +229,7 @@ def make_s_stage_3():
                     ),
                     reward_probabilities=[0.1, 0.4, 0.7],
                     block_length=UniformDistribution(
-                        distribution_parameters=UniformDistributionParameters(min=20, max=35),
+                        distribution_parameters=UniformDistributionParameters(min=20, max=36),
                     ),
                     inter_trial_interval_duration=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
@@ -262,7 +262,7 @@ def make_s_stage_final():
                     ),
                     reward_probabilities=[0.1, 0.4, 0.7],
                     block_length=UniformDistribution(
-                        distribution_parameters=UniformDistributionParameters(min=20, max=35),
+                        distribution_parameters=UniformDistributionParameters(min=20, max=36),
                     ),
                     inter_trial_interval_duration=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
@@ -297,7 +297,7 @@ def make_s_stage_graduated():
                     ),
                     reward_probabilities=[0.1, 0.4, 0.7],
                     block_length=UniformDistribution(
-                        distribution_parameters=UniformDistributionParameters(min=20, max=35),
+                        distribution_parameters=UniformDistributionParameters(min=20, max=36),
                     ),
                     inter_trial_interval_duration=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),

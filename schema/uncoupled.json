@@ -428,7 +428,7 @@
                                 "distribution_parameters": {
                                     "family": "Uniform",
                                     "min": 20.0,
-                                    "max": 35.0
+                                    "max": 36.0
                                 },
                                 "truncation_parameters": null,
                                 "scaling_parameters": null
@@ -461,7 +461,7 @@
                                 0.4,
                                 0.7
                             ],
-                            "maximum_dominance_streak": 3.0
+                            "maximum_dominance_streak": 3
                         }
                     },
                     "version": "0.0.2",
@@ -517,7 +517,7 @@
                                 "distribution_parameters": {
                                     "family": "Uniform",
                                     "min": 20.0,
-                                    "max": 35.0
+                                    "max": 36.0
                                 },
                                 "truncation_parameters": null,
                                 "scaling_parameters": null
@@ -546,7 +546,7 @@
                                 0.4,
                                 0.7
                             ],
-                            "maximum_dominance_streak": 3.0
+                            "maximum_dominance_streak": 3
                         }
                     },
                     "version": "0.0.2",
@@ -602,7 +602,7 @@
                                 "distribution_parameters": {
                                     "family": "Uniform",
                                     "min": 20.0,
-                                    "max": 35.0
+                                    "max": 36.0
                                 },
                                 "truncation_parameters": null,
                                 "scaling_parameters": null
@@ -631,7 +631,7 @@
                                 0.4,
                                 0.7
                             ],
-                            "maximum_dominance_streak": 3.0
+                            "maximum_dominance_streak": 3
                         }
                     },
                     "version": "0.0.2",
