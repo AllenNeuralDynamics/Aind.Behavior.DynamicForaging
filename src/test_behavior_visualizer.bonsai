@@ -490,7 +490,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p1:CreateNullableBoolean">
-                <p1:Value>false</p1:Value>
+                <p1:Value>true</p1:Value>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -656,8 +656,8 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p3:TrialOutcome">
-                <p3:IsRightChoice>false</p3:IsRightChoice>
-                <p3:IsRewarded>true</p3:IsRewarded>
+                <p3:IsRightChoice>true</p3:IsRightChoice>
+                <p3:IsRewarded>false</p3:IsRewarded>
               </Combinator>
             </Expression>
             <Expression xsi:type="rx:CreateObservable">
@@ -683,7 +683,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Delay">
-                      <rx:DueTime>PT0.127S</rx:DueTime>
+                      <rx:DueTime>PT0.285S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">

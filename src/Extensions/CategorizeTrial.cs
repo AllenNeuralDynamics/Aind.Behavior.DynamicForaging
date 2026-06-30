@@ -11,8 +11,6 @@ using System.Xml.Serialization;
 [Combinator]
 [Description("")]
 [WorkflowElementCategory(ElementCategory.Transform)]
-[XmlInclude(typeof(CategorizedTrial.Choice))]
-[XmlInclude(typeof(CategorizedTrial.Category))]
 public class CategorizeTrial
 {
     public IObservable<Timestamped<CategorizedTrial>> Process(IObservable<Timestamped<TrialOutcome>> source)
@@ -24,7 +22,7 @@ public class CategorizeTrial
             var categorizedTrial = new CategorizedTrial();
             if (!trial.IsRightChoice.HasValue)
             {
-                categorizedTrial.ChoiceCategory = CategorizedTrial.Choice.NoChoice;
+                categorizedTrial.ChoiceCategory = Choice.NoChoice;
             }
             else if (trial.IsRightChoice.Value)
             {
@@ -41,7 +39,7 @@ public class CategorizeTrial
                 }
                 else
                 {
-                    categorizedTrial.ChoiceCategory = CategorizedTrial.Choice.RightChoice;
+                    categorizedTrial.ChoiceCategory = Choice.RightChoice;
                     if (trial.IsRewarded)
                     {
                         categorizedTrial.TrialCategory = CategorizedTrial.Category.RightRewarded;
@@ -67,7 +65,7 @@ public class CategorizeTrial
                 }
                 else
                 {
-                    categorizedTrial.ChoiceCategory = CategorizedTrial.Choice.LeftChoice;
+                    categorizedTrial.ChoiceCategory = Choice.LeftChoice;
                     if (trial.IsRewarded)
                     {
                         categorizedTrial.TrialCategory = CategorizedTrial.Category.LeftRewarded;
@@ -86,26 +84,4 @@ public class CategorizeTrial
 }
 
 
-public class CategorizedTrial
-{
-    public enum Choice
-    {
-        NoChoice,
-        RightChoice,
-        LeftChoice
-    }
-    public enum Category
-    {
-        RightRewardedAuto,
-        LeftRewardedAuto,
-        RightUnrewardedAuto,
-        LeftUnrewardedAuto,
-        RightRewarded,
-        RightUnrewarded,
-        LeftRewarded,
-        LeftUnrewarded,
-    }
 
-    public Choice ChoiceCategory {get; set;}
-    public Category TrialCategory {get; set;}
-}
