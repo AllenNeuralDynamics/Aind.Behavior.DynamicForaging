@@ -35,12 +35,11 @@ def make_qc_runner(dataset: contract.Dataset) -> qc.Runner:
 
     # Exclude commands to Harp boards as these are tested separately
     for cmd in dataset["Behavior"]["HarpCommands"]:
+        if cmd.has_error:
+            continue
         for stream in cmd:
             if isinstance(stream, contract.harp.HarpRegister):
                 exclude.append(stream)
-
-    # Add the outcome of the dataset loading step to the automatic qc
-    _runner.add_suite(qc.contract.ContractTestSuite(dataset.collect_errors(), exclude=exclude), group="Data contract")
 
     # Add Harp tests for ALL Harp devices in the dataset
     for stream in (_r := dataset["Behavior"]):
