@@ -115,7 +115,7 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
         controller = rig.triggered_camera_controller
         fps = float(controller.frame_rate) if controller.frame_rate else float("nan")
         for name, cam in rig.triggered_camera_controller.cameras.items():
-            Camera(
+            camera = Camera(
                 name=name,
                 manufacturer=Organization.FLIR,
                 chroma=CameraChroma.BW,
@@ -137,12 +137,6 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                 crop_unit=SizeUnit.PX,
                 additional_settings=GenericModel.model_validate(cam.model_dump()),
             )
-            camera = Camera(
-                name=name,
-                serial_number=cam.serial_number,
-                manufacturer=Organization.SPINNAKER,
-                data_interface=DataInterface.COAX,
-            )
             assembly = CameraAssembly(
                 name=f"{name}Assembly",
                 camera=camera,
@@ -161,8 +155,9 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                 serial_number=rig.harp_behavior.serial_number,
                 manufacturer=Organization.CHAMPALIMAUD,
                 is_clock_generator=False,
-                firmware_version=behavior_board.device_reader.device.firmwareVersion,
-                hardware_version=behavior_board.device_reader.device.hardwareTargets,
+                firmware_version=behavior_board["FirmwareVersionHigh"],
+                hardware_version=behavior_board["HardwareVersionHigh"],
+                core_version=behavior_board["CoreVersionHigh"],
             )
         )
 
@@ -174,8 +169,9 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                 harp_device_type=HarpDeviceType.WHITERABBIT,
                 serial_number=rig.harp_clock_generator.serial_number,
                 is_clock_generator=True,
-                firmware_version=clock_generator.device_reader.device.firmwareVersion,
-                hardware_version=clock_generator.device_reader.device.hardwareTargets,
+                firmware_version=clock_generator["FirmwareVersionHigh"],
+                hardware_version=clock_generator["HardwareVersionHigh"],
+                core_version=clock_generator["CoreVersionHigh"],
             )
         )
 
@@ -245,7 +241,14 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
 
         # manipulator\
         components.append(
-            MotorizedStage(name="Manipulator", serial_number=rig.manipulator.serial_number, travel=Decimal("30"))
+            MotorizedStage(
+                name="motorized_stage",
+                manufacturer=Organization.AIND,
+                model="328-300-00",
+                travel=Decimal("30"),
+                travel_unit=SizeUnit.CM,
+                notes="This stage is driven by the manipulator device.",
+            )
         )
 
         # connections
