@@ -170,7 +170,7 @@
                         }
                     },
                     "version": "0.0.2",
-                    "stage_name": null
+                    "stage_name": "stage_1_warmup"
                 },
                 "graph": {
                     "nodes": {},
@@ -273,7 +273,7 @@
                         }
                     },
                     "version": "0.0.2",
-                    "stage_name": null
+                    "stage_name": "stage_1"
                 },
                 "graph": {
                     "nodes": {},
@@ -376,7 +376,7 @@
                         }
                     },
                     "version": "0.0.2",
-                    "stage_name": null
+                    "stage_name": "stage_2"
                 },
                 "graph": {
                     "nodes": {},
@@ -465,7 +465,7 @@
                         }
                     },
                     "version": "0.0.2",
-                    "stage_name": null
+                    "stage_name": "stage_3"
                 },
                 "graph": {
                     "nodes": {},
@@ -550,7 +550,7 @@
                         }
                     },
                     "version": "0.0.2",
-                    "stage_name": null
+                    "stage_name": "final"
                 },
                 "graph": {
                     "nodes": {},
@@ -635,7 +635,7 @@
                         }
                     },
                     "version": "0.0.2",
-                    "stage_name": null
+                    "stage_name": "graduated"
                 },
                 "graph": {
                     "nodes": {},

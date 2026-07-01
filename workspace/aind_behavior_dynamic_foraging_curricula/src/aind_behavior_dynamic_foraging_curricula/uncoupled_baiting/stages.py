@@ -46,6 +46,7 @@ def make_s_stage_1_warmup():
     return Stage(
         name="stage_1_warmup",
         task=AindDynamicForagingTaskLogic(
+            stage_name="stage_1_warmup",
             task_parameters=AindDynamicForagingTaskParameters(
                 reward_size=RewardSize(right_value_volume=4.0, left_value_volume=4.0),
                 trial_generator=TrialGeneratorCompositeSpec(
@@ -110,7 +111,7 @@ def make_s_stage_1_warmup():
                         ),
                     ]
                 ),
-            )
+            ),
         ),
         metrics_provider=MetricsProvider(metrics_from_dataset),
     )
@@ -120,6 +121,7 @@ def make_s_stage_1():
     return Stage(
         name="stage_1",
         task=AindDynamicForagingTaskLogic(
+            stage_name="stage_1",
             task_parameters=AindDynamicForagingTaskParameters(
                 reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
                 trial_generator=CoupledTrialGeneratorSpec(
@@ -157,7 +159,7 @@ def make_s_stage_1():
                         reward_fraction=0.5, min_ignored_trials=5, min_unrewarded_trials=5
                     ),
                 ),
-            )
+            ),
         ),
         metrics_provider=MetricsProvider(metrics_from_dataset),
     )
@@ -167,6 +169,7 @@ def make_s_stage_2():
     return Stage(
         name="stage_2",
         task=AindDynamicForagingTaskLogic(
+            stage_name="stage_2",
             task_parameters=AindDynamicForagingTaskParameters(
                 reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
                 trial_generator=CoupledTrialGeneratorSpec(
@@ -204,7 +207,7 @@ def make_s_stage_2():
                         reward_fraction=0.5, min_ignored_trials=7, min_unrewarded_trials=7
                     ),
                 ),
-            )
+            ),
         ),
         metrics_provider=MetricsProvider(metrics_from_dataset),
     )
@@ -214,6 +217,7 @@ def make_s_stage_3():
     return Stage(
         name="stage_3",
         task=AindDynamicForagingTaskLogic(
+            stage_name="stage_3",
             task_parameters=AindDynamicForagingTaskParameters(
                 reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
                 trial_generator=UncoupledTrialGeneratorSpec(
@@ -240,7 +244,7 @@ def make_s_stage_3():
                         reward_fraction=0.5, min_ignored_trials=10, min_unrewarded_trials=10
                     ),
                 ),
-            )
+            ),
         ),
         metrics_provider=MetricsProvider(metrics_from_dataset),
     )
@@ -250,6 +254,7 @@ def make_s_stage_final():
     return Stage(
         name="final",
         task=AindDynamicForagingTaskLogic(
+            stage_name="final",
             task_parameters=AindDynamicForagingTaskParameters(
                 reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
                 trial_generator=UncoupledTrialGeneratorSpec(
@@ -274,7 +279,7 @@ def make_s_stage_final():
                     reward_consumption_duration=3.0,
                     autowater_parameters=None,
                 ),
-            )
+            ),
         ),
         metrics_provider=MetricsProvider(metrics_from_dataset),
     )
@@ -284,6 +289,7 @@ def make_s_stage_graduated():
     return Stage(
         name="graduated",
         task=AindDynamicForagingTaskLogic(
+            stage_name="graduated",
             task_parameters=AindDynamicForagingTaskParameters(
                 reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
                 trial_generator=UncoupledTrialGeneratorSpec(
@@ -308,7 +314,7 @@ def make_s_stage_graduated():
                     reward_consumption_duration=3.0,
                     autowater_parameters=None,
                 ),
-            )
+            ),
         ),
         metrics_provider=MetricsProvider(metrics_from_dataset),
     )
