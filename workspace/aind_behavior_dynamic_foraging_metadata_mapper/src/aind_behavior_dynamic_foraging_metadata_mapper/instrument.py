@@ -155,8 +155,8 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                 serial_number=rig.harp_behavior.serial_number,
                 manufacturer=Organization.CHAMPALIMAUD,
                 is_clock_generator=False,
-                firmware_version=behavior_board.device.firmwareVersion,
-                hardware_version=behavior_board.device.hardwareTargets,
+                firmware_version=behavior_board.device_reader.device.firmwareVersion,
+                hardware_version=behavior_board.device_reader.device.hardwareTargets,
             )
         )
 
@@ -168,8 +168,8 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                 harp_device_type=HarpDeviceType.WHITERABBIT,
                 serial_number=rig.harp_clock_generator.serial_number,
                 is_clock_generator=True,
-                firmware_version=clock_generator.device.firmwareVersion,
-                hardware_version=clock_generator.device.hardwareTargets,
+                firmware_version=clock_generator.device_reader.device.firmwareVersion,
+                hardware_version=clock_generator.device_reader.device.hardwareTargets,
             )
         )
 
