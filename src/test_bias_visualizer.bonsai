@@ -12,8 +12,6 @@
                  xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
                  xmlns:p2="clr-namespace:;assembly=Extensions"
                  xmlns:p3="clr-namespace:AindDynamicForagingDataSchema;assembly=Extensions"
-                 xmlns:implot="clr-namespace:Bonsai.ImPlot;assembly=Bonsai.ImPlot"
-                 xmlns:imviz="clr-namespace:Bonsai.ImGui.Visualizers;assembly=Bonsai.ImGui.Visualizers"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
@@ -278,7 +276,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p2:CreateNullableBoolean">
-                <p2:Value>true</p2:Value>
+                <p2:Value>false</p2:Value>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -444,8 +442,8 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p3:TrialOutcome">
-                <p3:IsRightChoice xsi:nil="true" />
-                <p3:IsRewarded>true</p3:IsRewarded>
+                <p3:IsRightChoice>false</p3:IsRightChoice>
+                <p3:IsRewarded>false</p3:IsRewarded>
               </Combinator>
             </Expression>
             <Expression xsi:type="rx:CreateObservable">
@@ -471,7 +469,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Delay">
-                      <rx:DueTime>PT0.372S</rx:DueTime>
+                      <rx:DueTime>PT0.151S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -631,273 +629,13 @@
           </Edges>
         </Workflow>
       </Expression>
-      <Expression xsi:type="ExternalizedMapping">
-        <Property Name="FrameSubject" />
-        <Property Name="TimedBias" />
-      </Expression>
-      <Expression xsi:type="rx:Defer">
-        <Name>BiasPlot</Name>
-        <Workflow>
-          <Nodes>
-            <Expression xsi:type="ExternalizedMapping">
-              <Property Name="Name" DisplayName="FrameSubject" />
-            </Expression>
-            <Expression xsi:type="SubscribeSubject">
-              <Name>Frame</Name>
-            </Expression>
-            <Expression xsi:type="implot:PlotBuilder">
-              <implot:Name>BiasPlot</implot:Name>
-              <implot:Visible>true</implot:Visible>
-              <implot:Size>
-                <implot:X>-1</implot:X>
-                <implot:Y>150</implot:Y>
-              </implot:Size>
-              <implot:Flags>NoTitle</implot:Flags>
-              <implot:FlagsX>AutoFit</implot:FlagsX>
-              <implot:FlagsY>None</implot:FlagsY>
-            </Expression>
-            <Expression xsi:type="rx:PublishSubject">
-              <Name>BiasPlot</Name>
-            </Expression>
-            <Expression xsi:type="Unit" />
-            <Expression xsi:type="imviz:LatestOnNewFrame">
-              <Name>BiasPlot</Name>
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p2:PlotStyling">
-                <p2:TickPositions>
-                  <p2:double>-1</p2:double>
-                  <p2:double>1</p2:double>
-                </p2:TickPositions>
-                <p2:TickLabels>
-                  <p2:string>R</p2:string>
-                  <p2:string>L</p2:string>
-                </p2:TickLabels>
-                <p2:ImPlotLocationFlags>West</p2:ImPlotLocationFlags>
-                <p2:ImPlotLegendFlags>None</p2:ImPlotLegendFlags>
-                <p2:YAxisMax>1.1</p2:YAxisMax>
-                <p2:YAxisMin>-1.1</p2:YAxisMin>
-              </Combinator>
-            </Expression>
-            <Expression xsi:type="ExternalizedMapping">
-              <Property Name="Name" DisplayName="TimedBias" />
-            </Expression>
-            <Expression xsi:type="SubscribeSubject">
-              <Name>TimedBias</Name>
-            </Expression>
-            <Expression xsi:type="imviz:RollingBufferBuilder">
-              <imviz:Capacity>1000</imviz:Capacity>
-              <imviz:IndexSelector>Seconds</imviz:IndexSelector>
-              <imviz:ValueSelector>Value.Bias</imviz:ValueSelector>
-            </Expression>
-            <Expression xsi:type="imviz:LatestOnNewFrame">
-              <Name>BiasPlot</Name>
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p2:LineStyling">
-                <p2:ColorR>0</p2:ColorR>
-                <p2:ColorG>0</p2:ColorG>
-                <p2:ColorB>0</p2:ColorB>
-                <p2:ColorA>1</p2:ColorA>
-                <p2:LineThickness>2</p2:LineThickness>
-              </Combinator>
-            </Expression>
-            <Expression xsi:type="imviz:PlotLineSeriesBuilder">
-              <imviz:Visible>true</imviz:Visible>
-              <imviz:Flags>None</imviz:Flags>
-            </Expression>
-            <Expression xsi:type="imviz:RollingBufferBuilder">
-              <imviz:Capacity>1</imviz:Capacity>
-              <imviz:IndexSelector>Seconds</imviz:IndexSelector>
-              <imviz:ValueSelector>Value.Bias</imviz:ValueSelector>
-            </Expression>
-            <Expression xsi:type="imviz:LatestOnNewFrame">
-              <Name>BiasPlot</Name>
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p2:ScatterStyling">
-                <p2:ImPlotMarker>Circle</p2:ImPlotMarker>
-                <p2:Size>5</p2:Size>
-                <p2:FillColorR>0</p2:FillColorR>
-                <p2:FillColorG>1</p2:FillColorG>
-                <p2:FillColorB>0</p2:FillColorB>
-                <p2:FillColorA>1</p2:FillColorA>
-                <p2:OutlineColorR>0</p2:OutlineColorR>
-                <p2:OutlineColorG>0</p2:OutlineColorG>
-                <p2:OutlineColorB>0</p2:OutlineColorB>
-                <p2:OutlineColorA>1</p2:OutlineColorA>
-                <p2:OutlineWeight>1</p2:OutlineWeight>
-              </Combinator>
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="implot:PlotScatter">
-                <implot:Visible>true</implot:Visible>
-                <implot:Flags>None</implot:Flags>
-              </Combinator>
-            </Expression>
-            <Expression xsi:type="MemberSelector">
-              <Selector>Value.Bias</Selector>
-            </Expression>
-            <Expression xsi:type="imviz:LatestOnNewFrame">
-              <Name>BiasPlot</Name>
-            </Expression>
-            <Expression xsi:type="Format">
-              <Format>{0:N2}</Format>
-              <Selector>it</Selector>
-            </Expression>
-            <Expression xsi:type="PropertyMapping">
-              <PropertyMappings>
-                <Property Name="Text" />
-              </PropertyMappings>
-            </Expression>
-            <Expression xsi:type="MemberSelector">
-              <Selector>Seconds</Selector>
-            </Expression>
-            <Expression xsi:type="PropertyMapping">
-              <PropertyMappings>
-                <Property Name="X" />
-              </PropertyMappings>
-            </Expression>
-            <Expression xsi:type="PropertyMapping">
-              <PropertyMappings>
-                <Property Name="Y" />
-              </PropertyMappings>
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="implot:PlotText">
-                <implot:Visible>true</implot:Visible>
-                <implot:Text>0.26</implot:Text>
-                <implot:X>9.6599999999998385</implot:X>
-                <implot:Y>0.26182802890512547</implot:Y>
-                <implot:PixelOffset>
-                  <implot:X>0</implot:X>
-                  <implot:Y>-10</implot:Y>
-                </implot:PixelOffset>
-                <implot:Flags>None</implot:Flags>
-              </Combinator>
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="DoubleProperty">
-                <Value>1</Value>
-              </Combinator>
-            </Expression>
-            <Expression xsi:type="scr:ExpressionTransform">
-              <scr:Expression>new (it as LeftBias)</scr:Expression>
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="rx:Zip" />
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="harp:CreateTimestamped" />
-            </Expression>
-            <Expression xsi:type="imviz:RollingBufferBuilder">
-              <imviz:Capacity>1000</imviz:Capacity>
-              <imviz:IndexSelector>Seconds</imviz:IndexSelector>
-              <imviz:ValueSelector>Value.LeftBias</imviz:ValueSelector>
-            </Expression>
-            <Expression xsi:type="imviz:LatestOnNewFrame">
-              <Name>BiasPlot</Name>
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p2:LineStyling">
-                <p2:ColorR>1</p2:ColorR>
-                <p2:ColorG>0</p2:ColorG>
-                <p2:ColorB>0</p2:ColorB>
-                <p2:ColorA>0.7</p2:ColorA>
-                <p2:LineThickness>1</p2:LineThickness>
-              </Combinator>
-            </Expression>
-            <Expression xsi:type="imviz:PlotLineSeriesBuilder">
-              <imviz:Visible>true</imviz:Visible>
-              <imviz:Flags>None</imviz:Flags>
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="DoubleProperty">
-                <Value>-1</Value>
-              </Combinator>
-            </Expression>
-            <Expression xsi:type="scr:ExpressionTransform">
-              <scr:Expression>new (it as RightBias)</scr:Expression>
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="rx:Zip" />
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="harp:CreateTimestamped" />
-            </Expression>
-            <Expression xsi:type="imviz:RollingBufferBuilder">
-              <imviz:Capacity>1000</imviz:Capacity>
-              <imviz:IndexSelector>Seconds</imviz:IndexSelector>
-              <imviz:ValueSelector>Value.RightBias</imviz:ValueSelector>
-            </Expression>
-            <Expression xsi:type="imviz:LatestOnNewFrame">
-              <Name>BiasPlot</Name>
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p2:LineStyling">
-                <p2:ColorR>0</p2:ColorR>
-                <p2:ColorG>0</p2:ColorG>
-                <p2:ColorB>1</p2:ColorB>
-                <p2:ColorA>0.7</p2:ColorA>
-                <p2:LineThickness>1</p2:LineThickness>
-              </Combinator>
-            </Expression>
-            <Expression xsi:type="imviz:PlotLineSeriesBuilder">
-              <imviz:Visible>true</imviz:Visible>
-              <imviz:Flags>None</imviz:Flags>
-            </Expression>
-          </Nodes>
-          <Edges>
-            <Edge From="0" To="1" Label="Source1" />
-            <Edge From="1" To="2" Label="Source1" />
-            <Edge From="2" To="3" Label="Source1" />
-            <Edge From="4" To="5" Label="Source1" />
-            <Edge From="5" To="6" Label="Source1" />
-            <Edge From="7" To="8" Label="Source1" />
-            <Edge From="8" To="9" Label="Source1" />
-            <Edge From="8" To="13" Label="Source1" />
-            <Edge From="8" To="17" Label="Source1" />
-            <Edge From="8" To="21" Label="Source1" />
-            <Edge From="8" To="25" Label="Source1" />
-            <Edge From="8" To="33" Label="Source1" />
-            <Edge From="9" To="10" Label="Source1" />
-            <Edge From="10" To="11" Label="Source1" />
-            <Edge From="11" To="12" Label="Source1" />
-            <Edge From="13" To="14" Label="Source1" />
-            <Edge From="14" To="15" Label="Source1" />
-            <Edge From="15" To="16" Label="Source1" />
-            <Edge From="17" To="18" Label="Source1" />
-            <Edge From="17" To="19" Label="Source1" />
-            <Edge From="17" To="23" Label="Source1" />
-            <Edge From="18" To="24" Label="Source1" />
-            <Edge From="19" To="20" Label="Source1" />
-            <Edge From="20" To="24" Label="Source2" />
-            <Edge From="21" To="22" Label="Source1" />
-            <Edge From="21" To="27" Label="Source2" />
-            <Edge From="21" To="35" Label="Source2" />
-            <Edge From="22" To="24" Label="Source3" />
-            <Edge From="23" To="24" Label="Source4" />
-            <Edge From="25" To="26" Label="Source1" />
-            <Edge From="26" To="27" Label="Source1" />
-            <Edge From="27" To="28" Label="Source1" />
-            <Edge From="28" To="29" Label="Source1" />
-            <Edge From="29" To="30" Label="Source1" />
-            <Edge From="30" To="31" Label="Source1" />
-            <Edge From="31" To="32" Label="Source1" />
-            <Edge From="33" To="34" Label="Source1" />
-            <Edge From="34" To="35" Label="Source1" />
-            <Edge From="35" To="36" Label="Source1" />
-            <Edge From="36" To="37" Label="Source1" />
-            <Edge From="37" To="38" Label="Source1" />
-            <Edge From="38" To="39" Label="Source1" />
-            <Edge From="39" To="40" Label="Source1" />
-          </Edges>
-        </Workflow>
+      <Expression xsi:type="IncludeWorkflow" Path="Extensions\BiasVisualizer.bonsai">
+        <FrameSubject>Frame</FrameSubject>
+        <TimedBias>TimedBias</TimedBias>
       </Expression>
     </Nodes>
     <Edges>
       <Edge From="0" To="1" Label="Source1" />
-      <Edge From="4" To="5" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>
