@@ -16,6 +16,8 @@ public class PlotStyling
     public string[] TickLabels {get; set;}
     public ImPlotLocation ImPlotLocationFlags {get; set;}
     public ImPlotLegendFlags ImPlotLegendFlags {get; set;}
+    public double? YAxisMax {get; set;}
+    public double? YAxisMin {get; set;}
 
     public unsafe IObservable<TSource> Process<TSource>(IObservable<TSource> source)
     {
@@ -34,6 +36,12 @@ public class PlotStyling
                             ImPlot.SetupAxisTicks(ImAxis.Y1, ref TickPositions[0], TickPositions.Count());
                         }
                     }
+
+                    if (YAxisMax != null && YAxisMin != null)
+                    {
+                        ImPlot.SetupAxisLimits(ImAxis.Y1, (double)YAxisMax, (double)YAxisMin, ImPlotCond.Always);
+                    }
+
                     ImPlot.SetupLegend(ImPlotLocationFlags, ImPlotLegendFlags);
                     observer.OnNext(value);
                 },
