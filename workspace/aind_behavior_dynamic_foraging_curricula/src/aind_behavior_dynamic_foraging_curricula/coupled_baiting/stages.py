@@ -9,6 +9,9 @@ from aind_behavior_dynamic_foraging.task_logic.trial_generators import (
     CoupledWarmupTrialGeneratorSpec,
     TrialGeneratorCompositeSpec,
 )
+from aind_behavior_dynamic_foraging.task_logic.trial_generators.block_based_trial_generator import (
+    AutoWaterParameters,
+)
 from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generators.base_coupled_trial_generator import (
     RewardProbabilityParameters,
 )
@@ -51,6 +54,9 @@ def make_s_stage_1_warmup():
                             is_baiting=True,
                             response_duration=5.0,
                             reward_consumption_duration=1.0,
+                            autowater_parameters=AutoWaterParameters(
+                                min_ignored_trials=0, min_unrewarded_trials=0, reward_fraction=0.8
+                            ),
                         ),
                         CoupledTrialGeneratorSpec(
                             trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
@@ -83,6 +89,9 @@ def make_s_stage_1_warmup():
                             response_duration=5.0,
                             reward_consumption_duration=1.0,
                             kernel_size=2,
+                            autowater_parameters=AutoWaterParameters(
+                                min_ignored_trials=3, min_unrewarded_trials=3, reward_fraction=0.5
+                            ),
                         ),
                     ]
                 ),
@@ -129,6 +138,9 @@ def make_s_stage_1():
                     response_duration=5.0,
                     reward_consumption_duration=1.0,
                     kernel_size=2,
+                    autowater_parameters=AutoWaterParameters(
+                        min_ignored_trials=5, min_unrewarded_trials=5, reward_fraction=0.5
+                    ),
                 ),
             )
         ),
@@ -173,6 +185,9 @@ def make_s_stage_2():
                     response_duration=3.0,
                     reward_consumption_duration=1.0,
                     kernel_size=2,
+                    autowater_parameters=AutoWaterParameters(
+                        min_ignored_trials=7, min_unrewarded_trials=7, reward_fraction=0.5
+                    ),
                 ),
             )
         ),
@@ -217,6 +232,9 @@ def make_s_stage_3():
                     response_duration=2.0,
                     reward_consumption_duration=1.0,
                     kernel_size=2,
+                    autowater_parameters=AutoWaterParameters(
+                        min_ignored_trials=10, min_unrewarded_trials=10, reward_fraction=0.5
+                    ),
                 ),
             )
         ),
@@ -257,6 +275,7 @@ def make_s_stage_final():
                     response_duration=1.0,
                     reward_consumption_duration=3.0,
                     kernel_size=2,
+                    autowater_parameters=None,
                 ),
             )
         ),
@@ -297,6 +316,7 @@ def make_s_stage_graduated():
                     response_duration=1.0,
                     reward_consumption_duration=3.0,
                     kernel_size=2,
+                    autowater_parameters=None,
                 ),
             )
         ),

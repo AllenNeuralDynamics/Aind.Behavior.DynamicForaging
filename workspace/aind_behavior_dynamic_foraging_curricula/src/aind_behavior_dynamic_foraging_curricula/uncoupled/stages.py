@@ -52,7 +52,7 @@ def make_s_stage_1_warmup():
                     generators=[
                         CoupledWarmupTrialGeneratorSpec(
                             autowater_parameters=AutoWaterParameters(
-                                reward_fraction=0.5, min_ignored_trials=3, min_unrewarded_trials=3
+                                reward_fraction=0.8, min_ignored_trials=0, min_unrewarded_trials=0
                             ),
                             trial_generation_end_parameters=CoupledWarmupTrialGenerationEndConditions(
                                 min_trial=50,
