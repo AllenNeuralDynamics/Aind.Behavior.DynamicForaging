@@ -47,7 +47,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Timer">
-                <rx:DueTime>PT1.219S</rx:DueTime>
+                <rx:DueTime>PT2.178S</rx:DueTime>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -99,7 +99,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Timer">
-                <rx:DueTime>PT1.095S</rx:DueTime>
+                <rx:DueTime>PT2.874S</rx:DueTime>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -170,7 +170,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Timer">
-                <rx:DueTime>PT2.974S</rx:DueTime>
+                <rx:DueTime>PT0.133S</rx:DueTime>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -272,7 +272,262 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="p6:SoftwareEventVisualizer">
-          <p6:Visible>false</p6:Visible>
+          <p6:Visible>true</p6:Visible>
+          <p6:SoftwareEvents>
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+          </p6:SoftwareEvents>
+          <p6:TrialBreakEventName>Break</p6:TrialBreakEventName>
+          <p6:ShadedAreaPlotters>
+            <p6:ShadedAreaPlotter>
+              <p6:EventName>TrialOutcome</p6:EventName>
+              <p6:Color>CornflowerBlue</p6:Color>
+              <p6:Alpha>0.3</p6:Alpha>
+            </p6:ShadedAreaPlotter>
+            <p6:ShadedAreaPlotter>
+              <p6:EventName>RewardPeriod</p6:EventName>
+              <p6:Color>Crimson</p6:Color>
+              <p6:Alpha>0.3</p6:Alpha>
+            </p6:ShadedAreaPlotter>
+            <p6:ShadedAreaPlotter>
+              <p6:EventName>ITI</p6:EventName>
+              <p6:Color>Cyan</p6:Color>
+              <p6:Alpha>0.3</p6:Alpha>
+            </p6:ShadedAreaPlotter>
+          </p6:ShadedAreaPlotters>
+          <p6:PointPlotters>
+            <p6:PointPlotter>
+              <p6:EventName>TrialOutcome</p6:EventName>
+              <p6:Color>SaddleBrown</p6:Color>
+              <p6:YPosition>0.5</p6:YPosition>
+              <p6:MarkerSize>6</p6:MarkerSize>
+              <p6:Marker>Circle</p6:Marker>
+            </p6:PointPlotter>
+            <p6:PointPlotter>
+              <p6:EventName>LickLeft</p6:EventName>
+              <p6:Color>Red</p6:Color>
+              <p6:YPosition>0.8</p6:YPosition>
+              <p6:MarkerSize>6</p6:MarkerSize>
+              <p6:Marker>Down</p6:Marker>
+            </p6:PointPlotter>
+            <p6:PointPlotter>
+              <p6:EventName>LickRight</p6:EventName>
+              <p6:Color>DodgerBlue</p6:Color>
+              <p6:YPosition>0.2</p6:YPosition>
+              <p6:MarkerSize>6</p6:MarkerSize>
+              <p6:Marker>Up</p6:Marker>
+            </p6:PointPlotter>
+          </p6:PointPlotters>
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
