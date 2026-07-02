@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <WorkflowBuilder Version="2.9.0"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:imvizui="clr-namespace:Bonsai.ImGui.Visualizers;assembly=Bonsai.ImGui.Visualizers.Design"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
                  xmlns:p1="clr-namespace:Bonsai.Numerics.Distributions;assembly=Bonsai.Numerics"
                  xmlns:p2="clr-namespace:AllenNeuralDynamics.Core;assembly=AllenNeuralDynamics.Core"
@@ -8,12 +9,17 @@
                  xmlns:p4="clr-namespace:AllenNeuralDynamics.AindBehaviorServices.DataTypes;assembly=AllenNeuralDynamics.AindBehaviorServices"
                  xmlns:dsp="clr-namespace:Bonsai.Dsp;assembly=Bonsai.Dsp"
                  xmlns:harp="clr-namespace:Bonsai.Harp;assembly=Bonsai.Harp"
-                 xmlns:p5="clr-namespace:;assembly=Extensions"
+                 xmlns:p5="clr-namespace:AllenNeuralDynamics.Core.Design;assembly=AllenNeuralDynamics.Core.Design"
+                 xmlns:p6="clr-namespace:;assembly=Extensions"
                  xmlns:gl="clr-namespace:Bonsai.Shaders;assembly=Bonsai.Shaders"
                  xmlns:gli="clr-namespace:Bonsai.Shaders.Input;assembly=Bonsai.Shaders"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
+      <Expression xsi:type="imvizui:ImPlotVisualizerBuilder" />
+      <Expression xsi:type="rx:PublishSubject">
+        <Name>Frame</Name>
+      </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:Timer">
           <rx:DueTime>PT1S</rx:DueTime>
@@ -41,7 +47,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Timer">
-                <rx:DueTime>PT1.219S</rx:DueTime>
+                <rx:DueTime>PT2.266S</rx:DueTime>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -93,7 +99,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Timer">
-                <rx:DueTime>PT1.095S</rx:DueTime>
+                <rx:DueTime>PT1.529S</rx:DueTime>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -164,7 +170,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Timer">
-                <rx:DueTime>PT2.974S</rx:DueTime>
+                <rx:DueTime>PT1.415S</rx:DueTime>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -200,28 +206,18 @@
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:Repeat" />
-      </Expression>
-      <Expression xsi:type="rx:BehaviorSubject" TypeArguments="p4:SoftwareEvent">
-        <rx:Name>SoftwareEvent</rx:Name>
-      </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>SoftwareEvent</Name>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:Slice">
-          <rx:Start>0</rx:Start>
-          <rx:Step>5</rx:Step>
-          <rx:Stop xsi:nil="true" />
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="Combinator">
         <Combinator xsi:type="p2:CreateSoftwareEvent">
           <p2:EventName>Break</p2:EventName>
         </Combinator>
       </Expression>
+      <Expression xsi:type="MulticastSubject">
+        <Name>SoftwareEvent</Name>
+      </Expression>
       <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:Merge" />
+        <Combinator xsi:type="rx:Repeat" />
+      </Expression>
+      <Expression xsi:type="rx:BehaviorSubject" TypeArguments="p4:SoftwareEvent">
+        <rx:Name>SoftwareEvent</rx:Name>
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:Timer">
@@ -250,51 +246,114 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="p2:TimestampSoftwareEvent" />
       </Expression>
-      <Expression xsi:type="p5:SoftwareEventVisualizerBuilder">
-        <p5:FontSize>16</p5:FontSize>
-        <p5:TimeWindow>10</p5:TimeWindow>
-        <p5:ShadedAreaPlotters>
-          <p5:ShadedAreaPlotter>
-            <p5:EventName>TrialOutcome</p5:EventName>
-            <p5:Color>CornflowerBlue</p5:Color>
-            <p5:Alpha>0.3</p5:Alpha>
-          </p5:ShadedAreaPlotter>
-          <p5:ShadedAreaPlotter>
-            <p5:EventName>RewardPeriod</p5:EventName>
-            <p5:Color>Crimson</p5:Color>
-            <p5:Alpha>0.3</p5:Alpha>
-          </p5:ShadedAreaPlotter>
-          <p5:ShadedAreaPlotter>
-            <p5:EventName>ITI</p5:EventName>
-            <p5:Color>Cyan</p5:Color>
-            <p5:Alpha>0.3</p5:Alpha>
-          </p5:ShadedAreaPlotter>
-        </p5:ShadedAreaPlotters>
-        <p5:PointPlotters>
-          <p5:PointPlotter>
-            <p5:EventName>TrialOutcome</p5:EventName>
-            <p5:Color>SaddleBrown</p5:Color>
-            <p5:YPosition>0.5</p5:YPosition>
-            <p5:MarkerSize>6</p5:MarkerSize>
-            <p5:Marker>Circle</p5:Marker>
-          </p5:PointPlotter>
-          <p5:PointPlotter>
-            <p5:EventName>LickLeft</p5:EventName>
-            <p5:Color>Red</p5:Color>
-            <p5:YPosition>0.8</p5:YPosition>
-            <p5:MarkerSize>6</p5:MarkerSize>
-            <p5:Marker>Down</p5:Marker>
-          </p5:PointPlotter>
-          <p5:PointPlotter>
-            <p5:EventName>LickRight</p5:EventName>
-            <p5:Color>DodgerBlue</p5:Color>
-            <p5:YPosition>0.2</p5:YPosition>
-            <p5:MarkerSize>6</p5:MarkerSize>
-            <p5:Marker>Up</p5:Marker>
-          </p5:PointPlotter>
-        </p5:PointPlotters>
-        <p5:TrialBreakEventName>Break</p5:TrialBreakEventName>
-        <p5:MaxTrials>5</p5:MaxTrials>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:Timestamp" />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p5:AccumulateToImmutableList" />
+      </Expression>
+      <Expression xsi:type="rx:BehaviorSubject">
+        <Name>SoftwareEventHistory</Name>
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>Frame</Name>
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>SoftwareEventHistory</Name>
+      </Expression>
+      <Expression xsi:type="PropertyMapping">
+        <PropertyMappings>
+          <Property Name="SoftwareEvents" />
+        </PropertyMappings>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p6:SoftwareEventVisualizer">
+          <p6:Visible>true</p6:Visible>
+          <p6:SoftwareEvents>
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+          </p6:SoftwareEvents>
+          <p6:TrialBreakEventName>Break</p6:TrialBreakEventName>
+          <p6:ShadedAreaPlotters>
+            <p6:ShadedAreaPlotter>
+              <p6:EventName>TrialOutcome</p6:EventName>
+              <p6:Color>CornflowerBlue</p6:Color>
+              <p6:Alpha>0.3</p6:Alpha>
+            </p6:ShadedAreaPlotter>
+            <p6:ShadedAreaPlotter>
+              <p6:EventName>RewardPeriod</p6:EventName>
+              <p6:Color>Crimson</p6:Color>
+              <p6:Alpha>0.3</p6:Alpha>
+            </p6:ShadedAreaPlotter>
+            <p6:ShadedAreaPlotter>
+              <p6:EventName>ITI</p6:EventName>
+              <p6:Color>Cyan</p6:Color>
+              <p6:Alpha>0.3</p6:Alpha>
+            </p6:ShadedAreaPlotter>
+          </p6:ShadedAreaPlotters>
+          <p6:PointPlotters>
+            <p6:PointPlotter>
+              <p6:EventName>TrialOutcome</p6:EventName>
+              <p6:Color>SaddleBrown</p6:Color>
+              <p6:YPosition>0.5</p6:YPosition>
+              <p6:MarkerSize>6</p6:MarkerSize>
+              <p6:Marker>Circle</p6:Marker>
+            </p6:PointPlotter>
+            <p6:PointPlotter>
+              <p6:EventName>LickLeft</p6:EventName>
+              <p6:Color>Red</p6:Color>
+              <p6:YPosition>0.8</p6:YPosition>
+              <p6:MarkerSize>6</p6:MarkerSize>
+              <p6:Marker>Down</p6:Marker>
+            </p6:PointPlotter>
+            <p6:PointPlotter>
+              <p6:EventName>LickRight</p6:EventName>
+              <p6:Color>DodgerBlue</p6:Color>
+              <p6:YPosition>0.2</p6:YPosition>
+              <p6:MarkerSize>6</p6:MarkerSize>
+              <p6:Marker>Up</p6:Marker>
+            </p6:PointPlotter>
+          </p6:PointPlotters>
+        </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="gl:CreateWindow">
@@ -364,7 +423,6 @@
     </Nodes>
     <Edges>
       <Edge From="0" To="1" Label="Source1" />
-      <Edge From="1" To="2" Label="Source1" />
       <Edge From="2" To="3" Label="Source1" />
       <Edge From="3" To="4" Label="Source1" />
       <Edge From="4" To="5" Label="Source1" />
@@ -372,10 +430,10 @@
       <Edge From="6" To="7" Label="Source1" />
       <Edge From="7" To="8" Label="Source1" />
       <Edge From="8" To="9" Label="Source1" />
-      <Edge From="10" To="14" Label="Source1" />
+      <Edge From="9" To="10" Label="Source1" />
+      <Edge From="10" To="11" Label="Source1" />
       <Edge From="11" To="12" Label="Source1" />
       <Edge From="12" To="13" Label="Source1" />
-      <Edge From="13" To="14" Label="Source2" />
       <Edge From="14" To="18" Label="Source1" />
       <Edge From="15" To="16" Label="Source1" />
       <Edge From="16" To="17" Label="Source1" />
@@ -383,10 +441,15 @@
       <Edge From="18" To="19" Label="Source1" />
       <Edge From="19" To="20" Label="Source1" />
       <Edge From="20" To="21" Label="Source1" />
-      <Edge From="23" To="24" Label="Source1" />
-      <Edge From="24" To="25" Label="Source1" />
-      <Edge From="26" To="27" Label="Source1" />
-      <Edge From="27" To="28" Label="Source1" />
+      <Edge From="21" To="22" Label="Source1" />
+      <Edge From="22" To="23" Label="Source1" />
+      <Edge From="24" To="27" Label="Source1" />
+      <Edge From="25" To="26" Label="Source1" />
+      <Edge From="26" To="27" Label="Source2" />
+      <Edge From="29" To="30" Label="Source1" />
+      <Edge From="30" To="31" Label="Source1" />
+      <Edge From="32" To="33" Label="Source1" />
+      <Edge From="33" To="34" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>

@@ -1,98 +1,99 @@
-﻿using Bonsai.Design;
-using Bonsai.Expressions;
-using AllenNeuralDynamics.AindBehaviorServices.DataTypes;
-using AllenNeuralDynamics.Core.Design;
+﻿using AllenNeuralDynamics.AindBehaviorServices.DataTypes;
+using Bonsai;
 using Hexa.NET.ImGui;
 using Hexa.NET.ImPlot;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.ComponentModel;
 using System.Numerics;
+using System.Reactive;
+using Bonsai.Harp;
+using System.Reactive.Linq;
+using System.Collections.Immutable;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
+using System.Drawing;
+using System.Xml.Serialization;
 
-public class SoftwareEventVisualizer : BufferedVisualizer
+[Combinator]
+public class SoftwareEventVisualizer
 {
+    public bool Visible {get; set;}
+    public ImmutableList<System.Reactive.Timestamped<SoftwareEvent>> SoftwareEvents {get; set;}
+    public string TrialBreakEventName {get; set;}
+
     private const float MinPlotHeight = 100.0f;
     private const double YAxisMin = 0.0;
     private const double YAxisMax = 1.0;
     private const float InputWidth = 80.0f;
 
-    private float fontSize = 16.0f;
-    private float timeWindow = 30.0f;
-
-    private List<ShadedAreaPlotter> shadedAreaPlotters = new List<ShadedAreaPlotter>();
-    private List<PointPlotter> pointPlotters = new List<PointPlotter>();
-
-    private ImGuiControl imGuiCanvas;
-    private DateTimeOffset startTime;
+    private float timeWindow = 120.0f;
+    public List<ShadedAreaPlotter> ShadedAreaPlotters {get; set;}
+    public List<PointPlotter> PointPlotters {get; set;}
+    private int maxTrials = 0;
 
     private readonly Dictionary<string, List<EventRecord>> eventHistory = new Dictionary<string, List<EventRecord>>();
-    private double latestTimestamp = 0;
-    private string trialBreakEventName = "";
-    private int maxTrials = 0;
     private readonly List<double> trialBreaks = new List<double>();
+    private double lastTrialBreak = 0;
+    private DateTimeOffset startTime;
+    private double latestTimestamp = 0;
 
-    private bool HasTrialBreaks { get { return !string.IsNullOrEmpty(trialBreakEventName); } }
+    private bool HasTrialBreaks { get { return !string.IsNullOrEmpty(TrialBreakEventName); } }
     private int TrialCount { get { return HasTrialBreaks ? trialBreaks.Count + 1 : 1; } }
 
-    private struct EventRecord
+    public IObservable<TSource> Process<TSource>(IObservable<TSource> source)
     {
-        public double Timestamp;
-    }
-
-    private struct ShadedSegment
-    {
-        public double Timestamp;
-        public ShadedAreaPlotter Config;
-    }
-
-    /// <inheritdoc/>
-    public override void Show(object value)
-    {
-    }
-
-    /// <inheritdoc/>
-    protected override void ShowBuffer(IList<System.Reactive.Timestamped<object>> values)
-    {
-        foreach (var v in values)
+        return Observable.Create<TSource>(observer =>
         {
-            if (!(v.Value is SoftwareEvent)) continue;
-            var softwareEvent = (SoftwareEvent)v.Value;
+            startTime = DateTimeOffset.Now;
+            SoftwareEvents.Clear();
+            eventHistory.Clear();
+            trialBreaks.Clear();
+            lastTrialBreak = 0;
+            var sourceObserver = Observer.Create<TSource>(
+                value =>
+                {
+                    if (Visible)
+                    {
+                        foreach (var v in SoftwareEvents)   
+                        {
+                            double timestamp = (v.Timestamp - startTime).TotalSeconds;
 
-            double timestamp = (v.Timestamp - startTime).TotalSeconds;
+                            string name = v.Value.Name;
+                            if (HasTrialBreaks && name == TrialBreakEventName)
+                            {
+                                if ((timestamp - lastTrialBreak) > 0.1)
+                                {
+                                    trialBreaks.Add(timestamp);
+                                    lastTrialBreak = timestamp;
+                                }
+                            }
 
-            string name = softwareEvent.Name;
-            if (string.IsNullOrEmpty(name)) continue;
+                            List<EventRecord> records;
+                            if (!eventHistory.TryGetValue(name, out records))
+                            {
+                                records = new List<EventRecord>();
+                                eventHistory[name] = records;
+                            }
+                            records.Add(new EventRecord { Timestamp = timestamp });
+                        }   
 
-            if (HasTrialBreaks && name == trialBreakEventName)
-            {
-                trialBreaks.Add(timestamp);
-            }
+                        CleanupOldEvents();
 
-            List<EventRecord> records;
-            if (!eventHistory.TryGetValue(name, out records))
-            {
-                records = new List<EventRecord>();
-                eventHistory[name] = records;
-            }
-            records.Add(new EventRecord { Timestamp = timestamp });
-        }
-        
-        CleanupOldEvents();
-        
-        base.ShowBuffer(values);
-        if (imGuiCanvas != null) imGuiCanvas.Invalidate();
+                        DrawEvents();
+
+                        observer.OnNext(value);
+                    }
+                },
+                observer.OnError,
+                observer.OnCompleted);
+            return source.SubscribeSafe(sourceObserver);
+        });
     }
 
-    /// <summary>
-    /// Removes old event records outside the visible window.
-    /// Keeps the last event before the window for shaded area continuity.
-    /// </summary>
     private void CleanupOldEvents()
-    {
+    {   
         latestTimestamp = (DateTimeOffset.Now - startTime).TotalSeconds;
-        
+
         double cutoffTime = latestTimestamp - timeWindow;
         
         if (HasTrialBreaks && maxTrials > 0 && trialBreaks.Count > 0)
@@ -144,42 +145,51 @@ public class SoftwareEventVisualizer : BufferedVisualizer
         }
     }
 
-    private static Vector4 ToVec4(Color color)
+    private void DrawEvents()
     {
-        return new Vector4(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f);
-    }
+        latestTimestamp = (DateTimeOffset.Now - startTime).TotalSeconds;
 
-    void StyleColors()
-    {
-        ImGui.StyleColorsLight();
-        ImPlot.StyleColorsLight(ImPlot.GetStyle());
-    }
+        ImGui.Text("Time Window (s):");
+        ImGui.SameLine();
+        ImGui.SetNextItemWidth(InputWidth);
+        ImGui.InputFloat("##timewindow", ref timeWindow);
+        if (timeWindow < 1.0f) timeWindow = 1.0f;
 
-    /// <summary>
-    /// Converts absolute timestamp to plot-relative time where 0 = now.
-    /// </summary>
-    private double ToPlotTime(double timestamp)
-    {
-        return timestamp - latestTimestamp;
-    }
+        var availableSize = ImGui.GetContentRegionAvail();
+        float plotHeight = Math.Max(availableSize.Y, MinPlotHeight);
 
-    /// <summary>
-    /// Returns which trial a timestamp belongs to.
-    /// </summary>
-    private int GetTrialIndex(double timestamp)
-    {
-        if (!HasTrialBreaks || trialBreaks.Count == 0) return 0;
-        for (int i = trialBreaks.Count - 1; i >= 0; i--)
+        double plotTMin = -(double)timeWindow;
+        double plotTMax = 0.0;
+
+        int firstVisible, numVisible;
+        GetVisibleTrialRange(out firstVisible, out numVisible);
+
+        double yMin = HasTrialBreaks ? (double)firstVisible : YAxisMin;
+        double yMax = HasTrialBreaks ? (double)(firstVisible + numVisible) : YAxisMax;
+
+        ImPlot.SetNextAxesLimits(plotTMin, plotTMax, yMin, yMax, ImPlotCond.Always);
+        if (ImPlot.BeginPlot("Software Events", new Vector2(-1, plotHeight), ImPlotFlags.NoTitle))
         {
-            if (timestamp >= trialBreaks[i])
-                return i + 1;
+            ImPlot.SetupAxes("Time (s)", HasTrialBreaks ? "Trial" : "Value");
+            ImPlot.SetupAxisLimits(ImAxis.Y1, yMin, yMax, ImPlotCond.Always);
+            ImPlot.SetupLegend(ImPlotLocation.North, ImPlotLegendFlags.Outside | ImPlotLegendFlags.Horizontal);
+
+            if (HasTrialBreaks && numVisible > 0)
+            {
+                SetupTrialAxisTicks(firstVisible, numVisible);
+            }
+
+            DrawAllShadedAreas(plotTMin, plotTMax);
+
+            foreach (var config in PointPlotters)
+            {
+                DrawPointMarkers(config, plotTMin, plotTMax);
+            }
+
+            ImPlot.EndPlot();
         }
-        return 0;
     }
 
-    /// <summary>
-    /// Computes visible trial range based on MaxTrials rolling window.
-    /// </summary>
     private void GetVisibleTrialRange(out int firstVisible, out int numVisible)
     {
         int total = TrialCount;
@@ -200,65 +210,49 @@ public class SoftwareEventVisualizer : BufferedVisualizer
         }
     }
 
-    /// <summary>
-    /// Builds merged timeline of shaded area events, sorted by timestamp.
-    /// </summary>
-    private List<ShadedSegment> BuildMergedTimeline()
+    unsafe private void SetupTrialAxisTicks(int firstVisibleTrial, int numVisibleTrials)
     {
-        var merged = new List<ShadedSegment>();
+        if (numVisibleTrials <= 0) return;
 
-        foreach (var config in shadedAreaPlotters)
+        var positions = new double[numVisibleTrials];
+        var labelData = new byte[numVisibleTrials][];
+
+        for (int t = 0; t < numVisibleTrials; t++)
         {
-            List<EventRecord> records;
-            if (!eventHistory.TryGetValue(config.EventName, out records))
-                continue;
+            int trialNum = firstVisibleTrial + t;
+            positions[t] = trialNum + 0.5;
+            labelData[t] = System.Text.Encoding.UTF8.GetBytes(trialNum.ToString() + '\0');
+        }
 
-            for (int i = 0; i < records.Count; i++)
+        var handles = new GCHandle[numVisibleTrials];
+        var ptrs = new IntPtr[numVisibleTrials];
+
+        try
+        {
+            for (int t = 0; t < numVisibleTrials; t++)
             {
-                merged.Add(new ShadedSegment
-                {
-                    Timestamp = records[i].Timestamp,
-                    Config = config
-                });
+                handles[t] = GCHandle.Alloc(labelData[t], GCHandleType.Pinned);
+                ptrs[t] = handles[t].AddrOfPinnedObject();
+            }
+
+            fixed (double* posPtr = positions)
+            fixed (IntPtr* labelPtrs = ptrs)
+            {
+                ImPlot.SetupAxisTicks(ImAxis.Y1, posPtr, numVisibleTrials, (byte**)labelPtrs, false);
             }
         }
-
-        merged.Sort(delegate(ShadedSegment a, ShadedSegment b)
+        finally
         {
-            return a.Timestamp.CompareTo(b.Timestamp);
-        });
-
-        return merged;
-    }
-
-    /// <summary>
-    /// Draws a single shaded rectangle in a given trial row.
-    /// </summary>
-    unsafe private void DrawShadedRect(ShadedAreaPlotter config, double tStart, double tEnd, int trialIndex)
-    {
-        double x0 = ToPlotTime(tStart);
-        double x1 = ToPlotTime(tEnd);
-        double yLow = HasTrialBreaks ? (double)trialIndex : 0.0;
-        double yHigh = HasTrialBreaks ? (double)(trialIndex + 1) : 1.0;
-
-        var color = ToVec4(config.Color);
-        ImPlot.SetNextLineStyle(color, 0f);
-        ImPlot.SetNextFillStyle(color, config.Alpha);
-
-        fixed (double* xs = new double[] { x0, x1 })
-        fixed (double* ysL = new double[] { yLow, yLow })
-        fixed (double* ysH = new double[] { yHigh, yHigh })
-        {
-            ImPlot.PlotShaded(config.EventName, xs, ysL, ysH, 2);
+            for (int t = 0; t < numVisibleTrials; t++)
+            {
+                if (handles[t].IsAllocated) handles[t].Free();
+            }
         }
     }
 
-    /// <summary>
-    /// Draws shaded areas as mutually exclusive regions, split at trial boundaries when active.
-    /// </summary>
     unsafe private void DrawAllShadedAreas(double plotTMin, double plotTMax)
     {
-        if (shadedAreaPlotters.Count == 0) return;
+        if (ShadedAreaPlotters.Count == 0) return;
 
         var timeline = BuildMergedTimeline();
         if (timeline.Count == 0) return;
@@ -323,9 +317,46 @@ public class SoftwareEventVisualizer : BufferedVisualizer
         }
     }
 
-    /// <summary>
-    /// Draws scatter markers for a PointPlotter, offset by trial row when active.
-    /// </summary>
+    private double ToPlotTime(double timestamp)
+    {
+        return timestamp - latestTimestamp;
+    }
+
+    private static Vector4 ToVec4(Color color)
+    {
+        return new Vector4(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f);
+    }
+
+    unsafe private void DrawShadedRect(ShadedAreaPlotter config, double tStart, double tEnd, int trialIndex)
+    {
+        double x0 = ToPlotTime(tStart);
+        double x1 = ToPlotTime(tEnd);
+        double yLow = HasTrialBreaks ? (double)trialIndex : 0.0;
+        double yHigh = HasTrialBreaks ? (double)(trialIndex + 1) : 1.0;
+
+        var color = ToVec4(config.Color);
+        ImPlot.SetNextLineStyle(color, 0f);
+        ImPlot.SetNextFillStyle(color, config.Alpha);
+
+        fixed (double* xs = new double[] { x0, x1 })
+        fixed (double* ysL = new double[] { yLow, yLow })
+        fixed (double* ysH = new double[] { yHigh, yHigh })
+        {
+            ImPlot.PlotShaded(config.EventName, xs, ysL, ysH, 2);
+        }
+    }
+
+    private int GetTrialIndex(double timestamp)
+    {
+        if (!HasTrialBreaks || trialBreaks.Count == 0) return 0;
+        for (int i = trialBreaks.Count - 1; i >= 0; i--)
+        {
+            if (timestamp >= trialBreaks[i])
+                return i + 1;
+        }
+        return 0;
+    }
+
     unsafe private void DrawPointMarkers(PointPlotter config, double plotTMin, double plotTMax)
     {
         List<EventRecord> records;
@@ -377,159 +408,153 @@ public class SoftwareEventVisualizer : BufferedVisualizer
         }
     }
 
-    /// <summary>
-    /// Sets up Y axis ticks with trial labels at row centers.
-    /// </summary>
-    unsafe private void SetupTrialAxisTicks(int firstVisibleTrial, int numVisibleTrials)
+    private List<ShadedSegment> BuildMergedTimeline()
     {
-        if (numVisibleTrials <= 0) return;
+        var merged = new List<ShadedSegment>();
 
-        var positions = new double[numVisibleTrials];
-        var labelData = new byte[numVisibleTrials][];
-
-        for (int t = 0; t < numVisibleTrials; t++)
+        foreach (var config in ShadedAreaPlotters)
         {
-            int trialNum = firstVisibleTrial + t;
-            positions[t] = trialNum + 0.5;
-            labelData[t] = System.Text.Encoding.UTF8.GetBytes(trialNum.ToString() + '\0');
-        }
+            List<EventRecord> records;
+            if (!eventHistory.TryGetValue(config.EventName, out records))
+                continue;
 
-        var handles = new GCHandle[numVisibleTrials];
-        var ptrs = new IntPtr[numVisibleTrials];
-
-        try
-        {
-            for (int t = 0; t < numVisibleTrials; t++)
+            for (int i = 0; i < records.Count; i++)
             {
-                handles[t] = GCHandle.Alloc(labelData[t], GCHandleType.Pinned);
-                ptrs[t] = handles[t].AddrOfPinnedObject();
-            }
-
-            fixed (double* posPtr = positions)
-            fixed (IntPtr* labelPtrs = ptrs)
-            {
-                ImPlot.SetupAxisTicks(ImAxis.Y1, posPtr, numVisibleTrials, (byte**)labelPtrs, false);
-            }
-        }
-        finally
-        {
-            for (int t = 0; t < numVisibleTrials; t++)
-            {
-                if (handles[t].IsAllocated) handles[t].Free();
-            }
-        }
-    }
-
-    private void DrawEvents()
-    {
-        latestTimestamp = (DateTimeOffset.Now - startTime).TotalSeconds;
-
-        ImGui.Text("Time Window (s):");
-        ImGui.SameLine();
-        ImGui.SetNextItemWidth(InputWidth);
-        ImGui.InputFloat("##timewindow", ref timeWindow);
-        if (timeWindow < 1.0f) timeWindow = 1.0f;
-
-        var availableSize = ImGui.GetContentRegionAvail();
-        float plotHeight = Math.Max(availableSize.Y, MinPlotHeight);
-
-        double plotTMin = -(double)timeWindow;
-        double plotTMax = 0.0;
-
-        int firstVisible, numVisible;
-        GetVisibleTrialRange(out firstVisible, out numVisible);
-
-        double yMin = HasTrialBreaks ? (double)firstVisible : YAxisMin;
-        double yMax = HasTrialBreaks ? (double)(firstVisible + numVisible) : YAxisMax;
-
-        ImPlot.SetNextAxesLimits(plotTMin, plotTMax, yMin, yMax, ImPlotCond.Always);
-        if (ImPlot.BeginPlot("Software Events", new Vector2(-1, plotHeight), ImPlotFlags.NoTitle))
-        {
-            ImPlot.SetupAxes("Time (s)", HasTrialBreaks ? "Trial" : "Value");
-            ImPlot.SetupAxisLimits(ImAxis.Y1, yMin, yMax, ImPlotCond.Always);
-            ImPlot.SetupLegend(ImPlotLocation.North, ImPlotLegendFlags.Outside | ImPlotLegendFlags.Horizontal);
-
-            if (HasTrialBreaks && numVisible > 0)
-            {
-                SetupTrialAxisTicks(firstVisible, numVisible);
-            }
-
-            DrawAllShadedAreas(plotTMin, plotTMax);
-
-            foreach (var config in pointPlotters)
-            {
-                DrawPointMarkers(config, plotTMin, plotTMax);
-            }
-
-            ImPlot.EndPlot();
-        }
-    }
-
-    /// <inheritdoc/>
-    public override void Load(IServiceProvider provider)
-    {
-        var context = (ITypeVisualizerContext)provider.GetService(typeof(ITypeVisualizerContext));
-        var builder = ExpressionBuilder.GetVisualizerElement(context.Source).Builder as SoftwareEventVisualizerBuilder;
-        if (builder != null)
-        {
-            fontSize = builder.FontSize;
-            timeWindow = builder.TimeWindow;
-            shadedAreaPlotters = builder.ShadedAreaPlotters ?? new List<ShadedAreaPlotter>();
-            pointPlotters = builder.PointPlotters ?? new List<PointPlotter>();
-            trialBreakEventName = builder.TrialBreakEventName ?? "";
-            maxTrials = builder.MaxTrials;
-        }
-
-        if (startTime == default(DateTimeOffset))
-        {
-            startTime = DateTimeOffset.Now;
-        }
-
-        imGuiCanvas = new ImGuiControl();
-        imGuiCanvas.Dock = DockStyle.Fill;
-        imGuiCanvas.Render += (sender, e) =>
-        {
-            var dockspaceId = ImGui.DockSpaceOverViewport(
-                0,
-                ImGui.GetMainViewport(),
-                ImGuiDockNodeFlags.AutoHideTabBar | ImGuiDockNodeFlags.NoUndocking);
-
-            StyleColors();
-            ImGui.PushFont(ImGui.GetFont(), fontSize);
-
-            if (ImGui.Begin("SoftwareEventVisualizer"))
-            {
-                DrawEvents();
-            }
-
-            ImGui.End();
-            ImGui.PopFont();
-            var centralNode = ImGuiP.DockBuilderGetCentralNode(dockspaceId);
-            if (!ImGui.IsWindowDocked() && !centralNode.IsNull)
-            {
-                unsafe
+                merged.Add(new ShadedSegment
                 {
-                    var handle = centralNode.Handle;
-                    uint dockId = handle->ID;
-                    ImGuiP.DockBuilderDockWindow("SoftwareEventVisualizer", dockId);
-                }
+                    Timestamp = records[i].Timestamp,
+                    Config = config
+                });
             }
-        };
-
-        var visualizerService = (IDialogTypeVisualizerService)provider.GetService(typeof(IDialogTypeVisualizerService));
-        if (visualizerService != null)
-        {
-            visualizerService.AddControl(imGuiCanvas);
         }
+
+        merged.Sort(delegate(ShadedSegment a, ShadedSegment b)
+        {
+            return a.Timestamp.CompareTo(b.Timestamp);
+        });
+
+        return merged;
     }
 
-    /// <inheritdoc/>
-    public override void Unload()
+    private struct EventRecord
     {
-        if (imGuiCanvas != null)
-        {
-            imGuiCanvas.Dispose();
-            imGuiCanvas = null;
-        }
+        public double Timestamp;
     }
+
+    private struct ShadedSegment
+    {
+        public double Timestamp;
+        public ShadedAreaPlotter Config;
+    }
+
+    public interface IPlotter
+{
+    string EventName { get; set; }
+}
+
+public class ShadedAreaPlotter : IPlotter
+{
+    private string _eventName;
+    private Color _color;
+    private float _alpha;
+
+    public ShadedAreaPlotter()
+    {
+        _eventName = "";
+        _color = Color.CornflowerBlue;
+        _alpha = 0.3f;
+    }
+
+    [Description("The software event name to filter on.")]
+    public string EventName
+    {
+        get { return _eventName; }
+        set { _eventName = value; }
+    }
+
+    [XmlIgnore]
+    [Description("The color of the shaded area.")]
+    public Color Color
+    {
+        get { return _color; }
+        set { _color = value; }
+    }
+
+    [Browsable(false)]
+    [XmlElement("Color")]
+    public string ColorHtml
+    {
+        get { return ColorTranslator.ToHtml(Color); }
+        set { try { Color = ColorTranslator.FromHtml(value); } catch { } }
+    }
+
+    [Description("The transparency of the shaded area (0.0 to 1.0).")]
+    public float Alpha
+    {
+        get { return _alpha; }
+        set { _alpha = value; }
+    }
+}
+
+public class PointPlotter : IPlotter
+{
+    private string _eventName;
+    private Color _color;
+    private float _yPosition;
+    private float _markerSize;
+    private ImPlotMarker _marker;
+
+    public PointPlotter()
+    {
+        _eventName = "";
+        _color = Color.Red;
+        _yPosition = 0.5f;
+        _markerSize = 6.0f;
+        _marker = ImPlotMarker.Circle;
+    }
+
+    [Description("The software event name to filter on.")]
+    public string EventName
+    {
+        get { return _eventName; }
+        set { _eventName = value; }
+    }
+
+    [XmlIgnore]
+    [Description("The color of the marker.")]
+    public Color Color
+    {
+        get { return _color; }
+        set { _color = value; }
+    }
+
+    [Browsable(false)]
+    [XmlElement("Color")]
+    public string ColorHtml
+    {
+        get { return ColorTranslator.ToHtml(Color); }
+        set { try { Color = ColorTranslator.FromHtml(value); } catch { } }
+    }
+
+    [Description("The fixed Y position of the marker (0.0 to 1.0).")]
+    public float YPosition
+    {
+        get { return _yPosition; }
+        set { _yPosition = value; }
+    }
+
+    [Description("The size of the marker in pixels.")]
+    public float MarkerSize
+    {
+        get { return _markerSize; }
+        set { _markerSize = value; }
+    }
+
+    [Description("The marker style.")]
+    public ImPlotMarker Marker
+    {
+        get { return _marker; }
+        set { _marker = value; }
+    }
+}
 }
