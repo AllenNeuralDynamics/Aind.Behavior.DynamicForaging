@@ -1426,6 +1426,20 @@
                 <ui:WindowState>Maximized</ui:WindowState>
               </Builder>
             </Expression>
+            <Expression xsi:type="imvizui:ImPlotVisualizerBuilder" />
+            <Expression xsi:type="imgui:TableBuilder">
+              <imgui:Visible>true</imgui:Visible>
+              <imgui:Columns>1</imgui:Columns>
+              <imgui:Flags>None</imgui:Flags>
+              <imgui:OuterSize>
+                <imgui:X>0</imgui:X>
+                <imgui:Y>0</imgui:Y>
+              </imgui:OuterSize>
+              <imgui:InnerWidth>0</imgui:InnerWidth>
+            </Expression>
+            <Expression xsi:type="rx:PublishSubject">
+              <Name>Frame</Name>
+            </Expression>
             <Expression xsi:type="SubscribeSubject">
               <Name>GlobalTrialOutcome</Name>
             </Expression>
@@ -1462,6 +1476,21 @@
               <Name>LickRight</Name>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
+              <Name>GlobalTrialMetrics</Name>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Bias</Selector>
+            </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>new (it as Bias)</scr:Expression>
+            </Expression>
+            <Expression xsi:type="IncludeWorkflow" Path="Bonsai.Harp:WithLatestTimestamp.bonsai">
+              <Name>HarpTimestampSource</Name>
+            </Expression>
+            <Expression xsi:type="rx:BehaviorSubject">
+              <Name>TimedBias</Name>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
               <Name>IsRightLickEvent</Name>
             </Expression>
             <Expression xsi:type="rx:Condition">
@@ -1488,20 +1517,6 @@
             </Expression>
             <Expression xsi:type="rx:PublishSubject">
               <Name>LickLeft</Name>
-            </Expression>
-            <Expression xsi:type="imvizui:ImPlotVisualizerBuilder" />
-            <Expression xsi:type="imgui:TableBuilder">
-              <imgui:Visible>true</imgui:Visible>
-              <imgui:Columns>1</imgui:Columns>
-              <imgui:Flags>None</imgui:Flags>
-              <imgui:OuterSize>
-                <imgui:X>0</imgui:X>
-                <imgui:Y>0</imgui:Y>
-              </imgui:OuterSize>
-              <imgui:InnerWidth>0</imgui:InnerWidth>
-            </Expression>
-            <Expression xsi:type="rx:PublishSubject">
-              <Name>Frame</Name>
             </Expression>
             <Expression xsi:type="GroupWorkflow">
               <Name>VisualizerStructure</Name>
@@ -1655,6 +1670,10 @@
               <TrialSubject>TimedTrial</TrialSubject>
               <FrameSubject>Behavior</FrameSubject>
             </Expression>
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\BiasVisualizer.bonsai">
+              <FrameSubject>Bias</FrameSubject>
+              <TimedBias>TimedBias</TimedBias>
+            </Expression>
           </Nodes>
           <Edges>
             <Edge From="0" To="1" Label="Source1" />
@@ -1663,12 +1682,16 @@
             <Edge From="4" To="5" Label="Source1" />
             <Edge From="6" To="7" Label="Source1" />
             <Edge From="7" To="8" Label="Source1" />
-            <Edge From="8" To="9" Label="Source1" />
+            <Edge From="9" To="10" Label="Source1" />
             <Edge From="10" To="11" Label="Source1" />
             <Edge From="11" To="12" Label="Source1" />
-            <Edge From="12" To="13" Label="Source1" />
+            <Edge From="13" To="14" Label="Source1" />
             <Edge From="14" To="15" Label="Source1" />
             <Edge From="15" To="16" Label="Source1" />
+            <Edge From="16" To="17" Label="Source1" />
+            <Edge From="18" To="19" Label="Source1" />
+            <Edge From="19" To="20" Label="Source1" />
+            <Edge From="20" To="21" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
