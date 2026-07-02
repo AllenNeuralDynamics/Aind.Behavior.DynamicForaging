@@ -1579,6 +1579,9 @@
               <Name>OutputControl</Name>
               <Workflow>
                 <Nodes>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Single">
+                    <rx:Name>UiHabituationTimeUpdate</rx:Name>
+                  </Expression>
                   <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
                     <rx:Name>UiMoveLeft</rx:Name>
                   </Expression>
@@ -1591,8 +1594,56 @@
                   <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
                     <rx:Name>UiMoveRight</rx:Name>
                   </Expression>
-                  <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Single">
-                    <rx:Name>UiHabituationTimeUpdate</rx:Name>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                    <rx:Name>UiKeepLeftOpen</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                    <rx:Name>UiKeepRightOpen</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                    <rx:Name>UiKeepBothOpen</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                    <rx:Name>UiDrainLeft</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                    <rx:Name>UiDrainRight</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                    <rx:Name>UiDrainBoth</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                    <rx:Name>UiManipulatorLeft</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                    <rx:Name>UiManipulatorForwardLeft</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                    <rx:Name>UiManipulatorForwardRight</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                    <rx:Name>UiManipulatorUp</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                    <rx:Name>UiManipulatorRight</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                    <rx:Name>UiManipulatorBackRight</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                    <rx:Name>UiManipulatorBackLeft</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                    <rx:Name>UiManipulatorDown</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                    <rx:Name>UiManipulatorStop</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                    <rx:Name>UiManipulatorHome</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                    <rx:Name>UiManipulatorInitialize</rx:Name>
                   </Expression>
                 </Nodes>
                 <Edges />
@@ -1827,6 +1878,26 @@
               <StartExperimentSubject>StartExperimentShortcut</StartExperimentSubject>
               <EndExperimentSubject>EndExperiment</EndExperimentSubject>
               <UiHabituationTimeUpdate>UiHabituationTimeUpdate</UiHabituationTimeUpdate>
+            </Expression>
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\PreSessionVisualizer.bonsai">
+              <FrameSubject>PreSession</FrameSubject>
+              <UiKeepLeftOpne>UiKeepLeftOpen</UiKeepLeftOpne>
+              <UiKeepRightOpen>UiKeepRightOpen</UiKeepRightOpen>
+              <UiKeepBothOpen>UiKeepBothOpen</UiKeepBothOpen>
+              <UiDrainLeft>UiDrainLeft</UiDrainLeft>
+              <UiDrainRight>UiDrainRight</UiDrainRight>
+              <UiDrainBoth>UiDrainBoth</UiDrainBoth>
+              <UiManipulatorLeft>UiManipulatorLeft</UiManipulatorLeft>
+              <UiManipulatorForwardLeft>UiManipulatorForwardLeft</UiManipulatorForwardLeft>
+              <UiManipulatorForwardRight>UiManipulatorForwardRight</UiManipulatorForwardRight>
+              <UiManipulatorUp>UiManipulatorUp</UiManipulatorUp>
+              <UiManipulatorRight>UiManipulatorRight</UiManipulatorRight>
+              <UiManipulatorBackLeft>UiManipulatorBackLeft</UiManipulatorBackLeft>
+              <UiManipulatorBackRight>UiManipulatorBackRight</UiManipulatorBackRight>
+              <UiManipulatorDown>UiManipulatorDown</UiManipulatorDown>
+              <UiManipulatorStop>UiManipulatorStop</UiManipulatorStop>
+              <UiManipulatorHome>UiManipulatorHome</UiManipulatorHome>
+              <UiControlManipulator>UiManipulatorInitialize</UiControlManipulator>
             </Expression>
             <Expression xsi:type="IncludeWorkflow" Path="Extensions\InterSessionVisualizer.bonsai">
               <FrameSubject>InterSession</FrameSubject>
