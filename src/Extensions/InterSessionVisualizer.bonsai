@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WorkflowBuilder Version="2.9.0"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
+                 xmlns:imgui="clr-namespace:Bonsai.ImGui;assembly=Bonsai.ImGui"
+                 xmlns:p1="clr-namespace:;assembly=Extensions"
+                 xmlns="https://bonsai-rx.org/2018/workflow">
+  <Workflow>
+    <Nodes>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="FrameSubject" />
+      </Expression>
+      <Expression xsi:type="rx:Defer">
+        <Name>InterSessionVisualizer</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Name" DisplayName="FrameSubject" />
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>InterSession</Name>
+            </Expression>
+            <Expression xsi:type="imgui:TableBuilder">
+              <imgui:Visible>true</imgui:Visible>
+              <imgui:Columns>3</imgui:Columns>
+              <imgui:Flags>Borders</imgui:Flags>
+              <imgui:OuterSize>
+                <imgui:X>0</imgui:X>
+                <imgui:Y>0</imgui:Y>
+              </imgui:OuterSize>
+              <imgui:InnerWidth>0</imgui:InnerWidth>
+            </Expression>
+            <Expression xsi:type="imgui:TableNextColumnBuilder">
+              <imgui:Visible>true</imgui:Visible>
+            </Expression>
+            <Expression xsi:type="imgui:TableBuilder">
+              <imgui:Visible>true</imgui:Visible>
+              <imgui:Columns>2</imgui:Columns>
+              <imgui:Flags>None</imgui:Flags>
+              <imgui:OuterSize>
+                <imgui:X>0</imgui:X>
+                <imgui:Y>0</imgui:Y>
+              </imgui:OuterSize>
+              <imgui:InnerWidth>0</imgui:InnerWidth>
+            </Expression>
+            <Expression xsi:type="imgui:TableNextColumnBuilder">
+              <imgui:Visible>true</imgui:Visible>
+            </Expression>
+            <Expression xsi:type="imgui:ButtonBuilder">
+              <imgui:Name>GiveLeft</imgui:Name>
+              <imgui:Visible>true</imgui:Visible>
+              <imgui:Text>Give Left</imgui:Text>
+            </Expression>
+            <Expression xsi:type="imgui:TableNextColumnBuilder">
+              <imgui:Visible>true</imgui:Visible>
+            </Expression>
+            <Expression xsi:type="imgui:ButtonBuilder">
+              <imgui:Name>GiveRight</imgui:Name>
+              <imgui:Visible>true</imgui:Visible>
+              <imgui:Text>Give Right</imgui:Text>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:CombineLatest" />
+            </Expression>
+            <Expression xsi:type="imgui:TableBuilder">
+              <imgui:Visible>true</imgui:Visible>
+              <imgui:Columns>2</imgui:Columns>
+              <imgui:Flags>None</imgui:Flags>
+              <imgui:OuterSize>
+                <imgui:X>0</imgui:X>
+                <imgui:Y>0</imgui:Y>
+              </imgui:OuterSize>
+              <imgui:InnerWidth>0</imgui:InnerWidth>
+            </Expression>
+            <Expression xsi:type="imgui:TableNextColumnBuilder">
+              <imgui:Visible>true</imgui:Visible>
+            </Expression>
+            <Expression xsi:type="imgui:ButtonBuilder">
+              <imgui:Name>MoveLeft</imgui:Name>
+              <imgui:Visible>true</imgui:Visible>
+              <imgui:Text>Move Left</imgui:Text>
+            </Expression>
+            <Expression xsi:type="imgui:TableNextColumnBuilder">
+              <imgui:Visible>true</imgui:Visible>
+            </Expression>
+            <Expression xsi:type="imgui:ButtonBuilder">
+              <imgui:Name>MoveRight</imgui:Name>
+              <imgui:Visible>true</imgui:Visible>
+              <imgui:Text>Move Right</imgui:Text>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:CombineLatest" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:CombineLatest" />
+            </Expression>
+            <Expression xsi:type="imgui:TableNextColumnBuilder">
+              <imgui:Visible>true</imgui:Visible>
+            </Expression>
+            <Expression xsi:type="imgui:TextBuilder">
+              <imgui:Name>SessionInfo</imgui:Name>
+              <imgui:Visible>true</imgui:Visible>
+              <imgui:Text>Session Info</imgui:Text>
+            </Expression>
+            <Expression xsi:type="imgui:TableNextColumnBuilder">
+              <imgui:Visible>true</imgui:Visible>
+            </Expression>
+            <Expression xsi:type="p1:MultiLineInputTextBuilder">
+              <p1:Name>Notes</p1:Name>
+              <p1:Visible>true</p1:Visible>
+              <p1:Text>Notes</p1:Text>
+              <p1:Capacity>16384</p1:Capacity>
+            </Expression>
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="1" To="2" Label="Source1" />
+            <Edge From="2" To="3" Label="Source1" />
+            <Edge From="2" To="17" Label="Source1" />
+            <Edge From="2" To="19" Label="Source1" />
+            <Edge From="3" To="4" Label="Source1" />
+            <Edge From="3" To="10" Label="Source1" />
+            <Edge From="4" To="5" Label="Source1" />
+            <Edge From="4" To="7" Label="Source1" />
+            <Edge From="5" To="6" Label="Source1" />
+            <Edge From="6" To="9" Label="Source1" />
+            <Edge From="7" To="8" Label="Source1" />
+            <Edge From="8" To="9" Label="Source2" />
+            <Edge From="9" To="16" Label="Source1" />
+            <Edge From="10" To="11" Label="Source1" />
+            <Edge From="10" To="13" Label="Source1" />
+            <Edge From="11" To="12" Label="Source1" />
+            <Edge From="12" To="15" Label="Source1" />
+            <Edge From="13" To="14" Label="Source1" />
+            <Edge From="14" To="15" Label="Source2" />
+            <Edge From="15" To="16" Label="Source2" />
+            <Edge From="17" To="18" Label="Source1" />
+            <Edge From="19" To="20" Label="Source1" />
+          </Edges>
+        </Workflow>
+      </Expression>
+      <Expression xsi:type="WorkflowOutput" />
+    </Nodes>
+    <Edges>
+      <Edge From="0" To="1" Label="Source1" />
+      <Edge From="1" To="2" Label="Source1" />
+    </Edges>
+  </Workflow>
+</WorkflowBuilder>
