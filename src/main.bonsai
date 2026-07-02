@@ -1426,83 +1426,24 @@
                 <ui:WindowState>Maximized</ui:WindowState>
               </Builder>
             </Expression>
-            <Expression xsi:type="imvizui:ImPlotVisualizerBuilder" />
-            <Expression xsi:type="imgui:TableBuilder">
-              <imgui:Visible>true</imgui:Visible>
-              <imgui:Columns>1</imgui:Columns>
-              <imgui:Flags>None</imgui:Flags>
-              <imgui:OuterSize>
-                <imgui:X>0</imgui:X>
-                <imgui:Y>0</imgui:Y>
-              </imgui:OuterSize>
-              <imgui:InnerWidth>0</imgui:InnerWidth>
-            </Expression>
-            <Expression xsi:type="rx:PublishSubject">
-              <Name>Frame</Name>
-            </Expression>
-            <Expression xsi:type="SubscribeSubject">
-              <Name>GlobalTrialOutcome</Name>
-            </Expression>
-            <Expression xsi:type="IncludeWorkflow" Path="Bonsai.Harp:WithLatestTimestamp.bonsai">
-              <Name>HarpTimestampSource</Name>
-            </Expression>
-            <Expression xsi:type="rx:BehaviorSubject">
-              <Name>TimedTrial</Name>
-            </Expression>
-            <Expression xsi:type="SubscribeSubject">
-              <Name>IsRightLickEvent</Name>
-            </Expression>
-            <Expression xsi:type="rx:Condition">
+            <Expression xsi:type="GroupWorkflow">
+              <Name>ImGuiContext</Name>
               <Workflow>
                 <Nodes>
-                  <Expression xsi:type="WorkflowInput">
-                    <Name>Source1</Name>
+                  <Expression xsi:type="imvizui:ImPlotVisualizerBuilder" />
+                  <Expression xsi:type="imgui:TableBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Columns>1</imgui:Columns>
+                    <imgui:Flags>None</imgui:Flags>
+                    <imgui:OuterSize>
+                      <imgui:X>0</imgui:X>
+                      <imgui:Y>0</imgui:Y>
+                    </imgui:OuterSize>
+                    <imgui:InnerWidth>0</imgui:InnerWidth>
                   </Expression>
-                  <Expression xsi:type="MemberSelector">
-                    <Selector>Value</Selector>
+                  <Expression xsi:type="rx:PublishSubject">
+                    <Name>Frame</Name>
                   </Expression>
-                  <Expression xsi:type="WorkflowOutput" />
-                </Nodes>
-                <Edges>
-                  <Edge From="0" To="1" Label="Source1" />
-                  <Edge From="1" To="2" Label="Source1" />
-                </Edges>
-              </Workflow>
-            </Expression>
-            <Expression xsi:type="IncludeWorkflow" Path="Bonsai.Harp:WithLatestTimestamp.bonsai">
-              <Name>HarpTimestampSource</Name>
-            </Expression>
-            <Expression xsi:type="rx:PublishSubject">
-              <Name>LickRight</Name>
-            </Expression>
-            <Expression xsi:type="SubscribeSubject">
-              <Name>GlobalTrialMetrics</Name>
-            </Expression>
-            <Expression xsi:type="MemberSelector">
-              <Selector>Bias</Selector>
-            </Expression>
-            <Expression xsi:type="scr:ExpressionTransform">
-              <scr:Expression>new (it as Bias)</scr:Expression>
-            </Expression>
-            <Expression xsi:type="IncludeWorkflow" Path="Bonsai.Harp:WithLatestTimestamp.bonsai">
-              <Name>HarpTimestampSource</Name>
-            </Expression>
-            <Expression xsi:type="rx:BehaviorSubject">
-              <Name>TimedBias</Name>
-            </Expression>
-            <Expression xsi:type="SubscribeSubject">
-              <Name>IsRightLickEvent</Name>
-            </Expression>
-            <Expression xsi:type="rx:Condition">
-              <Workflow>
-                <Nodes>
-                  <Expression xsi:type="WorkflowInput">
-                    <Name>Source1</Name>
-                  </Expression>
-                  <Expression xsi:type="MemberSelector">
-                    <Selector>Value</Selector>
-                  </Expression>
-                  <Expression xsi:type="BitwiseNot" />
                   <Expression xsi:type="WorkflowOutput" />
                 </Nodes>
                 <Edges>
@@ -1512,11 +1453,127 @@
                 </Edges>
               </Workflow>
             </Expression>
-            <Expression xsi:type="IncludeWorkflow" Path="Bonsai.Harp:WithLatestTimestamp.bonsai">
-              <Name>HarpTimestampSource</Name>
-            </Expression>
-            <Expression xsi:type="rx:PublishSubject">
-              <Name>LickLeft</Name>
+            <Expression xsi:type="GroupWorkflow">
+              <Name>DataTransformations</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>GlobalTrialOutcome</Name>
+                  </Expression>
+                  <Expression xsi:type="IncludeWorkflow" Path="Bonsai.Harp:WithLatestTimestamp.bonsai">
+                    <Name>HarpTimestampSource</Name>
+                  </Expression>
+                  <Expression xsi:type="rx:BehaviorSubject">
+                    <Name>TimedTrial</Name>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>GlobalTrialMetrics</Name>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Bias</Selector>
+                  </Expression>
+                  <Expression xsi:type="scr:ExpressionTransform">
+                    <scr:Expression>new (it as Bias)</scr:Expression>
+                  </Expression>
+                  <Expression xsi:type="IncludeWorkflow" Path="Bonsai.Harp:WithLatestTimestamp.bonsai">
+                    <Name>HarpTimestampSource</Name>
+                  </Expression>
+                  <Expression xsi:type="rx:BehaviorSubject">
+                    <Name>TimedBias</Name>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>IsRightLickEvent</Name>
+                  </Expression>
+                  <Expression xsi:type="rx:Condition">
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Value</Selector>
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                        <Edge From="1" To="2" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="IncludeWorkflow" Path="Bonsai.Harp:WithLatestTimestamp.bonsai">
+                    <Name>HarpTimestampSource</Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject">
+                    <Name>LickRight</Name>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>IsRightLickEvent</Name>
+                  </Expression>
+                  <Expression xsi:type="rx:Condition">
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Value</Selector>
+                        </Expression>
+                        <Expression xsi:type="BitwiseNot" />
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                        <Edge From="1" To="2" Label="Source1" />
+                        <Edge From="2" To="3" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="IncludeWorkflow" Path="Bonsai.Harp:WithLatestTimestamp.bonsai">
+                    <Name>HarpTimestampSource</Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject">
+                    <Name>LickLeft</Name>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>SoftwareEvent</Name>
+                  </Expression>
+                  <Expression xsi:type="IncludeWorkflow" Path="Bonsai.Harp:WithLatestTimestamp.bonsai">
+                    <Name>HarpTimestampSource</Name>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="p5:TimestampSoftwareEvent" />
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Timestamp" />
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="p6:AccumulateToImmutableList" />
+                  </Expression>
+                  <Expression xsi:type="rx:BehaviorSubject">
+                    <Name>EthogramEvents</Name>
+                  </Expression>
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                  <Edge From="1" To="2" Label="Source1" />
+                  <Edge From="3" To="4" Label="Source1" />
+                  <Edge From="4" To="5" Label="Source1" />
+                  <Edge From="5" To="6" Label="Source1" />
+                  <Edge From="6" To="7" Label="Source1" />
+                  <Edge From="8" To="9" Label="Source1" />
+                  <Edge From="9" To="10" Label="Source1" />
+                  <Edge From="10" To="11" Label="Source1" />
+                  <Edge From="12" To="13" Label="Source1" />
+                  <Edge From="13" To="14" Label="Source1" />
+                  <Edge From="14" To="15" Label="Source1" />
+                  <Edge From="16" To="17" Label="Source1" />
+                  <Edge From="17" To="18" Label="Source1" />
+                  <Edge From="18" To="19" Label="Source1" />
+                  <Edge From="19" To="20" Label="Source1" />
+                  <Edge From="20" To="21" Label="Source1" />
+                </Edges>
+              </Workflow>
             </Expression>
             <Expression xsi:type="GroupWorkflow">
               <Name>VisualizerStructure</Name>
@@ -1674,24 +1731,72 @@
               <FrameSubject>Bias</FrameSubject>
               <TimedBias>TimedBias</TimedBias>
             </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>Ethogram</Name>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>EthogramEvents</Name>
+            </Expression>
+            <Expression xsi:type="PropertyMapping">
+              <PropertyMappings>
+                <Property Name="SoftwareEvents" />
+              </PropertyMappings>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p2:SoftwareEventVisualizer">
+                <p2:Visible>true</p2:Visible>
+                <p2:SoftwareEvents />
+                <p2:TrialBreakEventName>Break</p2:TrialBreakEventName>
+                <p2:PlotHeight>200</p2:PlotHeight>
+                <p2:ShadedAreaPlotters>
+                  <p2:ShadedAreaPlotter>
+                    <p2:EventName>TrialOutcome</p2:EventName>
+                    <p2:Color>CornflowerBlue</p2:Color>
+                    <p2:Alpha>0.3</p2:Alpha>
+                  </p2:ShadedAreaPlotter>
+                  <p2:ShadedAreaPlotter>
+                    <p2:EventName>RewardPeriod</p2:EventName>
+                    <p2:Color>Crimson</p2:Color>
+                    <p2:Alpha>0.3</p2:Alpha>
+                  </p2:ShadedAreaPlotter>
+                  <p2:ShadedAreaPlotter>
+                    <p2:EventName>ITI</p2:EventName>
+                    <p2:Color>Cyan</p2:Color>
+                    <p2:Alpha>0.3</p2:Alpha>
+                  </p2:ShadedAreaPlotter>
+                </p2:ShadedAreaPlotters>
+                <p2:PointPlotters>
+                  <p2:PointPlotter>
+                    <p2:EventName>TrialOutcome</p2:EventName>
+                    <p2:Color>SaddleBrown</p2:Color>
+                    <p2:YPosition>0.5</p2:YPosition>
+                    <p2:MarkerSize>2</p2:MarkerSize>
+                    <p2:Marker>Circle</p2:Marker>
+                  </p2:PointPlotter>
+                  <p2:PointPlotter>
+                    <p2:EventName>LickLeft</p2:EventName>
+                    <p2:Color>Red</p2:Color>
+                    <p2:YPosition>0.8</p2:YPosition>
+                    <p2:MarkerSize>2</p2:MarkerSize>
+                    <p2:Marker>Down</p2:Marker>
+                  </p2:PointPlotter>
+                  <p2:PointPlotter>
+                    <p2:EventName>LickRight</p2:EventName>
+                    <p2:Color>DodgerBlue</p2:Color>
+                    <p2:YPosition>0.2</p2:YPosition>
+                    <p2:MarkerSize>2</p2:MarkerSize>
+                    <p2:Marker>Up</p2:Marker>
+                  </p2:PointPlotter>
+                </p2:PointPlotters>
+              </Combinator>
+            </Expression>
           </Nodes>
           <Edges>
             <Edge From="0" To="1" Label="Source1" />
             <Edge From="1" To="2" Label="Source1" />
-            <Edge From="3" To="4" Label="Source1" />
-            <Edge From="4" To="5" Label="Source1" />
-            <Edge From="6" To="7" Label="Source1" />
-            <Edge From="7" To="8" Label="Source1" />
+            <Edge From="8" To="11" Label="Source1" />
             <Edge From="9" To="10" Label="Source1" />
-            <Edge From="10" To="11" Label="Source1" />
-            <Edge From="11" To="12" Label="Source1" />
-            <Edge From="13" To="14" Label="Source1" />
-            <Edge From="14" To="15" Label="Source1" />
-            <Edge From="15" To="16" Label="Source1" />
-            <Edge From="16" To="17" Label="Source1" />
-            <Edge From="18" To="19" Label="Source1" />
-            <Edge From="19" To="20" Label="Source1" />
-            <Edge From="20" To="21" Label="Source1" />
+            <Edge From="10" To="11" Label="Source2" />
           </Edges>
         </Workflow>
       </Expression>
