@@ -20,8 +20,8 @@ public class SoftwareEventVisualizer
     public bool Visible {get; set;}
     public ImmutableList<System.Reactive.Timestamped<SoftwareEvent>> SoftwareEvents {get; set;}
     public string TrialBreakEventName {get; set;}
+    public float PlotHeight {get; set;}
 
-    private const float MinPlotHeight = 100.0f;
     private const double YAxisMin = 0.0;
     private const double YAxisMax = 1.0;
     private const float InputWidth = 80.0f;
@@ -156,7 +156,6 @@ public class SoftwareEventVisualizer
         if (timeWindow < 1.0f) timeWindow = 1.0f;
 
         var availableSize = ImGui.GetContentRegionAvail();
-        float plotHeight = Math.Max(availableSize.Y, MinPlotHeight);
 
         double plotTMin = -(double)timeWindow;
         double plotTMax = 0.0;
@@ -168,7 +167,7 @@ public class SoftwareEventVisualizer
         double yMax = HasTrialBreaks ? (double)(firstVisible + numVisible) : YAxisMax;
 
         ImPlot.SetNextAxesLimits(plotTMin, plotTMax, yMin, yMax, ImPlotCond.Always);
-        if (ImPlot.BeginPlot("Software Events", new Vector2(-1, plotHeight), ImPlotFlags.NoTitle))
+        if (ImPlot.BeginPlot("Software Events", new Vector2(-1, PlotHeight), ImPlotFlags.NoTitle))
         {
             ImPlot.SetupAxes("Time (s)", HasTrialBreaks ? "Trial" : "Value");
             ImPlot.SetupAxisLimits(ImAxis.Y1, yMin, yMax, ImPlotCond.Always);
