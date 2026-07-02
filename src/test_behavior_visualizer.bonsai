@@ -3,13 +3,13 @@
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:wie="clr-namespace:Bonsai.Windows.Input;assembly=Bonsai.Windows.Input"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
-                 xmlns:p1="clr-namespace:Bonsai.Numerics.Distributions;assembly=Bonsai.Numerics"
+                 xmlns:p1="clr-namespace:AindDynamicForagingDataSchema;assembly=Extensions"
+                 xmlns:p2="clr-namespace:Bonsai.Numerics.Distributions;assembly=Bonsai.Numerics"
                  xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
                  xmlns:harp="clr-namespace:Bonsai.Harp;assembly=Bonsai.Harp"
                  xmlns:num="clr-namespace:Bonsai.Numerics;assembly=Bonsai.Numerics"
                  xmlns:dsp="clr-namespace:Bonsai.Dsp;assembly=Bonsai.Dsp"
-                 xmlns:p2="clr-namespace:;assembly=Extensions"
-                 xmlns:p3="clr-namespace:AindDynamicForagingDataSchema;assembly=Extensions"
+                 xmlns:p3="clr-namespace:;assembly=Extensions"
                  xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
                  xmlns:imvizui="clr-namespace:Bonsai.ImGui.Visualizers;assembly=Bonsai.ImGui.Visualizers.Design"
                  xmlns:imgui="clr-namespace:Bonsai.ImGui;assembly=Bonsai.ImGui"
@@ -33,6 +33,89 @@
             <Expression xsi:type="rx:PublishSubject">
               <Name>LickLeft</Name>
             </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Timer">
+                <rx:DueTime>PT5S</rx:DueTime>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="StringProperty">
+                <Value>Expo</Value>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Take">
+                <rx:Count>1</rx:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:ToList" />
+            </Expression>
+            <Expression xsi:type="InputMapping">
+              <PropertyMappings>
+                <Property Name="Experimenter" Selector="it" />
+              </PropertyMappings>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p1:Session">
+                <p1:AindBehaviorServicesPkgVersion>0.13.5</p1:AindBehaviorServicesPkgVersion>
+                <p1:Version>0.13.5</p1:Version>
+                <p1:Experiment>Task6</p1:Experiment>
+                <p1:Date>0001-01-01T00:00:00.0000000+00:00</p1:Date>
+                <p1:SessionName>Stage1</p1:SessionName>
+                <p1:Subject>Plimbo</p1:Subject>
+                <p1:AllowDirtyRepo>false</p1:AllowDirtyRepo>
+                <p1:SkipHardwareValidation>false</p1:SkipHardwareValidation>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Repeat" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="wie:KeyDown">
+                <wie:Filter>M</wie:Filter>
+                <wie:SuppressRepetitions>false</wie:SuppressRepetitions>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="StringProperty">
+                <Value>Expo</Value>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Take">
+                <rx:Count>1</rx:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:ToList" />
+            </Expression>
+            <Expression xsi:type="InputMapping">
+              <PropertyMappings>
+                <Property Name="Experimenter" Selector="it" />
+              </PropertyMappings>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p1:Session">
+                <p1:AindBehaviorServicesPkgVersion>0.13.5</p1:AindBehaviorServicesPkgVersion>
+                <p1:Version>0.13.5</p1:Version>
+                <p1:Experiment>Task7</p1:Experiment>
+                <p1:Date>0001-01-01T00:00:00.0000000+00:00</p1:Date>
+                <p1:SessionName>Stage2</p1:SessionName>
+                <p1:Subject>Plimbo</p1:Subject>
+                <p1:AllowDirtyRepo>false</p1:AllowDirtyRepo>
+                <p1:SkipHardwareValidation>false</p1:SkipHardwareValidation>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Repeat" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Merge" />
+            </Expression>
+            <Expression xsi:type="rx:BehaviorSubject">
+              <Name>SessionInfo</Name>
+            </Expression>
             <Expression xsi:type="SubscribeSubject">
               <Name>TimedTrial</Name>
             </Expression>
@@ -46,7 +129,7 @@
               <Selector>Item2</Selector>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:Sample" />
+              <Combinator xsi:type="p2:Sample" />
             </Expression>
             <Expression xsi:type="rx:Accumulate" />
             <Expression xsi:type="scr:ExpressionTransform">
@@ -89,9 +172,9 @@
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:CreateContinuousUniform">
-                <p1:Lower>0.1</p1:Lower>
-                <p1:Upper>1</p1:Upper>
+              <Combinator xsi:type="p2:CreateContinuousUniform">
+                <p2:Lower>0.1</p2:Lower>
+                <p2:Upper>1</p2:Upper>
               </Combinator>
             </Expression>
             <Expression xsi:type="rx:BehaviorSubject">
@@ -103,9 +186,9 @@
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:CreateContinuousUniform">
-                <p1:Lower>-0.1</p1:Lower>
-                <p1:Upper>0.1</p1:Upper>
+              <Combinator xsi:type="p2:CreateContinuousUniform">
+                <p2:Lower>-0.1</p2:Lower>
+                <p2:Upper>0.1</p2:Upper>
               </Combinator>
             </Expression>
             <Expression xsi:type="rx:BehaviorSubject">
@@ -127,14 +210,14 @@
               <Name>TimeBase</Name>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:CreateContinuousUniform">
-                <p1:Lower>0</p1:Lower>
-                <p1:Upper>1</p1:Upper>
+              <Combinator xsi:type="p2:CreateContinuousUniform">
+                <p2:Lower>0</p2:Lower>
+                <p2:Upper>1</p2:Upper>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:SampleMany">
-                <p1:Count>500</p1:Count>
+              <Combinator xsi:type="p2:SampleMany">
+                <p2:Count>500</p2:Count>
               </Combinator>
             </Expression>
             <Expression xsi:type="GreaterThan">
@@ -169,14 +252,14 @@
               <scr:Expression>(it +1) * 0.5</scr:Expression>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:CreateContinuousUniform">
-                <p1:Lower>0</p1:Lower>
-                <p1:Upper>1</p1:Upper>
+              <Combinator xsi:type="p2:CreateContinuousUniform">
+                <p2:Lower>0</p2:Lower>
+                <p2:Upper>1</p2:Upper>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:SampleMany">
-                <p1:Count>500</p1:Count>
+              <Combinator xsi:type="p2:SampleMany">
+                <p2:Count>500</p2:Count>
               </Combinator>
             </Expression>
             <Expression xsi:type="GreaterThan">
@@ -193,19 +276,19 @@
               </PropertyMappings>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p2:CreateNullableBoolean">
-                <p2:Value>false</p2:Value>
+              <Combinator xsi:type="p3:CreateNullableBoolean">
+                <p3:Value>true</p3:Value>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:CreateContinuousUniform">
-                <p1:Lower>0</p1:Lower>
-                <p1:Upper>1</p1:Upper>
+              <Combinator xsi:type="p2:CreateContinuousUniform">
+                <p2:Lower>0</p2:Lower>
+                <p2:Upper>1</p2:Upper>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:SampleMany">
-                <p1:Count>500</p1:Count>
+              <Combinator xsi:type="p2:SampleMany">
+                <p2:Count>500</p2:Count>
               </Combinator>
             </Expression>
             <Expression xsi:type="GreaterThan">
@@ -214,8 +297,8 @@
               </Operand>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p2:CreateNullableBoolean">
-                <p2:Value xsi:nil="true" />
+              <Combinator xsi:type="p3:CreateNullableBoolean">
+                <p3:Value xsi:nil="true" />
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -246,14 +329,14 @@
               <scr:Expression>(it +1) * 0.5</scr:Expression>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:CreateContinuousUniform">
-                <p1:Lower>0</p1:Lower>
-                <p1:Upper>1</p1:Upper>
+              <Combinator xsi:type="p2:CreateContinuousUniform">
+                <p2:Lower>0</p2:Lower>
+                <p2:Upper>1</p2:Upper>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:SampleMany">
-                <p1:Count>500</p1:Count>
+              <Combinator xsi:type="p2:SampleMany">
+                <p2:Count>500</p2:Count>
               </Combinator>
             </Expression>
             <Expression xsi:type="GreaterThan">
@@ -277,14 +360,14 @@
               </PropertyMappings>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:CreateContinuousUniform">
-                <p1:Lower>0</p1:Lower>
-                <p1:Upper>1</p1:Upper>
+              <Combinator xsi:type="p2:CreateContinuousUniform">
+                <p2:Lower>0</p2:Lower>
+                <p2:Upper>1</p2:Upper>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:SampleMany">
-                <p1:Count>500</p1:Count>
+              <Combinator xsi:type="p2:SampleMany">
+                <p2:Count>500</p2:Count>
               </Combinator>
             </Expression>
             <Expression xsi:type="GreaterThan">
@@ -298,24 +381,24 @@
               </PropertyMappings>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p2:CreateNullableBoolean">
-                <p2:Value>true</p2:Value>
+              <Combinator xsi:type="p3:CreateNullableBoolean">
+                <p3:Value>false</p3:Value>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p2:CreateNullableBoolean">
-                <p2:Value xsi:nil="true" />
+              <Combinator xsi:type="p3:CreateNullableBoolean">
+                <p3:Value xsi:nil="true" />
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:CreateContinuousUniform">
-                <p1:Lower>0</p1:Lower>
-                <p1:Upper>1</p1:Upper>
+              <Combinator xsi:type="p2:CreateContinuousUniform">
+                <p2:Lower>0</p2:Lower>
+                <p2:Upper>1</p2:Upper>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:SampleMany">
-                <p1:Count>500</p1:Count>
+              <Combinator xsi:type="p2:SampleMany">
+                <p2:Count>500</p2:Count>
               </Combinator>
             </Expression>
             <Expression xsi:type="GreaterThan">
@@ -341,16 +424,16 @@
               </PropertyMappings>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p3:Trial">
-                <p3:PRewardLeft>0.59164587077011477</p3:PRewardLeft>
-                <p3:PRewardRight>0.40913708100521279</p3:PRewardRight>
-                <p3:RewardConsumptionDuration>5</p3:RewardConsumptionDuration>
-                <p3:RewardDelayDuration>0</p3:RewardDelayDuration>
-                <p3:ResponseDeadlineDuration>5</p3:ResponseDeadlineDuration>
-                <p3:QuiescencePeriodDuration>0.5</p3:QuiescencePeriodDuration>
-                <p3:InterTrialIntervalDuration>5</p3:InterTrialIntervalDuration>
-                <p3:IsAutoResponseRight xsi:nil="true" />
-                <p3:LickspoutOffsetDelta>0</p3:LickspoutOffsetDelta>
+              <Combinator xsi:type="p1:Trial">
+                <p1:PRewardLeft>0.59164587077011477</p1:PRewardLeft>
+                <p1:PRewardRight>0.40913708100521279</p1:PRewardRight>
+                <p1:RewardConsumptionDuration>5</p1:RewardConsumptionDuration>
+                <p1:RewardDelayDuration>0</p1:RewardDelayDuration>
+                <p1:ResponseDeadlineDuration>5</p1:ResponseDeadlineDuration>
+                <p1:QuiescencePeriodDuration>0.5</p1:QuiescencePeriodDuration>
+                <p1:InterTrialIntervalDuration>5</p1:InterTrialIntervalDuration>
+                <p1:IsAutoResponseRight xsi:nil="true" />
+                <p1:LickspoutOffsetDelta>0</p1:LickspoutOffsetDelta>
               </Combinator>
             </Expression>
             <Expression xsi:type="PropertyMapping">
@@ -359,9 +442,9 @@
               </PropertyMappings>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p3:TrialOutcome">
-                <p3:IsRightChoice xsi:nil="true" />
-                <p3:IsRewarded>false</p3:IsRewarded>
+              <Combinator xsi:type="p1:TrialOutcome">
+                <p1:IsRightChoice>true</p1:IsRightChoice>
+                <p1:IsRewarded>false</p1:IsRewarded>
               </Combinator>
             </Expression>
             <Expression xsi:type="rx:CreateObservable">
@@ -375,7 +458,7 @@
                     <Name>Random</Name>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p1:Sample" />
+                    <Combinator xsi:type="p2:Sample" />
                   </Expression>
                   <Expression xsi:type="scr:ExpressionTransform">
                     <scr:Expression>TimeSpan.FromSeconds(it)</scr:Expression>
@@ -387,7 +470,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Delay">
-                      <rx:DueTime>PT0.177S</rx:DueTime>
+                      <rx:DueTime>PT0.424S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -428,85 +511,100 @@
             <Edge From="0" To="1" Label="Source1" />
             <Edge From="1" To="2" Label="Source1" />
             <Edge From="2" To="3" Label="Source1" />
-            <Edge From="4" To="6" Label="Source1" />
-            <Edge From="4" To="13" Label="Source1" />
-            <Edge From="5" To="6" Label="Source2" />
+            <Edge From="4" To="5" Label="Source1" />
+            <Edge From="5" To="6" Label="Source1" />
             <Edge From="6" To="7" Label="Source1" />
             <Edge From="7" To="8" Label="Source1" />
             <Edge From="8" To="9" Label="Source1" />
             <Edge From="9" To="10" Label="Source1" />
-            <Edge From="10" To="11" Label="Source1" />
+            <Edge From="10" To="18" Label="Source1" />
             <Edge From="11" To="12" Label="Source1" />
-            <Edge From="12" To="14" Label="Source1" />
-            <Edge From="13" To="14" Label="Source2" />
+            <Edge From="12" To="13" Label="Source1" />
+            <Edge From="13" To="14" Label="Source1" />
             <Edge From="14" To="15" Label="Source1" />
             <Edge From="15" To="16" Label="Source1" />
-            <Edge From="17" To="18" Label="Source1" />
+            <Edge From="16" To="17" Label="Source1" />
+            <Edge From="17" To="18" Label="Source2" />
             <Edge From="18" To="19" Label="Source1" />
-            <Edge From="19" To="20" Label="Source1" />
-            <Edge From="21" To="22" Label="Source1" />
+            <Edge From="20" To="22" Label="Source1" />
+            <Edge From="20" To="29" Label="Source1" />
+            <Edge From="21" To="22" Label="Source2" />
             <Edge From="22" To="23" Label="Source1" />
+            <Edge From="23" To="24" Label="Source1" />
             <Edge From="24" To="25" Label="Source1" />
             <Edge From="25" To="26" Label="Source1" />
+            <Edge From="26" To="27" Label="Source1" />
             <Edge From="27" To="28" Label="Source1" />
-            <Edge From="28" To="29" Label="Source1" />
-            <Edge From="29" To="30" Label="Source1" />
+            <Edge From="28" To="30" Label="Source1" />
+            <Edge From="29" To="30" Label="Source2" />
+            <Edge From="30" To="31" Label="Source1" />
             <Edge From="31" To="32" Label="Source1" />
-            <Edge From="32" To="33" Label="Source1" />
-            <Edge From="33" To="58" Label="Source1" />
+            <Edge From="33" To="34" Label="Source1" />
             <Edge From="34" To="35" Label="Source1" />
             <Edge From="35" To="36" Label="Source1" />
-            <Edge From="36" To="37" Label="Source1" />
             <Edge From="37" To="38" Label="Source1" />
-            <Edge From="38" To="58" Label="Source2" />
-            <Edge From="39" To="40" Label="Source1" />
+            <Edge From="38" To="39" Label="Source1" />
             <Edge From="40" To="41" Label="Source1" />
             <Edge From="41" To="42" Label="Source1" />
-            <Edge From="42" To="43" Label="Source1" />
             <Edge From="43" To="44" Label="Source1" />
-            <Edge From="44" To="49" Label="Source1" />
+            <Edge From="44" To="45" Label="Source1" />
             <Edge From="45" To="46" Label="Source1" />
-            <Edge From="46" To="47" Label="Source1" />
             <Edge From="47" To="48" Label="Source1" />
-            <Edge From="47" To="49" Label="Source3" />
-            <Edge From="48" To="49" Label="Source2" />
-            <Edge From="49" To="50" Label="Source1" />
-            <Edge From="50" To="58" Label="Source3" />
+            <Edge From="48" To="49" Label="Source1" />
+            <Edge From="49" To="74" Label="Source1" />
+            <Edge From="50" To="51" Label="Source1" />
             <Edge From="51" To="52" Label="Source1" />
             <Edge From="52" To="53" Label="Source1" />
             <Edge From="53" To="54" Label="Source1" />
-            <Edge From="54" To="58" Label="Source4" />
+            <Edge From="54" To="74" Label="Source2" />
             <Edge From="55" To="56" Label="Source1" />
             <Edge From="56" To="57" Label="Source1" />
-            <Edge From="57" To="58" Label="Source5" />
+            <Edge From="57" To="58" Label="Source1" />
             <Edge From="58" To="59" Label="Source1" />
-            <Edge From="58" To="60" Label="Source1" />
-            <Edge From="58" To="72" Label="Source1" />
-            <Edge From="59" To="77" Label="Source1" />
-            <Edge From="60" To="75" Label="Source1" />
+            <Edge From="59" To="60" Label="Source1" />
+            <Edge From="60" To="65" Label="Source1" />
             <Edge From="61" To="62" Label="Source1" />
             <Edge From="62" To="63" Label="Source1" />
             <Edge From="63" To="64" Label="Source1" />
-            <Edge From="64" To="65" Label="Source1" />
+            <Edge From="63" To="65" Label="Source3" />
+            <Edge From="64" To="65" Label="Source2" />
             <Edge From="65" To="66" Label="Source1" />
-            <Edge From="65" To="70" Label="Source2" />
-            <Edge From="66" To="70" Label="Source1" />
+            <Edge From="66" To="74" Label="Source3" />
             <Edge From="67" To="68" Label="Source1" />
             <Edge From="68" To="69" Label="Source1" />
-            <Edge From="69" To="70" Label="Source3" />
-            <Edge From="70" To="71" Label="Source1" />
-            <Edge From="71" To="72" Label="Source2" />
+            <Edge From="69" To="70" Label="Source1" />
+            <Edge From="70" To="74" Label="Source4" />
+            <Edge From="71" To="72" Label="Source1" />
             <Edge From="72" To="73" Label="Source1" />
-            <Edge From="73" To="74" Label="Source1" />
-            <Edge From="74" To="75" Label="Source2" />
-            <Edge From="75" To="76" Label="Source1" />
-            <Edge From="76" To="77" Label="Source2" />
+            <Edge From="73" To="74" Label="Source5" />
+            <Edge From="74" To="75" Label="Source1" />
+            <Edge From="74" To="76" Label="Source1" />
+            <Edge From="74" To="88" Label="Source1" />
+            <Edge From="75" To="93" Label="Source1" />
+            <Edge From="76" To="91" Label="Source1" />
             <Edge From="77" To="78" Label="Source1" />
             <Edge From="78" To="79" Label="Source1" />
-            <Edge From="79" To="81" Label="Source1" />
-            <Edge From="80" To="81" Label="Source2" />
+            <Edge From="79" To="80" Label="Source1" />
+            <Edge From="80" To="81" Label="Source1" />
             <Edge From="81" To="82" Label="Source1" />
-            <Edge From="82" To="83" Label="Source1" />
+            <Edge From="81" To="86" Label="Source2" />
+            <Edge From="82" To="86" Label="Source1" />
+            <Edge From="83" To="84" Label="Source1" />
+            <Edge From="84" To="85" Label="Source1" />
+            <Edge From="85" To="86" Label="Source3" />
+            <Edge From="86" To="87" Label="Source1" />
+            <Edge From="87" To="88" Label="Source2" />
+            <Edge From="88" To="89" Label="Source1" />
+            <Edge From="89" To="90" Label="Source1" />
+            <Edge From="90" To="91" Label="Source2" />
+            <Edge From="91" To="92" Label="Source1" />
+            <Edge From="92" To="93" Label="Source2" />
+            <Edge From="93" To="94" Label="Source1" />
+            <Edge From="94" To="95" Label="Source1" />
+            <Edge From="95" To="97" Label="Source1" />
+            <Edge From="96" To="97" Label="Source2" />
+            <Edge From="97" To="98" Label="Source1" />
+            <Edge From="98" To="99" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
@@ -759,329 +857,11 @@
           <FrameSubject>Camera</FrameSubject>
         </Builder>
       </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="wie:KeyDown">
-          <wie:Filter>N</wie:Filter>
-          <wie:SuppressRepetitions>false</wie:SuppressRepetitions>
-        </Combinator>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>SessionInfo</Name>
       </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="StringProperty">
-          <Value>Expo</Value>
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:Take">
-          <rx:Count>1</rx:Count>
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:ToList" />
-      </Expression>
-      <Expression xsi:type="InputMapping">
-        <PropertyMappings>
-          <Property Name="Experimenter" Selector="it" />
-        </PropertyMappings>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="p3:Session">
-          <p3:AindBehaviorServicesPkgVersion>0.13.5</p3:AindBehaviorServicesPkgVersion>
-          <p3:Version>0.13.5</p3:Version>
-          <p3:Experiment>Task6</p3:Experiment>
-          <p3:Date>0001-01-01T00:00:00.0000000+00:00</p3:Date>
-          <p3:SessionName>Stage1</p3:SessionName>
-          <p3:Subject>Plimbo</p3:Subject>
-          <p3:AllowDirtyRepo>false</p3:AllowDirtyRepo>
-          <p3:SkipHardwareValidation>false</p3:SkipHardwareValidation>
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:Repeat" />
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="wie:KeyDown">
-          <wie:Filter>M</wie:Filter>
-          <wie:SuppressRepetitions>false</wie:SuppressRepetitions>
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="StringProperty">
-          <Value>Expo</Value>
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:Take">
-          <rx:Count>1</rx:Count>
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:ToList" />
-      </Expression>
-      <Expression xsi:type="InputMapping">
-        <PropertyMappings>
-          <Property Name="Experimenter" Selector="it" />
-        </PropertyMappings>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="p3:Session">
-          <p3:AindBehaviorServicesPkgVersion>0.13.5</p3:AindBehaviorServicesPkgVersion>
-          <p3:Version>0.13.5</p3:Version>
-          <p3:Experiment>Task7</p3:Experiment>
-          <p3:Date>0001-01-01T00:00:00.0000000+00:00</p3:Date>
-          <p3:SessionName>Stage2</p3:SessionName>
-          <p3:Subject>Plimbo</p3:Subject>
-          <p3:AllowDirtyRepo>false</p3:AllowDirtyRepo>
-          <p3:SkipHardwareValidation>false</p3:SkipHardwareValidation>
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:Repeat" />
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:Merge" />
-      </Expression>
-      <Expression xsi:type="GroupWorkflow">
-        <Name>MetadataVisualizer</Name>
-        <Workflow>
-          <Nodes>
-            <Expression xsi:type="WorkflowInput">
-              <Name>Source1</Name>
-            </Expression>
-            <Expression xsi:type="ExternalizedMapping">
-              <Property Name="FrameSubject" />
-            </Expression>
-            <Expression xsi:type="rx:CreateObservable">
-              <Name>MetadataVisualizer</Name>
-              <Workflow>
-                <Nodes>
-                  <Expression xsi:type="WorkflowInput">
-                    <Name>Source1</Name>
-                  </Expression>
-                  <Expression xsi:type="rx:BehaviorSubject">
-                    <Name>CurrentMetadata</Name>
-                  </Expression>
-                  <Expression xsi:type="ExternalizedMapping">
-                    <Property Name="Name" DisplayName="FrameSubject" />
-                  </Expression>
-                  <Expression xsi:type="SubscribeSubject">
-                    <Name>Metadata</Name>
-                  </Expression>
-                  <Expression xsi:type="imgui:TableNextColumnBuilder">
-                    <imgui:Visible>true</imgui:Visible>
-                  </Expression>
-                  <Expression xsi:type="imgui:TableBuilder">
-                    <imgui:Visible>true</imgui:Visible>
-                    <imgui:Columns>7</imgui:Columns>
-                    <imgui:Flags>None</imgui:Flags>
-                    <imgui:OuterSize>
-                      <imgui:X>0</imgui:X>
-                      <imgui:Y>0</imgui:Y>
-                    </imgui:OuterSize>
-                    <imgui:InnerWidth>0</imgui:InnerWidth>
-                  </Expression>
-                  <Expression xsi:type="imgui:TableNextColumnBuilder">
-                    <imgui:Visible>true</imgui:Visible>
-                  </Expression>
-                  <Expression xsi:type="SubscribeSubject">
-                    <Name>CurrentMetadata</Name>
-                  </Expression>
-                  <Expression xsi:type="MemberSelector">
-                    <Selector>Experimenter</Selector>
-                  </Expression>
-                  <Expression xsi:type="rx:Condition">
-                    <Workflow>
-                      <Nodes>
-                        <Expression xsi:type="WorkflowInput">
-                          <Name>Source1</Name>
-                        </Expression>
-                        <Expression xsi:type="MemberSelector">
-                          <Selector>Count</Selector>
-                        </Expression>
-                        <Expression xsi:type="GreaterThan">
-                          <Operand xsi:type="IntProperty">
-                            <Value>0</Value>
-                          </Operand>
-                        </Expression>
-                        <Expression xsi:type="WorkflowOutput" />
-                      </Nodes>
-                      <Edges>
-                        <Edge From="0" To="1" Label="Source1" />
-                        <Edge From="1" To="2" Label="Source1" />
-                        <Edge From="2" To="3" Label="Source1" />
-                      </Edges>
-                    </Workflow>
-                  </Expression>
-                  <Expression xsi:type="Index">
-                    <Operand xsi:type="IntProperty">
-                      <Value>0</Value>
-                    </Operand>
-                  </Expression>
-                  <Expression xsi:type="PropertyMapping">
-                    <PropertyMappings>
-                      <Property Name="Text" />
-                    </PropertyMappings>
-                  </Expression>
-                  <Expression xsi:type="imgui:TextBuilder">
-                    <imgui:Visible>true</imgui:Visible>
-                    <imgui:Text>Expo</imgui:Text>
-                  </Expression>
-                  <Expression xsi:type="imgui:TableNextColumnBuilder">
-                    <imgui:Visible>true</imgui:Visible>
-                  </Expression>
-                  <Expression xsi:type="SubscribeSubject">
-                    <Name>CurrentMetadata</Name>
-                  </Expression>
-                  <Expression xsi:type="MemberSelector">
-                    <Selector>Subject</Selector>
-                  </Expression>
-                  <Expression xsi:type="PropertyMapping">
-                    <PropertyMappings>
-                      <Property Name="Text" />
-                    </PropertyMappings>
-                  </Expression>
-                  <Expression xsi:type="imgui:TextBuilder">
-                    <imgui:Visible>true</imgui:Visible>
-                    <imgui:Text>Plimbo</imgui:Text>
-                  </Expression>
-                  <Expression xsi:type="imgui:TableNextColumnBuilder">
-                    <imgui:Visible>true</imgui:Visible>
-                  </Expression>
-                  <Expression xsi:type="SubscribeSubject">
-                    <Name>CurrentMetadata</Name>
-                  </Expression>
-                  <Expression xsi:type="MemberSelector">
-                    <Selector>SessionName</Selector>
-                  </Expression>
-                  <Expression xsi:type="PropertyMapping">
-                    <PropertyMappings>
-                      <Property Name="Text" />
-                    </PropertyMappings>
-                  </Expression>
-                  <Expression xsi:type="imgui:TextBuilder">
-                    <imgui:Visible>true</imgui:Visible>
-                    <imgui:Text>Stage1</imgui:Text>
-                  </Expression>
-                  <Expression xsi:type="imgui:TableNextColumnBuilder">
-                    <imgui:Visible>true</imgui:Visible>
-                  </Expression>
-                  <Expression xsi:type="SubscribeSubject">
-                    <Name>CurrentMetadata</Name>
-                  </Expression>
-                  <Expression xsi:type="MemberSelector">
-                    <Selector>Experiment</Selector>
-                  </Expression>
-                  <Expression xsi:type="PropertyMapping">
-                    <PropertyMappings>
-                      <Property Name="Text" />
-                    </PropertyMappings>
-                  </Expression>
-                  <Expression xsi:type="imgui:TextBuilder">
-                    <imgui:Visible>true</imgui:Visible>
-                    <imgui:Text>Task6</imgui:Text>
-                  </Expression>
-                  <Expression xsi:type="imgui:TableNextColumnBuilder">
-                    <imgui:Visible>true</imgui:Visible>
-                  </Expression>
-                  <Expression xsi:type="imgui:TableBuilder">
-                    <imgui:Visible>true</imgui:Visible>
-                    <imgui:Columns>2</imgui:Columns>
-                    <imgui:Flags>None</imgui:Flags>
-                    <imgui:OuterSize>
-                      <imgui:X>0</imgui:X>
-                      <imgui:Y>0</imgui:Y>
-                    </imgui:OuterSize>
-                    <imgui:InnerWidth>0</imgui:InnerWidth>
-                  </Expression>
-                  <Expression xsi:type="imgui:TableNextColumnBuilder">
-                    <imgui:Visible>true</imgui:Visible>
-                  </Expression>
-                  <Expression xsi:type="imgui:TextBuilder">
-                    <imgui:Visible>true</imgui:Visible>
-                    <imgui:Text>Habituation</imgui:Text>
-                  </Expression>
-                  <Expression xsi:type="imgui:TableNextColumnBuilder">
-                    <imgui:Visible>true</imgui:Visible>
-                  </Expression>
-                  <Expression xsi:type="imgui:InputFloatBuilder">
-                    <imgui:Name>Habituation</imgui:Name>
-                    <imgui:Visible>true</imgui:Visible>
-                    <imgui:Flags>None</imgui:Flags>
-                    <imgui:InitialValue>0</imgui:InitialValue>
-                    <imgui:Step>0</imgui:Step>
-                    <imgui:StepFast>0</imgui:StepFast>
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="rx:CombineLatest" />
-                  </Expression>
-                  <Expression xsi:type="imgui:TableNextColumnBuilder">
-                    <imgui:Visible>true</imgui:Visible>
-                  </Expression>
-                  <Expression xsi:type="imgui:ButtonBuilder">
-                    <imgui:Visible>true</imgui:Visible>
-                    <imgui:Text>START</imgui:Text>
-                  </Expression>
-                  <Expression xsi:type="imgui:TableNextColumnBuilder">
-                    <imgui:Visible>true</imgui:Visible>
-                  </Expression>
-                  <Expression xsi:type="imgui:ButtonBuilder">
-                    <imgui:Visible>true</imgui:Visible>
-                    <imgui:Text>STOP</imgui:Text>
-                  </Expression>
-                </Nodes>
-                <Edges>
-                  <Edge From="0" To="1" Label="Source1" />
-                  <Edge From="2" To="3" Label="Source1" />
-                  <Edge From="3" To="4" Label="Source1" />
-                  <Edge From="4" To="5" Label="Source1" />
-                  <Edge From="5" To="6" Label="Source1" />
-                  <Edge From="5" To="13" Label="Source1" />
-                  <Edge From="5" To="18" Label="Source1" />
-                  <Edge From="5" To="23" Label="Source1" />
-                  <Edge From="5" To="28" Label="Source1" />
-                  <Edge From="5" To="35" Label="Source1" />
-                  <Edge From="5" To="37" Label="Source1" />
-                  <Edge From="6" To="12" Label="Source1" />
-                  <Edge From="7" To="8" Label="Source1" />
-                  <Edge From="8" To="9" Label="Source1" />
-                  <Edge From="9" To="10" Label="Source1" />
-                  <Edge From="10" To="11" Label="Source1" />
-                  <Edge From="11" To="12" Label="Source2" />
-                  <Edge From="13" To="17" Label="Source1" />
-                  <Edge From="14" To="15" Label="Source1" />
-                  <Edge From="15" To="16" Label="Source1" />
-                  <Edge From="16" To="17" Label="Source2" />
-                  <Edge From="18" To="22" Label="Source1" />
-                  <Edge From="19" To="20" Label="Source1" />
-                  <Edge From="20" To="21" Label="Source1" />
-                  <Edge From="21" To="22" Label="Source2" />
-                  <Edge From="23" To="27" Label="Source1" />
-                  <Edge From="24" To="25" Label="Source1" />
-                  <Edge From="25" To="26" Label="Source1" />
-                  <Edge From="26" To="27" Label="Source2" />
-                  <Edge From="28" To="29" Label="Source1" />
-                  <Edge From="29" To="30" Label="Source1" />
-                  <Edge From="29" To="32" Label="Source1" />
-                  <Edge From="30" To="31" Label="Source1" />
-                  <Edge From="31" To="34" Label="Source1" />
-                  <Edge From="32" To="33" Label="Source1" />
-                  <Edge From="33" To="34" Label="Source2" />
-                  <Edge From="35" To="36" Label="Source1" />
-                  <Edge From="37" To="38" Label="Source1" />
-                </Edges>
-              </Workflow>
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="rx:Switch" />
-            </Expression>
-            <Expression xsi:type="WorkflowOutput" />
-          </Nodes>
-          <Edges>
-            <Edge From="0" To="2" Label="Source1" />
-            <Edge From="1" To="2" Label="Source2" />
-            <Edge From="2" To="3" Label="Source1" />
-            <Edge From="3" To="4" Label="Source1" />
-          </Edges>
-        </Workflow>
+      <Expression xsi:type="IncludeWorkflow" Path="Extensions\MetadataVisualizer.bonsai">
+        <FrameSubject>Metadata</FrameSubject>
       </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Extensions\PreSessionVisualizer.bonsai">
         <FrameSubject>PreSession</FrameSubject>
@@ -1122,20 +902,6 @@
       <Edge From="30" To="31" Label="Source1" />
       <Edge From="30" To="32" Label="Source1" />
       <Edge From="33" To="34" Label="Source1" />
-      <Edge From="34" To="35" Label="Source1" />
-      <Edge From="35" To="36" Label="Source1" />
-      <Edge From="36" To="37" Label="Source1" />
-      <Edge From="37" To="38" Label="Source1" />
-      <Edge From="38" To="39" Label="Source1" />
-      <Edge From="39" To="47" Label="Source1" />
-      <Edge From="40" To="41" Label="Source1" />
-      <Edge From="41" To="42" Label="Source1" />
-      <Edge From="42" To="43" Label="Source1" />
-      <Edge From="43" To="44" Label="Source1" />
-      <Edge From="44" To="45" Label="Source1" />
-      <Edge From="45" To="46" Label="Source1" />
-      <Edge From="46" To="47" Label="Source2" />
-      <Edge From="47" To="48" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>
