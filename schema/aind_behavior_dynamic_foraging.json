@@ -3454,9 +3454,9 @@
           "title": "Inter Trial Interval Duration",
           "type": "number"
         },
-        "is_auto_response_right": {
+        "is_auto_reward_right": {
           "default": null,
-          "description": "If set, the trial will automatically (and immediately) register a response to the right (True) or left (False).",
+          "description": "If set, the trial will automatically (and immediately) trigger a reward to the right (True) or left (False). The trial will continue normally after delivery.",
           "oneOf": [
             {
               "type": "boolean"
@@ -3465,7 +3465,7 @@
               "type": "null"
             }
           ],
-          "title": "Is Auto Response Right"
+          "title": "Is Auto Reward Right"
         },
         "lickspout_offset_delta": {
           "default": 0.0,

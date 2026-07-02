@@ -194,33 +194,33 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             self.is_right_baited = self.block.p_right_reward > random_numbers[1] or self.is_right_baited
             logger.debug("Right baited: %s" % self.is_right_baited)
 
-        is_auto_response_right = None
+        is_auto_reward_right = None
 
         # determine autowater
         if is_autowater := self._are_autowater_conditions_met():
-            is_auto_response_right = True if self.block.p_right_reward > self.block.p_left_reward else False
-            logger.debug("Delivering autowater: is_auto_response_right = %s" % is_auto_response_right)
+            is_auto_reward_right = True if self.block.p_right_reward > self.block.p_left_reward else False
+            logger.debug("Delivering autowater: is_auto_reward_right = %s" % is_auto_reward_right)
 
         # determine bias correction. Overrides autowater
         lickspout_offset_delta = 0
         if self.bias_intervention.are_antibias_conditions_met(self.bias):
-            is_auto_response_right, lickspout_offset_delta = self.bias_intervention.determine_antibias_intervention(
+            is_auto_reward_right, lickspout_offset_delta = self.bias_intervention.determine_antibias_intervention(
                 self.bias
             )
             logger.debug(
-                "Performing bias intervention: is_auto_response_right = %s, lickspout_offset_delta = %s."
-                % (is_auto_response_right, lickspout_offset_delta)
+                "Performing bias intervention: is_auto_reward_right = %s, lickspout_offset_delta = %s."
+                % (is_auto_reward_right, lickspout_offset_delta)
             )
 
         return Trial(
-            p_reward_left=1 if (self.is_left_baited or is_auto_response_right is False) else self.block.p_left_reward,
-            p_reward_right=1 if (self.is_right_baited or is_auto_response_right) else self.block.p_right_reward,
+            p_reward_left=1 if (self.is_left_baited or is_auto_reward_right is False) else self.block.p_left_reward,
+            p_reward_right=1 if (self.is_right_baited or is_auto_reward_right) else self.block.p_right_reward,
             reward_consumption_duration=self.spec.reward_consumption_duration,
             response_deadline_duration=self.spec.response_duration,
             quiescence_period_duration=quiescent,
             inter_trial_interval_duration=iti,
             lickspout_offset_delta=lickspout_offset_delta,
-            is_auto_response_right=is_auto_response_right,
+            is_auto_reward_right=is_auto_reward_right,
             metadata=Metadata(
                 p_reward_left=self.block.p_left_reward,
                 p_reward_right=self.block.p_right_reward,

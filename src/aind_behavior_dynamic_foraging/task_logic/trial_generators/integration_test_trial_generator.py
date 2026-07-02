@@ -26,29 +26,29 @@ class IntegrationTestTrialGenerator(ITrialGenerator):
             Trial(p_reward_left=1.0, p_reward_right=1.0),  # 4: both reward
             # auto response right
             Trial(
-                p_reward_left=1.0, p_reward_right=0.0, is_auto_response_right=True
+                p_reward_left=1.0, p_reward_right=0.0, is_auto_reward_right=True
             ),  # 5: left reward, auto response right
             Trial(
-                p_reward_left=0.0, p_reward_right=1.0, is_auto_response_right=True
+                p_reward_left=0.0, p_reward_right=1.0, is_auto_reward_right=True
             ),  # 6: right reward, auto response right
             Trial(
-                p_reward_left=1.0, p_reward_right=1.0, is_auto_response_right=True
+                p_reward_left=1.0, p_reward_right=1.0, is_auto_reward_right=True
             ),  # 7: both reward, auto response right,
             Trial(
-                p_reward_left=0.0, p_reward_right=0.0, is_auto_response_right=True
+                p_reward_left=0.0, p_reward_right=0.0, is_auto_reward_right=True
             ),  # 8: no reward, auto response right,
             # auto response left
             Trial(
-                p_reward_left=1.0, p_reward_right=0.0, is_auto_response_right=False
+                p_reward_left=1.0, p_reward_right=0.0, is_auto_reward_right=False
             ),  # 9: left reward, auto response left,
             Trial(
-                p_reward_left=0.0, p_reward_right=1.0, is_auto_response_right=False
+                p_reward_left=0.0, p_reward_right=1.0, is_auto_reward_right=False
             ),  # 10: right reward, auto response left,
             Trial(
-                p_reward_left=0.0, p_reward_right=1.0, is_auto_response_right=False
+                p_reward_left=0.0, p_reward_right=1.0, is_auto_reward_right=False
             ),  # 11: both reward, auto response left,
             Trial(
-                p_reward_left=0.0, p_reward_right=0.0, is_auto_response_right=False
+                p_reward_left=0.0, p_reward_right=0.0, is_auto_reward_right=False
             ),  # 12: no reward, auto response left,
             # fast retract
             Trial(
