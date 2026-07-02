@@ -361,7 +361,7 @@
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p3:TrialOutcome">
                 <p3:IsRightChoice>true</p3:IsRightChoice>
-                <p3:IsRewarded>false</p3:IsRewarded>
+                <p3:IsRewarded>true</p3:IsRewarded>
               </Combinator>
             </Expression>
             <Expression xsi:type="rx:CreateObservable">
@@ -387,7 +387,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Delay">
-                      <rx:DueTime>PT0.322S</rx:DueTime>
+                      <rx:DueTime>PT0.775S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -991,6 +991,100 @@
       <Expression xsi:type="IncludeWorkflow" Path="Extensions\PreSessionVisualizer.bonsai">
         <FrameSubject>PreSession</FrameSubject>
       </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>InterSession</Name>
+      </Expression>
+      <Expression xsi:type="imgui:TableBuilder">
+        <imgui:Visible>true</imgui:Visible>
+        <imgui:Columns>3</imgui:Columns>
+        <imgui:Flags>Borders</imgui:Flags>
+        <imgui:OuterSize>
+          <imgui:X>0</imgui:X>
+          <imgui:Y>0</imgui:Y>
+        </imgui:OuterSize>
+        <imgui:InnerWidth>0</imgui:InnerWidth>
+      </Expression>
+      <Expression xsi:type="imgui:TableNextColumnBuilder">
+        <imgui:Visible>true</imgui:Visible>
+      </Expression>
+      <Expression xsi:type="imgui:TableBuilder">
+        <imgui:Visible>true</imgui:Visible>
+        <imgui:Columns>2</imgui:Columns>
+        <imgui:Flags>None</imgui:Flags>
+        <imgui:OuterSize>
+          <imgui:X>0</imgui:X>
+          <imgui:Y>0</imgui:Y>
+        </imgui:OuterSize>
+        <imgui:InnerWidth>0</imgui:InnerWidth>
+      </Expression>
+      <Expression xsi:type="imgui:TableNextColumnBuilder">
+        <imgui:Visible>true</imgui:Visible>
+      </Expression>
+      <Expression xsi:type="imgui:ButtonBuilder">
+        <imgui:Name>GiveLeft</imgui:Name>
+        <imgui:Visible>true</imgui:Visible>
+        <imgui:Text>Give Left</imgui:Text>
+      </Expression>
+      <Expression xsi:type="imgui:TableNextColumnBuilder">
+        <imgui:Visible>true</imgui:Visible>
+      </Expression>
+      <Expression xsi:type="imgui:ButtonBuilder">
+        <imgui:Name>GiveRight</imgui:Name>
+        <imgui:Visible>true</imgui:Visible>
+        <imgui:Text>Give Right</imgui:Text>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:CombineLatest" />
+      </Expression>
+      <Expression xsi:type="imgui:TableBuilder">
+        <imgui:Visible>true</imgui:Visible>
+        <imgui:Columns>2</imgui:Columns>
+        <imgui:Flags>None</imgui:Flags>
+        <imgui:OuterSize>
+          <imgui:X>0</imgui:X>
+          <imgui:Y>0</imgui:Y>
+        </imgui:OuterSize>
+        <imgui:InnerWidth>0</imgui:InnerWidth>
+      </Expression>
+      <Expression xsi:type="imgui:TableNextColumnBuilder">
+        <imgui:Visible>true</imgui:Visible>
+      </Expression>
+      <Expression xsi:type="imgui:ButtonBuilder">
+        <imgui:Name>MoveLeft</imgui:Name>
+        <imgui:Visible>true</imgui:Visible>
+        <imgui:Text>Move Left</imgui:Text>
+      </Expression>
+      <Expression xsi:type="imgui:TableNextColumnBuilder">
+        <imgui:Visible>true</imgui:Visible>
+      </Expression>
+      <Expression xsi:type="imgui:ButtonBuilder">
+        <imgui:Name>MoveRight</imgui:Name>
+        <imgui:Visible>true</imgui:Visible>
+        <imgui:Text>Move Right</imgui:Text>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:CombineLatest" />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:CombineLatest" />
+      </Expression>
+      <Expression xsi:type="imgui:TableNextColumnBuilder">
+        <imgui:Visible>true</imgui:Visible>
+      </Expression>
+      <Expression xsi:type="imgui:TextBuilder">
+        <imgui:Name>SessionInfo</imgui:Name>
+        <imgui:Visible>true</imgui:Visible>
+        <imgui:Text>Session Info</imgui:Text>
+      </Expression>
+      <Expression xsi:type="imgui:TableNextColumnBuilder">
+        <imgui:Visible>true</imgui:Visible>
+      </Expression>
+      <Expression xsi:type="p2:MultiLineInputTextBuilder">
+        <p2:Name>Notes</p2:Name>
+        <p2:Visible>true</p2:Visible>
+        <p2:Text>Notes</p2:Text>
+        <p2:Capacity>16384</p2:Capacity>
+      </Expression>
     </Nodes>
     <Edges>
       <Edge From="2" To="3" Label="Source1" />
@@ -1029,6 +1123,28 @@
       <Edge From="36" To="37" Label="Source1" />
       <Edge From="37" To="38" Label="Source1" />
       <Edge From="38" To="39" Label="Source1" />
+      <Edge From="41" To="42" Label="Source1" />
+      <Edge From="42" To="43" Label="Source1" />
+      <Edge From="42" To="57" Label="Source1" />
+      <Edge From="42" To="59" Label="Source1" />
+      <Edge From="43" To="44" Label="Source1" />
+      <Edge From="43" To="50" Label="Source1" />
+      <Edge From="44" To="45" Label="Source1" />
+      <Edge From="44" To="47" Label="Source1" />
+      <Edge From="45" To="46" Label="Source1" />
+      <Edge From="46" To="49" Label="Source1" />
+      <Edge From="47" To="48" Label="Source1" />
+      <Edge From="48" To="49" Label="Source2" />
+      <Edge From="49" To="56" Label="Source1" />
+      <Edge From="50" To="51" Label="Source1" />
+      <Edge From="50" To="53" Label="Source1" />
+      <Edge From="51" To="52" Label="Source1" />
+      <Edge From="52" To="55" Label="Source1" />
+      <Edge From="53" To="54" Label="Source1" />
+      <Edge From="54" To="55" Label="Source2" />
+      <Edge From="55" To="56" Label="Source2" />
+      <Edge From="57" To="58" Label="Source1" />
+      <Edge From="59" To="60" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>
