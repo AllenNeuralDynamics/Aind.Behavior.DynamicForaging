@@ -1,4 +1,4 @@
-using AllenNeuralDynamics.AindBehaviorServices.DataTypes;
+﻿using AllenNeuralDynamics.AindBehaviorServices.DataTypes;
 using Bonsai;
 using Hexa.NET.ImGui;
 using Hexa.NET.ImPlot;
@@ -18,7 +18,7 @@ using System.Xml.Serialization;
 public class SoftwareEventVisualizer
 {
     public bool Visible {get; set;}
-    public ImmutableList<Bonsai.Harp.Timestamped<SoftwareEvent>> SoftwareEvents {get; set;}
+    public ImmutableList<System.Reactive.Timestamped<SoftwareEvent>> SoftwareEvents {get; set;}
     public string TrialBreakEventName {get; set;}
 
     private const float MinPlotHeight = 100.0f;
@@ -34,6 +34,7 @@ public class SoftwareEventVisualizer
     private readonly Dictionary<string, List<EventRecord>> eventHistory = new Dictionary<string, List<EventRecord>>();
     private readonly List<double> trialBreaks = new List<double>();
     private double lastTrialBreak = 0;
+    private DateTimeOffset startTime;
     private double latestTimestamp = 0;
 
     private bool HasTrialBreaks { get { return !string.IsNullOrEmpty(TrialBreakEventName); } }
@@ -43,6 +44,8 @@ public class SoftwareEventVisualizer
     {
         return Observable.Create<TSource>(observer =>
         {
+            startTime = DateTimeOffset.Now;
+            SoftwareEvents.Clear();
             eventHistory.Clear();
             trialBreaks.Clear();
             lastTrialBreak = 0;
@@ -53,8 +56,7 @@ public class SoftwareEventVisualizer
                     {
                         foreach (var v in SoftwareEvents)   
                         {
-                            double timestamp = v.Seconds;
-                            latestTimestamp = timestamp;
+                            double timestamp = (v.Timestamp - startTime).TotalSeconds;
 
                             string name = v.Value.Name;
                             if (HasTrialBreaks && name == TrialBreakEventName)
@@ -89,7 +91,9 @@ public class SoftwareEventVisualizer
     }
 
     private void CleanupOldEvents()
-    {        
+    {   
+        latestTimestamp = (DateTimeOffset.Now - startTime).TotalSeconds;
+
         double cutoffTime = latestTimestamp - timeWindow;
         
         if (HasTrialBreaks && maxTrials > 0 && trialBreaks.Count > 0)
@@ -143,6 +147,8 @@ public class SoftwareEventVisualizer
 
     private void DrawEvents()
     {
+        latestTimestamp = (DateTimeOffset.Now - startTime).TotalSeconds;
+
         ImGui.Text("Time Window (s):");
         ImGui.SameLine();
         ImGui.SetNextItemWidth(InputWidth);
