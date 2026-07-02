@@ -142,7 +142,7 @@
               <Name>CurrentStream</Name>
             </Expression>
             <Expression xsi:type="MemberSelector">
-              <Selector>Value</Selector>
+              <Selector>Value.Image</Selector>
             </Expression>
             <Expression xsi:type="rx:BehaviorSubject" TypeArguments="sys:Int32">
               <rx:Name>FlipState</rx:Name>
