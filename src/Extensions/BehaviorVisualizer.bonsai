@@ -92,6 +92,8 @@
                 </p1:TickLabels>
                 <p1:ImPlotLocationFlags>West</p1:ImPlotLocationFlags>
                 <p1:ImPlotLegendFlags>None</p1:ImPlotLegendFlags>
+                <p1:YAxisMax xsi:nil="true" />
+                <p1:YAxisMin xsi:nil="true" />
               </Combinator>
             </Expression>
             <Expression xsi:type="Unit" />
@@ -107,6 +109,8 @@
                 <p1:TickLabels />
                 <p1:ImPlotLocationFlags>West</p1:ImPlotLocationFlags>
                 <p1:ImPlotLegendFlags>None</p1:ImPlotLegendFlags>
+                <p1:YAxisMax xsi:nil="true" />
+                <p1:YAxisMin xsi:nil="true" />
               </Combinator>
             </Expression>
             <Expression xsi:type="ExternalizedMapping">
@@ -440,7 +444,7 @@
             <Expression xsi:type="imviz:RollingBufferBuilder">
               <imviz:Capacity>1000</imviz:Capacity>
               <imviz:IndexSelector>Seconds</imviz:IndexSelector>
-              <imviz:ValueSelector>Value.Trial.PRewardLeft</imviz:ValueSelector>
+              <imviz:ValueSelector>Value.Trial.Metadata.PRewardLeft</imviz:ValueSelector>
             </Expression>
             <Expression xsi:type="imviz:LatestOnNewFrame">
               <Name>ContinuousPlot</Name>
@@ -461,7 +465,7 @@
             <Expression xsi:type="imviz:RollingBufferBuilder">
               <imviz:Capacity>1000</imviz:Capacity>
               <imviz:IndexSelector>Seconds</imviz:IndexSelector>
-              <imviz:ValueSelector>Value.Trial.PRewardRight</imviz:ValueSelector>
+              <imviz:ValueSelector>Value.Trial.Metadata.PRewardRight</imviz:ValueSelector>
             </Expression>
             <Expression xsi:type="imviz:LatestOnNewFrame">
               <Name>ContinuousPlot</Name>
