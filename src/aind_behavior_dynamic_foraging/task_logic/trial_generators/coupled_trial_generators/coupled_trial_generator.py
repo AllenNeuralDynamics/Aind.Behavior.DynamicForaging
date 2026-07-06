@@ -74,8 +74,6 @@ class CoupledTrialGeneratorSpec(BaseCoupledTrialGeneratorSpec):
         description="Whether to extend the minimum block length by one trial when the animal does not respond.",
     )
 
-    min_block_reward: int = Field(default=1, ge=0, title="Minimal rewards in a block to switch")
-
     kernel_size: int = Field(default=2, description="Kernel to evaluate choice fraction.")
 
     def create_generator(self) -> "CoupledTrialGenerator":
@@ -290,13 +288,8 @@ class CoupledTrialGenerator(BaseCoupledTrialGenerator):
         )
         logger.debug("Behavior meets stability criteria: %s" % behavior_ok)
 
-        # has reward criteria been met?
-        reward_ok = self.reward_history.count(False) + self.reward_history.count(True) >= self.spec.min_block_reward
-        logger.debug("Reward criterion satisfied: %s" % reward_ok)
-
         # conditions to switch:
         #   - planned block length reached
-        #   - minimum reward requirement is reached
         #   - behavior is stable
 
-        return block_length_ok and reward_ok and behavior_ok
+        return block_length_ok and behavior_ok

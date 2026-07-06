@@ -52,6 +52,7 @@ def make_s_stage_1_warmup():
                 trial_generator=TrialGeneratorCompositeSpec(
                     generators=[
                         CoupledWarmupTrialGeneratorSpec(
+                            min_block_reward=1,
                             autowater_parameters=AutoWaterParameters(
                                 reward_fraction=0.8, min_ignored_trials=0, min_unrewarded_trials=0
                             ),
@@ -102,7 +103,6 @@ def make_s_stage_1_warmup():
                                 truncation_parameters=TruncationParameters(truncation_mode="clamp", min=1, max=7),
                             ),
                             quiescent_duration=Scalar(distribution_parameters=ScalarDistributionParameter(value=0.1)),
-                            min_block_reward=0,
                             is_baiting=True,
                             extend_block_on_no_response=True,
                             response_duration=5.0,
@@ -152,7 +152,6 @@ def make_s_stage_1():
                         truncation_parameters=TruncationParameters(truncation_mode="clamp", min=1, max=7),
                     ),
                     quiescent_duration=Scalar(distribution_parameters=ScalarDistributionParameter(value=0.1)),
-                    min_block_reward=0,
                     is_baiting=True,
                     extend_block_on_no_response=True,
                     response_duration=5.0,
@@ -200,7 +199,6 @@ def make_s_stage_2():
                         truncation_parameters=TruncationParameters(truncation_mode="clamp", min=1, max=10),
                     ),
                     quiescent_duration=Scalar(distribution_parameters=ScalarDistributionParameter(value=0.3)),
-                    min_block_reward=0,
                     is_baiting=False,
                     extend_block_on_no_response=True,
                     response_duration=3.0,

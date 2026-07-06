@@ -41,17 +41,17 @@ class TestWarmup(unittest.TestCase):
             return
 
     def test_end_conditions_not_met_too_few_trials(self):
-        self.generator.is_right_choice_history.append([True] * 5)
+        self.generator.is_right_choice_history += [True] * 5
         self.assertFalse(self.generator._are_end_conditions_met())
 
     def test_end_conditions_not_met_high_bias(self):
         # all right choices = biased
-        self.generator.is_right_choice_history.append([True] * 10)
+        self.generator.is_right_choice_history += [True] * 10
         self.assertFalse(self.generator._are_end_conditions_met())
 
     def test_end_conditions_not_met_low_response_rate(self):
         # ignored
-        self.generator.is_right_choice_history.append([None] * 10)
+        self.generator.is_right_choice_history += [None] * 10
         self.assertFalse(self.generator._are_end_conditions_met())
 
     def test_end_conditions_met(self):
@@ -62,15 +62,15 @@ class TestWarmup(unittest.TestCase):
 
     ### block switches ###
 
-    def test_block_switches_every_update(self):
+    def test_block_switches_on_reward_minimum(self):
         initial_block = self.generator.block
         self.generator.update(make_outcome(is_right_choice=True, is_rewarded=True))
         self.assertIsNot(self.generator.block, initial_block)
 
-    def test_block_switches_on_ignored_trial(self):
+    def test_no_block_switch_on_reward_minimum_not_met(self):
         initial_block = self.generator.block
-        self.generator.update(make_outcome(is_right_choice=None, is_rewarded=False))
-        self.assertIsNot(self.generator.block, initial_block)
+        self.generator.update(make_outcome(is_right_choice=True, is_rewarded=False))
+        self.assertIs(self.generator.block, initial_block)
 
     def test_trials_in_block_resets_on_update(self):
         self.generator.trials_in_block = 5

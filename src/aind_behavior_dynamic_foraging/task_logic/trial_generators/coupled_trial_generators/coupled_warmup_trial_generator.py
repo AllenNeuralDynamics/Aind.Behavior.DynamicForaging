@@ -46,6 +46,8 @@ class CoupledWarmupTrialGeneratorSpec(BaseCoupledTrialGeneratorSpec):
         default=True, description="Whether uncollected rewards carry over to the next trial."
     )
 
+    min_block_reward: int = Field(default=1, ge=0, title="Minimal rewards in a block to switch")
+
     def create_generator(self) -> "CoupledWarmupTrialGenerator":
         return CoupledWarmupTrialGenerator(self)
 
@@ -90,12 +92,13 @@ class CoupledWarmupTrialGenerator(BaseCoupledTrialGenerator):
         )
         return False
 
-    def _is_block_switch_allowed(self) -> True:
+    def _is_block_switch_allowed(self) -> bool:
         """
-        Warmup switches block every update
+        Warmup switches when minimum reward.
 
         Returns:
-            True
+            bool indicating whether block can switch
         """
 
-        return True
+        reward_count = sum([outcome.is_rewarded for outcome in self.outcome_history])
+        return reward_count >= self.spec.min_block_reward
