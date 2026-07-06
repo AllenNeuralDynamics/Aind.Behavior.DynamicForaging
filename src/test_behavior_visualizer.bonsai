@@ -65,7 +65,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
-                      <rx:DueTime>PT2.795S</rx:DueTime>
+                      <rx:DueTime>PT0.553S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -117,7 +117,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
-                      <rx:DueTime>PT2.452S</rx:DueTime>
+                      <rx:DueTime>PT2.008S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -188,7 +188,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
-                      <rx:DueTime>PT0.123S</rx:DueTime>
+                      <rx:DueTime>PT2.284S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -607,7 +607,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p6:CreateNullableBoolean">
-                <p6:Value>true</p6:Value>
+                <p6:Value>false</p6:Value>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -669,7 +669,7 @@
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p3:TrialOutcome">
                 <p3:IsRightChoice>false</p3:IsRightChoice>
-                <p3:IsRewarded>false</p3:IsRewarded>
+                <p3:IsRewarded>true</p3:IsRewarded>
               </Combinator>
             </Expression>
             <Expression xsi:type="rx:CreateObservable">
@@ -695,7 +695,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Delay">
-                      <rx:DueTime>PT0.937S</rx:DueTime>
+                      <rx:DueTime>PT0.289S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -1242,6 +1242,11 @@
         <Combinator xsi:type="p6:SoftwareEventVisualizer">
           <p6:Visible>true</p6:Visible>
           <p6:SoftwareEvents>
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
+            <p6:TimestampedOfSoftwareEvent />
             <p6:TimestampedOfSoftwareEvent />
             <p6:TimestampedOfSoftwareEvent />
             <p6:TimestampedOfSoftwareEvent />
