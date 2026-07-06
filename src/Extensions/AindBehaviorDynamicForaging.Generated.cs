@@ -6091,7 +6091,7 @@ namespace AindDynamicForagingDataSchema
     
         private double _interTrialIntervalDuration;
     
-        private bool? _isAutoResponseRight;
+        private bool? _isAutoRewardRight;
     
         private double _lickspoutOffsetDelta;
     
@@ -6120,7 +6120,7 @@ namespace AindDynamicForagingDataSchema
             _quickRetractSettings = other._quickRetractSettings;
             _quiescencePeriodDuration = other._quiescencePeriodDuration;
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
-            _isAutoResponseRight = other._isAutoResponseRight;
+            _isAutoRewardRight = other._isAutoRewardRight;
             _lickspoutOffsetDelta = other._lickspoutOffsetDelta;
             _metadata = other._metadata;
         }
@@ -6283,20 +6283,20 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// If set, the trial will automatically (and immediately) register a response to the right (True) or left (False).
+        /// If set, the trial will automatically (and immediately) trigger a reward to the right (True) or left (False). The trial will continue normally after delivery.
         /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("is_auto_response_right")]
-        [System.ComponentModel.DescriptionAttribute("If set, the trial will automatically (and immediately) register a response to the" +
-            " right (True) or left (False).")]
-        public bool? IsAutoResponseRight
+        [Newtonsoft.Json.JsonPropertyAttribute("is_auto_reward_right")]
+        [System.ComponentModel.DescriptionAttribute("If set, the trial will automatically (and immediately) trigger a reward to the ri" +
+            "ght (True) or left (False). The trial will continue normally after delivery.")]
+        public bool? IsAutoRewardRight
         {
             get
             {
-                return _isAutoResponseRight;
+                return _isAutoRewardRight;
             }
             set
             {
-                _isAutoResponseRight = value;
+                _isAutoRewardRight = value;
             }
         }
     
@@ -6357,7 +6357,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("QuickRetractSettings = " + _quickRetractSettings + ", ");
             stringBuilder.Append("QuiescencePeriodDuration = " + _quiescencePeriodDuration + ", ");
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
-            stringBuilder.Append("IsAutoResponseRight = " + _isAutoResponseRight + ", ");
+            stringBuilder.Append("IsAutoRewardRight = " + _isAutoRewardRight + ", ");
             stringBuilder.Append("LickspoutOffsetDelta = " + _lickspoutOffsetDelta + ", ");
             stringBuilder.Append("Metadata = " + _metadata);
             return true;

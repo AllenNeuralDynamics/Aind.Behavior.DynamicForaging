@@ -100,7 +100,7 @@ class BiasIntervention:
         ``parameters.lickspout_offset_delta`` mm.
 
         Returns:
-            Tuple dictating is_auto_response_right and lickspout_offset_delta of trial
+            Tuple dictating is_auto_reward_right and lickspout_offset_delta of trial
         """
 
         if self.parameters is None:
