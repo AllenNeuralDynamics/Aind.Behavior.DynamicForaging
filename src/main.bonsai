@@ -1757,6 +1757,12 @@
                   <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
                     <rx:Name>UiManipulatorInitialize</rx:Name>
                   </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                    <rx:Name>UiCueGiveRight</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                    <rx:Name>UiCueGiveLeft</rx:Name>
+                  </Expression>
                 </Nodes>
                 <Edges />
               </Workflow>
