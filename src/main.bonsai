@@ -15,6 +15,7 @@
                  xmlns:ui="clr-namespace:Bonsai.Design;assembly=Bonsai.Design"
                  xmlns:imvizui="clr-namespace:Bonsai.ImGui.Visualizers;assembly=Bonsai.ImGui.Visualizers.Design"
                  xmlns:imgui="clr-namespace:Bonsai.ImGui;assembly=Bonsai.ImGui"
+                 xmlns:p7="clr-namespace:AllenNeuralDynamics.AindManipulator;assembly=AllenNeuralDynamics.AindManipulator"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
@@ -1691,6 +1692,355 @@
               <Name>OutputControl</Name>
               <Workflow>
                 <Nodes>
+                  <Expression xsi:type="GroupWorkflow">
+                    <Name>Manipulator</Name>
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                          <rx:Name>UiManipulatorLeft</rx:Name>
+                        </Expression>
+                        <Expression xsi:type="rx:Sink">
+                          <Name>MoveRelative</Name>
+                          <Workflow>
+                            <Nodes>
+                              <Expression xsi:type="WorkflowInput">
+                                <Name>Source1</Name>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="p7:ManipulatorPosition">
+                                  <p7:X>-1</p7:X>
+                                  <p7:Y1>0</p7:Y1>
+                                  <p7:Y2>0</p7:Y2>
+                                  <p7:Z>0</p7:Z>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="SubscribeSubject">
+                                <Name>OffsetGain</Name>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:WithLatestFrom" />
+                              </Expression>
+                              <Expression xsi:type="Multiply" />
+                              <Expression xsi:type="MulticastSubject">
+                                <Name>MoveBy</Name>
+                              </Expression>
+                              <Expression xsi:type="WorkflowOutput" />
+                            </Nodes>
+                            <Edges>
+                              <Edge From="0" To="1" Label="Source1" />
+                              <Edge From="1" To="3" Label="Source1" />
+                              <Edge From="2" To="3" Label="Source2" />
+                              <Edge From="3" To="4" Label="Source1" />
+                              <Edge From="4" To="5" Label="Source1" />
+                              <Edge From="5" To="6" Label="Source1" />
+                            </Edges>
+                          </Workflow>
+                        </Expression>
+                        <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                          <rx:Name>UiManipulatorRight</rx:Name>
+                        </Expression>
+                        <Expression xsi:type="rx:Sink">
+                          <Name>MoveRelative</Name>
+                          <Workflow>
+                            <Nodes>
+                              <Expression xsi:type="WorkflowInput">
+                                <Name>Source1</Name>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="p7:ManipulatorPosition">
+                                  <p7:X>1</p7:X>
+                                  <p7:Y1>0</p7:Y1>
+                                  <p7:Y2>0</p7:Y2>
+                                  <p7:Z>0</p7:Z>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="SubscribeSubject">
+                                <Name>OffsetGain</Name>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:WithLatestFrom" />
+                              </Expression>
+                              <Expression xsi:type="Multiply" />
+                              <Expression xsi:type="MulticastSubject">
+                                <Name>MoveBy</Name>
+                              </Expression>
+                              <Expression xsi:type="WorkflowOutput" />
+                            </Nodes>
+                            <Edges>
+                              <Edge From="0" To="1" Label="Source1" />
+                              <Edge From="1" To="3" Label="Source1" />
+                              <Edge From="2" To="3" Label="Source2" />
+                              <Edge From="3" To="4" Label="Source1" />
+                              <Edge From="4" To="5" Label="Source1" />
+                              <Edge From="5" To="6" Label="Source1" />
+                            </Edges>
+                          </Workflow>
+                        </Expression>
+                        <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                          <rx:Name>UiManipulatorForwardLeft</rx:Name>
+                        </Expression>
+                        <Expression xsi:type="rx:Sink">
+                          <Name>MoveRelative</Name>
+                          <Workflow>
+                            <Nodes>
+                              <Expression xsi:type="WorkflowInput">
+                                <Name>Source1</Name>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="p7:ManipulatorPosition">
+                                  <p7:X>-1</p7:X>
+                                  <p7:Y1>1</p7:Y1>
+                                  <p7:Y2>1</p7:Y2>
+                                  <p7:Z>0</p7:Z>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="SubscribeSubject">
+                                <Name>OffsetGain</Name>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:WithLatestFrom" />
+                              </Expression>
+                              <Expression xsi:type="Multiply" />
+                              <Expression xsi:type="MulticastSubject">
+                                <Name>MoveBy</Name>
+                              </Expression>
+                              <Expression xsi:type="WorkflowOutput" />
+                            </Nodes>
+                            <Edges>
+                              <Edge From="0" To="1" Label="Source1" />
+                              <Edge From="1" To="3" Label="Source1" />
+                              <Edge From="2" To="3" Label="Source2" />
+                              <Edge From="3" To="4" Label="Source1" />
+                              <Edge From="4" To="5" Label="Source1" />
+                              <Edge From="5" To="6" Label="Source1" />
+                            </Edges>
+                          </Workflow>
+                        </Expression>
+                        <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                          <rx:Name>UiManipulatorForwardRight</rx:Name>
+                        </Expression>
+                        <Expression xsi:type="rx:Sink">
+                          <Name>MoveRelative</Name>
+                          <Workflow>
+                            <Nodes>
+                              <Expression xsi:type="WorkflowInput">
+                                <Name>Source1</Name>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="p7:ManipulatorPosition">
+                                  <p7:X>1</p7:X>
+                                  <p7:Y1>1</p7:Y1>
+                                  <p7:Y2>1</p7:Y2>
+                                  <p7:Z>0</p7:Z>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="SubscribeSubject">
+                                <Name>OffsetGain</Name>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:WithLatestFrom" />
+                              </Expression>
+                              <Expression xsi:type="Multiply" />
+                              <Expression xsi:type="MulticastSubject">
+                                <Name>MoveBy</Name>
+                              </Expression>
+                              <Expression xsi:type="WorkflowOutput" />
+                            </Nodes>
+                            <Edges>
+                              <Edge From="0" To="1" Label="Source1" />
+                              <Edge From="1" To="3" Label="Source1" />
+                              <Edge From="2" To="3" Label="Source2" />
+                              <Edge From="3" To="4" Label="Source1" />
+                              <Edge From="4" To="5" Label="Source1" />
+                              <Edge From="5" To="6" Label="Source1" />
+                            </Edges>
+                          </Workflow>
+                        </Expression>
+                        <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                          <rx:Name>UiManipulatorBackLeft</rx:Name>
+                        </Expression>
+                        <Expression xsi:type="rx:Sink">
+                          <Name>MoveRelative</Name>
+                          <Workflow>
+                            <Nodes>
+                              <Expression xsi:type="WorkflowInput">
+                                <Name>Source1</Name>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="p7:ManipulatorPosition">
+                                  <p7:X>-1</p7:X>
+                                  <p7:Y1>-1</p7:Y1>
+                                  <p7:Y2>-1</p7:Y2>
+                                  <p7:Z>0</p7:Z>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="SubscribeSubject">
+                                <Name>OffsetGain</Name>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:WithLatestFrom" />
+                              </Expression>
+                              <Expression xsi:type="Multiply" />
+                              <Expression xsi:type="MulticastSubject">
+                                <Name>MoveBy</Name>
+                              </Expression>
+                              <Expression xsi:type="WorkflowOutput" />
+                            </Nodes>
+                            <Edges>
+                              <Edge From="0" To="1" Label="Source1" />
+                              <Edge From="1" To="3" Label="Source1" />
+                              <Edge From="2" To="3" Label="Source2" />
+                              <Edge From="3" To="4" Label="Source1" />
+                              <Edge From="4" To="5" Label="Source1" />
+                              <Edge From="5" To="6" Label="Source1" />
+                            </Edges>
+                          </Workflow>
+                        </Expression>
+                        <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                          <rx:Name>UiManipulatorBackRight</rx:Name>
+                        </Expression>
+                        <Expression xsi:type="rx:Sink">
+                          <Name>MoveRelative</Name>
+                          <Workflow>
+                            <Nodes>
+                              <Expression xsi:type="WorkflowInput">
+                                <Name>Source1</Name>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="p7:ManipulatorPosition">
+                                  <p7:X>1</p7:X>
+                                  <p7:Y1>-1</p7:Y1>
+                                  <p7:Y2>-1</p7:Y2>
+                                  <p7:Z>0</p7:Z>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="SubscribeSubject">
+                                <Name>OffsetGain</Name>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:WithLatestFrom" />
+                              </Expression>
+                              <Expression xsi:type="Multiply" />
+                              <Expression xsi:type="MulticastSubject">
+                                <Name>MoveBy</Name>
+                              </Expression>
+                              <Expression xsi:type="WorkflowOutput" />
+                            </Nodes>
+                            <Edges>
+                              <Edge From="0" To="1" Label="Source1" />
+                              <Edge From="1" To="3" Label="Source1" />
+                              <Edge From="2" To="3" Label="Source2" />
+                              <Edge From="3" To="4" Label="Source1" />
+                              <Edge From="4" To="5" Label="Source1" />
+                              <Edge From="5" To="6" Label="Source1" />
+                            </Edges>
+                          </Workflow>
+                        </Expression>
+                        <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                          <rx:Name>UiManipulatorUp</rx:Name>
+                        </Expression>
+                        <Expression xsi:type="rx:Sink">
+                          <Name>MoveRelative</Name>
+                          <Workflow>
+                            <Nodes>
+                              <Expression xsi:type="WorkflowInput">
+                                <Name>Source1</Name>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="p7:ManipulatorPosition">
+                                  <p7:X>0</p7:X>
+                                  <p7:Y1>0</p7:Y1>
+                                  <p7:Y2>0</p7:Y2>
+                                  <p7:Z>1</p7:Z>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="SubscribeSubject">
+                                <Name>OffsetGain</Name>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:WithLatestFrom" />
+                              </Expression>
+                              <Expression xsi:type="Multiply" />
+                              <Expression xsi:type="MulticastSubject">
+                                <Name>MoveBy</Name>
+                              </Expression>
+                              <Expression xsi:type="WorkflowOutput" />
+                            </Nodes>
+                            <Edges>
+                              <Edge From="0" To="1" Label="Source1" />
+                              <Edge From="1" To="3" Label="Source1" />
+                              <Edge From="2" To="3" Label="Source2" />
+                              <Edge From="3" To="4" Label="Source1" />
+                              <Edge From="4" To="5" Label="Source1" />
+                              <Edge From="5" To="6" Label="Source1" />
+                            </Edges>
+                          </Workflow>
+                        </Expression>
+                        <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                          <rx:Name>UiManipulatorDown</rx:Name>
+                        </Expression>
+                        <Expression xsi:type="rx:Sink">
+                          <Name>MoveRelative</Name>
+                          <Workflow>
+                            <Nodes>
+                              <Expression xsi:type="WorkflowInput">
+                                <Name>Source1</Name>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="p7:ManipulatorPosition">
+                                  <p7:X>0</p7:X>
+                                  <p7:Y1>0</p7:Y1>
+                                  <p7:Y2>0</p7:Y2>
+                                  <p7:Z>-1</p7:Z>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="SubscribeSubject">
+                                <Name>OffsetGain</Name>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:WithLatestFrom" />
+                              </Expression>
+                              <Expression xsi:type="Multiply" />
+                              <Expression xsi:type="MulticastSubject">
+                                <Name>MoveBy</Name>
+                              </Expression>
+                              <Expression xsi:type="WorkflowOutput" />
+                            </Nodes>
+                            <Edges>
+                              <Edge From="0" To="1" Label="Source1" />
+                              <Edge From="1" To="3" Label="Source1" />
+                              <Edge From="2" To="3" Label="Source2" />
+                              <Edge From="3" To="4" Label="Source1" />
+                              <Edge From="4" To="5" Label="Source1" />
+                              <Edge From="5" To="6" Label="Source1" />
+                            </Edges>
+                          </Workflow>
+                        </Expression>
+                        <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                          <rx:Name>UiManipulatorStop</rx:Name>
+                        </Expression>
+                        <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                          <rx:Name>UiManipulatorHome</rx:Name>
+                        </Expression>
+                        <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                          <rx:Name>UiManipulatorInitialize</rx:Name>
+                        </Expression>
+                        <Expression xsi:type="rx:BehaviorSubject" TypeArguments="sys:Single">
+                          <rx:Name>OffsetGain</rx:Name>
+                        </Expression>
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                        <Edge From="2" To="3" Label="Source1" />
+                        <Edge From="4" To="5" Label="Source1" />
+                        <Edge From="6" To="7" Label="Source1" />
+                        <Edge From="8" To="9" Label="Source1" />
+                        <Edge From="10" To="11" Label="Source1" />
+                        <Edge From="12" To="13" Label="Source1" />
+                        <Edge From="14" To="15" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
                   <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Single">
                     <rx:Name>UiHabituationTimeUpdate</rx:Name>
                   </Expression>
@@ -1723,39 +2073,6 @@
                   </Expression>
                   <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
                     <rx:Name>UiDrainBoth</rx:Name>
-                  </Expression>
-                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
-                    <rx:Name>UiManipulatorLeft</rx:Name>
-                  </Expression>
-                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
-                    <rx:Name>UiManipulatorForwardLeft</rx:Name>
-                  </Expression>
-                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
-                    <rx:Name>UiManipulatorForwardRight</rx:Name>
-                  </Expression>
-                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
-                    <rx:Name>UiManipulatorUp</rx:Name>
-                  </Expression>
-                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
-                    <rx:Name>UiManipulatorRight</rx:Name>
-                  </Expression>
-                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
-                    <rx:Name>UiManipulatorBackRight</rx:Name>
-                  </Expression>
-                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
-                    <rx:Name>UiManipulatorBackLeft</rx:Name>
-                  </Expression>
-                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
-                    <rx:Name>UiManipulatorDown</rx:Name>
-                  </Expression>
-                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
-                    <rx:Name>UiManipulatorStop</rx:Name>
-                  </Expression>
-                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
-                    <rx:Name>UiManipulatorHome</rx:Name>
-                  </Expression>
-                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
-                    <rx:Name>UiManipulatorInitialize</rx:Name>
                   </Expression>
                   <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
                     <rx:Name>UiCueGiveRight</rx:Name>
@@ -2510,9 +2827,18 @@
                         <Expression xsi:type="imgui:TableNextColumnBuilder">
                           <imgui:Visible>true</imgui:Visible>
                         </Expression>
-                        <Expression xsi:type="imgui:TextBuilder">
+                        <Expression xsi:type="imgui:InputFloatBuilder">
                           <imgui:Visible>true</imgui:Visible>
-                          <imgui:Text>0.25mm</imgui:Text>
+                          <imgui:Flags>None</imgui:Flags>
+                          <imgui:InitialValue>0.25</imgui:InitialValue>
+                          <imgui:Step>0</imgui:Step>
+                          <imgui:StepFast>0</imgui:StepFast>
+                        </Expression>
+                        <Expression xsi:type="ExternalizedMapping">
+                          <Property Name="Name" DisplayName="UiOffsetGain" Category="UiControl" />
+                        </Expression>
+                        <Expression xsi:type="MulticastSubject">
+                          <Name>OffsetGain</Name>
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="rx:CombineLatest" />
@@ -2671,9 +2997,11 @@
                         <Edge From="125" To="126" Label="Source2" />
                         <Edge From="126" To="127" Label="Source2" />
                         <Edge From="128" To="129" Label="Source1" />
-                        <Edge From="129" To="132" Label="Source1" />
+                        <Edge From="129" To="134" Label="Source1" />
                         <Edge From="130" To="131" Label="Source1" />
-                        <Edge From="131" To="132" Label="Source2" />
+                        <Edge From="131" To="133" Label="Source1" />
+                        <Edge From="132" To="133" Label="Source2" />
+                        <Edge From="133" To="134" Label="Source2" />
                       </Edges>
                     </Workflow>
                   </Expression>
