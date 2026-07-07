@@ -5,7 +5,6 @@ from decimal import Decimal
 from pathlib import Path
 from typing import Literal, Optional
 
-from contraqctor.contract import DataStream
 from aind_behavior_dynamic_foraging.data_contract import dataset as df_foraging_dataset
 from aind_behavior_dynamic_foraging.rig import AindDynamicForagingRig
 from aind_behavior_services.rig import water_valve as abs_water_valve
@@ -20,12 +19,12 @@ from aind_data_schema.components.devices import (
     CameraTarget,
     Cooling,
     DataInterface,
+    Device,
     HarpDevice,
     HarpDeviceType,
     Lens,
     MotorizedStage,
     SizeUnit,
-    Device,
 )
 from aind_data_schema.components.measurements import CalibrationFit, FitType, GenericModel, VolumeCalibration
 from aind_data_schema.core.acquisition import CALIBRATIONS
@@ -34,6 +33,7 @@ from aind_data_schema_models.modalities import Modality
 from aind_data_schema_models.organizations import Organization
 from aind_data_schema_models.units import FrequencyUnit, TimeUnit, VolumeUnit
 from clabe.data_mapper.aind_data_schema import AindDataSchemaRigDataMapper
+from contraqctor.contract import DataStream
 
 logger = logging.getLogger(__name__)
 
@@ -95,7 +95,9 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                Stream name prefix
         """
         try:
-            return f"{harp_stream[f"{version_prefix}VersionHigh"].data.iloc[0, 0]}.{harp_stream[f"{version_prefix}VersionLow"].data.iloc[0, 0]}"
+            high = harp_stream[f"{version_prefix}VersionHigh"].data.iloc[0, 0]
+            low = harp_stream[f"{version_prefix}VersionLow"].data.iloc[0, 0]
+            return f"{high}.{low}"
 
         except FileNotFoundError as e:
             logger.warning(f"No {version_prefix} version found for {harp_stream.name}: {str(e)}")
