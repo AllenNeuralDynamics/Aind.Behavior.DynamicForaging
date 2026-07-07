@@ -3,7 +3,9 @@ import os
 from datetime import date
 from decimal import Decimal
 from pathlib import Path
+from typing import Literal, Optional
 
+from contraqctor.contract import DataStream
 from aind_behavior_dynamic_foraging.data_contract import dataset as df_foraging_dataset
 from aind_behavior_dynamic_foraging.rig import AindDynamicForagingRig
 from aind_behavior_services.rig import water_valve as abs_water_valve
@@ -23,6 +25,7 @@ from aind_data_schema.components.devices import (
     Lens,
     MotorizedStage,
     SizeUnit,
+    Device,
 )
 from aind_data_schema.components.measurements import CalibrationFit, FitType, GenericModel, VolumeCalibration
 from aind_data_schema.core.acquisition import CALIBRATIONS
@@ -79,18 +82,24 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
         return self.mapped
 
     @staticmethod
-    def compose_version(high: int, low: int) -> str:
+    def compose_version(
+        harp_stream: DataStream, version_prefix: Literal["Core", "Firmware", "Hardware"]
+    ) -> Optional[str]:
         """
         Compose versioning from high and low version
 
         Args:
-            high (int):
-               Major number in version
-            low (int):
-               Minor number in version
+            harp_stream (DataStream):
+               Data stream for device
+            version_prefix (str):
+               Stream name prefix
         """
+        try:
+            return f"{harp_stream[f"{version_prefix}VersionHigh"].data.iloc[0, 0]}.{harp_stream[f"{version_prefix}VersionLow"].data.iloc[0, 0]}"
 
-        return f"{high}.{low}"
+        except FileNotFoundError as e:
+            logger.warning(f"No {version_prefix} version found for {harp_stream.name}: {str(e)}")
+            return
 
     @property
     def session_name(self):
@@ -169,18 +178,9 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                 serial_number=rig.harp_behavior.serial_number,
                 manufacturer=Organization.CHAMPALIMAUD,
                 is_clock_generator=False,
-                firmware_version=self.compose_version(
-                    behavior_board["FirmwareVersionHigh"].data.iloc[0, 1],
-                    behavior_board["FirmwareVersionlow"].data.iloc[0, 1],
-                ),
-                hardware_version=self.compose_version(
-                    behavior_board["HardwareVersionHigh"].data.iloc[0, 1],
-                    behavior_board["HardwareVersionlow"].data.iloc[0, 1],
-                ),
-                core_version=self.compose_version(
-                    behavior_board["CoreVersionHigh"].data.iloc[0, 1],
-                    behavior_board["CoreVersionlow"].data.iloc[0, 1],
-                ),
+                firmware_version=self.compose_version(behavior_board, "Firmware"),
+                hardware_version=self.compose_version(behavior_board, "Hardware"),
+                core_version=self.compose_version(behavior_board, "Core"),
             )
         )
 
@@ -192,18 +192,9 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                 harp_device_type=HarpDeviceType.WHITERABBIT,
                 serial_number=rig.harp_clock_generator.serial_number,
                 is_clock_generator=True,
-                firmware_version=self.compose_version(
-                    clock_generator["FirmwareVersionHigh"].data.iloc[0, 1],
-                    clock_generator["FirmwareVersionlow"].data.iloc[0, 1],
-                ),
-                hardware_version=self.compose_version(
-                    clock_generator["HardwareVersionHigh"].data.iloc[0, 1],
-                    clock_generator["HardwareVersionlow"].data.iloc[0, 1],
-                ),
-                core_version=self.compose_version(
-                    clock_generator["CoreVersionHigh"].data.iloc[0, 1],
-                    clock_generator["CoreVersionlow"].data.iloc[0, 1],
-                ),
+                firmware_version=self.compose_version(clock_generator, "Firmware"),
+                hardware_version=self.compose_version(clock_generator, "Hardware"),
+                core_version=self.compose_version(clock_generator, "Core"),
             )
         )
 
@@ -216,18 +207,9 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                 serial_number=rig.harp_sound_card.serial_number,
                 manufacturer=Organization.CHAMPALIMAUD,
                 is_clock_generator=False,
-                firmware_version=self.compose_version(
-                    sound_card["FirmwareVersionHigh"].data.iloc[0, 1],
-                    sound_card["FirmwareVersionlow"].data.iloc[0, 1],
-                ),
-                hardware_version=self.compose_version(
-                    sound_card["HardwareVersionHigh"].data.iloc[0, 1],
-                    sound_card["HardwareVersionlow"].data.iloc[0, 1],
-                ),
-                core_version=self.compose_version(
-                    sound_card["CoreVersionHigh"].data.iloc[0, 1],
-                    sound_card["CoreVersionlow"].data.iloc[0, 1],
-                ),
+                firmware_version=self.compose_version(sound_card, "Firmware"),
+                hardware_version=self.compose_version(sound_card, "Hardware"),
+                core_version=self.compose_version(sound_card, "Core"),
             )
         )
 
@@ -240,18 +222,9 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                     harp_device_type=HarpDeviceType.LICKETYSPLIT,
                     serial_number=rig.harp_lickometer_left.serial_number,
                     is_clock_generator=False,
-                    firmware_version=self.compose_version(
-                        left["FirmwareVersionHigh"].data.iloc[0, 1],
-                        left["FirmwareVersionlow"].data.iloc[0, 1],
-                    ),
-                    hardware_version=self.compose_version(
-                        left["HardwareVersionHigh"].data.iloc[0, 1],
-                        left["HardwareVersionlow"].data.iloc[0, 1],
-                    ),
-                    core_version=self.compose_version(
-                        left["CoreVersionHigh"].data.iloc[0, 1],
-                        left["CoreVersionlow"].data.iloc[0, 1],
-                    ),
+                    firmware_version=self.compose_version(left, "Firmware"),
+                    hardware_version=self.compose_version(left, "Hardware"),
+                    core_version=self.compose_version(left, "Core"),
                 )
             )
         if rig.harp_lickometer_right:
@@ -262,18 +235,9 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                     serial_number=rig.harp_lickometer_right.serial_number,
                     harp_device_type=HarpDeviceType.LICKETYSPLIT,
                     is_clock_generator=False,
-                    firmware_version=self.compose_version(
-                        right["FirmwareVersionHigh"].data.iloc[0, 1],
-                        right["FirmwareVersionlow"].data.iloc[0, 1],
-                    ),
-                    hardware_version=self.compose_version(
-                        right["HardwareVersionHigh"].data.iloc[0, 1],
-                        right["HardwareVersionlow"].data.iloc[0, 1],
-                    ),
-                    core_version=self.compose_version(
-                        left["CoreVersionHigh"].data.iloc[0, 1],
-                        left["CoreVersionlow"].data.iloc[0, 1],
-                    ),
+                    firmware_version=self.compose_version(right, "Firmware"),
+                    hardware_version=self.compose_version(right, "Hardware"),
+                    core_version=self.compose_version(right, "Core"),
                 )
             )
         if rig.harp_sniff_detector:
@@ -284,18 +248,9 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                     harp_device_type=HarpDeviceType.SNIFFDETECTOR,
                     serial_number=rig.harp_sniff_detector.serial_number,
                     is_clock_generator=False,
-                    firmware_version=self.compose_version(
-                        sniff["FirmwareVersionHigh"].data.iloc[0, 1],
-                        sniff["FirmwareVersionlow"].data.iloc[0, 1],
-                    ),
-                    hardware_version=self.compose_version(
-                        sniff["HardwareVersionHigh"].data.iloc[0, 1],
-                        sniff["HardwareVersionlow"].data.iloc[0, 1],
-                    ),
-                    core_version=self.compose_version(
-                        sniff["CoreVersionHigh"].data.iloc[0, 1],
-                        sniff["CoreVersionlow"].data.iloc[0, 1],
-                    ),
+                    firmware_version=self.compose_version(sniff, "Firmware"),
+                    hardware_version=self.compose_version(sniff, "Hardware"),
+                    core_version=self.compose_version(sniff, "Core"),
                 )
             )
         if rig.harp_environment_sensor:
@@ -306,18 +261,9 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                     harp_device_type=HarpDeviceType.ENVIRONMENTSENSOR,
                     serial_number=rig.harp_environment_sensor.serial_number,
                     is_clock_generator=False,
-                    firmware_version=self.compose_version(
-                        env_sen["FirmwareVersionHigh"].data.iloc[0, 1],
-                        env_sen["FirmwareVersionlow"].data.iloc[0, 1],
-                    ),
-                    hardware_version=self.compose_version(
-                        env_sen["HardwareVersionHigh"].data.iloc[0, 1],
-                        env_sen["HardwareVersionlow"].data.iloc[0, 1],
-                    ),
-                    core_version=self.compose_version(
-                        env_sen["CoreVersionHigh"].data.iloc[0, 1],
-                        env_sen["CoreVersionlow"].data.iloc[0, 1],
-                    ),
+                    firmware_version=self.compose_version(env_sen, "Firmware"),
+                    hardware_version=self.compose_version(env_sen, "Hardware"),
+                    core_version=self.compose_version(env_sen, "Core"),
                 )
             )
 
@@ -333,6 +279,31 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
             )
         )
 
+        # solenoid
+        components.append(
+            Device(
+                name="left_water_valve_solenoid",
+                manufacturer=Organization.THE_LEE_COMPANY,
+                model="LHDB1233518H",
+            )
+        )
+
+        components.append(
+            Device(
+                name="right_water_valve_solenoid",
+                manufacturer=Organization.THE_LEE_COMPANY,
+                model="LHDB1233518H",
+            )
+        )
+
+        components.append(
+            Device(
+                name="speaker",
+                manufacturer=Organization.TYMPHANY,
+                model="XT25SC90-04",
+            )
+        )
+
         # connections
         for name in rig.triggered_camera_controller.cameras:
             connections.append(
@@ -341,6 +312,18 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                     target_device=name,
                 )
             )
+        connections.append(
+            Connection(
+                source_device="BehaviorBoard",
+                target_device="left_water_valve_solenoid",
+                source_port="SupplyPort0",
+            )
+        )
+        connections.append(
+            Connection(
+                source_device="BehaviorBoard", target_device="right_water_valve_solenoid", source_port="SupplyPort1"
+            )
+        )
 
         return Instrument(
             instrument_id=rig.rig_name,
