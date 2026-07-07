@@ -239,7 +239,7 @@ def _get_camera_config(name: str, camera: abs_camera.CameraTypes, repository: gi
 
 
 def _get_bonsai_as_code(repository: git.Repo) -> Code:
-    bonsai_folder = Path(Path(repository.working_tree_dir) / ".bonsai" / "bonsai.exe").parent
+    bonsai_folder = Path(Path(repository.working_tree_dir) / "bonsai" / "bonsai.exe").parent
     bonsai_env = data_mapper_helpers.snapshot_bonsai_environment(bonsai_folder / "bonsai.config")
     bonsai_version = bonsai_env.get("Bonsai", "unknown")
     assert isinstance(repository, git.Repo)

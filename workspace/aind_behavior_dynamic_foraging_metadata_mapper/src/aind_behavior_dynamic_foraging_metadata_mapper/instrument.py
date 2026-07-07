@@ -78,6 +78,20 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
     def rig_schema(self):
         return self.mapped
 
+    @staticmethod
+    def compose_version(high: int, low: int) -> str:
+        """
+        Compose versioning from high and low version
+
+        Args:
+            high (int):
+               Major number in version
+            low (int):
+               Minor number in version
+        """
+
+        return f"{high}.{low}"
+
     @property
     def session_name(self):
         raise NotImplementedError("Method not implemented.")
@@ -155,8 +169,18 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                 serial_number=rig.harp_behavior.serial_number,
                 manufacturer=Organization.CHAMPALIMAUD,
                 is_clock_generator=False,
-                firmware_version=behavior_board.device_reader.device.firmwareVersion,
-                hardware_version=behavior_board.device_reader.device.hardwareTargets,
+                firmware_version=self.compose_version(
+                    behavior_board["FirmwareVersionHigh"].data.iloc[0, 1],
+                    behavior_board["FirmwareVersionlow"].data.iloc[0, 1],
+                ),
+                hardware_version=self.compose_version(
+                    behavior_board["HardwareVersionHigh"].data.iloc[0, 1],
+                    behavior_board["HardwareVersionlow"].data.iloc[0, 1],
+                ),
+                core_version=self.compose_version(
+                    behavior_board["CoreVersionHigh"].data.iloc[0, 1],
+                    behavior_board["CoreVersionlow"].data.iloc[0, 1],
+                ),
             )
         )
 
@@ -168,8 +192,18 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                 harp_device_type=HarpDeviceType.WHITERABBIT,
                 serial_number=rig.harp_clock_generator.serial_number,
                 is_clock_generator=True,
-                firmware_version=clock_generator.device_reader.device.firmwareVersion,
-                hardware_version=clock_generator.device_reader.device.hardwareTargets,
+                firmware_version=self.compose_version(
+                    clock_generator["FirmwareVersionHigh"].data.iloc[0, 1],
+                    clock_generator["FirmwareVersionlow"].data.iloc[0, 1],
+                ),
+                hardware_version=self.compose_version(
+                    clock_generator["HardwareVersionHigh"].data.iloc[0, 1],
+                    clock_generator["HardwareVersionlow"].data.iloc[0, 1],
+                ),
+                core_version=self.compose_version(
+                    clock_generator["CoreVersionHigh"].data.iloc[0, 1],
+                    clock_generator["CoreVersionlow"].data.iloc[0, 1],
+                ),
             )
         )
 
@@ -182,8 +216,18 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                 serial_number=rig.harp_sound_card.serial_number,
                 manufacturer=Organization.CHAMPALIMAUD,
                 is_clock_generator=False,
-                firmware_version=sound_card.device_reader.device.firmwareVersion,
-                hardware_version=sound_card.device_reader.device.hardwareTargets,
+                firmware_version=self.compose_version(
+                    sound_card["FirmwareVersionHigh"].data.iloc[0, 1],
+                    sound_card["FirmwareVersionlow"].data.iloc[0, 1],
+                ),
+                hardware_version=self.compose_version(
+                    sound_card["HardwareVersionHigh"].data.iloc[0, 1],
+                    sound_card["HardwareVersionlow"].data.iloc[0, 1],
+                ),
+                core_version=self.compose_version(
+                    sound_card["CoreVersionHigh"].data.iloc[0, 1],
+                    sound_card["CoreVersionlow"].data.iloc[0, 1],
+                ),
             )
         )
 
@@ -196,8 +240,18 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                     harp_device_type=HarpDeviceType.LICKETYSPLIT,
                     serial_number=rig.harp_lickometer_left.serial_number,
                     is_clock_generator=False,
-                    firmware_version=left.device_reader.device.firmwareVersion,
-                    hardware_version=left.device_reader.device.hardwareTargets,
+                    firmware_version=self.compose_version(
+                        left["FirmwareVersionHigh"].data.iloc[0, 1],
+                        left["FirmwareVersionlow"].data.iloc[0, 1],
+                    ),
+                    hardware_version=self.compose_version(
+                        left["HardwareVersionHigh"].data.iloc[0, 1],
+                        left["HardwareVersionlow"].data.iloc[0, 1],
+                    ),
+                    core_version=self.compose_version(
+                        left["CoreVersionHigh"].data.iloc[0, 1],
+                        left["CoreVersionlow"].data.iloc[0, 1],
+                    ),
                 )
             )
         if rig.harp_lickometer_right:
@@ -208,8 +262,18 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                     serial_number=rig.harp_lickometer_right.serial_number,
                     harp_device_type=HarpDeviceType.LICKETYSPLIT,
                     is_clock_generator=False,
-                    firmware_version=right.device_reader.device.firmwareVersion,
-                    hardware_version=right.device_reader.device.hardwareTargets,
+                    firmware_version=self.compose_version(
+                        right["FirmwareVersionHigh"].data.iloc[0, 1],
+                        right["FirmwareVersionlow"].data.iloc[0, 1],
+                    ),
+                    hardware_version=self.compose_version(
+                        right["HardwareVersionHigh"].data.iloc[0, 1],
+                        right["HardwareVersionlow"].data.iloc[0, 1],
+                    ),
+                    core_version=self.compose_version(
+                        left["CoreVersionHigh"].data.iloc[0, 1],
+                        left["CoreVersionlow"].data.iloc[0, 1],
+                    ),
                 )
             )
         if rig.harp_sniff_detector:
@@ -220,8 +284,18 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                     harp_device_type=HarpDeviceType.SNIFFDETECTOR,
                     serial_number=rig.harp_sniff_detector.serial_number,
                     is_clock_generator=False,
-                    firmware_version=sniff.device_reader.device.firmwareVersion,
-                    hardware_version=sniff.device_reader.device.hardwareTargets,
+                    firmware_version=self.compose_version(
+                        sniff["FirmwareVersionHigh"].data.iloc[0, 1],
+                        sniff["FirmwareVersionlow"].data.iloc[0, 1],
+                    ),
+                    hardware_version=self.compose_version(
+                        sniff["HardwareVersionHigh"].data.iloc[0, 1],
+                        sniff["HardwareVersionlow"].data.iloc[0, 1],
+                    ),
+                    core_version=self.compose_version(
+                        sniff["CoreVersionHigh"].data.iloc[0, 1],
+                        sniff["CoreVersionlow"].data.iloc[0, 1],
+                    ),
                 )
             )
         if rig.harp_environment_sensor:
@@ -232,8 +306,18 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                     harp_device_type=HarpDeviceType.ENVIRONMENTSENSOR,
                     serial_number=rig.harp_environment_sensor.serial_number,
                     is_clock_generator=False,
-                    firmware_version=env_sen.device_reader.device.firmwareVersion,
-                    hardware_version=env_sen.device_reader.device.hardwareTargets,
+                    firmware_version=self.compose_version(
+                        env_sen["FirmwareVersionHigh"].data.iloc[0, 1],
+                        env_sen["FirmwareVersionlow"].data.iloc[0, 1],
+                    ),
+                    hardware_version=self.compose_version(
+                        env_sen["HardwareVersionHigh"].data.iloc[0, 1],
+                        env_sen["HardwareVersionlow"].data.iloc[0, 1],
+                    ),
+                    core_version=self.compose_version(
+                        env_sen["CoreVersionHigh"].data.iloc[0, 1],
+                        env_sen["CoreVersionlow"].data.iloc[0, 1],
+                    ),
                 )
             )
 
