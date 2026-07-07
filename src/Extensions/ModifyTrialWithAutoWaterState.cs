@@ -24,13 +24,13 @@ namespace AindDynamicForagingDataSchema
                 if (autoWaterState.IsRight)
                 {
                     newTrial.PRewardRight = 1.0f;
-                    newTrial.IsAutoResponseRight = true;
+                    newTrial.IsAutoRewardRight = true;
                     return newTrial;
                 }
                 if (autoWaterState.IsLeft)
                 {
                     newTrial.PRewardLeft = 1.0f;
-                    newTrial.IsAutoResponseRight = false;
+                    newTrial.IsAutoRewardRight = false;
                     return newTrial;
                 }
                 throw new InvalidOperationException("AutoWaterState must be either right or left.");

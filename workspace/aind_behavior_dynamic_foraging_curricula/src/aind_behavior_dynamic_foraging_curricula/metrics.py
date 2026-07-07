@@ -68,7 +68,7 @@ def metrics_from_dataset(
     trial_outcomes = software_events["TrialOutcome"].data["data"].iloc
     # exclude auto response and ignored trials
     filtered = [
-        t for t in trial_outcomes if t["is_right_choice"] is not None and t["trial"]["is_auto_response_right"] is None
+        t for t in trial_outcomes if t["is_right_choice"] is not None and t["trial"]["is_auto_reward_right"] is None
     ]
     is_right_choice = [to["is_right_choice"] for to in filtered]
     is_rewarded = [to["is_rewarded"] for to in filtered]

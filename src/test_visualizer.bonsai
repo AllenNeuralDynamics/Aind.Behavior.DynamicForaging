@@ -222,7 +222,7 @@
       </Expression>
       <Expression xsi:type="PropertyMapping">
         <PropertyMappings>
-          <Property Name="IsAutoResponseRight" />
+          <Property Name="IsAutoRewardRight" />
         </PropertyMappings>
       </Expression>
       <Expression xsi:type="Combinator">
@@ -235,7 +235,7 @@
           <p3:EnableFastRetract>false</p3:EnableFastRetract>
           <p3:QuiescencePeriodDuration>0.5</p3:QuiescencePeriodDuration>
           <p3:InterTrialIntervalDuration>5</p3:InterTrialIntervalDuration>
-          <p3:IsAutoResponseRight>true</p3:IsAutoResponseRight>
+          <p3:IsAutoRewardRight>true</p3:IsAutoRewardRight>
           <p3:LickspoutOffset>0</p3:LickspoutOffset>
         </Combinator>
       </Expression>

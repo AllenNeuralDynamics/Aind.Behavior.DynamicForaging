@@ -97,9 +97,9 @@ class Trial(BaseModel):
     inter_trial_interval_duration: float = Field(
         default=5.0, ge=0.5, description="Duration of the inter-trial interval (in seconds)."
     )
-    is_auto_response_right: Optional[bool] = Field(
+    is_auto_reward_right: Optional[bool] = Field(
         default=None,
-        description="If set, the trial will automatically (and immediately) register a response to the right (True) or left (False).",
+        description="If set, the trial will automatically (and immediately) trigger a reward to the right (True) or left (False). The trial will continue normally after delivery.",
     )
     lickspout_offset_delta: float = Field(
         default=0.0,
