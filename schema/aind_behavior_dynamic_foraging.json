@@ -199,14 +199,6 @@
           "title": "aind_behavior_services package version",
           "type": "string"
         },
-        "reward_size": {
-          "$ref": "#/$defs/RewardSize",
-          "default": {
-            "right_value_volume": 3.0,
-            "left_value_volume": 3.0
-          },
-          "description": "Parameters describing reward size."
-        },
         "trial_generator": {
           "$ref": "#/$defs/TrialGeneratorSpec",
           "default": {
@@ -440,6 +432,14 @@
           "title": "Type",
           "type": "string"
         },
+        "reward_size": {
+          "$ref": "#/$defs/RewardSize",
+          "default": {
+            "right": 3.0,
+            "left": 3.0
+          },
+          "description": "Parameters describing reward size."
+        },
         "quiescent_duration": {
           "$ref": "#/$defs/Distribution",
           "default": {
@@ -530,7 +530,8 @@
             "intervention_interval": 10,
             "maximum_water_corrections": 5,
             "bias_window_length": 200,
-            "lickspout_offset_delta": 0.05
+            "lickspout_offset_delta": 0.05,
+            "reward_fraction": 0.8
           },
           "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
           "oneOf": [
@@ -714,6 +715,14 @@
           "minimum": 0,
           "title": "Lickspout Offset Delta",
           "type": "number"
+        },
+        "reward_fraction": {
+          "default": 0.8,
+          "description": "Fraction of full reward volume delivered for water intervention (0=none, 1=full).",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Reward Fraction",
+          "type": "number"
         }
       },
       "title": "BiasInterventionParameters",
@@ -825,6 +834,14 @@
           "title": "Type",
           "type": "string"
         },
+        "reward_size": {
+          "$ref": "#/$defs/RewardSize",
+          "default": {
+            "right": 3.0,
+            "left": 3.0
+          },
+          "description": "Parameters describing reward size."
+        },
         "quiescent_duration": {
           "$ref": "#/$defs/Distribution",
           "default": {
@@ -915,7 +932,8 @@
             "intervention_interval": 10,
             "maximum_water_corrections": 5,
             "bias_window_length": 200,
-            "lickspout_offset_delta": 0.05
+            "lickspout_offset_delta": 0.05,
+            "reward_fraction": 0.8
           },
           "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
           "oneOf": [
@@ -1112,6 +1130,14 @@
           "title": "Type",
           "type": "string"
         },
+        "reward_size": {
+          "$ref": "#/$defs/RewardSize",
+          "default": {
+            "right": 3.0,
+            "left": 3.0
+          },
+          "description": "Parameters describing reward size."
+        },
         "quiescent_duration": {
           "$ref": "#/$defs/Distribution",
           "default": {
@@ -1202,7 +1228,8 @@
             "intervention_interval": 10,
             "maximum_water_corrections": 5,
             "bias_window_length": 200,
-            "lickspout_offset_delta": 0.05
+            "lickspout_offset_delta": 0.05,
+            "reward_fraction": 0.8
           },
           "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
           "oneOf": [
@@ -1326,6 +1353,14 @@
           "title": "Type",
           "type": "string"
         },
+        "reward_size": {
+          "$ref": "#/$defs/RewardSize",
+          "default": {
+            "right": 3.0,
+            "left": 3.0
+          },
+          "description": "Parameters describing reward size."
+        },
         "quiescent_duration": {
           "$ref": "#/$defs/Distribution",
           "default": {
@@ -1412,7 +1447,8 @@
             "intervention_interval": 10,
             "maximum_water_corrections": 5,
             "bias_window_length": 200,
-            "lickspout_offset_delta": 0.05
+            "lickspout_offset_delta": 0.05,
+            "reward_fraction": 0.8
           },
           "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
           "oneOf": [
@@ -2663,18 +2699,18 @@
     },
     "RewardSize": {
       "properties": {
-        "right_value_volume": {
+        "right": {
           "title": "Right reward size (uL)",
           "type": "number"
         },
-        "left_value_volume": {
+        "left": {
           "title": "Left reward size (uL)",
           "type": "number"
         }
       },
       "required": [
-        "right_value_volume",
-        "left_value_volume"
+        "right",
+        "left"
       ],
       "title": "RewardSize",
       "type": "object"
@@ -3379,6 +3415,18 @@
     "Trial": {
       "description": "Represents a single trial that can be instantiated by the Bonsai state machine.",
       "properties": {
+        "reward_size_left": {
+          "default": 1.0,
+          "minimum": 0,
+          "title": "Left reward size (uL)",
+          "type": "number"
+        },
+        "reward_size_right": {
+          "default": 1.0,
+          "minimum": 0,
+          "title": "Right reward size (uL)",
+          "type": "number"
+        },
         "p_reward_left": {
           "default": 1.0,
           "description": "The probability of reward on the left side if response is made.",
@@ -3686,6 +3734,14 @@
           "title": "Type",
           "type": "string"
         },
+        "reward_size": {
+          "$ref": "#/$defs/RewardSize",
+          "default": {
+            "right": 3.0,
+            "left": 3.0
+          },
+          "description": "Parameters describing reward size."
+        },
         "quiescent_duration": {
           "$ref": "#/$defs/Distribution",
           "default": {
@@ -3773,7 +3829,8 @@
             "intervention_interval": 10,
             "maximum_water_corrections": 5,
             "bias_window_length": 200,
-            "lickspout_offset_delta": 0.05
+            "lickspout_offset_delta": 0.05,
+            "reward_fraction": 0.8
           },
           "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
           "oneOf": [

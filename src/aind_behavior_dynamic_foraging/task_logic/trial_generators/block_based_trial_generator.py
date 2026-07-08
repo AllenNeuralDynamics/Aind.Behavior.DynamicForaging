@@ -42,7 +42,7 @@ class AutoWaterParameters(BaseModel):
         ge=0,
         le=1,
         description="Fraction of full reward volume delivered during auto water (0=none, 1=full).",
-    )  # TODO: Not implemented yet
+    )
 
 
 class Block(BaseModel):
@@ -52,8 +52,17 @@ class Block(BaseModel):
     left_length: int = Field(ge=0, description="Minimum number of trials in block.")
 
 
+class RewardSize(BaseModel):
+    right: float = Field(title="Right reward size (uL)")
+    left: float = Field(title="Left reward size (uL)")
+
+
 class BlockBasedTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
     type: Literal["BlockBasedTrialGenerator"] = "BlockBasedTrialGenerator"
+
+    reward_size: RewardSize = Field(
+        default=RewardSize(left=3, right=3), description="Parameters describing reward size."
+    )
 
     quiescent_duration: Distribution = Field(
         default=ExponentialDistribution(
@@ -195,10 +204,12 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             logger.debug("Right baited: %s" % self.is_right_baited)
 
         is_auto_reward_right = None
+        reward_frac = 1
 
         # determine autowater
         if is_autowater := self._are_autowater_conditions_met():
             is_auto_reward_right = True if self.block.p_right_reward > self.block.p_left_reward else False
+            reward_frac = self.spec.autowater_parameters.reward_fraction
             logger.debug("Delivering autowater: is_auto_reward_right = %s" % is_auto_reward_right)
 
         # determine bias correction. Overrides autowater
@@ -207,12 +218,15 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             is_auto_reward_right, lickspout_offset_delta = self.bias_intervention.determine_antibias_intervention(
                 self.bias
             )
+            reward_frac = 1 if is_auto_reward_right is None else self.spec.bias_intervention_parameters.reward_fraction
             logger.debug(
                 "Performing bias intervention: is_auto_reward_right = %s, lickspout_offset_delta = %s."
                 % (is_auto_reward_right, lickspout_offset_delta)
             )
 
         return Trial(
+            reward_size_left=self.spec.reward_size.left * reward_frac,
+            reward_size_right=self.spec.reward_size.right * reward_frac,
             p_reward_left=1 if (self.is_left_baited or is_auto_reward_right is False) else self.block.p_left_reward,
             p_reward_right=1 if (self.is_right_baited or is_auto_reward_right) else self.block.p_right_reward,
             reward_consumption_duration=self.spec.reward_consumption_duration,
