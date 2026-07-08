@@ -64,12 +64,17 @@ class Metadata(BaseModel):
     )
 
 
+class RewardSize(BaseModel):
+    right: float = Field(gt=0, title="Right reward size (uL)")
+    left: float = Field(gt=0, title="Left reward size (uL)")
+
+
 class Trial(BaseModel):
     """Represents a single trial that can be instantiated by the Bonsai state machine."""
 
-    reward_size_left: float = Field(default=1.0, ge=0, title="Left reward size (uL)")
-
-    reward_size_right: float = Field(default=1.0, ge=0, title="Right reward size (uL)")
+    reward_size: RewardSize = Field(
+        default=RewardSize(left=2.0, right=2.0), description="Parameters describing reward size."
+    )
 
     p_reward_left: float = Field(
         default=1.0, ge=0, le=1, description="The probability of reward on the left side if response is made."

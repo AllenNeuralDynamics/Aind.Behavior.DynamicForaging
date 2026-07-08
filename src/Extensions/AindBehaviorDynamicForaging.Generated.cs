@@ -6165,9 +6165,7 @@ namespace AindDynamicForagingDataSchema
     public partial class Trial
     {
     
-        private double _rewardSizeLeft;
-    
-        private double _rewardSizeRight;
+        private RewardSize _rewardSize;
     
         private double _pRewardLeft;
     
@@ -6195,8 +6193,7 @@ namespace AindDynamicForagingDataSchema
     
         public Trial()
         {
-            _rewardSizeLeft = 1D;
-            _rewardSizeRight = 1D;
+            _rewardSize = new RewardSize();
             _pRewardLeft = 1D;
             _pRewardRight = 1D;
             _rewardConsumptionDuration = 5D;
@@ -6209,8 +6206,7 @@ namespace AindDynamicForagingDataSchema
     
         protected Trial(Trial other)
         {
-            _rewardSizeLeft = other._rewardSizeLeft;
-            _rewardSizeRight = other._rewardSizeRight;
+            _rewardSize = other._rewardSize;
             _pRewardLeft = other._pRewardLeft;
             _pRewardRight = other._pRewardRight;
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
@@ -6225,29 +6221,21 @@ namespace AindDynamicForagingDataSchema
             _metadata = other._metadata;
         }
     
-        [Newtonsoft.Json.JsonPropertyAttribute("reward_size_left")]
-        public double RewardSizeLeft
+        /// <summary>
+        /// Parameters describing reward size.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("reward_size")]
+        [System.ComponentModel.DescriptionAttribute("Parameters describing reward size.")]
+        public RewardSize RewardSize
         {
             get
             {
-                return _rewardSizeLeft;
+                return _rewardSize;
             }
             set
             {
-                _rewardSizeLeft = value;
-            }
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("reward_size_right")]
-        public double RewardSizeRight
-        {
-            get
-            {
-                return _rewardSizeRight;
-            }
-            set
-            {
-                _rewardSizeRight = value;
+                _rewardSize = value;
             }
         }
     
@@ -6474,8 +6462,7 @@ namespace AindDynamicForagingDataSchema
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("RewardSizeLeft = " + _rewardSizeLeft + ", ");
-            stringBuilder.Append("RewardSizeRight = " + _rewardSizeRight + ", ");
+            stringBuilder.Append("RewardSize = " + _rewardSize + ", ");
             stringBuilder.Append("PRewardLeft = " + _pRewardLeft + ", ");
             stringBuilder.Append("PRewardRight = " + _pRewardRight + ", ");
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");

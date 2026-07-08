@@ -18,7 +18,7 @@ from aind_behavior_dynamic_foraging.task_logic.interventions.bias_intervention i
 )
 from aind_behavior_dynamic_foraging.task_logic.utils.calculate_bias import calculate_bias
 
-from ..trial_models import Metadata, Trial, TrialMetrics
+from ..trial_models import Metadata, RewardSize, Trial, TrialMetrics
 from ._base import BaseTrialGeneratorSpecModel, ITrialGenerator, TrialOutcome
 
 logger = logging.getLogger(__name__)
@@ -52,16 +52,11 @@ class Block(BaseModel):
     left_length: int = Field(ge=0, description="Minimum number of trials in block.")
 
 
-class RewardSize(BaseModel):
-    right: float = Field(title="Right reward size (uL)")
-    left: float = Field(title="Left reward size (uL)")
-
-
 class BlockBasedTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
     type: Literal["BlockBasedTrialGenerator"] = "BlockBasedTrialGenerator"
 
     reward_size: RewardSize = Field(
-        default=RewardSize(left=3, right=3), description="Parameters describing reward size."
+        default=RewardSize(left=2, right=2), description="Parameters describing reward size."
     )
 
     quiescent_duration: Distribution = Field(
@@ -204,12 +199,12 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             logger.debug("Right baited: %s" % self.is_right_baited)
 
         is_auto_reward_right = None
-        reward_frac = 1
+        reward_fraction = 1
 
         # determine autowater
         if is_autowater := self._are_autowater_conditions_met():
             is_auto_reward_right = True if self.block.p_right_reward > self.block.p_left_reward else False
-            reward_frac = self.spec.autowater_parameters.reward_fraction
+            reward_fraction = self.spec.autowater_parameters.reward_fraction
             logger.debug("Delivering autowater: is_auto_reward_right = %s" % is_auto_reward_right)
 
         # determine bias correction. Overrides autowater
@@ -218,15 +213,15 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             is_auto_reward_right, lickspout_offset_delta = self.bias_intervention.determine_antibias_intervention(
                 self.bias
             )
-            reward_frac = 1 if is_auto_reward_right is None else self.spec.bias_intervention_parameters.reward_fraction
+            reward_fraction = (
+                1 if is_auto_reward_right is None else self.spec.bias_intervention_parameters.reward_fraction
+            )
             logger.debug(
                 "Performing bias intervention: is_auto_reward_right = %s, lickspout_offset_delta = %s."
                 % (is_auto_reward_right, lickspout_offset_delta)
             )
 
         return Trial(
-            reward_size_left=self.spec.reward_size.left * reward_frac,
-            reward_size_right=self.spec.reward_size.right * reward_frac,
             p_reward_left=1 if (self.is_left_baited or is_auto_reward_right is False) else self.block.p_left_reward,
             p_reward_right=1 if (self.is_right_baited or is_auto_reward_right) else self.block.p_right_reward,
             reward_consumption_duration=self.spec.reward_consumption_duration,
@@ -235,6 +230,9 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             inter_trial_interval_duration=iti,
             lickspout_offset_delta=lickspout_offset_delta,
             is_auto_reward_right=is_auto_reward_right,
+            reward_size=RewardSize(
+                left=self.spec.reward_size.left * reward_fraction, right=self.spec.reward_size.right * reward_fraction
+            ),
             metadata=Metadata(
                 p_reward_left=self.block.p_left_reward,
                 p_reward_right=self.block.p_right_reward,

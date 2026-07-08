@@ -435,8 +435,8 @@
         "reward_size": {
           "$ref": "#/$defs/RewardSize",
           "default": {
-            "right": 3.0,
-            "left": 3.0
+            "right": 2.0,
+            "left": 2.0
           },
           "description": "Parameters describing reward size."
         },
@@ -837,8 +837,8 @@
         "reward_size": {
           "$ref": "#/$defs/RewardSize",
           "default": {
-            "right": 3.0,
-            "left": 3.0
+            "right": 2.0,
+            "left": 2.0
           },
           "description": "Parameters describing reward size."
         },
@@ -1133,8 +1133,8 @@
         "reward_size": {
           "$ref": "#/$defs/RewardSize",
           "default": {
-            "right": 3.0,
-            "left": 3.0
+            "right": 2.0,
+            "left": 2.0
           },
           "description": "Parameters describing reward size."
         },
@@ -1356,8 +1356,8 @@
         "reward_size": {
           "$ref": "#/$defs/RewardSize",
           "default": {
-            "right": 3.0,
-            "left": 3.0
+            "right": 2.0,
+            "left": 2.0
           },
           "description": "Parameters describing reward size."
         },
@@ -2700,10 +2700,12 @@
     "RewardSize": {
       "properties": {
         "right": {
+          "exclusiveMinimum": 0,
           "title": "Right reward size (uL)",
           "type": "number"
         },
         "left": {
+          "exclusiveMinimum": 0,
           "title": "Left reward size (uL)",
           "type": "number"
         }
@@ -3415,17 +3417,13 @@
     "Trial": {
       "description": "Represents a single trial that can be instantiated by the Bonsai state machine.",
       "properties": {
-        "reward_size_left": {
-          "default": 1.0,
-          "minimum": 0,
-          "title": "Left reward size (uL)",
-          "type": "number"
-        },
-        "reward_size_right": {
-          "default": 1.0,
-          "minimum": 0,
-          "title": "Right reward size (uL)",
-          "type": "number"
+        "reward_size": {
+          "$ref": "#/$defs/RewardSize",
+          "default": {
+            "right": 3.0,
+            "left": 3.0
+          },
+          "description": "Parameters describing reward size."
         },
         "p_reward_left": {
           "default": 1.0,
@@ -3737,8 +3735,8 @@
         "reward_size": {
           "$ref": "#/$defs/RewardSize",
           "default": {
-            "right": 3.0,
-            "left": 3.0
+            "right": 2.0,
+            "left": 2.0
           },
           "description": "Parameters describing reward size."
         },
