@@ -3420,8 +3420,8 @@
         "reward_size": {
           "$ref": "#/$defs/RewardSize",
           "default": {
-            "right": 3.0,
-            "left": 3.0
+            "right": 2.0,
+            "left": 2.0
           },
           "description": "Parameters describing reward size."
         },
