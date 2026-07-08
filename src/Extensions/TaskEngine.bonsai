@@ -760,7 +760,7 @@
                                 <Name>ThisTrial</Name>
                               </Expression>
                               <Expression xsi:type="MemberSelector">
-                                <Selector>RewardRightSize</Selector>
+                                <Selector>RewardSizeRight</Selector>
                               </Expression>
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="rx:Zip" />
@@ -792,7 +792,7 @@
                                 <Name>ThisTrial</Name>
                               </Expression>
                               <Expression xsi:type="MemberSelector">
-                                <Selector>RewardRightSize</Selector>
+                                <Selector>RewardSizeLeft</Selector>
                               </Expression>
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="rx:Zip" />
