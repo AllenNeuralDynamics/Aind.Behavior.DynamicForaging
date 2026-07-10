@@ -55,8 +55,8 @@
                                         "scaling_parameters": null
                                     },
                                     "autowater_parameters": {
-                                        "min_ignored_trials": 3,
-                                        "min_unrewarded_trials": 3,
+                                        "min_ignored_trials": 0,
+                                        "min_unrewarded_trials": 0,
                                         "reward_fraction": 0.8
                                     },
                                     "bias_intervention_parameters": {
@@ -84,7 +84,8 @@
                                         "max_choice_bias": 0.1,
                                         "min_response_rate": 0.8,
                                         "evaluation_window": 20
-                                    }
+                                    },
+                                    "min_block_reward": 1
                                 },
                                 {
                                     "type": "CoupledTrialGenerator",
@@ -128,7 +129,7 @@
                                     "autowater_parameters": {
                                         "min_ignored_trials": 3,
                                         "min_unrewarded_trials": 3,
-                                        "reward_fraction": 0.8
+                                        "reward_fraction": 0.5
                                     },
                                     "bias_intervention_parameters": {
                                         "threshold": {
@@ -163,14 +164,13 @@
                                         "min_consecutive_stable_trials": 5
                                     },
                                     "extend_block_on_no_response": true,
-                                    "min_block_reward": 0,
                                     "kernel_size": 2
                                 }
                             ]
                         }
                     },
                     "version": "0.0.2",
-                    "stage_name": null
+                    "stage_name": "stage_1_warmup"
                 },
                 "graph": {
                     "nodes": {},
@@ -231,9 +231,9 @@
                                 "scaling_parameters": null
                             },
                             "autowater_parameters": {
-                                "min_ignored_trials": 3,
-                                "min_unrewarded_trials": 3,
-                                "reward_fraction": 0.8
+                                "min_ignored_trials": 5,
+                                "min_unrewarded_trials": 5,
+                                "reward_fraction": 0.5
                             },
                             "bias_intervention_parameters": {
                                 "threshold": {
@@ -268,12 +268,11 @@
                                 "min_consecutive_stable_trials": 5
                             },
                             "extend_block_on_no_response": true,
-                            "min_block_reward": 0,
                             "kernel_size": 2
                         }
                     },
                     "version": "0.0.2",
-                    "stage_name": null
+                    "stage_name": "stage_1"
                 },
                 "graph": {
                     "nodes": {},
@@ -334,9 +333,9 @@
                                 "scaling_parameters": null
                             },
                             "autowater_parameters": {
-                                "min_ignored_trials": 3,
-                                "min_unrewarded_trials": 3,
-                                "reward_fraction": 0.8
+                                "min_ignored_trials": 7,
+                                "min_unrewarded_trials": 7,
+                                "reward_fraction": 0.5
                             },
                             "bias_intervention_parameters": {
                                 "threshold": {
@@ -371,12 +370,11 @@
                                 "min_consecutive_stable_trials": 5
                             },
                             "extend_block_on_no_response": true,
-                            "min_block_reward": 0,
                             "kernel_size": 2
                         }
                     },
                     "version": "0.0.2",
-                    "stage_name": null
+                    "stage_name": "stage_2"
                 },
                 "graph": {
                     "nodes": {},
@@ -437,9 +435,9 @@
                                 "scaling_parameters": null
                             },
                             "autowater_parameters": {
-                                "min_ignored_trials": 3,
-                                "min_unrewarded_trials": 3,
-                                "reward_fraction": 0.8
+                                "min_ignored_trials": 10,
+                                "min_unrewarded_trials": 10,
+                                "reward_fraction": 0.5
                             },
                             "bias_intervention_parameters": {
                                 "threshold": {
@@ -474,12 +472,11 @@
                                 "min_consecutive_stable_trials": 5
                             },
                             "extend_block_on_no_response": true,
-                            "min_block_reward": 0,
                             "kernel_size": 2
                         }
                     },
                     "version": "0.0.2",
-                    "stage_name": null
+                    "stage_name": "stage_3"
                 },
                 "graph": {
                     "nodes": {},
@@ -539,11 +536,7 @@
                                 },
                                 "scaling_parameters": null
                             },
-                            "autowater_parameters": {
-                                "min_ignored_trials": 3,
-                                "min_unrewarded_trials": 3,
-                                "reward_fraction": 0.8
-                            },
+                            "autowater_parameters": null,
                             "bias_intervention_parameters": {
                                 "threshold": {
                                     "upper": 0.7,
@@ -585,12 +578,11 @@
                             },
                             "behavior_stability_parameters": null,
                             "extend_block_on_no_response": true,
-                            "min_block_reward": 0,
                             "kernel_size": 2
                         }
                     },
                     "version": "0.0.2",
-                    "stage_name": null
+                    "stage_name": "final"
                 },
                 "graph": {
                     "nodes": {},
@@ -650,11 +642,7 @@
                                 },
                                 "scaling_parameters": null
                             },
-                            "autowater_parameters": {
-                                "min_ignored_trials": 3,
-                                "min_unrewarded_trials": 3,
-                                "reward_fraction": 0.8
-                            },
+                            "autowater_parameters": null,
                             "bias_intervention_parameters": {
                                 "threshold": {
                                     "upper": 0.7,
@@ -696,12 +684,11 @@
                             },
                             "behavior_stability_parameters": null,
                             "extend_block_on_no_response": true,
-                            "min_block_reward": 0,
                             "kernel_size": 2
                         }
                     },
                     "version": "0.0.2",
-                    "stage_name": null
+                    "stage_name": "graduated"
                 },
                 "graph": {
                     "nodes": {},

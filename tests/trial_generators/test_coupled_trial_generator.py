@@ -173,7 +173,6 @@ class TestCoupledTrialGenerator(unittest.TestCase):
         self.generator.trials_in_block = 20
         self.generator.reward_history = [True] * 5
         self.generator.is_right_choice_history = [True] * 20
-        self.generator.spec.min_block_reward = 1
 
         result = self.generator._is_block_switch_allowed()
         self.assertTrue(result)
@@ -185,19 +184,6 @@ class TestCoupledTrialGenerator(unittest.TestCase):
         self.generator.reward_history = [True] * 5
         self.generator.is_right_choice_history = [True] * 10
         self.generator.trials_in_block = 10
-        self.generator.spec.min_block_reward = 1
-
-        result = self.generator._is_block_switch_allowed()
-        self.assertFalse(result)
-
-    def test_block_switch_reward_not_met(self):
-        self.generator.block.p_right_reward = 0.8
-        self.generator.block.p_left_reward = 0.2
-        self.generator.block.right_length = 20
-        self.generator.reward_history = []  # no rewards
-        self.generator.is_right_choice_history = [True] * 20
-        self.generator.trials_in_block = 20
-        self.generator.spec.min_block_reward = 5
 
         result = self.generator._is_block_switch_allowed()
         self.assertFalse(result)
@@ -209,7 +195,6 @@ class TestCoupledTrialGenerator(unittest.TestCase):
         self.generator.reward_history = [True] * 5
         self.generator.is_right_choice_history = [False] * 20
         self.generator.trials_in_block = 20
-        self.generator.spec.min_block_reward = 1
 
         result = self.generator._is_block_switch_allowed()
         self.assertFalse(result)

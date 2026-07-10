@@ -2282,8 +2282,6 @@ namespace AindDynamicForagingDataSchema
     
         private bool _extendBlockOnNoResponse;
     
-        private int _minBlockReward;
-    
         private int _kernelSize;
     
         public CoupledTrialGeneratorSpec()
@@ -2300,7 +2298,6 @@ namespace AindDynamicForagingDataSchema
             _trialGenerationEndParameters = new CoupledTrialGenerationEndConditions();
             _behaviorStabilityParameters = new BehaviorStabilityParameters();
             _extendBlockOnNoResponse = true;
-            _minBlockReward = 1;
             _kernelSize = 2;
         }
     
@@ -2319,7 +2316,6 @@ namespace AindDynamicForagingDataSchema
             _trialGenerationEndParameters = other._trialGenerationEndParameters;
             _behaviorStabilityParameters = other._behaviorStabilityParameters;
             _extendBlockOnNoResponse = other._extendBlockOnNoResponse;
-            _minBlockReward = other._minBlockReward;
             _kernelSize = other._kernelSize;
         }
     
@@ -2541,19 +2537,6 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
-        [Newtonsoft.Json.JsonPropertyAttribute("min_block_reward")]
-        public int MinBlockReward
-        {
-            get
-            {
-                return _minBlockReward;
-            }
-            set
-            {
-                _minBlockReward = value;
-            }
-        }
-    
         /// <summary>
         /// Kernel to evaluate choice fraction.
         /// </summary>
@@ -2599,7 +2582,6 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("TrialGenerationEndParameters = " + _trialGenerationEndParameters + ", ");
             stringBuilder.Append("BehaviorStabilityParameters = " + _behaviorStabilityParameters + ", ");
             stringBuilder.Append("ExtendBlockOnNoResponse = " + _extendBlockOnNoResponse + ", ");
-            stringBuilder.Append("MinBlockReward = " + _minBlockReward + ", ");
             stringBuilder.Append("KernelSize = " + _kernelSize);
             return true;
         }
@@ -2764,6 +2746,8 @@ namespace AindDynamicForagingDataSchema
     
         private CoupledWarmupTrialGenerationEndConditions _trialGenerationEndParameters;
     
+        private int _minBlockReward;
+    
         public CoupledWarmupTrialGeneratorSpec()
         {
             _quiescentDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
@@ -2776,6 +2760,7 @@ namespace AindDynamicForagingDataSchema
             _isBaiting = true;
             _rewardProbabilityParameters = new RewardProbabilityParameters();
             _trialGenerationEndParameters = new CoupledWarmupTrialGenerationEndConditions();
+            _minBlockReward = 1;
         }
     
         protected CoupledWarmupTrialGeneratorSpec(CoupledWarmupTrialGeneratorSpec other) : 
@@ -2791,6 +2776,7 @@ namespace AindDynamicForagingDataSchema
             _isBaiting = other._isBaiting;
             _rewardProbabilityParameters = other._rewardProbabilityParameters;
             _trialGenerationEndParameters = other._trialGenerationEndParameters;
+            _minBlockReward = other._minBlockReward;
         }
     
         /// <summary>
@@ -2973,6 +2959,19 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
+        [Newtonsoft.Json.JsonPropertyAttribute("min_block_reward")]
+        public int MinBlockReward
+        {
+            get
+            {
+                return _minBlockReward;
+            }
+            set
+            {
+                _minBlockReward = value;
+            }
+        }
+    
         public System.IObservable<CoupledWarmupTrialGeneratorSpec> Generate()
         {
             return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new CoupledWarmupTrialGeneratorSpec(this)));
@@ -2998,7 +2997,8 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("BiasInterventionParameters = " + _biasInterventionParameters + ", ");
             stringBuilder.Append("IsBaiting = " + _isBaiting + ", ");
             stringBuilder.Append("RewardProbabilityParameters = " + _rewardProbabilityParameters + ", ");
-            stringBuilder.Append("TrialGenerationEndParameters = " + _trialGenerationEndParameters);
+            stringBuilder.Append("TrialGenerationEndParameters = " + _trialGenerationEndParameters + ", ");
+            stringBuilder.Append("MinBlockReward = " + _minBlockReward);
             return true;
         }
     }
@@ -6091,7 +6091,7 @@ namespace AindDynamicForagingDataSchema
     
         private double _interTrialIntervalDuration;
     
-        private bool? _isAutoResponseRight;
+        private bool? _isAutoRewardRight;
     
         private double _lickspoutOffsetDelta;
     
@@ -6120,7 +6120,7 @@ namespace AindDynamicForagingDataSchema
             _quickRetractSettings = other._quickRetractSettings;
             _quiescencePeriodDuration = other._quiescencePeriodDuration;
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
-            _isAutoResponseRight = other._isAutoResponseRight;
+            _isAutoRewardRight = other._isAutoRewardRight;
             _lickspoutOffsetDelta = other._lickspoutOffsetDelta;
             _metadata = other._metadata;
         }
@@ -6283,20 +6283,20 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// If set, the trial will automatically (and immediately) register a response to the right (True) or left (False).
+        /// If set, the trial will automatically (and immediately) trigger a reward to the right (True) or left (False). The trial will continue normally after delivery.
         /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("is_auto_response_right")]
-        [System.ComponentModel.DescriptionAttribute("If set, the trial will automatically (and immediately) register a response to the" +
-            " right (True) or left (False).")]
-        public bool? IsAutoResponseRight
+        [Newtonsoft.Json.JsonPropertyAttribute("is_auto_reward_right")]
+        [System.ComponentModel.DescriptionAttribute("If set, the trial will automatically (and immediately) trigger a reward to the ri" +
+            "ght (True) or left (False). The trial will continue normally after delivery.")]
+        public bool? IsAutoRewardRight
         {
             get
             {
-                return _isAutoResponseRight;
+                return _isAutoRewardRight;
             }
             set
             {
-                _isAutoResponseRight = value;
+                _isAutoRewardRight = value;
             }
         }
     
@@ -6357,7 +6357,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("QuickRetractSettings = " + _quickRetractSettings + ", ");
             stringBuilder.Append("QuiescencePeriodDuration = " + _quiescencePeriodDuration + ", ");
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
-            stringBuilder.Append("IsAutoResponseRight = " + _isAutoResponseRight + ", ");
+            stringBuilder.Append("IsAutoRewardRight = " + _isAutoRewardRight + ", ");
             stringBuilder.Append("LickspoutOffsetDelta = " + _lickspoutOffsetDelta + ", ");
             stringBuilder.Append("Metadata = " + _metadata);
             return true;

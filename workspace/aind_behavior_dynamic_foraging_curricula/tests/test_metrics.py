@@ -13,7 +13,7 @@ def _make_trial(
     is_rewarded: bool,
     p_reward_right: float,
     p_reward_left: float,
-    is_auto_response_right: Optional[bool] = False,
+    is_auto_reward_right: Optional[bool] = False,
 ) -> dict:
     return {
         "is_right_choice": is_right_choice,
@@ -21,7 +21,7 @@ def _make_trial(
         "trial": {
             "p_reward_right": p_reward_right,
             "p_reward_left": p_reward_left,
-            "is_auto_response_right": is_auto_response_right,
+            "is_auto_reward_right": is_auto_reward_right,
         },
     }
 

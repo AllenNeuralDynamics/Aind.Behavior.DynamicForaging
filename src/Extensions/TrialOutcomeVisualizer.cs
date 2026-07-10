@@ -430,7 +430,7 @@ public class TrialOutcomeVisualizer : BufferedVisualizer
         {
             var trial = trialList[i];
             float x = i;
-            bool isAutoResponse = trial.Trial.IsAutoResponseRight.HasValue;
+            bool isAutoResponse = trial.Trial.IsAutoRewardRight.HasValue;
 
             if (!trial.IsRightChoice.HasValue)
             {
