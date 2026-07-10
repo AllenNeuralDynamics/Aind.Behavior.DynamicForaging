@@ -145,7 +145,7 @@ class AindAcquisitionDataMapper(AindDataSchemaSessionDataMapper):
         metrics = dataset["Behavior"]["Metrics"].data
         trainer_state = dataset["Behavior"]["TrainerState"].data
         trial_outcomes = dataset["Behavior"]["SoftwareEvents"]["TrialOutcome"].data["data"].iloc
-        rewarded = sum(to["is_rewarded"] for to in trial_outcomes if to["trial"]["is_auto_response_right"] is None)
+        rewarded = sum(to["is_rewarded"] for to in trial_outcomes if to["trial"]["is_auto_reward_right"] is None)
         water = calculate_consumed_water(self.data_path)
         performance_metrics = PerformanceMetrics(
             reward_consumed_during_epoch=None if not water else Decimal(str(water)),
