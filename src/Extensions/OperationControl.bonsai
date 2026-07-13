@@ -545,6 +545,9 @@
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Merge" />
                   </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:DistinctUntilChanged" />
+                  </Expression>
                   <Expression xsi:type="MulticastSubject">
                     <Name>HarpBehaviorCommands</Name>
                   </Expression>
@@ -584,6 +587,7 @@
                   <Edge From="30" To="31" Label="Source1" />
                   <Edge From="31" To="32" Label="Source2" />
                   <Edge From="32" To="33" Label="Source1" />
+                  <Edge From="33" To="34" Label="Source1" />
                 </Edges>
               </Workflow>
             </Expression>
