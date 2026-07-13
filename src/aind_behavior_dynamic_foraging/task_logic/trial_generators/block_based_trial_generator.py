@@ -28,6 +28,12 @@ class BlockBasedTrialMetadata(BaseModel):
     """Metadata for block based trial. These fields will NOT be used by the task engine."""
 
     is_autowater: bool = Field(default=False, description="Flag indicating if autowater is given for trial.")
+    is_bias_water_intervention: bool = Field(
+        default=False, description="Flag indicating if bias water intervention is given for trial."
+    )
+    is_bias_stage_intervention: bool = Field(
+        default=False, description="Flag indicating if bias stage intervention is given for trial."
+    )
 
 
 class AutoWaterParameters(BaseModel):
@@ -209,7 +215,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
 
         # determine bias correction. Overrides autowater
         lickspout_offset_delta = 0
-        if self.bias_intervention.are_antibias_conditions_met(self.bias):
+        if is_bias_intervention := self.bias_intervention.are_antibias_conditions_met(self.bias):
             is_auto_reward_right, lickspout_offset_delta = self.bias_intervention.determine_antibias_intervention(
                 self.bias
             )
@@ -236,7 +242,11 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             metadata=Metadata(
                 p_reward_left=self.block.p_left_reward,
                 p_reward_right=self.block.p_right_reward,
-                extra=BlockBasedTrialMetadata(is_autowater=is_autowater),
+                extra=BlockBasedTrialMetadata(
+                    is_autowater=is_autowater and not is_bias_intervention,
+                    is_bias_water_intervention=is_bias_intervention and is_auto_reward_right is not None,
+                    is_bias_stage_intervention=is_bias_intervention and lickspout_offset_delta != 0,
+                ),
             ),
         )
 
