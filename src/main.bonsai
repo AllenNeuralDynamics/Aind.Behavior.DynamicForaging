@@ -2220,6 +2220,33 @@
                     </Workflow>
                   </Expression>
                   <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
+                    <rx:Name>UiGiveLeft</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:Sink">
+                    <Name>TriggerLeft</Name>
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="BooleanProperty">
+                            <Value>false</Value>
+                          </Combinator>
+                        </Expression>
+                        <Expression xsi:type="MulticastSubject">
+                          <Name>GiveManualWaterRight</Name>
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                        <Edge From="1" To="2" Label="Source1" />
+                        <Edge From="2" To="3" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
                     <rx:Name>UiCueGiveLeft</rx:Name>
                   </Expression>
                   <Expression xsi:type="rx:Sink">
@@ -2298,33 +2325,6 @@
                         <Edge From="4" To="5" Label="Source2" />
                         <Edge From="5" To="6" Label="Source1" />
                         <Edge From="6" To="7" Label="Source1" />
-                      </Edges>
-                    </Workflow>
-                  </Expression>
-                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
-                    <rx:Name>UiGiveLeft</rx:Name>
-                  </Expression>
-                  <Expression xsi:type="rx:Sink">
-                    <Name>TriggerLeft</Name>
-                    <Workflow>
-                      <Nodes>
-                        <Expression xsi:type="WorkflowInput">
-                          <Name>Source1</Name>
-                        </Expression>
-                        <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="BooleanProperty">
-                            <Value>false</Value>
-                          </Combinator>
-                        </Expression>
-                        <Expression xsi:type="MulticastSubject">
-                          <Name>GiveManualWaterRight</Name>
-                        </Expression>
-                        <Expression xsi:type="WorkflowOutput" />
-                      </Nodes>
-                      <Edges>
-                        <Edge From="0" To="1" Label="Source1" />
-                        <Edge From="1" To="2" Label="Source1" />
-                        <Edge From="2" To="3" Label="Source1" />
                       </Edges>
                     </Workflow>
                   </Expression>
@@ -2596,14 +2596,14 @@
                   </p2:PointPlotter>
                   <p2:PointPlotter>
                     <p2:EventName>WaterRight</p2:EventName>
-                    <p2:Color>Blue</p2:Color>
+                    <p2:Color>Red</p2:Color>
                     <p2:YPosition>0.2</p2:YPosition>
                     <p2:MarkerSize>6</p2:MarkerSize>
                     <p2:Marker>Circle</p2:Marker>
                   </p2:PointPlotter>
                   <p2:PointPlotter>
-                    <p2:EventName>WaterLft</p2:EventName>
-                    <p2:Color>Red</p2:Color>
+                    <p2:EventName>WaterLeft</p2:EventName>
+                    <p2:Color>Blue</p2:Color>
                     <p2:YPosition>0.8</p2:YPosition>
                     <p2:MarkerSize>6</p2:MarkerSize>
                     <p2:Marker>Circle</p2:Marker>
