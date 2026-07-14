@@ -1788,9 +1788,9 @@
                               </Expression>
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="p7:ManipulatorPosition">
-                                  <p7:X>-1</p7:X>
+                                  <p7:X>0</p7:X>
                                   <p7:Y1>1</p7:Y1>
-                                  <p7:Y2>1</p7:Y2>
+                                  <p7:Y2>0</p7:Y2>
                                   <p7:Z>0</p7:Z>
                                 </Combinator>
                               </Expression>
@@ -1828,8 +1828,8 @@
                               </Expression>
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="p7:ManipulatorPosition">
-                                  <p7:X>1</p7:X>
-                                  <p7:Y1>1</p7:Y1>
+                                  <p7:X>0</p7:X>
+                                  <p7:Y1>0</p7:Y1>
                                   <p7:Y2>1</p7:Y2>
                                   <p7:Z>0</p7:Z>
                                 </Combinator>
@@ -1868,9 +1868,9 @@
                               </Expression>
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="p7:ManipulatorPosition">
-                                  <p7:X>-1</p7:X>
+                                  <p7:X>0</p7:X>
                                   <p7:Y1>-1</p7:Y1>
-                                  <p7:Y2>-1</p7:Y2>
+                                  <p7:Y2>0</p7:Y2>
                                   <p7:Z>0</p7:Z>
                                 </Combinator>
                               </Expression>
@@ -1908,8 +1908,8 @@
                               </Expression>
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="p7:ManipulatorPosition">
-                                  <p7:X>1</p7:X>
-                                  <p7:Y1>-1</p7:Y1>
+                                  <p7:X>0</p7:X>
+                                  <p7:Y1>0</p7:Y1>
                                   <p7:Y2>-1</p7:Y2>
                                   <p7:Z>0</p7:Z>
                                 </Combinator>
