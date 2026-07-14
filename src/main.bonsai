@@ -2996,7 +2996,7 @@
                         </Expression>
                         <Expression xsi:type="imgui:TextBuilder">
                           <imgui:Visible>true</imgui:Visible>
-                          <imgui:Text>x1: </imgui:Text>
+                          <imgui:Text>x: </imgui:Text>
                         </Expression>
                         <Expression xsi:type="imgui:TableNextColumnBuilder">
                           <imgui:Visible>true</imgui:Visible>
