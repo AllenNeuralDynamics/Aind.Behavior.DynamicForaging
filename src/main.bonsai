@@ -2469,13 +2469,13 @@
                     <Name>PreSession</Name>
                   </Expression>
                   <Expression xsi:type="imgui:TabItemBuilder">
-                    <imgui:Name>InterSession</imgui:Name>
+                    <imgui:Name>IntraSession</imgui:Name>
                     <imgui:Visible>true</imgui:Visible>
-                    <imgui:Text>inter-session</imgui:Text>
+                    <imgui:Text>intra-session</imgui:Text>
                     <imgui:Flags>None</imgui:Flags>
                   </Expression>
                   <Expression xsi:type="rx:PublishSubject">
-                    <Name>InterSession</Name>
+                    <Name>IntraSession</Name>
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:CombineLatest" />
@@ -3309,8 +3309,8 @@
                 </Edges>
               </Workflow>
             </Expression>
-            <Expression xsi:type="IncludeWorkflow" Path="Extensions\InterSessionVisualizer.bonsai">
-              <FrameSubject>InterSession</FrameSubject>
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\IntraSessionVisualizer.bonsai">
+              <FrameSubject>IntraSession</FrameSubject>
               <UiGiveLeft>UiGiveLeft</UiGiveLeft>
               <UiGiveRight>UiGiveRight</UiGiveRight>
               <UiMoveLeft>UiMoveLeft</UiMoveLeft>

@@ -22,7 +22,7 @@
               <Property Name="Name" DisplayName="FrameSubject" />
             </Expression>
             <Expression xsi:type="SubscribeSubject">
-              <Name>InterSession</Name>
+              <Name>IntraSession</Name>
             </Expression>
             <Expression xsi:type="imgui:TableBuilder">
               <imgui:Visible>true</imgui:Visible>
