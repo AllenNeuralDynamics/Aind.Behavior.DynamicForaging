@@ -584,14 +584,11 @@ namespace AindDynamicForagingDataSchema
     
         private string _aindBehaviorServicesPkgVersion;
     
-        private RewardSize _rewardSize;
-    
         private TrialGeneratorSpec _trialGenerator;
     
         public AindDynamicForagingTaskParameters()
         {
             _aindBehaviorServicesPkgVersion = "0.13.5";
-            _rewardSize = new RewardSize();
             _trialGenerator = new TrialGeneratorSpec();
         }
     
@@ -599,7 +596,6 @@ namespace AindDynamicForagingDataSchema
         {
             _rngSeed = other._rngSeed;
             _aindBehaviorServicesPkgVersion = other._aindBehaviorServicesPkgVersion;
-            _rewardSize = other._rewardSize;
             _trialGenerator = other._trialGenerator;
         }
     
@@ -630,24 +626,6 @@ namespace AindDynamicForagingDataSchema
             set
             {
                 _aindBehaviorServicesPkgVersion = value;
-            }
-        }
-    
-        /// <summary>
-        /// Parameters describing reward size.
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("reward_size")]
-        [System.ComponentModel.DescriptionAttribute("Parameters describing reward size.")]
-        public RewardSize RewardSize
-        {
-            get
-            {
-                return _rewardSize;
-            }
-            set
-            {
-                _rewardSize = value;
             }
         }
     
@@ -683,7 +661,6 @@ namespace AindDynamicForagingDataSchema
         {
             stringBuilder.Append("RngSeed = " + _rngSeed + ", ");
             stringBuilder.Append("AindBehaviorServicesPkgVersion = " + _aindBehaviorServicesPkgVersion + ", ");
-            stringBuilder.Append("RewardSize = " + _rewardSize + ", ");
             stringBuilder.Append("TrialGenerator = " + _trialGenerator);
             return true;
         }
@@ -885,6 +862,8 @@ namespace AindDynamicForagingDataSchema
     public partial class BaseCoupledTrialGeneratorSpec : TrialGeneratorSpec
     {
     
+        private RewardSize _rewardSize;
+    
         private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _quiescentDuration;
     
         private double _responseDuration;
@@ -905,6 +884,7 @@ namespace AindDynamicForagingDataSchema
     
         public BaseCoupledTrialGeneratorSpec()
         {
+            _rewardSize = new RewardSize();
             _quiescentDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _responseDuration = 1D;
             _rewardConsumptionDuration = 3D;
@@ -919,6 +899,7 @@ namespace AindDynamicForagingDataSchema
         protected BaseCoupledTrialGeneratorSpec(BaseCoupledTrialGeneratorSpec other) : 
                 base(other)
         {
+            _rewardSize = other._rewardSize;
             _quiescentDuration = other._quiescentDuration;
             _responseDuration = other._responseDuration;
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
@@ -928,6 +909,24 @@ namespace AindDynamicForagingDataSchema
             _biasInterventionParameters = other._biasInterventionParameters;
             _isBaiting = other._isBaiting;
             _rewardProbabilityParameters = other._rewardProbabilityParameters;
+        }
+    
+        /// <summary>
+        /// Parameters describing reward size.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("reward_size")]
+        [System.ComponentModel.DescriptionAttribute("Parameters describing reward size.")]
+        public RewardSize RewardSize
+        {
+            get
+            {
+                return _rewardSize;
+            }
+            set
+            {
+                _rewardSize = value;
+            }
         }
     
         /// <summary>
@@ -1109,6 +1108,7 @@ namespace AindDynamicForagingDataSchema
             {
                 stringBuilder.Append(", ");
             }
+            stringBuilder.Append("RewardSize = " + _rewardSize + ", ");
             stringBuilder.Append("QuiescentDuration = " + _quiescentDuration + ", ");
             stringBuilder.Append("ResponseDuration = " + _responseDuration + ", ");
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
@@ -1300,6 +1300,8 @@ namespace AindDynamicForagingDataSchema
     
         private double _lickspoutOffsetDelta;
     
+        private double _rewardFraction;
+    
         public BiasInterventionParameters()
         {
             _threshold = new BiasThreshold();
@@ -1307,6 +1309,7 @@ namespace AindDynamicForagingDataSchema
             _maximumWaterCorrections = 5;
             _biasWindowLength = 200;
             _lickspoutOffsetDelta = 0.05D;
+            _rewardFraction = 0.8D;
         }
     
         protected BiasInterventionParameters(BiasInterventionParameters other)
@@ -1316,6 +1319,7 @@ namespace AindDynamicForagingDataSchema
             _maximumWaterCorrections = other._maximumWaterCorrections;
             _biasWindowLength = other._biasWindowLength;
             _lickspoutOffsetDelta = other._lickspoutOffsetDelta;
+            _rewardFraction = other._rewardFraction;
         }
     
         /// <summary>
@@ -1405,6 +1409,24 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
+        /// <summary>
+        /// Fraction of full reward volume delivered for water intervention (0=none, 1=full).
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("reward_fraction")]
+        [System.ComponentModel.DescriptionAttribute("Fraction of full reward volume delivered for water intervention (0=none, 1=full)." +
+            "")]
+        public double RewardFraction
+        {
+            get
+            {
+                return _rewardFraction;
+            }
+            set
+            {
+                _rewardFraction = value;
+            }
+        }
+    
         public System.IObservable<BiasInterventionParameters> Generate()
         {
             return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new BiasInterventionParameters(this)));
@@ -1421,7 +1443,8 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("InterventionInterval = " + _interventionInterval + ", ");
             stringBuilder.Append("MaximumWaterCorrections = " + _maximumWaterCorrections + ", ");
             stringBuilder.Append("BiasWindowLength = " + _biasWindowLength + ", ");
-            stringBuilder.Append("LickspoutOffsetDelta = " + _lickspoutOffsetDelta);
+            stringBuilder.Append("LickspoutOffsetDelta = " + _lickspoutOffsetDelta + ", ");
+            stringBuilder.Append("RewardFraction = " + _rewardFraction);
             return true;
         }
     
@@ -1534,6 +1557,8 @@ namespace AindDynamicForagingDataSchema
     public partial class BlockBasedTrialGeneratorSpec : TrialGeneratorSpec
     {
     
+        private RewardSize _rewardSize;
+    
         private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _quiescentDuration;
     
         private double _responseDuration;
@@ -1552,6 +1577,7 @@ namespace AindDynamicForagingDataSchema
     
         public BlockBasedTrialGeneratorSpec()
         {
+            _rewardSize = new RewardSize();
             _quiescentDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _responseDuration = 1D;
             _rewardConsumptionDuration = 3D;
@@ -1565,6 +1591,7 @@ namespace AindDynamicForagingDataSchema
         protected BlockBasedTrialGeneratorSpec(BlockBasedTrialGeneratorSpec other) : 
                 base(other)
         {
+            _rewardSize = other._rewardSize;
             _quiescentDuration = other._quiescentDuration;
             _responseDuration = other._responseDuration;
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
@@ -1573,6 +1600,24 @@ namespace AindDynamicForagingDataSchema
             _autowaterParameters = other._autowaterParameters;
             _biasInterventionParameters = other._biasInterventionParameters;
             _isBaiting = other._isBaiting;
+        }
+    
+        /// <summary>
+        /// Parameters describing reward size.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("reward_size")]
+        [System.ComponentModel.DescriptionAttribute("Parameters describing reward size.")]
+        public RewardSize RewardSize
+        {
+            get
+            {
+                return _rewardSize;
+            }
+            set
+            {
+                _rewardSize = value;
+            }
         }
     
         /// <summary>
@@ -1736,6 +1781,7 @@ namespace AindDynamicForagingDataSchema
             {
                 stringBuilder.Append(", ");
             }
+            stringBuilder.Append("RewardSize = " + _rewardSize + ", ");
             stringBuilder.Append("QuiescentDuration = " + _quiescentDuration + ", ");
             stringBuilder.Append("ResponseDuration = " + _responseDuration + ", ");
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
@@ -2258,6 +2304,8 @@ namespace AindDynamicForagingDataSchema
     public partial class CoupledTrialGeneratorSpec : TrialGeneratorSpec
     {
     
+        private RewardSize _rewardSize;
+    
         private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _quiescentDuration;
     
         private double _responseDuration;
@@ -2286,6 +2334,7 @@ namespace AindDynamicForagingDataSchema
     
         public CoupledTrialGeneratorSpec()
         {
+            _rewardSize = new RewardSize();
             _quiescentDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _responseDuration = 1D;
             _rewardConsumptionDuration = 3D;
@@ -2304,6 +2353,7 @@ namespace AindDynamicForagingDataSchema
         protected CoupledTrialGeneratorSpec(CoupledTrialGeneratorSpec other) : 
                 base(other)
         {
+            _rewardSize = other._rewardSize;
             _quiescentDuration = other._quiescentDuration;
             _responseDuration = other._responseDuration;
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
@@ -2317,6 +2367,24 @@ namespace AindDynamicForagingDataSchema
             _behaviorStabilityParameters = other._behaviorStabilityParameters;
             _extendBlockOnNoResponse = other._extendBlockOnNoResponse;
             _kernelSize = other._kernelSize;
+        }
+    
+        /// <summary>
+        /// Parameters describing reward size.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("reward_size")]
+        [System.ComponentModel.DescriptionAttribute("Parameters describing reward size.")]
+        public RewardSize RewardSize
+        {
+            get
+            {
+                return _rewardSize;
+            }
+            set
+            {
+                _rewardSize = value;
+            }
         }
     
         /// <summary>
@@ -2570,6 +2638,7 @@ namespace AindDynamicForagingDataSchema
             {
                 stringBuilder.Append(", ");
             }
+            stringBuilder.Append("RewardSize = " + _rewardSize + ", ");
             stringBuilder.Append("QuiescentDuration = " + _quiescentDuration + ", ");
             stringBuilder.Append("ResponseDuration = " + _responseDuration + ", ");
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
@@ -2726,6 +2795,8 @@ namespace AindDynamicForagingDataSchema
     public partial class CoupledWarmupTrialGeneratorSpec : TrialGeneratorSpec
     {
     
+        private RewardSize _rewardSize;
+    
         private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _quiescentDuration;
     
         private double _responseDuration;
@@ -2750,6 +2821,7 @@ namespace AindDynamicForagingDataSchema
     
         public CoupledWarmupTrialGeneratorSpec()
         {
+            _rewardSize = new RewardSize();
             _quiescentDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _responseDuration = 1D;
             _rewardConsumptionDuration = 3D;
@@ -2766,6 +2838,7 @@ namespace AindDynamicForagingDataSchema
         protected CoupledWarmupTrialGeneratorSpec(CoupledWarmupTrialGeneratorSpec other) : 
                 base(other)
         {
+            _rewardSize = other._rewardSize;
             _quiescentDuration = other._quiescentDuration;
             _responseDuration = other._responseDuration;
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
@@ -2777,6 +2850,24 @@ namespace AindDynamicForagingDataSchema
             _rewardProbabilityParameters = other._rewardProbabilityParameters;
             _trialGenerationEndParameters = other._trialGenerationEndParameters;
             _minBlockReward = other._minBlockReward;
+        }
+    
+        /// <summary>
+        /// Parameters describing reward size.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("reward_size")]
+        [System.ComponentModel.DescriptionAttribute("Parameters describing reward size.")]
+        public RewardSize RewardSize
+        {
+            get
+            {
+                return _rewardSize;
+            }
+            set
+            {
+                _rewardSize = value;
+            }
         }
     
         /// <summary>
@@ -2988,6 +3079,7 @@ namespace AindDynamicForagingDataSchema
             {
                 stringBuilder.Append(", ");
             }
+            stringBuilder.Append("RewardSize = " + _rewardSize + ", ");
             stringBuilder.Append("QuiescentDuration = " + _quiescentDuration + ", ");
             stringBuilder.Append("ResponseDuration = " + _responseDuration + ", ");
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
@@ -4721,9 +4813,9 @@ namespace AindDynamicForagingDataSchema
     public partial class RewardSize
     {
     
-        private double _rightValueVolume;
+        private double _right;
     
-        private double _leftValueVolume;
+        private double _left;
     
         public RewardSize()
         {
@@ -4731,33 +4823,33 @@ namespace AindDynamicForagingDataSchema
     
         protected RewardSize(RewardSize other)
         {
-            _rightValueVolume = other._rightValueVolume;
-            _leftValueVolume = other._leftValueVolume;
+            _right = other._right;
+            _left = other._left;
         }
     
-        [Newtonsoft.Json.JsonPropertyAttribute("right_value_volume", Required=Newtonsoft.Json.Required.Always)]
-        public double RightValueVolume
+        [Newtonsoft.Json.JsonPropertyAttribute("right", Required=Newtonsoft.Json.Required.Always)]
+        public double Right
         {
             get
             {
-                return _rightValueVolume;
+                return _right;
             }
             set
             {
-                _rightValueVolume = value;
+                _right = value;
             }
         }
     
-        [Newtonsoft.Json.JsonPropertyAttribute("left_value_volume", Required=Newtonsoft.Json.Required.Always)]
-        public double LeftValueVolume
+        [Newtonsoft.Json.JsonPropertyAttribute("left", Required=Newtonsoft.Json.Required.Always)]
+        public double Left
         {
             get
             {
-                return _leftValueVolume;
+                return _left;
             }
             set
             {
-                _leftValueVolume = value;
+                _left = value;
             }
         }
     
@@ -4773,8 +4865,8 @@ namespace AindDynamicForagingDataSchema
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("RightValueVolume = " + _rightValueVolume + ", ");
-            stringBuilder.Append("LeftValueVolume = " + _leftValueVolume);
+            stringBuilder.Append("Right = " + _right + ", ");
+            stringBuilder.Append("Left = " + _left);
             return true;
         }
     
@@ -6073,6 +6165,8 @@ namespace AindDynamicForagingDataSchema
     public partial class Trial
     {
     
+        private RewardSize _rewardSize;
+    
         private double _pRewardLeft;
     
         private double _pRewardRight;
@@ -6099,6 +6193,7 @@ namespace AindDynamicForagingDataSchema
     
         public Trial()
         {
+            _rewardSize = new RewardSize();
             _pRewardLeft = 1D;
             _pRewardRight = 1D;
             _rewardConsumptionDuration = 5D;
@@ -6111,6 +6206,7 @@ namespace AindDynamicForagingDataSchema
     
         protected Trial(Trial other)
         {
+            _rewardSize = other._rewardSize;
             _pRewardLeft = other._pRewardLeft;
             _pRewardRight = other._pRewardRight;
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
@@ -6123,6 +6219,24 @@ namespace AindDynamicForagingDataSchema
             _isAutoRewardRight = other._isAutoRewardRight;
             _lickspoutOffsetDelta = other._lickspoutOffsetDelta;
             _metadata = other._metadata;
+        }
+    
+        /// <summary>
+        /// Parameters describing reward size.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("reward_size")]
+        [System.ComponentModel.DescriptionAttribute("Parameters describing reward size.")]
+        public RewardSize RewardSize
+        {
+            get
+            {
+                return _rewardSize;
+            }
+            set
+            {
+                _rewardSize = value;
+            }
         }
     
         /// <summary>
@@ -6348,6 +6462,7 @@ namespace AindDynamicForagingDataSchema
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
+            stringBuilder.Append("RewardSize = " + _rewardSize + ", ");
             stringBuilder.Append("PRewardLeft = " + _pRewardLeft + ", ");
             stringBuilder.Append("PRewardRight = " + _pRewardRight + ", ");
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
@@ -6878,6 +6993,8 @@ namespace AindDynamicForagingDataSchema
     public partial class UncoupledTrialGeneratorSpec : TrialGeneratorSpec
     {
     
+        private RewardSize _rewardSize;
+    
         private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _quiescentDuration;
     
         private double _responseDuration;
@@ -6902,6 +7019,7 @@ namespace AindDynamicForagingDataSchema
     
         public UncoupledTrialGeneratorSpec()
         {
+            _rewardSize = new RewardSize();
             _quiescentDuration = new AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution();
             _responseDuration = 1D;
             _rewardConsumptionDuration = 3D;
@@ -6918,6 +7036,7 @@ namespace AindDynamicForagingDataSchema
         protected UncoupledTrialGeneratorSpec(UncoupledTrialGeneratorSpec other) : 
                 base(other)
         {
+            _rewardSize = other._rewardSize;
             _quiescentDuration = other._quiescentDuration;
             _responseDuration = other._responseDuration;
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
@@ -6929,6 +7048,24 @@ namespace AindDynamicForagingDataSchema
             _trialGenerationEndParameters = other._trialGenerationEndParameters;
             _rewardProbabilities = other._rewardProbabilities;
             _maximumDominanceStreak = other._maximumDominanceStreak;
+        }
+    
+        /// <summary>
+        /// Parameters describing reward size.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("reward_size")]
+        [System.ComponentModel.DescriptionAttribute("Parameters describing reward size.")]
+        public RewardSize RewardSize
+        {
+            get
+            {
+                return _rewardSize;
+            }
+            set
+            {
+                _rewardSize = value;
+            }
         }
     
         /// <summary>
@@ -7145,6 +7282,7 @@ namespace AindDynamicForagingDataSchema
             {
                 stringBuilder.Append(", ");
             }
+            stringBuilder.Append("RewardSize = " + _rewardSize + ", ");
             stringBuilder.Append("QuiescentDuration = " + _quiescentDuration + ", ");
             stringBuilder.Append("ResponseDuration = " + _responseDuration + ", ");
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");

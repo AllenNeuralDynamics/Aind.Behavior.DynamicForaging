@@ -2,7 +2,6 @@ from aind_behavior_curriculum import MetricsProvider, Stage
 from aind_behavior_dynamic_foraging.task_logic import (
     AindDynamicForagingTaskLogic,
     AindDynamicForagingTaskParameters,
-    RewardSize,
 )
 from aind_behavior_dynamic_foraging.task_logic.trial_generators import (
     CoupledTrialGeneratorSpec,
@@ -11,6 +10,7 @@ from aind_behavior_dynamic_foraging.task_logic.trial_generators import (
 )
 from aind_behavior_dynamic_foraging.task_logic.trial_generators.block_based_trial_generator import (
     AutoWaterParameters,
+    RewardSize,
 )
 from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generators.base_coupled_trial_generator import (
     RewardProbabilityParameters,
@@ -48,11 +48,11 @@ def make_s_stage_1_warmup():
         task=AindDynamicForagingTaskLogic(
             stage_name="stage_1_warmup",
             task_parameters=AindDynamicForagingTaskParameters(
-                reward_size=RewardSize(right_value_volume=4.0, left_value_volume=4.0),
                 trial_generator=TrialGeneratorCompositeSpec(
                     generators=[
                         CoupledWarmupTrialGeneratorSpec(
                             min_block_reward=1,
+                            reward_size=RewardSize(right=4.0, left=4.0),
                             autowater_parameters=AutoWaterParameters(
                                 reward_fraction=0.8, min_ignored_trials=0, min_unrewarded_trials=0
                             ),
@@ -76,6 +76,7 @@ def make_s_stage_1_warmup():
                             reward_consumption_duration=1.0,
                         ),
                         CoupledTrialGeneratorSpec(
+                            reward_size=RewardSize(right=4.0, left=4.0),
                             autowater_parameters=AutoWaterParameters(
                                 reward_fraction=0.5, min_ignored_trials=3, min_unrewarded_trials=3
                             ),
@@ -123,8 +124,8 @@ def make_s_stage_1():
         task=AindDynamicForagingTaskLogic(
             stage_name="stage_1",
             task_parameters=AindDynamicForagingTaskParameters(
-                reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
                 trial_generator=CoupledTrialGeneratorSpec(
+                    reward_size=RewardSize(right=2.0, left=2.0),
                     autowater_parameters=AutoWaterParameters(
                         reward_fraction=0.5, min_ignored_trials=5, min_unrewarded_trials=5
                     ),
@@ -170,8 +171,8 @@ def make_s_stage_2():
         task=AindDynamicForagingTaskLogic(
             stage_name="stage_2",
             task_parameters=AindDynamicForagingTaskParameters(
-                reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
                 trial_generator=CoupledTrialGeneratorSpec(
+                    reward_size=RewardSize(right=2.0, left=2.0),
                     autowater_parameters=AutoWaterParameters(
                         reward_fraction=0.5, min_ignored_trials=7, min_unrewarded_trials=7
                     ),
@@ -217,8 +218,8 @@ def make_s_stage_3():
         task=AindDynamicForagingTaskLogic(
             stage_name="stage_3",
             task_parameters=AindDynamicForagingTaskParameters(
-                reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
                 trial_generator=UncoupledTrialGeneratorSpec(
+                    reward_size=RewardSize(right=2.0, left=2.0),
                     autowater_parameters=AutoWaterParameters(
                         reward_fraction=0.5, min_ignored_trials=10, min_unrewarded_trials=10
                     ),
@@ -254,8 +255,8 @@ def make_s_stage_final():
         task=AindDynamicForagingTaskLogic(
             stage_name="final",
             task_parameters=AindDynamicForagingTaskParameters(
-                reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
                 trial_generator=UncoupledTrialGeneratorSpec(
+                    reward_size=RewardSize(right=2.0, left=2.0),
                     trial_generation_end_parameters=UncoupledTrialGenerationEndConditions(
                         max_trial=1000,
                         max_time=4500,
@@ -289,8 +290,8 @@ def make_s_stage_graduated():
         task=AindDynamicForagingTaskLogic(
             stage_name="graduated",
             task_parameters=AindDynamicForagingTaskParameters(
-                reward_size=RewardSize(right_value_volume=2.0, left_value_volume=2.0),
                 trial_generator=UncoupledTrialGeneratorSpec(
+                    reward_size=RewardSize(right=2.0, left=2.0),
                     autowater_parameters=None,
                     trial_generation_end_parameters=UncoupledTrialGenerationEndConditions(
                         max_trial=1000,
