@@ -177,7 +177,6 @@ class AindAcquisitionDataMapper(AindDataSchemaSessionDataMapper):
             acquisition_type=session_model.experiment or task_logic_model.name,
             coordinate_system=None,
             data_streams=data_streams,
-            calibrations=_get_water_calibration(rig_model),
             stimulus_epochs=[stimulus_epoch],
         )
 
@@ -189,29 +188,6 @@ def _get_subject_details(data_path: os.PathLike) -> AcquisitionSubjectDetails:
         reward_consumed_total=None if not water else Decimal(str(water)),
         reward_consumed_unit=units.VolumeUnit.ML,
     )
-
-
-def _get_water_calibration(rig_model: AindDynamicForagingRig) -> List[CALIBRATIONS]:
-
-    water_calibrations = get_fields_of_type(rig_model, abs_water_valve.WaterValveCalibration)
-    vol_cal = []
-    for device_name, wc in water_calibrations:
-        if device_name and wc.interval_average:
-            vol_cal.append(
-                VolumeCalibration(
-                    device_name=device_name,
-                    calibration_date=wc.date if wc.date else utcnow(),
-                    input=list(wc.interval_average.keys()),
-                    output=list(wc.interval_average.values()),
-                    input_unit=units.TimeUnit.S,
-                    output_unit=units.VolumeUnit.ML,
-                    fit=CalibrationFit(
-                        fit_type=FitType.LINEAR,
-                        fit_parameters=GenericModel.model_validate(wc.model_dump()),
-                    ),
-                )
-            )
-    return vol_cal
 
 
 def _get_camera_config(name: str, camera: abs_camera.CameraTypes, repository: git.Repo) -> DetectorConfig:
