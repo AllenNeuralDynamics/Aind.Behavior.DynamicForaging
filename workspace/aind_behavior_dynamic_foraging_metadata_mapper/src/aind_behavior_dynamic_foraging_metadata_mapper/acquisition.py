@@ -4,7 +4,7 @@ import sys
 from datetime import datetime, timezone
 from decimal import Decimal
 from pathlib import Path
-from typing import List, Optional
+from typing import Optional
 
 import git
 from aind_behavior_dynamic_foraging.data_contract import dataset as df_foraging_dataset
@@ -13,13 +13,11 @@ from aind_behavior_dynamic_foraging.rig import AindDynamicForagingRig
 from aind_behavior_dynamic_foraging.task_logic import AindDynamicForagingTaskLogic
 from aind_behavior_services.rig import Device as AbsDevice
 from aind_behavior_services.rig import cameras as abs_camera
-from aind_behavior_services.rig import water_valve as abs_water_valve
 from aind_behavior_services.session import Session
-from aind_behavior_services.utils import get_fields_of_type, model_from_json_file, utcnow
+from aind_behavior_services.utils import get_fields_of_type, model_from_json_file
 from aind_data_schema.components.configs import TriggerType
-from aind_data_schema.components.measurements import CalibrationFit, FitType, GenericModel, VolumeCalibration
+from aind_data_schema.components.measurements import GenericModel
 from aind_data_schema.core.acquisition import (
-    CALIBRATIONS,
     Acquisition,
     AcquisitionSubjectDetails,
     Code,
