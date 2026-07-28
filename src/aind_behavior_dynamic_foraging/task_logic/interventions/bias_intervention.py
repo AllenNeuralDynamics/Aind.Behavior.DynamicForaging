@@ -23,6 +23,12 @@ class BiasInterventionParameters(BaseModel):
         ge=0,
         description="Distance (mm) to move the stage spouts by. This is a relative distance to the current value, not absolute.",
     )
+    reward_fraction: float = Field(
+        default=0.8,
+        ge=0,
+        le=1,
+        description="Fraction of full reward volume delivered for water intervention (0=none, 1=full).",
+    )
 
 
 class BiasIntervention:

@@ -2,13 +2,11 @@ import os
 
 from aind_behavior_curriculum import Stage, TrainerState
 
-import aind_behavior_dynamic_foraging.task_logic as df_task_logic
 from aind_behavior_dynamic_foraging.task_logic import AindDynamicForagingTaskLogic, AindDynamicForagingTaskParameters
 
 task_logic = AindDynamicForagingTaskLogic(
     task_parameters=AindDynamicForagingTaskParameters(
         rng_seed=42,
-        reward_size=df_task_logic.RewardSize(right_value_volume=4.0, left_value_volume=4.0),
     )
 )
 

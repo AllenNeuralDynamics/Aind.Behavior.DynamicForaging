@@ -32,7 +32,6 @@ def calculate_bias(outcomes: List[TrialOutcome]) -> float:
     solver = "liblinear"
     l1_ratio = 0
     trial_window_length = 5
-    cross_val_folds = 1
     regularization_strength = 10
 
     outcomes = outcomes[-200:]
@@ -42,7 +41,7 @@ def calculate_bias(outcomes: List[TrialOutcome]) -> float:
 
     if len(filtered) <= trial_window_length:
         logger.warning("Not enough choices to calculate bias.")
-        return np.nan
+        return 0
 
     is_right_choice_history = np.array([t.is_right_choice for t in filtered], dtype=float)
     is_rewarded_history = np.array([t.is_rewarded for t in filtered], dtype=float)
@@ -64,14 +63,16 @@ def calculate_bias(outcomes: List[TrialOutcome]) -> float:
 
     n_right_choice = np.sum(y == 1)
     n_left_choice = np.sum(y == -1)
-    if min(n_right_choice, n_left_choice) < cross_val_folds:
-        logger.warning(
-            "Not enough trials per class to fit logistic regression (need %d per class, got %d right, %d left).",
-            cross_val_folds,
-            n_right_choice,
-            n_left_choice,
-        )
-        return np.nan
+    if n_right_choice == n_left_choice == 0:
+        logger.warning("No choices in the last %d trials. Returning bias of 0.", trial_window_length)
+        return 0
+    if n_right_choice == 0:
+        logger.warning("No right choices in the last %d trials. Returning bias of -1.", trial_window_length)
+        return -1
+
+    if n_left_choice == 0:
+        logger.warning("No left choices in the last %d trials. Returning bias of +1.", trial_window_length)
+        return 1
 
     logistic_reg = LogisticRegression(solver=solver, l1_ratio=l1_ratio, C=1 / regularization_strength)
     logistic_reg.fit(x, y)

@@ -12,15 +12,15 @@
                     "task_parameters": {
                         "rng_seed": null,
                         "aind_behavior_services_pkg_version": "0.13.7",
-                        "reward_size": {
-                            "right_value_volume": 4.0,
-                            "left_value_volume": 4.0
-                        },
                         "trial_generator": {
                             "type": "TrialGeneratorComposite",
                             "generators": [
                                 {
                                     "type": "CoupledWarmupTrialGenerator",
+                                    "reward_size": {
+                                        "right": 4.0,
+                                        "left": 4.0
+                                    },
                                     "quiescent_duration": {
                                         "family": "Scalar",
                                         "distribution_parameters": {
@@ -67,7 +67,8 @@
                                         "intervention_interval": 10,
                                         "maximum_water_corrections": 5,
                                         "bias_window_length": 200,
-                                        "lickspout_offset_delta": 0.05
+                                        "lickspout_offset_delta": 0.05,
+                                        "reward_fraction": 0.8
                                     },
                                     "is_baiting": true,
                                     "reward_probability_parameters": {
@@ -89,6 +90,10 @@
                                 },
                                 {
                                     "type": "CoupledTrialGenerator",
+                                    "reward_size": {
+                                        "right": 4.0,
+                                        "left": 4.0
+                                    },
                                     "quiescent_duration": {
                                         "family": "Scalar",
                                         "distribution_parameters": {
@@ -139,7 +144,8 @@
                                         "intervention_interval": 10,
                                         "maximum_water_corrections": 5,
                                         "bias_window_length": 200,
-                                        "lickspout_offset_delta": 0.05
+                                        "lickspout_offset_delta": 0.05,
+                                        "reward_fraction": 0.8
                                     },
                                     "is_baiting": true,
                                     "reward_probability_parameters": {
@@ -187,12 +193,12 @@
                     "task_parameters": {
                         "rng_seed": null,
                         "aind_behavior_services_pkg_version": "0.13.7",
-                        "reward_size": {
-                            "right_value_volume": 2.0,
-                            "left_value_volume": 2.0
-                        },
                         "trial_generator": {
                             "type": "CoupledTrialGenerator",
+                            "reward_size": {
+                                "right": 2.0,
+                                "left": 2.0
+                            },
                             "quiescent_duration": {
                                 "family": "Scalar",
                                 "distribution_parameters": {
@@ -243,7 +249,8 @@
                                 "intervention_interval": 10,
                                 "maximum_water_corrections": 5,
                                 "bias_window_length": 200,
-                                "lickspout_offset_delta": 0.05
+                                "lickspout_offset_delta": 0.05,
+                                "reward_fraction": 0.8
                             },
                             "is_baiting": true,
                             "reward_probability_parameters": {
@@ -289,12 +296,12 @@
                     "task_parameters": {
                         "rng_seed": null,
                         "aind_behavior_services_pkg_version": "0.13.7",
-                        "reward_size": {
-                            "right_value_volume": 2.0,
-                            "left_value_volume": 2.0
-                        },
                         "trial_generator": {
                             "type": "CoupledTrialGenerator",
+                            "reward_size": {
+                                "right": 2.0,
+                                "left": 2.0
+                            },
                             "quiescent_duration": {
                                 "family": "Scalar",
                                 "distribution_parameters": {
@@ -345,7 +352,8 @@
                                 "intervention_interval": 10,
                                 "maximum_water_corrections": 5,
                                 "bias_window_length": 200,
-                                "lickspout_offset_delta": 0.05
+                                "lickspout_offset_delta": 0.05,
+                                "reward_fraction": 0.8
                             },
                             "is_baiting": true,
                             "reward_probability_parameters": {
@@ -391,12 +399,12 @@
                     "task_parameters": {
                         "rng_seed": null,
                         "aind_behavior_services_pkg_version": "0.13.7",
-                        "reward_size": {
-                            "right_value_volume": 2.0,
-                            "left_value_volume": 2.0
-                        },
                         "trial_generator": {
                             "type": "CoupledTrialGenerator",
+                            "reward_size": {
+                                "right": 2.0,
+                                "left": 2.0
+                            },
                             "quiescent_duration": {
                                 "family": "Scalar",
                                 "distribution_parameters": {
@@ -447,7 +455,8 @@
                                 "intervention_interval": 10,
                                 "maximum_water_corrections": 5,
                                 "bias_window_length": 200,
-                                "lickspout_offset_delta": 0.05
+                                "lickspout_offset_delta": 0.05,
+                                "reward_fraction": 0.8
                             },
                             "is_baiting": true,
                             "reward_probability_parameters": {
@@ -493,12 +502,12 @@
                     "task_parameters": {
                         "rng_seed": null,
                         "aind_behavior_services_pkg_version": "0.13.7",
-                        "reward_size": {
-                            "right_value_volume": 2.0,
-                            "left_value_volume": 2.0
-                        },
                         "trial_generator": {
                             "type": "CoupledTrialGenerator",
+                            "reward_size": {
+                                "right": 2.0,
+                                "left": 2.0
+                            },
                             "quiescent_duration": {
                                 "family": "Scalar",
                                 "distribution_parameters": {
@@ -545,7 +554,8 @@
                                 "intervention_interval": 10,
                                 "maximum_water_corrections": 5,
                                 "bias_window_length": 200,
-                                "lickspout_offset_delta": 0.05
+                                "lickspout_offset_delta": 0.05,
+                                "reward_fraction": 0.8
                             },
                             "is_baiting": true,
                             "reward_probability_parameters": {
@@ -599,12 +609,12 @@
                     "task_parameters": {
                         "rng_seed": null,
                         "aind_behavior_services_pkg_version": "0.13.7",
-                        "reward_size": {
-                            "right_value_volume": 2.0,
-                            "left_value_volume": 2.0
-                        },
                         "trial_generator": {
                             "type": "CoupledTrialGenerator",
+                            "reward_size": {
+                                "right": 2.0,
+                                "left": 2.0
+                            },
                             "quiescent_duration": {
                                 "family": "Scalar",
                                 "distribution_parameters": {
@@ -651,7 +661,8 @@
                                 "intervention_interval": 10,
                                 "maximum_water_corrections": 5,
                                 "bias_window_length": 200,
-                                "lickspout_offset_delta": 0.05
+                                "lickspout_offset_delta": 0.05,
+                                "reward_fraction": 0.8
                             },
                             "is_baiting": true,
                             "reward_probability_parameters": {
