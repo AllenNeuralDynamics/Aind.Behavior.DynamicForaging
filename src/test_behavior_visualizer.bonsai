@@ -3,23 +3,24 @@
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:wie="clr-namespace:Bonsai.Windows.Input;assembly=Bonsai.Windows.Input"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
-                 xmlns:p1="clr-namespace:Bonsai.Numerics.Distributions;assembly=Bonsai.Numerics"
-                 xmlns:p2="clr-namespace:AllenNeuralDynamics.Core;assembly=AllenNeuralDynamics.Core"
-                 xmlns:p3="clr-namespace:AindDynamicForagingDataSchema;assembly=Extensions"
-                 xmlns:p4="clr-namespace:AllenNeuralDynamics.AindBehaviorServices.DataTypes;assembly=AllenNeuralDynamics.AindBehaviorServices"
+                 xmlns:p1="clr-namespace:AllenNeuralDynamics.AindManipulator;assembly=AllenNeuralDynamics.AindManipulator"
+                 xmlns:p2="clr-namespace:Bonsai.Numerics.Distributions;assembly=Bonsai.Numerics"
+                 xmlns:p3="clr-namespace:AllenNeuralDynamics.Core;assembly=AllenNeuralDynamics.Core"
+                 xmlns:p4="clr-namespace:AindDynamicForagingDataSchema;assembly=Extensions"
+                 xmlns:p5="clr-namespace:AllenNeuralDynamics.AindBehaviorServices.DataTypes;assembly=AllenNeuralDynamics.AindBehaviorServices"
                  xmlns:harp="clr-namespace:Bonsai.Harp;assembly=Bonsai.Harp"
-                 xmlns:p5="clr-namespace:AllenNeuralDynamics.Core.Design;assembly=AllenNeuralDynamics.Core.Design"
+                 xmlns:p6="clr-namespace:AllenNeuralDynamics.Core.Design;assembly=AllenNeuralDynamics.Core.Design"
                  xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
                  xmlns:num="clr-namespace:Bonsai.Numerics;assembly=Bonsai.Numerics"
                  xmlns:dsp="clr-namespace:Bonsai.Dsp;assembly=Bonsai.Dsp"
-                 xmlns:p6="clr-namespace:;assembly=Extensions"
+                 xmlns:p7="clr-namespace:;assembly=Extensions"
                  xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
                  xmlns:imvizui="clr-namespace:Bonsai.ImGui.Visualizers;assembly=Bonsai.ImGui.Visualizers.Design"
                  xmlns:imgui="clr-namespace:Bonsai.ImGui;assembly=Bonsai.ImGui"
                  xmlns:implot="clr-namespace:Bonsai.ImPlot;assembly=Bonsai.ImPlot"
                  xmlns:imviz="clr-namespace:Bonsai.ImGui.Visualizers;assembly=Bonsai.ImGui.Visualizers"
                  xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                 xmlns:p7="clr-namespace:System.Reactive;assembly=System.Reactive.Core"
+                 xmlns:p8="clr-namespace:System.Reactive;assembly=System.Reactive.Core"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
@@ -41,6 +42,25 @@
               <Name>LickLeft</Name>
             </Expression>
             <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p1:ManipulatorPosition">
+                <p1:X>0</p1:X>
+                <p1:Y1>0</p1:Y1>
+                <p1:Y2>0</p1:Y2>
+                <p1:Z>0</p1:Z>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="rx:BehaviorSubject">
+              <Name>ManipulatorPosition</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="DoubleProperty">
+                <Value>0</Value>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="rx:BehaviorSubject">
+              <Name>OffsetGain</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Timer">
                 <rx:DueTime>PT1S</rx:DueTime>
               </Combinator>
@@ -49,16 +69,16 @@
               <Workflow>
                 <Nodes>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p1:CreateContinuousUniform">
-                      <p1:Lower>0</p1:Lower>
-                      <p1:Upper>3</p1:Upper>
+                    <Combinator xsi:type="p2:CreateContinuousUniform">
+                      <p2:Lower>0</p2:Lower>
+                      <p2:Upper>3</p2:Upper>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p1:Sample" />
+                    <Combinator xsi:type="p2:Sample" />
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p2:TimeSpanFromSeconds" />
+                    <Combinator xsi:type="p3:TimeSpanFromSeconds" />
                   </Expression>
                   <Expression xsi:type="PropertyMapping">
                     <PropertyMappings>
@@ -67,7 +87,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
-                      <rx:DueTime>PT0.028S</rx:DueTime>
+                      <rx:DueTime>PT1.609S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -76,8 +96,8 @@
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p2:CreateSoftwareEvent">
-                      <p2:EventName>ResponsePeriod</p2:EventName>
+                    <Combinator xsi:type="p3:CreateSoftwareEvent">
+                      <p3:EventName>ResponsePeriod</p3:EventName>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="MulticastSubject">
@@ -101,16 +121,16 @@
               <Workflow>
                 <Nodes>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p1:CreateContinuousUniform">
-                      <p1:Lower>0</p1:Lower>
-                      <p1:Upper>3</p1:Upper>
+                    <Combinator xsi:type="p2:CreateContinuousUniform">
+                      <p2:Lower>0</p2:Lower>
+                      <p2:Upper>3</p2:Upper>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p1:Sample" />
+                    <Combinator xsi:type="p2:Sample" />
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p2:TimeSpanFromSeconds" />
+                    <Combinator xsi:type="p3:TimeSpanFromSeconds" />
                   </Expression>
                   <Expression xsi:type="PropertyMapping">
                     <PropertyMappings>
@@ -119,7 +139,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
-                      <rx:DueTime>PT1.587S</rx:DueTime>
+                      <rx:DueTime>PT1.732S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -128,8 +148,8 @@
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p2:CreateSoftwareEvent">
-                      <p2:EventName>RewardPeriod</p2:EventName>
+                    <Combinator xsi:type="p3:CreateSoftwareEvent">
+                      <p3:EventName>RewardPeriod</p3:EventName>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="MulticastSubject">
@@ -155,14 +175,14 @@
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p3:TrialOutcome">
-                <p3:IsRightChoice xsi:nil="true" />
-                <p3:IsRewarded>false</p3:IsRewarded>
+              <Combinator xsi:type="p4:TrialOutcome">
+                <p4:IsRightChoice xsi:nil="true" />
+                <p4:IsRewarded>false</p4:IsRewarded>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p2:CreateSoftwareEvent">
-                <p2:EventName>TrialOutcome</p2:EventName>
+              <Combinator xsi:type="p3:CreateSoftwareEvent">
+                <p3:EventName>TrialOutcome</p3:EventName>
               </Combinator>
             </Expression>
             <Expression xsi:type="MulticastSubject">
@@ -172,16 +192,16 @@
               <Workflow>
                 <Nodes>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p1:CreateContinuousUniform">
-                      <p1:Lower>0</p1:Lower>
-                      <p1:Upper>3</p1:Upper>
+                    <Combinator xsi:type="p2:CreateContinuousUniform">
+                      <p2:Lower>0</p2:Lower>
+                      <p2:Upper>3</p2:Upper>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p1:Sample" />
+                    <Combinator xsi:type="p2:Sample" />
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p2:TimeSpanFromSeconds" />
+                    <Combinator xsi:type="p3:TimeSpanFromSeconds" />
                   </Expression>
                   <Expression xsi:type="PropertyMapping">
                     <PropertyMappings>
@@ -190,7 +210,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
-                      <rx:DueTime>PT1.989S</rx:DueTime>
+                      <rx:DueTime>PT2.251S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -199,8 +219,8 @@
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p2:CreateSoftwareEvent">
-                      <p2:EventName>ITI</p2:EventName>
+                    <Combinator xsi:type="p3:CreateSoftwareEvent">
+                      <p3:EventName>ITI</p3:EventName>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="MulticastSubject">
@@ -226,8 +246,8 @@
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p2:CreateSoftwareEvent">
-                <p2:EventName>Break</p2:EventName>
+              <Combinator xsi:type="p3:CreateSoftwareEvent">
+                <p3:EventName>Break</p3:EventName>
               </Combinator>
             </Expression>
             <Expression xsi:type="MulticastSubject">
@@ -236,7 +256,7 @@
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Repeat" />
             </Expression>
-            <Expression xsi:type="rx:BehaviorSubject" TypeArguments="p4:SoftwareEvent">
+            <Expression xsi:type="rx:BehaviorSubject" TypeArguments="p5:SoftwareEvent">
               <rx:Name>SoftwareEvent</rx:Name>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
@@ -249,13 +269,13 @@
               <Combinator xsi:type="harp:CreateTimestamped" />
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p2:TimestampSoftwareEvent" />
+              <Combinator xsi:type="p3:TimestampSoftwareEvent" />
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Timestamp" />
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p5:AccumulateToImmutableList" />
+              <Combinator xsi:type="p6:AccumulateToImmutableList" />
             </Expression>
             <Expression xsi:type="rx:BehaviorSubject">
               <Name>SoftwareEventHistory</Name>
@@ -284,15 +304,15 @@
               </PropertyMappings>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p3:Session">
-                <p3:AindBehaviorServicesPkgVersion>0.13.5</p3:AindBehaviorServicesPkgVersion>
-                <p3:Version>0.13.5</p3:Version>
-                <p3:Experiment>Task6</p3:Experiment>
-                <p3:Date>0001-01-01T00:00:00.0000000+00:00</p3:Date>
-                <p3:SessionName>Stage1</p3:SessionName>
-                <p3:Subject>Plimbo</p3:Subject>
-                <p3:AllowDirtyRepo>false</p3:AllowDirtyRepo>
-                <p3:SkipHardwareValidation>false</p3:SkipHardwareValidation>
+              <Combinator xsi:type="p4:Session">
+                <p4:AindBehaviorServicesPkgVersion>0.13.5</p4:AindBehaviorServicesPkgVersion>
+                <p4:Version>0.13.5</p4:Version>
+                <p4:Experiment>Task6</p4:Experiment>
+                <p4:Date>0001-01-01T00:00:00.0000000+00:00</p4:Date>
+                <p4:SessionName>Stage1</p4:SessionName>
+                <p4:Subject>Plimbo</p4:Subject>
+                <p4:AllowDirtyRepo>false</p4:AllowDirtyRepo>
+                <p4:SkipHardwareValidation>false</p4:SkipHardwareValidation>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -323,15 +343,15 @@
               </PropertyMappings>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p3:Session">
-                <p3:AindBehaviorServicesPkgVersion>0.13.5</p3:AindBehaviorServicesPkgVersion>
-                <p3:Version>0.13.5</p3:Version>
-                <p3:Experiment>Task7</p3:Experiment>
-                <p3:Date>0001-01-01T00:00:00.0000000+00:00</p3:Date>
-                <p3:SessionName>Stage2</p3:SessionName>
-                <p3:Subject>Plimbo</p3:Subject>
-                <p3:AllowDirtyRepo>false</p3:AllowDirtyRepo>
-                <p3:SkipHardwareValidation>false</p3:SkipHardwareValidation>
+              <Combinator xsi:type="p4:Session">
+                <p4:AindBehaviorServicesPkgVersion>0.13.5</p4:AindBehaviorServicesPkgVersion>
+                <p4:Version>0.13.5</p4:Version>
+                <p4:Experiment>Task7</p4:Experiment>
+                <p4:Date>0001-01-01T00:00:00.0000000+00:00</p4:Date>
+                <p4:SessionName>Stage2</p4:SessionName>
+                <p4:Subject>Plimbo</p4:Subject>
+                <p4:AllowDirtyRepo>false</p4:AllowDirtyRepo>
+                <p4:SkipHardwareValidation>false</p4:SkipHardwareValidation>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -448,7 +468,7 @@
               <Selector>Item2</Selector>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:Sample" />
+              <Combinator xsi:type="p2:Sample" />
             </Expression>
             <Expression xsi:type="rx:Accumulate" />
             <Expression xsi:type="scr:ExpressionTransform">
@@ -491,9 +511,9 @@
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:CreateContinuousUniform">
-                <p1:Lower>0.1</p1:Lower>
-                <p1:Upper>1</p1:Upper>
+              <Combinator xsi:type="p2:CreateContinuousUniform">
+                <p2:Lower>0.1</p2:Lower>
+                <p2:Upper>1</p2:Upper>
               </Combinator>
             </Expression>
             <Expression xsi:type="rx:BehaviorSubject">
@@ -505,9 +525,9 @@
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:CreateContinuousUniform">
-                <p1:Lower>-0.1</p1:Lower>
-                <p1:Upper>0.1</p1:Upper>
+              <Combinator xsi:type="p2:CreateContinuousUniform">
+                <p2:Lower>-0.1</p2:Lower>
+                <p2:Upper>0.1</p2:Upper>
               </Combinator>
             </Expression>
             <Expression xsi:type="rx:BehaviorSubject">
@@ -529,14 +549,14 @@
               <Name>TimeBase</Name>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:CreateContinuousUniform">
-                <p1:Lower>0</p1:Lower>
-                <p1:Upper>1</p1:Upper>
+              <Combinator xsi:type="p2:CreateContinuousUniform">
+                <p2:Lower>0</p2:Lower>
+                <p2:Upper>1</p2:Upper>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:SampleMany">
-                <p1:Count>500</p1:Count>
+              <Combinator xsi:type="p2:SampleMany">
+                <p2:Count>500</p2:Count>
               </Combinator>
             </Expression>
             <Expression xsi:type="GreaterThan">
@@ -571,14 +591,14 @@
               <scr:Expression>(it +1) * 0.5</scr:Expression>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:CreateContinuousUniform">
-                <p1:Lower>0</p1:Lower>
-                <p1:Upper>1</p1:Upper>
+              <Combinator xsi:type="p2:CreateContinuousUniform">
+                <p2:Lower>0</p2:Lower>
+                <p2:Upper>1</p2:Upper>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:SampleMany">
-                <p1:Count>500</p1:Count>
+              <Combinator xsi:type="p2:SampleMany">
+                <p2:Count>500</p2:Count>
               </Combinator>
             </Expression>
             <Expression xsi:type="GreaterThan">
@@ -595,19 +615,19 @@
               </PropertyMappings>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p6:CreateNullableBoolean">
-                <p6:Value>false</p6:Value>
+              <Combinator xsi:type="p7:CreateNullableBoolean">
+                <p7:Value>true</p7:Value>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:CreateContinuousUniform">
-                <p1:Lower>0</p1:Lower>
-                <p1:Upper>1</p1:Upper>
+              <Combinator xsi:type="p2:CreateContinuousUniform">
+                <p2:Lower>0</p2:Lower>
+                <p2:Upper>1</p2:Upper>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:SampleMany">
-                <p1:Count>500</p1:Count>
+              <Combinator xsi:type="p2:SampleMany">
+                <p2:Count>500</p2:Count>
               </Combinator>
             </Expression>
             <Expression xsi:type="GreaterThan">
@@ -616,8 +636,8 @@
               </Operand>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p6:CreateNullableBoolean">
-                <p6:Value xsi:nil="true" />
+              <Combinator xsi:type="p7:CreateNullableBoolean">
+                <p7:Value xsi:nil="true" />
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -648,14 +668,14 @@
               <scr:Expression>(it +1) * 0.5</scr:Expression>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:CreateContinuousUniform">
-                <p1:Lower>0</p1:Lower>
-                <p1:Upper>1</p1:Upper>
+              <Combinator xsi:type="p2:CreateContinuousUniform">
+                <p2:Lower>0</p2:Lower>
+                <p2:Upper>1</p2:Upper>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:SampleMany">
-                <p1:Count>500</p1:Count>
+              <Combinator xsi:type="p2:SampleMany">
+                <p2:Count>500</p2:Count>
               </Combinator>
             </Expression>
             <Expression xsi:type="GreaterThan">
@@ -679,14 +699,14 @@
               </PropertyMappings>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:CreateContinuousUniform">
-                <p1:Lower>0</p1:Lower>
-                <p1:Upper>1</p1:Upper>
+              <Combinator xsi:type="p2:CreateContinuousUniform">
+                <p2:Lower>0</p2:Lower>
+                <p2:Upper>1</p2:Upper>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:SampleMany">
-                <p1:Count>500</p1:Count>
+              <Combinator xsi:type="p2:SampleMany">
+                <p2:Count>500</p2:Count>
               </Combinator>
             </Expression>
             <Expression xsi:type="GreaterThan">
@@ -700,24 +720,24 @@
               </PropertyMappings>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p6:CreateNullableBoolean">
-                <p6:Value>true</p6:Value>
+              <Combinator xsi:type="p7:CreateNullableBoolean">
+                <p7:Value>false</p7:Value>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p6:CreateNullableBoolean">
-                <p6:Value xsi:nil="true" />
+              <Combinator xsi:type="p7:CreateNullableBoolean">
+                <p7:Value xsi:nil="true" />
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:CreateContinuousUniform">
-                <p1:Lower>0</p1:Lower>
-                <p1:Upper>1</p1:Upper>
+              <Combinator xsi:type="p2:CreateContinuousUniform">
+                <p2:Lower>0</p2:Lower>
+                <p2:Upper>1</p2:Upper>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:SampleMany">
-                <p1:Count>500</p1:Count>
+              <Combinator xsi:type="p2:SampleMany">
+                <p2:Count>500</p2:Count>
               </Combinator>
             </Expression>
             <Expression xsi:type="GreaterThan">
@@ -743,16 +763,16 @@
               </PropertyMappings>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p3:Trial">
-                <p3:PRewardLeft>0.59164587077011477</p3:PRewardLeft>
-                <p3:PRewardRight>0.40913708100521279</p3:PRewardRight>
-                <p3:RewardConsumptionDuration>5</p3:RewardConsumptionDuration>
-                <p3:RewardDelayDuration>0</p3:RewardDelayDuration>
-                <p3:ResponseDeadlineDuration>5</p3:ResponseDeadlineDuration>
-                <p3:QuiescencePeriodDuration>0.5</p3:QuiescencePeriodDuration>
-                <p3:InterTrialIntervalDuration>5</p3:InterTrialIntervalDuration>
-                <p3:IsAutoResponseRight xsi:nil="true" />
-                <p3:LickspoutOffsetDelta>0</p3:LickspoutOffsetDelta>
+              <Combinator xsi:type="p4:Trial">
+                <p4:PRewardLeft>0.59164587077011477</p4:PRewardLeft>
+                <p4:PRewardRight>0.40913708100521279</p4:PRewardRight>
+                <p4:RewardConsumptionDuration>5</p4:RewardConsumptionDuration>
+                <p4:RewardDelayDuration>0</p4:RewardDelayDuration>
+                <p4:ResponseDeadlineDuration>5</p4:ResponseDeadlineDuration>
+                <p4:QuiescencePeriodDuration>0.5</p4:QuiescencePeriodDuration>
+                <p4:InterTrialIntervalDuration>5</p4:InterTrialIntervalDuration>
+                <p4:IsAutoResponseRight xsi:nil="true" />
+                <p4:LickspoutOffsetDelta>0</p4:LickspoutOffsetDelta>
               </Combinator>
             </Expression>
             <Expression xsi:type="PropertyMapping">
@@ -761,9 +781,9 @@
               </PropertyMappings>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p3:TrialOutcome">
-                <p3:IsRightChoice>false</p3:IsRightChoice>
-                <p3:IsRewarded>false</p3:IsRewarded>
+              <Combinator xsi:type="p4:TrialOutcome">
+                <p4:IsRightChoice>true</p4:IsRightChoice>
+                <p4:IsRewarded>false</p4:IsRewarded>
               </Combinator>
             </Expression>
             <Expression xsi:type="rx:CreateObservable">
@@ -777,7 +797,7 @@
                     <Name>Random</Name>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p1:Sample" />
+                    <Combinator xsi:type="p2:Sample" />
                   </Expression>
                   <Expression xsi:type="scr:ExpressionTransform">
                     <scr:Expression>TimeSpan.FromSeconds(it)</scr:Expression>
@@ -789,7 +809,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Delay">
-                      <rx:DueTime>PT0.658S</rx:DueTime>
+                      <rx:DueTime>PT0.555S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -831,9 +851,7 @@
             <Edge From="1" To="2" Label="Source1" />
             <Edge From="2" To="3" Label="Source1" />
             <Edge From="4" To="5" Label="Source1" />
-            <Edge From="5" To="6" Label="Source1" />
             <Edge From="6" To="7" Label="Source1" />
-            <Edge From="7" To="8" Label="Source1" />
             <Edge From="8" To="9" Label="Source1" />
             <Edge From="9" To="10" Label="Source1" />
             <Edge From="10" To="11" Label="Source1" />
@@ -841,121 +859,125 @@
             <Edge From="12" To="13" Label="Source1" />
             <Edge From="13" To="14" Label="Source1" />
             <Edge From="14" To="15" Label="Source1" />
-            <Edge From="16" To="18" Label="Source1" />
-            <Edge From="17" To="18" Label="Source2" />
+            <Edge From="15" To="16" Label="Source1" />
+            <Edge From="16" To="17" Label="Source1" />
+            <Edge From="17" To="18" Label="Source1" />
             <Edge From="18" To="19" Label="Source1" />
-            <Edge From="19" To="20" Label="Source1" />
-            <Edge From="20" To="21" Label="Source1" />
-            <Edge From="21" To="22" Label="Source1" />
+            <Edge From="20" To="22" Label="Source1" />
+            <Edge From="21" To="22" Label="Source2" />
             <Edge From="22" To="23" Label="Source1" />
+            <Edge From="23" To="24" Label="Source1" />
             <Edge From="24" To="25" Label="Source1" />
             <Edge From="25" To="26" Label="Source1" />
             <Edge From="26" To="27" Label="Source1" />
-            <Edge From="27" To="28" Label="Source1" />
             <Edge From="28" To="29" Label="Source1" />
             <Edge From="29" To="30" Label="Source1" />
-            <Edge From="30" To="38" Label="Source1" />
+            <Edge From="30" To="31" Label="Source1" />
             <Edge From="31" To="32" Label="Source1" />
             <Edge From="32" To="33" Label="Source1" />
             <Edge From="33" To="34" Label="Source1" />
-            <Edge From="34" To="35" Label="Source1" />
+            <Edge From="34" To="42" Label="Source1" />
             <Edge From="35" To="36" Label="Source1" />
             <Edge From="36" To="37" Label="Source1" />
-            <Edge From="37" To="38" Label="Source2" />
+            <Edge From="37" To="38" Label="Source1" />
             <Edge From="38" To="39" Label="Source1" />
-            <Edge From="40" To="45" Label="Source1" />
-            <Edge From="41" To="42" Label="Source1" />
+            <Edge From="39" To="40" Label="Source1" />
+            <Edge From="40" To="41" Label="Source1" />
+            <Edge From="41" To="42" Label="Source2" />
             <Edge From="42" To="43" Label="Source1" />
-            <Edge From="43" To="44" Label="Source1" />
-            <Edge From="44" To="45" Label="Source2" />
-            <Edge From="45" To="52" Label="Source1" />
-            <Edge From="46" To="51" Label="Source1" />
+            <Edge From="44" To="49" Label="Source1" />
+            <Edge From="45" To="46" Label="Source1" />
+            <Edge From="46" To="47" Label="Source1" />
             <Edge From="47" To="48" Label="Source1" />
-            <Edge From="48" To="49" Label="Source1" />
-            <Edge From="49" To="50" Label="Source1" />
-            <Edge From="50" To="51" Label="Source2" />
-            <Edge From="51" To="52" Label="Source2" />
+            <Edge From="48" To="49" Label="Source2" />
+            <Edge From="49" To="56" Label="Source1" />
+            <Edge From="50" To="55" Label="Source1" />
+            <Edge From="51" To="52" Label="Source1" />
             <Edge From="52" To="53" Label="Source1" />
             <Edge From="53" To="54" Label="Source1" />
-            <Edge From="55" To="57" Label="Source1" />
-            <Edge From="55" To="64" Label="Source1" />
-            <Edge From="56" To="57" Label="Source2" />
+            <Edge From="54" To="55" Label="Source2" />
+            <Edge From="55" To="56" Label="Source2" />
+            <Edge From="56" To="57" Label="Source1" />
             <Edge From="57" To="58" Label="Source1" />
-            <Edge From="58" To="59" Label="Source1" />
-            <Edge From="59" To="60" Label="Source1" />
-            <Edge From="60" To="61" Label="Source1" />
+            <Edge From="59" To="61" Label="Source1" />
+            <Edge From="59" To="68" Label="Source1" />
+            <Edge From="60" To="61" Label="Source2" />
             <Edge From="61" To="62" Label="Source1" />
             <Edge From="62" To="63" Label="Source1" />
-            <Edge From="63" To="65" Label="Source1" />
-            <Edge From="64" To="65" Label="Source2" />
+            <Edge From="63" To="64" Label="Source1" />
+            <Edge From="64" To="65" Label="Source1" />
             <Edge From="65" To="66" Label="Source1" />
             <Edge From="66" To="67" Label="Source1" />
-            <Edge From="68" To="69" Label="Source1" />
+            <Edge From="67" To="69" Label="Source1" />
+            <Edge From="68" To="69" Label="Source2" />
             <Edge From="69" To="70" Label="Source1" />
             <Edge From="70" To="71" Label="Source1" />
             <Edge From="72" To="73" Label="Source1" />
             <Edge From="73" To="74" Label="Source1" />
-            <Edge From="75" To="76" Label="Source1" />
+            <Edge From="74" To="75" Label="Source1" />
             <Edge From="76" To="77" Label="Source1" />
-            <Edge From="78" To="79" Label="Source1" />
+            <Edge From="77" To="78" Label="Source1" />
             <Edge From="79" To="80" Label="Source1" />
             <Edge From="80" To="81" Label="Source1" />
             <Edge From="82" To="83" Label="Source1" />
             <Edge From="83" To="84" Label="Source1" />
-            <Edge From="84" To="109" Label="Source1" />
-            <Edge From="85" To="86" Label="Source1" />
+            <Edge From="84" To="85" Label="Source1" />
             <Edge From="86" To="87" Label="Source1" />
             <Edge From="87" To="88" Label="Source1" />
-            <Edge From="88" To="89" Label="Source1" />
-            <Edge From="89" To="109" Label="Source2" />
+            <Edge From="88" To="113" Label="Source1" />
+            <Edge From="89" To="90" Label="Source1" />
             <Edge From="90" To="91" Label="Source1" />
             <Edge From="91" To="92" Label="Source1" />
             <Edge From="92" To="93" Label="Source1" />
-            <Edge From="93" To="94" Label="Source1" />
+            <Edge From="93" To="113" Label="Source2" />
             <Edge From="94" To="95" Label="Source1" />
-            <Edge From="95" To="100" Label="Source1" />
+            <Edge From="95" To="96" Label="Source1" />
             <Edge From="96" To="97" Label="Source1" />
             <Edge From="97" To="98" Label="Source1" />
             <Edge From="98" To="99" Label="Source1" />
-            <Edge From="98" To="100" Label="Source3" />
-            <Edge From="99" To="100" Label="Source2" />
+            <Edge From="99" To="104" Label="Source1" />
             <Edge From="100" To="101" Label="Source1" />
-            <Edge From="101" To="109" Label="Source3" />
+            <Edge From="101" To="102" Label="Source1" />
             <Edge From="102" To="103" Label="Source1" />
-            <Edge From="103" To="104" Label="Source1" />
+            <Edge From="102" To="104" Label="Source3" />
+            <Edge From="103" To="104" Label="Source2" />
             <Edge From="104" To="105" Label="Source1" />
-            <Edge From="105" To="109" Label="Source4" />
+            <Edge From="105" To="113" Label="Source3" />
             <Edge From="106" To="107" Label="Source1" />
             <Edge From="107" To="108" Label="Source1" />
-            <Edge From="108" To="109" Label="Source5" />
-            <Edge From="109" To="110" Label="Source1" />
-            <Edge From="109" To="111" Label="Source1" />
-            <Edge From="109" To="123" Label="Source1" />
-            <Edge From="110" To="128" Label="Source1" />
-            <Edge From="111" To="126" Label="Source1" />
-            <Edge From="112" To="113" Label="Source1" />
+            <Edge From="108" To="109" Label="Source1" />
+            <Edge From="109" To="113" Label="Source4" />
+            <Edge From="110" To="111" Label="Source1" />
+            <Edge From="111" To="112" Label="Source1" />
+            <Edge From="112" To="113" Label="Source5" />
             <Edge From="113" To="114" Label="Source1" />
-            <Edge From="114" To="115" Label="Source1" />
-            <Edge From="115" To="116" Label="Source1" />
+            <Edge From="113" To="115" Label="Source1" />
+            <Edge From="113" To="127" Label="Source1" />
+            <Edge From="114" To="132" Label="Source1" />
+            <Edge From="115" To="130" Label="Source1" />
             <Edge From="116" To="117" Label="Source1" />
-            <Edge From="116" To="121" Label="Source2" />
-            <Edge From="117" To="121" Label="Source1" />
+            <Edge From="117" To="118" Label="Source1" />
             <Edge From="118" To="119" Label="Source1" />
             <Edge From="119" To="120" Label="Source1" />
-            <Edge From="120" To="121" Label="Source3" />
-            <Edge From="121" To="122" Label="Source1" />
-            <Edge From="122" To="123" Label="Source2" />
+            <Edge From="120" To="121" Label="Source1" />
+            <Edge From="120" To="125" Label="Source2" />
+            <Edge From="121" To="125" Label="Source1" />
+            <Edge From="122" To="123" Label="Source1" />
             <Edge From="123" To="124" Label="Source1" />
-            <Edge From="124" To="125" Label="Source1" />
-            <Edge From="125" To="126" Label="Source2" />
-            <Edge From="126" To="127" Label="Source1" />
-            <Edge From="127" To="128" Label="Source2" />
+            <Edge From="124" To="125" Label="Source3" />
+            <Edge From="125" To="126" Label="Source1" />
+            <Edge From="126" To="127" Label="Source2" />
+            <Edge From="127" To="128" Label="Source1" />
             <Edge From="128" To="129" Label="Source1" />
-            <Edge From="129" To="130" Label="Source1" />
-            <Edge From="130" To="132" Label="Source1" />
+            <Edge From="129" To="130" Label="Source2" />
+            <Edge From="130" To="131" Label="Source1" />
             <Edge From="131" To="132" Label="Source2" />
             <Edge From="132" To="133" Label="Source1" />
             <Edge From="133" To="134" Label="Source1" />
+            <Edge From="134" To="136" Label="Source1" />
+            <Edge From="135" To="136" Label="Source2" />
+            <Edge From="136" To="137" Label="Source1" />
+            <Edge From="137" To="138" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
@@ -1310,19 +1332,19 @@
                     <Name>EventPlot</Name>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p6:PlotStyling">
-                      <p6:TickPositions>
-                        <p6:double>0</p6:double>
-                        <p6:double>1</p6:double>
-                      </p6:TickPositions>
-                      <p6:TickLabels>
-                        <p6:string>R</p6:string>
-                        <p6:string>L</p6:string>
-                      </p6:TickLabels>
-                      <p6:ImPlotLocationFlags>West</p6:ImPlotLocationFlags>
-                      <p6:ImPlotLegendFlags>None</p6:ImPlotLegendFlags>
-                      <p6:YAxisMax xsi:nil="true" />
-                      <p6:YAxisMin xsi:nil="true" />
+                    <Combinator xsi:type="p7:PlotStyling">
+                      <p7:TickPositions>
+                        <p7:double>0</p7:double>
+                        <p7:double>1</p7:double>
+                      </p7:TickPositions>
+                      <p7:TickLabels>
+                        <p7:string>R</p7:string>
+                        <p7:string>L</p7:string>
+                      </p7:TickLabels>
+                      <p7:ImPlotLocationFlags>West</p7:ImPlotLocationFlags>
+                      <p7:ImPlotLegendFlags>None</p7:ImPlotLegendFlags>
+                      <p7:YAxisMax xsi:nil="true" />
+                      <p7:YAxisMin xsi:nil="true" />
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Unit" />
@@ -1330,16 +1352,16 @@
                     <Name>ContinuousPlot</Name>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p6:PlotStyling">
-                      <p6:TickPositions>
-                        <p6:double>0</p6:double>
-                        <p6:double>1</p6:double>
-                      </p6:TickPositions>
-                      <p6:TickLabels />
-                      <p6:ImPlotLocationFlags>West</p6:ImPlotLocationFlags>
-                      <p6:ImPlotLegendFlags>None</p6:ImPlotLegendFlags>
-                      <p6:YAxisMax xsi:nil="true" />
-                      <p6:YAxisMin xsi:nil="true" />
+                    <Combinator xsi:type="p7:PlotStyling">
+                      <p7:TickPositions>
+                        <p7:double>0</p7:double>
+                        <p7:double>1</p7:double>
+                      </p7:TickPositions>
+                      <p7:TickLabels />
+                      <p7:ImPlotLocationFlags>West</p7:ImPlotLocationFlags>
+                      <p7:ImPlotLegendFlags>None</p7:ImPlotLegendFlags>
+                      <p7:YAxisMax xsi:nil="true" />
+                      <p7:YAxisMin xsi:nil="true" />
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="ExternalizedMapping">
@@ -1374,18 +1396,18 @@
                     <Name>EventPlot</Name>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p6:ScatterStyling">
-                      <p6:ImPlotMarker>Square</p6:ImPlotMarker>
-                      <p6:Size>3</p6:Size>
-                      <p6:FillColorR>0</p6:FillColorR>
-                      <p6:FillColorG>0</p6:FillColorG>
-                      <p6:FillColorB>0</p6:FillColorB>
-                      <p6:FillColorA>1</p6:FillColorA>
-                      <p6:OutlineColorR>0</p6:OutlineColorR>
-                      <p6:OutlineColorG>0</p6:OutlineColorG>
-                      <p6:OutlineColorB>0</p6:OutlineColorB>
-                      <p6:OutlineColorA>1</p6:OutlineColorA>
-                      <p6:OutlineWeight>1</p6:OutlineWeight>
+                    <Combinator xsi:type="p7:ScatterStyling">
+                      <p7:ImPlotMarker>Square</p7:ImPlotMarker>
+                      <p7:Size>3</p7:Size>
+                      <p7:FillColorR>0</p7:FillColorR>
+                      <p7:FillColorG>0</p7:FillColorG>
+                      <p7:FillColorB>0</p7:FillColorB>
+                      <p7:FillColorA>1</p7:FillColorA>
+                      <p7:OutlineColorR>0</p7:OutlineColorR>
+                      <p7:OutlineColorG>0</p7:OutlineColorG>
+                      <p7:OutlineColorB>0</p7:OutlineColorB>
+                      <p7:OutlineColorA>1</p7:OutlineColorA>
+                      <p7:OutlineWeight>1</p7:OutlineWeight>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="imviz:PlotScatterSeriesBuilder">
@@ -1424,18 +1446,18 @@
                     <Name>EventPlot</Name>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p6:ScatterStyling">
-                      <p6:ImPlotMarker>Square</p6:ImPlotMarker>
-                      <p6:Size>3</p6:Size>
-                      <p6:FillColorR>0</p6:FillColorR>
-                      <p6:FillColorG>0</p6:FillColorG>
-                      <p6:FillColorB>0</p6:FillColorB>
-                      <p6:FillColorA>1</p6:FillColorA>
-                      <p6:OutlineColorR>0</p6:OutlineColorR>
-                      <p6:OutlineColorG>0</p6:OutlineColorG>
-                      <p6:OutlineColorB>0</p6:OutlineColorB>
-                      <p6:OutlineColorA>1</p6:OutlineColorA>
-                      <p6:OutlineWeight>1</p6:OutlineWeight>
+                    <Combinator xsi:type="p7:ScatterStyling">
+                      <p7:ImPlotMarker>Square</p7:ImPlotMarker>
+                      <p7:Size>3</p7:Size>
+                      <p7:FillColorR>0</p7:FillColorR>
+                      <p7:FillColorG>0</p7:FillColorG>
+                      <p7:FillColorB>0</p7:FillColorB>
+                      <p7:FillColorA>1</p7:FillColorA>
+                      <p7:OutlineColorR>0</p7:OutlineColorR>
+                      <p7:OutlineColorG>0</p7:OutlineColorG>
+                      <p7:OutlineColorB>0</p7:OutlineColorB>
+                      <p7:OutlineColorA>1</p7:OutlineColorA>
+                      <p7:OutlineWeight>1</p7:OutlineWeight>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="imviz:PlotScatterSeriesBuilder">
@@ -1449,7 +1471,7 @@
                     <Name>TimedTrial</Name>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p6:CategorizeTrial" />
+                    <Combinator xsi:type="p7:CategorizeTrial" />
                   </Expression>
                   <Expression xsi:type="MemberSelector">
                     <Selector>Value.ChoiceCategory</Selector>
@@ -1462,7 +1484,7 @@
                           <Name>Source1</Name>
                         </Expression>
                         <Expression xsi:type="Equal">
-                          <Operand xsi:type="WorkflowProperty" TypeArguments="p6:Choice">
+                          <Operand xsi:type="WorkflowProperty" TypeArguments="p7:Choice">
                             <Value>NoChoice</Value>
                           </Operand>
                         </Expression>
@@ -1487,7 +1509,7 @@
                           <Name>Source1</Name>
                         </Expression>
                         <Expression xsi:type="Equal">
-                          <Operand xsi:type="WorkflowProperty" TypeArguments="p6:Choice">
+                          <Operand xsi:type="WorkflowProperty" TypeArguments="p7:Choice">
                             <Value>LeftChoice</Value>
                           </Operand>
                         </Expression>
@@ -1512,7 +1534,7 @@
                           <Name>Source1</Name>
                         </Expression>
                         <Expression xsi:type="Equal">
-                          <Operand xsi:type="WorkflowProperty" TypeArguments="p6:Choice">
+                          <Operand xsi:type="WorkflowProperty" TypeArguments="p7:Choice">
                             <Value>RightChoice</Value>
                           </Operand>
                         </Expression>
@@ -1555,18 +1577,18 @@
                     <Name>EventPlot</Name>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p6:ScatterStyling">
-                      <p6:ImPlotMarker>Circle</p6:ImPlotMarker>
-                      <p6:Size>3</p6:Size>
-                      <p6:FillColorR>0</p6:FillColorR>
-                      <p6:FillColorG>0</p6:FillColorG>
-                      <p6:FillColorB>0</p6:FillColorB>
-                      <p6:FillColorA>0</p6:FillColorA>
-                      <p6:OutlineColorR>0</p6:OutlineColorR>
-                      <p6:OutlineColorG>1</p6:OutlineColorG>
-                      <p6:OutlineColorB>0</p6:OutlineColorB>
-                      <p6:OutlineColorA>1</p6:OutlineColorA>
-                      <p6:OutlineWeight>1</p6:OutlineWeight>
+                    <Combinator xsi:type="p7:ScatterStyling">
+                      <p7:ImPlotMarker>Circle</p7:ImPlotMarker>
+                      <p7:Size>3</p7:Size>
+                      <p7:FillColorR>0</p7:FillColorR>
+                      <p7:FillColorG>0</p7:FillColorG>
+                      <p7:FillColorB>0</p7:FillColorB>
+                      <p7:FillColorA>0</p7:FillColorA>
+                      <p7:OutlineColorR>0</p7:OutlineColorR>
+                      <p7:OutlineColorG>1</p7:OutlineColorG>
+                      <p7:OutlineColorB>0</p7:OutlineColorB>
+                      <p7:OutlineColorA>1</p7:OutlineColorA>
+                      <p7:OutlineWeight>1</p7:OutlineWeight>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="imviz:PlotScatterSeriesBuilder">
@@ -1584,7 +1606,7 @@
                           <Name>Source1</Name>
                         </Expression>
                         <Expression xsi:type="Equal">
-                          <Operand xsi:type="WorkflowProperty" TypeArguments="p6:Category">
+                          <Operand xsi:type="WorkflowProperty" TypeArguments="p7:Category">
                             <Value>LeftRewarded</Value>
                           </Operand>
                         </Expression>
@@ -1609,7 +1631,7 @@
                           <Name>Source1</Name>
                         </Expression>
                         <Expression xsi:type="Equal">
-                          <Operand xsi:type="WorkflowProperty" TypeArguments="p6:Category">
+                          <Operand xsi:type="WorkflowProperty" TypeArguments="p7:Category">
                             <Value>RightRewarded</Value>
                           </Operand>
                         </Expression>
@@ -1649,18 +1671,18 @@
                     <Name>EventPlot</Name>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p6:ScatterStyling">
-                      <p6:ImPlotMarker>Circle</p6:ImPlotMarker>
-                      <p6:Size>3</p6:Size>
-                      <p6:FillColorR>0</p6:FillColorR>
-                      <p6:FillColorG>1</p6:FillColorG>
-                      <p6:FillColorB>0</p6:FillColorB>
-                      <p6:FillColorA>1</p6:FillColorA>
-                      <p6:OutlineColorR>0</p6:OutlineColorR>
-                      <p6:OutlineColorG>1</p6:OutlineColorG>
-                      <p6:OutlineColorB>0</p6:OutlineColorB>
-                      <p6:OutlineColorA>1</p6:OutlineColorA>
-                      <p6:OutlineWeight>1</p6:OutlineWeight>
+                    <Combinator xsi:type="p7:ScatterStyling">
+                      <p7:ImPlotMarker>Circle</p7:ImPlotMarker>
+                      <p7:Size>3</p7:Size>
+                      <p7:FillColorR>0</p7:FillColorR>
+                      <p7:FillColorG>1</p7:FillColorG>
+                      <p7:FillColorB>0</p7:FillColorB>
+                      <p7:FillColorA>1</p7:FillColorA>
+                      <p7:OutlineColorR>0</p7:OutlineColorR>
+                      <p7:OutlineColorG>1</p7:OutlineColorG>
+                      <p7:OutlineColorB>0</p7:OutlineColorB>
+                      <p7:OutlineColorA>1</p7:OutlineColorA>
+                      <p7:OutlineWeight>1</p7:OutlineWeight>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="imviz:PlotScatterSeriesBuilder">
@@ -1682,12 +1704,12 @@
                   </Expression>
                   <Expression xsi:type="Disable">
                     <Builder xsi:type="Combinator">
-                      <Combinator xsi:type="p6:LineStyling">
-                        <p6:ColorR>1</p6:ColorR>
-                        <p6:ColorG>0</p6:ColorG>
-                        <p6:ColorB>0</p6:ColorB>
-                        <p6:ColorA>1</p6:ColorA>
-                        <p6:LineThickness>2</p6:LineThickness>
+                      <Combinator xsi:type="p7:LineStyling">
+                        <p7:ColorR>1</p7:ColorR>
+                        <p7:ColorG>0</p7:ColorG>
+                        <p7:ColorB>0</p7:ColorB>
+                        <p7:ColorA>1</p7:ColorA>
+                        <p7:LineThickness>2</p7:LineThickness>
                       </Combinator>
                     </Builder>
                   </Expression>
@@ -1709,12 +1731,12 @@
                   </Expression>
                   <Expression xsi:type="Disable">
                     <Builder xsi:type="Combinator">
-                      <Combinator xsi:type="p6:LineStyling">
-                        <p6:ColorR>0</p6:ColorR>
-                        <p6:ColorG>0</p6:ColorG>
-                        <p6:ColorB>1</p6:ColorB>
-                        <p6:ColorA>1</p6:ColorA>
-                        <p6:LineThickness>2</p6:LineThickness>
+                      <Combinator xsi:type="p7:LineStyling">
+                        <p7:ColorR>0</p7:ColorR>
+                        <p7:ColorG>0</p7:ColorG>
+                        <p7:ColorB>1</p7:ColorB>
+                        <p7:ColorA>1</p7:ColorA>
+                        <p7:LineThickness>2</p7:LineThickness>
                       </Combinator>
                     </Builder>
                   </Expression>
@@ -1817,284 +1839,9 @@
           </Edges>
         </Workflow>
       </Expression>
-      <Expression xsi:type="GroupWorkflow">
-        <Name>BiasVisualizer</Name>
-        <Workflow>
-          <Nodes>
-            <Expression xsi:type="ExternalizedMapping">
-              <Property Name="FrameSubject" />
-              <Property Name="TimedBias" />
-            </Expression>
-            <Expression xsi:type="rx:Defer">
-              <Name>BiasVisualizer</Name>
-              <Workflow>
-                <Nodes>
-                  <Expression xsi:type="ExternalizedMapping">
-                    <Property Name="Name" DisplayName="FrameSubject" />
-                  </Expression>
-                  <Expression xsi:type="SubscribeSubject">
-                    <Name>Bias</Name>
-                  </Expression>
-                  <Expression xsi:type="implot:PlotBuilder">
-                    <implot:Name>BiasPlot</implot:Name>
-                    <implot:Visible>true</implot:Visible>
-                    <implot:Size>
-                      <implot:X>-1</implot:X>
-                      <implot:Y>150</implot:Y>
-                    </implot:Size>
-                    <implot:Flags>NoTitle</implot:Flags>
-                    <implot:FlagsX>AutoFit</implot:FlagsX>
-                    <implot:FlagsY>None</implot:FlagsY>
-                  </Expression>
-                  <Expression xsi:type="rx:PublishSubject">
-                    <Name>BiasPlot</Name>
-                  </Expression>
-                  <Expression xsi:type="Unit" />
-                  <Expression xsi:type="imviz:LatestOnNewFrame">
-                    <Name>BiasPlot</Name>
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p6:PlotStyling">
-                      <p6:TickPositions>
-                        <p6:double>-1</p6:double>
-                        <p6:double>1</p6:double>
-                      </p6:TickPositions>
-                      <p6:TickLabels>
-                        <p6:string>R</p6:string>
-                        <p6:string>L</p6:string>
-                      </p6:TickLabels>
-                      <p6:ImPlotLocationFlags>West</p6:ImPlotLocationFlags>
-                      <p6:ImPlotLegendFlags>None</p6:ImPlotLegendFlags>
-                      <p6:YAxisMax>1.1</p6:YAxisMax>
-                      <p6:YAxisMin>-1.1</p6:YAxisMin>
-                    </Combinator>
-                  </Expression>
-                  <Expression xsi:type="ExternalizedMapping">
-                    <Property Name="Name" DisplayName="TimedBias" />
-                  </Expression>
-                  <Expression xsi:type="SubscribeSubject">
-                    <Name>TimedBias</Name>
-                  </Expression>
-                  <Expression xsi:type="imviz:RollingBufferBuilder">
-                    <imviz:Capacity>1000</imviz:Capacity>
-                    <imviz:IndexSelector>Seconds</imviz:IndexSelector>
-                    <imviz:ValueSelector>Value.Bias</imviz:ValueSelector>
-                  </Expression>
-                  <Expression xsi:type="imviz:LatestOnNewFrame">
-                    <Name>BiasPlot</Name>
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p6:LineStyling">
-                      <p6:ColorR>0</p6:ColorR>
-                      <p6:ColorG>0</p6:ColorG>
-                      <p6:ColorB>0</p6:ColorB>
-                      <p6:ColorA>1</p6:ColorA>
-                      <p6:LineThickness>2</p6:LineThickness>
-                    </Combinator>
-                  </Expression>
-                  <Expression xsi:type="imviz:PlotLineSeriesBuilder">
-                    <imviz:Visible>true</imviz:Visible>
-                    <imviz:Flags>None</imviz:Flags>
-                  </Expression>
-                  <Expression xsi:type="imviz:RollingBufferBuilder">
-                    <imviz:Capacity>1</imviz:Capacity>
-                    <imviz:IndexSelector>Seconds</imviz:IndexSelector>
-                    <imviz:ValueSelector>Value.Bias</imviz:ValueSelector>
-                  </Expression>
-                  <Expression xsi:type="imviz:LatestOnNewFrame">
-                    <Name>BiasPlot</Name>
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p6:ScatterStyling">
-                      <p6:ImPlotMarker>Circle</p6:ImPlotMarker>
-                      <p6:Size>5</p6:Size>
-                      <p6:FillColorR>0</p6:FillColorR>
-                      <p6:FillColorG>1</p6:FillColorG>
-                      <p6:FillColorB>0</p6:FillColorB>
-                      <p6:FillColorA>1</p6:FillColorA>
-                      <p6:OutlineColorR>0</p6:OutlineColorR>
-                      <p6:OutlineColorG>0</p6:OutlineColorG>
-                      <p6:OutlineColorB>0</p6:OutlineColorB>
-                      <p6:OutlineColorA>1</p6:OutlineColorA>
-                      <p6:OutlineWeight>1</p6:OutlineWeight>
-                    </Combinator>
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="implot:PlotScatter">
-                      <implot:Visible>true</implot:Visible>
-                      <implot:Flags>None</implot:Flags>
-                    </Combinator>
-                  </Expression>
-                  <Expression xsi:type="MemberSelector">
-                    <Selector>Value.Bias</Selector>
-                  </Expression>
-                  <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:FilterNotNull.bonsai" />
-                  <Expression xsi:type="imviz:LatestOnNewFrame">
-                    <Name>BiasPlot</Name>
-                  </Expression>
-                  <Expression xsi:type="Format">
-                    <Format>{0:N2}</Format>
-                    <Selector>it</Selector>
-                  </Expression>
-                  <Expression xsi:type="PropertyMapping">
-                    <PropertyMappings>
-                      <Property Name="Text" />
-                    </PropertyMappings>
-                  </Expression>
-                  <Expression xsi:type="MemberSelector">
-                    <Selector>Seconds</Selector>
-                  </Expression>
-                  <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:FilterNotNull.bonsai" />
-                  <Expression xsi:type="PropertyMapping">
-                    <PropertyMappings>
-                      <Property Name="X" />
-                    </PropertyMappings>
-                  </Expression>
-                  <Expression xsi:type="PropertyMapping">
-                    <PropertyMappings>
-                      <Property Name="Y" />
-                    </PropertyMappings>
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="implot:PlotText">
-                      <implot:Visible>true</implot:Visible>
-                      <implot:Text>1.00</implot:Text>
-                      <implot:X>32.0100000000022</implot:X>
-                      <implot:Y>1</implot:Y>
-                      <implot:PixelOffset>
-                        <implot:X>0</implot:X>
-                        <implot:Y>-10</implot:Y>
-                      </implot:PixelOffset>
-                      <implot:Flags>None</implot:Flags>
-                    </Combinator>
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="DoubleProperty">
-                      <Value>1</Value>
-                    </Combinator>
-                  </Expression>
-                  <Expression xsi:type="scr:ExpressionTransform">
-                    <scr:Expression>new (it as LeftBias)</scr:Expression>
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="rx:CombineLatest" />
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="harp:CreateTimestamped" />
-                  </Expression>
-                  <Expression xsi:type="imviz:RollingBufferBuilder">
-                    <imviz:Capacity>1000</imviz:Capacity>
-                    <imviz:IndexSelector>Seconds</imviz:IndexSelector>
-                    <imviz:ValueSelector>Value.LeftBias</imviz:ValueSelector>
-                  </Expression>
-                  <Expression xsi:type="imviz:LatestOnNewFrame">
-                    <Name>BiasPlot</Name>
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p6:LineStyling">
-                      <p6:ColorR>1</p6:ColorR>
-                      <p6:ColorG>0</p6:ColorG>
-                      <p6:ColorB>0</p6:ColorB>
-                      <p6:ColorA>0.7</p6:ColorA>
-                      <p6:LineThickness>1</p6:LineThickness>
-                    </Combinator>
-                  </Expression>
-                  <Expression xsi:type="imviz:PlotLineSeriesBuilder">
-                    <imviz:Visible>true</imviz:Visible>
-                    <imviz:Flags>None</imviz:Flags>
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="DoubleProperty">
-                      <Value>-1</Value>
-                    </Combinator>
-                  </Expression>
-                  <Expression xsi:type="scr:ExpressionTransform">
-                    <scr:Expression>new (it as RightBias)</scr:Expression>
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="rx:CombineLatest" />
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="harp:CreateTimestamped" />
-                  </Expression>
-                  <Expression xsi:type="imviz:RollingBufferBuilder">
-                    <imviz:Capacity>1000</imviz:Capacity>
-                    <imviz:IndexSelector>Seconds</imviz:IndexSelector>
-                    <imviz:ValueSelector>Value.RightBias</imviz:ValueSelector>
-                  </Expression>
-                  <Expression xsi:type="imviz:LatestOnNewFrame">
-                    <Name>BiasPlot</Name>
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p6:LineStyling">
-                      <p6:ColorR>0</p6:ColorR>
-                      <p6:ColorG>0</p6:ColorG>
-                      <p6:ColorB>1</p6:ColorB>
-                      <p6:ColorA>0.7</p6:ColorA>
-                      <p6:LineThickness>1</p6:LineThickness>
-                    </Combinator>
-                  </Expression>
-                  <Expression xsi:type="imviz:PlotLineSeriesBuilder">
-                    <imviz:Visible>true</imviz:Visible>
-                    <imviz:Flags>None</imviz:Flags>
-                  </Expression>
-                </Nodes>
-                <Edges>
-                  <Edge From="0" To="1" Label="Source1" />
-                  <Edge From="1" To="2" Label="Source1" />
-                  <Edge From="2" To="3" Label="Source1" />
-                  <Edge From="4" To="5" Label="Source1" />
-                  <Edge From="5" To="6" Label="Source1" />
-                  <Edge From="7" To="8" Label="Source1" />
-                  <Edge From="8" To="9" Label="Source1" />
-                  <Edge From="8" To="13" Label="Source1" />
-                  <Edge From="8" To="17" Label="Source1" />
-                  <Edge From="8" To="22" Label="Source1" />
-                  <Edge From="8" To="27" Label="Source1" />
-                  <Edge From="8" To="35" Label="Source1" />
-                  <Edge From="9" To="10" Label="Source1" />
-                  <Edge From="10" To="11" Label="Source1" />
-                  <Edge From="11" To="12" Label="Source1" />
-                  <Edge From="13" To="14" Label="Source1" />
-                  <Edge From="14" To="15" Label="Source1" />
-                  <Edge From="15" To="16" Label="Source1" />
-                  <Edge From="17" To="18" Label="Source1" />
-                  <Edge From="18" To="19" Label="Source1" />
-                  <Edge From="18" To="20" Label="Source1" />
-                  <Edge From="18" To="25" Label="Source1" />
-                  <Edge From="19" To="26" Label="Source1" />
-                  <Edge From="20" To="21" Label="Source1" />
-                  <Edge From="21" To="26" Label="Source2" />
-                  <Edge From="22" To="23" Label="Source1" />
-                  <Edge From="23" To="24" Label="Source1" />
-                  <Edge From="23" To="29" Label="Source2" />
-                  <Edge From="23" To="37" Label="Source2" />
-                  <Edge From="24" To="26" Label="Source3" />
-                  <Edge From="25" To="26" Label="Source4" />
-                  <Edge From="27" To="28" Label="Source1" />
-                  <Edge From="28" To="29" Label="Source1" />
-                  <Edge From="29" To="30" Label="Source1" />
-                  <Edge From="30" To="31" Label="Source1" />
-                  <Edge From="31" To="32" Label="Source1" />
-                  <Edge From="32" To="33" Label="Source1" />
-                  <Edge From="33" To="34" Label="Source1" />
-                  <Edge From="35" To="36" Label="Source1" />
-                  <Edge From="36" To="37" Label="Source1" />
-                  <Edge From="37" To="38" Label="Source1" />
-                  <Edge From="38" To="39" Label="Source1" />
-                  <Edge From="39" To="40" Label="Source1" />
-                  <Edge From="40" To="41" Label="Source1" />
-                  <Edge From="41" To="42" Label="Source1" />
-                </Edges>
-              </Workflow>
-            </Expression>
-            <Expression xsi:type="WorkflowOutput" />
-          </Nodes>
-          <Edges>
-            <Edge From="0" To="1" Label="Source1" />
-            <Edge From="1" To="2" Label="Source1" />
-          </Edges>
-        </Workflow>
+      <Expression xsi:type="IncludeWorkflow" Path="Extensions\BiasVisualizer.bonsai">
+        <FrameSubject>Bias</FrameSubject>
+        <TimedBias>TimedBias</TimedBias>
       </Expression>
       <Expression xsi:type="GroupWorkflow">
         <Name>OutputControl</Name>
@@ -2103,73 +1850,73 @@
             <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Single">
               <rx:Name>UiHabituationTimeUpdate</rx:Name>
             </Expression>
-            <Expression xsi:type="rx:PublishSubject" TypeArguments="p7:Unit">
+            <Expression xsi:type="rx:PublishSubject" TypeArguments="p8:Unit">
               <rx:Name>UiMoveLeft</rx:Name>
             </Expression>
-            <Expression xsi:type="rx:PublishSubject" TypeArguments="p7:Unit">
+            <Expression xsi:type="rx:PublishSubject" TypeArguments="p8:Unit">
               <rx:Name>UiGiveRight</rx:Name>
             </Expression>
-            <Expression xsi:type="rx:PublishSubject" TypeArguments="p7:Unit">
+            <Expression xsi:type="rx:PublishSubject" TypeArguments="p8:Unit">
               <rx:Name>UiGiveLeft</rx:Name>
             </Expression>
-            <Expression xsi:type="rx:PublishSubject" TypeArguments="p7:Unit">
+            <Expression xsi:type="rx:PublishSubject" TypeArguments="p8:Unit">
               <rx:Name>UiMoveRight</rx:Name>
             </Expression>
-            <Expression xsi:type="rx:PublishSubject" TypeArguments="p7:Unit">
+            <Expression xsi:type="rx:PublishSubject" TypeArguments="p8:Unit">
               <rx:Name>UiDrainLeft</rx:Name>
             </Expression>
-            <Expression xsi:type="rx:PublishSubject" TypeArguments="p7:Unit">
+            <Expression xsi:type="rx:PublishSubject" TypeArguments="p8:Unit">
               <rx:Name>UiDrainRight</rx:Name>
             </Expression>
-            <Expression xsi:type="rx:PublishSubject" TypeArguments="p7:Unit">
+            <Expression xsi:type="rx:PublishSubject" TypeArguments="p8:Unit">
               <rx:Name>UiDrainBoth</rx:Name>
             </Expression>
-            <Expression xsi:type="rx:PublishSubject" TypeArguments="p7:Unit">
+            <Expression xsi:type="rx:PublishSubject" TypeArguments="p8:Unit">
               <rx:Name>UiManipulatorLeft</rx:Name>
             </Expression>
-            <Expression xsi:type="rx:PublishSubject" TypeArguments="p7:Unit">
+            <Expression xsi:type="rx:PublishSubject" TypeArguments="p8:Unit">
               <rx:Name>UiManipulatorForwardLeft</rx:Name>
             </Expression>
-            <Expression xsi:type="rx:PublishSubject" TypeArguments="p7:Unit">
+            <Expression xsi:type="rx:PublishSubject" TypeArguments="p8:Unit">
               <rx:Name>UiManipulatorForwardRight</rx:Name>
             </Expression>
-            <Expression xsi:type="rx:PublishSubject" TypeArguments="p7:Unit">
+            <Expression xsi:type="rx:PublishSubject" TypeArguments="p8:Unit">
               <rx:Name>UiManipulatorUp</rx:Name>
             </Expression>
-            <Expression xsi:type="rx:PublishSubject" TypeArguments="p7:Unit">
+            <Expression xsi:type="rx:PublishSubject" TypeArguments="p8:Unit">
               <rx:Name>UiManipulatorRight</rx:Name>
             </Expression>
-            <Expression xsi:type="rx:PublishSubject" TypeArguments="p7:Unit">
+            <Expression xsi:type="rx:PublishSubject" TypeArguments="p8:Unit">
               <rx:Name>UiManipulatorBackRight</rx:Name>
             </Expression>
-            <Expression xsi:type="rx:PublishSubject" TypeArguments="p7:Unit">
+            <Expression xsi:type="rx:PublishSubject" TypeArguments="p8:Unit">
               <rx:Name>UiManipulatorBackLeft</rx:Name>
             </Expression>
-            <Expression xsi:type="rx:PublishSubject" TypeArguments="p7:Unit">
+            <Expression xsi:type="rx:PublishSubject" TypeArguments="p8:Unit">
               <rx:Name>UiManipulatorDown</rx:Name>
             </Expression>
-            <Expression xsi:type="rx:PublishSubject" TypeArguments="p7:Unit">
+            <Expression xsi:type="rx:PublishSubject" TypeArguments="p8:Unit">
               <rx:Name>UiManipulatorStop</rx:Name>
             </Expression>
-            <Expression xsi:type="rx:PublishSubject" TypeArguments="p7:Unit">
+            <Expression xsi:type="rx:PublishSubject" TypeArguments="p8:Unit">
               <rx:Name>UiManipulatorHome</rx:Name>
             </Expression>
-            <Expression xsi:type="rx:PublishSubject" TypeArguments="p7:Unit">
+            <Expression xsi:type="rx:PublishSubject" TypeArguments="p8:Unit">
               <rx:Name>UiManipulatorInitialize</rx:Name>
             </Expression>
-            <Expression xsi:type="rx:BehaviorSubject" TypeArguments="p7:Unit">
+            <Expression xsi:type="rx:BehaviorSubject" TypeArguments="p8:Unit">
               <rx:Name>StartExperimentShortcut</rx:Name>
             </Expression>
             <Expression xsi:type="rx:BehaviorSubject">
               <Name>StartExperiment</Name>
             </Expression>
-            <Expression xsi:type="rx:BehaviorSubject" TypeArguments="p7:Unit">
+            <Expression xsi:type="rx:BehaviorSubject" TypeArguments="p8:Unit">
               <rx:Name>EndExperiment</rx:Name>
             </Expression>
-            <Expression xsi:type="rx:PublishSubject" TypeArguments="p7:Unit">
+            <Expression xsi:type="rx:PublishSubject" TypeArguments="p8:Unit">
               <rx:Name>UiCueGiveRight</rx:Name>
             </Expression>
-            <Expression xsi:type="rx:PublishSubject" TypeArguments="p7:Unit">
+            <Expression xsi:type="rx:PublishSubject" TypeArguments="p8:Unit">
               <rx:Name>UiCueGiveLeft</rx:Name>
             </Expression>
             <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Boolean">
@@ -2199,83 +1946,72 @@
         </PropertyMappings>
       </Expression>
       <Expression xsi:type="Combinator">
-        <Combinator xsi:type="p6:SoftwareEventVisualizer">
-          <p6:Visible>true</p6:Visible>
-          <p6:SoftwareEvents>
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-            <p6:TimestampedOfSoftwareEvent />
-          </p6:SoftwareEvents>
-          <p6:TrialBreakEventName>Break</p6:TrialBreakEventName>
-          <p6:PlotHeight>200</p6:PlotHeight>
-          <p6:ShadedAreaPlotters>
-            <p6:ShadedAreaPlotter>
-              <p6:EventName>TrialOutcome</p6:EventName>
-              <p6:Color>CornflowerBlue</p6:Color>
-              <p6:Alpha>0.3</p6:Alpha>
-            </p6:ShadedAreaPlotter>
-            <p6:ShadedAreaPlotter>
-              <p6:EventName>RewardPeriod</p6:EventName>
-              <p6:Color>Crimson</p6:Color>
-              <p6:Alpha>0.3</p6:Alpha>
-            </p6:ShadedAreaPlotter>
-            <p6:ShadedAreaPlotter>
-              <p6:EventName>ITI</p6:EventName>
-              <p6:Color>Cyan</p6:Color>
-              <p6:Alpha>0.3</p6:Alpha>
-            </p6:ShadedAreaPlotter>
-          </p6:ShadedAreaPlotters>
-          <p6:PointPlotters>
-            <p6:PointPlotter>
-              <p6:EventName>TrialOutcome</p6:EventName>
-              <p6:Color>SaddleBrown</p6:Color>
-              <p6:YPosition>0.5</p6:YPosition>
-              <p6:MarkerSize>2</p6:MarkerSize>
-              <p6:Marker>Circle</p6:Marker>
-            </p6:PointPlotter>
-            <p6:PointPlotter>
-              <p6:EventName>LickLeft</p6:EventName>
-              <p6:Color>Red</p6:Color>
-              <p6:YPosition>0.8</p6:YPosition>
-              <p6:MarkerSize>2</p6:MarkerSize>
-              <p6:Marker>Down</p6:Marker>
-            </p6:PointPlotter>
-            <p6:PointPlotter>
-              <p6:EventName>LickRight</p6:EventName>
-              <p6:Color>DodgerBlue</p6:Color>
-              <p6:YPosition>0.2</p6:YPosition>
-              <p6:MarkerSize>2</p6:MarkerSize>
-              <p6:Marker>Up</p6:Marker>
-            </p6:PointPlotter>
-          </p6:PointPlotters>
+        <Combinator xsi:type="p7:SoftwareEventVisualizer">
+          <p7:Visible>true</p7:Visible>
+          <p7:SoftwareEvents>
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+          </p7:SoftwareEvents>
+          <p7:TrialBreakEventName>Break</p7:TrialBreakEventName>
+          <p7:PlotHeight>200</p7:PlotHeight>
+          <p7:ShadedAreaPlotters>
+            <p7:ShadedAreaPlotter>
+              <p7:EventName>TrialOutcome</p7:EventName>
+              <p7:Color>CornflowerBlue</p7:Color>
+              <p7:Alpha>0.3</p7:Alpha>
+            </p7:ShadedAreaPlotter>
+            <p7:ShadedAreaPlotter>
+              <p7:EventName>RewardPeriod</p7:EventName>
+              <p7:Color>Crimson</p7:Color>
+              <p7:Alpha>0.3</p7:Alpha>
+            </p7:ShadedAreaPlotter>
+            <p7:ShadedAreaPlotter>
+              <p7:EventName>ITI</p7:EventName>
+              <p7:Color>Cyan</p7:Color>
+              <p7:Alpha>0.3</p7:Alpha>
+            </p7:ShadedAreaPlotter>
+          </p7:ShadedAreaPlotters>
+          <p7:PointPlotters>
+            <p7:PointPlotter>
+              <p7:EventName>TrialOutcome</p7:EventName>
+              <p7:Color>SaddleBrown</p7:Color>
+              <p7:YPosition>0.5</p7:YPosition>
+              <p7:MarkerSize>2</p7:MarkerSize>
+              <p7:Marker>Circle</p7:Marker>
+            </p7:PointPlotter>
+            <p7:PointPlotter>
+              <p7:EventName>LickLeft</p7:EventName>
+              <p7:Color>Red</p7:Color>
+              <p7:YPosition>0.8</p7:YPosition>
+              <p7:MarkerSize>2</p7:MarkerSize>
+              <p7:Marker>Down</p7:Marker>
+            </p7:PointPlotter>
+            <p7:PointPlotter>
+              <p7:EventName>LickRight</p7:EventName>
+              <p7:Color>DodgerBlue</p7:Color>
+              <p7:YPosition>0.2</p7:YPosition>
+              <p7:MarkerSize>2</p7:MarkerSize>
+              <p7:Marker>Up</p7:Marker>
+            </p7:PointPlotter>
+          </p7:PointPlotters>
         </Combinator>
       </Expression>
       <Expression xsi:type="Unit" />
@@ -2387,10 +2123,10 @@
                     <Property Name="MaxSaturation" />
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p6:SaturationThreshold">
-                      <p6:MinSaturation>53</p6:MinSaturation>
-                      <p6:MaxSaturation>215</p6:MaxSaturation>
-                      <p6:Alpha>0.5</p6:Alpha>
+                    <Combinator xsi:type="p7:SaturationThreshold">
+                      <p7:MinSaturation>53</p7:MinSaturation>
+                      <p7:MaxSaturation>215</p7:MaxSaturation>
+                      <p7:Alpha>0.5</p7:Alpha>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="ExternalizedMapping">
@@ -2803,10 +2539,10 @@
                     <Property Name="MaxSaturation" />
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p6:SaturationThreshold">
-                      <p6:MinSaturation>53</p6:MinSaturation>
-                      <p6:MaxSaturation>215</p6:MaxSaturation>
-                      <p6:Alpha>0.5</p6:Alpha>
+                    <Combinator xsi:type="p7:SaturationThreshold">
+                      <p7:MinSaturation>53</p7:MinSaturation>
+                      <p7:MaxSaturation>215</p7:MaxSaturation>
+                      <p7:Alpha>0.5</p7:Alpha>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="ExternalizedMapping">
@@ -3120,34 +2856,1105 @@
         <EndExperimentSubject>EndExperiment</EndExperimentSubject>
         <UiHabituationTimeUpdate>UiHabituationTimeUpdate</UiHabituationTimeUpdate>
       </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="IncludeWorkflow" Path="Extensions\PreSessionVisualizer.bonsai">
-          <FrameSubject>PreSession</FrameSubject>
-          <UiKeepLeftOpne>UiKeepLeftOpen</UiKeepLeftOpne>
-          <UiKeepRightOpen>UiKeepRightOpen</UiKeepRightOpen>
-          <UiKeepBothOpen>UiKeepBothOpen</UiKeepBothOpen>
-          <UiDrainLeft>UiDrainLeft</UiDrainLeft>
-          <UiDrainRight>UiDrainRight</UiDrainRight>
-          <UiDrainBoth>UiDrainBoth</UiDrainBoth>
-          <UiManipulatorLeft>UiManipulatorLeft</UiManipulatorLeft>
-          <UiManipulatorForwardLeft>UiManipulatorForwardLeft</UiManipulatorForwardLeft>
-          <UiManipulatorForwardRight>UiManipulatorForwardRight</UiManipulatorForwardRight>
-          <UiManipulatorUp>UiManipulatorUp</UiManipulatorUp>
-          <UiManipulatorRight>UiManipulatorRight</UiManipulatorRight>
-          <UiManipulatorBackLeft>UiManipulatorBackLeft</UiManipulatorBackLeft>
-          <UiManipulatorBackRight>UiManipulatorBackRight</UiManipulatorBackRight>
-          <UiManipulatorDown>UiManipulatorDown</UiManipulatorDown>
-          <UiManipulatorStop>UiManipulatorStop</UiManipulatorStop>
-          <UiManipulatorHome>UiManipulatorHome</UiManipulatorHome>
-          <UiControlManipulator>UiManipulatorInitialize</UiControlManipulator>
-        </Builder>
+      <Expression xsi:type="GroupWorkflow">
+        <Name>PreSessionVisualizer</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="FrameSubject" />
+              <Property Name="UiKeepLeftOpne" />
+              <Property Name="UiKeepRightOpen" />
+              <Property Name="UiKeepBothOpen" />
+              <Property Name="UiDrainLeft" />
+              <Property Name="UiDrainRight" />
+              <Property Name="UiDrainBoth" />
+              <Property Name="UiManipulatorLeft" />
+              <Property Name="UiManipulatorForwardLeft" />
+              <Property Name="UiManipulatorForwardRight" />
+              <Property Name="UiManipulatorUp" />
+              <Property Name="UiManipulatorRight" />
+              <Property Name="UiManipulatorBackLeft" />
+              <Property Name="UiManipulatorBackRight" />
+              <Property Name="UiManipulatorDown" />
+              <Property Name="UiManipulatorStop" />
+              <Property Name="UiManipulatorHome" />
+              <Property Name="UiControlManipulator" />
+            </Expression>
+            <Expression xsi:type="rx:Defer">
+              <Name>PreSessionVisualizer</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="rx:BehaviorSubject" TypeArguments="sys:Boolean">
+                    <rx:Name>LeftOpenState</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:BehaviorSubject" TypeArguments="sys:Boolean">
+                    <rx:Name>RightOpenState</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:BehaviorSubject" TypeArguments="sys:Boolean">
+                    <rx:Name>BothOpenState</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="FrameSubject" />
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>PreSession</Name>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Columns>2</imgui:Columns>
+                    <imgui:Flags>Borders</imgui:Flags>
+                    <imgui:OuterSize>
+                      <imgui:X>0</imgui:X>
+                      <imgui:Y>0</imgui:Y>
+                    </imgui:OuterSize>
+                    <imgui:InnerWidth>0</imgui:InnerWidth>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Columns>2</imgui:Columns>
+                    <imgui:Flags>None</imgui:Flags>
+                    <imgui:OuterSize>
+                      <imgui:X>0</imgui:X>
+                      <imgui:Y>0</imgui:Y>
+                    </imgui:OuterSize>
+                    <imgui:InnerWidth>0</imgui:InnerWidth>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>BothOpenState</Name>
+                  </Expression>
+                  <Expression xsi:type="BitwiseNot" />
+                  <Expression xsi:type="PropertyMapping">
+                    <PropertyMappings>
+                      <Property Name="Enabled" />
+                    </PropertyMappings>
+                  </Expression>
+                  <Expression xsi:type="p7:ToggleButtonBuilder">
+                    <p7:Name>KeepLeftOpen</p7:Name>
+                    <p7:Visible>true</p7:Visible>
+                    <p7:Text>KeepLeftOpen</p7:Text>
+                    <p7:ToggledOffText>Open Left</p7:ToggledOffText>
+                    <p7:ToggledOnText>Close Left</p7:ToggledOnText>
+                    <p7:Enabled>true</p7:Enabled>
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>LeftOpenState</Name>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="UiKeepLeftOpne" Category="UiControlValve" />
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>UiKeepLeftOpen</Name>
+                  </Expression>
+                  <Expression xsi:type="PropertyMapping">
+                    <PropertyMappings>
+                      <Property Name="Enabled" />
+                    </PropertyMappings>
+                  </Expression>
+                  <Expression xsi:type="p7:ToggleButtonBuilder">
+                    <p7:Name>KeepRightOpen</p7:Name>
+                    <p7:Visible>true</p7:Visible>
+                    <p7:Text>KeepRightOpen</p7:Text>
+                    <p7:ToggledOffText>Open Right</p7:ToggledOffText>
+                    <p7:ToggledOnText>Close Right</p7:ToggledOnText>
+                    <p7:Enabled>true</p7:Enabled>
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>RightOpenState</Name>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="UiKeepRightOpen" Category="UiControlValve" />
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>UiKeepRightOpen</Name>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>LeftOpenState</Name>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>RightOpenState</Name>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:CombineLatest" />
+                  </Expression>
+                  <Expression xsi:type="BitwiseOr" />
+                  <Expression xsi:type="BitwiseNot" />
+                  <Expression xsi:type="PropertyMapping">
+                    <PropertyMappings>
+                      <Property Name="Enabled" />
+                    </PropertyMappings>
+                  </Expression>
+                  <Expression xsi:type="p7:ToggleButtonBuilder">
+                    <p7:Name>KeepBothOpen</p7:Name>
+                    <p7:Visible>true</p7:Visible>
+                    <p7:Text>KeepBothOpen</p7:Text>
+                    <p7:ToggledOffText>Open Both</p7:ToggledOffText>
+                    <p7:ToggledOnText>Close Both</p7:ToggledOnText>
+                    <p7:Enabled>true</p7:Enabled>
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>BothOpenState</Name>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="UiKeepBothOpen" Category="UiControlValve" />
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>UiKeepBothOpen</Name>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:CombineLatest" />
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="imgui:ButtonBuilder">
+                    <imgui:Name>DrainLeft</imgui:Name>
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Text>Drain 5ml Left</imgui:Text>
+                  </Expression>
+                  <Expression xsi:type="Unit" />
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="UiDrainLeft" Category="UiControlValve" />
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>UiDrainLeft</Name>
+                  </Expression>
+                  <Expression xsi:type="imgui:ButtonBuilder">
+                    <imgui:Name>Drain Right</imgui:Name>
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Text>Drain 5ml Right</imgui:Text>
+                  </Expression>
+                  <Expression xsi:type="Unit" />
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="UiDrainRight" Category="UiControlValve" />
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>UiDrainRight</Name>
+                  </Expression>
+                  <Expression xsi:type="imgui:ButtonBuilder">
+                    <imgui:Name>Drain Both</imgui:Name>
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Text>Drain 5ml Both</imgui:Text>
+                  </Expression>
+                  <Expression xsi:type="Unit" />
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="UiDrainBoth" Category="UiControlValve" />
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>UiDrainBoth</Name>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:CombineLatest" />
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:CombineLatest" />
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Columns>2</imgui:Columns>
+                    <imgui:Flags>Borders</imgui:Flags>
+                    <imgui:OuterSize>
+                      <imgui:X>0</imgui:X>
+                      <imgui:Y>0</imgui:Y>
+                    </imgui:OuterSize>
+                    <imgui:InnerWidth>0</imgui:InnerWidth>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Columns>1</imgui:Columns>
+                    <imgui:Flags>None</imgui:Flags>
+                    <imgui:OuterSize>
+                      <imgui:X>0</imgui:X>
+                      <imgui:Y>0</imgui:Y>
+                    </imgui:OuterSize>
+                    <imgui:InnerWidth>0</imgui:InnerWidth>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Columns>2</imgui:Columns>
+                    <imgui:Flags>None</imgui:Flags>
+                    <imgui:OuterSize>
+                      <imgui:X>0</imgui:X>
+                      <imgui:Y>0</imgui:Y>
+                    </imgui:OuterSize>
+                    <imgui:InnerWidth>0</imgui:InnerWidth>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="imgui:ButtonBuilder">
+                    <imgui:Name>MoveLeft</imgui:Name>
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Text>Move Left</imgui:Text>
+                  </Expression>
+                  <Expression xsi:type="Unit" />
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="UiManipulatorLeft" Category="UiControlManipulator" />
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>UiManipulatorLeft</Name>
+                  </Expression>
+                  <Expression xsi:type="imgui:ButtonBuilder">
+                    <imgui:Name>ForwardLeft</imgui:Name>
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Text>Forward Left</imgui:Text>
+                  </Expression>
+                  <Expression xsi:type="Unit" />
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="UiManipulatorForwardLeft" Category="UiControlManipulator" />
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>UiManipulatorForwardLeft</Name>
+                  </Expression>
+                  <Expression xsi:type="imgui:ButtonBuilder">
+                    <imgui:Name>ForwardRight</imgui:Name>
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Text>Forward Right</imgui:Text>
+                  </Expression>
+                  <Expression xsi:type="Unit" />
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="UiManipulatorForwardRight" Category="UiControlManipulator" />
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>UiManipulatorForwardRight</Name>
+                  </Expression>
+                  <Expression xsi:type="imgui:ButtonBuilder">
+                    <imgui:Name>Up</imgui:Name>
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Text>Up</imgui:Text>
+                  </Expression>
+                  <Expression xsi:type="Unit" />
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="UiManipulatorUp" Category="UiControlManipulator" />
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>UiManipulatorUp</Name>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:CombineLatest" />
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="imgui:ButtonBuilder">
+                    <imgui:Name>MoveRight</imgui:Name>
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Text>Move Right</imgui:Text>
+                  </Expression>
+                  <Expression xsi:type="Unit" />
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="UiManipulatorRight" Category="UiControlManipulator" />
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>UiManipulatorRight</Name>
+                  </Expression>
+                  <Expression xsi:type="imgui:ButtonBuilder">
+                    <imgui:Name>BackLeft</imgui:Name>
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Text>Back Left</imgui:Text>
+                  </Expression>
+                  <Expression xsi:type="Unit" />
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="UiManipulatorBackLeft" Category="UiControlManipulator" />
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>UiManipulatorBackLeft</Name>
+                  </Expression>
+                  <Expression xsi:type="imgui:ButtonBuilder">
+                    <imgui:Name>BackRight</imgui:Name>
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Text>Back Right</imgui:Text>
+                  </Expression>
+                  <Expression xsi:type="Unit" />
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="UiManipulatorBackRight" Category="UiControlManipulator" />
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>UiManipulatorBackRight</Name>
+                  </Expression>
+                  <Expression xsi:type="imgui:ButtonBuilder">
+                    <imgui:Name>Down</imgui:Name>
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Text>Down</imgui:Text>
+                  </Expression>
+                  <Expression xsi:type="Unit" />
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="UiManipulatorDown" Category="UiControlManipulator" />
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>UiManipulatorDown</Name>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:CombineLatest" />
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:CombineLatest" />
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="imgui:ButtonBuilder">
+                    <imgui:Name>STOP</imgui:Name>
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Text>STOP</imgui:Text>
+                  </Expression>
+                  <Expression xsi:type="Unit" />
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="UiManipulatorStop" Category="UiControlManipulator" />
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>UiManipulatorStop</Name>
+                  </Expression>
+                  <Expression xsi:type="imgui:ButtonBuilder">
+                    <imgui:Name>Home</imgui:Name>
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Text>Home</imgui:Text>
+                  </Expression>
+                  <Expression xsi:type="Unit" />
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="UiManipulatorHome" Category="UiControlManipulator" />
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>UiManipulatorHome</Name>
+                  </Expression>
+                  <Expression xsi:type="imgui:ButtonBuilder">
+                    <imgui:Name>Initialize</imgui:Name>
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Text>Initialize</imgui:Text>
+                  </Expression>
+                  <Expression xsi:type="Unit" />
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="UiControlManipulator" Category="UiManipulatorInitialize" />
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>UiManipulatorInitialize</Name>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:CombineLatest" />
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:CombineLatest" />
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Columns>2</imgui:Columns>
+                    <imgui:Flags>None</imgui:Flags>
+                    <imgui:OuterSize>
+                      <imgui:X>0</imgui:X>
+                      <imgui:Y>0</imgui:Y>
+                    </imgui:OuterSize>
+                    <imgui:InnerWidth>0</imgui:InnerWidth>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="imgui:TextBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Text>x: </imgui:Text>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" />
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>ManipulatorPosition</Name>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>X</Selector>
+                  </Expression>
+                  <Expression xsi:type="Format">
+                    <Format>{0:N2}</Format>
+                    <Selector>it</Selector>
+                  </Expression>
+                  <Expression xsi:type="PropertyMapping">
+                    <PropertyMappings>
+                      <Property Name="Text" />
+                    </PropertyMappings>
+                  </Expression>
+                  <Expression xsi:type="imgui:TextBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Text>0.00</imgui:Text>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:CombineLatest" />
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="imgui:TextBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Text>y1: </imgui:Text>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Y1</Selector>
+                  </Expression>
+                  <Expression xsi:type="Format">
+                    <Format>{0:N2}</Format>
+                    <Selector>it</Selector>
+                  </Expression>
+                  <Expression xsi:type="PropertyMapping">
+                    <PropertyMappings>
+                      <Property Name="Text" />
+                    </PropertyMappings>
+                  </Expression>
+                  <Expression xsi:type="imgui:TextBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Text>0.00</imgui:Text>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:CombineLatest" />
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="imgui:TextBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Text>y2: </imgui:Text>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Y2</Selector>
+                  </Expression>
+                  <Expression xsi:type="Format">
+                    <Format>{0:N2}</Format>
+                    <Selector>it</Selector>
+                  </Expression>
+                  <Expression xsi:type="PropertyMapping">
+                    <PropertyMappings>
+                      <Property Name="Text" />
+                    </PropertyMappings>
+                  </Expression>
+                  <Expression xsi:type="imgui:TextBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Text>0.00</imgui:Text>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:CombineLatest" />
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="imgui:TextBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Text>z: </imgui:Text>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Z</Selector>
+                  </Expression>
+                  <Expression xsi:type="Format">
+                    <Format>{0:N2}</Format>
+                    <Selector>it</Selector>
+                  </Expression>
+                  <Expression xsi:type="PropertyMapping">
+                    <PropertyMappings>
+                      <Property Name="Text" />
+                    </PropertyMappings>
+                  </Expression>
+                  <Expression xsi:type="imgui:TextBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Text>0.00</imgui:Text>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:CombineLatest" />
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="imgui:TextBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Text>step: </imgui:Text>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="imgui:InputFloatBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Flags>None</imgui:Flags>
+                    <imgui:InitialValue>0</imgui:InitialValue>
+                    <imgui:Step>0</imgui:Step>
+                    <imgui:StepFast>0</imgui:StepFast>
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>OffsetGain</Name>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:CombineLatest" />
+                  </Expression>
+                </Nodes>
+                <Edges>
+                  <Edge From="3" To="4" Label="Source1" />
+                  <Edge From="4" To="5" Label="Source1" />
+                  <Edge From="5" To="6" Label="Source1" />
+                  <Edge From="5" To="47" Label="Source1" />
+                  <Edge From="6" To="7" Label="Source1" />
+                  <Edge From="7" To="8" Label="Source1" />
+                  <Edge From="7" To="32" Label="Source1" />
+                  <Edge From="8" To="12" Label="Source1" />
+                  <Edge From="8" To="17" Label="Source1" />
+                  <Edge From="8" To="27" Label="Source1" />
+                  <Edge From="9" To="10" Label="Source1" />
+                  <Edge From="10" To="11" Label="Source1" />
+                  <Edge From="10" To="16" Label="Source1" />
+                  <Edge From="11" To="12" Label="Source2" />
+                  <Edge From="12" To="13" Label="Source1" />
+                  <Edge From="13" To="15" Label="Source1" />
+                  <Edge From="14" To="15" Label="Source2" />
+                  <Edge From="15" To="31" Label="Source1" />
+                  <Edge From="16" To="17" Label="Source2" />
+                  <Edge From="17" To="18" Label="Source1" />
+                  <Edge From="18" To="20" Label="Source1" />
+                  <Edge From="19" To="20" Label="Source2" />
+                  <Edge From="20" To="31" Label="Source2" />
+                  <Edge From="21" To="23" Label="Source1" />
+                  <Edge From="22" To="23" Label="Source2" />
+                  <Edge From="23" To="24" Label="Source1" />
+                  <Edge From="24" To="25" Label="Source1" />
+                  <Edge From="25" To="26" Label="Source1" />
+                  <Edge From="26" To="27" Label="Source2" />
+                  <Edge From="27" To="28" Label="Source1" />
+                  <Edge From="28" To="30" Label="Source1" />
+                  <Edge From="29" To="30" Label="Source2" />
+                  <Edge From="30" To="31" Label="Source3" />
+                  <Edge From="31" To="46" Label="Source1" />
+                  <Edge From="32" To="33" Label="Source1" />
+                  <Edge From="32" To="37" Label="Source1" />
+                  <Edge From="32" To="41" Label="Source1" />
+                  <Edge From="33" To="34" Label="Source1" />
+                  <Edge From="34" To="36" Label="Source1" />
+                  <Edge From="35" To="36" Label="Source2" />
+                  <Edge From="36" To="45" Label="Source1" />
+                  <Edge From="37" To="38" Label="Source1" />
+                  <Edge From="38" To="40" Label="Source1" />
+                  <Edge From="39" To="40" Label="Source2" />
+                  <Edge From="40" To="45" Label="Source2" />
+                  <Edge From="41" To="42" Label="Source1" />
+                  <Edge From="42" To="44" Label="Source1" />
+                  <Edge From="43" To="44" Label="Source2" />
+                  <Edge From="44" To="45" Label="Source3" />
+                  <Edge From="45" To="46" Label="Source2" />
+                  <Edge From="47" To="48" Label="Source1" />
+                  <Edge From="48" To="49" Label="Source1" />
+                  <Edge From="48" To="105" Label="Source1" />
+                  <Edge From="49" To="50" Label="Source1" />
+                  <Edge From="50" To="51" Label="Source1" />
+                  <Edge From="50" To="90" Label="Source1" />
+                  <Edge From="51" To="52" Label="Source1" />
+                  <Edge From="52" To="53" Label="Source1" />
+                  <Edge From="52" To="71" Label="Source1" />
+                  <Edge From="53" To="54" Label="Source1" />
+                  <Edge From="53" To="58" Label="Source1" />
+                  <Edge From="53" To="62" Label="Source1" />
+                  <Edge From="53" To="66" Label="Source1" />
+                  <Edge From="54" To="55" Label="Source1" />
+                  <Edge From="55" To="57" Label="Source1" />
+                  <Edge From="56" To="57" Label="Source2" />
+                  <Edge From="57" To="70" Label="Source1" />
+                  <Edge From="58" To="59" Label="Source1" />
+                  <Edge From="59" To="61" Label="Source1" />
+                  <Edge From="60" To="61" Label="Source2" />
+                  <Edge From="61" To="70" Label="Source2" />
+                  <Edge From="62" To="63" Label="Source1" />
+                  <Edge From="63" To="65" Label="Source1" />
+                  <Edge From="64" To="65" Label="Source2" />
+                  <Edge From="65" To="70" Label="Source3" />
+                  <Edge From="66" To="67" Label="Source1" />
+                  <Edge From="67" To="69" Label="Source1" />
+                  <Edge From="68" To="69" Label="Source2" />
+                  <Edge From="69" To="70" Label="Source4" />
+                  <Edge From="70" To="89" Label="Source1" />
+                  <Edge From="71" To="72" Label="Source1" />
+                  <Edge From="71" To="76" Label="Source1" />
+                  <Edge From="71" To="80" Label="Source1" />
+                  <Edge From="71" To="84" Label="Source1" />
+                  <Edge From="72" To="73" Label="Source1" />
+                  <Edge From="73" To="75" Label="Source1" />
+                  <Edge From="74" To="75" Label="Source2" />
+                  <Edge From="75" To="88" Label="Source1" />
+                  <Edge From="76" To="77" Label="Source1" />
+                  <Edge From="77" To="79" Label="Source1" />
+                  <Edge From="78" To="79" Label="Source2" />
+                  <Edge From="79" To="88" Label="Source2" />
+                  <Edge From="80" To="81" Label="Source1" />
+                  <Edge From="81" To="83" Label="Source1" />
+                  <Edge From="82" To="83" Label="Source2" />
+                  <Edge From="83" To="88" Label="Source3" />
+                  <Edge From="84" To="85" Label="Source1" />
+                  <Edge From="85" To="87" Label="Source1" />
+                  <Edge From="86" To="87" Label="Source2" />
+                  <Edge From="87" To="88" Label="Source4" />
+                  <Edge From="88" To="89" Label="Source2" />
+                  <Edge From="89" To="104" Label="Source1" />
+                  <Edge From="90" To="91" Label="Source1" />
+                  <Edge From="90" To="95" Label="Source1" />
+                  <Edge From="90" To="99" Label="Source1" />
+                  <Edge From="91" To="92" Label="Source1" />
+                  <Edge From="92" To="94" Label="Source1" />
+                  <Edge From="93" To="94" Label="Source2" />
+                  <Edge From="94" To="103" Label="Source1" />
+                  <Edge From="95" To="96" Label="Source1" />
+                  <Edge From="96" To="98" Label="Source1" />
+                  <Edge From="97" To="98" Label="Source2" />
+                  <Edge From="98" To="103" Label="Source2" />
+                  <Edge From="99" To="100" Label="Source1" />
+                  <Edge From="100" To="102" Label="Source1" />
+                  <Edge From="101" To="102" Label="Source2" />
+                  <Edge From="102" To="103" Label="Source3" />
+                  <Edge From="103" To="104" Label="Source2" />
+                  <Edge From="105" To="106" Label="Source1" />
+                  <Edge From="106" To="107" Label="Source1" />
+                  <Edge From="106" To="109" Label="Source1" />
+                  <Edge From="106" To="117" Label="Source1" />
+                  <Edge From="106" To="119" Label="Source1" />
+                  <Edge From="106" To="125" Label="Source1" />
+                  <Edge From="106" To="127" Label="Source1" />
+                  <Edge From="106" To="133" Label="Source1" />
+                  <Edge From="106" To="135" Label="Source1" />
+                  <Edge From="106" To="141" Label="Source1" />
+                  <Edge From="106" To="143" Label="Source1" />
+                  <Edge From="107" To="108" Label="Source1" />
+                  <Edge From="108" To="116" Label="Source1" />
+                  <Edge From="109" To="115" Label="Source1" />
+                  <Edge From="110" To="111" Label="Source1" />
+                  <Edge From="111" To="112" Label="Source1" />
+                  <Edge From="111" To="120" Label="Source1" />
+                  <Edge From="111" To="128" Label="Source1" />
+                  <Edge From="111" To="136" Label="Source1" />
+                  <Edge From="112" To="113" Label="Source1" />
+                  <Edge From="113" To="114" Label="Source1" />
+                  <Edge From="114" To="115" Label="Source2" />
+                  <Edge From="115" To="116" Label="Source2" />
+                  <Edge From="117" To="118" Label="Source1" />
+                  <Edge From="118" To="124" Label="Source1" />
+                  <Edge From="119" To="123" Label="Source1" />
+                  <Edge From="120" To="121" Label="Source1" />
+                  <Edge From="121" To="122" Label="Source1" />
+                  <Edge From="122" To="123" Label="Source2" />
+                  <Edge From="123" To="124" Label="Source2" />
+                  <Edge From="125" To="126" Label="Source1" />
+                  <Edge From="126" To="132" Label="Source1" />
+                  <Edge From="127" To="131" Label="Source1" />
+                  <Edge From="128" To="129" Label="Source1" />
+                  <Edge From="129" To="130" Label="Source1" />
+                  <Edge From="130" To="131" Label="Source2" />
+                  <Edge From="131" To="132" Label="Source2" />
+                  <Edge From="133" To="134" Label="Source1" />
+                  <Edge From="134" To="140" Label="Source1" />
+                  <Edge From="135" To="139" Label="Source1" />
+                  <Edge From="136" To="137" Label="Source1" />
+                  <Edge From="137" To="138" Label="Source1" />
+                  <Edge From="138" To="139" Label="Source2" />
+                  <Edge From="139" To="140" Label="Source2" />
+                  <Edge From="141" To="142" Label="Source1" />
+                  <Edge From="142" To="146" Label="Source1" />
+                  <Edge From="143" To="144" Label="Source1" />
+                  <Edge From="144" To="145" Label="Source1" />
+                  <Edge From="145" To="146" Label="Source2" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="1" To="2" Label="Source1" />
+          </Edges>
+        </Workflow>
       </Expression>
-      <Expression xsi:type="IncludeWorkflow" Path="Extensions\IntraSessionVisualizer.bonsai">
-        <FrameSubject>IntraSession</FrameSubject>
-        <UiGiveLeft>UiGiveLeft</UiGiveLeft>
-        <UiGiveRight>UiGiveRight</UiGiveRight>
-        <UiMoveLeft>UiMoveLeft</UiMoveLeft>
-        <UiMoveRight>UiMoveRight</UiMoveRight>
+      <Expression xsi:type="GroupWorkflow">
+        <Name>IntraSessionVisualizer</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="FrameSubject" />
+              <Property Name="UiGiveLeft" />
+              <Property Name="UiGiveRight" />
+              <Property Name="UiMoveLeft" />
+              <Property Name="UiMoveRight" />
+              <Property Name="SessionMetadataSubject" />
+              <Property Name="StartExperimentSubject" />
+              <Property Name="UiCueGiveLeft" />
+              <Property Name="UiCueGiveRight" />
+            </Expression>
+            <Expression xsi:type="rx:Defer">
+              <Name>InterSessionVisualizer</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="StartExperimentSubject" />
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>StartExperiment</Name>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="BooleanProperty">
+                      <Value>true</Value>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="BooleanProperty">
+                      <Value>false</Value>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Merge" />
+                  </Expression>
+                  <Expression xsi:type="rx:BehaviorSubject">
+                    <Name>ExperimentStarted</Name>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="FrameSubject" />
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>IntraSession</Name>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Columns>3</imgui:Columns>
+                    <imgui:Flags>Borders</imgui:Flags>
+                    <imgui:OuterSize>
+                      <imgui:X>0</imgui:X>
+                      <imgui:Y>0</imgui:Y>
+                    </imgui:OuterSize>
+                    <imgui:InnerWidth>0</imgui:InnerWidth>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="imgui:TabBarBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Flags>None</imgui:Flags>
+                  </Expression>
+                  <Expression xsi:type="imgui:TabItemBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Text>Manual</imgui:Text>
+                    <imgui:Flags>None</imgui:Flags>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Columns>2</imgui:Columns>
+                    <imgui:Flags>None</imgui:Flags>
+                    <imgui:OuterSize>
+                      <imgui:X>0</imgui:X>
+                      <imgui:Y>0</imgui:Y>
+                    </imgui:OuterSize>
+                    <imgui:InnerWidth>0</imgui:InnerWidth>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>ExperimentStarted</Name>
+                  </Expression>
+                  <Expression xsi:type="PropertyMapping">
+                    <PropertyMappings>
+                      <Property Name="Enabled" />
+                    </PropertyMappings>
+                  </Expression>
+                  <Expression xsi:type="p7:EnableableButtonBuilder">
+                    <p7:Name>GiveLeft</p7:Name>
+                    <p7:Visible>true</p7:Visible>
+                    <p7:Text>Give Left</p7:Text>
+                    <p7:Enabled>false</p7:Enabled>
+                  </Expression>
+                  <Expression xsi:type="Unit" />
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="UiGiveLeft" Category="UiControl" />
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>UiGiveLeft</Name>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>ExperimentStarted</Name>
+                  </Expression>
+                  <Expression xsi:type="PropertyMapping">
+                    <PropertyMappings>
+                      <Property Name="Enabled" />
+                    </PropertyMappings>
+                  </Expression>
+                  <Expression xsi:type="p7:EnableableButtonBuilder">
+                    <p7:Name>GiveRight</p7:Name>
+                    <p7:Visible>true</p7:Visible>
+                    <p7:Text>Give Right</p7:Text>
+                    <p7:Enabled>false</p7:Enabled>
+                  </Expression>
+                  <Expression xsi:type="Unit" />
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="UiGiveRight" Category="UiControl" />
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>UiGiveRight</Name>
+                  </Expression>
+                  <Expression xsi:type="imgui:TabItemBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Text>Go Cue</imgui:Text>
+                    <imgui:Flags>None</imgui:Flags>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Columns>2</imgui:Columns>
+                    <imgui:Flags>None</imgui:Flags>
+                    <imgui:OuterSize>
+                      <imgui:X>0</imgui:X>
+                      <imgui:Y>0</imgui:Y>
+                    </imgui:OuterSize>
+                    <imgui:InnerWidth>0</imgui:InnerWidth>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>ExperimentStarted</Name>
+                  </Expression>
+                  <Expression xsi:type="PropertyMapping">
+                    <PropertyMappings>
+                      <Property Name="Enabled" />
+                    </PropertyMappings>
+                  </Expression>
+                  <Expression xsi:type="p7:EnableableButtonBuilder">
+                    <p7:Name>GiveLeftCue</p7:Name>
+                    <p7:Visible>true</p7:Visible>
+                    <p7:Text>Give Left Cue</p7:Text>
+                    <p7:Enabled>false</p7:Enabled>
+                  </Expression>
+                  <Expression xsi:type="Unit" />
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="UiCueGiveLeft" Category="UiControl" />
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>UiCueGiveLeft</Name>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>ExperimentStarted</Name>
+                  </Expression>
+                  <Expression xsi:type="PropertyMapping">
+                    <PropertyMappings>
+                      <Property Name="Enabled" />
+                    </PropertyMappings>
+                  </Expression>
+                  <Expression xsi:type="p7:EnableableButtonBuilder">
+                    <p7:Name>GiveRightCue</p7:Name>
+                    <p7:Visible>true</p7:Visible>
+                    <p7:Text>Give Right Cue</p7:Text>
+                    <p7:Enabled>false</p7:Enabled>
+                  </Expression>
+                  <Expression xsi:type="Unit" />
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="UiCueGiveRight" Category="UiControl" />
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>UiCueGiveRight</Name>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:CombineLatest" />
+                  </Expression>
+                  <Expression xsi:type="imgui:TableBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                    <imgui:Columns>2</imgui:Columns>
+                    <imgui:Flags>None</imgui:Flags>
+                    <imgui:OuterSize>
+                      <imgui:X>0</imgui:X>
+                      <imgui:Y>0</imgui:Y>
+                    </imgui:OuterSize>
+                    <imgui:InnerWidth>0</imgui:InnerWidth>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>ExperimentStarted</Name>
+                  </Expression>
+                  <Expression xsi:type="PropertyMapping">
+                    <PropertyMappings>
+                      <Property Name="Enabled" />
+                    </PropertyMappings>
+                  </Expression>
+                  <Expression xsi:type="p7:EnableableButtonBuilder">
+                    <p7:Name>MoveLeft</p7:Name>
+                    <p7:Visible>true</p7:Visible>
+                    <p7:Text>Move Left</p7:Text>
+                    <p7:Enabled>false</p7:Enabled>
+                  </Expression>
+                  <Expression xsi:type="Unit" />
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="UiMoveLeft" Category="UiControl" />
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>UiMoveLeft</Name>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>ExperimentStarted</Name>
+                  </Expression>
+                  <Expression xsi:type="PropertyMapping">
+                    <PropertyMappings>
+                      <Property Name="Enabled" />
+                    </PropertyMappings>
+                  </Expression>
+                  <Expression xsi:type="p7:EnableableButtonBuilder">
+                    <p7:Name>MoveRight</p7:Name>
+                    <p7:Visible>true</p7:Visible>
+                    <p7:Text>Move Right</p7:Text>
+                    <p7:Enabled>false</p7:Enabled>
+                  </Expression>
+                  <Expression xsi:type="Unit" />
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="UiMoveRight" Category="UiControl" />
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>UiMoveRight</Name>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:CombineLatest" />
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:CombineLatest" />
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="SessionMetadataSubject" />
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>SessionMetadata</Name>
+                  </Expression>
+                  <Expression xsi:type="PropertyMapping">
+                    <PropertyMappings>
+                      <Property Name="SessionInfo" />
+                    </PropertyMappings>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="p7:SessionInfoVisualizer">
+                      <p7:Visible>true</p7:Visible>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="imgui:TableNextColumnBuilder">
+                    <imgui:Visible>true</imgui:Visible>
+                  </Expression>
+                  <Expression xsi:type="p7:MultiLineInputTextBuilder">
+                    <p7:Name>Notes</p7:Name>
+                    <p7:Visible>true</p7:Visible>
+                    <p7:Text>Notes</p7:Text>
+                    <p7:Capacity>16384</p7:Capacity>
+                  </Expression>
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                  <Edge From="1" To="2" Label="Source1" />
+                  <Edge From="2" To="4" Label="Source1" />
+                  <Edge From="3" To="4" Label="Source2" />
+                  <Edge From="4" To="5" Label="Source1" />
+                  <Edge From="6" To="7" Label="Source1" />
+                  <Edge From="7" To="8" Label="Source1" />
+                  <Edge From="8" To="9" Label="Source1" />
+                  <Edge From="8" To="61" Label="Source1" />
+                  <Edge From="8" To="66" Label="Source1" />
+                  <Edge From="9" To="10" Label="Source1" />
+                  <Edge From="9" To="44" Label="Source1" />
+                  <Edge From="10" To="11" Label="Source1" />
+                  <Edge From="10" To="27" Label="Source1" />
+                  <Edge From="11" To="12" Label="Source1" />
+                  <Edge From="12" To="13" Label="Source1" />
+                  <Edge From="12" To="20" Label="Source1" />
+                  <Edge From="13" To="16" Label="Source1" />
+                  <Edge From="14" To="15" Label="Source1" />
+                  <Edge From="15" To="16" Label="Source2" />
+                  <Edge From="16" To="17" Label="Source1" />
+                  <Edge From="17" To="19" Label="Source1" />
+                  <Edge From="18" To="19" Label="Source2" />
+                  <Edge From="19" To="43" Label="Source1" />
+                  <Edge From="20" To="23" Label="Source1" />
+                  <Edge From="21" To="22" Label="Source1" />
+                  <Edge From="22" To="23" Label="Source2" />
+                  <Edge From="23" To="24" Label="Source1" />
+                  <Edge From="24" To="26" Label="Source1" />
+                  <Edge From="25" To="26" Label="Source2" />
+                  <Edge From="26" To="43" Label="Source2" />
+                  <Edge From="27" To="28" Label="Source1" />
+                  <Edge From="28" To="29" Label="Source1" />
+                  <Edge From="28" To="36" Label="Source1" />
+                  <Edge From="29" To="32" Label="Source1" />
+                  <Edge From="30" To="31" Label="Source1" />
+                  <Edge From="31" To="32" Label="Source2" />
+                  <Edge From="32" To="33" Label="Source1" />
+                  <Edge From="33" To="35" Label="Source1" />
+                  <Edge From="34" To="35" Label="Source2" />
+                  <Edge From="35" To="43" Label="Source3" />
+                  <Edge From="36" To="39" Label="Source1" />
+                  <Edge From="37" To="38" Label="Source1" />
+                  <Edge From="38" To="39" Label="Source2" />
+                  <Edge From="39" To="40" Label="Source1" />
+                  <Edge From="40" To="42" Label="Source1" />
+                  <Edge From="41" To="42" Label="Source2" />
+                  <Edge From="42" To="43" Label="Source4" />
+                  <Edge From="43" To="60" Label="Source1" />
+                  <Edge From="44" To="45" Label="Source1" />
+                  <Edge From="44" To="52" Label="Source1" />
+                  <Edge From="45" To="48" Label="Source1" />
+                  <Edge From="46" To="47" Label="Source1" />
+                  <Edge From="47" To="48" Label="Source2" />
+                  <Edge From="48" To="49" Label="Source1" />
+                  <Edge From="49" To="51" Label="Source1" />
+                  <Edge From="50" To="51" Label="Source2" />
+                  <Edge From="51" To="59" Label="Source1" />
+                  <Edge From="52" To="55" Label="Source1" />
+                  <Edge From="53" To="54" Label="Source1" />
+                  <Edge From="54" To="55" Label="Source2" />
+                  <Edge From="55" To="56" Label="Source1" />
+                  <Edge From="56" To="58" Label="Source1" />
+                  <Edge From="57" To="58" Label="Source2" />
+                  <Edge From="58" To="59" Label="Source2" />
+                  <Edge From="59" To="60" Label="Source2" />
+                  <Edge From="61" To="65" Label="Source1" />
+                  <Edge From="62" To="63" Label="Source1" />
+                  <Edge From="63" To="64" Label="Source1" />
+                  <Edge From="64" To="65" Label="Source2" />
+                  <Edge From="66" To="67" Label="Source1" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="1" To="2" Label="Source1" />
+          </Edges>
+        </Workflow>
       </Expression>
     </Nodes>
     <Edges>

@@ -13,6 +13,10 @@
         <Property Name="UiGiveRight" />
         <Property Name="UiMoveLeft" />
         <Property Name="UiMoveRight" />
+        <Property Name="SessionMetadataSubject" />
+        <Property Name="StartExperimentSubject" />
+        <Property Name="UiCueGiveLeft" />
+        <Property Name="UiCueGiveRight" />
       </Expression>
       <Expression xsi:type="rx:Defer">
         <Name>InterSessionVisualizer</Name>
@@ -259,6 +263,9 @@
             <Expression xsi:type="imgui:TableNextColumnBuilder">
               <imgui:Visible>true</imgui:Visible>
             </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Name" DisplayName="SessionMetadataSubject" />
+            </Expression>
             <Expression xsi:type="SubscribeSubject">
               <Name>SessionMetadata</Name>
             </Expression>
@@ -292,7 +299,7 @@
             <Edge From="7" To="8" Label="Source1" />
             <Edge From="8" To="9" Label="Source1" />
             <Edge From="8" To="61" Label="Source1" />
-            <Edge From="8" To="65" Label="Source1" />
+            <Edge From="8" To="66" Label="Source1" />
             <Edge From="9" To="10" Label="Source1" />
             <Edge From="9" To="44" Label="Source1" />
             <Edge From="10" To="11" Label="Source1" />
@@ -349,10 +356,11 @@
             <Edge From="57" To="58" Label="Source2" />
             <Edge From="58" To="59" Label="Source2" />
             <Edge From="59" To="60" Label="Source2" />
-            <Edge From="61" To="64" Label="Source1" />
+            <Edge From="61" To="65" Label="Source1" />
             <Edge From="62" To="63" Label="Source1" />
-            <Edge From="63" To="64" Label="Source2" />
-            <Edge From="65" To="66" Label="Source1" />
+            <Edge From="63" To="64" Label="Source1" />
+            <Edge From="64" To="65" Label="Source2" />
+            <Edge From="66" To="67" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
