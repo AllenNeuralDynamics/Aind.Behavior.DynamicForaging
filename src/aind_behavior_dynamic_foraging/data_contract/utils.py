@@ -30,9 +30,7 @@ def _calculate_side_volume_ml(
     open_times_s = (matched["open_time_ms"].dropna() / 1000.0).to_numpy()
     if len(open_times_s) == 0:
         return 0.0
-    print(open_times_s, slope_g_per_s, offset_g)
     delivered_g = np.round((slope_g_per_s * open_times_s) + offset_g, 4)
-    print(delivered_g)
     # For water, 1 g is approximately 1 mL.
     return float(delivered_g.sum())
 
