@@ -165,7 +165,11 @@
               <imgui:Visible>true</imgui:Visible>
               <imgui:Text>Drain 5ml Left</imgui:Text>
             </Expression>
-            <Expression xsi:type="Unit" />
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="BooleanProperty">
+                <Value>true</Value>
+              </Combinator>
+            </Expression>
             <Expression xsi:type="ExternalizedMapping">
               <Property Name="Name" DisplayName="UiDrainLeft" Category="UiControlValve" />
             </Expression>
@@ -177,7 +181,11 @@
               <imgui:Visible>true</imgui:Visible>
               <imgui:Text>Drain 5ml Right</imgui:Text>
             </Expression>
-            <Expression xsi:type="Unit" />
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="BooleanProperty">
+                <Value>true</Value>
+              </Combinator>
+            </Expression>
             <Expression xsi:type="ExternalizedMapping">
               <Property Name="Name" DisplayName="UiDrainRight" Category="UiControlValve" />
             </Expression>
@@ -189,7 +197,11 @@
               <imgui:Visible>true</imgui:Visible>
               <imgui:Text>Drain 5ml Both</imgui:Text>
             </Expression>
-            <Expression xsi:type="Unit" />
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="BooleanProperty">
+                <Value>true</Value>
+              </Combinator>
+            </Expression>
             <Expression xsi:type="ExternalizedMapping">
               <Property Name="Name" DisplayName="UiDrainBoth" Category="UiControlValve" />
             </Expression>

@@ -2349,39 +2349,6 @@
                   <Expression xsi:type="MulticastSubject">
                     <Name>SetRightOpen</Name>
                   </Expression>
-                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
-                    <rx:Name>UiDrainLeft</rx:Name>
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="BooleanProperty">
-                      <Value>true</Value>
-                    </Combinator>
-                  </Expression>
-                  <Expression xsi:type="MulticastSubject">
-                    <Name>IsFlushingValveLeft</Name>
-                  </Expression>
-                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
-                    <rx:Name>UiDrainRight</rx:Name>
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="BooleanProperty">
-                      <Value>true</Value>
-                    </Combinator>
-                  </Expression>
-                  <Expression xsi:type="MulticastSubject">
-                    <Name>IsFlushingValveLeft</Name>
-                  </Expression>
-                  <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
-                    <rx:Name>UiDrainBoth</rx:Name>
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="BooleanProperty">
-                      <Value>true</Value>
-                    </Combinator>
-                  </Expression>
-                  <Expression xsi:type="MulticastSubject">
-                    <Name>IsFlushingValveLeft</Name>
-                  </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="BooleanProperty">
                       <Value>true</Value>
@@ -2401,6 +2368,18 @@
                   </Expression>
                   <Expression xsi:type="rx:BehaviorSubject" TypeArguments="sys:Boolean">
                     <rx:Name>IsFlushingValveLeft</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:BehaviorSubject" TypeArguments="sys:Boolean">
+                    <rx:Name>IsFlushingValveRight</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Boolean">
+                    <rx:Name>UiDrainLeft</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Boolean">
+                    <rx:Name>UiDrainBoth</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Merge" />
                   </Expression>
                   <Expression xsi:type="rx:CreateObservable">
                     <Name>Flush</Name>
@@ -2560,8 +2539,11 @@
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Switch" />
                   </Expression>
-                  <Expression xsi:type="rx:BehaviorSubject" TypeArguments="sys:Boolean">
-                    <rx:Name>IsFlushingValveRight</rx:Name>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Boolean">
+                    <rx:Name>UiDrainRight</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Merge" />
                   </Expression>
                   <Expression xsi:type="rx:CreateObservable">
                     <Name>Flush</Name>
@@ -2736,19 +2718,16 @@
                   <Edge From="20" To="21" Label="Source1" />
                   <Edge From="22" To="23" Label="Source1" />
                   <Edge From="24" To="25" Label="Source1" />
-                  <Edge From="25" To="26" Label="Source1" />
+                  <Edge From="26" To="27" Label="Source1" />
                   <Edge From="27" To="28" Label="Source1" />
-                  <Edge From="28" To="29" Label="Source1" />
-                  <Edge From="30" To="31" Label="Source1" />
-                  <Edge From="31" To="32" Label="Source1" />
-                  <Edge From="32" To="33" Label="Source1" />
+                  <Edge From="31" To="33" Label="Source1" />
+                  <Edge From="32" To="33" Label="Source2" />
+                  <Edge From="32" To="37" Label="Source2" />
                   <Edge From="33" To="34" Label="Source1" />
-                  <Edge From="35" To="36" Label="Source1" />
+                  <Edge From="34" To="35" Label="Source1" />
                   <Edge From="36" To="37" Label="Source1" />
+                  <Edge From="37" To="38" Label="Source1" />
                   <Edge From="38" To="39" Label="Source1" />
-                  <Edge From="39" To="40" Label="Source1" />
-                  <Edge From="41" To="42" Label="Source1" />
-                  <Edge From="42" To="43" Label="Source1" />
                 </Edges>
               </Workflow>
             </Expression>
