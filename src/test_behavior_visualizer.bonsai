@@ -1948,53 +1948,7 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="p7:SoftwareEventVisualizer">
           <p7:Visible>true</p7:Visible>
-          <p7:SoftwareEvents>
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-          </p7:SoftwareEvents>
+          <p7:SoftwareEvents />
           <p7:TrialBreakEventName>Break</p7:TrialBreakEventName>
           <p7:PlotHeight>200</p7:PlotHeight>
           <p7:ShadedAreaPlotters>
