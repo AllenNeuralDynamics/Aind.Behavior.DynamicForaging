@@ -2334,6 +2334,9 @@
                   <Expression xsi:type="MulticastSubject">
                     <Name>SetRightOpen</Name>
                   </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>SetLeftOpen</Name>
+                  </Expression>
                   <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Boolean">
                     <rx:Name>UiKeepLeftOpen</rx:Name>
                   </Expression>
@@ -2345,9 +2348,6 @@
                   </Expression>
                   <Expression xsi:type="MulticastSubject">
                     <Name>SetRightOpen</Name>
-                  </Expression>
-                  <Expression xsi:type="MulticastSubject">
-                    <Name>SetLeftOpen</Name>
                   </Expression>
                   <Expression xsi:type="rx:PublishSubject" TypeArguments="p3:Unit">
                     <rx:Name>UiDrainLeft</rx:Name>
@@ -2732,8 +2732,8 @@
                   <Edge From="13" To="14" Label="Source1" />
                   <Edge From="15" To="16" Label="Source1" />
                   <Edge From="17" To="18" Label="Source1" />
-                  <Edge From="19" To="20" Label="Source1" />
-                  <Edge From="21" To="22" Label="Source1" />
+                  <Edge From="18" To="19" Label="Source1" />
+                  <Edge From="20" To="21" Label="Source1" />
                   <Edge From="22" To="23" Label="Source1" />
                   <Edge From="24" To="25" Label="Source1" />
                   <Edge From="25" To="26" Label="Source1" />
