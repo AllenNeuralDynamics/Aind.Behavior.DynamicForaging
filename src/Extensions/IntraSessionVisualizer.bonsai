@@ -259,10 +259,18 @@
             <Expression xsi:type="imgui:TableNextColumnBuilder">
               <imgui:Visible>true</imgui:Visible>
             </Expression>
-            <Expression xsi:type="imgui:TextBuilder">
-              <imgui:Name>SessionInfo</imgui:Name>
-              <imgui:Visible>true</imgui:Visible>
-              <imgui:Text>Session Info</imgui:Text>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>SessionMetadata</Name>
+            </Expression>
+            <Expression xsi:type="PropertyMapping">
+              <PropertyMappings>
+                <Property Name="SessionInfo" />
+              </PropertyMappings>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p1:SessionInfoVisualizer">
+                <p1:Visible>true</p1:Visible>
+              </Combinator>
             </Expression>
             <Expression xsi:type="imgui:TableNextColumnBuilder">
               <imgui:Visible>true</imgui:Visible>
@@ -284,7 +292,7 @@
             <Edge From="7" To="8" Label="Source1" />
             <Edge From="8" To="9" Label="Source1" />
             <Edge From="8" To="61" Label="Source1" />
-            <Edge From="8" To="63" Label="Source1" />
+            <Edge From="8" To="65" Label="Source1" />
             <Edge From="9" To="10" Label="Source1" />
             <Edge From="9" To="44" Label="Source1" />
             <Edge From="10" To="11" Label="Source1" />
@@ -341,8 +349,10 @@
             <Edge From="57" To="58" Label="Source2" />
             <Edge From="58" To="59" Label="Source2" />
             <Edge From="59" To="60" Label="Source2" />
-            <Edge From="61" To="62" Label="Source1" />
-            <Edge From="63" To="64" Label="Source1" />
+            <Edge From="61" To="64" Label="Source1" />
+            <Edge From="62" To="63" Label="Source1" />
+            <Edge From="63" To="64" Label="Source2" />
+            <Edge From="65" To="66" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
