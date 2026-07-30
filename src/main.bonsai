@@ -2948,15 +2948,27 @@
                   <Expression xsi:type="imgui:TableNextColumnBuilder">
                     <imgui:Visible>true</imgui:Visible>
                   </Expression>
-                  <Expression xsi:type="imgui:TableBuilder">
-                    <imgui:Visible>true</imgui:Visible>
-                    <imgui:Columns>2</imgui:Columns>
-                    <imgui:Flags>Borders</imgui:Flags>
-                    <imgui:OuterSize>
-                      <imgui:X>0</imgui:X>
-                      <imgui:Y>0</imgui:Y>
-                    </imgui:OuterSize>
-                    <imgui:InnerWidth>0</imgui:InnerWidth>
+                  <Expression xsi:type="p2:TableBuilder">
+                    <p2:Visible>true</p2:Visible>
+                    <p2:Columns>
+                      <p2:ColumnStyling>
+                        <p2:Name>Ethograph</p2:Name>
+                        <p2:Flags>WidthStretch</p2:Flags>
+                        <p2:InitValue>0</p2:InitValue>
+                      </p2:ColumnStyling>
+                      <p2:ColumnStyling>
+                        <p2:Name>Camera</p2:Name>
+                        <p2:Flags>WidthFixed</p2:Flags>
+                        <p2:InitValue>320</p2:InitValue>
+                      </p2:ColumnStyling>
+                    </p2:Columns>
+                    <p2:Flags>BordersInnerH BordersOuterH BordersInnerV BordersOuterV BordersH BordersV BordersInner BordersOuter Borders SizingFixedFit</p2:Flags>
+                    <p2:OuterSize>
+                      <p2:X>0</p2:X>
+                      <p2:Y>0</p2:Y>
+                    </p2:OuterSize>
+                    <p2:InnerWidth>0</p2:InnerWidth>
+                    <p2:ShowHeadersRow>true</p2:ShowHeadersRow>
                   </Expression>
                   <Expression xsi:type="imgui:TableNextColumnBuilder">
                     <imgui:Visible>true</imgui:Visible>
