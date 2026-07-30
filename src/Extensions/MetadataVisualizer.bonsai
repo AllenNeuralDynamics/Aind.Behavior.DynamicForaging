@@ -3,6 +3,7 @@
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
                  xmlns:imgui="clr-namespace:Bonsai.ImGui;assembly=Bonsai.ImGui"
+                 xmlns:p1="clr-namespace:;assembly=Extensions"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
@@ -34,15 +35,47 @@
             <Expression xsi:type="imgui:TableNextColumnBuilder">
               <imgui:Visible>true</imgui:Visible>
             </Expression>
-            <Expression xsi:type="imgui:TableBuilder">
-              <imgui:Visible>true</imgui:Visible>
-              <imgui:Columns>7</imgui:Columns>
-              <imgui:Flags>None</imgui:Flags>
-              <imgui:OuterSize>
-                <imgui:X>0</imgui:X>
-                <imgui:Y>0</imgui:Y>
-              </imgui:OuterSize>
-              <imgui:InnerWidth>0</imgui:InnerWidth>
+            <Expression xsi:type="p1:TableBuilder">
+              <p1:Visible>true</p1:Visible>
+              <p1:Columns>
+                <p1:ColumnStyling>
+                  <p1:Name>Condition</p1:Name>
+                  <p1:Flags>WidthFixed</p1:Flags>
+                  <p1:InitValue>0</p1:InitValue>
+                </p1:ColumnStyling>
+                <p1:ColumnStyling>
+                  <p1:Name>Subject</p1:Name>
+                  <p1:Flags>WidthFixed</p1:Flags>
+                  <p1:InitValue>0</p1:InitValue>
+                </p1:ColumnStyling>
+                <p1:ColumnStyling>
+                  <p1:Name>Session</p1:Name>
+                  <p1:Flags>WidthFixed</p1:Flags>
+                  <p1:InitValue>0</p1:InitValue>
+                </p1:ColumnStyling>
+                <p1:ColumnStyling>
+                  <p1:Name>Experiment</p1:Name>
+                  <p1:Flags>WidthFixed</p1:Flags>
+                  <p1:InitValue>0</p1:InitValue>
+                </p1:ColumnStyling>
+                <p1:ColumnStyling>
+                  <p1:Name>Habituation</p1:Name>
+                  <p1:Flags>WidthStretch</p1:Flags>
+                  <p1:InitValue>0</p1:InitValue>
+                </p1:ColumnStyling>
+                <p1:ColumnStyling>
+                  <p1:Name>Control</p1:Name>
+                  <p1:Flags>WidthStretch</p1:Flags>
+                  <p1:InitValue>0</p1:InitValue>
+                </p1:ColumnStyling>
+              </p1:Columns>
+              <p1:Flags>BordersInnerH BordersOuterH BordersInnerV BordersOuterV BordersH BordersV BordersInner BordersOuter Borders SizingFixedFit</p1:Flags>
+              <p1:OuterSize>
+                <p1:X>0</p1:X>
+                <p1:Y>0</p1:Y>
+              </p1:OuterSize>
+              <p1:InnerWidth>0</p1:InnerWidth>
+              <p1:ShowHeadersRow>true</p1:ShowHeadersRow>
             </Expression>
             <Expression xsi:type="imgui:TableNextColumnBuilder">
               <imgui:Visible>true</imgui:Visible>
@@ -187,6 +220,31 @@
             <Expression xsi:type="imgui:TableNextColumnBuilder">
               <imgui:Visible>true</imgui:Visible>
             </Expression>
+            <Expression xsi:type="p1:TableBuilder">
+              <p1:Visible>true</p1:Visible>
+              <p1:Columns>
+                <p1:ColumnStyling>
+                  <p1:Name>Start</p1:Name>
+                  <p1:Flags>WidthStretch</p1:Flags>
+                  <p1:InitValue>0</p1:InitValue>
+                </p1:ColumnStyling>
+                <p1:ColumnStyling>
+                  <p1:Name>Stop</p1:Name>
+                  <p1:Flags>WidthStretch</p1:Flags>
+                  <p1:InitValue>0</p1:InitValue>
+                </p1:ColumnStyling>
+              </p1:Columns>
+              <p1:Flags>None</p1:Flags>
+              <p1:OuterSize>
+                <p1:X>0</p1:X>
+                <p1:Y>0</p1:Y>
+              </p1:OuterSize>
+              <p1:InnerWidth>0</p1:InnerWidth>
+              <p1:ShowHeadersRow>false</p1:ShowHeadersRow>
+            </Expression>
+            <Expression xsi:type="imgui:TableNextColumnBuilder">
+              <imgui:Visible>true</imgui:Visible>
+            </Expression>
             <Expression xsi:type="imgui:ButtonBuilder">
               <imgui:Visible>true</imgui:Visible>
               <imgui:Text>START</imgui:Text>
@@ -224,7 +282,6 @@
             <Edge From="5" To="23" Label="Source1" />
             <Edge From="5" To="28" Label="Source1" />
             <Edge From="5" To="37" Label="Source1" />
-            <Edge From="5" To="42" Label="Source1" />
             <Edge From="6" To="12" Label="Source1" />
             <Edge From="7" To="8" Label="Source1" />
             <Edge From="8" To="9" Label="Source1" />
@@ -254,12 +311,15 @@
             <Edge From="35" To="36" Label="Source2" />
             <Edge From="37" To="38" Label="Source1" />
             <Edge From="38" To="39" Label="Source1" />
-            <Edge From="39" To="41" Label="Source1" />
-            <Edge From="40" To="41" Label="Source2" />
-            <Edge From="42" To="43" Label="Source1" />
-            <Edge From="43" To="44" Label="Source1" />
-            <Edge From="44" To="46" Label="Source1" />
-            <Edge From="45" To="46" Label="Source2" />
+            <Edge From="38" To="44" Label="Source1" />
+            <Edge From="39" To="40" Label="Source1" />
+            <Edge From="40" To="41" Label="Source1" />
+            <Edge From="41" To="43" Label="Source1" />
+            <Edge From="42" To="43" Label="Source2" />
+            <Edge From="44" To="45" Label="Source1" />
+            <Edge From="45" To="46" Label="Source1" />
+            <Edge From="46" To="48" Label="Source1" />
+            <Edge From="47" To="48" Label="Source2" />
           </Edges>
         </Workflow>
       </Expression>

@@ -51,6 +51,8 @@ public class TableBuilder : ControlBuilder<string>
     [Description("The optional total width to layout columns for horizontal scrolling.")]
     public float InnerWidth { get; set; }
 
+    public bool ShowHeadersRow {get; set; }
+
     /// <inheritdoc/>
     protected override IObservable<string> Generate<TSource>(IObservable<TSource> source)
     {
@@ -66,7 +68,8 @@ public class TableBuilder : ControlBuilder<string>
                         {
                             ImGui.TableSetupColumn(col.Name, col.Flags, col.InitValue);
                         }
-                        ImGui.TableHeadersRow();
+                        if (ShowHeadersRow)
+                            ImGui.TableHeadersRow();
 
                         observer.OnNext(label);
                         ImGui.EndTable();
@@ -79,7 +82,7 @@ public class TableBuilder : ControlBuilder<string>
     }
 }
 
-[Serializable]
+// [Serializable]
 public class ColumnStyling
 {
     public string Name {get; set;}
