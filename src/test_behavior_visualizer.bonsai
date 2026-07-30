@@ -87,7 +87,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
-                      <rx:DueTime>PT2.215S</rx:DueTime>
+                      <rx:DueTime>PT2.635S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -139,7 +139,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
-                      <rx:DueTime>PT0.3S</rx:DueTime>
+                      <rx:DueTime>PT1.225S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -210,7 +210,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
-                      <rx:DueTime>PT0.281S</rx:DueTime>
+                      <rx:DueTime>PT0.184S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -616,7 +616,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p7:CreateNullableBoolean">
-                <p7:Value>false</p7:Value>
+                <p7:Value>true</p7:Value>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -721,7 +721,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p7:CreateNullableBoolean">
-                <p7:Value>false</p7:Value>
+                <p7:Value>true</p7:Value>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -771,7 +771,7 @@
                 <p4:ResponseDeadlineDuration>5</p4:ResponseDeadlineDuration>
                 <p4:QuiescencePeriodDuration>0.5</p4:QuiescencePeriodDuration>
                 <p4:InterTrialIntervalDuration>5</p4:InterTrialIntervalDuration>
-                <p4:IsAutoResponseRight>false</p4:IsAutoResponseRight>
+                <p4:IsAutoResponseRight xsi:nil="true" />
                 <p4:LickspoutOffsetDelta>0</p4:LickspoutOffsetDelta>
               </Combinator>
             </Expression>
@@ -782,7 +782,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p4:TrialOutcome">
-                <p4:IsRightChoice>false</p4:IsRightChoice>
+                <p4:IsRightChoice xsi:nil="true" />
                 <p4:IsRewarded>false</p4:IsRewarded>
               </Combinator>
             </Expression>
@@ -809,7 +809,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Delay">
-                      <rx:DueTime>PT0.901S</rx:DueTime>
+                      <rx:DueTime>PT0.385S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -1124,15 +1124,26 @@
             <Expression xsi:type="imgui:TableNextColumnBuilder">
               <imgui:Visible>true</imgui:Visible>
             </Expression>
-            <Expression xsi:type="imgui:TableBuilder">
-              <imgui:Visible>true</imgui:Visible>
-              <imgui:Columns>2</imgui:Columns>
-              <imgui:Flags>Borders</imgui:Flags>
-              <imgui:OuterSize>
-                <imgui:X>0</imgui:X>
-                <imgui:Y>0</imgui:Y>
-              </imgui:OuterSize>
-              <imgui:InnerWidth>0</imgui:InnerWidth>
+            <Expression xsi:type="p7:TableBuilder">
+              <p7:Visible>true</p7:Visible>
+              <p7:Columns>
+                <p7:ColumnStyling>
+                  <p7:Name>Etho</p7:Name>
+                  <p7:Flags>WidthStretch</p7:Flags>
+                  <p7:InitValue>0</p7:InitValue>
+                </p7:ColumnStyling>
+                <p7:ColumnStyling>
+                  <p7:Name>Camera</p7:Name>
+                  <p7:Flags>WidthFixed</p7:Flags>
+                  <p7:InitValue>320</p7:InitValue>
+                </p7:ColumnStyling>
+              </p7:Columns>
+              <p7:Flags>Resizable BordersInnerH BordersOuterH BordersInnerV BordersOuterV BordersH BordersV BordersInner BordersOuter Borders SizingFixedFit</p7:Flags>
+              <p7:OuterSize>
+                <p7:X>0</p7:X>
+                <p7:Y>0</p7:Y>
+              </p7:OuterSize>
+              <p7:InnerWidth>0</p7:InnerWidth>
             </Expression>
             <Expression xsi:type="imgui:TableNextColumnBuilder">
               <imgui:Visible>true</imgui:Visible>
@@ -1948,7 +1959,18 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="p7:SoftwareEventVisualizer">
           <p7:Visible>true</p7:Visible>
-          <p7:SoftwareEvents />
+          <p7:SoftwareEvents>
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+          </p7:SoftwareEvents>
           <p7:TrialBreakEventName>Break</p7:TrialBreakEventName>
           <p7:PlotHeight>200</p7:PlotHeight>
           <p7:ShadedAreaPlotters>

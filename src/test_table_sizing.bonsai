@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WorkflowBuilder Version="2.9.0"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:imvizui="clr-namespace:Bonsai.ImGui.Visualizers;assembly=Bonsai.ImGui.Visualizers.Design"
+                 xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
+                 xmlns:p1="clr-namespace:;assembly=Extensions"
+                 xmlns:imgui="clr-namespace:Bonsai.ImGui;assembly=Bonsai.ImGui"
+                 xmlns="https://bonsai-rx.org/2018/workflow">
+  <Workflow>
+    <Nodes>
+      <Expression xsi:type="imvizui:ImPlotVisualizerBuilder" />
+      <Expression xsi:type="rx:PublishSubject">
+        <Name>Frame</Name>
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>Frame</Name>
+      </Expression>
+      <Expression xsi:type="p1:TableBuilder">
+        <p1:Visible>true</p1:Visible>
+        <p1:Columns>
+          <p1:ColumnStyling>
+            <p1:Name>AAA</p1:Name>
+            <p1:Flags>WidthStretch</p1:Flags>
+            <p1:InitValue>0</p1:InitValue>
+          </p1:ColumnStyling>
+          <p1:ColumnStyling>
+            <p1:Name>BBB</p1:Name>
+            <p1:Flags>WidthFixed</p1:Flags>
+            <p1:InitValue>0</p1:InitValue>
+          </p1:ColumnStyling>
+        </p1:Columns>
+        <p1:Flags>Resizable BordersInnerH BordersOuterH BordersInnerV BordersOuterV BordersH BordersV BordersInner BordersOuter Borders SizingFixedFit</p1:Flags>
+        <p1:OuterSize>
+          <p1:X>0</p1:X>
+          <p1:Y>0</p1:Y>
+        </p1:OuterSize>
+        <p1:InnerWidth>0</p1:InnerWidth>
+      </Expression>
+      <Expression xsi:type="imgui:TableNextColumnBuilder">
+        <imgui:Visible>true</imgui:Visible>
+      </Expression>
+      <Expression xsi:type="imgui:ButtonBuilder">
+        <imgui:Visible>true</imgui:Visible>
+        <imgui:Text>TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST</imgui:Text>
+      </Expression>
+      <Expression xsi:type="imgui:TableNextColumnBuilder">
+        <imgui:Visible>true</imgui:Visible>
+      </Expression>
+      <Expression xsi:type="imgui:ButtonBuilder">
+        <imgui:Visible>true</imgui:Visible>
+        <imgui:Text>TEST</imgui:Text>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>Frame</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="imgui:TableBuilder">
+          <imgui:Visible>true</imgui:Visible>
+          <imgui:Columns>2</imgui:Columns>
+          <imgui:Flags>Borders</imgui:Flags>
+          <imgui:OuterSize>
+            <imgui:X>0</imgui:X>
+            <imgui:Y>0</imgui:Y>
+          </imgui:OuterSize>
+          <imgui:InnerWidth>0</imgui:InnerWidth>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="imgui:TableNextColumnBuilder">
+          <imgui:Visible>true</imgui:Visible>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="imgui:ButtonBuilder">
+          <imgui:Visible>true</imgui:Visible>
+          <imgui:Text>TEST</imgui:Text>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="imgui:TableNextColumnBuilder">
+          <imgui:Visible>true</imgui:Visible>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="imgui:ButtonBuilder">
+          <imgui:Visible>true</imgui:Visible>
+          <imgui:Text>TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST</imgui:Text>
+        </Builder>
+      </Expression>
+    </Nodes>
+    <Edges>
+      <Edge From="0" To="1" Label="Source1" />
+      <Edge From="2" To="3" Label="Source1" />
+      <Edge From="3" To="4" Label="Source1" />
+      <Edge From="3" To="6" Label="Source1" />
+      <Edge From="4" To="5" Label="Source1" />
+      <Edge From="6" To="7" Label="Source1" />
+      <Edge From="8" To="9" Label="Source1" />
+      <Edge From="9" To="10" Label="Source1" />
+      <Edge From="9" To="12" Label="Source1" />
+      <Edge From="10" To="11" Label="Source1" />
+      <Edge From="12" To="13" Label="Source1" />
+    </Edges>
+  </Workflow>
+</WorkflowBuilder>
