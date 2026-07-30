@@ -1,6 +1,7 @@
 using Bonsai;
 using Bonsai.ImGui;
 using Hexa.NET.ImGui;
+using Markdig.Extensions.Tables;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -52,6 +53,11 @@ public class TableBuilder : ControlBuilder<string>
     public float InnerWidth { get; set; }
 
     public bool ShowHeadersRow {get; set; }
+
+    public TableBuilder()
+    {
+        Columns = new List<ColumnStyling>();
+    }
 
     /// <inheritdoc/>
     protected override IObservable<string> Generate<TSource>(IObservable<TSource> source)
