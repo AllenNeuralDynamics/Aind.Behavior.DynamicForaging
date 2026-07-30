@@ -245,9 +245,15 @@
             <Expression xsi:type="imgui:TableNextColumnBuilder">
               <imgui:Visible>true</imgui:Visible>
             </Expression>
-            <Expression xsi:type="imgui:ButtonBuilder">
-              <imgui:Visible>true</imgui:Visible>
-              <imgui:Text>START</imgui:Text>
+            <Expression xsi:type="p1:EnableableButtonBuilder">
+              <p1:Name>StartButton</p1:Name>
+              <p1:Visible>true</p1:Visible>
+              <p1:Text>START</p1:Text>
+              <p1:Enabled>true</p1:Enabled>
+              <p1:Size>
+                <p1:Width>100</p1:Width>
+                <p1:Height>50</p1:Height>
+              </p1:Size>
             </Expression>
             <Expression xsi:type="Unit" />
             <Expression xsi:type="ExternalizedMapping">
@@ -259,9 +265,15 @@
             <Expression xsi:type="imgui:TableNextColumnBuilder">
               <imgui:Visible>true</imgui:Visible>
             </Expression>
-            <Expression xsi:type="imgui:ButtonBuilder">
-              <imgui:Visible>true</imgui:Visible>
-              <imgui:Text>STOP</imgui:Text>
+            <Expression xsi:type="p1:EnableableButtonBuilder">
+              <p1:Name>StopButton</p1:Name>
+              <p1:Visible>true</p1:Visible>
+              <p1:Text>STOP</p1:Text>
+              <p1:Enabled>true</p1:Enabled>
+              <p1:Size>
+                <p1:Width>100</p1:Width>
+                <p1:Height>50</p1:Height>
+              </p1:Size>
             </Expression>
             <Expression xsi:type="Unit" />
             <Expression xsi:type="ExternalizedMapping">

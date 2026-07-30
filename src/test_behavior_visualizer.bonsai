@@ -87,7 +87,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
-                      <rx:DueTime>PT0.777S</rx:DueTime>
+                      <rx:DueTime>PT2.983S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -139,7 +139,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
-                      <rx:DueTime>PT2.307S</rx:DueTime>
+                      <rx:DueTime>PT1.822S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -210,7 +210,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
-                      <rx:DueTime>PT0.164S</rx:DueTime>
+                      <rx:DueTime>PT1.348S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -616,7 +616,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p7:CreateNullableBoolean">
-                <p7:Value>false</p7:Value>
+                <p7:Value>true</p7:Value>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -782,7 +782,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p4:TrialOutcome">
-                <p4:IsRightChoice>false</p4:IsRightChoice>
+                <p4:IsRightChoice>true</p4:IsRightChoice>
                 <p4:IsRewarded>true</p4:IsRewarded>
               </Combinator>
             </Expression>
@@ -809,7 +809,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Delay">
-                      <rx:DueTime>PT0.594S</rx:DueTime>
+                      <rx:DueTime>PT0.824S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -1967,12 +1967,6 @@
             <p7:TimestampedOfSoftwareEvent />
             <p7:TimestampedOfSoftwareEvent />
             <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
-            <p7:TimestampedOfSoftwareEvent />
           </p7:SoftwareEvents>
           <p7:TrialBreakEventName>Break</p7:TrialBreakEventName>
           <p7:PlotHeight>200</p7:PlotHeight>
@@ -2891,32 +2885,32 @@
                     <p7:Columns>
                       <p7:ColumnStyling>
                         <p7:Name>Condition</p7:Name>
-                        <p7:Flags>None</p7:Flags>
+                        <p7:Flags>WidthFixed</p7:Flags>
                         <p7:InitValue>0</p7:InitValue>
                       </p7:ColumnStyling>
                       <p7:ColumnStyling>
                         <p7:Name>Subject</p7:Name>
-                        <p7:Flags>None</p7:Flags>
+                        <p7:Flags>WidthFixed</p7:Flags>
                         <p7:InitValue>0</p7:InitValue>
                       </p7:ColumnStyling>
                       <p7:ColumnStyling>
                         <p7:Name>Session</p7:Name>
-                        <p7:Flags>None</p7:Flags>
+                        <p7:Flags>WidthFixed</p7:Flags>
                         <p7:InitValue>0</p7:InitValue>
                       </p7:ColumnStyling>
                       <p7:ColumnStyling>
                         <p7:Name>Experiment</p7:Name>
-                        <p7:Flags>None</p7:Flags>
+                        <p7:Flags>WidthFixed</p7:Flags>
                         <p7:InitValue>0</p7:InitValue>
                       </p7:ColumnStyling>
                       <p7:ColumnStyling>
                         <p7:Name>Habituation</p7:Name>
-                        <p7:Flags>None</p7:Flags>
+                        <p7:Flags>WidthStretch</p7:Flags>
                         <p7:InitValue>0</p7:InitValue>
                       </p7:ColumnStyling>
                       <p7:ColumnStyling>
                         <p7:Name>Control</p7:Name>
-                        <p7:Flags>None</p7:Flags>
+                        <p7:Flags>WidthStretch</p7:Flags>
                         <p7:InitValue>0</p7:InitValue>
                       </p7:ColumnStyling>
                     </p7:Columns>
@@ -3096,9 +3090,15 @@
                   <Expression xsi:type="imgui:TableNextColumnBuilder">
                     <imgui:Visible>true</imgui:Visible>
                   </Expression>
-                  <Expression xsi:type="imgui:ButtonBuilder">
-                    <imgui:Visible>true</imgui:Visible>
-                    <imgui:Text>START</imgui:Text>
+                  <Expression xsi:type="p7:EnableableButtonBuilder">
+                    <p7:Name>StartButton</p7:Name>
+                    <p7:Visible>true</p7:Visible>
+                    <p7:Text>START</p7:Text>
+                    <p7:Enabled>true</p7:Enabled>
+                    <p7:Size>
+                      <p7:Width>100</p7:Width>
+                      <p7:Height>50</p7:Height>
+                    </p7:Size>
                   </Expression>
                   <Expression xsi:type="Unit" />
                   <Expression xsi:type="ExternalizedMapping">
@@ -3110,9 +3110,15 @@
                   <Expression xsi:type="imgui:TableNextColumnBuilder">
                     <imgui:Visible>true</imgui:Visible>
                   </Expression>
-                  <Expression xsi:type="imgui:ButtonBuilder">
-                    <imgui:Visible>true</imgui:Visible>
-                    <imgui:Text>STOP</imgui:Text>
+                  <Expression xsi:type="p7:EnableableButtonBuilder">
+                    <p7:Name>StopButton</p7:Name>
+                    <p7:Visible>true</p7:Visible>
+                    <p7:Text>STOP</p7:Text>
+                    <p7:Enabled>true</p7:Enabled>
+                    <p7:Size>
+                      <p7:Width>100</p7:Width>
+                      <p7:Height>50</p7:Height>
+                    </p7:Size>
                   </Expression>
                   <Expression xsi:type="Unit" />
                   <Expression xsi:type="ExternalizedMapping">

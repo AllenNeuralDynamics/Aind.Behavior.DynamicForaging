@@ -1,8 +1,10 @@
 using System;
 using System.ComponentModel;
+using System.Numerics;
 using System.Reactive;
 using System.Reactive.Linq;
 using Bonsai.ImGui;
+using OpenCV.Net;
 using ImGui = Hexa.NET.ImGui.ImGui;
 
 /// <summary>
@@ -13,6 +15,15 @@ using ImGui = Hexa.NET.ImGui.ImGui;
 public class EnableableButtonBuilder : TextControlBuilder<string>
 {
     public bool Enabled {get; set;}
+    public Size Size {get; set;}
+
+    private Vector2 buttonSize
+    {
+        get
+        {
+            return new Vector2(Size.Width, Size.Height);
+        }
+    }
 
     /// <inheritdoc/>
     protected override IObservable<string> Generate<TSource>(IObservable<TSource> source)
@@ -38,12 +49,12 @@ public class EnableableButtonBuilder : TextControlBuilder<string>
                     {
                         if (Enabled)
                         {
-                            if (ImGui.Button(label))
+                            if (ImGui.Button(label, buttonSize))
                                 observer.OnNext(output);
                         } else
                         {
                             ImGui.BeginDisabled();
-                            ImGui.Button(label);
+                            ImGui.Button(label, buttonSize);
                             ImGui.EndDisabled();
                         }
                     }
