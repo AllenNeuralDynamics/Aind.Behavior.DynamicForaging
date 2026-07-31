@@ -1,8 +1,9 @@
 import os
 from pathlib import Path
 
-import pandas as pd
 import numpy as np
+import pandas as pd
+
 from aind_behavior_dynamic_foraging.data_contract import dataset as df_dataset
 from aind_behavior_dynamic_foraging.rig import AindDynamicForagingRig
 
@@ -13,30 +14,46 @@ def _calculate_side_volume_ml(
     slope_g_per_s: float,
     offset_g: float,
 ) -> float:
-    """Estimate delivered volume (mL) for one side from pulse durations and calibration."""
+    """Estimate delivered volume for one side from set open times and valve-open events.
 
-    delivery_times = delivery_times.reset_index(names="Time")
+    Args:
+        set_open_time_ms (pd.Series): Time-indexed set open-time values in milliseconds.
+        delivery_times (pd.DataFrame): Event rows where the side valve was commanded open.
+        slope_g_per_s (float): Calibration slope converting open duration (s) to delivered (g).
+        offset_g (float): Calibration offset in grams applied per delivered event.
+
+    Returns:
+        float: Total delivered volume in mL for the side.
+    """
+
+    delivery_times = delivery_times.reset_index(names="Time")[["Time"]].sort_values("Time")
     if delivery_times.empty:
         return 0.0
 
-    pulse_series_ms = pd.to_numeric(set_open_time_ms, errors="coerce").dropna().sort_index()
-    if pulse_series_ms.empty:
+    # normalize setpoints to numeric values and reshape into a Time-keyed frame.
+    setpoints = (
+        pd.to_numeric(set_open_time_ms, errors="coerce")
+        .dropna()
+        .sort_index()
+        .rename("set_open_time_ms")
+        .to_frame()
+        .reset_index(names="Time")
+    )
+    if setpoints.empty:
         return 0.0
 
-    setpoints = pulse_series_ms.rename("open_time_ms").to_frame().reset_index(names="Time")
-    delivery_times = delivery_times[["Time"]].sort_values("Time")
-
+    # Each valve-open event uses the most recent set open-time configured at or before that event.
     matched = pd.merge_asof(delivery_times, setpoints, on="Time", direction="backward")
-    open_times_s = (matched["open_time_ms"].dropna() / 1000.0).to_numpy()
+    open_times_s = (matched["set_open_time_ms"].dropna() / 1000.0).to_numpy()
     if len(open_times_s) == 0:
         return 0.0
+
     delivered_g = np.round((slope_g_per_s * open_times_s) + offset_g, 4)
-    # For water, 1 g is approximately 1 mL.
     return float(delivered_g.sum())
 
 
 def calculate_consumed_water(session_path: str | os.PathLike[str]) -> float:
-    """Calculate the delivered water volume for left/right valves and total session consumption.
+    """Calculate total delivered water volume across left and right valves for a session.
 
     Args:
         session_path (str | os.PathLike[str]): Path to the session directory.
