@@ -18,6 +18,10 @@ class DataMapperCli(BaseSettings, cli_kebab_case=True):
         default=None,
         description="End time of the session in ISO format. If not provided, will use the time the data mapping is run.",
     )
+    curriculum_repository_path: t.Optional[os.PathLike] = Field(
+        default=None,
+        description="Path to the curriculum repository. If not provided, will use the repository path.",
+    )
     suffix: t.Optional[str] = Field(default="", description="Suffix to append to the output filenames.")
 
     def cli_cmd(self):

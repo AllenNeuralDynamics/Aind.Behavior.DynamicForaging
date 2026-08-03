@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Optional
 
 import git
+from aind_behavior_curriculum import TrainerState
 from aind_behavior_dynamic_foraging.data_contract import dataset as df_foraging_dataset
 from aind_behavior_dynamic_foraging.data_contract.utils import calculate_consumed_water
 from aind_behavior_dynamic_foraging.rig import AindDynamicForagingRig
@@ -38,7 +39,11 @@ logger = logging.getLogger(__name__)
 
 class AindAcquisitionDataMapper(AindDataSchemaSessionDataMapper):
     def __init__(
-        self, data_path: os.PathLike, repository_path: os.PathLike, session_end_time: Optional[datetime] = None
+        self,
+        data_path: os.PathLike,
+        repository_path: os.PathLike,
+        session_end_time: Optional[datetime] = None,
+        curriculum_repository_path: Optional[os.PathLike] = None,
     ):
         """
         Class to create acquisition model for completed session.
@@ -58,6 +63,7 @@ class AindAcquisitionDataMapper(AindDataSchemaSessionDataMapper):
         self.data_path = data_path
         self.repository_path = repository_path
         self.session_end_time = session_end_time
+        self.curriculum_repository_path = curriculum_repository_path
 
         self.session_model = model_from_json_file(
             json_path=Path(self.data_path) / "behavior" / "Logs" / "session_output.json", model=Session
@@ -104,13 +110,18 @@ class AindAcquisitionDataMapper(AindDataSchemaSessionDataMapper):
         rig_model = AindDynamicForagingRig.model_validate(input_schemas["Rig"].data)
         task_logic_model = AindDynamicForagingTaskLogic.model_validate(input_schemas["TaskLogic"].data)
         repository = git.Repo(self.repository_path)
+        curriculum_repository = git.Repo(self.curriculum_repository_path or self.repository_path)
+        trainer_state = TrainerState.model_validate(dataset["Behavior"]["TrainerState"].data)
 
         if self.session_end_time is None:
             logger.warning("Session end time is not set. Using current time as end time.")
             acquisition_end_time = datetime.now(tz=timezone.utc)
+        else:
+            acquisition_end_time = self.session_end_time
 
         bonsai_code = _get_bonsai_as_code(repository)
         python_code = _get_python_as_code(repository)
+        curriculum_code = _get_curriculum_as_code(curriculum_repository, trainer_state)
 
         cameras = data_mapper_helpers.get_cameras(rig_model, exclude_without_video_writer=True)
         camera_configs = [_get_camera_config(k, v, repository) for k, v in cameras.items()]
@@ -131,7 +142,7 @@ class AindAcquisitionDataMapper(AindDataSchemaSessionDataMapper):
             DataStream(
                 stream_start_time=session_model.date,
                 stream_end_time=acquisition_end_time,
-                code=[bonsai_code, python_code],
+                code=[bonsai_code, python_code, curriculum_code],
                 active_devices=active_devices,
                 modalities=modalities,
                 configurations=camera_configs,
@@ -141,7 +152,6 @@ class AindAcquisitionDataMapper(AindDataSchemaSessionDataMapper):
 
         # populate behavior epoch
         metrics = dataset["Behavior"]["Metrics"].data
-        trainer_state = dataset["Behavior"]["TrainerState"].data
         trial_outcomes = dataset["Behavior"]["SoftwareEvents"]["TrialOutcome"].data["data"].iloc
         rewarded = sum(to["is_rewarded"] for to in trial_outcomes)
         water = calculate_consumed_water(self.data_path)
@@ -161,7 +171,7 @@ class AindAcquisitionDataMapper(AindDataSchemaSessionDataMapper):
             code=bonsai_code,
             stimulus_modalities=[StimulusModality.AUDITORY],
             performance_metrics=performance_metrics,
-            curriculum_status=trainer_state.stage.name,
+            training_protocol_name=str(trainer_state.curriculum.name),
         )
 
         # Construct aind-data-schema session
@@ -209,6 +219,17 @@ def _get_camera_config(name: str, camera: abs_camera.CameraTypes, repository: gi
         exposure_time_unit=units.TimeUnit.US,
         trigger_type=TriggerType.EXTERNAL,
         compression=compression,
+    )
+
+
+def _get_curriculum_as_code(repository: git.Repo, trainer_state: TrainerState) -> Code:
+
+    return Code(
+        url=repository.remote().url,
+        commit_hash=repository.head.commit.hexsha,
+        name=trainer_state.curriculum.pkg_location,
+        version=trainer_state.curriculum.version,
+        language="aind-behavior-curriculum",
     )
 
 
