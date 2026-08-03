@@ -110,7 +110,11 @@ class AindAcquisitionDataMapper(AindDataSchemaSessionDataMapper):
         rig_model = AindDynamicForagingRig.model_validate(input_schemas["Rig"].data)
         task_logic_model = AindDynamicForagingTaskLogic.model_validate(input_schemas["TaskLogic"].data)
         repository = git.Repo(self.repository_path)
-        curriculum_repository = git.Repo(self.curriculum_repository_path or self.repository_path)
+        curriculum_repository = _resolve_curriculum_repository(
+            repository,
+            self.curriculum_repository_path,
+            self.repository_path,
+        )
         trainer_state = TrainerState.model_validate(dataset["Behavior"]["TrainerState"].data)
 
         if self.session_end_time is None:
@@ -187,6 +191,29 @@ class AindAcquisitionDataMapper(AindDataSchemaSessionDataMapper):
             data_streams=data_streams,
             stimulus_epochs=[stimulus_epoch],
         )
+
+
+def _resolve_curriculum_repository(
+    repository: git.Repo,
+    curriculum_repository_path: Optional[os.PathLike],
+    repository_path: os.PathLike,
+) -> git.Repo:
+    """Resolve the curriculum repository, preferring a matching main-repo submodule."""
+    if not curriculum_repository_path:
+        return repository
+
+    curriculum_path = Path(curriculum_repository_path).resolve()
+    repository_root = Path(repository.working_tree_dir or repository_path).resolve()
+    submodule_paths = {(repository_root / submodule.path).resolve(): submodule for submodule in repository.submodules}
+
+    if curriculum_path in submodule_paths:
+        return submodule_paths[curriculum_path].module()
+
+    logger.info(
+        "Curriculum repository path is not a submodule of the main repository: %s",
+        curriculum_path,
+    )
+    return git.Repo(curriculum_path)
 
 
 def _get_subject_details(data_path: os.PathLike) -> AcquisitionSubjectDetails:
