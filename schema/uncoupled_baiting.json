@@ -1,7 +1,7 @@
 {
     "pkg_location": "aind_behavior_dynamic_foraging_curricula.uncoupled_baiting",
-    "name": "UncoupledBaiting",
-    "version": "0.0.2",
+    "name": "Uncoupled Baiting",
+    "version": "0.0.3",
     "graph": {
         "nodes": {
             "0": {
