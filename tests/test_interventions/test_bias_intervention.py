@@ -39,10 +39,19 @@ class TestBiasIntervention(unittest.TestCase):
 
         self.assertTrue(result)
 
-    def test_returns_true_when_bias_below_lower_threshold(self):
-        """Intervention when bias is below threshold"""
+    def test_returns_false_when_bias_below_lower_threshold_and_centered(self):
+        """No intervention is needed at low bias when the lickspout is already centered."""
         bias_intervention = BiasIntervention(BiasInterventionParameters(bias_window_length=5))
         bias_intervention.trials_in_bias_intervention = 15
+        result = bias_intervention.are_antibias_conditions_met(0.2)
+
+        self.assertFalse(result)
+
+    def test_returns_true_when_bias_below_lower_threshold_and_offset_exists(self):
+        """Low bias should trigger recentering when lickspout has drifted from center."""
+        bias_intervention = BiasIntervention(BiasInterventionParameters(bias_window_length=5))
+        bias_intervention.trials_in_bias_intervention = 15
+        bias_intervention.total_lickspout_offset = 0.2
         result = bias_intervention.are_antibias_conditions_met(0.2)
 
         self.assertTrue(result)

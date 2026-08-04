@@ -219,6 +219,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             is_auto_reward_right, lickspout_offset_delta = self.bias_intervention.determine_antibias_intervention(
                 self.bias
             )
+
             reward_fraction = (
                 1 if is_auto_reward_right is None else self.spec.bias_intervention_parameters.reward_fraction
             )
@@ -269,13 +270,21 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
         min_ignore = self.spec.autowater_parameters.min_ignored_trials
         min_unreward = self.spec.autowater_parameters.min_unrewarded_trials
 
+        if min_ignore == 0 or min_unreward == 0:
+            logger.debug(
+                "Autowater enabled every trial (min_ignored_trials=%s, min_unrewarded_trials=%s).",
+                min_ignore,
+                min_unreward,
+            )
+            return True
+
         is_ignored = [choice is None for choice in self.is_right_choice_history]
-        if len(is_ignored) > min_ignore and all(is_ignored[-min_ignore:]):
+        if len(is_ignored) >= min_ignore and all(is_ignored[-min_ignore:]):
             logger.debug("Past %s trials ignored." % min_ignore)
             return True
 
         is_unrewarded = [not reward for reward in self.reward_history]
-        if len(is_unrewarded) > min_unreward and all(is_unrewarded[-min_unreward:]):
+        if len(is_unrewarded) >= min_unreward and all(is_unrewarded[-min_unreward:]):
             logger.debug("Past %s trials unrewarded." % min_unreward)
             return True
 

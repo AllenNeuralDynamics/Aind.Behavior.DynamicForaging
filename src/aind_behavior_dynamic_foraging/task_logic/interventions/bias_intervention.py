@@ -83,12 +83,13 @@ class BiasIntervention:
             return False
 
         if self.trials_in_bias_intervention > self.parameters.intervention_interval:
-            if bias <= self.parameters.threshold.lower:
-                logger.debug("Bias calculated below threshold: %s." % bias)
+            if abs(bias) >= self.parameters.threshold.upper:
+                logger.debug("Bias calculated above threshold: %s." % bias)
                 return True
 
-            if bias >= self.parameters.threshold.upper:
-                logger.debug("Bias calculated above threshold: %s." % bias)
+            # bias intervention only when the spout is currently off-center.
+            if abs(bias) <= self.parameters.threshold.lower and self.total_lickspout_offset != 0:
+                logger.debug("Bias calculated below threshold: %s." % bias)
                 return True
         self.trials_in_bias_intervention += 1
         return False

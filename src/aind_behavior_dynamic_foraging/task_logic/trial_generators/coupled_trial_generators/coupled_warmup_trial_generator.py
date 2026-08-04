@@ -100,5 +100,6 @@ class CoupledWarmupTrialGenerator(BaseCoupledTrialGenerator):
             bool indicating whether block can switch
         """
 
-        reward_count = sum([outcome.is_rewarded for outcome in self.outcome_history])
+        block_outcomes = self.outcome_history[-self.trials_in_block :] if self.trials_in_block > 0 else []
+        reward_count = sum(outcome.is_rewarded for outcome in block_outcomes)
         return reward_count >= self.spec.min_block_reward
