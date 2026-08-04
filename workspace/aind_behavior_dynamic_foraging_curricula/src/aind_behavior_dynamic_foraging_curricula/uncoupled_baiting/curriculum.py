@@ -20,7 +20,7 @@ from .stages import (
     make_s_stage_graduated,
 )
 
-CURRICULUM_NAME = "UncoupledBaiting"
+CURRICULUM_NAME = "Uncoupled Baiting"
 PKG_LOCATION = ".".join(__name__.split(".")[:-1])
 
 TModel = TypeVar("TModel", bound=pydantic.BaseModel)
