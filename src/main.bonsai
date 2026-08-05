@@ -3118,10 +3118,14 @@
                     <Selector>Value.Trial.Metadata.Extra</Selector>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="StringProperty" />
+                    <Combinator xsi:type="StringProperty">
+                      <Value>Placeholder</Value>
+                    </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="StringProperty" />
+                    <Combinator xsi:type="StringProperty">
+                      <Value>Placeholder</Value>
+                    </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Zip" />
