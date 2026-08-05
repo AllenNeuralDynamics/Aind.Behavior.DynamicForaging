@@ -1,17 +1,2 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<VisualizerLayout Version="2.9.0">
-  <WindowSettings Index="2">
-    <Location>
-      <X>421</X>
-      <Y>76</Y>
-    </Location>
-    <Size>
-      <Width>821</Width>
-      <Height>678</Height>
-    </Size>
-    <VisualizerTypeName>Bonsai.ImGui.Visualizers.ImPlotVisualizer</VisualizerTypeName>
-    <VisualizerSettings>
-      <ImPlotVisualizer />
-    </VisualizerSettings>
-  </WindowSettings>
-</VisualizerLayout>
+<VisualizerLayout Version="2.9.0" />
