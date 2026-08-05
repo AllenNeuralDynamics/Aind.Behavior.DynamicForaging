@@ -12,7 +12,7 @@ using ImGui = Hexa.NET.ImGui.ImGui;
 [Description("Draws a button control and generates a sequence of notifications whenever the button is clicked.")]
 public class ToggleButtonBuilder : TextControlBuilder<bool>
 {
-    private bool Toggled;
+    public bool Toggled {get; set;}
 
     public string ToggledOffText {get; set;}
     public string ToggledOnText {get; set;}
