@@ -87,7 +87,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
-                      <rx:DueTime>PT1.074S</rx:DueTime>
+                      <rx:DueTime>PT1.745S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -139,7 +139,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
-                      <rx:DueTime>PT2.031S</rx:DueTime>
+                      <rx:DueTime>PT0.609S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -210,7 +210,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
-                      <rx:DueTime>PT1.039S</rx:DueTime>
+                      <rx:DueTime>PT2.764S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -721,7 +721,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p7:CreateNullableBoolean">
-                <p7:Value>false</p7:Value>
+                <p7:Value>true</p7:Value>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -771,7 +771,7 @@
                 <p4:ResponseDeadlineDuration>5</p4:ResponseDeadlineDuration>
                 <p4:QuiescencePeriodDuration>0.5</p4:QuiescencePeriodDuration>
                 <p4:InterTrialIntervalDuration>5</p4:InterTrialIntervalDuration>
-                <p4:IsAutoResponseRight>false</p4:IsAutoResponseRight>
+                <p4:IsAutoResponseRight xsi:nil="true" />
                 <p4:LickspoutOffsetDelta>0</p4:LickspoutOffsetDelta>
               </Combinator>
             </Expression>
@@ -809,7 +809,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Delay">
-                      <rx:DueTime>PT0.994S</rx:DueTime>
+                      <rx:DueTime>PT0.847S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -1940,6 +1940,12 @@
             <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Boolean">
               <rx:Name>UiKeepBothOpen</rx:Name>
             </Expression>
+            <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Boolean">
+              <rx:Name>DrainLeftComplete</rx:Name>
+            </Expression>
+            <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Boolean">
+              <rx:Name>DrainRightComplete</rx:Name>
+            </Expression>
           </Nodes>
           <Edges>
             <Edge From="19" To="20" Label="Source1" />
@@ -1961,6 +1967,50 @@
         <Combinator xsi:type="p7:SoftwareEventVisualizer">
           <p7:Visible>true</p7:Visible>
           <p7:SoftwareEvents>
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
+            <p7:TimestampedOfSoftwareEvent />
             <p7:TimestampedOfSoftwareEvent />
             <p7:TimestampedOfSoftwareEvent />
           </p7:SoftwareEvents>
@@ -2869,6 +2919,8 @@
         <UiManipulatorStop>UiManipulatorStop</UiManipulatorStop>
         <UiManipulatorHome>UiManipulatorHome</UiManipulatorHome>
         <UiControlManipulator>UiManipulatorInitialize</UiControlManipulator>
+        <DrainLeftComplete>DrainLeftComplete</DrainLeftComplete>
+        <DrainRightComplete>DrainRightComplete</DrainRightComplete>
       </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Extensions\IntraSessionVisualizer.bonsai">
         <FrameSubject>IntraSession</FrameSubject>
