@@ -975,6 +975,19 @@
                   </Expression>
                   <Expression xsi:type="WorkflowOutput" />
                   <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="DoubleProperty">
+                      <Value>500</Value>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Take">
+                      <rx:Count>1</rx:Count>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="rx:AsyncSubject">
+                    <Name>DefaultOpenTime</Name>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
                       <rx:DueTime>PT0.1S</rx:DueTime>
                     </Combinator>
@@ -987,16 +1000,27 @@
                       <Value>false</Value>
                     </Combinator>
                   </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>DefaultOpenTime</Name>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>RigSchema</Name>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Calibration.WaterValveRight</Selector>
+                  </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="DoubleProperty">
-                      <Value>500</Value>
-                    </Combinator>
+                    <Combinator xsi:type="rx:Zip" />
+                  </Expression>
+                  <Expression xsi:type="scr:ExpressionTransform">
+                    <scr:Name>TimeToReward</scr:Name>
+                    <scr:Expression>((Item2.Slope*(Item1*0.001)) + Item2.Offset)*1000000</scr:Expression>
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:WithLatestFrom" />
                   </Expression>
                   <Expression xsi:type="MulticastSubject">
-                    <Name>SetIsRightValveMs</Name>
+                    <Name>SetIsRightRewardAmount</Name>
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Delay">
@@ -1023,16 +1047,22 @@
                   <Edge From="1" To="2" Label="Source1" />
                   <Edge From="2" To="3" Label="Source1" />
                   <Edge From="3" To="4" Label="Source1" />
-                  <Edge From="5" To="7" Label="Source1" />
-                  <Edge From="6" To="7" Label="Source2" />
-                  <Edge From="7" To="9" Label="Source1" />
-                  <Edge From="8" To="9" Label="Source2" />
-                  <Edge From="9" To="10" Label="Source1" />
-                  <Edge From="10" To="11" Label="Source1" />
-                  <Edge From="11" To="12" Label="Source1" />
+                  <Edge From="5" To="6" Label="Source1" />
+                  <Edge From="6" To="7" Label="Source1" />
+                  <Edge From="8" To="10" Label="Source1" />
+                  <Edge From="9" To="10" Label="Source2" />
+                  <Edge From="10" To="16" Label="Source1" />
+                  <Edge From="11" To="14" Label="Source1" />
                   <Edge From="12" To="13" Label="Source1" />
-                  <Edge From="13" To="14" Label="Source1" />
+                  <Edge From="13" To="14" Label="Source2" />
                   <Edge From="14" To="15" Label="Source1" />
+                  <Edge From="15" To="16" Label="Source2" />
+                  <Edge From="16" To="17" Label="Source1" />
+                  <Edge From="17" To="18" Label="Source1" />
+                  <Edge From="18" To="19" Label="Source1" />
+                  <Edge From="19" To="20" Label="Source1" />
+                  <Edge From="20" To="21" Label="Source1" />
+                  <Edge From="21" To="22" Label="Source1" />
                 </Edges>
               </Workflow>
             </Expression>
@@ -1073,6 +1103,19 @@
                   </Expression>
                   <Expression xsi:type="WorkflowOutput" />
                   <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="DoubleProperty">
+                      <Value>500</Value>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Take">
+                      <rx:Count>1</rx:Count>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="rx:AsyncSubject">
+                    <Name>DefaultOpenTime</Name>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
                       <rx:DueTime>PT0.1S</rx:DueTime>
                     </Combinator>
@@ -1085,16 +1128,27 @@
                       <Value>true</Value>
                     </Combinator>
                   </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>DefaultOpenTime</Name>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>RigSchema</Name>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Calibration.WaterValveRight</Selector>
+                  </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="DoubleProperty">
-                      <Value>500</Value>
-                    </Combinator>
+                    <Combinator xsi:type="rx:Zip" />
+                  </Expression>
+                  <Expression xsi:type="scr:ExpressionTransform">
+                    <scr:Name>TimeToReward</scr:Name>
+                    <scr:Expression>((Item2.Slope*(Item1*0.001)) + Item2.Offset)*1000000</scr:Expression>
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:WithLatestFrom" />
                   </Expression>
                   <Expression xsi:type="MulticastSubject">
-                    <Name>SetIsRightValveMs</Name>
+                    <Name>SetIsRightRewardAmount</Name>
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Delay">
@@ -1121,16 +1175,22 @@
                   <Edge From="1" To="2" Label="Source1" />
                   <Edge From="2" To="3" Label="Source1" />
                   <Edge From="3" To="4" Label="Source1" />
-                  <Edge From="5" To="7" Label="Source1" />
-                  <Edge From="6" To="7" Label="Source2" />
-                  <Edge From="7" To="9" Label="Source1" />
-                  <Edge From="8" To="9" Label="Source2" />
-                  <Edge From="9" To="10" Label="Source1" />
-                  <Edge From="10" To="11" Label="Source1" />
-                  <Edge From="11" To="12" Label="Source1" />
+                  <Edge From="5" To="6" Label="Source1" />
+                  <Edge From="6" To="7" Label="Source1" />
+                  <Edge From="8" To="10" Label="Source1" />
+                  <Edge From="9" To="10" Label="Source2" />
+                  <Edge From="10" To="16" Label="Source1" />
+                  <Edge From="11" To="14" Label="Source1" />
                   <Edge From="12" To="13" Label="Source1" />
-                  <Edge From="13" To="14" Label="Source1" />
+                  <Edge From="13" To="14" Label="Source2" />
                   <Edge From="14" To="15" Label="Source1" />
+                  <Edge From="15" To="16" Label="Source2" />
+                  <Edge From="16" To="17" Label="Source1" />
+                  <Edge From="17" To="18" Label="Source1" />
+                  <Edge From="18" To="19" Label="Source1" />
+                  <Edge From="19" To="20" Label="Source1" />
+                  <Edge From="20" To="21" Label="Source1" />
+                  <Edge From="21" To="22" Label="Source1" />
                 </Edges>
               </Workflow>
             </Expression>
@@ -1150,6 +1210,19 @@
               <Name>Flush</Name>
               <Workflow>
                 <Nodes>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="DoubleProperty">
+                      <Value>50</Value>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Take">
+                      <rx:Count>1</rx:Count>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="rx:AsyncSubject">
+                    <Name>DefaultVolume</Name>
+                  </Expression>
                   <Expression xsi:type="WorkflowInput">
                     <Name>Source1</Name>
                   </Expression>
@@ -1180,16 +1253,14 @@
                       <Value>false</Value>
                     </Combinator>
                   </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="DoubleProperty">
-                      <Value>500</Value>
-                    </Combinator>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>DefaultVolume</Name>
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:WithLatestFrom" />
                   </Expression>
                   <Expression xsi:type="MulticastSubject">
-                    <Name>SetIsRightValveMs</Name>
+                    <Name>SetIsRightRewardAmount</Name>
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Delay">
@@ -1202,15 +1273,8 @@
                   <Expression xsi:type="MulticastSubject">
                     <Name>GiveRewardRight</Name>
                   </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="rx:Delay">
-                      <rx:DueTime>PT0.5S</rx:DueTime>
-                    </Combinator>
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="FloatProperty">
-                      <Value>5000</Value>
-                    </Combinator>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>DefaultVolume</Name>
                   </Expression>
                   <Expression xsi:type="SubscribeSubject">
                     <Name>RigSchema</Name>
@@ -1225,18 +1289,25 @@
                     <scr:Name>RewardToTime</scr:Name>
                     <scr:Expression>((Item1 * 0.001) - Item2.Offset) / Item2.Slope </scr:Expression>
                   </Expression>
-                  <Expression xsi:type="Annotation">
-                    <Name>ToMilliseconds</Name>
-                    <Text><![CDATA[]]></Text>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="p1:TimeSpanFromSeconds" />
                   </Expression>
-                  <Expression xsi:type="Multiply">
-                    <Operand xsi:type="DoubleProperty">
-                      <Value>1000</Value>
-                    </Operand>
+                  <Expression xsi:type="PropertyMapping">
+                    <PropertyMappings>
+                      <Property Name="DueTime" />
+                    </PropertyMappings>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Delay">
+                      <rx:DueTime>PT0.607S</rx:DueTime>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>DefaultVolume</Name>
                   </Expression>
                   <Expression xsi:type="scr:ExpressionTransform">
                     <scr:Name>DivideByEachOpen</scr:Name>
-                    <scr:Expression>Math.Ceiling(it / 500)</scr:Expression>
+                    <scr:Expression>Math.Ceiling(5000 / it)</scr:Expression>
                   </Expression>
                   <Expression xsi:type="PropertyMapping">
                     <PropertyMappings>
@@ -1245,7 +1316,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:RepeatCount">
-                      <rx:Count>300</rx:Count>
+                      <rx:Count>100</rx:Count>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -1272,32 +1343,35 @@
                 <Edges>
                   <Edge From="0" To="1" Label="Source1" />
                   <Edge From="1" To="2" Label="Source1" />
-                  <Edge From="2" To="26" Label="Source1" />
-                  <Edge From="3" To="5" Label="Source1" />
-                  <Edge From="4" To="5" Label="Source2" />
-                  <Edge From="5" To="7" Label="Source1" />
-                  <Edge From="6" To="7" Label="Source2" />
-                  <Edge From="7" To="8" Label="Source1" />
-                  <Edge From="8" To="9" Label="Source1" />
-                  <Edge From="9" To="10" Label="Source1" />
+                  <Edge From="3" To="4" Label="Source1" />
+                  <Edge From="4" To="5" Label="Source1" />
+                  <Edge From="5" To="30" Label="Source1" />
+                  <Edge From="6" To="8" Label="Source1" />
+                  <Edge From="7" To="8" Label="Source2" />
+                  <Edge From="8" To="10" Label="Source1" />
+                  <Edge From="9" To="10" Label="Source2" />
                   <Edge From="10" To="11" Label="Source1" />
                   <Edge From="11" To="12" Label="Source1" />
-                  <Edge From="12" To="22" Label="Source1" />
-                  <Edge From="13" To="16" Label="Source1" />
-                  <Edge From="14" To="15" Label="Source1" />
-                  <Edge From="15" To="16" Label="Source2" />
+                  <Edge From="12" To="13" Label="Source1" />
+                  <Edge From="13" To="14" Label="Source1" />
+                  <Edge From="14" To="22" Label="Source1" />
+                  <Edge From="15" To="18" Label="Source1" />
                   <Edge From="16" To="17" Label="Source1" />
-                  <Edge From="17" To="19" Label="Source1" />
-                  <Edge From="18" To="19" Label="Source2" />
+                  <Edge From="17" To="18" Label="Source2" />
+                  <Edge From="18" To="19" Label="Source1" />
                   <Edge From="19" To="20" Label="Source1" />
                   <Edge From="20" To="21" Label="Source1" />
                   <Edge From="21" To="22" Label="Source2" />
-                  <Edge From="22" To="23" Label="Source1" />
+                  <Edge From="22" To="26" Label="Source1" />
                   <Edge From="23" To="24" Label="Source1" />
                   <Edge From="24" To="25" Label="Source1" />
                   <Edge From="25" To="26" Label="Source2" />
                   <Edge From="26" To="27" Label="Source1" />
                   <Edge From="27" To="28" Label="Source1" />
+                  <Edge From="28" To="29" Label="Source1" />
+                  <Edge From="29" To="30" Label="Source2" />
+                  <Edge From="30" To="31" Label="Source1" />
+                  <Edge From="31" To="32" Label="Source1" />
                 </Edges>
               </Workflow>
             </Expression>
@@ -1317,6 +1391,19 @@
               <Name>Flush</Name>
               <Workflow>
                 <Nodes>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="DoubleProperty">
+                      <Value>50</Value>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Take">
+                      <rx:Count>1</rx:Count>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="rx:AsyncSubject">
+                    <Name>DefaultVolume</Name>
+                  </Expression>
                   <Expression xsi:type="WorkflowInput">
                     <Name>Source1</Name>
                   </Expression>
@@ -1347,16 +1434,14 @@
                       <Value>true</Value>
                     </Combinator>
                   </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="DoubleProperty">
-                      <Value>500</Value>
-                    </Combinator>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>DefaultVolume</Name>
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:WithLatestFrom" />
                   </Expression>
                   <Expression xsi:type="MulticastSubject">
-                    <Name>SetIsRightValveMs</Name>
+                    <Name>SetIsRightRewardAmount</Name>
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Delay">
@@ -1369,15 +1454,8 @@
                   <Expression xsi:type="MulticastSubject">
                     <Name>GiveRewardRight</Name>
                   </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="rx:Delay">
-                      <rx:DueTime>PT0.5S</rx:DueTime>
-                    </Combinator>
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="FloatProperty">
-                      <Value>5000</Value>
-                    </Combinator>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>DefaultVolume</Name>
                   </Expression>
                   <Expression xsi:type="SubscribeSubject">
                     <Name>RigSchema</Name>
@@ -1392,18 +1470,25 @@
                     <scr:Name>RewardToTime</scr:Name>
                     <scr:Expression>((Item1 * 0.001) - Item2.Offset) / Item2.Slope </scr:Expression>
                   </Expression>
-                  <Expression xsi:type="Annotation">
-                    <Name>ToMilliseconds</Name>
-                    <Text><![CDATA[]]></Text>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="p1:TimeSpanFromSeconds" />
                   </Expression>
-                  <Expression xsi:type="Multiply">
-                    <Operand xsi:type="DoubleProperty">
-                      <Value>1000</Value>
-                    </Operand>
+                  <Expression xsi:type="PropertyMapping">
+                    <PropertyMappings>
+                      <Property Name="DueTime" />
+                    </PropertyMappings>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Delay">
+                      <rx:DueTime>PT0.678S</rx:DueTime>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>DefaultVolume</Name>
                   </Expression>
                   <Expression xsi:type="scr:ExpressionTransform">
                     <scr:Name>DivideByEachOpen</scr:Name>
-                    <scr:Expression>Math.Ceiling(it / 500)</scr:Expression>
+                    <scr:Expression>Math.Ceiling(5000 / it)</scr:Expression>
                   </Expression>
                   <Expression xsi:type="PropertyMapping">
                     <PropertyMappings>
@@ -1412,7 +1497,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:RepeatCount">
-                      <rx:Count>300</rx:Count>
+                      <rx:Count>100</rx:Count>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -1439,32 +1524,35 @@
                 <Edges>
                   <Edge From="0" To="1" Label="Source1" />
                   <Edge From="1" To="2" Label="Source1" />
-                  <Edge From="2" To="26" Label="Source1" />
-                  <Edge From="3" To="5" Label="Source1" />
-                  <Edge From="4" To="5" Label="Source2" />
-                  <Edge From="5" To="7" Label="Source1" />
-                  <Edge From="6" To="7" Label="Source2" />
-                  <Edge From="7" To="8" Label="Source1" />
-                  <Edge From="8" To="9" Label="Source1" />
-                  <Edge From="9" To="10" Label="Source1" />
+                  <Edge From="3" To="4" Label="Source1" />
+                  <Edge From="4" To="5" Label="Source1" />
+                  <Edge From="5" To="30" Label="Source1" />
+                  <Edge From="6" To="8" Label="Source1" />
+                  <Edge From="7" To="8" Label="Source2" />
+                  <Edge From="8" To="10" Label="Source1" />
+                  <Edge From="9" To="10" Label="Source2" />
                   <Edge From="10" To="11" Label="Source1" />
                   <Edge From="11" To="12" Label="Source1" />
-                  <Edge From="12" To="22" Label="Source1" />
-                  <Edge From="13" To="16" Label="Source1" />
-                  <Edge From="14" To="15" Label="Source1" />
-                  <Edge From="15" To="16" Label="Source2" />
+                  <Edge From="12" To="13" Label="Source1" />
+                  <Edge From="13" To="14" Label="Source1" />
+                  <Edge From="14" To="22" Label="Source1" />
+                  <Edge From="15" To="18" Label="Source1" />
                   <Edge From="16" To="17" Label="Source1" />
-                  <Edge From="17" To="19" Label="Source1" />
-                  <Edge From="18" To="19" Label="Source2" />
+                  <Edge From="17" To="18" Label="Source2" />
+                  <Edge From="18" To="19" Label="Source1" />
                   <Edge From="19" To="20" Label="Source1" />
                   <Edge From="20" To="21" Label="Source1" />
                   <Edge From="21" To="22" Label="Source2" />
-                  <Edge From="22" To="23" Label="Source1" />
+                  <Edge From="22" To="26" Label="Source1" />
                   <Edge From="23" To="24" Label="Source1" />
                   <Edge From="24" To="25" Label="Source1" />
                   <Edge From="25" To="26" Label="Source2" />
                   <Edge From="26" To="27" Label="Source1" />
                   <Edge From="27" To="28" Label="Source1" />
+                  <Edge From="28" To="29" Label="Source1" />
+                  <Edge From="29" To="30" Label="Source2" />
+                  <Edge From="30" To="31" Label="Source1" />
+                  <Edge From="31" To="32" Label="Source1" />
                 </Edges>
               </Workflow>
             </Expression>
@@ -1690,50 +1778,6 @@
             <Expression xsi:type="MemberSelector">
               <Selector>Value.Trial.Metadata.Extra</Selector>
             </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="StringProperty">
-                <Value>Placeholder</Value>
-              </Combinator>
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="StringProperty">
-                <Value>Placeholder</Value>
-              </Combinator>
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="rx:Zip" />
-            </Expression>
-            <Expression xsi:type="rx:SelectMany">
-              <Name>AsDictionary</Name>
-              <Workflow>
-                <Nodes>
-                  <Expression xsi:type="WorkflowInput">
-                    <Name>Source1</Name>
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="rx:Take">
-                      <rx:Count>1</rx:Count>
-                    </Combinator>
-                  </Expression>
-                  <Expression xsi:type="rx:ToDictionary">
-                    <rx:KeySelector>Item1</rx:KeySelector>
-                    <rx:ElementSelector>Item2</rx:ElementSelector>
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="rx:Take">
-                      <rx:Count>1</rx:Count>
-                    </Combinator>
-                  </Expression>
-                  <Expression xsi:type="WorkflowOutput" />
-                </Nodes>
-                <Edges>
-                  <Edge From="0" To="1" Label="Source1" />
-                  <Edge From="1" To="2" Label="Source1" />
-                  <Edge From="2" To="3" Label="Source1" />
-                  <Edge From="3" To="4" Label="Source1" />
-                </Edges>
-              </Workflow>
-            </Expression>
             <Expression xsi:type="rx:BehaviorSubject">
               <Name>SessionMetadata</Name>
             </Expression>
@@ -1742,12 +1786,7 @@
           <Edges>
             <Edge From="0" To="1" Label="Source1" />
             <Edge From="1" To="2" Label="Source1" />
-            <Edge From="1" To="3" Label="Source1" />
-            <Edge From="2" To="4" Label="Source1" />
-            <Edge From="3" To="4" Label="Source2" />
-            <Edge From="4" To="5" Label="Source1" />
-            <Edge From="5" To="6" Label="Source1" />
-            <Edge From="6" To="7" Label="Source1" />
+            <Edge From="2" To="3" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
@@ -1765,7 +1804,58 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="p5:SoftwareEventVisualizer">
           <p5:Visible>true</p5:Visible>
-          <p5:SoftwareEvents />
+          <p5:SoftwareEvents>
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+            <p5:TimestampedOfSoftwareEvent />
+          </p5:SoftwareEvents>
           <p5:TrialBreakEventName>Break</p5:TrialBreakEventName>
           <p5:PlotHeight>200</p5:PlotHeight>
           <p5:ShadedAreaPlotters>
@@ -1839,7 +1929,7 @@
       <Expression xsi:type="Unit" />
       <Expression xsi:type="IncludeWorkflow" Path="Extensions\CameraPreviewVisualizer.bonsai">
         <FrameSubject>Camera</FrameSubject>
-        <CameraName>Camera1</CameraName>
+        <CameraName>SideCamera</CameraName>
         <MinSaturation>53</MinSaturation>
         <MaxSaturation>215</MaxSaturation>
         <FlipState>2</FlipState>
@@ -1848,7 +1938,7 @@
       </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Extensions\CameraPreviewVisualizer.bonsai">
         <FrameSubject>Camera</FrameSubject>
-        <CameraName>Camera2</CameraName>
+        <CameraName>BodyCamera</CameraName>
         <MinSaturation>53</MinSaturation>
         <MaxSaturation>215</MaxSaturation>
         <FlipState>2</FlipState>
@@ -1892,10 +1982,10 @@
         <UiGiveRight>UiGiveRight</UiGiveRight>
         <UiMoveLeft>UiMoveLeft</UiMoveLeft>
         <UiMoveRight>UiMoveRight</UiMoveRight>
-        <SessionMetadataSubject>SessionMetadata</SessionMetadataSubject>
         <StartExperimentSubject>StartExperiment</StartExperimentSubject>
         <UiCueGiveLeft>UiCueGiveLeft</UiCueGiveLeft>
         <UiCueGiveRight>UiCueGiveRight</UiCueGiveRight>
+        <SessionMetadataSubject>SessionMetadata</SessionMetadataSubject>
       </Expression>
     </Nodes>
     <Edges>

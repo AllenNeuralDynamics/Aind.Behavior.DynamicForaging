@@ -13,10 +13,10 @@
         <Property Name="UiGiveRight" />
         <Property Name="UiMoveLeft" />
         <Property Name="UiMoveRight" />
-        <Property Name="SessionMetadataSubject" />
         <Property Name="StartExperimentSubject" />
         <Property Name="UiCueGiveLeft" />
         <Property Name="UiCueGiveRight" />
+        <Property Name="SessionMetadataSubject" />
       </Expression>
       <Expression xsi:type="rx:Defer">
         <Name>InterSessionVisualizer</Name>
@@ -97,7 +97,11 @@
               <p1:Name>GiveLeft</p1:Name>
               <p1:Visible>true</p1:Visible>
               <p1:Text>Give Left</p1:Text>
-              <p1:Enabled>false</p1:Enabled>
+              <p1:Enabled>true</p1:Enabled>
+              <p1:Size>
+                <p1:Width>0</p1:Width>
+                <p1:Height>0</p1:Height>
+              </p1:Size>
             </Expression>
             <Expression xsi:type="Unit" />
             <Expression xsi:type="ExternalizedMapping">
@@ -121,7 +125,11 @@
               <p1:Name>GiveRight</p1:Name>
               <p1:Visible>true</p1:Visible>
               <p1:Text>Give Right</p1:Text>
-              <p1:Enabled>false</p1:Enabled>
+              <p1:Enabled>true</p1:Enabled>
+              <p1:Size>
+                <p1:Width>0</p1:Width>
+                <p1:Height>0</p1:Height>
+              </p1:Size>
             </Expression>
             <Expression xsi:type="Unit" />
             <Expression xsi:type="ExternalizedMapping">
@@ -160,7 +168,11 @@
               <p1:Name>GiveLeftCue</p1:Name>
               <p1:Visible>true</p1:Visible>
               <p1:Text>Give Left Cue</p1:Text>
-              <p1:Enabled>false</p1:Enabled>
+              <p1:Enabled>true</p1:Enabled>
+              <p1:Size>
+                <p1:Width>0</p1:Width>
+                <p1:Height>0</p1:Height>
+              </p1:Size>
             </Expression>
             <Expression xsi:type="Unit" />
             <Expression xsi:type="ExternalizedMapping">
@@ -184,7 +196,11 @@
               <p1:Name>GiveRightCue</p1:Name>
               <p1:Visible>true</p1:Visible>
               <p1:Text>Give Right Cue</p1:Text>
-              <p1:Enabled>false</p1:Enabled>
+              <p1:Enabled>true</p1:Enabled>
+              <p1:Size>
+                <p1:Width>0</p1:Width>
+                <p1:Height>0</p1:Height>
+              </p1:Size>
             </Expression>
             <Expression xsi:type="Unit" />
             <Expression xsi:type="ExternalizedMapping">
@@ -221,7 +237,11 @@
               <p1:Name>MoveLeft</p1:Name>
               <p1:Visible>true</p1:Visible>
               <p1:Text>Move Left</p1:Text>
-              <p1:Enabled>false</p1:Enabled>
+              <p1:Enabled>true</p1:Enabled>
+              <p1:Size>
+                <p1:Width>0</p1:Width>
+                <p1:Height>0</p1:Height>
+              </p1:Size>
             </Expression>
             <Expression xsi:type="Unit" />
             <Expression xsi:type="ExternalizedMapping">
@@ -245,7 +265,11 @@
               <p1:Name>MoveRight</p1:Name>
               <p1:Visible>true</p1:Visible>
               <p1:Text>Move Right</p1:Text>
-              <p1:Enabled>false</p1:Enabled>
+              <p1:Enabled>true</p1:Enabled>
+              <p1:Size>
+                <p1:Width>0</p1:Width>
+                <p1:Height>0</p1:Height>
+              </p1:Size>
             </Expression>
             <Expression xsi:type="Unit" />
             <Expression xsi:type="ExternalizedMapping">

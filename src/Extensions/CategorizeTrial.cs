@@ -18,7 +18,7 @@ public class CategorizeTrial
         return source.Select(value =>
         {
             var trial = value.Value;
-            bool isAutoResponse = trial.Trial.IsAutoResponseRight.HasValue;
+            bool isAutoResponse = trial.Trial.IsAutoRewardRight.HasValue;
             var categorizedTrial = new CategorizedTrial();
             if (!trial.IsRightChoice.HasValue)
             {
