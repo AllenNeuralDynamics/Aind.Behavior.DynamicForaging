@@ -10,7 +10,7 @@ from aind_behavior_services.task.distributions import (
 from aind_behavior_services.task.distributions_utils import draw_sample
 from pydantic import BaseModel, Field
 
-from ..trial_models import TrialOutcome
+from ..trial_models import TrialOutcome, Trial
 from .block_based_trial_generator import (
     Block,
     BlockBasedTrialGenerator,
@@ -112,7 +112,6 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
         """
 
         super().__init__(spec)
-        self.start_time = datetime.now()
 
         block_length_min = spec.block_length.distribution_parameters.min
         block_length_max = spec.block_length.distribution_parameters.max
@@ -125,6 +124,27 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
         self.right_dominance_streak = 0
         self.trials_in_left_block = 0
         self.left_dominance_streak = 0
+
+    def add_extra_metadata(self, trial: Trial) -> Trial:
+        """Adds time remaining metadata to the trial.
+
+        Args:
+            trial: The Trial object to which metadata will be added.
+
+        Returns:
+            The Trial object with additional metadata.
+        """
+
+        trial = super().add_extra_metadata(trial)
+        trial.metadata.extra.time_remaining = (
+            (
+                timedelta(seconds=self.spec.trial_generation_end_parameters.max_time)
+                - (datetime.now() - self.start_time)
+            ).total_seconds()
+            / 60,
+        )
+
+        return trial
 
     def _are_end_conditions_met(self) -> bool:
         """Checks whether the session should end.
