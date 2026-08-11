@@ -5,7 +5,7 @@
     "graph": {
         "nodes": {
             "0": {
-                "name": "stage_1_warmup",
+                "name": "STAGE_1_WARMUP",
                 "task": {
                     "name": "AindDynamicForaging",
                     "description": "",
@@ -176,7 +176,7 @@
                         }
                     },
                     "version": "0.0.2",
-                    "stage_name": "stage_1_warmup"
+                    "stage_name": "STAGE_1_WARMUP"
                 },
                 "graph": {
                     "nodes": {},
@@ -186,7 +186,7 @@
                 "metrics_provider": "aind_behavior_dynamic_foraging_curricula.metrics.metrics_from_dataset"
             },
             "1": {
-                "name": "stage_1",
+                "name": "STAGE_1",
                 "task": {
                     "name": "AindDynamicForaging",
                     "description": "",
@@ -279,7 +279,7 @@
                         }
                     },
                     "version": "0.0.2",
-                    "stage_name": "stage_1"
+                    "stage_name": "STAGE_1"
                 },
                 "graph": {
                     "nodes": {},
@@ -289,7 +289,7 @@
                 "metrics_provider": "aind_behavior_dynamic_foraging_curricula.metrics.metrics_from_dataset"
             },
             "2": {
-                "name": "stage_2",
+                "name": "STAGE_2",
                 "task": {
                     "name": "AindDynamicForaging",
                     "description": "",
@@ -382,7 +382,7 @@
                         }
                     },
                     "version": "0.0.2",
-                    "stage_name": "stage_2"
+                    "stage_name": "STAGE_2"
                 },
                 "graph": {
                     "nodes": {},
@@ -392,7 +392,7 @@
                 "metrics_provider": "aind_behavior_dynamic_foraging_curricula.metrics.metrics_from_dataset"
             },
             "3": {
-                "name": "stage_3",
+                "name": "STAGE_3",
                 "task": {
                     "name": "AindDynamicForaging",
                     "description": "",
@@ -472,7 +472,7 @@
                         }
                     },
                     "version": "0.0.2",
-                    "stage_name": "stage_3"
+                    "stage_name": "STAGE_3"
                 },
                 "graph": {
                     "nodes": {},
@@ -482,7 +482,7 @@
                 "metrics_provider": "aind_behavior_dynamic_foraging_curricula.metrics.metrics_from_dataset"
             },
             "4": {
-                "name": "final",
+                "name": "STAGE_FINAL",
                 "task": {
                     "name": "AindDynamicForaging",
                     "description": "",
@@ -499,7 +499,7 @@
                                 "family": "Scalar",
                                 "distribution_parameters": {
                                     "family": "Scalar",
-                                    "value": 0.5
+                                    "value": 1.0
                                 },
                                 "truncation_parameters": null,
                                 "scaling_parameters": null
@@ -558,7 +558,7 @@
                         }
                     },
                     "version": "0.0.2",
-                    "stage_name": "final"
+                    "stage_name": "STAGE_FINAL"
                 },
                 "graph": {
                     "nodes": {},
@@ -568,7 +568,7 @@
                 "metrics_provider": "aind_behavior_dynamic_foraging_curricula.metrics.metrics_from_dataset"
             },
             "5": {
-                "name": "graduated",
+                "name": "GRADUATED",
                 "task": {
                     "name": "AindDynamicForaging",
                     "description": "",
@@ -585,7 +585,7 @@
                                 "family": "Scalar",
                                 "distribution_parameters": {
                                     "family": "Scalar",
-                                    "value": 0.5
+                                    "value": 1.0
                                 },
                                 "truncation_parameters": null,
                                 "scaling_parameters": null
@@ -644,7 +644,7 @@
                         }
                     },
                     "version": "0.0.2",
-                    "stage_name": "graduated"
+                    "stage_name": "GRADUATED"
                 },
                 "graph": {
                     "nodes": {},
