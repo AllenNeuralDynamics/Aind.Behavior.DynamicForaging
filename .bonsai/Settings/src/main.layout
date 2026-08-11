@@ -1,14 +1,2 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<VisualizerLayout Version="2.9.0">
-  <WindowSettings Index="26">
-    <NestedLayout>
-      <WindowSettings Index="0">
-        <NestedLayout>
-          <WindowSettings Index="0">
-            <VisualizerTypeName>Bonsai.ImGui.Visualizers.ImPlotVisualizer</VisualizerTypeName>
-          </WindowSettings>
-        </NestedLayout>
-      </WindowSettings>
-    </NestedLayout>
-  </WindowSettings>
-</VisualizerLayout>
+<VisualizerLayout Version="2.9.0" />
