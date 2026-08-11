@@ -102,3 +102,7 @@ def metrics_from_dataset(
         consecutive_sessions_at_current_stage=consecutive_sessions_at_current_stage + 1,
         stage_name=stage_name,
     )
+
+
+if __name__ == "__main__":
+    print(metrics_from_dataset(r"C:\Users\micah.woodard\Downloads\864253_2026-07-24T194251Z").model_dump_json(indent=4))

@@ -5,7 +5,9 @@ from typing import Literal, Optional
 import numpy as np
 from pydantic import BaseModel, Field
 
-from ...trial_models import Trial
+from ..block_based_trial_generator import (
+    BlockBasedTrialMetadata,
+)
 from .base_coupled_trial_generator import (
     BaseCoupledTrialGenerator,
     BaseCoupledTrialGeneratorSpec,
@@ -94,26 +96,21 @@ class CoupledTrialGenerator(BaseCoupledTrialGenerator):
 
     spec: CoupledTrialGeneratorSpec
 
-    def add_extra_metadata(self, trial: Trial) -> Trial:
+    def _add_extra_metadata(self, extra_metadata: BlockBasedTrialMetadata) -> BlockBasedTrialMetadata:
         """Adds time remaining metadata to the trial.
 
         Args:
-            trial: The Trial object to which metadata will be added.
+            extra_metadata: The extra metadata to which additional metadata will be added.
 
         Returns:
-            The Trial object with additional metadata.
+            The extra metadata with additional metadata.
         """
 
-        trial = super().add_extra_metadata(trial)
-        trial.metadata.extra.time_remaining = (
-            (
-                timedelta(seconds=self.spec.trial_generation_end_parameters.max_time)
-                - (datetime.now() - self.start_time)
-            ).total_seconds()
-            / 60,
-        )
-
-        return trial
+        extra_metadata = super()._add_extra_metadata(extra_metadata)
+        extra_metadata.time_remaining = (
+            timedelta(seconds=self.spec.trial_generation_end_parameters.max_time) - (datetime.now() - self.start_time)
+        ).total_seconds() / 60
+        return extra_metadata
 
     def _are_end_conditions_met(self) -> bool:
         """Checks whether the session should end.
