@@ -1901,7 +1901,6 @@
             <Expression xsi:type="ExternalizedMapping">
               <Property Name="FrameSubject" />
               <Property Name="StartExperimentSubject" />
-              <Property Name="EndExperimentSubject" />
               <Property Name="UiHabituationTimeUpdate" />
             </Expression>
             <Expression xsi:type="rx:CreateObservable">
@@ -2164,9 +2163,6 @@
                     </p5:Size>
                   </Expression>
                   <Expression xsi:type="Unit" />
-                  <Expression xsi:type="ExternalizedMapping">
-                    <Property Name="Name" DisplayName="EndExperimentSubject" Category="UiControl" />
-                  </Expression>
                   <Expression xsi:type="MulticastSubject">
                     <Name>EndExperiment</Name>
                   </Expression>
@@ -2218,8 +2214,7 @@
                   <Edge From="42" To="43" Label="Source2" />
                   <Edge From="44" To="45" Label="Source1" />
                   <Edge From="45" To="46" Label="Source1" />
-                  <Edge From="46" To="48" Label="Source1" />
-                  <Edge From="47" To="48" Label="Source2" />
+                  <Edge From="46" To="47" Label="Source1" />
                 </Edges>
               </Workflow>
             </Expression>
