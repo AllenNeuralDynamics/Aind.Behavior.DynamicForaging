@@ -19,7 +19,7 @@ class TestCoupledTrialGenerator(unittest.TestCase):
     def test_session(self):
         """Simulates a full experimental session to verify generator stability."""
 
-        trial = Trial()
+        trial = self.generator.next()
         outcome = TrialOutcome(
             trial=trial,
             is_right_choice=np.random.choice([True, False, None]),
@@ -33,6 +33,7 @@ class TestCoupledTrialGenerator(unittest.TestCase):
                 previous_choice=outcome.is_right_choice,
                 previous_left_bait=False,
                 previous_right_bait=False,
+                trial=trial,
             )
 
         if not trial:

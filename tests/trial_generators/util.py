@@ -1,10 +1,16 @@
+from typing import Optional
+
 import numpy as np
 
 from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial, TrialOutcome
 
 
 def simulate_response(
-    previous_reward: bool, previous_choice: bool | None, previous_left_bait: bool, previous_right_bait: bool
+    previous_reward: bool,
+    previous_choice: bool | None,
+    previous_left_bait: bool,
+    previous_right_bait: bool,
+    trial: Optional[Trial] = None,
 ) -> TrialOutcome:
 
     np.random.seed(42)
@@ -23,4 +29,4 @@ def simulate_response(
     else:
         is_rewarded = previous_right_bait if is_right_choice else previous_left_bait
 
-    return TrialOutcome(trial=Trial(), is_right_choice=is_right_choice, is_rewarded=is_rewarded)
+    return TrialOutcome(trial=trial or Trial(), is_right_choice=is_right_choice, is_rewarded=is_rewarded)
