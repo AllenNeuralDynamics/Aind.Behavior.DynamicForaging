@@ -130,7 +130,7 @@ class BiasIntervention:
                 self.water_corrections = 0
 
         elif (
-            abs(bias) <= self.parameters.threshold.lower and self.total_lickspout_offset != 0
+            abs(bias) < self.parameters.threshold.lower and self.total_lickspout_offset != 0
         ):  # bias below lower threshold, move back towards center
             logger.debug("Moving lickspout back toward center.")
             delta = min(self.parameters.lickspout_offset_delta, abs(self.total_lickspout_offset))
