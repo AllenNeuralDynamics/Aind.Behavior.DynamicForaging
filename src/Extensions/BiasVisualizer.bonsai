@@ -6,7 +6,6 @@
                  xmlns:imviz="clr-namespace:Bonsai.ImGui.Visualizers;assembly=Bonsai.ImGui.Visualizers"
                  xmlns:p1="clr-namespace:;assembly=Extensions"
                  xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
-                 xmlns:harp="clr-namespace:Bonsai.Harp;assembly=Bonsai.Harp"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
@@ -62,12 +61,12 @@
               <Property Name="Name" DisplayName="TimedBias" />
             </Expression>
             <Expression xsi:type="SubscribeSubject">
-              <Name>TimedBias</Name>
+              <Name>TrialIndexedBias</Name>
             </Expression>
             <Expression xsi:type="imviz:RollingBufferBuilder">
               <imviz:Capacity>1000</imviz:Capacity>
-              <imviz:IndexSelector>Seconds</imviz:IndexSelector>
-              <imviz:ValueSelector>Value.Bias</imviz:ValueSelector>
+              <imviz:IndexSelector>TrialIndex</imviz:IndexSelector>
+              <imviz:ValueSelector>Bias</imviz:ValueSelector>
             </Expression>
             <Expression xsi:type="imviz:LatestOnNewFrame">
               <Name>BiasPlot</Name>
@@ -87,8 +86,8 @@
             </Expression>
             <Expression xsi:type="imviz:RollingBufferBuilder">
               <imviz:Capacity>1</imviz:Capacity>
-              <imviz:IndexSelector>Seconds</imviz:IndexSelector>
-              <imviz:ValueSelector>Value.Bias</imviz:ValueSelector>
+              <imviz:IndexSelector>TrialIndex</imviz:IndexSelector>
+              <imviz:ValueSelector>Bias</imviz:ValueSelector>
             </Expression>
             <Expression xsi:type="imviz:LatestOnNewFrame">
               <Name>BiasPlot</Name>
@@ -115,7 +114,7 @@
               </Combinator>
             </Expression>
             <Expression xsi:type="MemberSelector">
-              <Selector>Value.Bias</Selector>
+              <Selector>Bias</Selector>
             </Expression>
             <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:FilterNotNull.bonsai" />
             <Expression xsi:type="imviz:LatestOnNewFrame">
@@ -131,7 +130,7 @@
               </PropertyMappings>
             </Expression>
             <Expression xsi:type="MemberSelector">
-              <Selector>Seconds</Selector>
+              <Selector>TrialIndex</Selector>
             </Expression>
             <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:FilterNotNull.bonsai" />
             <Expression xsi:type="PropertyMapping">
@@ -147,9 +146,9 @@
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="implot:PlotText">
                 <implot:Visible>true</implot:Visible>
-                <implot:Text>1.00</implot:Text>
-                <implot:X>32.0100000000022</implot:X>
-                <implot:Y>1</implot:Y>
+                <implot:Text>0.00</implot:Text>
+                <implot:X>13</implot:X>
+                <implot:Y>0</implot:Y>
                 <implot:PixelOffset>
                   <implot:X>0</implot:X>
                   <implot:Y>-10</implot:Y>
@@ -168,13 +167,10 @@
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:CombineLatest" />
             </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="harp:CreateTimestamped" />
-            </Expression>
             <Expression xsi:type="imviz:RollingBufferBuilder">
               <imviz:Capacity>1000</imviz:Capacity>
-              <imviz:IndexSelector>Seconds</imviz:IndexSelector>
-              <imviz:ValueSelector>Value.LeftBias</imviz:ValueSelector>
+              <imviz:IndexSelector>Item2</imviz:IndexSelector>
+              <imviz:ValueSelector>Item1.LeftBias</imviz:ValueSelector>
             </Expression>
             <Expression xsi:type="imviz:LatestOnNewFrame">
               <Name>BiasPlot</Name>
@@ -203,13 +199,10 @@
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:CombineLatest" />
             </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="harp:CreateTimestamped" />
-            </Expression>
             <Expression xsi:type="imviz:RollingBufferBuilder">
               <imviz:Capacity>1000</imviz:Capacity>
-              <imviz:IndexSelector>Seconds</imviz:IndexSelector>
-              <imviz:ValueSelector>Value.RightBias</imviz:ValueSelector>
+              <imviz:IndexSelector>Item2</imviz:IndexSelector>
+              <imviz:ValueSelector>Item1.RightBias</imviz:ValueSelector>
             </Expression>
             <Expression xsi:type="imviz:LatestOnNewFrame">
               <Name>BiasPlot</Name>
@@ -240,7 +233,7 @@
             <Edge From="8" To="17" Label="Source1" />
             <Edge From="8" To="22" Label="Source1" />
             <Edge From="8" To="27" Label="Source1" />
-            <Edge From="8" To="35" Label="Source1" />
+            <Edge From="8" To="34" Label="Source1" />
             <Edge From="9" To="10" Label="Source1" />
             <Edge From="10" To="11" Label="Source1" />
             <Edge From="11" To="12" Label="Source1" />
@@ -257,7 +250,7 @@
             <Edge From="22" To="23" Label="Source1" />
             <Edge From="23" To="24" Label="Source1" />
             <Edge From="23" To="29" Label="Source2" />
-            <Edge From="23" To="37" Label="Source2" />
+            <Edge From="23" To="36" Label="Source2" />
             <Edge From="24" To="26" Label="Source3" />
             <Edge From="25" To="26" Label="Source4" />
             <Edge From="27" To="28" Label="Source1" />
@@ -266,14 +259,12 @@
             <Edge From="30" To="31" Label="Source1" />
             <Edge From="31" To="32" Label="Source1" />
             <Edge From="32" To="33" Label="Source1" />
-            <Edge From="33" To="34" Label="Source1" />
+            <Edge From="34" To="35" Label="Source1" />
             <Edge From="35" To="36" Label="Source1" />
             <Edge From="36" To="37" Label="Source1" />
             <Edge From="37" To="38" Label="Source1" />
             <Edge From="38" To="39" Label="Source1" />
             <Edge From="39" To="40" Label="Source1" />
-            <Edge From="40" To="41" Label="Source1" />
-            <Edge From="41" To="42" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
