@@ -90,8 +90,8 @@
                   <p1:string>R</p1:string>
                   <p1:string>L</p1:string>
                 </p1:TickLabels>
-                <p1:ImPlotLocationFlags>West</p1:ImPlotLocationFlags>
-                <p1:ImPlotLegendFlags>None</p1:ImPlotLegendFlags>
+                <p1:ImPlotLocationFlags>East</p1:ImPlotLocationFlags>
+                <p1:ImPlotLegendFlags>Outside</p1:ImPlotLegendFlags>
                 <p1:YAxisMax xsi:nil="true" />
                 <p1:YAxisMin xsi:nil="true" />
               </Combinator>
@@ -107,8 +107,8 @@
                   <p1:double>1</p1:double>
                 </p1:TickPositions>
                 <p1:TickLabels />
-                <p1:ImPlotLocationFlags>West</p1:ImPlotLocationFlags>
-                <p1:ImPlotLegendFlags>None</p1:ImPlotLegendFlags>
+                <p1:ImPlotLocationFlags>East</p1:ImPlotLocationFlags>
+                <p1:ImPlotLegendFlags>Outside</p1:ImPlotLegendFlags>
                 <p1:YAxisMax xsi:nil="true" />
                 <p1:YAxisMin xsi:nil="true" />
               </Combinator>
@@ -127,19 +127,19 @@
                 <Value>0.9</Value>
               </Combinator>
             </Expression>
-            <Expression xsi:type="scr:ExpressionTransform">
-              <scr:Expression>new(it as LickLeft)</scr:Expression>
-            </Expression>
             <Expression xsi:type="MemberSelector">
               <Selector>Seconds</Selector>
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Zip" />
             </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>new(it.Item1 as LickLeft, it.Item2)</scr:Expression>
+            </Expression>
             <Expression xsi:type="imviz:RollingBufferBuilder">
               <imviz:Capacity>1000</imviz:Capacity>
               <imviz:IndexSelector>Item2</imviz:IndexSelector>
-              <imviz:ValueSelector>Item1.LickLeft</imviz:ValueSelector>
+              <imviz:ValueSelector>LickLeft</imviz:ValueSelector>
             </Expression>
             <Expression xsi:type="imviz:LatestOnNewFrame">
               <Name>EventPlot</Name>
@@ -177,19 +177,19 @@
                 <Value>0.1</Value>
               </Combinator>
             </Expression>
-            <Expression xsi:type="scr:ExpressionTransform">
-              <scr:Expression>new(it as LickRight)</scr:Expression>
-            </Expression>
             <Expression xsi:type="MemberSelector">
               <Selector>Seconds</Selector>
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Zip" />
             </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>new(it.Item1 as LickRight, it.Item2)</scr:Expression>
+            </Expression>
             <Expression xsi:type="imviz:RollingBufferBuilder">
               <imviz:Capacity>1000</imviz:Capacity>
               <imviz:IndexSelector>Item2</imviz:IndexSelector>
-              <imviz:ValueSelector>Item1.LickRight</imviz:ValueSelector>
+              <imviz:ValueSelector>LickRight</imviz:ValueSelector>
             </Expression>
             <Expression xsi:type="imviz:LatestOnNewFrame">
               <Name>EventPlot</Name>
@@ -303,11 +303,6 @@
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Merge" />
             </Expression>
-            <Expression xsi:type="scr:ExpressionTransform">
-              <scr:Expression>new (
-  it as Choice
-)</scr:Expression>
-            </Expression>
             <Expression xsi:type="MemberSelector">
               <Selector>Seconds</Selector>
             </Expression>
@@ -317,10 +312,13 @@
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="harp:CreateTimestamped" />
             </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>new(it.Seconds, it.Value as Choice)</scr:Expression>
+            </Expression>
             <Expression xsi:type="imviz:RollingBufferBuilder">
               <imviz:Capacity>1000</imviz:Capacity>
               <imviz:IndexSelector>Seconds</imviz:IndexSelector>
-              <imviz:ValueSelector>Value.Choice</imviz:ValueSelector>
+              <imviz:ValueSelector>Choice</imviz:ValueSelector>
             </Expression>
             <Expression xsi:type="imviz:LatestOnNewFrame">
               <Name>EventPlot</Name>
@@ -400,21 +398,19 @@
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Merge" />
             </Expression>
-            <Expression xsi:type="scr:ExpressionTransform">
-              <scr:Expression>new (
-  it as Choice
-)</scr:Expression>
-            </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:WithLatestFrom" />
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="harp:CreateTimestamped" />
             </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>new(it.Seconds, it.Value as Choice)</scr:Expression>
+            </Expression>
             <Expression xsi:type="imviz:RollingBufferBuilder">
               <imviz:Capacity>1000</imviz:Capacity>
               <imviz:IndexSelector>Seconds</imviz:IndexSelector>
-              <imviz:ValueSelector>Value.Choice</imviz:ValueSelector>
+              <imviz:ValueSelector>Choice</imviz:ValueSelector>
             </Expression>
             <Expression xsi:type="imviz:LatestOnNewFrame">
               <Name>EventPlot</Name>
@@ -441,10 +437,13 @@
             <Expression xsi:type="SubscribeSubject">
               <Name>TimedTrial</Name>
             </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>new(it.Seconds, it.Value.Trial.Metadata.PRewardLeft as PRewardLeft, it.Value.Trial.Metadata.PRewardRight as PRewardRight )</scr:Expression>
+            </Expression>
             <Expression xsi:type="imviz:RollingBufferBuilder">
               <imviz:Capacity>1000</imviz:Capacity>
               <imviz:IndexSelector>Seconds</imviz:IndexSelector>
-              <imviz:ValueSelector>Value.Trial.Metadata.PRewardLeft</imviz:ValueSelector>
+              <imviz:ValueSelector>PRewardLeft</imviz:ValueSelector>
             </Expression>
             <Expression xsi:type="imviz:LatestOnNewFrame">
               <Name>ContinuousPlot</Name>
@@ -465,7 +464,7 @@
             <Expression xsi:type="imviz:RollingBufferBuilder">
               <imviz:Capacity>1000</imviz:Capacity>
               <imviz:IndexSelector>Seconds</imviz:IndexSelector>
-              <imviz:ValueSelector>Value.Trial.Metadata.PRewardRight</imviz:ValueSelector>
+              <imviz:ValueSelector>PRewardRight</imviz:ValueSelector>
             </Expression>
             <Expression xsi:type="imviz:LatestOnNewFrame">
               <Name>ContinuousPlot</Name>
@@ -500,22 +499,22 @@
             <Edge From="14" To="15" Label="Source1" />
             <Edge From="16" To="17" Label="Source1" />
             <Edge From="17" To="18" Label="Source1" />
-            <Edge From="17" To="21" Label="Source1" />
+            <Edge From="17" To="20" Label="Source1" />
             <Edge From="18" To="19" Label="Source1" />
-            <Edge From="19" To="20" Label="Source1" />
-            <Edge From="20" To="22" Label="Source1" />
-            <Edge From="21" To="22" Label="Source2" />
+            <Edge From="19" To="21" Label="Source1" />
+            <Edge From="20" To="21" Label="Source2" />
+            <Edge From="21" To="22" Label="Source1" />
             <Edge From="22" To="23" Label="Source1" />
             <Edge From="23" To="24" Label="Source1" />
             <Edge From="24" To="25" Label="Source1" />
             <Edge From="25" To="26" Label="Source1" />
             <Edge From="27" To="28" Label="Source1" />
             <Edge From="28" To="29" Label="Source1" />
-            <Edge From="28" To="32" Label="Source1" />
+            <Edge From="28" To="31" Label="Source1" />
             <Edge From="29" To="30" Label="Source1" />
-            <Edge From="30" To="31" Label="Source1" />
-            <Edge From="31" To="33" Label="Source1" />
-            <Edge From="32" To="33" Label="Source2" />
+            <Edge From="30" To="32" Label="Source1" />
+            <Edge From="31" To="32" Label="Source2" />
+            <Edge From="32" To="33" Label="Source1" />
             <Edge From="33" To="34" Label="Source1" />
             <Edge From="34" To="35" Label="Source1" />
             <Edge From="35" To="36" Label="Source1" />
@@ -523,7 +522,7 @@
             <Edge From="38" To="39" Label="Source1" />
             <Edge From="38" To="70" Label="Source1" />
             <Edge From="39" To="40" Label="Source1" />
-            <Edge From="39" To="50" Label="Source1" />
+            <Edge From="39" To="49" Label="Source1" />
             <Edge From="40" To="41" Label="Source1" />
             <Edge From="40" To="57" Label="Source1" />
             <Edge From="41" To="42" Label="Source1" />
@@ -535,10 +534,10 @@
             <Edge From="45" To="48" Label="Source2" />
             <Edge From="46" To="47" Label="Source1" />
             <Edge From="47" To="48" Label="Source3" />
-            <Edge From="48" To="49" Label="Source1" />
-            <Edge From="49" To="51" Label="Source1" />
-            <Edge From="50" To="51" Label="Source2" />
-            <Edge From="50" To="64" Label="Source2" />
+            <Edge From="48" To="50" Label="Source1" />
+            <Edge From="49" To="50" Label="Source2" />
+            <Edge From="49" To="63" Label="Source2" />
+            <Edge From="50" To="51" Label="Source1" />
             <Edge From="51" To="52" Label="Source1" />
             <Edge From="52" To="53" Label="Source1" />
             <Edge From="53" To="54" Label="Source1" />
@@ -558,13 +557,14 @@
             <Edge From="67" To="68" Label="Source1" />
             <Edge From="68" To="69" Label="Source1" />
             <Edge From="70" To="71" Label="Source1" />
-            <Edge From="70" To="75" Label="Source1" />
             <Edge From="71" To="72" Label="Source1" />
+            <Edge From="71" To="76" Label="Source1" />
             <Edge From="72" To="73" Label="Source1" />
             <Edge From="73" To="74" Label="Source1" />
-            <Edge From="75" To="76" Label="Source1" />
+            <Edge From="74" To="75" Label="Source1" />
             <Edge From="76" To="77" Label="Source1" />
             <Edge From="77" To="78" Label="Source1" />
+            <Edge From="78" To="79" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>

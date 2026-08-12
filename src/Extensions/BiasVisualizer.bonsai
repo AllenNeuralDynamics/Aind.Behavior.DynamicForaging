@@ -51,8 +51,8 @@
                   <p1:string>R</p1:string>
                   <p1:string>L</p1:string>
                 </p1:TickLabels>
-                <p1:ImPlotLocationFlags>West</p1:ImPlotLocationFlags>
-                <p1:ImPlotLegendFlags>None</p1:ImPlotLegendFlags>
+                <p1:ImPlotLocationFlags>East</p1:ImPlotLocationFlags>
+                <p1:ImPlotLegendFlags>Outside</p1:ImPlotLegendFlags>
                 <p1:YAxisMax>1.1</p1:YAxisMax>
                 <p1:YAxisMin>-1.1</p1:YAxisMin>
               </Combinator>
@@ -147,7 +147,7 @@
               <Combinator xsi:type="implot:PlotText">
                 <implot:Visible>true</implot:Visible>
                 <implot:Text>0.00</implot:Text>
-                <implot:X>13</implot:X>
+                <implot:X>22</implot:X>
                 <implot:Y>0</implot:Y>
                 <implot:PixelOffset>
                   <implot:X>0</implot:X>
@@ -161,16 +161,16 @@
                 <Value>1</Value>
               </Combinator>
             </Expression>
-            <Expression xsi:type="scr:ExpressionTransform">
-              <scr:Expression>new (it as LeftBias)</scr:Expression>
-            </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:CombineLatest" />
             </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>new (it.Item1 as LeftBias, it.Item2 as TrialIndex)</scr:Expression>
+            </Expression>
             <Expression xsi:type="imviz:RollingBufferBuilder">
               <imviz:Capacity>1000</imviz:Capacity>
-              <imviz:IndexSelector>Item2</imviz:IndexSelector>
-              <imviz:ValueSelector>Item1.LeftBias</imviz:ValueSelector>
+              <imviz:IndexSelector>TrialIndex</imviz:IndexSelector>
+              <imviz:ValueSelector>LeftBias</imviz:ValueSelector>
             </Expression>
             <Expression xsi:type="imviz:LatestOnNewFrame">
               <Name>BiasPlot</Name>
@@ -193,16 +193,16 @@
                 <Value>-1</Value>
               </Combinator>
             </Expression>
-            <Expression xsi:type="scr:ExpressionTransform">
-              <scr:Expression>new (it as RightBias)</scr:Expression>
-            </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:CombineLatest" />
             </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>new (it.Item1 as RightBias, it.Item2 as TrialIndex)</scr:Expression>
+            </Expression>
             <Expression xsi:type="imviz:RollingBufferBuilder">
               <imviz:Capacity>1000</imviz:Capacity>
-              <imviz:IndexSelector>Item2</imviz:IndexSelector>
-              <imviz:ValueSelector>Item1.RightBias</imviz:ValueSelector>
+              <imviz:IndexSelector>TrialIndex</imviz:IndexSelector>
+              <imviz:ValueSelector>RightBias</imviz:ValueSelector>
             </Expression>
             <Expression xsi:type="imviz:LatestOnNewFrame">
               <Name>BiasPlot</Name>
@@ -249,8 +249,8 @@
             <Edge From="21" To="26" Label="Source2" />
             <Edge From="22" To="23" Label="Source1" />
             <Edge From="23" To="24" Label="Source1" />
-            <Edge From="23" To="29" Label="Source2" />
-            <Edge From="23" To="36" Label="Source2" />
+            <Edge From="23" To="28" Label="Source2" />
+            <Edge From="23" To="35" Label="Source2" />
             <Edge From="24" To="26" Label="Source3" />
             <Edge From="25" To="26" Label="Source4" />
             <Edge From="27" To="28" Label="Source1" />
