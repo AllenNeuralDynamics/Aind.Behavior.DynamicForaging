@@ -1,7 +1,7 @@
 {
     "pkg_location": "aind_behavior_dynamic_foraging_curricula.coupled_baiting",
     "name": "Coupled Baiting",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "graph": {
         "nodes": {
             "0": {
