@@ -88,7 +88,7 @@ class BiasIntervention:
                 return True
 
             # bias intervention only when the spout is currently off-center.
-            if abs(bias) <= self.parameters.threshold.lower and self.total_lickspout_offset != 0:
+            if abs(bias) < self.parameters.threshold.lower and self.total_lickspout_offset != 0:
                 logger.debug("Bias calculated below threshold: %s." % bias)
                 return True
         self.trials_in_bias_intervention += 1

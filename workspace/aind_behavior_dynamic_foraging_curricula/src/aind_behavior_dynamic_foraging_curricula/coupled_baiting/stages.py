@@ -3,6 +3,10 @@ from aind_behavior_dynamic_foraging.task_logic import (
     AindDynamicForagingTaskLogic,
     AindDynamicForagingTaskParameters,
 )
+from aind_behavior_dynamic_foraging.task_logic.interventions.bias_intervention import (
+    BiasInterventionParameters,
+    BiasThreshold,
+)
 from aind_behavior_dynamic_foraging.task_logic.trial_generators import (
     CoupledTrialGeneratorSpec,
     CoupledWarmupTrialGeneratorSpec,
@@ -59,6 +63,14 @@ def make_s_stage_1_warmup():
                             autowater_parameters=AutoWaterParameters(
                                 min_ignored_trials=0, min_unrewarded_trials=0, reward_fraction=0.8
                             ),
+                            bias_intervention_parameters=BiasInterventionParameters(
+                                threshold=BiasThreshold(upper=0.5, lower=0.0),
+                                intervention_interval=10,
+                                maximum_water_corrections=2,
+                                bias_window_length=200,
+                                lickspout_offset_delta=0.05,
+                                reward_fraction=0.8,
+                            ),
                         ),
                         CoupledTrialGeneratorSpec(
                             reward_size=RewardSize(right=4.0, left=4.0),
@@ -93,6 +105,14 @@ def make_s_stage_1_warmup():
                             kernel_size=2,
                             autowater_parameters=AutoWaterParameters(
                                 min_ignored_trials=3, min_unrewarded_trials=3, reward_fraction=0.5
+                            ),
+                            bias_intervention_parameters=BiasInterventionParameters(
+                                threshold=BiasThreshold(upper=0.5, lower=0.0),
+                                intervention_interval=10,
+                                maximum_water_corrections=2,
+                                bias_window_length=200,
+                                lickspout_offset_delta=0.05,
+                                reward_fraction=0.5,
                             ),
                         ),
                     ]
@@ -143,6 +163,14 @@ def make_s_stage_1():
                     autowater_parameters=AutoWaterParameters(
                         min_ignored_trials=5, min_unrewarded_trials=5, reward_fraction=0.5
                     ),
+                    bias_intervention_parameters=BiasInterventionParameters(
+                        threshold=BiasThreshold(upper=0.5, lower=0.0),
+                        intervention_interval=10,
+                        maximum_water_corrections=2,
+                        bias_window_length=200,
+                        lickspout_offset_delta=0.05,
+                        reward_fraction=0.5,
+                    ),
                 ),
             ),
         ),
@@ -189,6 +217,14 @@ def make_s_stage_2():
                     kernel_size=2,
                     autowater_parameters=AutoWaterParameters(
                         min_ignored_trials=7, min_unrewarded_trials=7, reward_fraction=0.5
+                    ),
+                    bias_intervention_parameters=BiasInterventionParameters(
+                        threshold=BiasThreshold(upper=0.5, lower=0.0),
+                        intervention_interval=10,
+                        maximum_water_corrections=2,
+                        bias_window_length=200,
+                        lickspout_offset_delta=0.05,
+                        reward_fraction=0.5,
                     ),
                 ),
             ),
@@ -237,6 +273,14 @@ def make_s_stage_3():
                     autowater_parameters=AutoWaterParameters(
                         min_ignored_trials=10, min_unrewarded_trials=10, reward_fraction=0.5
                     ),
+                    bias_intervention_parameters=BiasInterventionParameters(
+                        threshold=BiasThreshold(upper=0.5, lower=0.0),
+                        intervention_interval=10,
+                        maximum_water_corrections=2,
+                        bias_window_length=200,
+                        lickspout_offset_delta=0.05,
+                        reward_fraction=0.5,
+                    ),
                 ),
             ),
         ),
@@ -278,6 +322,14 @@ def make_s_stage_final():
                     reward_consumption_duration=3.0,
                     kernel_size=2,
                     autowater_parameters=None,
+                    bias_intervention_parameters=BiasInterventionParameters(
+                        threshold=BiasThreshold(upper=0.5, lower=0.0),
+                        intervention_interval=10,
+                        maximum_water_corrections=2,
+                        bias_window_length=200,
+                        lickspout_offset_delta=0.05,
+                        reward_fraction=0.5,
+                    ),
                 ),
             ),
         ),
@@ -319,6 +371,14 @@ def make_s_stage_graduated():
                     reward_consumption_duration=3.0,
                     kernel_size=2,
                     autowater_parameters=None,
+                    bias_intervention_parameters=BiasInterventionParameters(
+                        threshold=BiasThreshold(upper=0.5, lower=0.0),
+                        intervention_interval=10,
+                        maximum_water_corrections=2,
+                        bias_window_length=200,
+                        lickspout_offset_delta=0.05,
+                        reward_fraction=0.5,
+                    ),
                 ),
             ),
         ),
