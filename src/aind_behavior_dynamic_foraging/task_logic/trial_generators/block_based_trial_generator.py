@@ -1,3 +1,4 @@
+import datetime
 import logging
 from abc import ABC, abstractmethod
 from typing import Literal, Optional
@@ -16,7 +17,7 @@ from aind_behavior_dynamic_foraging.task_logic.interventions.bias_intervention i
     BiasIntervention,
     BiasInterventionParameters,
 )
-from aind_behavior_dynamic_foraging.task_logic.utils.calculate_bias import calculate_bias
+from aind_behavior_dynamic_foraging.task_logic.utils import calculate_bias, calculate_foraging_efficiency
 
 from ..trial_models import Metadata, RewardSize, Trial, TrialMetrics
 from ._base import BaseTrialGeneratorSpecModel, ITrialGenerator, TrialOutcome
@@ -27,6 +28,20 @@ logger = logging.getLogger(__name__)
 class BlockBasedTrialMetadata(BaseModel):
     """Metadata for block based trial. These fields will NOT be used by the task engine."""
 
+    time_elapsed: Optional[float] = Field(
+        default=None, description="Time elapsed in session at start of trial (in minutes)."
+    )
+    time_remaining: Optional[float] = Field(
+        default=None, description="Time remaining in session at start of trial (in minutes)."
+    )
+    current_trial: Optional[int] = Field(default=None, description="Current trial number in session.")
+    responses: Optional[int] = Field(default=None, description="Number of responses made in session.")
+    ignored: Optional[int] = Field(default=None, description="Number of ignored trials in session.")
+    earned_water: Optional[float] = Field(default=None, description="Total water earned in session (in mL).")
+    total_water: Optional[float] = Field(default=None, description="Total water delivered in session (in mL).")
+    foraging_efficiency: Optional[float] = Field(
+        default=None, description="Foraging efficiency in session (earned water / total water)."
+    )
     is_autowater: bool = Field(default=False, description="Flag indicating if autowater is given for trial.")
     is_bias_water_intervention: bool = Field(
         default=False, description="Flag indicating if bias water intervention is given for trial."
@@ -138,6 +153,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
         """
 
         self.spec = spec
+        self.start_time = datetime.datetime.now()
         self.outcome_history: list[TrialOutcome] = []
         self.is_right_choice_history: list[bool | None] = []
         self.reward_history: list[bool] = []
@@ -228,7 +244,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
                 % (is_auto_reward_right, lickspout_offset_delta)
             )
 
-        return Trial(
+        trial = Trial(
             p_reward_left=1 if (self.is_left_baited or is_auto_reward_right is False) else self.block.p_left_reward,
             p_reward_right=1 if (self.is_right_baited or is_auto_reward_right) else self.block.p_right_reward,
             reward_consumption_duration=self.spec.reward_consumption_duration,
@@ -243,13 +259,53 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             metadata=Metadata(
                 p_reward_left=self.block.p_left_reward,
                 p_reward_right=self.block.p_right_reward,
-                extra=BlockBasedTrialMetadata(
-                    is_autowater=is_autowater and not is_bias_intervention,
-                    is_bias_water_intervention=is_bias_intervention and is_auto_reward_right is not None,
-                    is_bias_stage_intervention=is_bias_intervention and lickspout_offset_delta != 0,
-                ),
             ),
         )
+        extra_metadata = BlockBasedTrialMetadata(
+            is_autowater=is_autowater and not is_bias_intervention,
+            is_bias_water_intervention=is_bias_intervention and is_auto_reward_right is not None,
+            is_bias_stage_intervention=is_bias_intervention and lickspout_offset_delta != 0,
+        )
+        trial.metadata.extra = self._add_extra_metadata(extra_metadata)
+        return trial
+
+    def _add_extra_metadata(self, extra_metadata: BlockBasedTrialMetadata) -> BlockBasedTrialMetadata:
+        """Adds extra metadata.
+
+        Args:
+            extra_metadata: The extra metadata to add to.
+
+        Returns:
+            Extra metadata added.
+        """
+
+        extra_metadata.time_elapsed = (datetime.datetime.now() - self.start_time).total_seconds() / 60
+        extra_metadata.current_trial = len(self.outcome_history)
+        extra_metadata.responses = sum([1 for choice in self.is_right_choice_history if choice is not None])
+        extra_metadata.ignored = sum([1 for choice in self.is_right_choice_history if choice is None])
+        extra_metadata.earned_water = sum(
+            [
+                oc.trial.reward_size.left
+                for oc in self.outcome_history
+                if oc.is_rewarded and not oc.is_right_choice and oc.trial.is_auto_reward_right is None
+            ]
+            + [
+                oc.trial.reward_size.right
+                for oc in self.outcome_history
+                if oc.is_rewarded and oc.is_right_choice and oc.trial.is_auto_reward_right is None
+            ]
+        )
+        extra_metadata.total_water = sum(
+            [oc.trial.reward_size.left for oc in self.outcome_history if oc.is_rewarded and not oc.is_right_choice]
+            + [oc.trial.reward_size.right for oc in self.outcome_history if oc.is_rewarded and oc.is_right_choice]
+        )
+        extra_metadata.foraging_efficiency = calculate_foraging_efficiency(
+            is_baiting=self.spec.is_baiting,
+            is_rewarded=self.reward_history,
+            p_left_reward=[oc.trial.metadata.p_reward_left for oc in self.outcome_history],
+            p_right_reward=[oc.trial.metadata.p_reward_right for oc in self.outcome_history],
+        )
+        return extra_metadata
 
     def get_metrics(self) -> TrialMetrics:
         """Return metrics at current state of the trial generator."""
