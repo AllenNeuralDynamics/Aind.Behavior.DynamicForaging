@@ -7,7 +7,7 @@ from aind_behavior_dynamic_foraging.data_contract import dataset as df_foraging_
 from aind_behavior_dynamic_foraging.task_logic.utils.calculate_foraging_efficiency import calculate_foraging_efficiency
 from pydantic import BeforeValidator, Field
 
-STAGE_NAMES = Literal["stage_1_warmup", "stage_1", "stage_2", "stage_3", "final", "graduated"]
+STAGE_NAMES = Literal["STAGE_1_WARMUP", "STAGE_1", "STAGE_2", "STAGE_3", "STAGE_FINAL", "GRADUATED"]
 
 logger = logging.getLogger(__name__)
 
