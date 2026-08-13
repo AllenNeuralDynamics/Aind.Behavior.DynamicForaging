@@ -13,7 +13,6 @@
       <Expression xsi:type="ExternalizedMapping">
         <Property Name="FrameSubject" />
         <Property Name="StartExperimentSubject" />
-        <Property Name="EndExperimentSubject" />
         <Property Name="UiHabituationTimeUpdate" />
       </Expression>
       <Expression xsi:type="rx:CreateObservable">
@@ -39,17 +38,17 @@
               <p1:Visible>true</p1:Visible>
               <p1:Columns>
                 <p1:ColumnStyling>
-                  <p1:Name>Condition</p1:Name>
+                  <p1:Name>Stage</p1:Name>
+                  <p1:Flags>WidthFixed</p1:Flags>
+                  <p1:InitValue>0</p1:InitValue>
+                </p1:ColumnStyling>
+                <p1:ColumnStyling>
+                  <p1:Name>Experimenter</p1:Name>
                   <p1:Flags>WidthFixed</p1:Flags>
                   <p1:InitValue>0</p1:InitValue>
                 </p1:ColumnStyling>
                 <p1:ColumnStyling>
                   <p1:Name>Subject</p1:Name>
-                  <p1:Flags>WidthFixed</p1:Flags>
-                  <p1:InitValue>0</p1:InitValue>
-                </p1:ColumnStyling>
-                <p1:ColumnStyling>
-                  <p1:Name>Session</p1:Name>
                   <p1:Flags>WidthFixed</p1:Flags>
                   <p1:InitValue>0</p1:InitValue>
                 </p1:ColumnStyling>
@@ -83,8 +82,27 @@
             <Expression xsi:type="SubscribeSubject">
               <Name>CurrentMetadata</Name>
             </Expression>
+            <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:FilterNotNull.bonsai" />
             <Expression xsi:type="MemberSelector">
-              <Selector>Experimenter</Selector>
+              <Selector>Item2.StageName</Selector>
+            </Expression>
+            <Expression xsi:type="PropertyMapping">
+              <PropertyMappings>
+                <Property Name="Text" />
+              </PropertyMappings>
+            </Expression>
+            <Expression xsi:type="imgui:TextBuilder">
+              <imgui:Visible>true</imgui:Visible>
+              <imgui:Text />
+            </Expression>
+            <Expression xsi:type="imgui:TableNextColumnBuilder">
+              <imgui:Visible>true</imgui:Visible>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>CurrentMetadata</Name>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Item1.Experimenter</Selector>
             </Expression>
             <Expression xsi:type="rx:Condition">
               <Workflow>
@@ -121,7 +139,7 @@
             </Expression>
             <Expression xsi:type="imgui:TextBuilder">
               <imgui:Visible>true</imgui:Visible>
-              <imgui:Text>Expo</imgui:Text>
+              <imgui:Text />
             </Expression>
             <Expression xsi:type="imgui:TableNextColumnBuilder">
               <imgui:Visible>true</imgui:Visible>
@@ -130,7 +148,7 @@
               <Name>CurrentMetadata</Name>
             </Expression>
             <Expression xsi:type="MemberSelector">
-              <Selector>Subject</Selector>
+              <Selector>Item1.Subject</Selector>
             </Expression>
             <Expression xsi:type="PropertyMapping">
               <PropertyMappings>
@@ -139,7 +157,7 @@
             </Expression>
             <Expression xsi:type="imgui:TextBuilder">
               <imgui:Visible>true</imgui:Visible>
-              <imgui:Text>Plimbo</imgui:Text>
+              <imgui:Text />
             </Expression>
             <Expression xsi:type="imgui:TableNextColumnBuilder">
               <imgui:Visible>true</imgui:Visible>
@@ -148,8 +166,9 @@
               <Name>CurrentMetadata</Name>
             </Expression>
             <Expression xsi:type="MemberSelector">
-              <Selector>SessionName</Selector>
+              <Selector>Item1.Experiment</Selector>
             </Expression>
+            <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:FilterNotNull.bonsai" />
             <Expression xsi:type="PropertyMapping">
               <PropertyMappings>
                 <Property Name="Text" />
@@ -157,25 +176,7 @@
             </Expression>
             <Expression xsi:type="imgui:TextBuilder">
               <imgui:Visible>true</imgui:Visible>
-              <imgui:Text>Stage1</imgui:Text>
-            </Expression>
-            <Expression xsi:type="imgui:TableNextColumnBuilder">
-              <imgui:Visible>true</imgui:Visible>
-            </Expression>
-            <Expression xsi:type="SubscribeSubject">
-              <Name>CurrentMetadata</Name>
-            </Expression>
-            <Expression xsi:type="MemberSelector">
-              <Selector>Experiment</Selector>
-            </Expression>
-            <Expression xsi:type="PropertyMapping">
-              <PropertyMappings>
-                <Property Name="Text" />
-              </PropertyMappings>
-            </Expression>
-            <Expression xsi:type="imgui:TextBuilder">
-              <imgui:Visible>true</imgui:Visible>
-              <imgui:Text>Task6</imgui:Text>
+              <imgui:Text />
             </Expression>
             <Expression xsi:type="imgui:TableNextColumnBuilder">
               <imgui:Visible>true</imgui:Visible>
@@ -276,9 +277,6 @@
               </p1:Size>
             </Expression>
             <Expression xsi:type="Unit" />
-            <Expression xsi:type="ExternalizedMapping">
-              <Property Name="Name" DisplayName="EndExperimentSubject" Category="UiControl" />
-            </Expression>
             <Expression xsi:type="MulticastSubject">
               <Name>EndExperiment</Name>
             </Expression>
@@ -289,49 +287,50 @@
             <Edge From="3" To="4" Label="Source1" />
             <Edge From="4" To="5" Label="Source1" />
             <Edge From="5" To="6" Label="Source1" />
-            <Edge From="5" To="13" Label="Source1" />
-            <Edge From="5" To="18" Label="Source1" />
-            <Edge From="5" To="23" Label="Source1" />
-            <Edge From="5" To="28" Label="Source1" />
-            <Edge From="5" To="37" Label="Source1" />
-            <Edge From="6" To="12" Label="Source1" />
+            <Edge From="5" To="12" Label="Source1" />
+            <Edge From="5" To="19" Label="Source1" />
+            <Edge From="5" To="24" Label="Source1" />
+            <Edge From="5" To="30" Label="Source1" />
+            <Edge From="5" To="39" Label="Source1" />
+            <Edge From="6" To="11" Label="Source1" />
             <Edge From="7" To="8" Label="Source1" />
             <Edge From="8" To="9" Label="Source1" />
             <Edge From="9" To="10" Label="Source1" />
-            <Edge From="10" To="11" Label="Source1" />
-            <Edge From="11" To="12" Label="Source2" />
-            <Edge From="13" To="17" Label="Source1" />
+            <Edge From="10" To="11" Label="Source2" />
+            <Edge From="12" To="18" Label="Source1" />
+            <Edge From="13" To="14" Label="Source1" />
             <Edge From="14" To="15" Label="Source1" />
             <Edge From="15" To="16" Label="Source1" />
-            <Edge From="16" To="17" Label="Source2" />
-            <Edge From="18" To="22" Label="Source1" />
-            <Edge From="19" To="20" Label="Source1" />
+            <Edge From="16" To="17" Label="Source1" />
+            <Edge From="17" To="18" Label="Source2" />
+            <Edge From="19" To="23" Label="Source1" />
             <Edge From="20" To="21" Label="Source1" />
-            <Edge From="21" To="22" Label="Source2" />
-            <Edge From="23" To="27" Label="Source1" />
-            <Edge From="24" To="25" Label="Source1" />
+            <Edge From="21" To="22" Label="Source1" />
+            <Edge From="22" To="23" Label="Source2" />
+            <Edge From="24" To="29" Label="Source1" />
             <Edge From="25" To="26" Label="Source1" />
-            <Edge From="26" To="27" Label="Source2" />
-            <Edge From="28" To="29" Label="Source1" />
-            <Edge From="29" To="30" Label="Source1" />
-            <Edge From="29" To="32" Label="Source1" />
+            <Edge From="26" To="27" Label="Source1" />
+            <Edge From="27" To="28" Label="Source1" />
+            <Edge From="28" To="29" Label="Source2" />
             <Edge From="30" To="31" Label="Source1" />
-            <Edge From="31" To="36" Label="Source1" />
+            <Edge From="31" To="32" Label="Source1" />
+            <Edge From="31" To="34" Label="Source1" />
             <Edge From="32" To="33" Label="Source1" />
-            <Edge From="33" To="35" Label="Source1" />
-            <Edge From="34" To="35" Label="Source2" />
-            <Edge From="35" To="36" Label="Source2" />
-            <Edge From="37" To="38" Label="Source1" />
-            <Edge From="38" To="39" Label="Source1" />
-            <Edge From="38" To="44" Label="Source1" />
+            <Edge From="33" To="38" Label="Source1" />
+            <Edge From="34" To="35" Label="Source1" />
+            <Edge From="35" To="37" Label="Source1" />
+            <Edge From="36" To="37" Label="Source2" />
+            <Edge From="37" To="38" Label="Source2" />
             <Edge From="39" To="40" Label="Source1" />
             <Edge From="40" To="41" Label="Source1" />
-            <Edge From="41" To="43" Label="Source1" />
-            <Edge From="42" To="43" Label="Source2" />
-            <Edge From="44" To="45" Label="Source1" />
-            <Edge From="45" To="46" Label="Source1" />
-            <Edge From="46" To="48" Label="Source1" />
-            <Edge From="47" To="48" Label="Source2" />
+            <Edge From="40" To="46" Label="Source1" />
+            <Edge From="41" To="42" Label="Source1" />
+            <Edge From="42" To="43" Label="Source1" />
+            <Edge From="43" To="45" Label="Source1" />
+            <Edge From="44" To="45" Label="Source2" />
+            <Edge From="46" To="47" Label="Source1" />
+            <Edge From="47" To="48" Label="Source1" />
+            <Edge From="48" To="49" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
