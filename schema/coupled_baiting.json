@@ -1,7 +1,7 @@
 {
     "pkg_location": "aind_behavior_dynamic_foraging_curricula.coupled_baiting",
     "name": "Coupled Baiting",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "graph": {
         "nodes": {
             "0": {
@@ -61,11 +61,11 @@
                                     },
                                     "bias_intervention_parameters": {
                                         "threshold": {
-                                            "upper": 0.7,
-                                            "lower": 0.3
+                                            "upper": 0.5,
+                                            "lower": 0.0
                                         },
                                         "intervention_interval": 10,
-                                        "maximum_water_corrections": 5,
+                                        "maximum_water_corrections": 2,
                                         "bias_window_length": 200,
                                         "lickspout_offset_delta": 0.05,
                                         "reward_fraction": 0.8
@@ -138,14 +138,14 @@
                                     },
                                     "bias_intervention_parameters": {
                                         "threshold": {
-                                            "upper": 0.7,
-                                            "lower": 0.3
+                                            "upper": 0.5,
+                                            "lower": 0.0
                                         },
                                         "intervention_interval": 10,
-                                        "maximum_water_corrections": 5,
+                                        "maximum_water_corrections": 2,
                                         "bias_window_length": 200,
                                         "lickspout_offset_delta": 0.05,
-                                        "reward_fraction": 0.8
+                                        "reward_fraction": 0.5
                                     },
                                     "is_baiting": true,
                                     "reward_probability_parameters": {
@@ -243,14 +243,14 @@
                             },
                             "bias_intervention_parameters": {
                                 "threshold": {
-                                    "upper": 0.7,
-                                    "lower": 0.3
+                                    "upper": 0.5,
+                                    "lower": 0.0
                                 },
                                 "intervention_interval": 10,
-                                "maximum_water_corrections": 5,
+                                "maximum_water_corrections": 2,
                                 "bias_window_length": 200,
                                 "lickspout_offset_delta": 0.05,
-                                "reward_fraction": 0.8
+                                "reward_fraction": 0.5
                             },
                             "is_baiting": true,
                             "reward_probability_parameters": {
@@ -346,14 +346,14 @@
                             },
                             "bias_intervention_parameters": {
                                 "threshold": {
-                                    "upper": 0.7,
-                                    "lower": 0.3
+                                    "upper": 0.5,
+                                    "lower": 0.0
                                 },
                                 "intervention_interval": 10,
-                                "maximum_water_corrections": 5,
+                                "maximum_water_corrections": 2,
                                 "bias_window_length": 200,
                                 "lickspout_offset_delta": 0.05,
-                                "reward_fraction": 0.8
+                                "reward_fraction": 0.5
                             },
                             "is_baiting": true,
                             "reward_probability_parameters": {
@@ -449,14 +449,14 @@
                             },
                             "bias_intervention_parameters": {
                                 "threshold": {
-                                    "upper": 0.7,
-                                    "lower": 0.3
+                                    "upper": 0.5,
+                                    "lower": 0.0
                                 },
                                 "intervention_interval": 10,
-                                "maximum_water_corrections": 5,
+                                "maximum_water_corrections": 2,
                                 "bias_window_length": 200,
                                 "lickspout_offset_delta": 0.05,
-                                "reward_fraction": 0.8
+                                "reward_fraction": 0.5
                             },
                             "is_baiting": true,
                             "reward_probability_parameters": {
@@ -548,14 +548,14 @@
                             "autowater_parameters": null,
                             "bias_intervention_parameters": {
                                 "threshold": {
-                                    "upper": 0.7,
-                                    "lower": 0.3
+                                    "upper": 0.5,
+                                    "lower": 0.0
                                 },
                                 "intervention_interval": 10,
-                                "maximum_water_corrections": 5,
+                                "maximum_water_corrections": 2,
                                 "bias_window_length": 200,
                                 "lickspout_offset_delta": 0.05,
-                                "reward_fraction": 0.8
+                                "reward_fraction": 0.5
                             },
                             "is_baiting": true,
                             "reward_probability_parameters": {
@@ -655,14 +655,14 @@
                             "autowater_parameters": null,
                             "bias_intervention_parameters": {
                                 "threshold": {
-                                    "upper": 0.7,
-                                    "lower": 0.3
+                                    "upper": 0.5,
+                                    "lower": 0.0
                                 },
                                 "intervention_interval": 10,
-                                "maximum_water_corrections": 5,
+                                "maximum_water_corrections": 2,
                                 "bias_window_length": 200,
                                 "lickspout_offset_delta": 0.05,
-                                "reward_fraction": 0.8
+                                "reward_fraction": 0.5
                             },
                             "is_baiting": true,
                             "reward_probability_parameters": {

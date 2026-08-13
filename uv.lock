@@ -105,7 +105,7 @@ docs = [
 
 [[package]]
 name = "aind-behavior-dynamic-foraging-curricula"
-version = "0.0.3"
+version = "0.0.4"
 source = { editable = "workspace/aind_behavior_dynamic_foraging_curricula" }
 dependencies = [
     { name = "aind-behavior-curriculum" },

@@ -3,6 +3,10 @@ from aind_behavior_dynamic_foraging.task_logic import (
     AindDynamicForagingTaskLogic,
     AindDynamicForagingTaskParameters,
 )
+from aind_behavior_dynamic_foraging.task_logic.interventions.bias_intervention import (
+    BiasInterventionParameters,
+    BiasThreshold,
+)
 from aind_behavior_dynamic_foraging.task_logic.trial_generators import (
     CoupledTrialGeneratorSpec,
     CoupledWarmupTrialGeneratorSpec,
@@ -74,6 +78,14 @@ def make_s_stage_1_warmup():
                             is_baiting=True,
                             response_duration=5.0,
                             reward_consumption_duration=1.0,
+                            bias_intervention_parameters=BiasInterventionParameters(
+                                threshold=BiasThreshold(upper=0.5, lower=0.0),
+                                intervention_interval=10,
+                                maximum_water_corrections=2,
+                                bias_window_length=200,
+                                lickspout_offset_delta=0.05,
+                                reward_fraction=0.8,
+                            ),
                         ),
                         CoupledTrialGeneratorSpec(
                             reward_size=RewardSize(right=4.0, left=4.0),
@@ -109,6 +121,14 @@ def make_s_stage_1_warmup():
                             response_duration=5.0,
                             reward_consumption_duration=1.0,
                             kernel_size=2,
+                            bias_intervention_parameters=BiasInterventionParameters(
+                                threshold=BiasThreshold(upper=0.5, lower=0.0),
+                                intervention_interval=10,
+                                maximum_water_corrections=2,
+                                bias_window_length=200,
+                                lickspout_offset_delta=0.05,
+                                reward_fraction=0.5,
+                            ),
                         ),
                     ]
                 ),
@@ -128,6 +148,14 @@ def make_s_stage_1():
                     reward_size=RewardSize(right=2.0, left=2.0),
                     autowater_parameters=AutoWaterParameters(
                         reward_fraction=0.5, min_ignored_trials=5, min_unrewarded_trials=5
+                    ),
+                    bias_intervention_parameters=BiasInterventionParameters(
+                        threshold=BiasThreshold(upper=0.5, lower=0.0),
+                        intervention_interval=10,
+                        maximum_water_corrections=2,
+                        bias_window_length=200,
+                        lickspout_offset_delta=0.05,
+                        reward_fraction=0.5,
                     ),
                     trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
                         max_trial=1000,
@@ -176,6 +204,14 @@ def make_s_stage_2():
                     autowater_parameters=AutoWaterParameters(
                         reward_fraction=0.5, min_ignored_trials=7, min_unrewarded_trials=7
                     ),
+                    bias_intervention_parameters=BiasInterventionParameters(
+                        threshold=BiasThreshold(upper=0.5, lower=0.0),
+                        intervention_interval=10,
+                        maximum_water_corrections=2,
+                        bias_window_length=200,
+                        lickspout_offset_delta=0.05,
+                        reward_fraction=0.5,
+                    ),
                     trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
                         max_trial=1000,
                         max_time=4500,
@@ -222,6 +258,14 @@ def make_s_stage_3():
                     reward_size=RewardSize(right=2.0, left=2.0),
                     autowater_parameters=AutoWaterParameters(
                         reward_fraction=0.5, min_ignored_trials=10, min_unrewarded_trials=10
+                    ),
+                    bias_intervention_parameters=BiasInterventionParameters(
+                        threshold=BiasThreshold(upper=0.5, lower=0.0),
+                        intervention_interval=10,
+                        maximum_water_corrections=2,
+                        bias_window_length=200,
+                        lickspout_offset_delta=0.05,
+                        reward_fraction=0.5,
                     ),
                     trial_generation_end_parameters=UncoupledTrialGenerationEndConditions(
                         max_trial=1000,
@@ -277,6 +321,14 @@ def make_s_stage_final():
                     is_baiting=False,
                     response_duration=1.0,
                     reward_consumption_duration=3.0,
+                    bias_intervention_parameters=BiasInterventionParameters(
+                        threshold=BiasThreshold(upper=0.5, lower=0.0),
+                        intervention_interval=10,
+                        maximum_water_corrections=2,
+                        bias_window_length=200,
+                        lickspout_offset_delta=0.05,
+                        reward_fraction=0.5,
+                    ),
                 ),
             ),
         ),
@@ -293,6 +345,14 @@ def make_s_stage_graduated():
                 trial_generator=UncoupledTrialGeneratorSpec(
                     reward_size=RewardSize(right=2.0, left=2.0),
                     autowater_parameters=None,
+                    bias_intervention_parameters=BiasInterventionParameters(
+                        threshold=BiasThreshold(upper=0.5, lower=0.0),
+                        intervention_interval=10,
+                        maximum_water_corrections=2,
+                        bias_window_length=200,
+                        lickspout_offset_delta=0.05,
+                        reward_fraction=0.8,
+                    ),
                     trial_generation_end_parameters=UncoupledTrialGenerationEndConditions(
                         max_trial=1000,
                         max_time=4500,
