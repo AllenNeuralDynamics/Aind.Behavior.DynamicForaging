@@ -68,12 +68,14 @@ def make_qc_runner(dataset: contract.Dataset) -> qc.Runner:
             "HarpEnvironmentSensor",
         )
 
-    _runner.add_suite(
-        qc.harp.HarpLicketySplitTestSuite(dataset["Behavior"]["HarpLickometerRight"]), "HarpLickometerRight"
-    )
-    _runner.add_suite(
-        qc.harp.HarpLicketySplitTestSuite(dataset["Behavior"]["HarpLickometerLeft"]), "HarpLickometerLeft"
-    )
+    if rig.harp_lickometer_right is not None:
+        _runner.add_suite(
+            qc.harp.HarpLicketySplitTestSuite(dataset["Behavior"]["HarpLickometerRight"]), "HarpLickometerRight"
+        )
+    if rig.harp_lickometer_left is not None:
+        _runner.add_suite(
+            qc.harp.HarpLicketySplitTestSuite(dataset["Behavior"]["HarpLickometerLeft"]), "HarpLickometerLeft"
+        )
 
     # Add camera qc
     for camera in dataset["BehaviorVideos"]:

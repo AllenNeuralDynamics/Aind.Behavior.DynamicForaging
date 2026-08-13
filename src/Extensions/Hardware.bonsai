@@ -196,7 +196,7 @@
               <Name>RigSchema</Name>
             </Expression>
             <Expression xsi:type="MemberSelector">
-              <Selector>HarpSniffDetector</Selector>
+              <Selector>HarpEnvironmentSensor</Selector>
             </Expression>
             <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:FilterNotNull.bonsai" />
             <Expression xsi:type="Combinator">
