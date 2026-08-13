@@ -327,7 +327,7 @@ def make_s_stage_final():
                         maximum_water_corrections=2,
                         bias_window_length=200,
                         lickspout_offset_delta=0.05,
-                        reward_fraction=0.8,
+                        reward_fraction=0.5,
                     ),
                 ),
             ),
