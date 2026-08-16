@@ -1,6 +1,6 @@
 import logging
 from datetime import datetime, timedelta
-from typing import Literal
+from typing import Literal, Optional
 
 import numpy as np
 from aind_behavior_services.task.distributions import (
@@ -36,6 +36,21 @@ class UncoupledTrialGenerationEndConditions(BaseModel):
     max_trial: int = Field(default=1000, ge=0, description="Maximum number of trials allowed in a session.")
     max_time: float = Field(default=75 * 60, ge=0, description="Maximum session duration (sec).")
     min_time: float = Field(default=30 * 60, ge=0, description="Minimum session duration (sec)")
+
+
+class MinimumProbabilityPerseverationConditions(BaseModel):
+    """Defines the conditions under which a block is extended due to perseveration on minimum probability side."""
+
+    choice_streak: int = Field(
+        default=4,
+        ge=1,
+        description="Number of consecutive choices on the minimum-probability side required to extend both block lengths.",
+    )
+    block_extension: int = Field(
+        default=4,
+        ge=1,
+        description="Number of trials to extend both block lengths when the choice streak condition is met.",
+    )
 
 
 class UncoupledTrialGeneratorSpec(BlockBasedTrialGeneratorSpec):
@@ -78,6 +93,9 @@ class UncoupledTrialGeneratorSpec(BlockBasedTrialGeneratorSpec):
         default=3,
         description="Maximum number of consecutive blocks a side can have the higher probability.",
     )
+    minimum_probability_perseveration_conditions: Optional[MinimumProbabilityPerseverationConditions] = Field(
+        default_factory=MinimumProbabilityPerseverationConditions,
+    )
 
     block_length: UniformDistribution = Field(
         default=UniformDistribution(
@@ -117,14 +135,20 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
         block_length_min = spec.block_length.distribution_parameters.min
         block_length_max = spec.block_length.distribution_parameters.max
         self.block_length_stagger = np.floor(
-            round((block_length_max - block_length_min - 0.5) / 2 + block_length_min) / 2
+            round(((block_length_max - 1) - block_length_min - 0.5) / 2 + block_length_min) / 2
         )
 
         self.block = self._generate_first_block()
+
+        # right counters
         self.trials_in_right_block = 0
         self.right_dominance_streak = 0
+        self.right_perseveration_streak = 0
+
+        # left counters
         self.trials_in_left_block = 0
         self.left_dominance_streak = 0
+        self.left_perseveration_streak = 0
 
     def _add_extra_metadata(self, extra_metadata: BlockBasedTrialMetadata) -> BlockBasedTrialMetadata:
         """Adds time remaining metadata to the trial.
@@ -189,12 +213,17 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
             outcome: The TrialOutcome from the most recently completed trial.
         """
 
+        if isinstance(outcome, str):
+            outcome = TrialOutcome.model_validate_json(outcome)
+
         super().update(outcome)
 
         self.trials_in_left_block += 1
         self.trials_in_right_block += 1
 
-        switches = []
+        self._update_perseveration_streaks(outcome)
+
+        switches: list[bool] = []
         if left_switching := self._is_block_switch_allowed(self.trials_in_left_block, self.block.left_length):
             switches.append(False)
         if right_switching := self._is_block_switch_allowed(self.trials_in_right_block, self.block.right_length):
@@ -213,16 +242,67 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
                     block_stagger=self.block_length_stagger,
                     block=self.block,
                 )
-            # reset the counter for any side whose probability changed
-            if new_block.p_right_reward != self.block.p_right_reward:
-                self.trials_in_right_block = 0
-            if new_block.p_left_reward != self.block.p_left_reward:
-                self.trials_in_left_block = 0
-            self.block = new_block
-            logger.info(
-                "New block generated: p_right_reward=%s, p_left_reward=%s, right_length=%s, left_length=%s."
-                % (self.block.p_right_reward, self.block.p_left_reward, self.block.right_length, self.block.left_length)
-            )
+                # reset the counter for any side whose probability changed
+                if new_block.p_right_reward != self.block.p_right_reward:
+                    self.trials_in_right_block = 0
+                    if self.right_dominance_streak >= self.spec.maximum_dominance_streak:
+                        self._reset_dominance_streaks()
+
+                if new_block.p_left_reward != self.block.p_left_reward:
+                    self.trials_in_left_block = 0
+                    if self.left_dominance_streak >= self.spec.maximum_dominance_streak:
+                        self._reset_dominance_streaks()
+
+                self.block = new_block
+                logger.info(
+                    "New block generated: p_right_reward=%s, p_left_reward=%s, right_length=%s, left_length=%s."
+                    % (
+                        self.block.p_right_reward,
+                        self.block.p_left_reward,
+                        self.block.right_length,
+                        self.block.left_length,
+                    )
+                )
+        if self._is_extend_block_allowed():
+            self._extend_block_lengths()
+
+    def _extend_block_lengths(self) -> None:
+        """Extends both block lengths by the specified extension amount."""
+        self.block.right_length += self.spec.minimum_probability_perseveration_conditions.block_extension
+        self.block.left_length += self.spec.minimum_probability_perseveration_conditions.block_extension
+        self.right_perseveration_streak = 0
+        self.left_perseveration_streak = 0
+        logger.info(
+            "Block lengths extended: right_length=%s, left_length=%s."
+            % (self.block.right_length, self.block.left_length)
+        )
+
+    def _is_extend_block_allowed(self) -> bool:
+        """Return True if either side has exceeded the minimum probability perseveration choice streak."""
+
+        if self.spec.minimum_probability_perseveration_conditions is None:
+            logger.debug("Minimum probability perseveration conditions are not set. Block extension is disabled.")
+            return False
+        return (
+            self.right_perseveration_streak >= self.spec.minimum_probability_perseveration_conditions.choice_streak
+            or self.left_perseveration_streak >= self.spec.minimum_probability_perseveration_conditions.choice_streak
+        )
+
+    def _update_perseveration_streaks(self, trial_outcome: TrialOutcome) -> None:
+        """Update the per-side perseveration streak counters based on the current trial outcome."""
+
+        if trial_outcome.is_right_choice is None:
+            return
+
+        if trial_outcome.is_right_choice:
+            self.left_perseveration_streak = 0
+            if self.block.p_right_reward == min(self.spec.reward_probabilities):
+                self.right_perseveration_streak += 1
+
+        if not trial_outcome.is_right_choice:
+            self.right_perseveration_streak = 0
+            if self.block.p_left_reward == min(self.spec.reward_probabilities):
+                self.left_perseveration_streak += 1
 
     def _update_dominance_streak(self) -> None:
         """Update the per-side dominance streak counters based on the current block.
@@ -245,9 +325,14 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
             % (self.right_dominance_streak, self.left_dominance_streak)
         )
 
+    def _reset_dominance_streaks(self) -> None:
+        """Reset the per-side dominance streak counters to zero."""
+        self.right_dominance_streak = 0
+        self.left_dominance_streak = 0
+
     def _is_block_switch_allowed(self, trials_in_block: int, block_length: int) -> bool:
         """Return True if the trial counter has exceeded the current block length."""
-        return trials_in_block > block_length
+        return trials_in_block >= block_length
 
     def _generate_first_block(self) -> Block:
         """Generate the initial block for both sides, ensuring neither side starts at minimum
@@ -260,8 +345,9 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
         logger.info("Generating first block.")
         p_left_reward = np.random.choice(self.spec.reward_probabilities)
         p_right_reward = np.random.choice(self.spec.reward_probabilities)
-        right_length = np.floor(draw_sample(self.spec.block_length))
         left_length = np.floor(draw_sample(self.spec.block_length))
+        right_length = np.floor(draw_sample(self.spec.block_length))
+
         while p_right_reward == p_left_reward == min(self.spec.reward_probabilities):
             if np.random.choice([True, False]):
                 logger.debug("Right and left reward are both equal to min. Redrawing right probability.")
@@ -291,8 +377,8 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
             left_length=left_length,
         )
 
-    @staticmethod
     def _generate_next_block(
+        self,
         right_switching: bool,
         right_dominance_streak: int,
         left_dominance_streak: int,
@@ -338,8 +424,12 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
 
         if right_switching:
             logger.info("Generating right block.")
-            r_available = [x for x in reward_probabilities if x != p_right_reward]
-            p_right_reward = np.random.choice(r_available) if right_dominance_streak < max_dominance_streak else p_min
+            if right_dominance_streak < max_dominance_streak:
+                p_right_reward = self._draw_reward_probability(p_right_reward, reward_probabilities)
+            else:
+                logger.info("Right dominance streak exceeded max. Forcing right reward probability to minimum.")
+                p_right_reward = p_min
+
             right_length = np.floor(draw_sample(block_length))
 
             if p_right_reward == p_left_reward == p_min:
@@ -347,12 +437,16 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
                     "Right and left reward are both equal to min. Staggering right block length and generating new left block."
                 )
                 right_length -= block_stagger
-                p_left_reward = np.random.choice([x for x in reward_probabilities if x != p_min])
+                p_left_reward = self._draw_reward_probability(p_left_reward, reward_probabilities)
                 left_length = np.floor(draw_sample(block_length))
         else:
             logger.info("Generating left block.")
-            l_available = [x for x in reward_probabilities if x != p_left_reward]
-            p_left_reward = np.random.choice(l_available) if left_dominance_streak < max_dominance_streak else p_min
+            if left_dominance_streak < max_dominance_streak:
+                p_left_reward = self._draw_reward_probability(p_left_reward, reward_probabilities)
+            else:
+                logger.info("Left dominance streak exceeded max. Forcing left reward probability to minimum.")
+                p_left_reward = p_min
+
             left_length = np.floor(draw_sample(block_length))
 
             if p_right_reward == p_left_reward == p_min:
@@ -360,7 +454,7 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
                     "Right and left reward are both equal to min. Staggering left block length and generating new right block."
                 )
                 left_length -= block_stagger
-                p_right_reward = np.random.choice([x for x in reward_probabilities if x != p_min])
+                p_right_reward = self._draw_reward_probability(p_right_reward, reward_probabilities)
                 right_length = np.floor(draw_sample(block_length))
 
         return Block(
@@ -369,3 +463,16 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
             right_length=right_length,
             left_length=left_length,
         )
+
+    @staticmethod
+    def _draw_reward_probability(previous_probability: float, reward_probabilities: list[float]) -> float:
+        """Draw a new reward probability from the available probabilities, excluding the previous probability.
+
+        Args:
+            previous_probability: The reward probability from the previous block.
+            reward_probabilities: List of candidate probabilities to sample from."""
+
+        p_reward = np.random.choice(reward_probabilities)
+        while p_reward == previous_probability:
+            p_reward = np.random.choice(reward_probabilities)
+        return p_reward
