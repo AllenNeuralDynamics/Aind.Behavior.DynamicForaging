@@ -40,10 +40,13 @@
                                         },
                                         "truncation_parameters": {
                                             "truncation_mode": "clamp",
-                                            "min": 1.0,
+                                            "min": 0.0,
                                             "max": 7.0
                                         },
-                                        "scaling_parameters": null
+                                        "scaling_parameters": {
+                                            "scale": 1.0,
+                                            "offset": 1.0
+                                        }
                                     },
                                     "block_length": {
                                         "family": "Scalar",
@@ -113,10 +116,13 @@
                                         },
                                         "truncation_parameters": {
                                             "truncation_mode": "clamp",
-                                            "min": 1.0,
+                                            "min": 0.0,
                                             "max": 7.0
                                         },
-                                        "scaling_parameters": null
+                                        "scaling_parameters": {
+                                            "scale": 1.0,
+                                            "offset": 1.0
+                                        }
                                     },
                                     "block_length": {
                                         "family": "Exponential",
@@ -218,10 +224,13 @@
                                 },
                                 "truncation_parameters": {
                                     "truncation_mode": "clamp",
-                                    "min": 1.0,
+                                    "min": 0.0,
                                     "max": 7.0
                                 },
-                                "scaling_parameters": null
+                                "scaling_parameters": {
+                                    "scale": 1.0,
+                                    "offset": 1.0
+                                }
                             },
                             "block_length": {
                                 "family": "Exponential",
@@ -321,10 +330,13 @@
                                 },
                                 "truncation_parameters": {
                                     "truncation_mode": "clamp",
-                                    "min": 1.0,
+                                    "min": 0.0,
                                     "max": 10.0
                                 },
-                                "scaling_parameters": null
+                                "scaling_parameters": {
+                                    "scale": 1.0,
+                                    "offset": 1.0
+                                }
                             },
                             "block_length": {
                                 "family": "Exponential",
@@ -424,10 +436,13 @@
                                 },
                                 "truncation_parameters": {
                                     "truncation_mode": "clamp",
-                                    "min": 1.0,
+                                    "min": 0.0,
                                     "max": 15.0
                                 },
-                                "scaling_parameters": null
+                                "scaling_parameters": {
+                                    "scale": 1.0,
+                                    "offset": 1.0
+                                }
                             },
                             "block_length": {
                                 "family": "Exponential",
@@ -527,10 +542,13 @@
                                 },
                                 "truncation_parameters": {
                                     "truncation_mode": "clamp",
-                                    "min": 1.0,
+                                    "min": 0.0,
                                     "max": 30.0
                                 },
-                                "scaling_parameters": null
+                                "scaling_parameters": {
+                                    "scale": 1.0,
+                                    "offset": 1.0
+                                }
                             },
                             "block_length": {
                                 "family": "Exponential",
@@ -634,10 +652,13 @@
                                 },
                                 "truncation_parameters": {
                                     "truncation_mode": "clamp",
-                                    "min": 1.0,
+                                    "min": 0.0,
                                     "max": 30.0
                                 },
-                                "scaling_parameters": null
+                                "scaling_parameters": {
+                                    "scale": 1.0,
+                                    "offset": 1.0
+                                }
                             },
                             "block_length": {
                                 "family": "Exponential",

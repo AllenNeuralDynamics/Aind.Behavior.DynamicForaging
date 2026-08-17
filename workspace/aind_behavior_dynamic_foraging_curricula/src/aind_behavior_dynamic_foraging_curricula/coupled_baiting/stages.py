@@ -28,8 +28,8 @@ from aind_behavior_services.task.distributions import (
     ExponentialDistributionParameters,
     Scalar,
     ScalarDistributionParameter,
-    TruncationParameters,
     ScalingParameters,
+    TruncationParameters,
 )
 
 from ..metrics import metrics_from_dataset

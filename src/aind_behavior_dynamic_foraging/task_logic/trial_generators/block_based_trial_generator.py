@@ -8,8 +8,8 @@ from aind_behavior_services.task.distributions import (
     Distribution,
     ExponentialDistribution,
     ExponentialDistributionParameters,
-    TruncationParameters,
     ScalingParameters,
+    TruncationParameters,
 )
 from aind_behavior_services.task.distributions_utils import draw_sample
 from pydantic import BaseModel, Field
