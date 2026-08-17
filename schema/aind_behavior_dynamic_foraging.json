@@ -481,10 +481,13 @@
             },
             "truncation_parameters": {
               "max": 8.0,
-              "min": 1.0,
+              "min": 0.0,
               "truncation_mode": "exclude"
             },
-            "scaling_parameters": null
+            "scaling_parameters": {
+              "offset": 1.0,
+              "scale": 1.0
+            }
           },
           "description": "Distribution describing the inter-trial interval (in seconds)."
         },
@@ -883,10 +886,13 @@
             },
             "truncation_parameters": {
               "max": 8.0,
-              "min": 1.0,
+              "min": 0.0,
               "truncation_mode": "exclude"
             },
-            "scaling_parameters": null
+            "scaling_parameters": {
+              "offset": 1.0,
+              "scale": 1.0
+            }
           },
           "description": "Distribution describing the inter-trial interval (in seconds)."
         },
@@ -1179,10 +1185,13 @@
             },
             "truncation_parameters": {
               "max": 8.0,
-              "min": 1.0,
+              "min": 0.0,
               "truncation_mode": "exclude"
             },
-            "scaling_parameters": null
+            "scaling_parameters": {
+              "offset": 1.0,
+              "scale": 1.0
+            }
           },
           "description": "Distribution describing the inter-trial interval (in seconds)."
         },
@@ -1396,10 +1405,13 @@
             },
             "truncation_parameters": {
               "max": 8.0,
-              "min": 1.0,
+              "min": 0.0,
               "truncation_mode": "exclude"
             },
-            "scaling_parameters": null
+            "scaling_parameters": {
+              "offset": 1.0,
+              "scale": 1.0
+            }
           },
           "description": "Distribution describing the inter-trial interval (in seconds)."
         },
@@ -3781,10 +3793,13 @@
             },
             "truncation_parameters": {
               "max": 8.0,
-              "min": 1.0,
+              "min": 0.0,
               "truncation_mode": "exclude"
             },
-            "scaling_parameters": null
+            "scaling_parameters": {
+              "offset": 1.0,
+              "scale": 1.0
+            }
           },
           "description": "Distribution describing the inter-trial interval (in seconds)."
         },

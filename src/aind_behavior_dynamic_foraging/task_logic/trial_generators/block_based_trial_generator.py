@@ -8,6 +8,7 @@ from aind_behavior_services.task.distributions import (
     Distribution,
     ExponentialDistribution,
     ExponentialDistributionParameters,
+    ScalingParameters,
     TruncationParameters,
 )
 from aind_behavior_services.task.distributions_utils import draw_sample
@@ -99,7 +100,8 @@ class BlockBasedTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
     inter_trial_interval_duration: Distribution = Field(
         default=ExponentialDistribution(
             distribution_parameters=ExponentialDistributionParameters(rate=1 / 2),
-            truncation_parameters=TruncationParameters(min=1, max=8),
+            truncation_parameters=TruncationParameters(max=8),
+            scaling_parameters=ScalingParameters(offset=1),
         ),
         description="Distribution describing the inter-trial interval (in seconds).",
     )
