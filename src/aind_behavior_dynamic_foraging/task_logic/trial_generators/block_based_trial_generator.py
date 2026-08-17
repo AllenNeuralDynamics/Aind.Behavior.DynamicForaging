@@ -101,7 +101,7 @@ class BlockBasedTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
         default=ExponentialDistribution(
             distribution_parameters=ExponentialDistributionParameters(rate=1 / 2),
             truncation_parameters=TruncationParameters(max=8),
-            scaling_parameters=ScalingParameters(scale=1),
+            scaling_parameters=ScalingParameters(offset=1),
         ),
         description="Distribution describing the inter-trial interval (in seconds).",
     )
