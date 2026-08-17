@@ -10,7 +10,7 @@ authors = [
     {name = "Micah Woodard", email = "micah.woodard@alleninstitute.org"}
     ]
 license = "MIT"
-version = "0.0.4"
+version = "0.0.2rc36"
 requires-python = ">=3.11"
 classifiers = [
     "Programming Language :: Python :: 3.11",

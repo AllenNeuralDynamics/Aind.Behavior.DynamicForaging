@@ -1,7 +1,7 @@
 {
     "pkg_location": "aind_behavior_dynamic_foraging_curricula.uncoupled_baiting",
     "name": "Uncoupled Baiting",
-    "version": "0.0.4",
+    "version": "0.0.2-rc36",
     "graph": {
         "nodes": {
             "0": {
@@ -175,7 +175,7 @@
                             ]
                         }
                     },
-                    "version": "0.0.2",
+                    "version": "0.0.2-rc36",
                     "stage_name": "STAGE_1_WARMUP"
                 },
                 "graph": {
@@ -278,7 +278,7 @@
                             "kernel_size": 2
                         }
                     },
-                    "version": "0.0.2",
+                    "version": "0.0.2-rc36",
                     "stage_name": "STAGE_1"
                 },
                 "graph": {
@@ -381,7 +381,7 @@
                             "kernel_size": 2
                         }
                     },
-                    "version": "0.0.2",
+                    "version": "0.0.2-rc36",
                     "stage_name": "STAGE_2"
                 },
                 "graph": {
@@ -471,7 +471,7 @@
                             "maximum_dominance_streak": 3
                         }
                     },
-                    "version": "0.0.2",
+                    "version": "0.0.2-rc36",
                     "stage_name": "STAGE_3"
                 },
                 "graph": {
@@ -557,7 +557,7 @@
                             "maximum_dominance_streak": 3
                         }
                     },
-                    "version": "0.0.2",
+                    "version": "0.0.2-rc36",
                     "stage_name": "STAGE_FINAL"
                 },
                 "graph": {
@@ -643,7 +643,7 @@
                             "maximum_dominance_streak": 3
                         }
                     },
-                    "version": "0.0.2",
+                    "version": "0.0.2-rc36",
                     "stage_name": "GRADUATED"
                 },
                 "graph": {
