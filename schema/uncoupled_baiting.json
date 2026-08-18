@@ -483,7 +483,11 @@
                                 0.4,
                                 0.7
                             ],
-                            "maximum_dominance_streak": 3
+                            "maximum_dominance_streak": 3,
+                            "minimum_probability_perseveration_conditions": {
+                                "choice_streak": 4,
+                                "block_extension": 4
+                            }
                         }
                     },
                     "version": "0.0.2-rc36",
@@ -572,7 +576,11 @@
                                 0.4,
                                 0.7
                             ],
-                            "maximum_dominance_streak": 3
+                            "maximum_dominance_streak": 3,
+                            "minimum_probability_perseveration_conditions": {
+                                "choice_streak": 4,
+                                "block_extension": 4
+                            }
                         }
                     },
                     "version": "0.0.2-rc36",
@@ -661,7 +669,11 @@
                                 0.4,
                                 0.7
                             ],
-                            "maximum_dominance_streak": 3
+                            "maximum_dominance_streak": 3,
+                            "minimum_probability_perseveration_conditions": {
+                                "choice_streak": 4,
+                                "block_extension": 4
+                            }
                         }
                     },
                     "version": "0.0.2-rc36",

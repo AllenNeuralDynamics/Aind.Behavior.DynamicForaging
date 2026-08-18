@@ -2367,6 +2367,27 @@
       ],
       "x-sgen-typename": "AllenNeuralDynamics.AindManipulator.MicrostepResolution"
     },
+    "MinimumProbabilityPerseverationConditions": {
+      "description": "Defines the conditions under which a block is extended due to perseveration on minimum probability side.",
+      "properties": {
+        "choice_streak": {
+          "default": 4,
+          "description": "Number of consecutive choices on the minimum-probability side required to extend both block lengths.",
+          "minimum": 1,
+          "title": "Choice Streak",
+          "type": "integer"
+        },
+        "block_extension": {
+          "default": 4,
+          "description": "Number of trials to extend both block lengths when the choice streak condition is met.",
+          "minimum": 1,
+          "title": "Block Extension",
+          "type": "integer"
+        }
+      },
+      "title": "MinimumProbabilityPerseverationConditions",
+      "type": "object"
+    },
     "MotorOperationMode": {
       "description": "Motor operation mode",
       "enum": [
@@ -3891,6 +3912,16 @@
           "description": "Maximum number of consecutive blocks a side can have the higher probability.",
           "title": "Maximum Dominance Streak",
           "type": "integer"
+        },
+        "minimum_probability_perseveration_conditions": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/MinimumProbabilityPerseverationConditions"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "title": "UncoupledTrialGeneratorSpec",
