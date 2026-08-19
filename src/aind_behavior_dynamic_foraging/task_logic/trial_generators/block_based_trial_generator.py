@@ -50,6 +50,8 @@ class BlockBasedTrialMetadata(BaseModel):
     is_bias_stage_intervention: bool = Field(
         default=False, description="Flag indicating if bias stage intervention is given for trial."
     )
+    is_right_baited: bool = Field(default=False, description="Flag indicating if right side is baited.")
+    is_left_baited: bool = Field(default=False, description="Flag indicating if left side is baited.")
 
 
 class AutoWaterParameters(BaseModel):
@@ -267,6 +269,8 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             is_autowater=is_autowater and not is_bias_intervention,
             is_bias_water_intervention=is_bias_intervention and is_auto_reward_right is not None,
             is_bias_stage_intervention=is_bias_intervention and lickspout_offset_delta != 0,
+            is_right_baited=self.is_right_baited,
+            is_left_baited=self.is_left_baited,
         )
         trial.metadata.extra = self._add_extra_metadata(extra_metadata)
         return trial
