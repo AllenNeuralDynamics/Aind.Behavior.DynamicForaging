@@ -384,9 +384,7 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
             )
         )
         connections.append(
-            Connection(
-                source_device="BehaviorBoard", target_device="Solenoid Right", source_port="SupplyPort1"
-            )
+            Connection(source_device="BehaviorBoard", target_device="Solenoid Right", source_port="SupplyPort1")
         )
 
         return Instrument(
