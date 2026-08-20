@@ -161,6 +161,8 @@ class AindAcquisitionDataMapper(AindDataSchemaSessionDataMapper):
             output_parameters=metrics.model_dump(),
         )
 
+        curriculum_status = str(trainer_state.stage.name) if trainer_state.stage is not None else None
+
         stimulus_epoch = StimulusEpoch(
             stimulus_start_time=session_model.date,
             stimulus_end_time=acquisition_end_time,
@@ -169,6 +171,7 @@ class AindAcquisitionDataMapper(AindDataSchemaSessionDataMapper):
             stimulus_modalities=[StimulusModality.AUDITORY],
             performance_metrics=performance_metrics,
             training_protocol_name=str(trainer_state.curriculum.name),
+            curriculum_status=curriculum_status,
         )
 
         # Construct aind-data-schema session
@@ -189,7 +192,7 @@ class AindAcquisitionDataMapper(AindDataSchemaSessionDataMapper):
 def _get_subject_details(data_path: os.PathLike) -> AcquisitionSubjectDetails:
     water = calculate_consumed_water(data_path)
     return AcquisitionSubjectDetails(
-        mouse_platform_name="tube",
+        mouse_platform_name="mouse_tube_foraging",
         reward_consumed_total=None if not water else Decimal(str(water)),
         reward_consumed_unit=units.VolumeUnit.ML,
     )
