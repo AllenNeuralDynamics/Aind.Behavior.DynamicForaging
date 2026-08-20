@@ -283,6 +283,7 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                     LickSpout(
                         name="Left lick spout",
                         manufacturer=Organization.OTHER,
+                        notes="Lick spout manufacturer is unknown.",
                         spout_diameter=Decimal("1.2"),
                         spout_diameter_unit=SizeUnit.MM,
                         solenoid_valve=Device(
@@ -299,6 +300,7 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                     LickSpout(
                         name="Right lick spout",
                         manufacturer=Organization.OTHER,
+                        notes="Lick spout manufacturer is unknown.",
                         spout_diameter=Decimal("1.2"),
                         spout_diameter_unit=SizeUnit.MM,
                         solenoid_valve=Device(
