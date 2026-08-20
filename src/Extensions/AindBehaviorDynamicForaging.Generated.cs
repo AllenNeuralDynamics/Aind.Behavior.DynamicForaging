@@ -866,6 +866,8 @@ namespace AindDynamicForagingDataSchema
     
         private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _quiescentDuration;
     
+        private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _quiescencePeriodRefractoryDuration;
+    
         private double _responseDuration;
     
         private double _rewardConsumptionDuration;
@@ -901,6 +903,7 @@ namespace AindDynamicForagingDataSchema
         {
             _rewardSize = other._rewardSize;
             _quiescentDuration = other._quiescentDuration;
+            _quiescencePeriodRefractoryDuration = other._quiescencePeriodRefractoryDuration;
             _responseDuration = other._responseDuration;
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
@@ -945,6 +948,25 @@ namespace AindDynamicForagingDataSchema
             set
             {
                 _quiescentDuration = value;
+            }
+        }
+    
+        /// <summary>
+        /// Distribution describing the refractory period after a lick is detected during the quiescence period (in seconds).
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("quiescence_period_refractory_duration")]
+        [System.ComponentModel.DescriptionAttribute("Distribution describing the refractory period after a lick is detected during the" +
+            " quiescence period (in seconds).")]
+        public AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution QuiescencePeriodRefractoryDuration
+        {
+            get
+            {
+                return _quiescencePeriodRefractoryDuration;
+            }
+            set
+            {
+                _quiescencePeriodRefractoryDuration = value;
             }
         }
     
@@ -1110,6 +1132,7 @@ namespace AindDynamicForagingDataSchema
             }
             stringBuilder.Append("RewardSize = " + _rewardSize + ", ");
             stringBuilder.Append("QuiescentDuration = " + _quiescentDuration + ", ");
+            stringBuilder.Append("QuiescencePeriodRefractoryDuration = " + _quiescencePeriodRefractoryDuration + ", ");
             stringBuilder.Append("ResponseDuration = " + _responseDuration + ", ");
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
@@ -1561,6 +1584,8 @@ namespace AindDynamicForagingDataSchema
     
         private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _quiescentDuration;
     
+        private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _quiescencePeriodRefractoryDuration;
+    
         private double _responseDuration;
     
         private double _rewardConsumptionDuration;
@@ -1593,6 +1618,7 @@ namespace AindDynamicForagingDataSchema
         {
             _rewardSize = other._rewardSize;
             _quiescentDuration = other._quiescentDuration;
+            _quiescencePeriodRefractoryDuration = other._quiescencePeriodRefractoryDuration;
             _responseDuration = other._responseDuration;
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
@@ -1636,6 +1662,25 @@ namespace AindDynamicForagingDataSchema
             set
             {
                 _quiescentDuration = value;
+            }
+        }
+    
+        /// <summary>
+        /// Distribution describing the refractory period after a lick is detected during the quiescence period (in seconds).
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("quiescence_period_refractory_duration")]
+        [System.ComponentModel.DescriptionAttribute("Distribution describing the refractory period after a lick is detected during the" +
+            " quiescence period (in seconds).")]
+        public AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution QuiescencePeriodRefractoryDuration
+        {
+            get
+            {
+                return _quiescencePeriodRefractoryDuration;
+            }
+            set
+            {
+                _quiescencePeriodRefractoryDuration = value;
             }
         }
     
@@ -1783,6 +1828,7 @@ namespace AindDynamicForagingDataSchema
             }
             stringBuilder.Append("RewardSize = " + _rewardSize + ", ");
             stringBuilder.Append("QuiescentDuration = " + _quiescentDuration + ", ");
+            stringBuilder.Append("QuiescencePeriodRefractoryDuration = " + _quiescencePeriodRefractoryDuration + ", ");
             stringBuilder.Append("ResponseDuration = " + _responseDuration + ", ");
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
@@ -2308,6 +2354,8 @@ namespace AindDynamicForagingDataSchema
     
         private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _quiescentDuration;
     
+        private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _quiescencePeriodRefractoryDuration;
+    
         private double _responseDuration;
     
         private double _rewardConsumptionDuration;
@@ -2355,6 +2403,7 @@ namespace AindDynamicForagingDataSchema
         {
             _rewardSize = other._rewardSize;
             _quiescentDuration = other._quiescentDuration;
+            _quiescencePeriodRefractoryDuration = other._quiescencePeriodRefractoryDuration;
             _responseDuration = other._responseDuration;
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
@@ -2403,6 +2452,25 @@ namespace AindDynamicForagingDataSchema
             set
             {
                 _quiescentDuration = value;
+            }
+        }
+    
+        /// <summary>
+        /// Distribution describing the refractory period after a lick is detected during the quiescence period (in seconds).
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("quiescence_period_refractory_duration")]
+        [System.ComponentModel.DescriptionAttribute("Distribution describing the refractory period after a lick is detected during the" +
+            " quiescence period (in seconds).")]
+        public AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution QuiescencePeriodRefractoryDuration
+        {
+            get
+            {
+                return _quiescencePeriodRefractoryDuration;
+            }
+            set
+            {
+                _quiescencePeriodRefractoryDuration = value;
             }
         }
     
@@ -2640,6 +2708,7 @@ namespace AindDynamicForagingDataSchema
             }
             stringBuilder.Append("RewardSize = " + _rewardSize + ", ");
             stringBuilder.Append("QuiescentDuration = " + _quiescentDuration + ", ");
+            stringBuilder.Append("QuiescencePeriodRefractoryDuration = " + _quiescencePeriodRefractoryDuration + ", ");
             stringBuilder.Append("ResponseDuration = " + _responseDuration + ", ");
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
@@ -2799,6 +2868,8 @@ namespace AindDynamicForagingDataSchema
     
         private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _quiescentDuration;
     
+        private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _quiescencePeriodRefractoryDuration;
+    
         private double _responseDuration;
     
         private double _rewardConsumptionDuration;
@@ -2840,6 +2911,7 @@ namespace AindDynamicForagingDataSchema
         {
             _rewardSize = other._rewardSize;
             _quiescentDuration = other._quiescentDuration;
+            _quiescencePeriodRefractoryDuration = other._quiescencePeriodRefractoryDuration;
             _responseDuration = other._responseDuration;
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
@@ -2886,6 +2958,25 @@ namespace AindDynamicForagingDataSchema
             set
             {
                 _quiescentDuration = value;
+            }
+        }
+    
+        /// <summary>
+        /// Distribution describing the refractory period after a lick is detected during the quiescence period (in seconds).
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("quiescence_period_refractory_duration")]
+        [System.ComponentModel.DescriptionAttribute("Distribution describing the refractory period after a lick is detected during the" +
+            " quiescence period (in seconds).")]
+        public AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution QuiescencePeriodRefractoryDuration
+        {
+            get
+            {
+                return _quiescencePeriodRefractoryDuration;
+            }
+            set
+            {
+                _quiescencePeriodRefractoryDuration = value;
             }
         }
     
@@ -3081,6 +3172,7 @@ namespace AindDynamicForagingDataSchema
             }
             stringBuilder.Append("RewardSize = " + _rewardSize + ", ");
             stringBuilder.Append("QuiescentDuration = " + _quiescentDuration + ", ");
+            stringBuilder.Append("QuiescencePeriodRefractoryDuration = " + _quiescencePeriodRefractoryDuration + ", ");
             stringBuilder.Append("ResponseDuration = " + _responseDuration + ", ");
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
@@ -7115,6 +7207,8 @@ namespace AindDynamicForagingDataSchema
     
         private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _quiescentDuration;
     
+        private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _quiescencePeriodRefractoryDuration;
+    
         private double _responseDuration;
     
         private double _rewardConsumptionDuration;
@@ -7158,6 +7252,7 @@ namespace AindDynamicForagingDataSchema
         {
             _rewardSize = other._rewardSize;
             _quiescentDuration = other._quiescentDuration;
+            _quiescencePeriodRefractoryDuration = other._quiescencePeriodRefractoryDuration;
             _responseDuration = other._responseDuration;
             _rewardConsumptionDuration = other._rewardConsumptionDuration;
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
@@ -7205,6 +7300,25 @@ namespace AindDynamicForagingDataSchema
             set
             {
                 _quiescentDuration = value;
+            }
+        }
+    
+        /// <summary>
+        /// Distribution describing the refractory period after a lick is detected during the quiescence period (in seconds).
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("quiescence_period_refractory_duration")]
+        [System.ComponentModel.DescriptionAttribute("Distribution describing the refractory period after a lick is detected during the" +
+            " quiescence period (in seconds).")]
+        public AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution QuiescencePeriodRefractoryDuration
+        {
+            get
+            {
+                return _quiescencePeriodRefractoryDuration;
+            }
+            set
+            {
+                _quiescencePeriodRefractoryDuration = value;
             }
         }
     
@@ -7419,6 +7533,7 @@ namespace AindDynamicForagingDataSchema
             }
             stringBuilder.Append("RewardSize = " + _rewardSize + ", ");
             stringBuilder.Append("QuiescentDuration = " + _quiescentDuration + ", ");
+            stringBuilder.Append("QuiescencePeriodRefractoryDuration = " + _quiescencePeriodRefractoryDuration + ", ");
             stringBuilder.Append("ResponseDuration = " + _responseDuration + ", ");
             stringBuilder.Append("RewardConsumptionDuration = " + _rewardConsumptionDuration + ", ");
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");

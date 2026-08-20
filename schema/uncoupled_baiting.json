@@ -30,6 +30,22 @@
                                         "truncation_parameters": null,
                                         "scaling_parameters": null
                                     },
+                                    "quiescence_period_refractory_duration": {
+                                        "family": "Exponential",
+                                        "distribution_parameters": {
+                                            "family": "Exponential",
+                                            "rate": 0.3333333333333333
+                                        },
+                                        "truncation_parameters": {
+                                            "truncation_mode": "clamp",
+                                            "min": 0.0,
+                                            "max": 7.0
+                                        },
+                                        "scaling_parameters": {
+                                            "scale": 1.0,
+                                            "offset": 1.0
+                                        }
+                                    },
                                     "response_duration": 5.0,
                                     "reward_consumption_duration": 1.0,
                                     "inter_trial_interval_duration": {
@@ -105,6 +121,22 @@
                                         },
                                         "truncation_parameters": null,
                                         "scaling_parameters": null
+                                    },
+                                    "quiescence_period_refractory_duration": {
+                                        "family": "Exponential",
+                                        "distribution_parameters": {
+                                            "family": "Exponential",
+                                            "rate": 0.3333333333333333
+                                        },
+                                        "truncation_parameters": {
+                                            "truncation_mode": "clamp",
+                                            "min": 0.0,
+                                            "max": 7.0
+                                        },
+                                        "scaling_parameters": {
+                                            "scale": 1.0,
+                                            "offset": 1.0
+                                        }
                                     },
                                     "response_duration": 5.0,
                                     "reward_consumption_duration": 1.0,
@@ -214,6 +246,7 @@
                                 "truncation_parameters": null,
                                 "scaling_parameters": null
                             },
+                            "quiescence_period_refractory_duration": null,
                             "response_duration": 5.0,
                             "reward_consumption_duration": 1.0,
                             "inter_trial_interval_duration": {
@@ -320,13 +353,29 @@
                                 "truncation_parameters": null,
                                 "scaling_parameters": null
                             },
+                            "quiescence_period_refractory_duration": {
+                                "family": "Exponential",
+                                "distribution_parameters": {
+                                    "family": "Exponential",
+                                    "rate": 0.3333333333333333
+                                },
+                                "truncation_parameters": {
+                                    "truncation_mode": "clamp",
+                                    "min": 0.0,
+                                    "max": 10.0
+                                },
+                                "scaling_parameters": {
+                                    "scale": 1.0,
+                                    "offset": 1.0
+                                }
+                            },
                             "response_duration": 3.0,
                             "reward_consumption_duration": 1.0,
                             "inter_trial_interval_duration": {
                                 "family": "Exponential",
                                 "distribution_parameters": {
                                     "family": "Exponential",
-                                    "rate": 0.2
+                                    "rate": 0.3333333333333333
                                 },
                                 "truncation_parameters": {
                                     "truncation_mode": "clamp",
@@ -426,6 +475,22 @@
                                 "truncation_parameters": null,
                                 "scaling_parameters": null
                             },
+                            "quiescence_period_refractory_duration": {
+                                "family": "Exponential",
+                                "distribution_parameters": {
+                                    "family": "Exponential",
+                                    "rate": 0.3333333333333333
+                                },
+                                "truncation_parameters": {
+                                    "truncation_mode": "clamp",
+                                    "min": 0.0,
+                                    "max": 15.0
+                                },
+                                "scaling_parameters": {
+                                    "scale": 1.0,
+                                    "offset": 1.0
+                                }
+                            },
                             "response_duration": 2.0,
                             "reward_consumption_duration": 1.0,
                             "inter_trial_interval_duration": {
@@ -523,6 +588,22 @@
                                 "truncation_parameters": null,
                                 "scaling_parameters": null
                             },
+                            "quiescence_period_refractory_duration": {
+                                "family": "Exponential",
+                                "distribution_parameters": {
+                                    "family": "Exponential",
+                                    "rate": 0.3333333333333333
+                                },
+                                "truncation_parameters": {
+                                    "truncation_mode": "clamp",
+                                    "min": 0.0,
+                                    "max": 30.0
+                                },
+                                "scaling_parameters": {
+                                    "scale": 1.0,
+                                    "offset": 1.0
+                                }
+                            },
                             "response_duration": 1.0,
                             "reward_consumption_duration": 3.0,
                             "inter_trial_interval_duration": {
@@ -615,6 +696,22 @@
                                 },
                                 "truncation_parameters": null,
                                 "scaling_parameters": null
+                            },
+                            "quiescence_period_refractory_duration": {
+                                "family": "Exponential",
+                                "distribution_parameters": {
+                                    "family": "Exponential",
+                                    "rate": 0.3333333333333333
+                                },
+                                "truncation_parameters": {
+                                    "truncation_mode": "clamp",
+                                    "min": 0.0,
+                                    "max": 30.0
+                                },
+                                "scaling_parameters": {
+                                    "scale": 1.0,
+                                    "offset": 1.0
+                                }
                             },
                             "response_duration": 1.0,
                             "reward_consumption_duration": 3.0,
