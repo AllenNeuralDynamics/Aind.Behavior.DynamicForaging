@@ -24,10 +24,10 @@ from aind_data_schema.components.devices import (
     HarpDevice,
     HarpDeviceType,
     Lens,
-    LightEmittingDiode,
     LickSensorType,
     LickSpout,
     LickSpoutAssembly,
+    LightEmittingDiode,
     MotorizedStage,
     SizeUnit,
     Tube,
@@ -283,7 +283,7 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                     LickSpout(
                         name="Left lick spout",
                         manufacturer=Organization.OTHER,
-                        notes="Lick spout manufacturer is unknown.",
+                        notes=" (v1v2 upgrade): 'manufacturer' field was missing, defaulting to 'Other'.",
                         spout_diameter=Decimal("1.2"),
                         spout_diameter_unit=SizeUnit.MM,
                         solenoid_valve=Device(
