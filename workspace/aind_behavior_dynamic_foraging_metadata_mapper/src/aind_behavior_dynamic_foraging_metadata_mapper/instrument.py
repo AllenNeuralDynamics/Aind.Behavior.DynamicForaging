@@ -148,7 +148,7 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
         for name, cam in rig.triggered_camera_controller.cameras.items():
             additional_settings = cam.model_dump()
             additional_settings["note"] = (
-                "These values are input parameters passed to initialize camera. Enum clarifications: adc_bit_depth is an "
+                "The additional_settings values are the input parameters used to initialize the camera. Model found at https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/blob/a6c0f539275f73af87da82a8ea0101836389f1b3/src/aind_behavior_services/rig/cameras.py#L226. Enum clarifications: adc_bit_depth is an "
                 "Spinnaker SDK enum-coded value (0=ADC8BIT, 1=ADC10BIT, 2=ADC12BIT), and pixel_format "
                 "is also enum-coded (for this configuration, 0=MONO8)."
             )
