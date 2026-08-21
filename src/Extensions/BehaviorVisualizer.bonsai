@@ -1,0 +1,578 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WorkflowBuilder Version="2.9.0"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
+                 xmlns:imgui="clr-namespace:Bonsai.ImGui;assembly=Bonsai.ImGui"
+                 xmlns:implot="clr-namespace:Bonsai.ImPlot;assembly=Bonsai.ImPlot"
+                 xmlns:imviz="clr-namespace:Bonsai.ImGui.Visualizers;assembly=Bonsai.ImGui.Visualizers"
+                 xmlns:p1="clr-namespace:;assembly=Extensions"
+                 xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
+                 xmlns:harp="clr-namespace:Bonsai.Harp;assembly=Bonsai.Harp"
+                 xmlns="https://bonsai-rx.org/2018/workflow">
+  <Workflow>
+    <Nodes>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="PlotName" />
+        <Property Name="LickLeftSubject" />
+        <Property Name="LickRightSubject" />
+        <Property Name="TrialSubject" />
+        <Property Name="FrameSubject" />
+      </Expression>
+      <Expression xsi:type="rx:Defer">
+        <Name>BehaviorPlot</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Name" DisplayName="FrameSubject" />
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>Behavior</Name>
+            </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Name" DisplayName="PlotName" />
+            </Expression>
+            <Expression xsi:type="imgui:TableBuilder">
+              <imgui:Name>Behavior1</imgui:Name>
+              <imgui:Visible>true</imgui:Visible>
+              <imgui:Columns>1</imgui:Columns>
+              <imgui:Flags>None</imgui:Flags>
+              <imgui:OuterSize>
+                <imgui:X>0</imgui:X>
+                <imgui:Y>0</imgui:Y>
+              </imgui:OuterSize>
+              <imgui:InnerWidth>0</imgui:InnerWidth>
+            </Expression>
+            <Expression xsi:type="imgui:TableNextColumnBuilder">
+              <imgui:Visible>true</imgui:Visible>
+            </Expression>
+            <Expression xsi:type="implot:PlotBuilder">
+              <implot:Name>EventPlot</implot:Name>
+              <implot:Visible>true</implot:Visible>
+              <implot:Size>
+                <implot:X>-1</implot:X>
+                <implot:Y>150</implot:Y>
+              </implot:Size>
+              <implot:Flags>NoTitle</implot:Flags>
+              <implot:FlagsX>AutoFit</implot:FlagsX>
+              <implot:FlagsY>RangeFit</implot:FlagsY>
+            </Expression>
+            <Expression xsi:type="rx:PublishSubject">
+              <Name>EventPlot</Name>
+            </Expression>
+            <Expression xsi:type="imgui:TableNextColumnBuilder">
+              <imgui:Visible>true</imgui:Visible>
+            </Expression>
+            <Expression xsi:type="implot:PlotBuilder">
+              <implot:Name>ContinuousPlot</implot:Name>
+              <implot:Visible>true</implot:Visible>
+              <implot:Size>
+                <implot:X>-1</implot:X>
+                <implot:Y>150</implot:Y>
+              </implot:Size>
+              <implot:Flags>NoTitle</implot:Flags>
+              <implot:FlagsX>AutoFit</implot:FlagsX>
+              <implot:FlagsY>None</implot:FlagsY>
+            </Expression>
+            <Expression xsi:type="rx:PublishSubject">
+              <Name>ContinuousPlot</Name>
+            </Expression>
+            <Expression xsi:type="Unit" />
+            <Expression xsi:type="imviz:LatestOnNewFrame">
+              <Name>EventPlot</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p1:PlotStyling">
+                <p1:TickPositions>
+                  <p1:double>0</p1:double>
+                  <p1:double>1</p1:double>
+                </p1:TickPositions>
+                <p1:TickLabels>
+                  <p1:string>R</p1:string>
+                  <p1:string>L</p1:string>
+                </p1:TickLabels>
+                <p1:ImPlotLocationFlags>East</p1:ImPlotLocationFlags>
+                <p1:ImPlotLegendFlags>Outside</p1:ImPlotLegendFlags>
+                <p1:YAxisMax xsi:nil="true" />
+                <p1:YAxisMin xsi:nil="true" />
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Unit" />
+            <Expression xsi:type="imviz:LatestOnNewFrame">
+              <Name>ContinuousPlot</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p1:PlotStyling">
+                <p1:TickPositions>
+                  <p1:double>0</p1:double>
+                  <p1:double>1</p1:double>
+                </p1:TickPositions>
+                <p1:TickLabels />
+                <p1:ImPlotLocationFlags>East</p1:ImPlotLocationFlags>
+                <p1:ImPlotLegendFlags>Outside</p1:ImPlotLegendFlags>
+                <p1:YAxisMax xsi:nil="true" />
+                <p1:YAxisMin xsi:nil="true" />
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Name" DisplayName="LickLeftSubject" />
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>LickLeft</Name>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Value</Selector>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="DoubleProperty">
+                <Value>0.9</Value>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Seconds</Selector>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Zip" />
+            </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>new(it.Item1 as LickLeft, it.Item2)</scr:Expression>
+            </Expression>
+            <Expression xsi:type="imviz:RollingBufferBuilder">
+              <imviz:Capacity>1000</imviz:Capacity>
+              <imviz:IndexSelector>Item2</imviz:IndexSelector>
+              <imviz:ValueSelector>LickLeft</imviz:ValueSelector>
+            </Expression>
+            <Expression xsi:type="imviz:LatestOnNewFrame">
+              <Name>EventPlot</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p1:ScatterStyling">
+                <p1:ImPlotMarker>Square</p1:ImPlotMarker>
+                <p1:Size>3</p1:Size>
+                <p1:FillColorR>0</p1:FillColorR>
+                <p1:FillColorG>0</p1:FillColorG>
+                <p1:FillColorB>0</p1:FillColorB>
+                <p1:FillColorA>1</p1:FillColorA>
+                <p1:OutlineColorR>0</p1:OutlineColorR>
+                <p1:OutlineColorG>0</p1:OutlineColorG>
+                <p1:OutlineColorB>0</p1:OutlineColorB>
+                <p1:OutlineColorA>1</p1:OutlineColorA>
+                <p1:OutlineWeight>1</p1:OutlineWeight>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="imviz:PlotScatterSeriesBuilder">
+              <imviz:Visible>true</imviz:Visible>
+              <imviz:Flags>None</imviz:Flags>
+            </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Name" DisplayName="LickRightSubject" />
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>LickRight</Name>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Value</Selector>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="DoubleProperty">
+                <Value>0.1</Value>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Seconds</Selector>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Zip" />
+            </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>new(it.Item1 as LickRight, it.Item2)</scr:Expression>
+            </Expression>
+            <Expression xsi:type="imviz:RollingBufferBuilder">
+              <imviz:Capacity>1000</imviz:Capacity>
+              <imviz:IndexSelector>Item2</imviz:IndexSelector>
+              <imviz:ValueSelector>LickRight</imviz:ValueSelector>
+            </Expression>
+            <Expression xsi:type="imviz:LatestOnNewFrame">
+              <Name>EventPlot</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p1:ScatterStyling">
+                <p1:ImPlotMarker>Square</p1:ImPlotMarker>
+                <p1:Size>3</p1:Size>
+                <p1:FillColorR>0</p1:FillColorR>
+                <p1:FillColorG>0</p1:FillColorG>
+                <p1:FillColorB>0</p1:FillColorB>
+                <p1:FillColorA>1</p1:FillColorA>
+                <p1:OutlineColorR>0</p1:OutlineColorR>
+                <p1:OutlineColorG>0</p1:OutlineColorG>
+                <p1:OutlineColorB>0</p1:OutlineColorB>
+                <p1:OutlineColorA>1</p1:OutlineColorA>
+                <p1:OutlineWeight>1</p1:OutlineWeight>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="imviz:PlotScatterSeriesBuilder">
+              <imviz:Visible>true</imviz:Visible>
+              <imviz:Flags>None</imviz:Flags>
+            </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Name" DisplayName="TrialSubject" />
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>TimedTrial</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p1:CategorizeTrial" />
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Value.ChoiceCategory</Selector>
+            </Expression>
+            <Expression xsi:type="rx:Condition">
+              <Name>NoChoice</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
+                  </Expression>
+                  <Expression xsi:type="Equal">
+                    <Operand xsi:type="WorkflowProperty" TypeArguments="p1:Choice">
+                      <Value>NoChoice</Value>
+                    </Operand>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                  <Edge From="1" To="2" Label="Source1" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="DoubleProperty">
+                <Value>0.5</Value>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="rx:Condition">
+              <Name>LeftChoice</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
+                  </Expression>
+                  <Expression xsi:type="Equal">
+                    <Operand xsi:type="WorkflowProperty" TypeArguments="p1:Choice">
+                      <Value>LeftChoice</Value>
+                    </Operand>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                  <Edge From="1" To="2" Label="Source1" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="DoubleProperty">
+                <Value>0.85</Value>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="rx:Condition">
+              <Name>RightChoice</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
+                  </Expression>
+                  <Expression xsi:type="Equal">
+                    <Operand xsi:type="WorkflowProperty" TypeArguments="p1:Choice">
+                      <Value>RightChoice</Value>
+                    </Operand>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                  <Edge From="1" To="2" Label="Source1" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="DoubleProperty">
+                <Value>0.15</Value>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Merge" />
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Seconds</Selector>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Zip" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="harp:CreateTimestamped" />
+            </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>new(it.Seconds, it.Value as Choice)</scr:Expression>
+            </Expression>
+            <Expression xsi:type="imviz:RollingBufferBuilder">
+              <imviz:Capacity>1000</imviz:Capacity>
+              <imviz:IndexSelector>Seconds</imviz:IndexSelector>
+              <imviz:ValueSelector>Choice</imviz:ValueSelector>
+            </Expression>
+            <Expression xsi:type="imviz:LatestOnNewFrame">
+              <Name>EventPlot</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p1:ScatterStyling">
+                <p1:ImPlotMarker>Circle</p1:ImPlotMarker>
+                <p1:Size>3</p1:Size>
+                <p1:FillColorR>0</p1:FillColorR>
+                <p1:FillColorG>0</p1:FillColorG>
+                <p1:FillColorB>0</p1:FillColorB>
+                <p1:FillColorA>0</p1:FillColorA>
+                <p1:OutlineColorR>0</p1:OutlineColorR>
+                <p1:OutlineColorG>1</p1:OutlineColorG>
+                <p1:OutlineColorB>0</p1:OutlineColorB>
+                <p1:OutlineColorA>1</p1:OutlineColorA>
+                <p1:OutlineWeight>1</p1:OutlineWeight>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="imviz:PlotScatterSeriesBuilder">
+              <imviz:Visible>true</imviz:Visible>
+              <imviz:Flags>None</imviz:Flags>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Value.TrialCategory</Selector>
+            </Expression>
+            <Expression xsi:type="rx:Condition">
+              <Name>LeftRewarded</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
+                  </Expression>
+                  <Expression xsi:type="Equal">
+                    <Operand xsi:type="WorkflowProperty" TypeArguments="p1:Category">
+                      <Value>LeftRewarded</Value>
+                    </Operand>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                  <Edge From="1" To="2" Label="Source1" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="DoubleProperty">
+                <Value>0.8</Value>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="rx:Condition">
+              <Name>RightRewarded</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
+                  </Expression>
+                  <Expression xsi:type="Equal">
+                    <Operand xsi:type="WorkflowProperty" TypeArguments="p1:Category">
+                      <Value>RightRewarded</Value>
+                    </Operand>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                  <Edge From="1" To="2" Label="Source1" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="DoubleProperty">
+                <Value>0.2</Value>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Merge" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:WithLatestFrom" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="harp:CreateTimestamped" />
+            </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>new(it.Seconds, it.Value as Choice)</scr:Expression>
+            </Expression>
+            <Expression xsi:type="imviz:RollingBufferBuilder">
+              <imviz:Capacity>1000</imviz:Capacity>
+              <imviz:IndexSelector>Seconds</imviz:IndexSelector>
+              <imviz:ValueSelector>Choice</imviz:ValueSelector>
+            </Expression>
+            <Expression xsi:type="imviz:LatestOnNewFrame">
+              <Name>EventPlot</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p1:ScatterStyling">
+                <p1:ImPlotMarker>Circle</p1:ImPlotMarker>
+                <p1:Size>3</p1:Size>
+                <p1:FillColorR>0</p1:FillColorR>
+                <p1:FillColorG>1</p1:FillColorG>
+                <p1:FillColorB>0</p1:FillColorB>
+                <p1:FillColorA>1</p1:FillColorA>
+                <p1:OutlineColorR>0</p1:OutlineColorR>
+                <p1:OutlineColorG>1</p1:OutlineColorG>
+                <p1:OutlineColorB>0</p1:OutlineColorB>
+                <p1:OutlineColorA>1</p1:OutlineColorA>
+                <p1:OutlineWeight>1</p1:OutlineWeight>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="imviz:PlotScatterSeriesBuilder">
+              <imviz:Visible>true</imviz:Visible>
+              <imviz:Flags>None</imviz:Flags>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>TimedTrial</Name>
+            </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>new(it.Seconds, it.Value.Trial.Metadata.PRewardLeft as PRewardLeft, it.Value.Trial.Metadata.PRewardRight as PRewardRight )</scr:Expression>
+            </Expression>
+            <Expression xsi:type="imviz:RollingBufferBuilder">
+              <imviz:Capacity>1000</imviz:Capacity>
+              <imviz:IndexSelector>Seconds</imviz:IndexSelector>
+              <imviz:ValueSelector>PRewardLeft</imviz:ValueSelector>
+            </Expression>
+            <Expression xsi:type="imviz:LatestOnNewFrame">
+              <Name>ContinuousPlot</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p1:LineStyling">
+                <p1:ColorR>1</p1:ColorR>
+                <p1:ColorG>0</p1:ColorG>
+                <p1:ColorB>0</p1:ColorB>
+                <p1:ColorA>1</p1:ColorA>
+                <p1:LineThickness>2</p1:LineThickness>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="imviz:PlotLineSeriesBuilder">
+              <imviz:Visible>true</imviz:Visible>
+              <imviz:Flags>None</imviz:Flags>
+            </Expression>
+            <Expression xsi:type="imviz:RollingBufferBuilder">
+              <imviz:Capacity>1000</imviz:Capacity>
+              <imviz:IndexSelector>Seconds</imviz:IndexSelector>
+              <imviz:ValueSelector>PRewardRight</imviz:ValueSelector>
+            </Expression>
+            <Expression xsi:type="imviz:LatestOnNewFrame">
+              <Name>ContinuousPlot</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p1:LineStyling">
+                <p1:ColorR>0</p1:ColorR>
+                <p1:ColorG>0</p1:ColorG>
+                <p1:ColorB>1</p1:ColorB>
+                <p1:ColorA>1</p1:ColorA>
+                <p1:LineThickness>2</p1:LineThickness>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="imviz:PlotLineSeriesBuilder">
+              <imviz:Visible>true</imviz:Visible>
+              <imviz:Flags>None</imviz:Flags>
+            </Expression>
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="1" To="3" Label="Source1" />
+            <Edge From="2" To="3" Label="Source2" />
+            <Edge From="3" To="4" Label="Source1" />
+            <Edge From="3" To="7" Label="Source1" />
+            <Edge From="4" To="5" Label="Source1" />
+            <Edge From="5" To="6" Label="Source1" />
+            <Edge From="7" To="8" Label="Source1" />
+            <Edge From="8" To="9" Label="Source1" />
+            <Edge From="10" To="11" Label="Source1" />
+            <Edge From="11" To="12" Label="Source1" />
+            <Edge From="13" To="14" Label="Source1" />
+            <Edge From="14" To="15" Label="Source1" />
+            <Edge From="16" To="17" Label="Source1" />
+            <Edge From="17" To="18" Label="Source1" />
+            <Edge From="17" To="20" Label="Source1" />
+            <Edge From="18" To="19" Label="Source1" />
+            <Edge From="19" To="21" Label="Source1" />
+            <Edge From="20" To="21" Label="Source2" />
+            <Edge From="21" To="22" Label="Source1" />
+            <Edge From="22" To="23" Label="Source1" />
+            <Edge From="23" To="24" Label="Source1" />
+            <Edge From="24" To="25" Label="Source1" />
+            <Edge From="25" To="26" Label="Source1" />
+            <Edge From="27" To="28" Label="Source1" />
+            <Edge From="28" To="29" Label="Source1" />
+            <Edge From="28" To="31" Label="Source1" />
+            <Edge From="29" To="30" Label="Source1" />
+            <Edge From="30" To="32" Label="Source1" />
+            <Edge From="31" To="32" Label="Source2" />
+            <Edge From="32" To="33" Label="Source1" />
+            <Edge From="33" To="34" Label="Source1" />
+            <Edge From="34" To="35" Label="Source1" />
+            <Edge From="35" To="36" Label="Source1" />
+            <Edge From="36" To="37" Label="Source1" />
+            <Edge From="38" To="39" Label="Source1" />
+            <Edge From="38" To="70" Label="Source1" />
+            <Edge From="39" To="40" Label="Source1" />
+            <Edge From="39" To="49" Label="Source1" />
+            <Edge From="40" To="41" Label="Source1" />
+            <Edge From="40" To="57" Label="Source1" />
+            <Edge From="41" To="42" Label="Source1" />
+            <Edge From="41" To="44" Label="Source1" />
+            <Edge From="41" To="46" Label="Source1" />
+            <Edge From="42" To="43" Label="Source1" />
+            <Edge From="43" To="48" Label="Source1" />
+            <Edge From="44" To="45" Label="Source1" />
+            <Edge From="45" To="48" Label="Source2" />
+            <Edge From="46" To="47" Label="Source1" />
+            <Edge From="47" To="48" Label="Source3" />
+            <Edge From="48" To="50" Label="Source1" />
+            <Edge From="49" To="50" Label="Source2" />
+            <Edge From="49" To="63" Label="Source2" />
+            <Edge From="50" To="51" Label="Source1" />
+            <Edge From="51" To="52" Label="Source1" />
+            <Edge From="52" To="53" Label="Source1" />
+            <Edge From="53" To="54" Label="Source1" />
+            <Edge From="54" To="55" Label="Source1" />
+            <Edge From="55" To="56" Label="Source1" />
+            <Edge From="57" To="58" Label="Source1" />
+            <Edge From="57" To="60" Label="Source1" />
+            <Edge From="58" To="59" Label="Source1" />
+            <Edge From="59" To="62" Label="Source1" />
+            <Edge From="60" To="61" Label="Source1" />
+            <Edge From="61" To="62" Label="Source2" />
+            <Edge From="62" To="63" Label="Source1" />
+            <Edge From="63" To="64" Label="Source1" />
+            <Edge From="64" To="65" Label="Source1" />
+            <Edge From="65" To="66" Label="Source1" />
+            <Edge From="66" To="67" Label="Source1" />
+            <Edge From="67" To="68" Label="Source1" />
+            <Edge From="68" To="69" Label="Source1" />
+            <Edge From="70" To="71" Label="Source1" />
+            <Edge From="71" To="72" Label="Source1" />
+            <Edge From="71" To="76" Label="Source1" />
+            <Edge From="72" To="73" Label="Source1" />
+            <Edge From="73" To="74" Label="Source1" />
+            <Edge From="74" To="75" Label="Source1" />
+            <Edge From="76" To="77" Label="Source1" />
+            <Edge From="77" To="78" Label="Source1" />
+            <Edge From="78" To="79" Label="Source1" />
+          </Edges>
+        </Workflow>
+      </Expression>
+      <Expression xsi:type="WorkflowOutput" />
+    </Nodes>
+    <Edges>
+      <Edge From="0" To="1" Label="Source1" />
+      <Edge From="1" To="2" Label="Source1" />
+    </Edges>
+  </Workflow>
+</WorkflowBuilder>
