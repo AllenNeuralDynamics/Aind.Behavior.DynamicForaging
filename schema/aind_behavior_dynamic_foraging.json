@@ -3526,6 +3526,18 @@
           "title": "Quiescence Period Duration",
           "type": "number"
         },
+        "quiescence_period_refractory_duration": {
+          "default": null,
+          "description": "Duration of the refractory period after a lick is detected during the quiescence period (in seconds).",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Distribution"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
         "inter_trial_interval_duration": {
           "default": 5.0,
           "description": "Duration of the inter-trial interval (in seconds).",
