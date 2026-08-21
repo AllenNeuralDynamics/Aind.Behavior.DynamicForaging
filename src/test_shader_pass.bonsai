@@ -58,8 +58,10 @@
           <imgui:Y>1</imgui:Y>
         </imgui:UV1>
       </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="p1:ShaderPass" />
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="p1:ShaderPass" />
+        </Builder>
       </Expression>
     </Nodes>
     <Edges>

@@ -1,4 +1,4 @@
-using Bonsai;
+﻿using Bonsai;
 using System;
 using System.ComponentModel;
 using System.Collections.Generic;
@@ -16,17 +16,17 @@ public class ShaderPass : Combinator<ImTextureRef, ImTextureRef>
     layout(location = 0) in vec2 vertexPosition;
     layout(location = 1) in vec2 vertexTexCoords;
 
-    out vec2 TexCoords;
+    out vec2 texCoord;
 
     void main()
     {
-        TexCoords = vec2(.5, -.5) * (vertexPosition.xy + 1);
+        texCoord = vec2(.5, -.5) * (vertexPosition.xy + 1);
         gl_Position = vec4(vertexPosition.xy, 0.0, 1.0);
     }
     ";
 
     const string DefaultFragmentShader = @"
-        #version 330
+        #version 330 core
         uniform sampler2D tex0;
         uniform vec2 iResolution;
         in vec2 texCoord;
@@ -53,12 +53,12 @@ public class ShaderPass : Combinator<ImTextureRef, ImTextureRef>
                     shaderProgram = CreateProgram(VertexShaderSource, DefaultFragmentShader);
                 }
 
-                // GL.UseProgram(shaderProgram);
+                GL.UseProgram(shaderProgram);
 
-                // GL.ActiveTexture(TextureUnit.Texture0);
-                // GL.BindTexture(TextureTarget.Texture2D, sourceTexture);
+                GL.ActiveTexture(TextureUnit.Texture0);
+                GL.BindTexture(TextureTarget.Texture2D, sourceTexture);
 
-                // GL.UseProgram(0);
+                GL.UseProgram(0);
 
                 return texture;
             });
@@ -84,7 +84,7 @@ public class ShaderPass : Combinator<ImTextureRef, ImTextureRef>
             var infoLog = GL.GetProgramInfoLog(program);
             GL.DeleteProgram(program);
             Console.WriteLine(infoLog);
-            throw new InvalidOperationException("Failed to link the shader program.");
+            throw new InvalidOperationException(string.Format("Failed to link the shader program: {0}", infoLog));
         }
 
         GL.DeleteShader(vertexShader);
@@ -95,7 +95,20 @@ public class ShaderPass : Combinator<ImTextureRef, ImTextureRef>
 
     static int CompileShader(ShaderType type, string source)
     {
+        int status;
+
         var shader = GL.CreateShader(type);
+        GL.ShaderSource(shader, source);
+        GL.CompileShader(shader);
+        GL.GetShader(shader, ShaderParameter.CompileStatus, out status);
+
+        if (status == 0)
+        {
+            var infoLog = GL.GetShaderInfoLog(shader);
+            GL.DeleteShader(shader);
+            throw new InvalidOperationException(string.Format("Failed to compile the {0}.", infoLog));
+        }
+
         return shader;
     }
 }
