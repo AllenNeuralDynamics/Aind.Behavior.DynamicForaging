@@ -14,7 +14,6 @@ class DynamicForagingQcSuite(qc.Suite):
     def test_end_session_exists(self):
         """Check that the session has an end event."""
         end_session = self.dataset["Behavior"]["SoftwareEvents"]["EndSession"]
-
         if not end_session.has_data:
             return self.fail_test(
                 None, "EndSession event does not exist. Session may be corrupted or not ended properly."
@@ -41,9 +40,23 @@ def make_qc_runner(dataset: contract.Dataset) -> qc.Runner:
             if isinstance(stream, contract.harp.HarpRegister):
                 exclude.append(stream)
 
+    # Add harp board specific tests
+    exclude_streams: list[str] = []
+    if not rig.harp_sniff_detector:
+        exclude_streams.append("HarpSniffDetector")
+
+    if not rig.harp_environment_sensor:
+        exclude_streams.append("HarpEnvironmentSensor")
+
+    if not rig.harp_lickometer_right:
+        exclude_streams.append("HarpLickometerRight")
+
+    if not rig.harp_lickometer_left:
+        exclude_streams.append("HarpLickometerLeft")
+
     # Add Harp tests for ALL Harp devices in the dataset
     for stream in (_r := dataset["Behavior"]):
-        if isinstance(stream, HarpDevice):
+        if isinstance(stream, HarpDevice) and stream.name not in exclude_streams:
             commands = t.cast(HarpDevice, _r["HarpCommands"][stream.name])
             _runner.add_suite(qc.harp.HarpDeviceTestSuite(stream, commands), stream.name)
 
@@ -51,31 +64,14 @@ def make_qc_runner(dataset: contract.Dataset) -> qc.Runner:
     _runner.add_suite(
         qc.harp.HarpHubTestSuite(
             dataset["Behavior"]["HarpClockGenerator"],
-            [harp_device for harp_device in dataset["Behavior"] if isinstance(harp_device, HarpDevice)],
+            [
+                harp_device
+                for harp_device in dataset["Behavior"]
+                if isinstance(harp_device, HarpDevice) and harp_device.name not in exclude_streams
+            ],
         ),
         "HarpHub",
     )
-
-    # Add harp board specific tests
-    if rig.harp_sniff_detector is not None:
-        _runner.add_suite(
-            qc.harp.HarpSniffDetectorTestSuite(dataset["Behavior"]["HarpSniffDetector"]), "HarpSniffDetector"
-        )
-
-    if rig.harp_environment_sensor is not None:
-        _runner.add_suite(
-            qc.harp.HarpEnvironmentSensorTestSuite(dataset["Behavior"]["HarpEnvironmentSensor"]),
-            "HarpEnvironmentSensor",
-        )
-
-    if rig.harp_lickometer_right is not None:
-        _runner.add_suite(
-            qc.harp.HarpLicketySplitTestSuite(dataset["Behavior"]["HarpLickometerRight"]), "HarpLickometerRight"
-        )
-    if rig.harp_lickometer_left is not None:
-        _runner.add_suite(
-            qc.harp.HarpLicketySplitTestSuite(dataset["Behavior"]["HarpLickometerLeft"]), "HarpLickometerLeft"
-        )
 
     # Add camera qc
     for camera in dataset["BehaviorVideos"]:
@@ -90,5 +86,4 @@ def make_qc_runner(dataset: contract.Dataset) -> qc.Runner:
 
     # Add the task specific tests
     _runner.add_suite(DynamicForagingQcSuite(dataset), "DynamicForaging")
-
     return _runner
