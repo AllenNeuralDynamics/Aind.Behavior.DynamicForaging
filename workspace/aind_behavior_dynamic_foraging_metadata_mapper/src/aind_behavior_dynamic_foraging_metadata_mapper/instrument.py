@@ -146,6 +146,13 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
         controller = rig.triggered_camera_controller
         fps = float(controller.frame_rate) if controller.frame_rate else float("nan")
         for name, cam in rig.triggered_camera_controller.cameras.items():
+            additional_settings = cam.model_dump()
+            additional_settings["note"] = (
+                "These values are input parameters passed to initialize camera. Enum clarifications: adc_bit_depth is an "
+                "Spinnaker SDK enum-coded value (0=ADC8BIT, 1=ADC10BIT, 2=ADC12BIT), and pixel_format "
+                "is also enum-coded (for this configuration, 0=MONO8)."
+            )
+
             camera = Camera(
                 name=name,
                 manufacturer=Organization.FLIR,
@@ -166,7 +173,7 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                 crop_width=cam.region_of_interest.width if cam.region_of_interest.width > 0 else None,
                 crop_height=cam.region_of_interest.height if cam.region_of_interest.height > 0 else None,
                 crop_unit=SizeUnit.PX,
-                additional_settings=GenericModel.model_validate(cam.model_dump()),
+                additional_settings=GenericModel.model_validate(additional_settings),
             )
             assembly = CameraAssembly(
                 name=f"{name}Assembly",

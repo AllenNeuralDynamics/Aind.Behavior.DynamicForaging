@@ -182,7 +182,7 @@ class AindAcquisitionDataMapper(AindDataSchemaSessionDataMapper):
             acquisition_end_time=acquisition_end_time,
             acquisition_start_time=session_model.date,
             experimenters=session_model.experimenter,
-            acquisition_type=session_model.experiment or task_logic_model.name,
+            acquisition_type=task_logic_model.name,
             coordinate_system=None,
             data_streams=data_streams,
             stimulus_epochs=[stimulus_epoch],
