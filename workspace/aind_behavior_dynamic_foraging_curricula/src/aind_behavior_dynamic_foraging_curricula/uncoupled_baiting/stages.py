@@ -225,7 +225,7 @@ def make_s_stage_2():
                         truncation_parameters=TruncationParameters(min=10, max=40),
                     ),
                     inter_trial_interval_duration=ExponentialDistribution(
-                        distribution_parameters=ExponentialDistributionParameters(rate=0.2),
+                        distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
                         truncation_parameters=TruncationParameters(truncation_mode="clamp", min=0, max=10),
                         scaling_parameters=ScalingParameters(offset=1),
                     ),

@@ -254,6 +254,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             reward_consumption_duration=self.spec.reward_consumption_duration,
             response_deadline_duration=self.spec.response_duration,
             quiescence_period_duration=quiescent,
+            quiescence_period_refractory_duration=self.spec.inter_trial_interval_duration,
             inter_trial_interval_duration=iti,
             lickspout_offset_delta=lickspout_offset_delta,
             is_auto_reward_right=is_auto_reward_right,
