@@ -91,11 +91,6 @@ class BlockBasedTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
         description="Distribution describing the quiescence period before trial starts (in seconds). Each lick resets the timer.",
     )
 
-    quiescence_period_refractory_duration: Optional[Distribution] = Field(
-        default=None,
-        description="Distribution describing the refractory period after a lick is detected during the quiescence period (in seconds).",
-    )
-
     response_duration: float = Field(default=1.0, ge=0, description="Duration after go cue for animal response.")
 
     reward_consumption_duration: float = Field(
@@ -259,7 +254,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             reward_consumption_duration=self.spec.reward_consumption_duration,
             response_deadline_duration=self.spec.response_duration,
             quiescence_period_duration=quiescent,
-            quiescence_period_refractory_duration=self.spec.quiescence_period_refractory_duration,
+            quiescence_period_refractory_duration=self.spec.inter_trial_interval_duration,
             inter_trial_interval_duration=iti,
             lickspout_offset_delta=lickspout_offset_delta,
             is_auto_reward_right=is_auto_reward_right,

@@ -457,18 +457,6 @@
           },
           "description": "Distribution describing the quiescence period before trial starts (in seconds). Each lick resets the timer."
         },
-        "quiescence_period_refractory_duration": {
-          "default": null,
-          "description": "Distribution describing the refractory period after a lick is detected during the quiescence period (in seconds).",
-          "oneOf": [
-            {
-              "$ref": "#/$defs/Distribution"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
         "response_duration": {
           "default": 1.0,
           "description": "Duration after go cue for animal response.",
@@ -874,18 +862,6 @@
           },
           "description": "Distribution describing the quiescence period before trial starts (in seconds). Each lick resets the timer."
         },
-        "quiescence_period_refractory_duration": {
-          "default": null,
-          "description": "Distribution describing the refractory period after a lick is detected during the quiescence period (in seconds).",
-          "oneOf": [
-            {
-              "$ref": "#/$defs/Distribution"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
         "response_duration": {
           "default": 1.0,
           "description": "Duration after go cue for animal response.",
@@ -1185,18 +1161,6 @@
           },
           "description": "Distribution describing the quiescence period before trial starts (in seconds). Each lick resets the timer."
         },
-        "quiescence_period_refractory_duration": {
-          "default": null,
-          "description": "Distribution describing the refractory period after a lick is detected during the quiescence period (in seconds).",
-          "oneOf": [
-            {
-              "$ref": "#/$defs/Distribution"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
         "response_duration": {
           "default": 1.0,
           "description": "Duration after go cue for animal response.",
@@ -1416,18 +1380,6 @@
             "scaling_parameters": null
           },
           "description": "Distribution describing the quiescence period before trial starts (in seconds). Each lick resets the timer."
-        },
-        "quiescence_period_refractory_duration": {
-          "default": null,
-          "description": "Distribution describing the refractory period after a lick is detected during the quiescence period (in seconds).",
-          "oneOf": [
-            {
-              "$ref": "#/$defs/Distribution"
-            },
-            {
-              "type": "null"
-            }
-          ]
         },
         "response_duration": {
           "default": 1.0,
@@ -3849,18 +3801,6 @@
             "scaling_parameters": null
           },
           "description": "Distribution describing the quiescence period before trial starts (in seconds). Each lick resets the timer."
-        },
-        "quiescence_period_refractory_duration": {
-          "default": null,
-          "description": "Distribution describing the refractory period after a lick is detected during the quiescence period (in seconds).",
-          "oneOf": [
-            {
-              "$ref": "#/$defs/Distribution"
-            },
-            {
-              "type": "null"
-            }
-          ]
         },
         "response_duration": {
           "default": 1.0,
