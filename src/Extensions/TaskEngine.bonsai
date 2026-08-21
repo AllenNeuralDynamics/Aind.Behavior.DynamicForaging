@@ -357,7 +357,7 @@
                         <Expression xsi:type="Unit" />
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="p3:CreateSoftwareEvent">
-                            <p3:EventName>QuiscentPeriod</p3:EventName>
+                            <p3:EventName>QuiescentPeriod</p3:EventName>
                           </Combinator>
                         </Expression>
                         <Expression xsi:type="MulticastSubject">
