@@ -294,6 +294,13 @@ def make_dataset(
                                 ),
                             ),
                             SoftwareEvents(
+                                name="FinalManipulatorPosition",
+                                description="An event emitted at the end of the experiment to indicate the final manipulator position.",
+                                reader_params=SoftwareEvents.make_params(
+                                    root_path / "behavior/SoftwareEvents/FinalManipulatorPosition.json"
+                                ),
+                            ),
+                            SoftwareEvents(
                                 name="EndSession",
                                 description="An event emitted when the experiment ends.",
                                 reader_params=SoftwareEvents.make_params(
