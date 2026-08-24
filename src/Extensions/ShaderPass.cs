@@ -11,6 +11,8 @@ using System.Runtime.Remoting.Contexts;
 
 public class ShaderPass : Combinator<ImTextureRef, ImTextureRef>
 {
+    public float Alpha { get; set; }
+
     const string VertexShaderSource = @"
     #version 330 core
     layout(location = 0) in vec2 vertexPosition;
@@ -60,6 +62,7 @@ public class ShaderPass : Combinator<ImTextureRef, ImTextureRef>
             int targetWidth = 0;
             int targetHeight = 0;
             var targetRef = default(ImTextureRef);
+            int alphaLocation = 0;
             return source.Select(texture =>
             {
                 var currentContext = ImGui.GetCurrentContext();
@@ -71,6 +74,7 @@ public class ShaderPass : Combinator<ImTextureRef, ImTextureRef>
                     shaderProgram = CreateProgram(VertexShaderSource, DefaultFragmentShader);
                     vertexArray = CreateQuad();
                     framebuffer = GL.GenFramebuffer();
+                    alphaLocation = GL.GetUniformLocation(shaderProgram, "alpha");
                 }
 
                 // The pass renders into a texture of the same size as the incoming one.
@@ -99,6 +103,7 @@ public class ShaderPass : Combinator<ImTextureRef, ImTextureRef>
 
                 GL.ActiveTexture(TextureUnit.Texture0);
                 GL.BindTexture(TextureTarget.Texture2D, sourceTexture);
+                GL.Uniform1(alphaLocation, Alpha);
 
                 GL.BindVertexArray(vertexArray);
                 GL.DrawArrays(PrimitiveType.TriangleStrip, 0, 4);

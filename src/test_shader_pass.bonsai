@@ -51,7 +51,9 @@
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
-        <Combinator xsi:type="p1:ShaderPass" />
+        <Combinator xsi:type="p1:ShaderPass">
+          <p1:Alpha>0.4</p1:Alpha>
+        </Combinator>
       </Expression>
       <Expression xsi:type="PropertyMapping">
         <PropertyMappings>
