@@ -29,12 +29,21 @@ public class ShaderPass : Combinator<ImTextureRef, ImTextureRef>
         #version 330 core
         uniform sampler2D tex0;
         uniform vec2 iResolution;
+        uniform float minSaturation = 0.1;
+        uniform float maxSaturation = 0.9;
+        uniform float alpha = 0.5;
         in vec2 texCoord;
         out vec4 fragColor;
 
-        void main()
+        void main() 
         {
-            fragColor = vec4(1.0, 0.0, 0.0, 1.0);
+            vec4 texColor = texture(tex0, texCoord);
+            vec4 overlay = vec4(0,0,0,0);
+
+            if (texColor.r >= maxSaturation) overlay = vec4(1,0,0,alpha);
+            else if (texColor.r <= minSaturation) overlay = vec4(0,0,1,alpha);
+
+            fragColor = mix(texColor, overlay, overlay.a);
         }
         ";
 
