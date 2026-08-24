@@ -9,7 +9,7 @@ using OpenTK.Graphics.OpenGL4;
 using System.Runtime.Remoting.Contexts;
 
 
-public class ShaderPass : Combinator<ImTextureRef, ImTextureRef>
+public class SaturationShaderPass : Combinator<ImTextureRef, ImTextureRef>
 {
     public float Alpha { get; set; }
     public float MinSaturation {get; set;}
@@ -29,7 +29,7 @@ public class ShaderPass : Combinator<ImTextureRef, ImTextureRef>
     }
     ";
 
-    const string DefaultFragmentShader = @"
+    const string SaturationFragmentShader = @"
         #version 330 core
         uniform sampler2D tex0;
         uniform vec2 iResolution;
@@ -75,7 +75,7 @@ public class ShaderPass : Combinator<ImTextureRef, ImTextureRef>
 
                 if (shaderProgram == 0)
                 {
-                    shaderProgram = CreateProgram(VertexShaderSource, DefaultFragmentShader);
+                    shaderProgram = CreateProgram(VertexShaderSource, SaturationFragmentShader);
                     vertexArray = CreateQuad();
                     framebuffer = GL.GenFramebuffer();
                     alphaLocation = GL.GetUniformLocation(shaderProgram, "alpha");
