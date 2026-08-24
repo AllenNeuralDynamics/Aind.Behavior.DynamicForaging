@@ -52,7 +52,9 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="p1:ShaderPass">
-          <p1:Alpha>0.4</p1:Alpha>
+          <p1:Alpha>1</p1:Alpha>
+          <p1:MinSaturation>0.3</p1:MinSaturation>
+          <p1:MaxSaturation>0.7</p1:MaxSaturation>
         </Combinator>
       </Expression>
       <Expression xsi:type="PropertyMapping">
