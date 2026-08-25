@@ -151,6 +151,7 @@ class TestAntiBiasBlockBasedTrialGenerator(unittest.TestCase):
     def test_next_lickspout_delta_nonzero_after_corrections_exhausted(self):
         """After max water corrections, next() should produce a nonzero lickspout delta."""
         gen = self._make_generator(bias=-0.9, water_corrections=5)
+        gen.bias_intervention.is_previous_right_autowater = False  # right bias → left water
         trial = gen.next()
         assert trial is not None
         self.assertEqual(trial.lickspout_offset_delta, 0.05)
