@@ -326,7 +326,7 @@
                                 "family": "Exponential",
                                 "distribution_parameters": {
                                     "family": "Exponential",
-                                    "rate": 0.2
+                                    "rate": 0.3333333333333333
                                 },
                                 "truncation_parameters": {
                                     "truncation_mode": "clamp",
