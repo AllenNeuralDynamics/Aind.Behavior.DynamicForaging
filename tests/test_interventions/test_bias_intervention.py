@@ -35,7 +35,7 @@ class TestBiasIntervention(unittest.TestCase):
 
         bias_intervention = BiasIntervention(BiasInterventionParameters(bias_window_length=5))
         bias_intervention.trials_in_bias_intervention = 15
-        result = bias_intervention.are_antibias_conditions_met(0.9)
+        result = bias_intervention.are_antibias_conditions_met(0.9, n_trials=999)
 
         self.assertTrue(result)
 
@@ -52,7 +52,7 @@ class TestBiasIntervention(unittest.TestCase):
         bias_intervention = BiasIntervention(BiasInterventionParameters(bias_window_length=5))
         bias_intervention.trials_in_bias_intervention = 15
         bias_intervention.total_lickspout_offset = 0.2
-        result = bias_intervention.are_antibias_conditions_met(0.2)
+        result = bias_intervention.are_antibias_conditions_met(0.2, n_trials=999)
 
         self.assertTrue(result)
 
@@ -154,7 +154,7 @@ class TestBiasIntervention(unittest.TestCase):
         """Counter should not increment when intervention conditions are met."""
         bias_intervention = BiasIntervention(BiasInterventionParameters())
         bias_intervention.trials_in_bias_intervention = 15
-        bias_intervention.are_antibias_conditions_met(0.9)
+        bias_intervention.are_antibias_conditions_met(0.9, n_trials=999)
         self.assertNotEqual(bias_intervention.trials_in_bias_intervention, 16)
 
     def test_trials_in_bias_intervention_resets_after_determine_intervention(self):
@@ -170,3 +170,24 @@ class TestBiasIntervention(unittest.TestCase):
         bias_intervention.trials_in_bias_intervention = 0
         bias_intervention.are_antibias_conditions_met(0.9)
         self.assertEqual(bias_intervention.trials_in_bias_intervention, 0)
+
+    # #### Test trial_threshold ####
+
+    def test_no_intervention_before_trial_threshold(self):
+        """Intervention should not trigger when n_trials is below trial_threshold."""
+        bias_intervention = BiasIntervention(BiasInterventionParameters(trial_threshold=100))
+        bias_intervention.trials_in_bias_intervention = 999
+        self.assertFalse(bias_intervention.are_antibias_conditions_met(0.9, n_trials=99))
+
+    def test_intervention_allowed_at_trial_threshold(self):
+        """Intervention should be allowed once n_trials reaches trial_threshold."""
+        bias_intervention = BiasIntervention(BiasInterventionParameters(trial_threshold=100))
+        bias_intervention.trials_in_bias_intervention = 999
+        self.assertTrue(bias_intervention.are_antibias_conditions_met(0.9, n_trials=100))
+
+    def test_counter_increments_while_below_trial_threshold(self):
+        """trials_in_bias_intervention should still increment while below trial_threshold."""
+        bias_intervention = BiasIntervention(BiasInterventionParameters(trial_threshold=100))
+        bias_intervention.trials_in_bias_intervention = 5
+        bias_intervention.are_antibias_conditions_met(0.9, n_trials=50)
+        self.assertEqual(bias_intervention.trials_in_bias_intervention, 6)

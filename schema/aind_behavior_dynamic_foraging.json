@@ -534,7 +534,8 @@
             "maximum_water_corrections": 5,
             "bias_window_length": 200,
             "lickspout_offset_delta": 0.05,
-            "reward_fraction": 0.8
+            "reward_fraction": 0.8,
+            "trial_threshold": null
           },
           "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
           "oneOf": [
@@ -726,6 +727,20 @@
           "minimum": 0,
           "title": "Reward Fraction",
           "type": "number"
+        },
+        "trial_threshold": {
+          "default": null,
+          "description": "Minimum number of trials that must elapse before anti-bias intervention can trigger. Bias is unreliable with few trials, so interventions are suppressed until this threshold is reached. If None, no minimum trial threshold is enforced.",
+          "oneOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Trial Threshold"
         }
       },
       "title": "BiasInterventionParameters",
@@ -939,7 +954,8 @@
             "maximum_water_corrections": 5,
             "bias_window_length": 200,
             "lickspout_offset_delta": 0.05,
-            "reward_fraction": 0.8
+            "reward_fraction": 0.8,
+            "trial_threshold": null
           },
           "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
           "oneOf": [
@@ -1238,7 +1254,8 @@
             "maximum_water_corrections": 5,
             "bias_window_length": 200,
             "lickspout_offset_delta": 0.05,
-            "reward_fraction": 0.8
+            "reward_fraction": 0.8,
+            "trial_threshold": null
           },
           "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
           "oneOf": [
@@ -1454,7 +1471,8 @@
             "maximum_water_corrections": 5,
             "bias_window_length": 200,
             "lickspout_offset_delta": 0.05,
-            "reward_fraction": 0.8
+            "reward_fraction": 0.8,
+            "trial_threshold": null
           },
           "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
           "oneOf": [
@@ -3876,7 +3894,8 @@
             "maximum_water_corrections": 5,
             "bias_window_length": 200,
             "lickspout_offset_delta": 0.05,
-            "reward_fraction": 0.8
+            "reward_fraction": 0.8,
+            "trial_threshold": null
           },
           "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
           "oneOf": [

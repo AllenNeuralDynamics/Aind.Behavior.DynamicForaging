@@ -29,6 +29,13 @@ class BiasInterventionParameters(BaseModel):
         le=1,
         description="Fraction of full reward volume delivered for water intervention (0=none, 1=full).",
     )
+    trial_threshold: Optional[int] = Field(
+        default=None,
+        ge=0,
+        description="Minimum number of trials that must elapse before anti-bias intervention can trigger. "
+        "Bias is unreliable with few trials, so interventions are suppressed until this threshold is reached. "
+        "If None, no minimum trial threshold is enforced.",
+    )
 
 
 class BiasIntervention:
@@ -66,20 +73,31 @@ class BiasIntervention:
         self.water_corrections = 0
         self.total_lickspout_offset = 0
 
-    def are_antibias_conditions_met(self, bias: float) -> bool:
+    def are_antibias_conditions_met(self, bias: float, n_trials: int = 0) -> bool:
         """Checks whether antibias conditions are met.
 
-        Intervention is only considered once ``trials_in_bias_intervention`` exceeds
-        ``parameters.intervention_interval``. If the bias is outside the threshold
-        range at that point, returns True and leaves the counter unchanged (the caller
-        is expected to call ``determine_antibias_intervention``, which resets it).
+        Intervention is only considered once ``n_trials`` has reached
+        ``parameters.min_trials_for_bias_intervention`` and
+        ``trials_in_bias_intervention`` exceeds ``parameters.intervention_interval``.
+        If the bias is outside the threshold range at that point, returns True and
+        leaves the counter unchanged (the caller is expected to call
+        ``determine_antibias_intervention``, which resets it).
         If conditions are not met, increments ``trials_in_bias_intervention`` by 1.
+
+        Args:
+            bias: Current bias value.
+            n_trials: Total number of trials elapsed in the session.
 
         Returns:
             True if antibias conditions are met, False otherwise.
         """
         if self.parameters is None:
             logger.debug("Bias intervention not configured.")
+            return False
+
+        if self.parameters.trial_threshold is not None and n_trials < self.parameters.trial_threshold:
+            logger.debug("Minimum trial count not reached (%s/%s).", n_trials, self.parameters.trial_threshold)
+            self.trials_in_bias_intervention += 1
             return False
 
         if self.trials_in_bias_intervention > self.parameters.intervention_interval:

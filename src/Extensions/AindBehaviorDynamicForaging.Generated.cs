@@ -1302,6 +1302,8 @@ namespace AindDynamicForagingDataSchema
     
         private double _rewardFraction;
     
+        private int? _trialThreshold;
+    
         public BiasInterventionParameters()
         {
             _threshold = new BiasThreshold();
@@ -1320,6 +1322,7 @@ namespace AindDynamicForagingDataSchema
             _biasWindowLength = other._biasWindowLength;
             _lickspoutOffsetDelta = other._lickspoutOffsetDelta;
             _rewardFraction = other._rewardFraction;
+            _trialThreshold = other._trialThreshold;
         }
     
         /// <summary>
@@ -1427,6 +1430,25 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
+        /// <summary>
+        /// Minimum number of trials that must elapse before anti-bias intervention can trigger. Bias is unreliable with few trials, so interventions are suppressed until this threshold is reached. If None, no minimum trial threshold is enforced.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("trial_threshold")]
+        [System.ComponentModel.DescriptionAttribute("Minimum number of trials that must elapse before anti-bias intervention can trigg" +
+            "er. Bias is unreliable with few trials, so interventions are suppressed until th" +
+            "is threshold is reached. If None, no minimum trial threshold is enforced.")]
+        public int? TrialThreshold
+        {
+            get
+            {
+                return _trialThreshold;
+            }
+            set
+            {
+                _trialThreshold = value;
+            }
+        }
+    
         public System.IObservable<BiasInterventionParameters> Generate()
         {
             return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new BiasInterventionParameters(this)));
@@ -1444,7 +1466,8 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("MaximumWaterCorrections = " + _maximumWaterCorrections + ", ");
             stringBuilder.Append("BiasWindowLength = " + _biasWindowLength + ", ");
             stringBuilder.Append("LickspoutOffsetDelta = " + _lickspoutOffsetDelta + ", ");
-            stringBuilder.Append("RewardFraction = " + _rewardFraction);
+            stringBuilder.Append("RewardFraction = " + _rewardFraction + ", ");
+            stringBuilder.Append("TrialThreshold = " + _trialThreshold);
             return true;
         }
     

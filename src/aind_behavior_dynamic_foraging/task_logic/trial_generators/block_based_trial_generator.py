@@ -235,7 +235,9 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
 
         # determine bias correction. Overrides autowater
         lickspout_offset_delta = 0
-        if is_bias_intervention := self.bias_intervention.are_antibias_conditions_met(self.bias):
+        if is_bias_intervention := self.bias_intervention.are_antibias_conditions_met(
+            self.bias, len(self.outcome_history)
+        ):
             is_auto_reward_right, lickspout_offset_delta = self.bias_intervention.determine_antibias_intervention(
                 self.bias
             )
