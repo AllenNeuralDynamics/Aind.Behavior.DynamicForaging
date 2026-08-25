@@ -29,12 +29,11 @@ class BiasInterventionParameters(BaseModel):
         le=1,
         description="Fraction of full reward volume delivered for water intervention (0=none, 1=full).",
     )
-    trial_threshold: Optional[int] = Field(
-        default=None,
+    trial_threshold: int = Field(
+        default=100,
         ge=0,
         description="Minimum number of trials that must elapse before anti-bias intervention can trigger. "
-        "Bias is unreliable with few trials, so interventions are suppressed until this threshold is reached. "
-        "If None, no minimum trial threshold is enforced.",
+        "Bias is unreliable with few trials, so interventions are suppressed until this threshold is reached.",
     )
 
 
@@ -95,7 +94,7 @@ class BiasIntervention:
             logger.debug("Bias intervention not configured.")
             return False
 
-        if self.parameters.trial_threshold is not None and n_trials < self.parameters.trial_threshold:
+        if n_trials < self.parameters.trial_threshold:
             logger.debug("Minimum trial count not reached (%s/%s).", n_trials, self.parameters.trial_threshold)
             self.trials_in_bias_intervention += 1
             return False

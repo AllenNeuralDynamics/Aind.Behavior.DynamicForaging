@@ -1302,7 +1302,7 @@ namespace AindDynamicForagingDataSchema
     
         private double _rewardFraction;
     
-        private int? _trialThreshold;
+        private int _trialThreshold;
     
         public BiasInterventionParameters()
         {
@@ -1312,6 +1312,7 @@ namespace AindDynamicForagingDataSchema
             _biasWindowLength = 200;
             _lickspoutOffsetDelta = 0.05D;
             _rewardFraction = 0.8D;
+            _trialThreshold = 100;
         }
     
         protected BiasInterventionParameters(BiasInterventionParameters other)
@@ -1431,13 +1432,13 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
-        /// Minimum number of trials that must elapse before anti-bias intervention can trigger. Bias is unreliable with few trials, so interventions are suppressed until this threshold is reached. If None, no minimum trial threshold is enforced.
+        /// Minimum number of trials that must elapse before anti-bias intervention can trigger. Bias is unreliable with few trials, so interventions are suppressed until this threshold is reached.
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("trial_threshold")]
         [System.ComponentModel.DescriptionAttribute("Minimum number of trials that must elapse before anti-bias intervention can trigg" +
             "er. Bias is unreliable with few trials, so interventions are suppressed until th" +
-            "is threshold is reached. If None, no minimum trial threshold is enforced.")]
-        public int? TrialThreshold
+            "is threshold is reached.")]
+        public int TrialThreshold
         {
             get
             {
