@@ -76,8 +76,8 @@ class BiasIntervention:
         """Checks whether antibias conditions are met.
 
         Intervention is only considered once ``n_trials`` has reached
-        ``parameters.min_trials_for_bias_intervention`` and
-        ``trials_in_bias_intervention`` exceeds ``parameters.intervention_interval``.
+        ``parameters.trial_threshold`` and ``trials_in_bias_intervention`` exceeds
+        ``parameters.intervention_interval``.
         If the bias is outside the threshold range at that point, returns True and
         leaves the counter unchanged (the caller is expected to call
         ``determine_antibias_intervention``, which resets it).
