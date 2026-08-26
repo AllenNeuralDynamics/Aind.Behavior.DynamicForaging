@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <WorkflowBuilder Version="2.9.0"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
@@ -887,7 +887,7 @@
                 <p4:ResponseDeadlineDuration>5</p4:ResponseDeadlineDuration>
                 <p4:QuiescencePeriodDuration>0.5</p4:QuiescencePeriodDuration>
                 <p4:InterTrialIntervalDuration>5</p4:InterTrialIntervalDuration>
-                <p4:IsAutoResponseRight xsi:nil="true" />
+                <p4:IsAutoRewardRight xsi:nil="true" />
                 <p4:LickspoutOffsetDelta>0</p4:LickspoutOffsetDelta>
               </Combinator>
             </Expression>
@@ -2854,7 +2854,6 @@
             <Expression xsi:type="IncludeWorkflow" Path="Extensions\MetadataVisualizer.bonsai">
               <FrameSubject>Metadata</FrameSubject>
               <StartExperimentSubject>StartExperimentShortcut</StartExperimentSubject>
-              <EndExperimentSubject>EndExperiment</EndExperimentSubject>
               <UiHabituationTimeUpdate>UiHabituationTimeUpdate</UiHabituationTimeUpdate>
             </Expression>
             <Expression xsi:type="IncludeWorkflow" Path="Extensions\PreSessionVisualizer.bonsai">
@@ -2885,10 +2884,10 @@
               <UiGiveRight>UiGiveRight</UiGiveRight>
               <UiMoveLeft>UiMoveLeft</UiMoveLeft>
               <UiMoveRight>UiMoveRight</UiMoveRight>
-              <SessionMetadataSubject>SessionMetadata</SessionMetadataSubject>
               <StartExperimentSubject>StartExperiment</StartExperimentSubject>
               <UiCueGiveLeft>UiCueGiveLeft</UiCueGiveLeft>
               <UiCueGiveRight>UiCueGiveRight</UiCueGiveRight>
+              <SessionMetadataSubject>SessionMetadata</SessionMetadataSubject>
             </Expression>
           </Nodes>
           <Edges>

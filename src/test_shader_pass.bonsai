@@ -3,7 +3,7 @@
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:imvizui="clr-namespace:Bonsai.ImGui.Visualizers;assembly=Bonsai.ImGui.Visualizers.Design"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
-                 xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
+                 xmlns:spk="clr-namespace:Bonsai.Spinnaker;assembly=Bonsai.Spinnaker"
                  xmlns:imviz="clr-namespace:Bonsai.ImGui.Visualizers;assembly=Bonsai.ImGui.Visualizers"
                  xmlns:p1="clr-namespace:;assembly=Extensions"
                  xmlns:imgui="clr-namespace:Bonsai.ImGui;assembly=Bonsai.ImGui"
@@ -18,25 +18,13 @@
         <Name>Frame</Name>
       </Expression>
       <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:Timer">
-          <rx:DueTime>PT0S</rx:DueTime>
-          <rx:Period>PT0.004S</rx:Period>
+        <Combinator xsi:type="spk:SpinnakerCapture">
+          <spk:Index xsi:nil="true" />
+          <spk:ColorProcessing>Default</spk:ColorProcessing>
         </Combinator>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="cv:CameraCapture">
-          <cv:Index>0</cv:Index>
-          <cv:CaptureProperties />
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="cv:Grayscale" />
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:WithLatestFrom" />
       </Expression>
       <Expression xsi:type="MemberSelector">
-        <Selector>Item2</Selector>
+        <Selector>Image</Selector>
       </Expression>
       <Expression xsi:type="imviz:SampleOnNewFrame">
         <Name>Frame</Name>
@@ -86,18 +74,15 @@
     </Nodes>
     <Edges>
       <Edge From="0" To="1" Label="Source1" />
-      <Edge From="2" To="12" Label="Source1" />
-      <Edge From="3" To="6" Label="Source1" />
+      <Edge From="2" To="9" Label="Source1" />
+      <Edge From="3" To="4" Label="Source1" />
       <Edge From="4" To="5" Label="Source1" />
-      <Edge From="5" To="6" Label="Source2" />
+      <Edge From="4" To="10" Label="Source1" />
+      <Edge From="5" To="6" Label="Source1" />
       <Edge From="6" To="7" Label="Source1" />
       <Edge From="7" To="8" Label="Source1" />
-      <Edge From="8" To="9" Label="Source1" />
-      <Edge From="9" To="10" Label="Source1" />
+      <Edge From="8" To="9" Label="Source2" />
       <Edge From="10" To="11" Label="Source1" />
-      <Edge From="10" To="13" Label="Source1" />
-      <Edge From="11" To="12" Label="Source2" />
-      <Edge From="13" To="14" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>
