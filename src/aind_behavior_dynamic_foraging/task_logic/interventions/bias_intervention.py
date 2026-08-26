@@ -54,8 +54,12 @@ class BiasIntervention:
         Trials elapsed since the last intervention. Must exceed
         ``parameters.intervention_interval`` before a new intervention can trigger.
     water_corrections : int
-        Number of consecutive water corrections given in the current intervention.
-        Resets to 0 when switching to lickspout correction.
+        Number of consecutive water corrections given in the current direction.
+        Resets to 0 when switching to lickspout correction or when the correction
+        direction changes (e.g. from correcting right bias to correcting left bias).
+    is_previous_right_autowater : Optional[bool]
+        Direction of the last water correction (True = right, False = left, None = none given).
+        Used to detect direction changes that require resetting ``water_corrections``.
     total_lickspout_offset : float
         Cumulative lickspout offset (mm) applied since instantiation.
         Used to track how far the spout has drifted from center.
@@ -70,6 +74,7 @@ class BiasIntervention:
 
         self.trials_in_bias_intervention = 0
         self.water_corrections = 0
+        self.is_previous_right_autowater: Optional[bool] = None
         self.total_lickspout_offset = 0
 
     def are_antibias_conditions_met(self, bias: float, n_trials: int = 0) -> bool:
@@ -135,10 +140,15 @@ class BiasIntervention:
         lickspout_offset_delta = 0
         ab_delta = self.parameters.lickspout_offset_delta
         if abs(bias) >= self.parameters.threshold.upper:
+            if self.water_corrections > 0 and (bias < 0) != self.is_previous_right_autowater:
+                logger.debug("Correction direction changed; resetting water correction counter.")
+                self.water_corrections = 0
+
             if self.water_corrections < self.parameters.maximum_water_corrections:
                 logger.debug("Correcting bias with water.")
                 # - bias values corresponds to left, so give right and vice versa
-                is_right_autowater = True if bias < 0 else False
+                is_right_autowater = bias < 0
+                self.is_previous_right_autowater = is_right_autowater
                 self.water_corrections += 1
             else:
                 logger.debug("Correcting bias with lickspout offset.")

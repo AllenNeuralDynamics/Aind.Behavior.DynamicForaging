@@ -74,6 +74,7 @@ class TestBiasIntervention(unittest.TestCase):
     def test_water_corrections_counter_increments(self):
         bias_intervention = BiasIntervention(BiasInterventionParameters())
         bias_intervention.water_corrections = 2
+        bias_intervention.is_previous_right_autowater = True  # left bias → right water
         bias_intervention.determine_antibias_intervention(-0.9)
         self.assertEqual(bias_intervention.water_corrections, 3)
 
@@ -81,6 +82,7 @@ class TestBiasIntervention(unittest.TestCase):
         """After exhausting water corrections, move lickspout right (combat left bias)."""
         bias_intervention = BiasIntervention(BiasInterventionParameters())
         bias_intervention.water_corrections = 5
+        bias_intervention.is_previous_right_autowater = True  # left bias → right water
         is_right, delta = bias_intervention.determine_antibias_intervention(-0.9)
         self.assertIsNone(is_right)
         self.assertGreater(delta, 0)
@@ -89,6 +91,7 @@ class TestBiasIntervention(unittest.TestCase):
         """After exhausting water corrections, move lickspout left (combat right bias)."""
         bias_intervention = BiasIntervention(BiasInterventionParameters())
         bias_intervention.water_corrections = 5
+        bias_intervention.is_previous_right_autowater = False  # right bias → left water
         is_right, delta = bias_intervention.determine_antibias_intervention(0.9)
         self.assertIsNone(is_right)
         self.assertLess(delta, 0)
@@ -96,6 +99,7 @@ class TestBiasIntervention(unittest.TestCase):
     def test_water_corrections_reset_after_lickspout_move(self):
         bias_intervention = BiasIntervention(BiasInterventionParameters())
         bias_intervention.water_corrections = 5
+        bias_intervention.is_previous_right_autowater = False  # right bias → left water
         bias_intervention.determine_antibias_intervention(0.9)
         self.assertEqual(bias_intervention.water_corrections, 0)
 
@@ -140,6 +144,7 @@ class TestBiasIntervention(unittest.TestCase):
         bias_intervention = BiasIntervention(BiasInterventionParameters())
         bias_intervention.total_lickspout_offset = 0
         bias_intervention.water_corrections = 5
+        bias_intervention.is_previous_right_autowater = False  # right bias → left water
         _, delta = bias_intervention.determine_antibias_intervention(0.9)
         self.assertAlmostEqual(bias_intervention.total_lickspout_offset, delta)
 
@@ -191,3 +196,46 @@ class TestBiasIntervention(unittest.TestCase):
         bias_intervention.trials_in_bias_intervention = 5
         bias_intervention.are_antibias_conditions_met(0.9, n_trials=50)
         self.assertEqual(bias_intervention.trials_in_bias_intervention, 6)
+
+    # #### Test direction-change reset ####
+
+    def test_water_corrections_reset_when_direction_changes(self):
+        """Switching bias direction should reset the water corrections counter."""
+        bias_intervention = BiasIntervention(BiasInterventionParameters(maximum_water_corrections=5))
+        # Build up some right-water corrections (left bias)
+        bias_intervention.determine_antibias_intervention(-0.9)
+        bias_intervention.determine_antibias_intervention(-0.9)
+        self.assertEqual(bias_intervention.water_corrections, 2)
+        # Now bias flips to right — counter should reset and give water again
+        bias_intervention.determine_antibias_intervention(0.9)
+        self.assertEqual(bias_intervention.water_corrections, 1)
+
+    def test_water_corrections_not_reset_when_direction_unchanged(self):
+        """Repeated interventions in the same direction should not reset the counter."""
+        bias_intervention = BiasIntervention(BiasInterventionParameters(maximum_water_corrections=3))
+        bias_intervention.determine_antibias_intervention(-0.9)
+        bias_intervention.determine_antibias_intervention(-0.9)
+        bias_intervention.determine_antibias_intervention(-0.9)
+        self.assertEqual(bias_intervention.water_corrections, 3)
+
+    def test_direction_change_gives_water_not_lickspout(self):
+        """After a direction change, water should be given (not lickspout) even if
+        the counter was near the maximum before the switch."""
+        params = BiasInterventionParameters(maximum_water_corrections=2)
+        bias_intervention = BiasIntervention(params)
+        # Exhaust water corrections in the left-bias direction
+        bias_intervention.determine_antibias_intervention(-0.9)
+        bias_intervention.determine_antibias_intervention(-0.9)
+        self.assertEqual(bias_intervention.water_corrections, 2)
+        # Direction changes: counter resets, so water (not lickspout) should be given
+        is_right, delta = bias_intervention.determine_antibias_intervention(0.9)
+        self.assertFalse(is_right)  # right bias → give left water
+        self.assertEqual(delta, 0.0)  # no lickspout movement
+
+    def test_no_reset_on_first_correction(self):
+        """The very first water correction should not trigger a direction-change reset."""
+        bias_intervention = BiasIntervention(BiasInterventionParameters(maximum_water_corrections=5))
+        is_right, delta = bias_intervention.determine_antibias_intervention(-0.9)
+        self.assertTrue(is_right)
+        self.assertEqual(bias_intervention.water_corrections, 1)
+        self.assertEqual(delta, 0.0)
