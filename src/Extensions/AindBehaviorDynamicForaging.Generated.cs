@@ -50,7 +50,7 @@ namespace AindDynamicForagingDataSchema
         public AindDynamicForagingRig()
         {
             _aindBehaviorServicesPkgVersion = "0.13.7";
-            _version = "0.0.2-rc36";
+            _version = "0.0.2-rc37";
             _triggeredCameraController = new CameraControllerSpinnakerCamera();
             _harpBehavior = new HarpBehavior();
             _harpClockGenerator = new HarpWhiteRabbit();
@@ -433,7 +433,7 @@ namespace AindDynamicForagingDataSchema
             _name = "AindDynamicForaging";
             _description = "";
             _taskParameters = new AindDynamicForagingTaskParameters();
-            _version = "0.0.2-rc36";
+            _version = "0.0.2-rc37";
         }
     
         protected AindDynamicForagingTaskLogic(AindDynamicForagingTaskLogic other)
@@ -1302,6 +1302,8 @@ namespace AindDynamicForagingDataSchema
     
         private double _rewardFraction;
     
+        private int _trialThreshold;
+    
         public BiasInterventionParameters()
         {
             _threshold = new BiasThreshold();
@@ -1310,6 +1312,7 @@ namespace AindDynamicForagingDataSchema
             _biasWindowLength = 200;
             _lickspoutOffsetDelta = 0.05D;
             _rewardFraction = 0.8D;
+            _trialThreshold = 100;
         }
     
         protected BiasInterventionParameters(BiasInterventionParameters other)
@@ -1320,6 +1323,7 @@ namespace AindDynamicForagingDataSchema
             _biasWindowLength = other._biasWindowLength;
             _lickspoutOffsetDelta = other._lickspoutOffsetDelta;
             _rewardFraction = other._rewardFraction;
+            _trialThreshold = other._trialThreshold;
         }
     
         /// <summary>
@@ -1427,6 +1431,25 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
+        /// <summary>
+        /// Minimum number of trials that must elapse before anti-bias intervention can trigger. Bias is unreliable with few trials, so interventions are suppressed until this threshold is reached.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("trial_threshold")]
+        [System.ComponentModel.DescriptionAttribute("Minimum number of trials that must elapse before anti-bias intervention can trigg" +
+            "er. Bias is unreliable with few trials, so interventions are suppressed until th" +
+            "is threshold is reached.")]
+        public int TrialThreshold
+        {
+            get
+            {
+                return _trialThreshold;
+            }
+            set
+            {
+                _trialThreshold = value;
+            }
+        }
+    
         public System.IObservable<BiasInterventionParameters> Generate()
         {
             return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new BiasInterventionParameters(this)));
@@ -1444,7 +1467,8 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("MaximumWaterCorrections = " + _maximumWaterCorrections + ", ");
             stringBuilder.Append("BiasWindowLength = " + _biasWindowLength + ", ");
             stringBuilder.Append("LickspoutOffsetDelta = " + _lickspoutOffsetDelta + ", ");
-            stringBuilder.Append("RewardFraction = " + _rewardFraction);
+            stringBuilder.Append("RewardFraction = " + _rewardFraction + ", ");
+            stringBuilder.Append("TrialThreshold = " + _trialThreshold);
             return true;
         }
     
@@ -6278,6 +6302,8 @@ namespace AindDynamicForagingDataSchema
     
         private double _quiescencePeriodDuration;
     
+        private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _quiescencePeriodRefractoryDuration;
+    
         private double _interTrialIntervalDuration;
     
         private bool? _isAutoRewardRight;
@@ -6310,6 +6336,7 @@ namespace AindDynamicForagingDataSchema
             _responseDeadlineDuration = other._responseDeadlineDuration;
             _quickRetractSettings = other._quickRetractSettings;
             _quiescencePeriodDuration = other._quiescencePeriodDuration;
+            _quiescencePeriodRefractoryDuration = other._quiescencePeriodRefractoryDuration;
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
             _isAutoRewardRight = other._isAutoRewardRight;
             _lickspoutOffsetDelta = other._lickspoutOffsetDelta;
@@ -6475,6 +6502,25 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
+        /// Duration of the refractory period after a lick is detected during the quiescence period (in seconds).
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("quiescence_period_refractory_duration")]
+        [System.ComponentModel.DescriptionAttribute("Duration of the refractory period after a lick is detected during the quiescence " +
+            "period (in seconds).")]
+        public AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution QuiescencePeriodRefractoryDuration
+        {
+            get
+            {
+                return _quiescencePeriodRefractoryDuration;
+            }
+            set
+            {
+                _quiescencePeriodRefractoryDuration = value;
+            }
+        }
+    
+        /// <summary>
         /// Duration of the inter-trial interval (in seconds).
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("inter_trial_interval_duration")]
@@ -6566,6 +6612,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("ResponseDeadlineDuration = " + _responseDeadlineDuration + ", ");
             stringBuilder.Append("QuickRetractSettings = " + _quickRetractSettings + ", ");
             stringBuilder.Append("QuiescencePeriodDuration = " + _quiescencePeriodDuration + ", ");
+            stringBuilder.Append("QuiescencePeriodRefractoryDuration = " + _quiescencePeriodRefractoryDuration + ", ");
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
             stringBuilder.Append("IsAutoRewardRight = " + _isAutoRewardRight + ", ");
             stringBuilder.Append("LickspoutOffsetDelta = " + _lickspoutOffsetDelta + ", ");

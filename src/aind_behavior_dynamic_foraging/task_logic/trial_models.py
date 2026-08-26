@@ -103,6 +103,10 @@ class Trial(BaseModel):
         ge=0,
         description="Duration of the quiescence period before trial starts (in seconds). Each lick resets the timer.",
     )
+    quiescence_period_refractory_duration: Optional[Distribution] = Field(
+        default=None,
+        description="Duration of the refractory period after a lick is detected during the quiescence period (in seconds).",
+    )
     inter_trial_interval_duration: float = Field(
         default=5.0, ge=0.5, description="Duration of the inter-trial interval (in seconds)."
     )

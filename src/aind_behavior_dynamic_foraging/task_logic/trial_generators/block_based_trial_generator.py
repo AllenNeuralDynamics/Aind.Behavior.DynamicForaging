@@ -235,7 +235,9 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
 
         # determine bias correction. Overrides autowater
         lickspout_offset_delta = 0
-        if is_bias_intervention := self.bias_intervention.are_antibias_conditions_met(self.bias):
+        if is_bias_intervention := self.bias_intervention.are_antibias_conditions_met(
+            self.bias, len(self.outcome_history)
+        ):
             is_auto_reward_right, lickspout_offset_delta = self.bias_intervention.determine_antibias_intervention(
                 self.bias
             )
@@ -254,6 +256,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             reward_consumption_duration=self.spec.reward_consumption_duration,
             response_deadline_duration=self.spec.response_duration,
             quiescence_period_duration=quiescent,
+            quiescence_period_refractory_duration=self.spec.inter_trial_interval_duration,
             inter_trial_interval_duration=iti,
             lickspout_offset_delta=lickspout_offset_delta,
             is_auto_reward_right=is_auto_reward_right,

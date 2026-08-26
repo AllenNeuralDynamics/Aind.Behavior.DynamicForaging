@@ -1,7 +1,7 @@
 {
     "pkg_location": "aind_behavior_dynamic_foraging_curricula.uncoupled_baiting",
     "name": "Uncoupled Baiting",
-    "version": "0.0.2-rc36",
+    "version": "0.0.2-rc37",
     "graph": {
         "nodes": {
             "0": {
@@ -71,7 +71,8 @@
                                         "maximum_water_corrections": 2,
                                         "bias_window_length": 200,
                                         "lickspout_offset_delta": 0.05,
-                                        "reward_fraction": 0.8
+                                        "reward_fraction": 0.8,
+                                        "trial_threshold": 100
                                     },
                                     "is_baiting": true,
                                     "reward_probability_parameters": {
@@ -151,7 +152,8 @@
                                         "maximum_water_corrections": 2,
                                         "bias_window_length": 200,
                                         "lickspout_offset_delta": 0.05,
-                                        "reward_fraction": 0.5
+                                        "reward_fraction": 0.5,
+                                        "trial_threshold": 100
                                     },
                                     "is_baiting": true,
                                     "reward_probability_parameters": {
@@ -181,7 +183,7 @@
                             ]
                         }
                     },
-                    "version": "0.0.2-rc36",
+                    "version": "0.0.2-rc37",
                     "stage_name": "STAGE_1_WARMUP"
                 },
                 "graph": {
@@ -259,7 +261,8 @@
                                 "maximum_water_corrections": 2,
                                 "bias_window_length": 200,
                                 "lickspout_offset_delta": 0.05,
-                                "reward_fraction": 0.5
+                                "reward_fraction": 0.5,
+                                "trial_threshold": 100
                             },
                             "is_baiting": true,
                             "reward_probability_parameters": {
@@ -287,7 +290,7 @@
                             "kernel_size": 2
                         }
                     },
-                    "version": "0.0.2-rc36",
+                    "version": "0.0.2-rc37",
                     "stage_name": "STAGE_1"
                 },
                 "graph": {
@@ -326,7 +329,7 @@
                                 "family": "Exponential",
                                 "distribution_parameters": {
                                     "family": "Exponential",
-                                    "rate": 0.2
+                                    "rate": 0.3333333333333333
                                 },
                                 "truncation_parameters": {
                                     "truncation_mode": "clamp",
@@ -365,7 +368,8 @@
                                 "maximum_water_corrections": 2,
                                 "bias_window_length": 200,
                                 "lickspout_offset_delta": 0.05,
-                                "reward_fraction": 0.5
+                                "reward_fraction": 0.5,
+                                "trial_threshold": 100
                             },
                             "is_baiting": true,
                             "reward_probability_parameters": {
@@ -393,7 +397,7 @@
                             "kernel_size": 2
                         }
                     },
-                    "version": "0.0.2-rc36",
+                    "version": "0.0.2-rc37",
                     "stage_name": "STAGE_2"
                 },
                 "graph": {
@@ -468,7 +472,8 @@
                                 "maximum_water_corrections": 2,
                                 "bias_window_length": 200,
                                 "lickspout_offset_delta": 0.05,
-                                "reward_fraction": 0.5
+                                "reward_fraction": 0.5,
+                                "trial_threshold": 100
                             },
                             "is_baiting": true,
                             "trial_generation_end_parameters": {
@@ -490,7 +495,7 @@
                             }
                         }
                     },
-                    "version": "0.0.2-rc36",
+                    "version": "0.0.2-rc37",
                     "stage_name": "STAGE_3"
                 },
                 "graph": {
@@ -561,7 +566,8 @@
                                 "maximum_water_corrections": 2,
                                 "bias_window_length": 200,
                                 "lickspout_offset_delta": 0.05,
-                                "reward_fraction": 0.5
+                                "reward_fraction": 0.5,
+                                "trial_threshold": 100
                             },
                             "is_baiting": true,
                             "trial_generation_end_parameters": {
@@ -583,7 +589,7 @@
                             }
                         }
                     },
-                    "version": "0.0.2-rc36",
+                    "version": "0.0.2-rc37",
                     "stage_name": "STAGE_FINAL"
                 },
                 "graph": {
@@ -654,7 +660,8 @@
                                 "maximum_water_corrections": 2,
                                 "bias_window_length": 200,
                                 "lickspout_offset_delta": 0.05,
-                                "reward_fraction": 0.5
+                                "reward_fraction": 0.5,
+                                "trial_threshold": 100
                             },
                             "is_baiting": true,
                             "trial_generation_end_parameters": {
@@ -676,7 +683,7 @@
                             }
                         }
                     },
-                    "version": "0.0.2-rc36",
+                    "version": "0.0.2-rc37",
                     "stage_name": "GRADUATED"
                 },
                 "graph": {
