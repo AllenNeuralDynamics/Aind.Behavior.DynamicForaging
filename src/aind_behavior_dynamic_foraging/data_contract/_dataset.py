@@ -294,10 +294,10 @@ def make_dataset(
                                 ),
                             ),
                             SoftwareEvents(
-                                name="EndExperiment",
+                                name="EndSession",
                                 description="An event emitted when the experiment ends.",
                                 reader_params=SoftwareEvents.make_params(
-                                    root_path / "behavior/SoftwareEvents/EndExperiment.json"
+                                    root_path / "behavior/SoftwareEvents/EndSession.json"
                                 ),
                             ),
                         ],

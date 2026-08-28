@@ -10,7 +10,7 @@ from aind_behavior_dynamic_foraging.rig import AindDynamicForagingRig
 from aind_behavior_services.rig import water_valve as abs_water_valve
 from aind_behavior_services.utils import get_fields_of_type, utcnow
 from aind_data_schema.components.connections import Connection
-from aind_data_schema.components.coordinates import Axis, AxisName, CoordinateSystem, Direction, Origin
+from aind_data_schema.components.coordinates import Axis, AxisName, CoordinateSystem, Direction, Origin, Scale
 from aind_data_schema.components.devices import (
     AnatomicalRelative,
     Camera,
@@ -20,11 +20,17 @@ from aind_data_schema.components.devices import (
     Cooling,
     DataInterface,
     Device,
+    Enclosure,
     HarpDevice,
     HarpDeviceType,
     Lens,
+    LickSensorType,
+    LickSpout,
+    LickSpoutAssembly,
+    LightEmittingDiode,
     MotorizedStage,
     SizeUnit,
+    Tube,
 )
 from aind_data_schema.components.measurements import CalibrationFit, FitType, GenericModel, VolumeCalibration
 from aind_data_schema.core.acquisition import CALIBRATIONS
@@ -140,6 +146,13 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
         controller = rig.triggered_camera_controller
         fps = float(controller.frame_rate) if controller.frame_rate else float("nan")
         for name, cam in rig.triggered_camera_controller.cameras.items():
+            additional_settings = cam.model_dump()
+            additional_settings["note"] = (
+                "The additional_settings values are the input parameters used to initialize the camera. Model found at https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/blob/a6c0f539275f73af87da82a8ea0101836389f1b3/src/aind_behavior_services/rig/cameras.py#L226. Enum clarifications: adc_bit_depth is an "
+                "Spinnaker SDK enum-coded value (0=ADC8BIT, 1=ADC10BIT, 2=ADC12BIT), and pixel_format "
+                "is also enum-coded (for this configuration, 0=MONO8)."
+            )
+
             camera = Camera(
                 name=name,
                 manufacturer=Organization.FLIR,
@@ -160,7 +173,7 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                 crop_width=cam.region_of_interest.width if cam.region_of_interest.width > 0 else None,
                 crop_height=cam.region_of_interest.height if cam.region_of_interest.height > 0 else None,
                 crop_unit=SizeUnit.PX,
-                additional_settings=GenericModel.model_validate(cam.model_dump()),
+                additional_settings=GenericModel.model_validate(additional_settings),
             )
             assembly = CameraAssembly(
                 name=f"{name}Assembly",
@@ -269,32 +282,90 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                 )
             )
 
-        # manipulator\
+        # lick spout assembly
         components.append(
-            MotorizedStage(
-                name="motorized_stage",
+            LickSpoutAssembly(
+                name="LickSpoutAssembly",
+                lick_spouts=[
+                    LickSpout(
+                        name="Left lick spout",
+                        manufacturer=Organization.OTHER,
+                        notes=" (v1v2 upgrade): 'manufacturer' field was missing, defaulting to 'Other'.",
+                        spout_diameter=Decimal("1.2"),
+                        spout_diameter_unit=SizeUnit.MM,
+                        solenoid_valve=Device(
+                            name="Solenoid Left",
+                            manufacturer=Organization.THE_LEE_COMPANY,
+                            model="LHDB1233518H",
+                        ),
+                        lick_sensor=Device(
+                            name="Lick Sensor Left",
+                            manufacturer=Organization.JANELIA,
+                        ),
+                        lick_sensor_type=LickSensorType.CAPACITIVE,
+                    ),
+                    LickSpout(
+                        name="Right lick spout",
+                        manufacturer=Organization.OTHER,
+                        notes="Lick spout manufacturer is unknown.",
+                        spout_diameter=Decimal("1.2"),
+                        spout_diameter_unit=SizeUnit.MM,
+                        solenoid_valve=Device(
+                            name="Solenoid Right",
+                            manufacturer=Organization.THE_LEE_COMPANY,
+                            model="LHDB1233518H",
+                        ),
+                        lick_sensor=Device(
+                            name="Lick Sensor Right",
+                            manufacturer=Organization.JANELIA,
+                        ),
+                        lick_sensor_type=LickSensorType.CAPACITIVE,
+                    ),
+                ],
+                motorized_stage=MotorizedStage(
+                    name="motorized_stage",
+                    manufacturer=Organization.AIND,
+                    model="328-300-00",
+                    travel=Decimal("30"),
+                    travel_unit=SizeUnit.MM,
+                    notes="This stage is driven by the manipulator device.",
+                ),
+            )
+        )
+
+        # mouse platform
+        components.append(
+            Tube(
+                name="mouse_tube_foraging",
+                manufacturer=Organization.CUSTOM,
+                diameter=Decimal("3.0"),
+                diameter_unit=SizeUnit.CM,
+            )
+        )
+
+        # IR light source
+        components.append(
+            LightEmittingDiode(
+                name="IR LED",
+                manufacturer=Organization.THORLABS,
+                model="M810L5",
+                wavelength=810,
+            )
+        )
+
+        # enclosure
+        components.append(
+            Enclosure(
+                name="Behavior enclosure",
                 manufacturer=Organization.AIND,
-                model="328-300-00",
-                travel=Decimal("30"),
-                travel_unit=SizeUnit.CM,
-                notes="This stage is driven by the manipulator device.",
-            )
-        )
-
-        # solenoid
-        components.append(
-            Device(
-                name="left_water_valve_solenoid",
-                manufacturer=Organization.THE_LEE_COMPANY,
-                model="LHDB1233518H",
-            )
-        )
-
-        components.append(
-            Device(
-                name="right_water_valve_solenoid",
-                manufacturer=Organization.THE_LEE_COMPANY,
-                model="LHDB1233518H",
+                size=Scale(scale=[54, 54, 54]),
+                size_unit=SizeUnit.CM,
+                internal_material="",
+                external_material="",
+                grounded=False,
+                laser_interlock=False,
+                air_filtration=False,
+                notes=" (v1v2 upgrade): Scale is width/length/height",
             )
         )
 
@@ -317,14 +388,12 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
         connections.append(
             Connection(
                 source_device="BehaviorBoard",
-                target_device="left_water_valve_solenoid",
+                target_device="Solenoid Left",
                 source_port="SupplyPort0",
             )
         )
         connections.append(
-            Connection(
-                source_device="BehaviorBoard", target_device="right_water_valve_solenoid", source_port="SupplyPort1"
-            )
+            Connection(source_device="BehaviorBoard", target_device="Solenoid Right", source_port="SupplyPort1")
         )
 
         return Instrument(
