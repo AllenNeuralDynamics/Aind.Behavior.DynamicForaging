@@ -50,7 +50,7 @@ namespace AindDynamicForagingDataSchema
         public AindDynamicForagingRig()
         {
             _aindBehaviorServicesPkgVersion = "0.13.7";
-            _version = "0.0.2";
+            _version = "0.0.2-rc37";
             _triggeredCameraController = new CameraControllerSpinnakerCamera();
             _harpBehavior = new HarpBehavior();
             _harpClockGenerator = new HarpWhiteRabbit();
@@ -433,7 +433,7 @@ namespace AindDynamicForagingDataSchema
             _name = "AindDynamicForaging";
             _description = "";
             _taskParameters = new AindDynamicForagingTaskParameters();
-            _version = "0.0.2";
+            _version = "0.0.2-rc37";
         }
     
         protected AindDynamicForagingTaskLogic(AindDynamicForagingTaskLogic other)
@@ -1302,6 +1302,8 @@ namespace AindDynamicForagingDataSchema
     
         private double _rewardFraction;
     
+        private int _trialThreshold;
+    
         public BiasInterventionParameters()
         {
             _threshold = new BiasThreshold();
@@ -1310,6 +1312,7 @@ namespace AindDynamicForagingDataSchema
             _biasWindowLength = 200;
             _lickspoutOffsetDelta = 0.05D;
             _rewardFraction = 0.8D;
+            _trialThreshold = 100;
         }
     
         protected BiasInterventionParameters(BiasInterventionParameters other)
@@ -1320,6 +1323,7 @@ namespace AindDynamicForagingDataSchema
             _biasWindowLength = other._biasWindowLength;
             _lickspoutOffsetDelta = other._lickspoutOffsetDelta;
             _rewardFraction = other._rewardFraction;
+            _trialThreshold = other._trialThreshold;
         }
     
         /// <summary>
@@ -1427,6 +1431,25 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
+        /// <summary>
+        /// Minimum number of trials that must elapse before anti-bias intervention can trigger. Bias is unreliable with few trials, so interventions are suppressed until this threshold is reached.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("trial_threshold")]
+        [System.ComponentModel.DescriptionAttribute("Minimum number of trials that must elapse before anti-bias intervention can trigg" +
+            "er. Bias is unreliable with few trials, so interventions are suppressed until th" +
+            "is threshold is reached.")]
+        public int TrialThreshold
+        {
+            get
+            {
+                return _trialThreshold;
+            }
+            set
+            {
+                _trialThreshold = value;
+            }
+        }
+    
         public System.IObservable<BiasInterventionParameters> Generate()
         {
             return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new BiasInterventionParameters(this)));
@@ -1444,7 +1467,8 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("MaximumWaterCorrections = " + _maximumWaterCorrections + ", ");
             stringBuilder.Append("BiasWindowLength = " + _biasWindowLength + ", ");
             stringBuilder.Append("LickspoutOffsetDelta = " + _lickspoutOffsetDelta + ", ");
-            stringBuilder.Append("RewardFraction = " + _rewardFraction);
+            stringBuilder.Append("RewardFraction = " + _rewardFraction + ", ");
+            stringBuilder.Append("TrialThreshold = " + _trialThreshold);
             return true;
         }
     
@@ -4443,6 +4467,101 @@ namespace AindDynamicForagingDataSchema
 
 
     /// <summary>
+    /// Defines the conditions under which a block is extended due to perseveration on minimum probability side.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.ComponentModel.DescriptionAttribute("Defines the conditions under which a block is extended due to perseveration on mi" +
+        "nimum probability side.")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class MinimumProbabilityPerseverationConditions
+    {
+    
+        private int _choiceStreak;
+    
+        private int _blockExtension;
+    
+        public MinimumProbabilityPerseverationConditions()
+        {
+            _choiceStreak = 4;
+            _blockExtension = 4;
+        }
+    
+        protected MinimumProbabilityPerseverationConditions(MinimumProbabilityPerseverationConditions other)
+        {
+            _choiceStreak = other._choiceStreak;
+            _blockExtension = other._blockExtension;
+        }
+    
+        /// <summary>
+        /// Number of consecutive choices on the minimum-probability side required to extend both block lengths.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("choice_streak")]
+        [System.ComponentModel.DescriptionAttribute("Number of consecutive choices on the minimum-probability side required to extend " +
+            "both block lengths.")]
+        public int ChoiceStreak
+        {
+            get
+            {
+                return _choiceStreak;
+            }
+            set
+            {
+                _choiceStreak = value;
+            }
+        }
+    
+        /// <summary>
+        /// Number of trials to extend both block lengths when the choice streak condition is met.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("block_extension")]
+        [System.ComponentModel.DescriptionAttribute("Number of trials to extend both block lengths when the choice streak condition is" +
+            " met.")]
+        public int BlockExtension
+        {
+            get
+            {
+                return _blockExtension;
+            }
+            set
+            {
+                _blockExtension = value;
+            }
+        }
+    
+        public System.IObservable<MinimumProbabilityPerseverationConditions> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new MinimumProbabilityPerseverationConditions(this)));
+        }
+    
+        public System.IObservable<MinimumProbabilityPerseverationConditions> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new MinimumProbabilityPerseverationConditions(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("ChoiceStreak = " + _choiceStreak + ", ");
+            stringBuilder.Append("BlockExtension = " + _blockExtension);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    /// <summary>
     /// Settings for the quick retract feature.
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
@@ -6183,6 +6302,8 @@ namespace AindDynamicForagingDataSchema
     
         private double _quiescencePeriodDuration;
     
+        private AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution _quiescencePeriodRefractoryDuration;
+    
         private double _interTrialIntervalDuration;
     
         private bool? _isAutoRewardRight;
@@ -6215,6 +6336,7 @@ namespace AindDynamicForagingDataSchema
             _responseDeadlineDuration = other._responseDeadlineDuration;
             _quickRetractSettings = other._quickRetractSettings;
             _quiescencePeriodDuration = other._quiescencePeriodDuration;
+            _quiescencePeriodRefractoryDuration = other._quiescencePeriodRefractoryDuration;
             _interTrialIntervalDuration = other._interTrialIntervalDuration;
             _isAutoRewardRight = other._isAutoRewardRight;
             _lickspoutOffsetDelta = other._lickspoutOffsetDelta;
@@ -6380,6 +6502,25 @@ namespace AindDynamicForagingDataSchema
         }
     
         /// <summary>
+        /// Duration of the refractory period after a lick is detected during the quiescence period (in seconds).
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("quiescence_period_refractory_duration")]
+        [System.ComponentModel.DescriptionAttribute("Duration of the refractory period after a lick is detected during the quiescence " +
+            "period (in seconds).")]
+        public AllenNeuralDynamics.AindBehaviorServices.Distributions.Distribution QuiescencePeriodRefractoryDuration
+        {
+            get
+            {
+                return _quiescencePeriodRefractoryDuration;
+            }
+            set
+            {
+                _quiescencePeriodRefractoryDuration = value;
+            }
+        }
+    
+        /// <summary>
         /// Duration of the inter-trial interval (in seconds).
         /// </summary>
         [Newtonsoft.Json.JsonPropertyAttribute("inter_trial_interval_duration")]
@@ -6471,6 +6612,7 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("ResponseDeadlineDuration = " + _responseDeadlineDuration + ", ");
             stringBuilder.Append("QuickRetractSettings = " + _quickRetractSettings + ", ");
             stringBuilder.Append("QuiescencePeriodDuration = " + _quiescencePeriodDuration + ", ");
+            stringBuilder.Append("QuiescencePeriodRefractoryDuration = " + _quiescencePeriodRefractoryDuration + ", ");
             stringBuilder.Append("InterTrialIntervalDuration = " + _interTrialIntervalDuration + ", ");
             stringBuilder.Append("IsAutoRewardRight = " + _isAutoRewardRight + ", ");
             stringBuilder.Append("LickspoutOffsetDelta = " + _lickspoutOffsetDelta + ", ");
@@ -7017,6 +7159,8 @@ namespace AindDynamicForagingDataSchema
     
         private int _maximumDominanceStreak;
     
+        private MinimumProbabilityPerseverationConditions _minimumProbabilityPerseverationConditions;
+    
         public UncoupledTrialGeneratorSpec()
         {
             _rewardSize = new RewardSize();
@@ -7048,6 +7192,7 @@ namespace AindDynamicForagingDataSchema
             _trialGenerationEndParameters = other._trialGenerationEndParameters;
             _rewardProbabilities = other._rewardProbabilities;
             _maximumDominanceStreak = other._maximumDominanceStreak;
+            _minimumProbabilityPerseverationConditions = other._minimumProbabilityPerseverationConditions;
         }
     
         /// <summary>
@@ -7266,6 +7411,20 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("minimum_probability_perseveration_conditions")]
+        public MinimumProbabilityPerseverationConditions MinimumProbabilityPerseverationConditions
+        {
+            get
+            {
+                return _minimumProbabilityPerseverationConditions;
+            }
+            set
+            {
+                _minimumProbabilityPerseverationConditions = value;
+            }
+        }
+    
         public System.IObservable<UncoupledTrialGeneratorSpec> Generate()
         {
             return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new UncoupledTrialGeneratorSpec(this)));
@@ -7293,7 +7452,8 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("IsBaiting = " + _isBaiting + ", ");
             stringBuilder.Append("TrialGenerationEndParameters = " + _trialGenerationEndParameters + ", ");
             stringBuilder.Append("RewardProbabilities = " + _rewardProbabilities + ", ");
-            stringBuilder.Append("MaximumDominanceStreak = " + _maximumDominanceStreak);
+            stringBuilder.Append("MaximumDominanceStreak = " + _maximumDominanceStreak + ", ");
+            stringBuilder.Append("MinimumProbabilityPerseverationConditions = " + _minimumProbabilityPerseverationConditions);
             return true;
         }
     }
@@ -8555,6 +8715,11 @@ namespace AindDynamicForagingDataSchema
             return Process<Metadata>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<MinimumProbabilityPerseverationConditions> source)
+        {
+            return Process<MinimumProbabilityPerseverationConditions>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<QuickRetractSettings> source)
         {
             return Process<QuickRetractSettings>(source);
@@ -8702,6 +8867,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<IntegrationTestTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Measurement>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Metadata>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<MinimumProbabilityPerseverationConditions>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<QuickRetractSettings>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Rect>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<RewardProbabilityParameters>))]

@@ -8,6 +8,7 @@ from aind_behavior_services.task.distributions import (
     Distribution,
     ExponentialDistribution,
     ExponentialDistributionParameters,
+    ScalingParameters,
     TruncationParameters,
 )
 from aind_behavior_services.task.distributions_utils import draw_sample
@@ -49,6 +50,8 @@ class BlockBasedTrialMetadata(BaseModel):
     is_bias_stage_intervention: bool = Field(
         default=False, description="Flag indicating if bias stage intervention is given for trial."
     )
+    is_right_baited: bool = Field(default=False, description="Flag indicating if right side is baited.")
+    is_left_baited: bool = Field(default=False, description="Flag indicating if left side is baited.")
 
 
 class AutoWaterParameters(BaseModel):
@@ -99,7 +102,8 @@ class BlockBasedTrialGeneratorSpec(BaseTrialGeneratorSpecModel):
     inter_trial_interval_duration: Distribution = Field(
         default=ExponentialDistribution(
             distribution_parameters=ExponentialDistributionParameters(rate=1 / 2),
-            truncation_parameters=TruncationParameters(min=1, max=8),
+            truncation_parameters=TruncationParameters(max=8),
+            scaling_parameters=ScalingParameters(offset=1),
         ),
         description="Distribution describing the inter-trial interval (in seconds).",
     )
@@ -231,7 +235,9 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
 
         # determine bias correction. Overrides autowater
         lickspout_offset_delta = 0
-        if is_bias_intervention := self.bias_intervention.are_antibias_conditions_met(self.bias):
+        if is_bias_intervention := self.bias_intervention.are_antibias_conditions_met(
+            self.bias, len(self.outcome_history)
+        ):
             is_auto_reward_right, lickspout_offset_delta = self.bias_intervention.determine_antibias_intervention(
                 self.bias
             )
@@ -250,6 +256,7 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             reward_consumption_duration=self.spec.reward_consumption_duration,
             response_deadline_duration=self.spec.response_duration,
             quiescence_period_duration=quiescent,
+            quiescence_period_refractory_duration=self.spec.inter_trial_interval_duration,
             inter_trial_interval_duration=iti,
             lickspout_offset_delta=lickspout_offset_delta,
             is_auto_reward_right=is_auto_reward_right,
@@ -265,6 +272,8 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
             is_autowater=is_autowater and not is_bias_intervention,
             is_bias_water_intervention=is_bias_intervention and is_auto_reward_right is not None,
             is_bias_stage_intervention=is_bias_intervention and lickspout_offset_delta != 0,
+            is_right_baited=self.is_right_baited,
+            is_left_baited=self.is_left_baited,
         )
         trial.metadata.extra = self._add_extra_metadata(extra_metadata)
         return trial

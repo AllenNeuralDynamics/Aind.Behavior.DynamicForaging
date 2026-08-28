@@ -9,8 +9,8 @@
           "type": "string"
         },
         "version": {
-          "const": "0.0.2",
-          "default": "0.0.2",
+          "const": "0.0.2-rc37",
+          "default": "0.0.2-rc37",
           "title": "Version",
           "type": "string"
         },
@@ -151,8 +151,8 @@
           "description": "Parameters of the task logic"
         },
         "version": {
-          "const": "0.0.2",
-          "default": "0.0.2",
+          "const": "0.0.2-rc37",
+          "default": "0.0.2-rc37",
           "title": "Version",
           "type": "string"
         },
@@ -481,10 +481,13 @@
             },
             "truncation_parameters": {
               "max": 8.0,
-              "min": 1.0,
+              "min": 0.0,
               "truncation_mode": "exclude"
             },
-            "scaling_parameters": null
+            "scaling_parameters": {
+              "offset": 1.0,
+              "scale": 1.0
+            }
           },
           "description": "Distribution describing the inter-trial interval (in seconds)."
         },
@@ -531,7 +534,8 @@
             "maximum_water_corrections": 5,
             "bias_window_length": 200,
             "lickspout_offset_delta": 0.05,
-            "reward_fraction": 0.8
+            "reward_fraction": 0.8,
+            "trial_threshold": 100
           },
           "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
           "oneOf": [
@@ -723,6 +727,13 @@
           "minimum": 0,
           "title": "Reward Fraction",
           "type": "number"
+        },
+        "trial_threshold": {
+          "default": 100,
+          "description": "Minimum number of trials that must elapse before anti-bias intervention can trigger. Bias is unreliable with few trials, so interventions are suppressed until this threshold is reached.",
+          "minimum": 0,
+          "title": "Trial Threshold",
+          "type": "integer"
         }
       },
       "title": "BiasInterventionParameters",
@@ -883,10 +894,13 @@
             },
             "truncation_parameters": {
               "max": 8.0,
-              "min": 1.0,
+              "min": 0.0,
               "truncation_mode": "exclude"
             },
-            "scaling_parameters": null
+            "scaling_parameters": {
+              "offset": 1.0,
+              "scale": 1.0
+            }
           },
           "description": "Distribution describing the inter-trial interval (in seconds)."
         },
@@ -933,7 +947,8 @@
             "maximum_water_corrections": 5,
             "bias_window_length": 200,
             "lickspout_offset_delta": 0.05,
-            "reward_fraction": 0.8
+            "reward_fraction": 0.8,
+            "trial_threshold": 100
           },
           "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
           "oneOf": [
@@ -1179,10 +1194,13 @@
             },
             "truncation_parameters": {
               "max": 8.0,
-              "min": 1.0,
+              "min": 0.0,
               "truncation_mode": "exclude"
             },
-            "scaling_parameters": null
+            "scaling_parameters": {
+              "offset": 1.0,
+              "scale": 1.0
+            }
           },
           "description": "Distribution describing the inter-trial interval (in seconds)."
         },
@@ -1229,7 +1247,8 @@
             "maximum_water_corrections": 5,
             "bias_window_length": 200,
             "lickspout_offset_delta": 0.05,
-            "reward_fraction": 0.8
+            "reward_fraction": 0.8,
+            "trial_threshold": 100
           },
           "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
           "oneOf": [
@@ -1396,10 +1415,13 @@
             },
             "truncation_parameters": {
               "max": 8.0,
-              "min": 1.0,
+              "min": 0.0,
               "truncation_mode": "exclude"
             },
-            "scaling_parameters": null
+            "scaling_parameters": {
+              "offset": 1.0,
+              "scale": 1.0
+            }
           },
           "description": "Distribution describing the inter-trial interval (in seconds)."
         },
@@ -1442,7 +1464,8 @@
             "maximum_water_corrections": 5,
             "bias_window_length": 200,
             "lickspout_offset_delta": 0.05,
-            "reward_fraction": 0.8
+            "reward_fraction": 0.8,
+            "trial_threshold": 100
           },
           "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
           "oneOf": [
@@ -2354,6 +2377,27 @@
         "Microstep64"
       ],
       "x-sgen-typename": "AllenNeuralDynamics.AindManipulator.MicrostepResolution"
+    },
+    "MinimumProbabilityPerseverationConditions": {
+      "description": "Defines the conditions under which a block is extended due to perseveration on minimum probability side.",
+      "properties": {
+        "choice_streak": {
+          "default": 4,
+          "description": "Number of consecutive choices on the minimum-probability side required to extend both block lengths.",
+          "minimum": 1,
+          "title": "Choice Streak",
+          "type": "integer"
+        },
+        "block_extension": {
+          "default": 4,
+          "description": "Number of trials to extend both block lengths when the choice streak condition is met.",
+          "minimum": 1,
+          "title": "Block Extension",
+          "type": "integer"
+        }
+      },
+      "title": "MinimumProbabilityPerseverationConditions",
+      "type": "object"
     },
     "MotorOperationMode": {
       "description": "Motor operation mode",
@@ -3493,6 +3537,18 @@
           "title": "Quiescence Period Duration",
           "type": "number"
         },
+        "quiescence_period_refractory_duration": {
+          "default": null,
+          "description": "Duration of the refractory period after a lick is detected during the quiescence period (in seconds).",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Distribution"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
         "inter_trial_interval_duration": {
           "default": 5.0,
           "description": "Duration of the inter-trial interval (in seconds).",
@@ -3781,10 +3837,13 @@
             },
             "truncation_parameters": {
               "max": 8.0,
-              "min": 1.0,
+              "min": 0.0,
               "truncation_mode": "exclude"
             },
-            "scaling_parameters": null
+            "scaling_parameters": {
+              "offset": 1.0,
+              "scale": 1.0
+            }
           },
           "description": "Distribution describing the inter-trial interval (in seconds)."
         },
@@ -3828,7 +3887,8 @@
             "maximum_water_corrections": 5,
             "bias_window_length": 200,
             "lickspout_offset_delta": 0.05,
-            "reward_fraction": 0.8
+            "reward_fraction": 0.8,
+            "trial_threshold": 100
           },
           "description": "Antibias settings. If set, trial generator will give water and move lickspouts to combat bias.",
           "oneOf": [
@@ -3876,6 +3936,16 @@
           "description": "Maximum number of consecutive blocks a side can have the higher probability.",
           "title": "Maximum Dominance Streak",
           "type": "integer"
+        },
+        "minimum_probability_perseveration_conditions": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/MinimumProbabilityPerseverationConditions"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "title": "UncoupledTrialGeneratorSpec",
