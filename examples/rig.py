@@ -19,6 +19,7 @@ from aind_behavior_dynamic_foraging.rig import (
     DynamicForagingAindManipulator,
     DynamicForagingSoundCard,
     RigCalibration,
+    DynamicForagingSpinnakerCamera,
 )
 
 manipulator_calibration = AindManipulatorCalibration(
@@ -48,13 +49,13 @@ rig = AindDynamicForagingRig(
     rig_name="test_rig",
     computer_name="test_computer",
     data_directory="D:/Data/",
-    triggered_camera_controller=cameras.CameraController[cameras.SpinnakerCamera](
+    triggered_camera_controller=cameras.CameraController[DynamicForagingSpinnakerCamera](
         frame_rate=120,
         cameras={
-            "BodyCamera": cameras.SpinnakerCamera(
+            "BodyCamera": DynamicForagingSpinnakerCamera(
                 serial_number="23349426", binning=1, exposure=1000, gain=8, video_writer=None
             ),
-            "SideCamera": cameras.SpinnakerCamera(
+            "SideCamera": DynamicForagingSpinnakerCamera(
                 serial_number="23349424", binning=1, exposure=1000, gain=8, video_writer=None
             ),
         },
