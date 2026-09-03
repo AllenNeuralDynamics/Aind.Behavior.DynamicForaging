@@ -18,8 +18,8 @@ from aind_behavior_dynamic_foraging.rig import (
     AindDynamicForagingRig,
     DynamicForagingAindManipulator,
     DynamicForagingSoundCard,
-    RigCalibration,
     DynamicForagingSpinnakerCamera,
+    RigCalibration,
 )
 
 manipulator_calibration = AindManipulatorCalibration(
