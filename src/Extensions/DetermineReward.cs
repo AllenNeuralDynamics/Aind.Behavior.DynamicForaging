@@ -23,7 +23,7 @@ public class DetermineReward
         {
             var response = value.Item1;
             var trial = value.Item2;
-            if (!response.HasValue)
+            if (!response.HasValue || trial.IsAutoRewardRight != response.Value)
             {
                 return false;
             }
