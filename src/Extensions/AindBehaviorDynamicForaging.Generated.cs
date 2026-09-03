@@ -3445,11 +3445,11 @@ namespace AindDynamicForagingDataSchema
 
 
     /// <summary>
-    /// A SpinnakerCamera for the dynamic foraging rig. This is a subclass of the SpinnakerCamera that includes camera orientation settings.
+    /// A SpinnakerCamera for the dynamic foraging rig. This is a subclass of the SpinnakerCamera that includes camera image rotation for visualizers.
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [System.ComponentModel.DescriptionAttribute("A SpinnakerCamera for the dynamic foraging rig. This is a subclass of the Spinnak" +
-        "erCamera that includes camera orientation settings.")]
+        "erCamera that includes camera image rotation for visualizers.")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class DynamicForagingSpinnakerCamera

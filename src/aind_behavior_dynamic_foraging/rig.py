@@ -73,7 +73,7 @@ class DynamicForagingAindManipulator(aind_manipulator.AindManipulator):
 
 
 class DynamicForagingSpinnakerCamera(cameras.SpinnakerCamera):
-    """A SpinnakerCamera for the dynamic foraging rig. This is a subclass of the SpinnakerCamera that includes camera orientation settings."""
+    """A SpinnakerCamera for the dynamic foraging rig. This is a subclass of the SpinnakerCamera that includes camera image rotation for visualizers."""
 
     flip_state: float = Field(default=2, gt=0, le=2, description="Camera flip state", validate_default=True)
     rotation: float = Field(default=0, description="Camera rotation angle in radians", validate_default=True)

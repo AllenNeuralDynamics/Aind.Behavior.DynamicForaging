@@ -1751,7 +1751,7 @@
       "type": "object"
     },
     "DynamicForagingSpinnakerCamera": {
-      "description": "A SpinnakerCamera for the dynamic foraging rig. This is a subclass of the SpinnakerCamera that includes camera orientation settings.",
+      "description": "A SpinnakerCamera for the dynamic foraging rig. This is a subclass of the SpinnakerCamera that includes camera image rotation for visualizers.",
       "properties": {
         "device_type": {
           "const": "SpinnakerCamera",
