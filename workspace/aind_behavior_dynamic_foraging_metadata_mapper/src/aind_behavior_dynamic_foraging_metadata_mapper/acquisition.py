@@ -10,7 +10,7 @@ import git
 from aind_behavior_curriculum import TrainerState
 from aind_behavior_dynamic_foraging.data_contract import dataset as df_foraging_dataset
 from aind_behavior_dynamic_foraging.data_contract.utils import calculate_consumed_water
-from aind_behavior_dynamic_foraging.rig import AindDynamicForagingRig
+from aind_behavior_dynamic_foraging.rig import AindDynamicForagingRig, DynamicForagingSpinnakerCamera, CameraController
 from aind_behavior_dynamic_foraging.task_logic import AindDynamicForagingTaskLogic
 from aind_behavior_services.rig import Device as AbsDevice
 from aind_behavior_services.rig import cameras as abs_camera
@@ -120,7 +120,11 @@ class AindAcquisitionDataMapper(AindDataSchemaSessionDataMapper):
         python_code = _get_python_as_code(repository)
         curriculum_code = _get_curriculum_as_code(repository, trainer_state)
 
-        cameras = data_mapper_helpers.get_cameras(rig_model, exclude_without_video_writer=True)
+        cameras: dict[str, DynamicForagingSpinnakerCamera] = {}
+        camera_controllers = [x[1] for x in get_fields_of_type(rig_model, CameraController)]
+        for controller in camera_controllers:
+            cameras.update({k: v for k, v in controller.cameras.items() if v.camera.video_writer is not None})
+
         camera_configs = [_get_camera_config(k, v, repository) for k, v in cameras.items()]
 
         # construct data stream
