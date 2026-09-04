@@ -68,7 +68,7 @@
                   </Expression>
                   <Expression xsi:type="Equal">
                     <Operand xsi:type="StringProperty">
-                      <Value>SideCamera</Value>
+                      <Value>BodyCamera</Value>
                     </Operand>
                   </Expression>
                   <Expression xsi:type="WorkflowOutput" />
@@ -269,8 +269,8 @@
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p1:SaturationShaderPass">
                 <p1:Alpha>0.5</p1:Alpha>
-                <p1:MinSaturation>53</p1:MinSaturation>
-                <p1:MaxSaturation>215</p1:MaxSaturation>
+                <p1:MinSaturation>0.1</p1:MinSaturation>
+                <p1:MaxSaturation>0.9</p1:MaxSaturation>
               </Combinator>
             </Expression>
             <Expression xsi:type="PropertyMapping">

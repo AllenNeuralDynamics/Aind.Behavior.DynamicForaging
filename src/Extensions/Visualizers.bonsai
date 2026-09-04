@@ -1866,9 +1866,9 @@
       <Expression xsi:type="Unit" />
       <Expression xsi:type="IncludeWorkflow" Path="Extensions\CameraPreviewVisualizer.bonsai">
         <FrameSubject>Camera</FrameSubject>
-        <CameraName>SideCamera</CameraName>
-        <MinSaturation>53</MinSaturation>
-        <MaxSaturation>215</MaxSaturation>
+        <CameraName>BodyCamera</CameraName>
+        <MinSaturation>0.1</MinSaturation>
+        <MaxSaturation>0.9</MaxSaturation>
         <FlipState>2</FlipState>
         <Rotation>0</Rotation>
         <TriggeredCamerasStream>TriggeredCamerasStream</TriggeredCamerasStream>
@@ -1876,8 +1876,8 @@
       <Expression xsi:type="IncludeWorkflow" Path="Extensions\CameraPreviewVisualizer.bonsai">
         <FrameSubject>Camera</FrameSubject>
         <CameraName>BodyCamera</CameraName>
-        <MinSaturation>53</MinSaturation>
-        <MaxSaturation>215</MaxSaturation>
+        <MinSaturation>0.1</MinSaturation>
+        <MaxSaturation>0.9</MaxSaturation>
         <FlipState>2</FlipState>
         <Rotation>0</Rotation>
         <TriggeredCamerasStream>TriggeredCamerasStream</TriggeredCamerasStream>
