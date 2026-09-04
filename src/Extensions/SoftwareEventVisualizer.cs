@@ -26,7 +26,7 @@ public class SoftwareEventVisualizer
     private const double YAxisMax = 1.0;
     private const float InputWidth = 80.0f;
 
-    private float timeWindow = 120.0f;
+    private float timeWindow = 20.0f;
     public List<ShadedAreaPlotter> ShadedAreaPlotters {get; set;}
     public List<PointPlotter> PointPlotters {get; set;}
     private int maxTrials = 0;
