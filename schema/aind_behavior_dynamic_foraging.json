@@ -1751,139 +1751,23 @@
       "type": "object"
     },
     "DynamicForagingSpinnakerCamera": {
-      "description": "A SpinnakerCamera for the dynamic foraging rig. This is a subclass of the SpinnakerCamera that includes camera image rotation for visualizers.",
+      "description": "A SpinnakerCamera for the dynamic foraging rig that includes camera image rotation for visualizers.",
       "properties": {
-        "device_type": {
-          "const": "SpinnakerCamera",
-          "default": "SpinnakerCamera",
-          "title": "Device Type",
-          "type": "string"
+        "camera": {
+          "$ref": "#/$defs/SpinnakerCamera",
+          "description": "Spinnaker camera instance"
         },
-        "calibration": {
-          "default": null,
-          "description": "Calibration for the device.",
-          "oneOf": [
-            {
-              "$ref": "#/$defs/BaseModel"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "serial_number": {
-          "description": "Camera serial number",
-          "title": "Serial Number",
-          "type": "string"
-        },
-        "binning": {
-          "default": 1,
-          "description": "Binning",
-          "minimum": 1,
-          "title": "Binning",
-          "type": "integer"
-        },
-        "color_processing": {
-          "default": "Default",
-          "description": "Color processing",
-          "enum": [
-            "Default",
-            "NoColorProcessing"
-          ],
-          "title": "Color Processing",
-          "type": "string"
-        },
-        "exposure": {
-          "default": 1000,
-          "description": "Exposure time",
-          "minimum": 100,
-          "title": "Exposure",
-          "type": "integer"
-        },
-        "gain": {
-          "default": 0,
-          "description": "Gain",
-          "minimum": 0,
-          "title": "Gain",
-          "type": "number"
-        },
-        "gamma": {
-          "default": null,
-          "description": "Gamma. If None, will disable gamma correction.",
-          "oneOf": [
-            {
-              "minimum": 0,
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "title": "Gamma"
-        },
-        "adc_bit_depth": {
-          "default": 0,
-          "description": "ADC bit depth. If None will be left as default.",
-          "oneOf": [
-            {
-              "$ref": "#/$defs/SpinnakerCameraAdcBitDepth"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "pixel_format": {
-          "default": 0,
-          "description": "Pixel format. If None will be left as default.",
-          "oneOf": [
-            {
-              "$ref": "#/$defs/SpinnakerCameraPixelFormat"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "region_of_interest": {
-          "$ref": "#/$defs/Rect",
+        "visualizer_settings": {
+          "$ref": "#/$defs/VisualizerSettings",
           "default": {
-            "x": 0,
-            "y": 0,
-            "width": 0,
-            "height": 0
+            "flip_state": null,
+            "rotation": 0.0
           },
-          "description": "Region of interest"
-        },
-        "video_writer": {
-          "default": null,
-          "description": "Video writer. If not provided, no video will be saved.",
-          "oneOf": [
-            {
-              "$ref": "#/$defs/VideoWriter"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "flip_state": {
-          "default": 2,
-          "description": "Camera flip state",
-          "exclusiveMinimum": 0,
-          "maximum": 2,
-          "title": "Flip State",
-          "type": "number"
-        },
-        "rotation": {
-          "default": 0,
-          "description": "Camera rotation angle in radians",
-          "title": "Rotation",
-          "type": "number"
+          "description": "Visualizer settings for the camera"
         }
       },
       "required": [
-        "serial_number"
+        "camera"
       ],
       "title": "DynamicForagingSpinnakerCamera",
       "type": "object"
@@ -3160,6 +3044,130 @@
       "title": "SoundCardCalibration",
       "type": "object"
     },
+    "SpinnakerCamera": {
+      "description": "Spinnaker camera device configuration.",
+      "properties": {
+        "device_type": {
+          "const": "SpinnakerCamera",
+          "default": "SpinnakerCamera",
+          "title": "Device Type",
+          "type": "string"
+        },
+        "calibration": {
+          "default": null,
+          "description": "Calibration for the device.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/BaseModel"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "serial_number": {
+          "description": "Camera serial number",
+          "title": "Serial Number",
+          "type": "string"
+        },
+        "binning": {
+          "default": 1,
+          "description": "Binning",
+          "minimum": 1,
+          "title": "Binning",
+          "type": "integer"
+        },
+        "color_processing": {
+          "default": "Default",
+          "description": "Color processing",
+          "enum": [
+            "Default",
+            "NoColorProcessing"
+          ],
+          "title": "Color Processing",
+          "type": "string"
+        },
+        "exposure": {
+          "default": 1000,
+          "description": "Exposure time",
+          "minimum": 100,
+          "title": "Exposure",
+          "type": "integer"
+        },
+        "gain": {
+          "default": 0,
+          "description": "Gain",
+          "minimum": 0,
+          "title": "Gain",
+          "type": "number"
+        },
+        "gamma": {
+          "default": null,
+          "description": "Gamma. If None, will disable gamma correction.",
+          "oneOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Gamma"
+        },
+        "adc_bit_depth": {
+          "default": 0,
+          "description": "ADC bit depth. If None will be left as default.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/SpinnakerCameraAdcBitDepth"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "pixel_format": {
+          "default": 0,
+          "description": "Pixel format. If None will be left as default.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/SpinnakerCameraPixelFormat"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "region_of_interest": {
+          "$ref": "#/$defs/Rect",
+          "default": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0
+          },
+          "description": "Region of interest"
+        },
+        "video_writer": {
+          "default": null,
+          "description": "Video writer. If not provided, no video will be saved.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/VideoWriter"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "serial_number"
+      ],
+      "title": "SpinnakerCamera",
+      "type": "object"
+    },
     "SpinnakerCameraAdcBitDepth": {
       "description": "ADC bit depth options for Spinnaker cameras.",
       "enum": [
@@ -4123,6 +4131,37 @@
         }
       },
       "title": "VideoWriterOpenCv",
+      "type": "object"
+    },
+    "VisualizerSettings": {
+      "description": "Visualizer settings for the dynamic foraging rig's camera. This includes camera image rotation and flip state for visualizers.",
+      "properties": {
+        "flip_state": {
+          "default": null,
+          "description": "Camera flip state",
+          "oneOf": [
+            {
+              "enum": [
+                "horizontal",
+                "vertical",
+                "both"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Flip State"
+        },
+        "rotation": {
+          "default": 0,
+          "description": "Camera rotation angle in radians",
+          "title": "Rotation",
+          "type": "number"
+        }
+      },
+      "title": "VisualizerSettings",
       "type": "object"
     },
     "WaterValveCalibration": {

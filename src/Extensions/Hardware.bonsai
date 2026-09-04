@@ -376,7 +376,7 @@
                     <Name>ThisCamera</Name>
                   </Expression>
                   <Expression xsi:type="MemberSelector">
-                    <Selector>Value</Selector>
+                    <Selector>Value.Camera</Selector>
                   </Expression>
                   <Expression xsi:type="PropertyMapping">
                     <PropertyMappings>
@@ -394,7 +394,7 @@
                     <Name>ThisCamera</Name>
                   </Expression>
                   <Expression xsi:type="MemberSelector">
-                    <Selector>Value</Selector>
+                    <Selector>Value.Camera</Selector>
                   </Expression>
                   <Expression xsi:type="MemberSelector">
                     <Selector>RegionOfInterest</Selector>

@@ -3445,310 +3445,65 @@ namespace AindDynamicForagingDataSchema
 
 
     /// <summary>
-    /// A SpinnakerCamera for the dynamic foraging rig. This is a subclass of the SpinnakerCamera that includes camera image rotation for visualizers.
+    /// A SpinnakerCamera for the dynamic foraging rig that includes camera image rotation for visualizers.
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
-    [System.ComponentModel.DescriptionAttribute("A SpinnakerCamera for the dynamic foraging rig. This is a subclass of the Spinnak" +
-        "erCamera that includes camera image rotation for visualizers.")]
+    [System.ComponentModel.DescriptionAttribute("A SpinnakerCamera for the dynamic foraging rig that includes camera image rotatio" +
+        "n for visualizers.")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class DynamicForagingSpinnakerCamera
     {
     
-        private string _deviceType;
+        private SpinnakerCamera _camera;
     
-        private BaseModel _calibration;
-    
-        private string _serialNumber;
-    
-        private int _binning;
-    
-        private DynamicForagingSpinnakerCameraColorProcessing _colorProcessing;
-    
-        private int _exposure;
-    
-        private double _gain;
-    
-        private double? _gamma;
-    
-        private SpinnakerCameraAdcBitDepth? _adcBitDepth;
-    
-        private SpinnakerCameraPixelFormat? _pixelFormat;
-    
-        private Rect _regionOfInterest;
-    
-        private VideoWriter _videoWriter;
-    
-        private double _flipState;
-    
-        private double _rotation;
+        private VisualizerSettings _visualizerSettings;
     
         public DynamicForagingSpinnakerCamera()
         {
-            _deviceType = "SpinnakerCamera";
-            _binning = 1;
-            _colorProcessing = DynamicForagingSpinnakerCameraColorProcessing.Default;
-            _exposure = 1000;
-            _gain = 0D;
-            _adcBitDepth = SpinnakerCameraAdcBitDepth.Adc8bit;
-            _pixelFormat = SpinnakerCameraPixelFormat.Mono8;
-            _regionOfInterest = new Rect();
-            _flipState = 2D;
-            _rotation = 0D;
+            _camera = new SpinnakerCamera();
+            _visualizerSettings = new VisualizerSettings();
         }
     
         protected DynamicForagingSpinnakerCamera(DynamicForagingSpinnakerCamera other)
         {
-            _deviceType = other._deviceType;
-            _calibration = other._calibration;
-            _serialNumber = other._serialNumber;
-            _binning = other._binning;
-            _colorProcessing = other._colorProcessing;
-            _exposure = other._exposure;
-            _gain = other._gain;
-            _gamma = other._gamma;
-            _adcBitDepth = other._adcBitDepth;
-            _pixelFormat = other._pixelFormat;
-            _regionOfInterest = other._regionOfInterest;
-            _videoWriter = other._videoWriter;
-            _flipState = other._flipState;
-            _rotation = other._rotation;
-        }
-    
-        [Newtonsoft.Json.JsonPropertyAttribute("device_type")]
-        public string DeviceType
-        {
-            get
-            {
-                return _deviceType;
-            }
-            set
-            {
-                _deviceType = value;
-            }
+            _camera = other._camera;
+            _visualizerSettings = other._visualizerSettings;
         }
     
         /// <summary>
-        /// Calibration for the device.
+        /// Spinnaker camera instance
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("calibration")]
-        [System.ComponentModel.DescriptionAttribute("Calibration for the device.")]
-        public BaseModel Calibration
+        [Newtonsoft.Json.JsonPropertyAttribute("camera", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("Spinnaker camera instance")]
+        public SpinnakerCamera Camera
         {
             get
             {
-                return _calibration;
+                return _camera;
             }
             set
             {
-                _calibration = value;
+                _camera = value;
             }
         }
     
         /// <summary>
-        /// Camera serial number
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("serial_number", Required=Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DescriptionAttribute("Camera serial number")]
-        public string SerialNumber
-        {
-            get
-            {
-                return _serialNumber;
-            }
-            set
-            {
-                _serialNumber = value;
-            }
-        }
-    
-        /// <summary>
-        /// Binning
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("binning")]
-        [System.ComponentModel.DescriptionAttribute("Binning")]
-        public int Binning
-        {
-            get
-            {
-                return _binning;
-            }
-            set
-            {
-                _binning = value;
-            }
-        }
-    
-        /// <summary>
-        /// Color processing
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("color_processing")]
-        [System.ComponentModel.DescriptionAttribute("Color processing")]
-        public DynamicForagingSpinnakerCameraColorProcessing ColorProcessing
-        {
-            get
-            {
-                return _colorProcessing;
-            }
-            set
-            {
-                _colorProcessing = value;
-            }
-        }
-    
-        /// <summary>
-        /// Exposure time
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("exposure")]
-        [System.ComponentModel.DescriptionAttribute("Exposure time")]
-        public int Exposure
-        {
-            get
-            {
-                return _exposure;
-            }
-            set
-            {
-                _exposure = value;
-            }
-        }
-    
-        /// <summary>
-        /// Gain
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("gain")]
-        [System.ComponentModel.DescriptionAttribute("Gain")]
-        public double Gain
-        {
-            get
-            {
-                return _gain;
-            }
-            set
-            {
-                _gain = value;
-            }
-        }
-    
-        /// <summary>
-        /// Gamma. If None, will disable gamma correction.
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("gamma")]
-        [System.ComponentModel.DescriptionAttribute("Gamma. If None, will disable gamma correction.")]
-        public double? Gamma
-        {
-            get
-            {
-                return _gamma;
-            }
-            set
-            {
-                _gamma = value;
-            }
-        }
-    
-        /// <summary>
-        /// ADC bit depth. If None will be left as default.
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("adc_bit_depth")]
-        [System.ComponentModel.DescriptionAttribute("ADC bit depth. If None will be left as default.")]
-        public SpinnakerCameraAdcBitDepth? AdcBitDepth
-        {
-            get
-            {
-                return _adcBitDepth;
-            }
-            set
-            {
-                _adcBitDepth = value;
-            }
-        }
-    
-        /// <summary>
-        /// Pixel format. If None will be left as default.
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("pixel_format")]
-        [System.ComponentModel.DescriptionAttribute("Pixel format. If None will be left as default.")]
-        public SpinnakerCameraPixelFormat? PixelFormat
-        {
-            get
-            {
-                return _pixelFormat;
-            }
-            set
-            {
-                _pixelFormat = value;
-            }
-        }
-    
-        /// <summary>
-        /// Region of interest
+        /// Visualizer settings for the camera
         /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("region_of_interest")]
-        [System.ComponentModel.DescriptionAttribute("Region of interest")]
-        public Rect RegionOfInterest
+        [Newtonsoft.Json.JsonPropertyAttribute("visualizer_settings")]
+        [System.ComponentModel.DescriptionAttribute("Visualizer settings for the camera")]
+        public VisualizerSettings VisualizerSettings
         {
             get
             {
-                return _regionOfInterest;
+                return _visualizerSettings;
             }
             set
             {
-                _regionOfInterest = value;
-            }
-        }
-    
-        /// <summary>
-        /// Video writer. If not provided, no video will be saved.
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [Newtonsoft.Json.JsonPropertyAttribute("video_writer")]
-        [System.ComponentModel.DescriptionAttribute("Video writer. If not provided, no video will be saved.")]
-        public VideoWriter VideoWriter
-        {
-            get
-            {
-                return _videoWriter;
-            }
-            set
-            {
-                _videoWriter = value;
-            }
-        }
-    
-        /// <summary>
-        /// Camera flip state
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("flip_state")]
-        [System.ComponentModel.DescriptionAttribute("Camera flip state")]
-        public double FlipState
-        {
-            get
-            {
-                return _flipState;
-            }
-            set
-            {
-                _flipState = value;
-            }
-        }
-    
-        /// <summary>
-        /// Camera rotation angle in radians
-        /// </summary>
-        [Newtonsoft.Json.JsonPropertyAttribute("rotation")]
-        [System.ComponentModel.DescriptionAttribute("Camera rotation angle in radians")]
-        public double Rotation
-        {
-            get
-            {
-                return _rotation;
-            }
-            set
-            {
-                _rotation = value;
+                _visualizerSettings = value;
             }
         }
     
@@ -3764,20 +3519,8 @@ namespace AindDynamicForagingDataSchema
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("DeviceType = " + _deviceType + ", ");
-            stringBuilder.Append("Calibration = " + _calibration + ", ");
-            stringBuilder.Append("SerialNumber = " + _serialNumber + ", ");
-            stringBuilder.Append("Binning = " + _binning + ", ");
-            stringBuilder.Append("ColorProcessing = " + _colorProcessing + ", ");
-            stringBuilder.Append("Exposure = " + _exposure + ", ");
-            stringBuilder.Append("Gain = " + _gain + ", ");
-            stringBuilder.Append("Gamma = " + _gamma + ", ");
-            stringBuilder.Append("AdcBitDepth = " + _adcBitDepth + ", ");
-            stringBuilder.Append("PixelFormat = " + _pixelFormat + ", ");
-            stringBuilder.Append("RegionOfInterest = " + _regionOfInterest + ", ");
-            stringBuilder.Append("VideoWriter = " + _videoWriter + ", ");
-            stringBuilder.Append("FlipState = " + _flipState + ", ");
-            stringBuilder.Append("Rotation = " + _rotation);
+            stringBuilder.Append("Camera = " + _camera + ", ");
+            stringBuilder.Append("VisualizerSettings = " + _visualizerSettings);
             return true;
         }
     
@@ -5861,6 +5604,313 @@ namespace AindDynamicForagingDataSchema
 
 
     /// <summary>
+    /// Spinnaker camera device configuration.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.ComponentModel.DescriptionAttribute("Spinnaker camera device configuration.")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class SpinnakerCamera
+    {
+    
+        private string _deviceType;
+    
+        private BaseModel _calibration;
+    
+        private string _serialNumber;
+    
+        private int _binning;
+    
+        private SpinnakerCameraColorProcessing _colorProcessing;
+    
+        private int _exposure;
+    
+        private double _gain;
+    
+        private double? _gamma;
+    
+        private SpinnakerCameraAdcBitDepth? _adcBitDepth;
+    
+        private SpinnakerCameraPixelFormat? _pixelFormat;
+    
+        private Rect _regionOfInterest;
+    
+        private VideoWriter _videoWriter;
+    
+        public SpinnakerCamera()
+        {
+            _deviceType = "SpinnakerCamera";
+            _binning = 1;
+            _colorProcessing = SpinnakerCameraColorProcessing.Default;
+            _exposure = 1000;
+            _gain = 0D;
+            _adcBitDepth = SpinnakerCameraAdcBitDepth.Adc8bit;
+            _pixelFormat = SpinnakerCameraPixelFormat.Mono8;
+            _regionOfInterest = new Rect();
+        }
+    
+        protected SpinnakerCamera(SpinnakerCamera other)
+        {
+            _deviceType = other._deviceType;
+            _calibration = other._calibration;
+            _serialNumber = other._serialNumber;
+            _binning = other._binning;
+            _colorProcessing = other._colorProcessing;
+            _exposure = other._exposure;
+            _gain = other._gain;
+            _gamma = other._gamma;
+            _adcBitDepth = other._adcBitDepth;
+            _pixelFormat = other._pixelFormat;
+            _regionOfInterest = other._regionOfInterest;
+            _videoWriter = other._videoWriter;
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("device_type")]
+        public string DeviceType
+        {
+            get
+            {
+                return _deviceType;
+            }
+            set
+            {
+                _deviceType = value;
+            }
+        }
+    
+        /// <summary>
+        /// Calibration for the device.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("calibration")]
+        [System.ComponentModel.DescriptionAttribute("Calibration for the device.")]
+        public BaseModel Calibration
+        {
+            get
+            {
+                return _calibration;
+            }
+            set
+            {
+                _calibration = value;
+            }
+        }
+    
+        /// <summary>
+        /// Camera serial number
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("serial_number", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("Camera serial number")]
+        public string SerialNumber
+        {
+            get
+            {
+                return _serialNumber;
+            }
+            set
+            {
+                _serialNumber = value;
+            }
+        }
+    
+        /// <summary>
+        /// Binning
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("binning")]
+        [System.ComponentModel.DescriptionAttribute("Binning")]
+        public int Binning
+        {
+            get
+            {
+                return _binning;
+            }
+            set
+            {
+                _binning = value;
+            }
+        }
+    
+        /// <summary>
+        /// Color processing
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("color_processing")]
+        [System.ComponentModel.DescriptionAttribute("Color processing")]
+        public SpinnakerCameraColorProcessing ColorProcessing
+        {
+            get
+            {
+                return _colorProcessing;
+            }
+            set
+            {
+                _colorProcessing = value;
+            }
+        }
+    
+        /// <summary>
+        /// Exposure time
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("exposure")]
+        [System.ComponentModel.DescriptionAttribute("Exposure time")]
+        public int Exposure
+        {
+            get
+            {
+                return _exposure;
+            }
+            set
+            {
+                _exposure = value;
+            }
+        }
+    
+        /// <summary>
+        /// Gain
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("gain")]
+        [System.ComponentModel.DescriptionAttribute("Gain")]
+        public double Gain
+        {
+            get
+            {
+                return _gain;
+            }
+            set
+            {
+                _gain = value;
+            }
+        }
+    
+        /// <summary>
+        /// Gamma. If None, will disable gamma correction.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("gamma")]
+        [System.ComponentModel.DescriptionAttribute("Gamma. If None, will disable gamma correction.")]
+        public double? Gamma
+        {
+            get
+            {
+                return _gamma;
+            }
+            set
+            {
+                _gamma = value;
+            }
+        }
+    
+        /// <summary>
+        /// ADC bit depth. If None will be left as default.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("adc_bit_depth")]
+        [System.ComponentModel.DescriptionAttribute("ADC bit depth. If None will be left as default.")]
+        public SpinnakerCameraAdcBitDepth? AdcBitDepth
+        {
+            get
+            {
+                return _adcBitDepth;
+            }
+            set
+            {
+                _adcBitDepth = value;
+            }
+        }
+    
+        /// <summary>
+        /// Pixel format. If None will be left as default.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("pixel_format")]
+        [System.ComponentModel.DescriptionAttribute("Pixel format. If None will be left as default.")]
+        public SpinnakerCameraPixelFormat? PixelFormat
+        {
+            get
+            {
+                return _pixelFormat;
+            }
+            set
+            {
+                _pixelFormat = value;
+            }
+        }
+    
+        /// <summary>
+        /// Region of interest
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("region_of_interest")]
+        [System.ComponentModel.DescriptionAttribute("Region of interest")]
+        public Rect RegionOfInterest
+        {
+            get
+            {
+                return _regionOfInterest;
+            }
+            set
+            {
+                _regionOfInterest = value;
+            }
+        }
+    
+        /// <summary>
+        /// Video writer. If not provided, no video will be saved.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("video_writer")]
+        [System.ComponentModel.DescriptionAttribute("Video writer. If not provided, no video will be saved.")]
+        public VideoWriter VideoWriter
+        {
+            get
+            {
+                return _videoWriter;
+            }
+            set
+            {
+                _videoWriter = value;
+            }
+        }
+    
+        public System.IObservable<SpinnakerCamera> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new SpinnakerCamera(this)));
+        }
+    
+        public System.IObservable<SpinnakerCamera> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new SpinnakerCamera(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("DeviceType = " + _deviceType + ", ");
+            stringBuilder.Append("Calibration = " + _calibration + ", ");
+            stringBuilder.Append("SerialNumber = " + _serialNumber + ", ");
+            stringBuilder.Append("Binning = " + _binning + ", ");
+            stringBuilder.Append("ColorProcessing = " + _colorProcessing + ", ");
+            stringBuilder.Append("Exposure = " + _exposure + ", ");
+            stringBuilder.Append("Gain = " + _gain + ", ");
+            stringBuilder.Append("Gamma = " + _gamma + ", ");
+            stringBuilder.Append("AdcBitDepth = " + _adcBitDepth + ", ");
+            stringBuilder.Append("PixelFormat = " + _pixelFormat + ", ");
+            stringBuilder.Append("RegionOfInterest = " + _regionOfInterest + ", ");
+            stringBuilder.Append("VideoWriter = " + _videoWriter);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    /// <summary>
     /// ADC bit depth options for Spinnaker cameras.
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
@@ -7790,6 +7840,98 @@ namespace AindDynamicForagingDataSchema
 
 
     /// <summary>
+    /// Visualizer settings for the dynamic foraging rig's camera. This includes camera image rotation and flip state for visualizers.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.ComponentModel.DescriptionAttribute("Visualizer settings for the dynamic foraging rig\'s camera. This includes camera i" +
+        "mage rotation and flip state for visualizers.")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class VisualizerSettings
+    {
+    
+        private FlipState? _flipState;
+    
+        private double _rotation;
+    
+        public VisualizerSettings()
+        {
+            _rotation = 0D;
+        }
+    
+        protected VisualizerSettings(VisualizerSettings other)
+        {
+            _flipState = other._flipState;
+            _rotation = other._rotation;
+        }
+    
+        /// <summary>
+        /// Camera flip state
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("flip_state")]
+        [System.ComponentModel.DescriptionAttribute("Camera flip state")]
+        public FlipState? FlipState
+        {
+            get
+            {
+                return _flipState;
+            }
+            set
+            {
+                _flipState = value;
+            }
+        }
+    
+        /// <summary>
+        /// Camera rotation angle in radians
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("rotation")]
+        [System.ComponentModel.DescriptionAttribute("Camera rotation angle in radians")]
+        public double Rotation
+        {
+            get
+            {
+                return _rotation;
+            }
+            set
+            {
+                _rotation = value;
+            }
+        }
+    
+        public System.IObservable<VisualizerSettings> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new VisualizerSettings(this)));
+        }
+    
+        public System.IObservable<VisualizerSettings> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new VisualizerSettings(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("FlipState = " + _flipState + ", ");
+            stringBuilder.Append("Rotation = " + _rotation);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    /// <summary>
     /// Represents a water valve calibration.
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
@@ -8315,7 +8457,7 @@ namespace AindDynamicForagingDataSchema
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    public enum DynamicForagingSpinnakerCameraColorProcessing
+    public enum SpinnakerCameraColorProcessing
     {
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="Default")]
@@ -8323,6 +8465,22 @@ namespace AindDynamicForagingDataSchema
     
         [System.Runtime.Serialization.EnumMemberAttribute(Value="NoColorProcessing")]
         NoColorProcessing = 1,
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+    public enum FlipState
+    {
+    
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="horizontal")]
+        Horizontal = 0,
+    
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="vertical")]
+        Vertical = 1,
+    
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="both")]
+        Both = 2,
     }
 
 
@@ -8805,6 +8963,11 @@ namespace AindDynamicForagingDataSchema
             return Process<SoundCardCalibration>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<SpinnakerCamera> source)
+        {
+            return Process<SpinnakerCamera>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<Trial> source)
         {
             return Process<Trial>(source);
@@ -8853,6 +9016,11 @@ namespace AindDynamicForagingDataSchema
         public System.IObservable<string> Process(System.IObservable<VideoWriterOpenCv> source)
         {
             return Process<VideoWriterOpenCv>(source);
+        }
+
+        public System.IObservable<string> Process(System.IObservable<VisualizerSettings> source)
+        {
+            return Process<VisualizerSettings>(source);
         }
 
         public System.IObservable<string> Process(System.IObservable<WaterValveCalibration> source)
@@ -8921,6 +9089,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<RigCalibration>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Session>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<SoundCardCalibration>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<SpinnakerCamera>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Trial>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialGeneratorCompositeSpecTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialGeneratorSpec>))]
@@ -8931,6 +9100,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriter>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriterFfmpeg>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriterOpenCv>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VisualizerSettings>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WaterValveCalibration>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Waveform>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WebCamera>))]

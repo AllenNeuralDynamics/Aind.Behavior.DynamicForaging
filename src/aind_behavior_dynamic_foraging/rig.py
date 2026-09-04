@@ -1,7 +1,8 @@
 from typing import Annotated, Literal, Optional
 
 import aind_behavior_services.rig as rig
-from aind_behavior_services.rig import aind_manipulator, cameras, harp, water_valve
+from aind_behavior_services.rig import aind_manipulator, harp, water_valve
+from aind_behavior_services.rig.cameras import CameraController, SpinnakerCamera, WebCamera
 from pydantic import BaseModel, Field, model_validator
 
 from aind_behavior_dynamic_foraging import __semver__
@@ -72,19 +73,30 @@ class DynamicForagingAindManipulator(aind_manipulator.AindManipulator):
     )
 
 
-class DynamicForagingSpinnakerCamera(cameras.SpinnakerCamera):
-    """A SpinnakerCamera for the dynamic foraging rig. This is a subclass of the SpinnakerCamera that includes camera image rotation for visualizers."""
+class VisualizerSettings(BaseModel):
+    """Visualizer settings for the dynamic foraging rig's camera. This includes camera image rotation and flip state for visualizers."""
 
-    flip_state: float = Field(default=2, gt=0, le=2, description="Camera flip state", validate_default=True)
+    flip_state: None | Literal["horizontal", "vertical", "both"] = Field(
+        default=None, description="Camera flip state", validate_default=True
+    )
     rotation: float = Field(default=0, description="Camera rotation angle in radians", validate_default=True)
+
+
+class DynamicForagingSpinnakerCamera(BaseModel):
+    """A SpinnakerCamera for the dynamic foraging rig that includes camera image rotation for visualizers."""
+
+    camera: SpinnakerCamera = Field(description="Spinnaker camera instance")
+    visualizer_settings: VisualizerSettings = Field(
+        default=VisualizerSettings(), description="Visualizer settings for the camera", validate_default=True
+    )
 
 
 class AindDynamicForagingRig(rig.Rig):
     version: Literal[__semver__] = __semver__
-    triggered_camera_controller: cameras.CameraController[DynamicForagingSpinnakerCamera] = Field(
+    triggered_camera_controller: CameraController[DynamicForagingSpinnakerCamera] = Field(
         description="Required camera controller to triggered cameras."
     )
-    monitoring_camera_controller: Optional[cameras.CameraController[cameras.WebCamera]] = Field(
+    monitoring_camera_controller: Optional[CameraController[WebCamera]] = Field(
         default=None, description="Optional camera controller for monitoring cameras."
     )
     harp_behavior: harp.HarpBehavior = Field(description="Harp behavior")
