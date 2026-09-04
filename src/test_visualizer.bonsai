@@ -370,7 +370,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
-                      <rx:DueTime>PT0.79S</rx:DueTime>
+                      <rx:DueTime>PT1.537S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -422,7 +422,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
-                      <rx:DueTime>PT0.306S</rx:DueTime>
+                      <rx:DueTime>PT0.079S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -493,7 +493,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
-                      <rx:DueTime>PT2.147S</rx:DueTime>
+                      <rx:DueTime>PT2.62S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -1013,7 +1013,7 @@ it.Index as TrialIndex
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p4:TrialOutcome">
                 <p4:IsRightChoice>true</p4:IsRightChoice>
-                <p4:IsRewarded>false</p4:IsRewarded>
+                <p4:IsRewarded>true</p4:IsRewarded>
               </Combinator>
             </Expression>
             <Expression xsi:type="rx:CreateObservable">
@@ -1039,7 +1039,7 @@ it.Index as TrialIndex
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Delay">
-                      <rx:DueTime>PT0.907S</rx:DueTime>
+                      <rx:DueTime>PT0.974S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -1731,9 +1731,9 @@ it.Index as TrialIndex
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="implot:PlotText">
                             <implot:Visible>true</implot:Visible>
-                            <implot:Text>-0.33</implot:Text>
-                            <implot:X>32</implot:X>
-                            <implot:Y>-0.32753804625363003</implot:Y>
+                            <implot:Text>-0.04</implot:Text>
+                            <implot:X>3</implot:X>
+                            <implot:Y>-0.037661941925837626</implot:Y>
                             <implot:PixelOffset>
                               <implot:X>0</implot:X>
                               <implot:Y>-10</implot:Y>
@@ -1995,16 +1995,6 @@ it.Index as TrialIndex
               <Combinator xsi:type="p7:SoftwareEventVisualizer">
                 <p7:Visible>true</p7:Visible>
                 <p7:SoftwareEvents>
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
                   <p7:TimestampedOfSoftwareEvent />
                   <p7:TimestampedOfSoftwareEvent />
                 </p7:SoftwareEvents>
