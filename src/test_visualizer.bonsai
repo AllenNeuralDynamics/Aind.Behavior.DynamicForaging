@@ -202,7 +202,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
-                      <rx:DueTime>PT2.855S</rx:DueTime>
+                      <rx:DueTime>PT0.102S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -254,7 +254,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
-                      <rx:DueTime>PT0.809S</rx:DueTime>
+                      <rx:DueTime>PT1.88S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -325,7 +325,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
-                      <rx:DueTime>PT2.887S</rx:DueTime>
+                      <rx:DueTime>PT0.798S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -731,7 +731,7 @@ it.Index as TrialIndex
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p7:CreateNullableBoolean">
-                <p7:Value>false</p7:Value>
+                <p7:Value>true</p7:Value>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -844,8 +844,8 @@ it.Index as TrialIndex
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p4:TrialOutcome">
-                <p4:IsRightChoice>false</p4:IsRightChoice>
-                <p4:IsRewarded>true</p4:IsRewarded>
+                <p4:IsRightChoice xsi:nil="true" />
+                <p4:IsRewarded>false</p4:IsRewarded>
               </Combinator>
             </Expression>
             <Expression xsi:type="rx:CreateObservable">
@@ -871,7 +871,7 @@ it.Index as TrialIndex
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Delay">
-                      <rx:DueTime>PT0.552S</rx:DueTime>
+                      <rx:DueTime>PT0.517S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -930,7 +930,7 @@ it.Index as TrialIndex
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p7:CreateNullableBoolean">
-                <p7:Value>false</p7:Value>
+                <p7:Value>true</p7:Value>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -1185,7 +1185,7 @@ it.Index as TrialIndex
                     <Name>Ethogram</Name>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="rx:CombineLatest" />
+                    <Combinator xsi:type="rx:Zip" />
                   </Expression>
                   <Expression xsi:type="imgui:TableNextColumnBuilder">
                     <imgui:Visible>true</imgui:Visible>
@@ -1194,7 +1194,7 @@ it.Index as TrialIndex
                     <Name>Camera</Name>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="rx:CombineLatest" />
+                    <Combinator xsi:type="rx:Zip" />
                   </Expression>
                   <Expression xsi:type="imgui:TableNextColumnBuilder">
                     <imgui:Visible>true</imgui:Visible>
@@ -1238,7 +1238,7 @@ it.Index as TrialIndex
                     <Name>IntraSession</Name>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="rx:CombineLatest" />
+                    <Combinator xsi:type="rx:Zip" />
                   </Expression>
                 </Nodes>
                 <Edges>
@@ -1398,6 +1398,7 @@ it.Index as TrialIndex
               <Combinator xsi:type="p7:SoftwareEventVisualizer">
                 <p7:Visible>true</p7:Visible>
                 <p7:SoftwareEvents>
+                  <p7:TimestampedOfSoftwareEvent />
                   <p7:TimestampedOfSoftwareEvent />
                   <p7:TimestampedOfSoftwareEvent />
                   <p7:TimestampedOfSoftwareEvent />
@@ -1722,7 +1723,7 @@ it.Index as TrialIndex
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="p7:SaturationShaderPass">
-                            <p7:Alpha>0.476</p7:Alpha>
+                            <p7:Alpha>0.5</p7:Alpha>
                             <p7:MinSaturation>0.1</p7:MinSaturation>
                             <p7:MaxSaturation>0.3</p7:MaxSaturation>
                           </Combinator>
@@ -1798,10 +1799,10 @@ it.Index as TrialIndex
                           <Name>OverlayAlpha</Name>
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="rx:CombineLatest" />
+                          <Combinator xsi:type="rx:Zip" />
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="rx:CombineLatest" />
+                          <Combinator xsi:type="rx:Zip" />
                         </Expression>
                       </Nodes>
                       <Edges>
@@ -2143,7 +2144,7 @@ it.Index as TrialIndex
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="p7:SaturationShaderPass">
-                            <p7:Alpha>0.371</p7:Alpha>
+                            <p7:Alpha>0.5</p7:Alpha>
                             <p7:MinSaturation>0.1</p7:MinSaturation>
                             <p7:MaxSaturation>0.3</p7:MaxSaturation>
                           </Combinator>
@@ -2219,10 +2220,10 @@ it.Index as TrialIndex
                           <Name>OverlayAlpha</Name>
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="rx:CombineLatest" />
+                          <Combinator xsi:type="rx:Zip" />
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="rx:CombineLatest" />
+                          <Combinator xsi:type="rx:Zip" />
                         </Expression>
                       </Nodes>
                       <Edges>

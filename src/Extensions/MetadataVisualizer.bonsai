@@ -93,7 +93,7 @@
             </Expression>
             <Expression xsi:type="imgui:TextBuilder">
               <imgui:Visible>true</imgui:Visible>
-              <imgui:Text />
+              <imgui:Text>Task6</imgui:Text>
             </Expression>
             <Expression xsi:type="imgui:TableNextColumnBuilder">
               <imgui:Visible>true</imgui:Visible>
@@ -139,7 +139,7 @@
             </Expression>
             <Expression xsi:type="imgui:TextBuilder">
               <imgui:Visible>true</imgui:Visible>
-              <imgui:Text />
+              <imgui:Text>Expo</imgui:Text>
             </Expression>
             <Expression xsi:type="imgui:TableNextColumnBuilder">
               <imgui:Visible>true</imgui:Visible>
@@ -157,7 +157,7 @@
             </Expression>
             <Expression xsi:type="imgui:TextBuilder">
               <imgui:Visible>true</imgui:Visible>
-              <imgui:Text />
+              <imgui:Text>Plimbo</imgui:Text>
             </Expression>
             <Expression xsi:type="imgui:TableNextColumnBuilder">
               <imgui:Visible>true</imgui:Visible>
@@ -176,7 +176,7 @@
             </Expression>
             <Expression xsi:type="imgui:TextBuilder">
               <imgui:Visible>true</imgui:Visible>
-              <imgui:Text />
+              <imgui:Text>Task6</imgui:Text>
             </Expression>
             <Expression xsi:type="imgui:TableNextColumnBuilder">
               <imgui:Visible>true</imgui:Visible>
@@ -216,7 +216,7 @@
               <Name>UiHabituationTimeUpdate</Name>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="rx:CombineLatest" />
+              <Combinator xsi:type="rx:Zip" />
             </Expression>
             <Expression xsi:type="imgui:TableNextColumnBuilder">
               <imgui:Visible>true</imgui:Visible>

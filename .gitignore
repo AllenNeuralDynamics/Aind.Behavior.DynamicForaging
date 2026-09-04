@@ -88,3 +88,6 @@ ipython_config.py
 .vscode/
 .idea
 .sln
+*.editor
+
+*.layout

@@ -30,7 +30,7 @@
               <Property Name="Name" DisplayName="FrameSubject" />
             </Expression>
             <Expression xsi:type="SubscribeSubject">
-              <Name>Frame</Name>
+              <Name>Camera</Name>
             </Expression>
             <Expression xsi:type="imgui:TableBuilder">
               <imgui:Visible>true</imgui:Visible>
@@ -202,8 +202,8 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="cv:CreatePoint2f">
-                <cv:X>720</cv:X>
-                <cv:Y>540</cv:Y>
+                <cv:X>320</cv:X>
+                <cv:Y>240</cv:Y>
               </Combinator>
             </Expression>
             <Expression xsi:type="PropertyMapping">
@@ -217,8 +217,8 @@
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="cv:AffineTransform">
                 <cv:Pivot>
-                  <cv:X>720</cv:X>
-                  <cv:Y>540</cv:Y>
+                  <cv:X>320</cv:X>
+                  <cv:Y>240</cv:Y>
                 </cv:Pivot>
                 <cv:Translation>
                   <cv:X>0</cv:X>
@@ -350,10 +350,10 @@
               <Name>OverlayAlpha</Name>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="rx:CombineLatest" />
+              <Combinator xsi:type="rx:Zip" />
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="rx:CombineLatest" />
+              <Combinator xsi:type="rx:Zip" />
             </Expression>
           </Nodes>
           <Edges>

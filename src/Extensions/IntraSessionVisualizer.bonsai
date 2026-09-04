@@ -210,7 +210,7 @@
               <Name>UiCueGiveRight</Name>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="rx:CombineLatest" />
+              <Combinator xsi:type="rx:Zip" />
             </Expression>
             <Expression xsi:type="imgui:TableBuilder">
               <imgui:Visible>true</imgui:Visible>
@@ -279,10 +279,10 @@
               <Name>UiMoveRight</Name>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="rx:CombineLatest" />
+              <Combinator xsi:type="rx:Zip" />
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="rx:CombineLatest" />
+              <Combinator xsi:type="rx:Zip" />
             </Expression>
             <Expression xsi:type="imgui:TableNextColumnBuilder">
               <imgui:Visible>true</imgui:Visible>
