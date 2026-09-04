@@ -4,7 +4,7 @@ bin
 obj
 Packages
 Bonsai.exe.WebView2
-.bonsai/Settings/
+.bonsai/Settings/**
 *.bin
 *.avi
 *.dll
@@ -88,3 +88,6 @@ ipython_config.py
 .vscode/
 .idea
 .sln
+*.editor
+
+*.layout
