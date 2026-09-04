@@ -18,6 +18,12 @@ public class SaturationShaderPass : Combinator<ImTextureRef, ImTextureRef>
     [Description("Clockwise rotation applied to the image, in radians.")]
     public float Rotation { get; set; }
 
+    [Description("Mirrors the image left to right, about its vertical axis.")]
+    public bool FlipHorizontal { get; set; }
+
+    [Description("Mirrors the image top to bottom, about its horizontal axis.")]
+    public bool FlipVertical { get; set; }
+
     const string VertexShaderSource = @"
     #version 330 core
     layout(location = 0) in vec2 vertexPosition;
@@ -42,20 +48,26 @@ public class SaturationShaderPass : Combinator<ImTextureRef, ImTextureRef>
         uniform float rotation = 0.0;
         uniform vec2 sourceSize;
         uniform vec2 outputSize;
+        uniform vec2 flip = vec2(0.0, 0.0);
         in vec2 texCoord;
         out vec4 fragColor;
 
         // Maps a coordinate in the rotated output back into the source texture by
-        // applying the inverse rotation about the centre of the image. The offsets are
-        // in pixels rather than normalised units, so a non-square image is rotated
-        // rigidly instead of being skewed by its aspect ratio.
+        // applying the inverse transform about the centre of the image. The rotation
+        // offsets are in pixels rather than normalised units, so a non-square image is
+        // rotated rigidly instead of being skewed by its aspect ratio. The forward
+        // transform mirrors the image before rotating it, so the inverse undoes the
+        // rotation first and the mirroring second. Each component of `flip` is 1 to
+        // mirror that axis and 0 to leave it alone; mirroring maps the unit square onto
+        // itself, so it does not disturb the coverage test in main().
         vec2 sourceCoord(vec2 uv)
         {
             vec2 offset = (uv - 0.5) * outputSize;
             float c = cos(rotation);
             float s = sin(rotation);
             vec2 rotated = vec2(c * offset.x + s * offset.y, c * offset.y - s * offset.x);
-            return rotated / sourceSize + 0.5;
+            vec2 sourceUv = rotated / sourceSize + 0.5;
+            return mix(sourceUv, 1.0 - sourceUv, flip);
         }
 
         void main() 
@@ -98,6 +110,7 @@ public class SaturationShaderPass : Combinator<ImTextureRef, ImTextureRef>
             int rotationLocation = 0;
             int sourceSizeLocation = 0;
             int outputSizeLocation = 0;
+            int flipLocation = 0;
             return source.Select(texture =>
             {
                 var currentContext = ImGui.GetCurrentContext();
@@ -115,6 +128,7 @@ public class SaturationShaderPass : Combinator<ImTextureRef, ImTextureRef>
                     rotationLocation = GL.GetUniformLocation(shaderProgram, "rotation");
                     sourceSizeLocation = GL.GetUniformLocation(shaderProgram, "sourceSize");
                     outputSizeLocation = GL.GetUniformLocation(shaderProgram, "outputSize");
+                    flipLocation = GL.GetUniformLocation(shaderProgram, "flip");
                 }
 
                 // The pass renders into a texture large enough to hold the bounding box
@@ -158,6 +172,7 @@ public class SaturationShaderPass : Combinator<ImTextureRef, ImTextureRef>
                 GL.Uniform1(rotationLocation, rotation);
                 GL.Uniform2(sourceSizeLocation, (float)width, (float)height);
                 GL.Uniform2(outputSizeLocation, (float)outputWidth, (float)outputHeight);
+                GL.Uniform2(flipLocation, FlipHorizontal ? 1f : 0f, FlipVertical ? 1f : 0f);
 
                 GL.BindVertexArray(vertexArray);
                 GL.DrawArrays(PrimitiveType.TriangleStrip, 0, 4);
