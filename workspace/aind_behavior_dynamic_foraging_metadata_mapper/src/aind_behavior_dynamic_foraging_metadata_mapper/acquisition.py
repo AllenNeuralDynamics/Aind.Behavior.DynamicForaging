@@ -10,7 +10,7 @@ import git
 from aind_behavior_curriculum import TrainerState
 from aind_behavior_dynamic_foraging.data_contract import dataset as df_foraging_dataset
 from aind_behavior_dynamic_foraging.data_contract.utils import calculate_consumed_water
-from aind_behavior_dynamic_foraging.rig import AindDynamicForagingRig, DynamicForagingSpinnakerCamera, CameraController
+from aind_behavior_dynamic_foraging.rig import AindDynamicForagingRig, CameraController, DynamicForagingSpinnakerCamera
 from aind_behavior_dynamic_foraging.task_logic import AindDynamicForagingTaskLogic
 from aind_behavior_services.rig import Device as AbsDevice
 from aind_behavior_services.rig import cameras as abs_camera
