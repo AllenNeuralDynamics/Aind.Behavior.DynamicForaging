@@ -146,7 +146,7 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
         controller = rig.triggered_camera_controller
         fps = float(controller.frame_rate) if controller.frame_rate else float("nan")
         for name, cam in rig.triggered_camera_controller.cameras.items():
-            additional_settings = cam.model_dump()
+            additional_settings = cam.camera.model_dump()
             additional_settings["note"] = (
                 "The additional_settings values are the input parameters used to initialize the camera. Model found at https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/blob/a6c0f539275f73af87da82a8ea0101836389f1b3/src/aind_behavior_services/rig/cameras.py#L226. Enum clarifications: adc_bit_depth is an "
                 "Spinnaker SDK enum-coded value (0=ADC8BIT, 1=ADC10BIT, 2=ADC12BIT), and pixel_format "
@@ -166,12 +166,12 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                 model="Blackfly S BFS-U3-04S2M",
                 frame_rate=Decimal(str(fps)),
                 frame_rate_unit=FrequencyUnit.HZ,
-                gain=Decimal(str(cam.gain) if cam.gain is not None else "0"),
-                serial_number=cam.serial_number,
-                crop_offset_x=cam.region_of_interest.x if cam.region_of_interest.x > 0 else None,
-                crop_offset_y=cam.region_of_interest.y if cam.region_of_interest.y > 0 else None,
-                crop_width=cam.region_of_interest.width if cam.region_of_interest.width > 0 else None,
-                crop_height=cam.region_of_interest.height if cam.region_of_interest.height > 0 else None,
+                gain=Decimal(str(cam.camera.gain) if cam.camera.gain is not None else "0"),
+                serial_number=cam.camera.serial_number,
+                crop_offset_x=cam.camera.region_of_interest.x if cam.camera.region_of_interest.x > 0 else None,
+                crop_offset_y=cam.camera.region_of_interest.y if cam.camera.region_of_interest.y > 0 else None,
+                crop_width=cam.camera.region_of_interest.width if cam.camera.region_of_interest.width > 0 else None,
+                crop_height=cam.camera.region_of_interest.height if cam.camera.region_of_interest.height > 0 else None,
                 crop_unit=SizeUnit.PX,
                 additional_settings=GenericModel.model_validate(additional_settings),
             )

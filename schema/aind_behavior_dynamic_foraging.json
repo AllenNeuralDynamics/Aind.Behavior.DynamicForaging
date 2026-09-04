@@ -31,7 +31,7 @@
           "type": "string"
         },
         "triggered_camera_controller": {
-          "$ref": "#/$defs/CameraController_SpinnakerCamera_",
+          "$ref": "#/$defs/CameraController_DynamicForagingSpinnakerCamera_",
           "description": "Required camera controller to triggered cameras."
         },
         "monitoring_camera_controller": {
@@ -970,7 +970,7 @@
       "title": "BlockBasedTrialGeneratorSpec",
       "type": "object"
     },
-    "CameraController_SpinnakerCamera_": {
+    "CameraController_DynamicForagingSpinnakerCamera_": {
       "properties": {
         "device_type": {
           "const": "CameraController",
@@ -992,7 +992,7 @@
         },
         "cameras": {
           "additionalProperties": {
-            "$ref": "#/$defs/SpinnakerCamera"
+            "$ref": "#/$defs/DynamicForagingSpinnakerCamera"
           },
           "description": "Cameras to be instantiated",
           "title": "Cameras",
@@ -1016,7 +1016,7 @@
       "required": [
         "cameras"
       ],
-      "title": "CameraController[SpinnakerCamera]",
+      "title": "CameraController[DynamicForagingSpinnakerCamera]",
       "type": "object"
     },
     "CameraController_WebCamera_": {
@@ -1748,6 +1748,28 @@
         "port_name"
       ],
       "title": "DynamicForagingSoundCard",
+      "type": "object"
+    },
+    "DynamicForagingSpinnakerCamera": {
+      "description": "A SpinnakerCamera for the dynamic foraging rig that includes camera image rotation for visualizers.",
+      "properties": {
+        "camera": {
+          "$ref": "#/$defs/SpinnakerCamera",
+          "description": "Spinnaker camera instance"
+        },
+        "visualizer_settings": {
+          "$ref": "#/$defs/VisualizerSettings",
+          "default": {
+            "flip_state": null,
+            "rotation": 0.0
+          },
+          "description": "Visualizer settings for the camera"
+        }
+      },
+      "required": [
+        "camera"
+      ],
+      "title": "DynamicForagingSpinnakerCamera",
       "type": "object"
     },
     "ExponentialDistribution": {
@@ -4109,6 +4131,37 @@
         }
       },
       "title": "VideoWriterOpenCv",
+      "type": "object"
+    },
+    "VisualizerSettings": {
+      "description": "Visualizer settings for the dynamic foraging rig's camera. This includes camera image rotation and flip state for visualizers.",
+      "properties": {
+        "flip_state": {
+          "default": null,
+          "description": "Camera flip state",
+          "oneOf": [
+            {
+              "enum": [
+                "horizontal",
+                "vertical",
+                "both"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Flip State"
+        },
+        "rotation": {
+          "default": 0,
+          "description": "Camera rotation angle in radians",
+          "title": "Rotation",
+          "type": "number"
+        }
+      },
+      "title": "VisualizerSettings",
       "type": "object"
     },
     "WaterValveCalibration": {
