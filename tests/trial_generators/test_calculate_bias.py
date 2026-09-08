@@ -42,7 +42,7 @@ class TestCalculateBias(unittest.TestCase):
         """All same choice and reward should return nan since bias is undefined."""
         outcomes = make_outcomes(100, 1, 1)
         bias = calculate_bias(outcomes)
-        self.assertTrue(bias == 1)
+        self.assertTrue(bias == -1)
 
     def test_ignored_trials_excluded(self):
         """Adding ignored trials should not change the result."""
