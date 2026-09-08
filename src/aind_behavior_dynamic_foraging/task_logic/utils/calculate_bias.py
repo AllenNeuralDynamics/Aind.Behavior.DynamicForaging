@@ -67,12 +67,12 @@ def calculate_bias(outcomes: List[TrialOutcome]) -> float:
         logger.warning("No choices in the last %d trials. Returning bias of 0.", trial_window_length)
         return 0
     if n_right_choice == 0:
-        logger.warning("No right choices in the last %d trials. Returning bias of -1.", trial_window_length)
-        return -1
+        logger.warning("No right choices in the last %d trials. Returning bias of +1.", trial_window_length)
+        return 1
 
     if n_left_choice == 0:
-        logger.warning("No left choices in the last %d trials. Returning bias of +1.", trial_window_length)
-        return 1
+        logger.warning("No left choices in the last %d trials. Returning bias of -1.", trial_window_length)
+        return -1
 
     logistic_reg = LogisticRegression(solver=solver, l1_ratio=l1_ratio, C=1 / regularization_strength)
     logistic_reg.fit(x, y)
