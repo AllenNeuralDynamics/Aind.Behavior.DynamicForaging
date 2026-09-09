@@ -1,6 +1,6 @@
-from datetime import timedelta
 import logging
 import unittest
+from datetime import timedelta
 
 import numpy as np
 
