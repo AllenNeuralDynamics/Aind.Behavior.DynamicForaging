@@ -93,7 +93,7 @@ class TestStage2Transitions(unittest.TestCase):
         metrics = make_metrics(
             unignored_trials_per_session=[300],
             foraging_efficiency_per_session=[0.65],
-            consecutive_sessions_at_current_stage=3,
+            consecutive_sessions_at_current_stage=2,
             stage_name="STAGE_2",
         )
         updated = TRAINER.evaluate(self.trainer_state, metrics)
