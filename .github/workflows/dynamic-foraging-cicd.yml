@@ -59,15 +59,6 @@ jobs:
           uv run python -m unittest discover tests
           uv run --directory .\workspace\aind_behavior_dynamic_foraging_curricula\ python -m unittest discover tests
 
-      - name: Run workspace python unit tests
-        shell: bash
-        run: |
-          for workspace in workspace/*; do
-            if [ -d "$workspace/tests" ]; then
-              uv run --directory "$workspace" python -m unittest discover tests
-            fi
-          done
-
       - name: Regenerate all schemas
         run: |
           uv run dynamic-foraging regenerate
