@@ -111,7 +111,8 @@ def make_s_stage_1_warmup():
                             ),
                             block_length=ExponentialDistribution(
                                 distribution_parameters=ExponentialDistributionParameters(rate=0.1),
-                                truncation_parameters=TruncationParameters(min=10, max=30),
+                                truncation_parameters=TruncationParameters(truncation_mode="clamp", min=0, max=30),
+                                scaling_parameters=ScalingParameters(offset=10),
                             ),
                             inter_trial_interval_duration=ExponentialDistribution(
                                 distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
@@ -177,7 +178,8 @@ def make_s_stage_1():
                     ),
                     block_length=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=0.1),
-                        truncation_parameters=TruncationParameters(min=10, max=30),
+                        truncation_parameters=TruncationParameters(truncation_mode="clamp", min=0, max=30),
+                        scaling_parameters=ScalingParameters(offset=10),
                     ),
                     inter_trial_interval_duration=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
@@ -233,7 +235,8 @@ def make_s_stage_2():
                     ),
                     block_length=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=0.1),
-                        truncation_parameters=TruncationParameters(min=10, max=40),
+                        truncation_parameters=TruncationParameters(truncation_mode="clamp", min=0, max=40),
+                        scaling_parameters=ScalingParameters(offset=10),
                     ),
                     inter_trial_interval_duration=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
