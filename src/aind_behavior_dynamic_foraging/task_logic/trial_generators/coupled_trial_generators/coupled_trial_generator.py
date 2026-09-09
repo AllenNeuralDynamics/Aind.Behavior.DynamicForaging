@@ -130,10 +130,7 @@ class CoupledTrialGenerator(BaseCoupledTrialGenerator):
         frac = end_conditions.ignore_ratio_threshold
         win = end_conditions.ignore_window_length
 
-        if (
-            time_elapsed > timedelta(seconds=end_conditions.min_time)
-            and choice_history[-win:].count(None) >= frac * win
-        ):
+        if time_elapsed > timedelta(seconds=end_conditions.min_time) and choice_history[-win:].count(None) > frac * win:
             logger.debug("Minimum time and ignored trial count exceeded.")
             return True
 
@@ -141,7 +138,7 @@ class CoupledTrialGenerator(BaseCoupledTrialGenerator):
             logger.debug("Maximum session time exceeded.")
             return True
 
-        if end_conditions.max_trial < len(choice_history):
+        if end_conditions.max_trial <= len(choice_history):
             logger.debug("Maximum trial count exceeded.")
             return True
 

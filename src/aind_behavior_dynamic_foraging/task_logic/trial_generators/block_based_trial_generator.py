@@ -229,7 +229,10 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
 
         # determine autowater
         if is_autowater := self._are_autowater_conditions_met():
-            is_auto_reward_right = True if self.block.p_right_reward > self.block.p_left_reward else False
+            if self.block.p_right_reward != self.block.p_left_reward:
+                is_auto_reward_right = True if self.block.p_right_reward > self.block.p_left_reward else False
+            else:
+                is_auto_reward_right = np.random.choice([True, False])
             reward_fraction = self.spec.autowater_parameters.reward_fraction
             logger.debug("Delivering autowater: is_auto_reward_right = %s" % is_auto_reward_right)
 
