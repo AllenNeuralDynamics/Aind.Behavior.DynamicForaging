@@ -130,7 +130,10 @@ class CoupledTrialGenerator(BaseCoupledTrialGenerator):
         frac = end_conditions.ignore_ratio_threshold
         win = end_conditions.ignore_window_length
 
-        if time_elapsed > timedelta(seconds=end_conditions.min_time) and choice_history[-win:].count(None) > frac * win:
+        if (
+            time_elapsed > timedelta(seconds=end_conditions.min_time)
+            and choice_history[-win:].count(None) >= frac * win
+        ):
             logger.debug("Minimum time and ignored trial count exceeded.")
             return True
 
@@ -229,7 +232,7 @@ class CoupledTrialGenerator(BaseCoupledTrialGenerator):
                     run_len += 1
                 else:
                     run_len = 0
-                if run_len >= min_stable:
+                if run_len > min_stable:
                     logger.info("Behavior stable at trial index %s." % i)
                     return True
             logger.info("Behavior not stable in block anytime evaluation.")

@@ -184,7 +184,10 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
         frac = end_conditions.ignore_ratio_threshold
         win = end_conditions.ignore_window_length
 
-        if time_elapsed > timedelta(seconds=end_conditions.min_time) and choice_history[-win:].count(None) > frac * win:
+        if (
+            time_elapsed > timedelta(seconds=end_conditions.min_time)
+            and choice_history[-win:].count(None) >= frac * win
+        ):
             logger.info("Minimum time and ignored trial count exceeded.")
             return True
 
