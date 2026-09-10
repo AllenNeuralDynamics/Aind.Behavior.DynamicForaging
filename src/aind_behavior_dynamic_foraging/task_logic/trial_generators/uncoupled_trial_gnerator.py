@@ -195,7 +195,7 @@ class UncoupledTrialGenerator(BlockBasedTrialGenerator):
             logger.info("Maximum session time exceeded.")
             return True
 
-        if end_conditions.max_trial < len(choice_history):
+        if end_conditions.max_trial <= len(choice_history):
             logger.info("Maximum trial count exceeded.")
             return True
 
