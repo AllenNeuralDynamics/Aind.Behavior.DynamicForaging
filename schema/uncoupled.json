@@ -132,11 +132,14 @@
                                             "rate": 0.1
                                         },
                                         "truncation_parameters": {
-                                            "truncation_mode": "exclude",
-                                            "min": 10.0,
+                                            "truncation_mode": "clamp",
+                                            "min": 0.0,
                                             "max": 30.0
                                         },
-                                        "scaling_parameters": null
+                                        "scaling_parameters": {
+                                            "scale": 1.0,
+                                            "offset": 10.0
+                                        }
                                     },
                                     "autowater_parameters": {
                                         "min_ignored_trials": 3,
@@ -241,11 +244,14 @@
                                     "rate": 0.1
                                 },
                                 "truncation_parameters": {
-                                    "truncation_mode": "exclude",
-                                    "min": 10.0,
+                                    "truncation_mode": "clamp",
+                                    "min": 0.0,
                                     "max": 30.0
                                 },
-                                "scaling_parameters": null
+                                "scaling_parameters": {
+                                    "scale": 1.0,
+                                    "offset": 10.0
+                                }
                             },
                             "autowater_parameters": {
                                 "min_ignored_trials": 5,
@@ -348,11 +354,14 @@
                                     "rate": 0.1
                                 },
                                 "truncation_parameters": {
-                                    "truncation_mode": "exclude",
-                                    "min": 10.0,
+                                    "truncation_mode": "clamp",
+                                    "min": 0.0,
                                     "max": 40.0
                                 },
-                                "scaling_parameters": null
+                                "scaling_parameters": {
+                                    "scale": 1.0,
+                                    "offset": 10.0
+                                }
                             },
                             "autowater_parameters": {
                                 "min_ignored_trials": 7,

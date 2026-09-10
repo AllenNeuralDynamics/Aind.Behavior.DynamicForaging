@@ -49,7 +49,11 @@ def st_stage_1_to_stage_2(metrics: DynamicForagingMetrics) -> bool:
 # stage 2
 @StageTransition
 def st_stage_2_to_stage_3(metrics: DynamicForagingMetrics) -> bool:
-    return bool(metrics.foraging_efficiency_per_session[-1] >= 0.65 and metrics.unignored_trials_per_session[-1] >= 300)
+    return bool(
+        metrics.foraging_efficiency_per_session[-1] >= 0.65
+        and metrics.unignored_trials_per_session[-1] >= 300
+        and metrics.consecutive_sessions_at_current_stage >= 2
+    )
 
 
 @StageTransition

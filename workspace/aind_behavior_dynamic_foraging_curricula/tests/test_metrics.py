@@ -27,7 +27,7 @@ def _make_trial(
 
 
 def _patch_dataset(
-    trials: list[dict], is_baiting: bool = True, prev_metrics: Optional[dict] = None, stage_name: str = "stage_1"
+    trials: list[dict], is_baiting: bool = True, prev_metrics: Optional[dict] = None, stage_name: str = "STAGE_1"
 ):
     """Patch df_foraging_dataset with a mock matching the access pattern in metrics_from_dataset."""
 
@@ -100,7 +100,7 @@ class TestMetricsFromDataset(unittest.TestCase):
             "unignored_trials_per_session": [10],
             "total_sessions": 1,
             "consecutive_sessions_at_current_stage": 1,
-            "stage_name": "stage_1_warmup",
+            "stage_name": "STAGE_1_WARMUP",
         }
         with _patch_dataset(trials, prev_metrics=metrics):
             result = metrics_from_dataset(self.tmp_path)
