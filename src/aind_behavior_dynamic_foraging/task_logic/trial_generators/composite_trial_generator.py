@@ -2,7 +2,7 @@ from typing import Generic, Literal, TypeVar
 
 from pydantic import Field, SerializeAsAny
 
-from ..trial_models import Trial, TrialOutcome
+from ..trial_models import Trial, TrialOutcome, TrialMetrics
 from ._base import BaseTrialGeneratorSpecModel, ITrialGenerator
 
 _TSpec = TypeVar("_TSpec", bound=BaseTrialGeneratorSpecModel, covariant=True)
@@ -70,3 +70,8 @@ class TrialGeneratorComposite(ITrialGenerator):
         """
         if self._current_index < len(self._generators):
             self._generators[self._current_index].update(outcome)
+
+    def get_metrics(self) -> TrialMetrics:
+        """Return metrics at current state of the trial generator."""
+        if self._current_index < len(self._generators):
+            return self._generators[self._current_index].get_metrics()
