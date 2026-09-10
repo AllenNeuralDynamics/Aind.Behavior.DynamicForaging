@@ -55,6 +55,38 @@ class TestBlockBasedTrialGenerator(unittest.TestCase):
         self.assertEqual(trial.p_reward_left, self.generator.block.p_left_reward)
         self.assertEqual(trial.p_reward_right, self.generator.block.p_right_reward)
 
+    def test_next_autowater_equal_probs_choice_right_sets_expected_p_rewards(self):
+        spec = ConcreteBlockBasedTrialGeneratorSpec(
+            autowater_parameters=AutoWaterParameters(min_ignored_trials=0, min_unrewarded_trials=0),
+            bias_intervention_parameters=None,
+        )
+        generator = spec.create_generator()
+        generator.block = Block(p_left_reward=0.5, p_right_reward=0.5, left_length=10, right_length=10)
+
+        with patch("numpy.random.choice", return_value=np.bool_(True)):
+            trial = generator.next()
+
+        assert trial is not None
+        self.assertTrue(trial.is_auto_reward_right)
+        self.assertEqual(trial.p_reward_left, generator.block.p_left_reward)
+        self.assertEqual(trial.p_reward_right, 1.0)
+
+    def test_next_autowater_equal_probs_choice_left_sets_expected_p_rewards(self):
+        spec = ConcreteBlockBasedTrialGeneratorSpec(
+            autowater_parameters=AutoWaterParameters(min_ignored_trials=0, min_unrewarded_trials=0),
+            bias_intervention_parameters=None,
+        )
+        generator = spec.create_generator()
+        generator.block = Block(p_left_reward=0.5, p_right_reward=0.5, left_length=10, right_length=10)
+
+        with patch("numpy.random.choice", return_value=np.bool_(False)):
+            trial = generator.next()
+
+        assert trial is not None
+        self.assertFalse(trial.is_auto_reward_right)
+        self.assertEqual(trial.p_reward_left, 1.0)
+        self.assertEqual(trial.p_reward_right, generator.block.p_right_reward)
+
 
 class TestAntiBiasBlockBasedTrialGenerator(unittest.TestCase):
     def _patch_bias(self, bias_value: float) -> Any:

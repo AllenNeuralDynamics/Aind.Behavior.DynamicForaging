@@ -141,7 +141,7 @@ class CoupledTrialGenerator(BaseCoupledTrialGenerator):
             logger.debug("Maximum session time exceeded.")
             return True
 
-        if end_conditions.max_trial < len(choice_history):
+        if end_conditions.max_trial <= len(choice_history):
             logger.debug("Maximum trial count exceeded.")
             return True
 
@@ -232,7 +232,7 @@ class CoupledTrialGenerator(BaseCoupledTrialGenerator):
                     run_len += 1
                 else:
                     run_len = 0
-                if run_len >= min_stable:
+                if run_len > min_stable:
                     logger.info("Behavior stable at trial index %s." % i)
                     return True
             logger.info("Behavior not stable in block anytime evaluation.")

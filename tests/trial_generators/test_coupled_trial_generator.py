@@ -81,14 +81,16 @@ class TestCoupledTrialGenerator(unittest.TestCase):
         high_reward_is_right = right_prob > left_prob
         beh_params.behavior_evaluation_mode = "anytime"
 
-        # stable run early, then drifts off — should still pass
-        choices = [high_reward_is_right] * (min_stable + kernel_size - 1) + [not high_reward_is_right] * 10
+        # stable run early, then drifts off — should still pass.
+        # For "anytime" mode, implementation requires run_len > min_stable.
+        choices = [high_reward_is_right] * (min_stable + kernel_size) + [not high_reward_is_right] * 10
         self.assertTrue(
             self.generator._is_behavior_stable(choices, right_prob, left_prob, beh_params, len(choices), kernel_size)
         )
 
-        # stable at end: wrong side early, correct side at end
-        choices = [not high_reward_is_right] * 10 + [high_reward_is_right] * (min_stable + kernel_size - 1)
+        # stable at end: wrong side early, correct side at end.
+        # Use one additional trial so stable windows are strictly greater than min_stable.
+        choices = [not high_reward_is_right] * 10 + [high_reward_is_right] * (min_stable + kernel_size)
         self.assertTrue(
             self.generator._is_behavior_stable(choices, right_prob, left_prob, beh_params, len(choices), kernel_size)
         )
@@ -257,7 +259,7 @@ class TestCoupledTrialGenerator(unittest.TestCase):
     #### Test next ####
 
     def test_next_returns_none_after_max_trials(self):
-        self.generator.is_right_choice_history = [True] * (self.spec.trial_generation_end_parameters.max_trial + 1)
+        self.generator.is_right_choice_history = [True] * (self.spec.trial_generation_end_parameters.max_trial)
         self.generator.start_time = self.generator.start_time - timedelta(
             self.spec.trial_generation_end_parameters.min_time
         )

@@ -1,5 +1,6 @@
 import logging
 import unittest
+from datetime import timedelta
 
 import numpy as np
 
@@ -169,6 +170,15 @@ class TestUncoupledTrialGenerator(unittest.TestCase):
         self.generator.trials_in_left_block = 100
         self.generator.update(TrialOutcome(trial=Trial(), is_right_choice=True, is_rewarded=True))
         self.assertEqual(self.generator.trials_in_left_block, 0)
+
+    def test_next_returns_none_after_max_trials(self):
+        self.generator.is_right_choice_history = [True] * (self.spec.trial_generation_end_parameters.max_trial)
+        self.generator.start_time = self.generator.start_time - timedelta(
+            self.spec.trial_generation_end_parameters.min_time
+        )
+
+        trial = self.generator.next()
+        self.assertIsNone(trial)
 
 
 if __name__ == "__main__":

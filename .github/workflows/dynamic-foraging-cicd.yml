@@ -54,8 +54,10 @@ jobs:
         working-directory: ./.bonsai
         run: ./setup.ps1
 
-      - name: Run python unit tests
-        run: uv run python -m unittest
+      - name: Run root python unit tests
+        run: |
+          uv run python -m unittest discover tests
+          uv run --directory .\workspace\aind_behavior_dynamic_foraging_curricula\ python -m unittest discover tests
 
       - name: Regenerate all schemas
         run: |
