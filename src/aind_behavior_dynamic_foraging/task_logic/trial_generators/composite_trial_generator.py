@@ -2,7 +2,7 @@ from typing import Generic, Literal, TypeVar
 
 from pydantic import Field, SerializeAsAny
 
-from ..trial_models import Trial, TrialOutcome, TrialMetrics
+from ..trial_models import Trial, TrialMetrics, TrialOutcome
 from ._base import BaseTrialGeneratorSpecModel, ITrialGenerator
 
 _TSpec = TypeVar("_TSpec", bound=BaseTrialGeneratorSpecModel, covariant=True)
