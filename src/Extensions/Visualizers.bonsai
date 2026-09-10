@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<WorkflowBuilder Version="2.9.0"
+<WorkflowBuilder Version="2.9.1"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:imvizui="clr-namespace:Bonsai.ImGui.Visualizers;assembly=Bonsai.ImGui.Visualizers.Design"
                  xmlns:imgui="clr-namespace:Bonsai.ImGui;assembly=Bonsai.ImGui"
@@ -2032,13 +2032,13 @@
         <CameraName>BodyCamera</CameraName>
         <MinSaturation>0.1</MinSaturation>
         <MaxSaturation>0.9</MaxSaturation>
-        <FlipState>2</FlipState>
+        <FlipState>1</FlipState>
         <Rotation>0</Rotation>
         <TriggeredCamerasStream>TriggeredCamerasStream</TriggeredCamerasStream>
       </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Extensions\CameraPreviewVisualizer.bonsai">
         <FrameSubject>Camera</FrameSubject>
-        <CameraName>BodyCamera</CameraName>
+        <CameraName>SideCamera</CameraName>
         <MinSaturation>0.1</MinSaturation>
         <MaxSaturation>0.9</MaxSaturation>
         <FlipState>2</FlipState>
