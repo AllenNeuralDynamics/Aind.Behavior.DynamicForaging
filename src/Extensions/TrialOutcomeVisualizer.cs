@@ -574,31 +574,31 @@ public class TrialOutcomeVisualizer : BufferedVisualizer
             // Align 0.5 to 0, 1 to 1 and 0 to -1
             ImPlot.SetupAxisLimits(ImAxis.Y2, -y2Max, y2Max, ImPlotCond.Always);
             ImPlot.SetAxes(ImAxis.X1, ImAxis.Y2);
-            PlotProbabilityBars(trialIndices, pRewardRight, 1, RightChoiceColor, "P(Reward Right)");
-            PlotProbabilityBars(trialIndices, pRewardLeft, -1, LeftChoiceColor, "P(Reward Left)");
+            // PlotProbabilityBars(trialIndices, pRewardRight, 1, RightChoiceColor, "P(Reward Right)");
+            // PlotProbabilityBars(trialIndices, pRewardLeft, -1, LeftChoiceColor, "P(Reward Left)");
 
             // Switch back to Y1 for everything else
             ImPlot.SetAxes(ImAxis.X1, ImAxis.Y1);
 
             PlotRollingLine(trialIndices, rollingChoiceAvg, "Right Choice Rate", ProbabilityTraceColor);
-            PlotRollingLine(trialIndices, rollingRewardRate, "Reward Rate", RewardRateLineColor);
-            PlotRollingLine(trialIndices, rollingFinishedRate, "Finished Trial Rate", FinishedTrialRateColor);
+            // PlotRollingLine(trialIndices, rollingRewardRate, "Reward Rate", RewardRateLineColor);
+            // PlotRollingLine(trialIndices, rollingFinishedRate, "Finished Trial Rate", FinishedTrialRateColor);
 
             // Right choices: bars extend upward from Y=1 (past 1)
             PlotRewardedBars(rightRewardedX, RightChoiceY, 1, RightChoiceColor, "Right + Rewarded");
             PlotUnrewardedBars(rightUnrewardedX, RightChoiceY, 1, RightChoiceColor, "Right + Unrewarded");
 
-            // Left choices: bars extend downward from Y=0 (past 0 into negative)
-            PlotRewardedBars(leftRewardedX, LeftChoiceY, -1, LeftChoiceColor, "Left + Rewarded");
-            PlotUnrewardedBars(leftUnrewardedX, LeftChoiceY, -1, LeftChoiceColor, "Left + Unrewarded");
+            // // Left choices: bars extend downward from Y=0 (past 0 into negative)
+            // PlotRewardedBars(leftRewardedX, LeftChoiceY, -1, LeftChoiceColor, "Left + Rewarded");
+            // PlotUnrewardedBars(leftUnrewardedX, LeftChoiceY, -1, LeftChoiceColor, "Left + Unrewarded");
 
-            // Auto-response trials with purple outline
-            PlotRewardedBarsWithOutline(rightRewardedAutoX, RightChoiceY, 1, RightChoiceColor, "Right + Rewarded (Auto)");
-            PlotUnrewardedBarsWithOutline(rightUnrewardedAutoX, RightChoiceY, 1, RightChoiceColor, "Right + Unrewarded (Auto)");
-            PlotRewardedBarsWithOutline(leftRewardedAutoX, LeftChoiceY, -1, LeftChoiceColor, "Left + Rewarded (Auto)");
-            PlotUnrewardedBarsWithOutline(leftUnrewardedAutoX, LeftChoiceY, -1, LeftChoiceColor, "Left + Unrewarded (Auto)");
+            // // Auto-response trials with purple outline
+            // PlotRewardedBarsWithOutline(rightRewardedAutoX, RightChoiceY, 1, RightChoiceColor, "Right + Rewarded (Auto)");
+            // PlotUnrewardedBarsWithOutline(rightUnrewardedAutoX, RightChoiceY, 1, RightChoiceColor, "Right + Unrewarded (Auto)");
+            // PlotRewardedBarsWithOutline(leftRewardedAutoX, LeftChoiceY, -1, LeftChoiceColor, "Left + Rewarded (Auto)");
+            // PlotUnrewardedBarsWithOutline(leftUnrewardedAutoX, LeftChoiceY, -1, LeftChoiceColor, "Left + Unrewarded (Auto)");
 
-            // No choice: cross marker at middle
+            // // No choice: cross marker at middle
             PlotNoChoiceMarkers(noChoiceX, NoChoiceColor, "No Choice");
 
             ImPlot.EndPlot();
