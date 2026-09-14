@@ -11,7 +11,7 @@ from pydantic import BaseModel
 import aind_behavior_dynamic_foraging
 import aind_behavior_dynamic_foraging.task_logic
 
-SOURCE_ROOT = "https://github.com/AllenNeuralDynamics/Aind.Behavior.DynamicForaging/tree/main/src/"
+SOURCE_ROOT = "https://github.com/AllenNeuralDynamics/Aind.Behavior.DynamicForaging/tree/main/src/packages/aind_behavior_dynamic_foraging/src"
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information

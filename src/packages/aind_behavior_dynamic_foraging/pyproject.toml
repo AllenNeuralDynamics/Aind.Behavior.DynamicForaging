@@ -1,0 +1,51 @@
+[build-system]
+requires = ["uv_build>=0.8.22"]
+build-backend = "uv_build"
+
+[project]
+name = "aind-behavior-dynamic-foraging"
+description = "A library that defines AIND data schema for the Aind Behavior Dynamic Foraging experiment."
+authors = [
+    {name = "Micah Woodard", email = "micah.woodard@alleninstitute.org"},
+    {name = "Bruno Cruz", email = "bruno.cruz@alleninstitute.org"}
+    ]
+license = "MIT"
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3.11",
+    "Operating System :: Microsoft :: Windows",
+]
+version = "0.0.2rc37"
+readme = {file = "../../../README.md", content-type = "text/markdown"}
+
+dependencies = [
+    "aind_behavior_services>=0.13.5",
+    "contraqctor>=0.5.8",
+    "pydantic-settings",
+    "scikit-learn>=1.8.0",
+]
+
+[project.optional-dependencies]
+
+data = ["contraqctor>=0.6.0"]
+
+[project.scripts]
+dynamic-foraging = "aind_behavior_dynamic_foraging.cli:main"
+
+[tool.ruff]
+line-length = 120
+target-version = 'py311'
+
+[tool.ruff.lint]
+extend-select = ['Q', 'RUF100', 'C90', 'I']
+extend-ignore = []
+mccabe = { max-complexity = 14 }
+pydocstyle = { convention = 'google' }
+
+[tool.codespell]
+skip = '.git,*.pdf,*.svg,./bonsai,*.bonsai,./docs/_build,uv.lock,*Generated.cs'
+ignore-words-list = 'nd'
+
+[tool.uv]
+default-groups = ['dev']
+required-version = '>=0.8.4'

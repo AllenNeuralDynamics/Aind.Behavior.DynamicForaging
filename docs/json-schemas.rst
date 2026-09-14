@@ -1,6 +1,6 @@
 json-schema
 -------------
-The following json-schemas are used as the format definition of the input for this task. They are the result of the `Pydantic`` models defined in `src/aind_behavior_dynamic_foraging`, and are also used to generate `src/Extensions/AindBehaviorDynamicForaging.cs` via `Bonsai.Sgen`.
+The following json-schemas are used as the format definition of the input for this task. They are the result of the `Pydantic`` models defined in `src/packages/aind_behavior_dynamic_foraging/src/aind_behavior_dynamic_foraging`, and are also used to generate `src/Extensions/AindBehaviorDynamicForaging.cs` via `Bonsai.Sgen`.
 
 `Download Schema <https://raw.githubusercontent.com/AllenNeuralDynamics/Aind.Behavior.DynamicForaging/refs/heads/main/schema/aind_behavior_dynamic_foraging.json>`_
 
