@@ -80,6 +80,7 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                             fit_type=FitType.LINEAR,
                             fit_parameters=GenericModel.model_validate(wc.model_dump()),
                         ),
+                        notes="Water calibration model can be found at https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/blob/main/src/aind_behavior_services/rig/water_valve.py.",
                     )
                 )
         return vol_cal
@@ -289,8 +290,8 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                 lick_spouts=[
                     LickSpout(
                         name="Left lick spout",
-                        manufacturer=Organization.OTHER,
-                        notes=" (v1v2 upgrade): 'manufacturer' field was missing, defaulting to 'Other'.",
+                        manufacturer=Organization.UNKNOWN,
+                        notes="Lick spout manufacturer is unknown.",
                         spout_diameter=Decimal("1.2"),
                         spout_diameter_unit=SizeUnit.MM,
                         solenoid_valve=Device(
@@ -306,7 +307,7 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                     ),
                     LickSpout(
                         name="Right lick spout",
-                        manufacturer=Organization.OTHER,
+                        manufacturer=Organization.UNKNOWN,
                         notes="Lick spout manufacturer is unknown.",
                         spout_diameter=Decimal("1.2"),
                         spout_diameter_unit=SizeUnit.MM,
@@ -365,7 +366,7 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                 grounded=False,
                 laser_interlock=False,
                 air_filtration=False,
-                notes=" (v1v2 upgrade): Scale is width/length/height",
+                notes="Scale is width/length/height",
             )
         )
 
