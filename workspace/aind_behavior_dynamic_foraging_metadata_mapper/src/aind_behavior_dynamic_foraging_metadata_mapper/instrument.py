@@ -80,6 +80,7 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                             fit_type=FitType.LINEAR,
                             fit_parameters=GenericModel.model_validate(wc.model_dump()),
                         ),
+                        notes="Water calibration model can be found at https://github.com/AllenNeuralDynamics/Aind.Behavior.Services/blob/main/src/aind_behavior_services/rig/water_valve.py.",
                     )
                 )
         return vol_cal
