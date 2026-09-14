@@ -250,9 +250,9 @@
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="implot:PlotText">
                 <implot:Visible>true</implot:Visible>
-                <implot:Text>0.00</implot:Text>
-                <implot:X>11</implot:X>
-                <implot:Y>0</implot:Y>
+                <implot:Text>0.70</implot:Text>
+                <implot:X>9</implot:X>
+                <implot:Y>0.7</implot:Y>
                 <implot:PixelOffset>
                   <implot:X>0</implot:X>
                   <implot:Y>-10</implot:Y>

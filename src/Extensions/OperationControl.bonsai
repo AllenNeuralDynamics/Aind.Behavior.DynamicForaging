@@ -1162,7 +1162,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p5:ManipulatorPosition">
-                <p5:X>16.4225</p5:X>
+                <p5:X>0</p5:X>
                 <p5:Y1>0</p5:Y1>
                 <p5:Y2>0</p5:Y2>
                 <p5:Z>0</p5:Z>
