@@ -151,12 +151,13 @@ class AindAcquisitionDataMapper(AindDataSchemaSessionDataMapper):
         metrics = dataset["Behavior"]["Metrics"].data
         trial_outcomes = dataset["Behavior"]["SoftwareEvents"]["TrialOutcome"].data["data"].iloc
         rewarded = sum(to["is_rewarded"] for to in trial_outcomes)
+        finished = sum(to["is_right_choice"] is not None for to in trial_outcomes)
         water = calculate_consumed_water(self.data_path)
         performance_metrics = PerformanceMetrics(
             reward_consumed_during_epoch=None if not water else Decimal(str(water)),
             reward_consumed_unit=units.VolumeUnit.ML,
             trials_total=trial_outcomes[:].shape[0],
-            trials_finished=metrics.unignored_trials_per_session[-1],
+            trials_finished=finished,
             trials_rewarded=rewarded,
             output_parameters=metrics.model_dump(),
         )
