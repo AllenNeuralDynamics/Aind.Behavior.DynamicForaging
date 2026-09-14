@@ -227,7 +227,7 @@ def make_dataset(
                                 name="QuiescentPeriod",
                                 description="An event emitted at the start of the quiescent period.",
                                 reader_params=SoftwareEvents.make_params(
-                                    root_path / "behavior/SoftwareEvents/QuiscentPeriod.json"
+                                    root_path / "behavior/SoftwareEvents/QuiescentPeriod.json"
                                 ),
                             ),
                             SoftwareEvents(
