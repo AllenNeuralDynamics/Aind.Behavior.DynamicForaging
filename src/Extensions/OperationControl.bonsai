@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<WorkflowBuilder Version="2.9.0"
+<WorkflowBuilder Version="2.9.1"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
                  xmlns:p1="clr-namespace:AllenNeuralDynamics.LicketySplit;assembly=AllenNeuralDynamics.LicketySplit"
@@ -1079,6 +1079,9 @@
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Merge" />
             </Expression>
+            <Expression xsi:type="rx:BehaviorSubject">
+              <Name>SpoutDelta</Name>
+            </Expression>
             <Expression xsi:type="rx:Condition">
               <Name>Drop0s</Name>
               <Workflow>
@@ -1140,6 +1143,9 @@
               <Name>ManipulatorBiasTracker</Name>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
+              <Name>SpoutDelta</Name>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
               <Name>ManipulatorPosition</Name>
             </Expression>
             <Expression xsi:type="MemberSelector">
@@ -1156,7 +1162,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p5:ManipulatorPosition">
-                <p5:X>0</p5:X>
+                <p5:X>16.4225</p5:X>
                 <p5:Y1>0</p5:Y1>
                 <p5:Y2>0</p5:Y2>
                 <p5:Z>0</p5:Z>
@@ -1210,18 +1216,19 @@
             <Edge From="34" To="36" Label="Source1" />
             <Edge From="35" To="36" Label="Source2" />
             <Edge From="36" To="37" Label="Source1" />
-            <Edge From="37" To="39" Label="Source1" />
-            <Edge From="38" To="39" Label="Source2" />
-            <Edge From="39" To="40" Label="Source1" />
-            <Edge From="40" To="43" Label="Source1" />
-            <Edge From="41" To="42" Label="Source1" />
-            <Edge From="42" To="43" Label="Source2" />
+            <Edge From="37" To="38" Label="Source1" />
+            <Edge From="38" To="40" Label="Source1" />
+            <Edge From="39" To="40" Label="Source2" />
+            <Edge From="40" To="41" Label="Source1" />
+            <Edge From="42" To="45" Label="Source1" />
             <Edge From="43" To="44" Label="Source1" />
-            <Edge From="44" To="45" Label="Source1" />
+            <Edge From="44" To="45" Label="Source2" />
             <Edge From="45" To="46" Label="Source1" />
             <Edge From="46" To="47" Label="Source1" />
+            <Edge From="47" To="48" Label="Source1" />
             <Edge From="48" To="49" Label="Source1" />
-            <Edge From="49" To="50" Label="Source1" />
+            <Edge From="50" To="51" Label="Source1" />
+            <Edge From="51" To="52" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
