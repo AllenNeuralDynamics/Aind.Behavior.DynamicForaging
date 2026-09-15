@@ -9,7 +9,7 @@ from aind_behavior_dynamic_foraging.task_logic.trial_models import TrialOutcome
 logger = logging.getLogger(__name__)
 
 
-def calculate_bias(outcomes: List[TrialOutcome]) -> float:
+def calculate_bias(outcomes: List[TrialOutcome], outcome_window_length: int = 200) -> float:
     """Estimate the side bias of an animal using logistic regression on recent trial history.
 
     Fits a Su2022-style logistic regression model using rewarded and unrewarded choice
@@ -20,7 +20,9 @@ def calculate_bias(outcomes: List[TrialOutcome]) -> float:
     ----------
     outcomes : List[TrialOutcome]
         List of trial outcomes. Auto-response and ignored trials are excluded.
-        Only the most recent 200 trials are used.
+        Only the most recent `outcome_window_length` trials are used.
+    outcome_window_length : int
+        Number of recent trials to consider for bias calculation.
 
     Returns
     -------
@@ -34,7 +36,7 @@ def calculate_bias(outcomes: List[TrialOutcome]) -> float:
     trial_window_length = 5
     regularization_strength = 10
 
-    outcomes = outcomes[-200:]
+    outcomes = outcomes[-outcome_window_length:]
 
     # exclude auto response and ignored trials
     filtered = [t for t in outcomes if t.is_right_choice is not None]
