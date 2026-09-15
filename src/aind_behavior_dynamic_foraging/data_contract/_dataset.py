@@ -210,6 +210,34 @@ def make_dataset(
                                 ),
                             ),
                             SoftwareEvents(
+                                name="LeftManualAutoReward",
+                                description="An event emitted when the manual left auto reward is triggered.",
+                                reader_params=SoftwareEvents.make_params(
+                                    root_path / "behavior/SoftwareEvents/LeftManualAutoReward.json"
+                                ),
+                            ),
+                            SoftwareEvents(
+                                name="RightManualAutoReward",
+                                description="An event emitted when the manual right auto reward is triggered.",
+                                reader_params=SoftwareEvents.make_params(
+                                    root_path / "behavior/SoftwareEvents/RightManualAutoReward.json"
+                                ),
+                            ),
+                            SoftwareEvents(
+                                name="RightManualWater",
+                                description="An event emitted when the right manual water is triggered.",
+                                reader_params=SoftwareEvents.make_params(
+                                    root_path / "behavior/SoftwareEvents/RightManualWater.json"
+                                ),
+                            ),
+                            SoftwareEvents(
+                                name="LeftManualWater",
+                                description="An event emitted when the left manual water is triggered.",
+                                reader_params=SoftwareEvents.make_params(
+                                    root_path / "behavior/SoftwareEvents/LeftManualWater.json"
+                                ),
+                            ),
+                            SoftwareEvents(
                                 name="GiveManualWaterRight",
                                 description="An event emitted when manual water is given through visualizer. The value corresponds to whether water was delivered on the Right (True) or Left (False)",
                                 reader_params=SoftwareEvents.make_params(
