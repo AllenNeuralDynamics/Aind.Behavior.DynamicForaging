@@ -211,14 +211,14 @@ def make_dataset(
                             ),
                             SoftwareEvents(
                                 name="LeftManualAutoReward",
-                                description="An event emitted when the manual left auto reward is triggered.",
+                                description="An event emitted when the manual left auto reward is triggered. This manual reward is aligned with go cue.",
                                 reader_params=SoftwareEvents.make_params(
                                     root_path / "behavior/SoftwareEvents/LeftManualAutoReward.json"
                                 ),
                             ),
                             SoftwareEvents(
                                 name="RightManualAutoReward",
-                                description="An event emitted when the manual right auto reward is triggered.",
+                                description="An event emitted when the manual right auto reward is triggered. This manual reward is aligned with go cue.",
                                 reader_params=SoftwareEvents.make_params(
                                     root_path / "behavior/SoftwareEvents/RightManualAutoReward.json"
                                 ),
