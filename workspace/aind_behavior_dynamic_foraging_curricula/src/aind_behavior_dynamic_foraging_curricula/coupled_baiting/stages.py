@@ -336,7 +336,7 @@ def make_s_stage_final():
                     autowater_parameters=None,
                     bias_intervention_parameters=BiasInterventionParameters(
                         threshold=BiasThreshold(upper=0.5, lower=0.0),
-                        intervention_interval=10,
+                        intervention_interval=20,
                         maximum_water_corrections=2,
                         bias_window_length=200,
                         lickspout_offset_delta=0.05,
@@ -387,7 +387,7 @@ def make_s_stage_graduated():
                     autowater_parameters=None,
                     bias_intervention_parameters=BiasInterventionParameters(
                         threshold=BiasThreshold(upper=0.5, lower=0.0),
-                        intervention_interval=10,
+                        intervention_interval=20,
                         maximum_water_corrections=2,
                         bias_window_length=200,
                         lickspout_offset_delta=0.05,
