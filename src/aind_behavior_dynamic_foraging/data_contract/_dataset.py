@@ -217,6 +217,13 @@ def make_dataset(
                                 ),
                             ),
                             SoftwareEvents(
+                                name="Notes",
+                                description="An event emitted when notes are saved in a session.",
+                                reader_params=SoftwareEvents.make_params(
+                                    root_path / "behavior/SoftwareEvents/Notes.json"
+                                ),
+                            ),
+                            SoftwareEvents(
                                 name="RightManualAutoReward",
                                 description="An event emitted when the manual right auto reward is triggered. This manual reward is aligned with go cue.",
                                 reader_params=SoftwareEvents.make_params(
