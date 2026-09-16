@@ -192,7 +192,14 @@ class BlockBasedTrialGenerator(ITrialGenerator, ABC):
                 # trial ignored so current baiting state retained
                 pass
 
-        self.bias = calculate_bias(outcomes=self.outcome_history)
+        self.bias = calculate_bias(
+            outcomes=self.outcome_history,
+            outcome_window_length=(
+                200
+                if not self.spec.bias_intervention_parameters
+                else self.spec.bias_intervention_parameters.bias_window_length
+            ),
+        )
 
     def next(self) -> Trial | None:
         """Generates the next trial in the session.
