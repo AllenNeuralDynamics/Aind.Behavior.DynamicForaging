@@ -25,7 +25,7 @@ namespace AindDynamicForagingDataSchema
     
         private string _dataDirectory;
     
-        private CameraControllerSpinnakerCamera _triggeredCameraController;
+        private CameraControllerDynamicForagingSpinnakerCamera _triggeredCameraController;
     
         private CameraControllerWebCamera _monitoringCameraController;
     
@@ -51,7 +51,7 @@ namespace AindDynamicForagingDataSchema
         {
             _aindBehaviorServicesPkgVersion = "0.13.7";
             _version = "0.0.2-rc37";
-            _triggeredCameraController = new CameraControllerSpinnakerCamera();
+            _triggeredCameraController = new CameraControllerDynamicForagingSpinnakerCamera();
             _harpBehavior = new HarpBehavior();
             _harpClockGenerator = new HarpWhiteRabbit();
             _harpSoundCard = new DynamicForagingSoundCard();
@@ -162,7 +162,7 @@ namespace AindDynamicForagingDataSchema
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("triggered_camera_controller", Required=Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DescriptionAttribute("Required camera controller to triggered cameras.")]
-        public CameraControllerSpinnakerCamera TriggeredCameraController
+        public CameraControllerDynamicForagingSpinnakerCamera TriggeredCameraController
         {
             get
             {
@@ -1822,25 +1822,25 @@ namespace AindDynamicForagingDataSchema
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
-    public partial class CameraControllerSpinnakerCamera
+    public partial class CameraControllerDynamicForagingSpinnakerCamera
     {
     
         private string _deviceType;
     
         private BaseModel _calibration;
     
-        private System.Collections.Generic.Dictionary<string, SpinnakerCamera> _cameras;
+        private System.Collections.Generic.Dictionary<string, DynamicForagingSpinnakerCamera> _cameras;
     
         private int? _frameRate;
     
-        public CameraControllerSpinnakerCamera()
+        public CameraControllerDynamicForagingSpinnakerCamera()
         {
             _deviceType = "CameraController";
-            _cameras = new System.Collections.Generic.Dictionary<string, SpinnakerCamera>();
+            _cameras = new System.Collections.Generic.Dictionary<string, DynamicForagingSpinnakerCamera>();
             _frameRate = 30;
         }
     
-        protected CameraControllerSpinnakerCamera(CameraControllerSpinnakerCamera other)
+        protected CameraControllerDynamicForagingSpinnakerCamera(CameraControllerDynamicForagingSpinnakerCamera other)
         {
             _deviceType = other._deviceType;
             _calibration = other._calibration;
@@ -1885,7 +1885,7 @@ namespace AindDynamicForagingDataSchema
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [Newtonsoft.Json.JsonPropertyAttribute("cameras", Required=Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DescriptionAttribute("Cameras to be instantiated")]
-        public System.Collections.Generic.Dictionary<string, SpinnakerCamera> Cameras
+        public System.Collections.Generic.Dictionary<string, DynamicForagingSpinnakerCamera> Cameras
         {
             get
             {
@@ -1914,14 +1914,14 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
-        public System.IObservable<CameraControllerSpinnakerCamera> Generate()
+        public System.IObservable<CameraControllerDynamicForagingSpinnakerCamera> Generate()
         {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new CameraControllerSpinnakerCamera(this)));
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new CameraControllerDynamicForagingSpinnakerCamera(this)));
         }
     
-        public System.IObservable<CameraControllerSpinnakerCamera> Generate<TSource>(System.IObservable<TSource> source)
+        public System.IObservable<CameraControllerDynamicForagingSpinnakerCamera> Generate<TSource>(System.IObservable<TSource> source)
         {
-            return System.Reactive.Linq.Observable.Select(source, _ => new CameraControllerSpinnakerCamera(this));
+            return System.Reactive.Linq.Observable.Select(source, _ => new CameraControllerDynamicForagingSpinnakerCamera(this));
         }
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
@@ -3426,6 +3426,101 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("WhoAmI = " + _whoAmI + ", ");
             stringBuilder.Append("SerialNumber = " + _serialNumber + ", ");
             stringBuilder.Append("PortName = " + _portName);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    /// <summary>
+    /// A SpinnakerCamera for the dynamic foraging rig that includes camera image rotation for visualizers.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.ComponentModel.DescriptionAttribute("A SpinnakerCamera for the dynamic foraging rig that includes camera image rotatio" +
+        "n for visualizers.")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class DynamicForagingSpinnakerCamera
+    {
+    
+        private SpinnakerCamera _camera;
+    
+        private VisualizerSettings _visualizerSettings;
+    
+        public DynamicForagingSpinnakerCamera()
+        {
+            _camera = new SpinnakerCamera();
+            _visualizerSettings = new VisualizerSettings();
+        }
+    
+        protected DynamicForagingSpinnakerCamera(DynamicForagingSpinnakerCamera other)
+        {
+            _camera = other._camera;
+            _visualizerSettings = other._visualizerSettings;
+        }
+    
+        /// <summary>
+        /// Spinnaker camera instance
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("camera", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("Spinnaker camera instance")]
+        public SpinnakerCamera Camera
+        {
+            get
+            {
+                return _camera;
+            }
+            set
+            {
+                _camera = value;
+            }
+        }
+    
+        /// <summary>
+        /// Visualizer settings for the camera
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("visualizer_settings")]
+        [System.ComponentModel.DescriptionAttribute("Visualizer settings for the camera")]
+        public VisualizerSettings VisualizerSettings
+        {
+            get
+            {
+                return _visualizerSettings;
+            }
+            set
+            {
+                _visualizerSettings = value;
+            }
+        }
+    
+        public System.IObservable<DynamicForagingSpinnakerCamera> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new DynamicForagingSpinnakerCamera(this)));
+        }
+    
+        public System.IObservable<DynamicForagingSpinnakerCamera> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new DynamicForagingSpinnakerCamera(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("Camera = " + _camera + ", ");
+            stringBuilder.Append("VisualizerSettings = " + _visualizerSettings);
             return true;
         }
     
@@ -7745,6 +7840,98 @@ namespace AindDynamicForagingDataSchema
 
 
     /// <summary>
+    /// Visualizer settings for the dynamic foraging rig's camera. This includes camera image rotation and flip state for visualizers.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.ComponentModel.DescriptionAttribute("Visualizer settings for the dynamic foraging rig\'s camera. This includes camera i" +
+        "mage rotation and flip state for visualizers.")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class VisualizerSettings
+    {
+    
+        private FlipState? _flipState;
+    
+        private double _rotation;
+    
+        public VisualizerSettings()
+        {
+            _rotation = 0D;
+        }
+    
+        protected VisualizerSettings(VisualizerSettings other)
+        {
+            _flipState = other._flipState;
+            _rotation = other._rotation;
+        }
+    
+        /// <summary>
+        /// Camera flip state
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("flip_state")]
+        [System.ComponentModel.DescriptionAttribute("Camera flip state")]
+        public FlipState? FlipState
+        {
+            get
+            {
+                return _flipState;
+            }
+            set
+            {
+                _flipState = value;
+            }
+        }
+    
+        /// <summary>
+        /// Camera rotation angle in radians
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("rotation")]
+        [System.ComponentModel.DescriptionAttribute("Camera rotation angle in radians")]
+        public double Rotation
+        {
+            get
+            {
+                return _rotation;
+            }
+            set
+            {
+                _rotation = value;
+            }
+        }
+    
+        public System.IObservable<VisualizerSettings> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new VisualizerSettings(this)));
+        }
+    
+        public System.IObservable<VisualizerSettings> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new VisualizerSettings(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("FlipState = " + _flipState + ", ");
+            stringBuilder.Append("Rotation = " + _rotation);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    /// <summary>
     /// Represents a water valve calibration.
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
@@ -8283,6 +8470,22 @@ namespace AindDynamicForagingDataSchema
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+    public enum FlipState
+    {
+    
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="horizontal")]
+        Horizontal = 0,
+    
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="vertical")]
+        Vertical = 1,
+    
+        [System.Runtime.Serialization.EnumMemberAttribute(Value="both")]
+        Both = 2,
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     public enum WaveformType
     {
     
@@ -8630,9 +8833,9 @@ namespace AindDynamicForagingDataSchema
             return Process<BlockBasedTrialGeneratorSpec>(source);
         }
 
-        public System.IObservable<string> Process(System.IObservable<CameraControllerSpinnakerCamera> source)
+        public System.IObservable<string> Process(System.IObservable<CameraControllerDynamicForagingSpinnakerCamera> source)
         {
-            return Process<CameraControllerSpinnakerCamera>(source);
+            return Process<CameraControllerDynamicForagingSpinnakerCamera>(source);
         }
 
         public System.IObservable<string> Process(System.IObservable<CameraControllerWebCamera> source)
@@ -8673,6 +8876,11 @@ namespace AindDynamicForagingDataSchema
         public System.IObservable<string> Process(System.IObservable<DynamicForagingSoundCard> source)
         {
             return Process<DynamicForagingSoundCard>(source);
+        }
+
+        public System.IObservable<string> Process(System.IObservable<DynamicForagingSpinnakerCamera> source)
+        {
+            return Process<DynamicForagingSpinnakerCamera>(source);
         }
 
         public System.IObservable<string> Process(System.IObservable<HarpBehavior> source)
@@ -8810,6 +9018,11 @@ namespace AindDynamicForagingDataSchema
             return Process<VideoWriterOpenCv>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<VisualizerSettings> source)
+        {
+            return Process<VisualizerSettings>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<WaterValveCalibration> source)
         {
             return Process<WaterValveCalibration>(source);
@@ -8850,7 +9063,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BiasInterventionParameters>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BiasThreshold>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<BlockBasedTrialGeneratorSpec>))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CameraControllerSpinnakerCamera>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CameraControllerDynamicForagingSpinnakerCamera>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CameraControllerWebCamera>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<ConnectedClockOutput>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CoupledTrialGenerationEndConditions>))]
@@ -8859,6 +9072,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CoupledWarmupTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<DynamicForagingAindManipulator>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<DynamicForagingSoundCard>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<DynamicForagingSpinnakerCamera>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpBehavior>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpEnvironmentSensor>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<HarpLicketySplit>))]
@@ -8886,6 +9100,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriter>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriterFfmpeg>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VideoWriterOpenCv>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<VisualizerSettings>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WaterValveCalibration>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Waveform>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WebCamera>))]

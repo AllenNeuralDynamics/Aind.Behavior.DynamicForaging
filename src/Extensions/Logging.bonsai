@@ -1107,7 +1107,7 @@
                     <Combinator xsi:type="rx:Merge" />
                   </Expression>
                   <Expression xsi:type="MemberSelector">
-                    <Selector>Value.VideoWriter</Selector>
+                    <Selector>Value.Camera.VideoWriter</Selector>
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:FilterNotNull.bonsai" />
                   <Expression xsi:type="p7:MatchVideoWriter">
@@ -1273,7 +1273,7 @@
                     <Combinator xsi:type="rx:Merge" />
                   </Expression>
                   <Expression xsi:type="MemberSelector">
-                    <Selector>Value.VideoWriter</Selector>
+                    <Selector>Value.Camera.VideoWriter</Selector>
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:FilterNotNull.bonsai" />
                   <Expression xsi:type="p7:MatchVideoWriter">

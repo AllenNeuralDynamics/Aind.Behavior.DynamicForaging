@@ -172,7 +172,7 @@
                                       <Name>ThisCamera</Name>
                                     </Expression>
                                     <Expression xsi:type="MemberSelector">
-                                      <Selector>Value.Exposure</Selector>
+                                      <Selector>Value.Camera.Exposure</Selector>
                                     </Expression>
                                     <Expression xsi:type="SubscribeSubject">
                                       <Name>TriggeredCameraController</Name>
