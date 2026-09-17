@@ -9,6 +9,7 @@ from .composite_trial_generator import TrialGeneratorCompositeSpec
 from .coupled_trial_generators.base_coupled_trial_generator import BaseCoupledTrialGeneratorSpec
 from .coupled_trial_generators.coupled_trial_generator import CoupledTrialGeneratorSpec
 from .coupled_trial_generators.coupled_warmup_trial_generator import CoupledWarmupTrialGeneratorSpec
+from .coupled_trial_generators.warmup_trial_generator import WarmupTrialGeneratorSpec
 from .integration_test_trial_generator import IntegrationTestTrialGeneratorSpec
 from .uncoupled_trial_gnerator import UncoupledTrialGeneratorSpec
 
@@ -21,6 +22,7 @@ if TYPE_CHECKING:
             CoupledWarmupTrialGeneratorSpec,
             CoupledTrialGeneratorSpec,
             IntegrationTestTrialGeneratorSpec,
+            WarmupTrialGeneratorSpec,
             TrialGeneratorCompositeSpec["TrialGeneratorSpec"],
         )
     ]
@@ -35,6 +37,7 @@ else:
                     BaseCoupledTrialGeneratorSpec,
                     CoupledWarmupTrialGeneratorSpec,
                     CoupledTrialGeneratorSpec,
+                    WarmupTrialGeneratorSpec,
                     IntegrationTestTrialGeneratorSpec,
                     TrialGeneratorCompositeSpec["TrialGeneratorSpec"],
                 )

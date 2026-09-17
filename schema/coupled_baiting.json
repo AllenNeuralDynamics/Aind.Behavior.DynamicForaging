@@ -13,177 +13,175 @@
                         "rng_seed": null,
                         "aind_behavior_services_pkg_version": "0.13.7",
                         "trial_generator": {
-                            "type": "TrialGeneratorComposite",
-                            "generators": [
-                                {
-                                    "type": "CoupledWarmupTrialGenerator",
-                                    "reward_size": {
-                                        "right": 4.0,
-                                        "left": 4.0
-                                    },
-                                    "quiescent_duration": {
-                                        "family": "Scalar",
-                                        "distribution_parameters": {
-                                            "family": "Scalar",
-                                            "value": 0.1
-                                        },
-                                        "truncation_parameters": null,
-                                        "scaling_parameters": null
-                                    },
-                                    "response_duration": 5.0,
-                                    "reward_consumption_duration": 1.0,
-                                    "inter_trial_interval_duration": {
-                                        "family": "Exponential",
-                                        "distribution_parameters": {
-                                            "family": "Exponential",
-                                            "rate": 0.3333333333333333
-                                        },
-                                        "truncation_parameters": {
-                                            "truncation_mode": "clamp",
-                                            "min": 0.0,
-                                            "max": 7.0
-                                        },
-                                        "scaling_parameters": {
-                                            "scale": 1.0,
-                                            "offset": 1.0
-                                        }
-                                    },
-                                    "block_length": {
-                                        "family": "Scalar",
-                                        "distribution_parameters": {
-                                            "family": "Scalar",
-                                            "value": 1.0
-                                        },
-                                        "truncation_parameters": null,
-                                        "scaling_parameters": null
-                                    },
-                                    "autowater_parameters": {
-                                        "min_ignored_trials": 0,
-                                        "min_unrewarded_trials": 0,
-                                        "reward_fraction": 0.8
-                                    },
-                                    "bias_intervention_parameters": {
-                                        "threshold": {
-                                            "upper": 0.5,
-                                            "lower": 0.0
-                                        },
-                                        "intervention_interval": 10,
-                                        "maximum_water_corrections": 2,
-                                        "bias_window_length": 200,
-                                        "lickspout_offset_delta": 0.05,
-                                        "reward_fraction": 0.8,
-                                        "trial_threshold": 100
-                                    },
-                                    "is_baiting": true,
-                                    "reward_probability_parameters": {
-                                        "base_reward_sum": 1.0,
-                                        "reward_pairs": [
-                                            [
-                                                1.0,
-                                                0.0
-                                            ]
-                                        ]
-                                    },
-                                    "trial_generation_end_parameters": {
-                                        "min_trial": 50,
-                                        "max_choice_bias": 0.1,
-                                        "min_response_rate": 0.8,
-                                        "evaluation_window": 20
-                                    },
-                                    "min_block_reward": 1
+                            "type": "CoupledWarmupTrialGenerator",
+                            "warmup_generator_spec": {
+                                "type": "WarmupTrialGenerator",
+                                "reward_size": {
+                                    "right": 4.0,
+                                    "left": 4.0
                                 },
-                                {
-                                    "type": "CoupledTrialGenerator",
-                                    "reward_size": {
-                                        "right": 4.0,
-                                        "left": 4.0
-                                    },
-                                    "quiescent_duration": {
+                                "quiescent_duration": {
+                                    "family": "Scalar",
+                                    "distribution_parameters": {
                                         "family": "Scalar",
-                                        "distribution_parameters": {
-                                            "family": "Scalar",
-                                            "value": 0.1
-                                        },
-                                        "truncation_parameters": null,
-                                        "scaling_parameters": null
+                                        "value": 0.1
                                     },
-                                    "response_duration": 5.0,
-                                    "reward_consumption_duration": 1.0,
-                                    "inter_trial_interval_duration": {
+                                    "truncation_parameters": null,
+                                    "scaling_parameters": null
+                                },
+                                "response_duration": 5.0,
+                                "reward_consumption_duration": 1.0,
+                                "inter_trial_interval_duration": {
+                                    "family": "Exponential",
+                                    "distribution_parameters": {
                                         "family": "Exponential",
-                                        "distribution_parameters": {
-                                            "family": "Exponential",
-                                            "rate": 0.3333333333333333
-                                        },
-                                        "truncation_parameters": {
-                                            "truncation_mode": "clamp",
-                                            "min": 0.0,
-                                            "max": 7.0
-                                        },
-                                        "scaling_parameters": {
-                                            "scale": 1.0,
-                                            "offset": 1.0
-                                        }
+                                        "rate": 0.3333333333333333
                                     },
-                                    "block_length": {
-                                        "family": "Exponential",
-                                        "distribution_parameters": {
-                                            "family": "Exponential",
-                                            "rate": 0.2
-                                        },
-                                        "truncation_parameters": {
-                                            "truncation_mode": "clamp",
-                                            "min": 0.0,
-                                            "max": 20.0
-                                        },
-                                        "scaling_parameters": {
-                                            "scale": 1.0,
-                                            "offset": 10.0
-                                        }
+                                    "truncation_parameters": {
+                                        "truncation_mode": "clamp",
+                                        "min": 0.0,
+                                        "max": 7.0
                                     },
-                                    "autowater_parameters": {
-                                        "min_ignored_trials": 3,
-                                        "min_unrewarded_trials": 3,
-                                        "reward_fraction": 0.5
+                                    "scaling_parameters": {
+                                        "scale": 1.0,
+                                        "offset": 1.0
+                                    }
+                                },
+                                "block_length": {
+                                    "family": "Scalar",
+                                    "distribution_parameters": {
+                                        "family": "Scalar",
+                                        "value": 1.0
                                     },
-                                    "bias_intervention_parameters": {
-                                        "threshold": {
-                                            "upper": 0.5,
-                                            "lower": 0.0
-                                        },
-                                        "intervention_interval": 10,
-                                        "maximum_water_corrections": 2,
-                                        "bias_window_length": 200,
-                                        "lickspout_offset_delta": 0.05,
-                                        "reward_fraction": 0.5,
-                                        "trial_threshold": 100
+                                    "truncation_parameters": null,
+                                    "scaling_parameters": null
+                                },
+                                "autowater_parameters": {
+                                    "min_ignored_trials": 0,
+                                    "min_unrewarded_trials": 0,
+                                    "reward_fraction": 0.8
+                                },
+                                "bias_intervention_parameters": {
+                                    "threshold": {
+                                        "upper": 0.5,
+                                        "lower": 0.0
                                     },
-                                    "is_baiting": true,
-                                    "reward_probability_parameters": {
-                                        "base_reward_sum": 0.8,
-                                        "reward_pairs": [
-                                            [
-                                                1.0,
-                                                0.0
-                                            ]
+                                    "intervention_interval": 10,
+                                    "maximum_water_corrections": 2,
+                                    "bias_window_length": 200,
+                                    "lickspout_offset_delta": 0.05,
+                                    "reward_fraction": 0.8,
+                                    "trial_threshold": 100
+                                },
+                                "is_baiting": true,
+                                "reward_probability_parameters": {
+                                    "base_reward_sum": 1.0,
+                                    "reward_pairs": [
+                                        [
+                                            1.0,
+                                            0.0
                                         ]
+                                    ]
+                                },
+                                "trial_generation_end_parameters": {
+                                    "min_trial": 50,
+                                    "max_choice_bias": 0.1,
+                                    "min_response_rate": 0.8,
+                                    "evaluation_window": 20
+                                },
+                                "min_block_reward": 1
+                            },
+                            "coupled_generator_spec": {
+                                "type": "CoupledTrialGenerator",
+                                "reward_size": {
+                                    "right": 4.0,
+                                    "left": 4.0
+                                },
+                                "quiescent_duration": {
+                                    "family": "Scalar",
+                                    "distribution_parameters": {
+                                        "family": "Scalar",
+                                        "value": 0.1
                                     },
-                                    "trial_generation_end_parameters": {
-                                        "ignore_window_length": 20000,
-                                        "ignore_ratio_threshold": 1.0,
-                                        "max_trial": 1000,
-                                        "max_time": 4500.0,
-                                        "min_time": 1800.0
+                                    "truncation_parameters": null,
+                                    "scaling_parameters": null
+                                },
+                                "response_duration": 5.0,
+                                "reward_consumption_duration": 1.0,
+                                "inter_trial_interval_duration": {
+                                    "family": "Exponential",
+                                    "distribution_parameters": {
+                                        "family": "Exponential",
+                                        "rate": 0.3333333333333333
                                     },
-                                    "behavior_stability_parameters": {
-                                        "behavior_evaluation_mode": "end",
-                                        "behavior_stability_fraction": 0.5,
-                                        "min_consecutive_stable_trials": 5
+                                    "truncation_parameters": {
+                                        "truncation_mode": "clamp",
+                                        "min": 0.0,
+                                        "max": 7.0
                                     },
-                                    "extend_block_on_no_response": true,
-                                    "kernel_size": 2
-                                }
-                            ]
+                                    "scaling_parameters": {
+                                        "scale": 1.0,
+                                        "offset": 1.0
+                                    }
+                                },
+                                "block_length": {
+                                    "family": "Exponential",
+                                    "distribution_parameters": {
+                                        "family": "Exponential",
+                                        "rate": 0.2
+                                    },
+                                    "truncation_parameters": {
+                                        "truncation_mode": "clamp",
+                                        "min": 0.0,
+                                        "max": 20.0
+                                    },
+                                    "scaling_parameters": {
+                                        "scale": 1.0,
+                                        "offset": 10.0
+                                    }
+                                },
+                                "autowater_parameters": {
+                                    "min_ignored_trials": 3,
+                                    "min_unrewarded_trials": 3,
+                                    "reward_fraction": 0.5
+                                },
+                                "bias_intervention_parameters": {
+                                    "threshold": {
+                                        "upper": 0.5,
+                                        "lower": 0.0
+                                    },
+                                    "intervention_interval": 10,
+                                    "maximum_water_corrections": 2,
+                                    "bias_window_length": 200,
+                                    "lickspout_offset_delta": 0.05,
+                                    "reward_fraction": 0.5,
+                                    "trial_threshold": 100
+                                },
+                                "is_baiting": true,
+                                "reward_probability_parameters": {
+                                    "base_reward_sum": 0.8,
+                                    "reward_pairs": [
+                                        [
+                                            1.0,
+                                            0.0
+                                        ]
+                                    ]
+                                },
+                                "trial_generation_end_parameters": {
+                                    "ignore_window_length": 20000,
+                                    "ignore_ratio_threshold": 1.0,
+                                    "max_trial": 1000,
+                                    "max_time": 4500.0,
+                                    "min_time": 1800.0
+                                },
+                                "behavior_stability_parameters": {
+                                    "behavior_evaluation_mode": "end",
+                                    "behavior_stability_fraction": 0.5,
+                                    "min_consecutive_stable_trials": 5
+                                },
+                                "extend_block_on_no_response": true,
+                                "kernel_size": 2
+                            }
                         }
                     },
                     "version": "0.0.2-rc37",

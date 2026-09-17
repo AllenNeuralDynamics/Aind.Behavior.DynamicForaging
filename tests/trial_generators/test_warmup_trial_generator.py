@@ -2,8 +2,8 @@ import unittest
 
 import numpy as np
 
-from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generators.coupled_warmup_trial_generator import (
-    CoupledWarmupTrialGeneratorSpec,
+from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generators.warmup_trial_generator import (
+    WarmupTrialGeneratorSpec,
 )
 from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial, TrialOutcome
 from tests.trial_generators.util import simulate_response
@@ -15,7 +15,7 @@ def make_outcome(is_right_choice: bool | None, is_rewarded: bool) -> TrialOutcom
 
 class TestWarmup(unittest.TestCase):
     def setUp(self):
-        self.spec = CoupledWarmupTrialGeneratorSpec()
+        self.spec = WarmupTrialGeneratorSpec()
         self.generator = self.spec.create_generator()
 
     def test_session(self):
