@@ -6,8 +6,8 @@ from ._base import BaseTrialGeneratorSpecModel as BaseTrialGeneratorSpecModel
 from ._base import ITrialGenerator as ITrialGenerator
 from .block_based_trial_generator import BlockBasedTrialGeneratorSpec
 from .composite_trial_generator import TrialGeneratorCompositeSpec
+from .continuous_composite_trial_generator import ContinuousCompositeTrialGeneratorSpec
 from .coupled_trial_generators.base_coupled_trial_generator import BaseCoupledTrialGeneratorSpec
-from .coupled_trial_generators.composite_warmup_trial_generator import CompositeWarmupTrialGeneratorSpec
 from .coupled_trial_generators.coupled_trial_generator import CoupledTrialGeneratorSpec
 from .coupled_trial_generators.coupled_warmup_trial_generator import CoupledWarmupTrialGeneratorSpec
 from .integration_test_trial_generator import IntegrationTestTrialGeneratorSpec
@@ -23,7 +23,7 @@ if TYPE_CHECKING:
             CoupledTrialGeneratorSpec,
             IntegrationTestTrialGeneratorSpec,
             TrialGeneratorCompositeSpec["TrialGeneratorSpec"],
-            CompositeWarmupTrialGeneratorSpec["TrialGeneratorSpec"],
+            ContinuousCompositeTrialGeneratorSpec["TrialGeneratorSpec"],
         )
     ]
 else:
@@ -39,7 +39,7 @@ else:
                     CoupledTrialGeneratorSpec,
                     IntegrationTestTrialGeneratorSpec,
                     TrialGeneratorCompositeSpec["TrialGeneratorSpec"],
-                    CompositeWarmupTrialGeneratorSpec["TrialGeneratorSpec"],
+                    ContinuousCompositeTrialGeneratorSpec["TrialGeneratorSpec"],
                 )
             ],
             Field(discriminator="type", description="Type of trial generator"),

@@ -3,20 +3,20 @@ from typing import Literal
 
 from pydantic import Field
 
-from aind_behavior_dynamic_foraging.task_logic.trial_generators import CompositeWarmupTrialGeneratorSpec
+from aind_behavior_dynamic_foraging.task_logic.trial_generators import ContinuousCompositeTrialGeneratorSpec
 from aind_behavior_dynamic_foraging.task_logic.trial_generators._base import (
     BaseTrialGeneratorSpecModel,
     ITrialGenerator,
 )
-from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generators.composite_warmup_trial_generator import (
-    CompositeWarmupTrialGenerator,
-)
-from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generators.coupled_warmup_trial_generator import (
-    CoupledWarmupTrialGeneratorSpec,
-    CoupledWarmupTrialGenerationEndConditions,
+from aind_behavior_dynamic_foraging.task_logic.trial_generators.continuous_composite_trial_generator import (
+    ContinuousCompositeTrialGenerator,
 )
 from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generators.coupled_trial_generator import (
     CoupledTrialGeneratorSpec,
+)
+from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generators.coupled_warmup_trial_generator import (
+    CoupledWarmupTrialGenerationEndConditions,
+    CoupledWarmupTrialGeneratorSpec,
 )
 from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial, TrialOutcome
 
@@ -33,7 +33,6 @@ class MockTrialGenerator(ITrialGenerator):
     def __init__(self, spec: MockTrialGeneratorSpec) -> None:
         self.spec = spec
         self.trial_count = 0
-        # Add attributes to simulate BlockBasedTrialGenerator interface
         self.outcome_history = []
         self.is_right_choice_history = []
         self.reward_history = []
@@ -52,27 +51,27 @@ class MockTrialGenerator(ITrialGenerator):
         self.reward_history.append(outcome.is_rewarded)
 
 
-class TestCompositeWarmupTrialGenerator(unittest.TestCase):
-    def test_requires_exactly_two_generators(self):
-        """Test that CompositeWarmupTrialGenerator validates exactly 2 generators."""
-        # Valid with 2 generators
-        spec = CompositeWarmupTrialGeneratorSpec(
+class TestContinuousCompositeTrialGenerator(unittest.TestCase):
+    def test_accepts_multiple_generators(self):
+        """The generic composite should accept any number of generator stages."""
+        spec = ContinuousCompositeTrialGeneratorSpec(
             generators=[
+                MockTrialGeneratorSpec(num_trials=5),
                 MockTrialGeneratorSpec(num_trials=5),
                 MockTrialGeneratorSpec(num_trials=5),
             ]
         )
         generator = spec.create_generator()
-        self.assertIsInstance(generator, CompositeWarmupTrialGenerator)
+        self.assertIsInstance(generator, ContinuousCompositeTrialGenerator)
+        self.assertEqual(len(generator._generators), 3)
 
-    def test_concatenate_warmup_and_main(self):
-        """Test that warmup and main stage trials concatenate properly."""
-        warmup_trials = 5
-        main_trials = 5
-        spec = CompositeWarmupTrialGeneratorSpec(
+    def test_concatenate_multiple_stages(self):
+        """Trials should concatenate across all stages in order."""
+        stage_trials = 5
+        spec = ContinuousCompositeTrialGeneratorSpec(
             generators=[
-                MockTrialGeneratorSpec(num_trials=warmup_trials),
-                MockTrialGeneratorSpec(num_trials=main_trials),
+                MockTrialGeneratorSpec(num_trials=stage_trials),
+                MockTrialGeneratorSpec(num_trials=stage_trials),
             ]
         )
         generator = spec.create_generator()
@@ -85,31 +84,25 @@ class TestCompositeWarmupTrialGenerator(unittest.TestCase):
             generator.update(outcome)
             trial = generator.next()
 
-        self.assertEqual(trials_count, warmup_trials + main_trials)
+        self.assertEqual(trials_count, 2 * stage_trials)
 
     def test_state_transfer_with_block_based_generators(self):
-        """Test that session state is transferred between block-based generators.
-
-        This test uses real CoupledWarmupTrialGenerator and CoupledTrialGenerator
-        to verify that state transfer occurs at the warmup to main boundary.
-        """
-        # Create warmup and main stage generators with short durations for testing
+        """Session-level state should carry over between block-based stages."""
         warmup_spec = CoupledWarmupTrialGeneratorSpec(
             trial_generation_end_parameters=CoupledWarmupTrialGenerationEndConditions(
                 min_trial=5,
-                max_choice_bias=0.5,  # Be lenient with bias threshold
-                min_response_rate=0.5,  # Be lenient with response rate
+                max_choice_bias=0.5,
+                min_response_rate=0.5,
             ),
         )
         main_spec = CoupledTrialGeneratorSpec()
 
-        composite_spec = CompositeWarmupTrialGeneratorSpec(generators=[warmup_spec, main_spec])
+        composite_spec = ContinuousCompositeTrialGeneratorSpec(generators=[warmup_spec, main_spec])
         composite = composite_spec.create_generator()
 
-        # Run through warmup stage and into main stage
         total_trial_count = 0
         trial = composite.next()
-        while trial is not None and total_trial_count < 20:  # Safety limit
+        while trial is not None and total_trial_count < 20:
             total_trial_count += 1
             outcome = TrialOutcome(
                 trial=trial,
@@ -119,41 +112,39 @@ class TestCompositeWarmupTrialGenerator(unittest.TestCase):
             composite.update(outcome)
             trial = composite.next()
 
-        # Get the generators
         warmup_generator = composite._generators[0]
         main_generator = composite._generators[1]
 
-        # Verify warmup generator has outcomes
-        warmup_outcomes_count = len(warmup_generator.outcome_history)
-        self.assertGreater(warmup_outcomes_count, 0, "Warmup generator should have outcomes")
-
-        # Verify main generator has transferred history
-        main_outcomes_count = len(main_generator.outcome_history)
-        self.assertGreaterEqual(
-            main_outcomes_count,
-            warmup_outcomes_count,
-            "Main generator should have at least the warmup outcomes transferred",
+        self.assertEqual(
+            main_generator.outcome_history[: len(warmup_generator.outcome_history)],
+            warmup_generator.outcome_history,
         )
+        self.assertEqual(
+            main_generator.is_right_choice_history[: len(warmup_generator.is_right_choice_history)],
+            warmup_generator.is_right_choice_history,
+        )
+        self.assertEqual(
+            main_generator.reward_history[: len(warmup_generator.reward_history)],
+            warmup_generator.reward_history,
+        )
+        self.assertEqual(main_generator.start_time, warmup_generator.start_time)
+        self.assertFalse(main_generator.is_left_baited)
+        self.assertFalse(main_generator.is_right_baited)
 
-    def test_main_stage_works_after_warmup_transition(self):
-        """Test that main stage can continue generating trials after warmup transition.
-
-        Verifies that after transferring state from warmup to main, the composite
-        generator can continue to generate additional trials from the main stage.
-        """
+    def test_main_stage_works_after_transition(self):
+        """After the stage boundary, the next generator should continue producing trials."""
         warmup_spec = CoupledWarmupTrialGeneratorSpec(
             trial_generation_end_parameters=CoupledWarmupTrialGenerationEndConditions(
                 min_trial=5,
-                max_choice_bias=0.5,  # Be lenient with bias threshold
-                min_response_rate=0.5,  # Be lenient with response rate
+                max_choice_bias=0.5,
+                min_response_rate=0.5,
             ),
         )
         main_spec = CoupledTrialGeneratorSpec()
 
-        composite_spec = CompositeWarmupTrialGeneratorSpec(generators=[warmup_spec, main_spec])
+        composite_spec = ContinuousCompositeTrialGeneratorSpec(generators=[warmup_spec, main_spec])
         composite = composite_spec.create_generator()
 
-        # Run through all trials: warmup stage and into main stage
         trial_count = 0
         trial = composite.next()
         while trial is not None and trial_count < 20:
@@ -166,51 +157,39 @@ class TestCompositeWarmupTrialGenerator(unittest.TestCase):
             composite.update(outcome)
             trial = composite.next()
 
-        # Get the generators
         warmup_generator = composite._generators[0]
         main_generator = composite._generators[1]
 
-        warmup_outcomes_count = len(warmup_generator.outcome_history)
-        self.assertGreater(warmup_outcomes_count, 0, "Warmup should have generated trials")
-
-        # Verify main generator has transferred warmup outcomes plus additional main stage outcomes
-        final_main_outcomes = len(main_generator.outcome_history)
-        self.assertGreater(
-            final_main_outcomes,
-            warmup_outcomes_count,
-            "Main stage should have transferred warmup outcomes plus new outcomes",
-        )
+        self.assertGreater(len(warmup_generator.outcome_history), 0)
+        self.assertGreater(len(main_generator.outcome_history), len(warmup_generator.outcome_history))
 
     def test_updates_transition_correctly(self):
-        """Test that updates go to the correct generator during transition."""
-        spec = CompositeWarmupTrialGeneratorSpec(
+        """Updates should continue to target the active stage after each transition."""
+        spec = ContinuousCompositeTrialGeneratorSpec(
             generators=[
+                MockTrialGeneratorSpec(num_trials=3),
                 MockTrialGeneratorSpec(num_trials=3),
                 MockTrialGeneratorSpec(num_trials=3),
             ]
         )
         generator = spec.create_generator()
 
-        # Run through warmup
-        for i in range(3):
+        for _ in range(3):
             trial = generator.next()
             self.assertIsNotNone(trial)
             outcome = TrialOutcome(trial=trial, is_right_choice=True, is_rewarded=True)
             generator.update(outcome)
 
-        # Verify warmup generator received 3 updates
-        warmup_gen = generator._generators[0]
-        self.assertEqual(warmup_gen.trial_count, 3)
+        first_gen = generator._generators[0]
+        self.assertEqual(first_gen.trial_count, 3)
 
-        # Next trial should be from main generator
         trial = generator.next()
         self.assertIsNotNone(trial)
         outcome = TrialOutcome(trial=trial, is_right_choice=True, is_rewarded=True)
         generator.update(outcome)
 
-        # Verify main generator received the update
-        main_gen = generator._generators[1]
-        self.assertEqual(main_gen.trial_count, 1)
+        second_gen = generator._generators[1]
+        self.assertEqual(second_gen.trial_count, 1)
 
 
 if __name__ == "__main__":
