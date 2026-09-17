@@ -13,7 +13,7 @@
                         "rng_seed": null,
                         "aind_behavior_services_pkg_version": "0.13.7",
                         "trial_generator": {
-                            "type": "TrialGeneratorComposite",
+                            "type": "ContinuousCompositeTrialGenerator",
                             "generators": [
                                 {
                                     "type": "CoupledWarmupTrialGenerator",

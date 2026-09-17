@@ -10,7 +10,7 @@ from aind_behavior_dynamic_foraging.task_logic.interventions.bias_intervention i
 from aind_behavior_dynamic_foraging.task_logic.trial_generators import (
     CoupledTrialGeneratorSpec,
     CoupledWarmupTrialGeneratorSpec,
-    TrialGeneratorCompositeSpec,
+    ContinuousCompositeTrialGeneratorSpec,
 )
 from aind_behavior_dynamic_foraging.task_logic.trial_generators.block_based_trial_generator import (
     AutoWaterParameters,
@@ -53,7 +53,7 @@ def make_s_stage_1_warmup():
         task=AindDynamicForagingTaskLogic(
             stage_name="STAGE_1_WARMUP",
             task_parameters=AindDynamicForagingTaskParameters(
-                trial_generator=TrialGeneratorCompositeSpec(
+                trial_generator=ContinuousCompositeTrialGeneratorSpec(
                     generators=[
                         CoupledWarmupTrialGeneratorSpec(
                             min_block_reward=1,
