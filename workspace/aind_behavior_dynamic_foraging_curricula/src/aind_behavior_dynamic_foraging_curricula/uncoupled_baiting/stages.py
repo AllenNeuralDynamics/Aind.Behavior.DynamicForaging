@@ -8,9 +8,9 @@ from aind_behavior_dynamic_foraging.task_logic.interventions.bias_intervention i
     BiasThreshold,
 )
 from aind_behavior_dynamic_foraging.task_logic.trial_generators import (
-    ContinuousCompositeTrialGeneratorSpec,
     CoupledTrialGeneratorSpec,
     CoupledWarmupTrialGeneratorSpec,
+    WarmupTrialGeneratorSpec,
 )
 from aind_behavior_dynamic_foraging.task_logic.trial_generators.block_based_trial_generator import (
     AutoWaterParameters,
@@ -23,8 +23,8 @@ from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_ge
     BehaviorStabilityParameters,
     CoupledTrialGenerationEndConditions,
 )
-from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generators.coupled_warmup_trial_generator import (
-    CoupledWarmupTrialGenerationEndConditions,
+from aind_behavior_dynamic_foraging.task_logic.trial_generators.coupled_trial_generators.warmup_trial_generator import (
+    WarmupTrialGenerationEndConditions,
 )
 from aind_behavior_dynamic_foraging.task_logic.trial_generators.uncoupled_trial_gnerator import (
     UncoupledTrialGenerationEndConditions,
@@ -53,88 +53,86 @@ def make_s_stage_1_warmup():
         task=AindDynamicForagingTaskLogic(
             stage_name="STAGE_1_WARMUP",
             task_parameters=AindDynamicForagingTaskParameters(
-                trial_generator=ContinuousCompositeTrialGeneratorSpec(
-                    generators=[
-                        CoupledWarmupTrialGeneratorSpec(
-                            min_block_reward=1,
-                            reward_size=RewardSize(right=4.0, left=4.0),
-                            trial_generation_end_parameters=CoupledWarmupTrialGenerationEndConditions(
-                                min_trial=50,
-                                max_choice_bias=0.1,
-                                min_response_rate=0.8,
-                                evaluation_window=20,
-                            ),
-                            reward_probability_parameters=RewardProbabilityParameters(
-                                base_reward_sum=1, reward_pairs=[[1.0, 0.0]]
-                            ),
-                            block_length=Scalar(distribution_parameters=ScalarDistributionParameter(value=1)),
-                            inter_trial_interval_duration=ExponentialDistribution(
-                                distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
-                                truncation_parameters=TruncationParameters(truncation_mode="clamp", min=0, max=7),
-                                scaling_parameters=ScalingParameters(offset=1),
-                            ),
-                            quiescent_duration=Scalar(distribution_parameters=ScalarDistributionParameter(value=0.1)),
-                            is_baiting=True,
-                            response_duration=5.0,
-                            reward_consumption_duration=1.0,
-                            autowater_parameters=AutoWaterParameters(
-                                reward_fraction=0.8, min_ignored_trials=0, min_unrewarded_trials=0
-                            ),
-                            bias_intervention_parameters=BiasInterventionParameters(
-                                threshold=BiasThreshold(upper=0.5, lower=0.0),
-                                intervention_interval=10,
-                                maximum_water_corrections=2,
-                                bias_window_length=200,
-                                lickspout_offset_delta=0.05,
-                                reward_fraction=0.8,
-                            ),
+                trial_generator=CoupledWarmupTrialGeneratorSpec(
+                    warmup_generator_spec=WarmupTrialGeneratorSpec(
+                        min_block_reward=1,
+                        reward_size=RewardSize(right=4.0, left=4.0),
+                        trial_generation_end_parameters=WarmupTrialGenerationEndConditions(
+                            min_trial=50,
+                            max_choice_bias=0.1,
+                            min_response_rate=0.8,
+                            evaluation_window=20,
                         ),
-                        CoupledTrialGeneratorSpec(
-                            reward_size=RewardSize(right=4.0, left=4.0),
-                            trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
-                                max_trial=1000,
-                                max_time=4500,
-                                min_time=1800,
-                                ignore_window_length=20000,
-                                ignore_ratio_threshold=1,
-                            ),
-                            behavior_stability_parameters=BehaviorStabilityParameters(
-                                behavior_evaluation_mode="end",
-                                behavior_stability_fraction=0.5,
-                                min_consecutive_stable_trials=5,
-                            ),
-                            reward_probability_parameters=RewardProbabilityParameters(
-                                base_reward_sum=0.8, reward_pairs=[[1.0, 0.0]]
-                            ),
-                            block_length=ExponentialDistribution(
-                                distribution_parameters=ExponentialDistributionParameters(rate=0.1),
-                                truncation_parameters=TruncationParameters(truncation_mode="clamp", min=0, max=30),
-                                scaling_parameters=ScalingParameters(offset=10),
-                            ),
-                            inter_trial_interval_duration=ExponentialDistribution(
-                                distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
-                                truncation_parameters=TruncationParameters(truncation_mode="clamp", min=0, max=7),
-                                scaling_parameters=ScalingParameters(offset=1),
-                            ),
-                            quiescent_duration=Scalar(distribution_parameters=ScalarDistributionParameter(value=0.1)),
-                            is_baiting=True,
-                            extend_block_on_no_response=True,
-                            response_duration=5.0,
-                            reward_consumption_duration=1.0,
-                            kernel_size=2,
-                            autowater_parameters=AutoWaterParameters(
-                                reward_fraction=0.5, min_ignored_trials=3, min_unrewarded_trials=3
-                            ),
-                            bias_intervention_parameters=BiasInterventionParameters(
-                                threshold=BiasThreshold(upper=0.5, lower=0.0),
-                                intervention_interval=10,
-                                maximum_water_corrections=2,
-                                bias_window_length=200,
-                                lickspout_offset_delta=0.05,
-                                reward_fraction=0.5,
-                            ),
+                        reward_probability_parameters=RewardProbabilityParameters(
+                            base_reward_sum=1, reward_pairs=[[1.0, 0.0]]
                         ),
-                    ]
+                        block_length=Scalar(distribution_parameters=ScalarDistributionParameter(value=1)),
+                        inter_trial_interval_duration=ExponentialDistribution(
+                            distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
+                            truncation_parameters=TruncationParameters(truncation_mode="clamp", min=0, max=7),
+                            scaling_parameters=ScalingParameters(offset=1),
+                        ),
+                        quiescent_duration=Scalar(distribution_parameters=ScalarDistributionParameter(value=0.1)),
+                        is_baiting=True,
+                        response_duration=5.0,
+                        reward_consumption_duration=1.0,
+                        autowater_parameters=AutoWaterParameters(
+                            reward_fraction=0.8, min_ignored_trials=0, min_unrewarded_trials=0
+                        ),
+                        bias_intervention_parameters=BiasInterventionParameters(
+                            threshold=BiasThreshold(upper=0.5, lower=0.0),
+                            intervention_interval=10,
+                            maximum_water_corrections=2,
+                            bias_window_length=200,
+                            lickspout_offset_delta=0.05,
+                            reward_fraction=0.8,
+                        ),
+                    ),
+                    coupled_generator_spec=CoupledTrialGeneratorSpec(
+                        reward_size=RewardSize(right=4.0, left=4.0),
+                        trial_generation_end_parameters=CoupledTrialGenerationEndConditions(
+                            max_trial=1000,
+                            max_time=4500,
+                            min_time=1800,
+                            ignore_window_length=20000,
+                            ignore_ratio_threshold=1,
+                        ),
+                        behavior_stability_parameters=BehaviorStabilityParameters(
+                            behavior_evaluation_mode="end",
+                            behavior_stability_fraction=0.5,
+                            min_consecutive_stable_trials=5,
+                        ),
+                        reward_probability_parameters=RewardProbabilityParameters(
+                            base_reward_sum=0.8, reward_pairs=[[1.0, 0.0]]
+                        ),
+                        block_length=ExponentialDistribution(
+                            distribution_parameters=ExponentialDistributionParameters(rate=0.1),
+                            truncation_parameters=TruncationParameters(truncation_mode="clamp", min=0, max=30),
+                            scaling_parameters=ScalingParameters(offset=10),
+                        ),
+                        inter_trial_interval_duration=ExponentialDistribution(
+                            distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
+                            truncation_parameters=TruncationParameters(truncation_mode="clamp", min=0, max=7),
+                            scaling_parameters=ScalingParameters(offset=1),
+                        ),
+                        quiescent_duration=Scalar(distribution_parameters=ScalarDistributionParameter(value=0.1)),
+                        is_baiting=True,
+                        extend_block_on_no_response=True,
+                        response_duration=5.0,
+                        reward_consumption_duration=1.0,
+                        kernel_size=2,
+                        autowater_parameters=AutoWaterParameters(
+                            reward_fraction=0.5, min_ignored_trials=3, min_unrewarded_trials=3
+                        ),
+                        bias_intervention_parameters=BiasInterventionParameters(
+                            threshold=BiasThreshold(upper=0.5, lower=0.0),
+                            intervention_interval=10,
+                            maximum_water_corrections=2,
+                            bias_window_length=200,
+                            lickspout_offset_delta=0.05,
+                            reward_fraction=0.5,
+                        ),
+                    ),
                 ),
             ),
         ),
