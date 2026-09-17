@@ -8,9 +8,9 @@ from aind_behavior_dynamic_foraging.task_logic.interventions.bias_intervention i
     BiasThreshold,
 )
 from aind_behavior_dynamic_foraging.task_logic.trial_generators import (
+    ContinuousCompositeTrialGeneratorSpec,
     CoupledTrialGeneratorSpec,
     CoupledWarmupTrialGeneratorSpec,
-    ContinuousCompositeTrialGeneratorSpec,
 )
 from aind_behavior_dynamic_foraging.task_logic.trial_generators.block_based_trial_generator import (
     AutoWaterParameters,
