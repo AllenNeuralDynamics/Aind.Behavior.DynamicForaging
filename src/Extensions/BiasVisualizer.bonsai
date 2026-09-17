@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<WorkflowBuilder Version="2.9.0"
+<WorkflowBuilder Version="2.9.1"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
                  xmlns:implot="clr-namespace:Bonsai.ImPlot;assembly=Bonsai.ImPlot"
@@ -34,7 +34,7 @@
               </implot:Size>
               <implot:Flags>NoTitle</implot:Flags>
               <implot:FlagsX>AutoFit</implot:FlagsX>
-              <implot:FlagsY>None</implot:FlagsY>
+              <implot:FlagsY>Invert</implot:FlagsY>
             </Expression>
             <Expression xsi:type="rx:PublishSubject">
               <Name>BiasPlot</Name>
@@ -50,8 +50,8 @@
                   <p1:double>1</p1:double>
                 </p1:TickPositions>
                 <p1:TickLabels>
-                  <p1:string>R</p1:string>
                   <p1:string>L</p1:string>
+                  <p1:string>R</p1:string>
                 </p1:TickLabels>
                 <p1:ImPlotLocationFlags>East</p1:ImPlotLocationFlags>
                 <p1:ImPlotLegendFlags>Outside</p1:ImPlotLegendFlags>
@@ -324,12 +324,6 @@
               <imviz:Visible>true</imviz:Visible>
               <imviz:Flags>None</imviz:Flags>
             </Expression>
-            <Expression xsi:type="SubscribeSubject">
-              <Name>TaskLogicParameters</Name>
-            </Expression>
-            <Expression xsi:type="MemberSelector">
-              <Selector>TrialGenerator</Selector>
-            </Expression>
           </Nodes>
           <Edges>
             <Edge From="0" To="1" Label="Source1" />
@@ -397,7 +391,6 @@
             <Edge From="61" To="62" Label="Source1" />
             <Edge From="62" To="63" Label="Source1" />
             <Edge From="63" To="64" Label="Source1" />
-            <Edge From="65" To="66" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
