@@ -2163,6 +2163,67 @@ namespace AindDynamicForagingDataSchema
     }
 
 
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class ContinuousCompositeTrialGeneratorSpecTrialGeneratorSpec : TrialGeneratorSpec
+    {
+    
+        private System.Collections.Generic.List<TrialGeneratorSpec> _generators;
+    
+        public ContinuousCompositeTrialGeneratorSpecTrialGeneratorSpec()
+        {
+            _generators = new System.Collections.Generic.List<TrialGeneratorSpec>();
+        }
+    
+        protected ContinuousCompositeTrialGeneratorSpecTrialGeneratorSpec(ContinuousCompositeTrialGeneratorSpecTrialGeneratorSpec other) : 
+                base(other)
+        {
+            _generators = other._generators;
+        }
+    
+        /// <summary>
+        /// List of block-based generator specifications to concatenate. When one generator returns None, the next one is activated while preserving session-state history across the stage boundary.
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("generators", Required=Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DescriptionAttribute("List of block-based generator specifications to concatenate. When one generator r" +
+            "eturns None, the next one is activated while preserving session-state history ac" +
+            "ross the stage boundary.")]
+        public System.Collections.Generic.List<TrialGeneratorSpec> Generators
+        {
+            get
+            {
+                return _generators;
+            }
+            set
+            {
+                _generators = value;
+            }
+        }
+    
+        public System.IObservable<ContinuousCompositeTrialGeneratorSpecTrialGeneratorSpec> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new ContinuousCompositeTrialGeneratorSpecTrialGeneratorSpec(this)));
+        }
+    
+        public System.IObservable<ContinuousCompositeTrialGeneratorSpecTrialGeneratorSpec> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new ContinuousCompositeTrialGeneratorSpecTrialGeneratorSpec(this));
+        }
+    
+        protected override bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            if (base.PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(", ");
+            }
+            stringBuilder.Append("Generators = " + _generators);
+            return true;
+        }
+    }
+
+
     /// <summary>
     /// Defines the conditions under which a foraging session should terminate.
     /// </summary>
@@ -6704,6 +6765,7 @@ namespace AindDynamicForagingDataSchema
     [JsonInheritanceAttribute("CoupledTrialGenerator", typeof(CoupledTrialGeneratorSpec))]
     [JsonInheritanceAttribute("IntegrationTestTrialGenerator", typeof(IntegrationTestTrialGeneratorSpec))]
     [JsonInheritanceAttribute("TrialGeneratorComposite", typeof(TrialGeneratorCompositeSpecTrialGeneratorSpec))]
+    [JsonInheritanceAttribute("ContinuousCompositeTrialGenerator", typeof(ContinuousCompositeTrialGeneratorSpecTrialGeneratorSpec))]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
     [Bonsai.CombinatorAttribute(MethodName="Generate")]
     public partial class TrialGeneratorSpec
@@ -8441,6 +8503,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CoupledTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<IntegrationTestTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TrialGeneratorCompositeSpecTrialGeneratorSpec>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<ContinuousCompositeTrialGeneratorSpecTrialGeneratorSpec>))]
     public partial class MatchTrialGeneratorSpec : Bonsai.Expressions.SingleArgumentExpressionBuilder
     {
     
@@ -8643,6 +8706,11 @@ namespace AindDynamicForagingDataSchema
         public System.IObservable<string> Process(System.IObservable<ConnectedClockOutput> source)
         {
             return Process<ConnectedClockOutput>(source);
+        }
+
+        public System.IObservable<string> Process(System.IObservable<ContinuousCompositeTrialGeneratorSpecTrialGeneratorSpec> source)
+        {
+            return Process<ContinuousCompositeTrialGeneratorSpecTrialGeneratorSpec>(source);
         }
 
         public System.IObservable<string> Process(System.IObservable<CoupledTrialGenerationEndConditions> source)
@@ -8853,6 +8921,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CameraControllerSpinnakerCamera>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CameraControllerWebCamera>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<ConnectedClockOutput>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<ContinuousCompositeTrialGeneratorSpecTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CoupledTrialGenerationEndConditions>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CoupledTrialGeneratorSpec>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CoupledWarmupTrialGenerationEndConditions>))]

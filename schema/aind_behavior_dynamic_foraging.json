@@ -1096,6 +1096,30 @@
       "title": "ConnectedClockOutput",
       "type": "object"
     },
+    "ContinuousCompositeTrialGeneratorSpec_TrialGeneratorSpec_": {
+      "properties": {
+        "type": {
+          "const": "ContinuousCompositeTrialGenerator",
+          "default": "ContinuousCompositeTrialGenerator",
+          "title": "Type",
+          "type": "string"
+        },
+        "generators": {
+          "description": "List of block-based generator specifications to concatenate. When one generator returns None, the next one is activated while preserving session-state history across the stage boundary.",
+          "items": {
+            "$ref": "#/$defs/TrialGeneratorSpec"
+          },
+          "minItems": 1,
+          "title": "Generators",
+          "type": "array"
+        }
+      },
+      "required": [
+        "generators"
+      ],
+      "title": "ContinuousCompositeTrialGeneratorSpec[TrialGeneratorSpec]",
+      "type": "object"
+    },
     "CoupledTrialGenerationEndConditions": {
       "description": "Defines the conditions under which a foraging session should terminate.",
       "properties": {
@@ -3621,6 +3645,7 @@
         "mapping": {
           "BaseCoupledTrialGenerator": "#/$defs/BaseCoupledTrialGeneratorSpec",
           "BlockBasedTrialGenerator": "#/$defs/BlockBasedTrialGeneratorSpec",
+          "ContinuousCompositeTrialGenerator": "#/$defs/ContinuousCompositeTrialGeneratorSpec_TrialGeneratorSpec_",
           "CoupledTrialGenerator": "#/$defs/CoupledTrialGeneratorSpec",
           "CoupledWarmupTrialGenerator": "#/$defs/CoupledWarmupTrialGeneratorSpec",
           "IntegrationTestTrialGenerator": "#/$defs/IntegrationTestTrialGeneratorSpec",
@@ -3650,6 +3675,9 @@
         },
         {
           "$ref": "#/$defs/TrialGeneratorCompositeSpec_TrialGeneratorSpec_"
+        },
+        {
+          "$ref": "#/$defs/ContinuousCompositeTrialGeneratorSpec_TrialGeneratorSpec_"
         }
       ]
     },
