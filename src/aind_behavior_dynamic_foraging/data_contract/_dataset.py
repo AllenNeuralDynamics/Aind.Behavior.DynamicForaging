@@ -224,6 +224,13 @@ def make_dataset(
                                 ),
                             ),
                             SoftwareEvents(
+                                name="Annotations",
+                                description="An event emitted whenever an annotation is made during the session.",
+                                reader_params=SoftwareEvents.make_params(
+                                    root_path / "behavior/SoftwareEvents/Annotations.json"
+                                ),
+                            ),
+                            SoftwareEvents(
                                 name="RightManualAutoReward",
                                 description="An event emitted when the manual right auto reward is triggered. This manual reward is aligned with go cue.",
                                 reader_params=SoftwareEvents.make_params(
