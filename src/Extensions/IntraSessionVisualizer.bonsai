@@ -327,7 +327,7 @@
               <Selector>Item2</Selector>
             </Expression>
             <Expression xsi:type="IncludeWorkflow" Path="Extensions\InlineSoftwareEvent.bonsai">
-              <EventName>Notes</EventName>
+              <EventName>Annotations</EventName>
             </Expression>
           </Nodes>
           <Edges>

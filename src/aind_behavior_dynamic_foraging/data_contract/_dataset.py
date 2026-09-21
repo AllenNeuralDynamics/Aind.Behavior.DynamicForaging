@@ -217,10 +217,10 @@ def make_dataset(
                                 ),
                             ),
                             SoftwareEvents(
-                                name="Notes",
-                                description="An event emitted when notes are saved in a session.",
+                                name="Annotations",
+                                description="An event emitted whenever an annotation is made during the session.",
                                 reader_params=SoftwareEvents.make_params(
-                                    root_path / "behavior/SoftwareEvents/Notes.json"
+                                    root_path / "behavior/SoftwareEvents/Annotations.json"
                                 ),
                             ),
                             SoftwareEvents(
