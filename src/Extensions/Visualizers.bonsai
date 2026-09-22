@@ -458,7 +458,7 @@
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="p4:ManipulatorPosition">
-                            <p4:X>-1</p4:X>
+                            <p4:X>1</p4:X>
                             <p4:Y1>0</p4:Y1>
                             <p4:Y2>0</p4:Y2>
                             <p4:Z>0</p4:Z>
@@ -498,7 +498,7 @@
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="p4:ManipulatorPosition">
-                            <p4:X>1</p4:X>
+                            <p4:X>-1</p4:X>
                             <p4:Y1>0</p4:Y1>
                             <p4:Y2>0</p4:Y2>
                             <p4:Z>0</p4:Z>
@@ -539,8 +539,8 @@
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="p4:ManipulatorPosition">
                             <p4:X>0</p4:X>
-                            <p4:Y1>1</p4:Y1>
-                            <p4:Y2>0</p4:Y2>
+                            <p4:Y1>0</p4:Y1>
+                            <p4:Y2>1</p4:Y2>
                             <p4:Z>0</p4:Z>
                           </Combinator>
                         </Expression>
@@ -579,8 +579,8 @@
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="p4:ManipulatorPosition">
                             <p4:X>0</p4:X>
-                            <p4:Y1>0</p4:Y1>
-                            <p4:Y2>1</p4:Y2>
+                            <p4:Y1>1</p4:Y1>
+                            <p4:Y2>0</p4:Y2>
                             <p4:Z>0</p4:Z>
                           </Combinator>
                         </Expression>
@@ -619,8 +619,8 @@
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="p4:ManipulatorPosition">
                             <p4:X>0</p4:X>
-                            <p4:Y1>-1</p4:Y1>
-                            <p4:Y2>0</p4:Y2>
+                            <p4:Y1>0</p4:Y1>
+                            <p4:Y2>-1</p4:Y2>
                             <p4:Z>0</p4:Z>
                           </Combinator>
                         </Expression>
@@ -659,8 +659,8 @@
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="p4:ManipulatorPosition">
                             <p4:X>0</p4:X>
-                            <p4:Y1>0</p4:Y1>
-                            <p4:Y2>-1</p4:Y2>
+                            <p4:Y1>-1</p4:Y1>
+                            <p4:Y2>0</p4:Y2>
                             <p4:Z>0</p4:Z>
                           </Combinator>
                         </Expression>
@@ -889,11 +889,6 @@
                   <Expression xsi:type="MemberSelector">
                     <Selector>Item2</Selector>
                   </Expression>
-                  <Expression xsi:type="Multiply">
-                    <Operand xsi:type="DoubleProperty">
-                      <Value>-1</Value>
-                    </Operand>
-                  </Expression>
                   <Expression xsi:type="MulticastSubject">
                     <Name>ManualSpoutDelta</Name>
                   </Expression>
@@ -905,7 +900,6 @@
                   <Edge From="2" To="3" Label="Source1" />
                   <Edge From="3" To="4" Label="Source1" />
                   <Edge From="4" To="5" Label="Source1" />
-                  <Edge From="5" To="6" Label="Source1" />
                 </Edges>
               </Workflow>
             </Expression>
@@ -928,6 +922,11 @@
                   <Expression xsi:type="MemberSelector">
                     <Selector>Item2</Selector>
                   </Expression>
+                  <Expression xsi:type="Multiply">
+                    <Operand xsi:type="DoubleProperty">
+                      <Value>-1</Value>
+                    </Operand>
+                  </Expression>
                   <Expression xsi:type="MulticastSubject">
                     <Name>ManualSpoutDelta</Name>
                   </Expression>
@@ -939,6 +938,7 @@
                   <Edge From="2" To="3" Label="Source1" />
                   <Edge From="3" To="4" Label="Source1" />
                   <Edge From="4" To="5" Label="Source1" />
+                  <Edge From="5" To="6" Label="Source1" />
                 </Edges>
               </Workflow>
             </Expression>
@@ -1925,25 +1925,6 @@
           </Edges>
         </Workflow>
       </Expression>
-      <Expression xsi:type="IncludeWorkflow" Path="Extensions\BehaviorVisualizer.bonsai">
-        <PlotName>Behavior1</PlotName>
-        <LickLeftSubject>LickLeft</LickLeftSubject>
-        <LickRightSubject>LickRight</LickRightSubject>
-        <TrialSubject>TimedTrial</TrialSubject>
-        <FrameSubject>Behavior</FrameSubject>
-        <AutoRewardRightSubject>AutoRewardRight</AutoRewardRightSubject>
-        <AutoRewardLeftSubject>AutoRewardLeft</AutoRewardLeftSubject>
-      </Expression>
-      <Expression xsi:type="IncludeWorkflow" Path="Extensions\BiasVisualizer.bonsai">
-        <FrameSubject>Bias</FrameSubject>
-        <TimedBias>TrialIndexedBias</TimedBias>
-        <LeftBiasCorrectionSubject>LeftBiasCorrection</LeftBiasCorrectionSubject>
-        <RightBiasCorrectionSubject>RightBiasCorrection</RightBiasCorrectionSubject>
-      </Expression>
-      <Expression xsi:type="Annotation">
-        <Name>PLACEHOLDER</Name>
-        <Text><![CDATA[Placheolder for session information dictionary]]></Text>
-      </Expression>
       <Expression xsi:type="GroupWorkflow">
         <Name>SessionInfo</Name>
         <Workflow>
@@ -1963,6 +1944,43 @@
             <Edge From="0" To="1" Label="Source1" />
             <Edge From="1" To="2" Label="Source1" />
             <Edge From="2" To="3" Label="Source1" />
+          </Edges>
+        </Workflow>
+      </Expression>
+      <Expression xsi:type="rx:Defer">
+        <Name>BehaviorVisualizer</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\BehaviorVisualizer.bonsai">
+              <PlotName>Behavior1</PlotName>
+              <LickLeftSubject>LickLeft</LickLeftSubject>
+              <LickRightSubject>LickRight</LickRightSubject>
+              <TrialSubject>TimedTrial</TrialSubject>
+              <FrameSubject>Behavior</FrameSubject>
+              <AutoRewardRightSubject>AutoRewardRight</AutoRewardRightSubject>
+              <AutoRewardLeftSubject>AutoRewardLeft</AutoRewardLeftSubject>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+          </Edges>
+        </Workflow>
+      </Expression>
+      <Expression xsi:type="rx:Defer">
+        <Name>BiasVisualizer</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\BiasVisualizer.bonsai">
+              <FrameSubject>Bias</FrameSubject>
+              <TimedBias>TrialIndexedBias</TimedBias>
+              <LeftBiasCorrectionSubject>LeftBiasCorrection</LeftBiasCorrectionSubject>
+              <RightBiasCorrectionSubject>RightBiasCorrection</RightBiasCorrectionSubject>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
@@ -2057,13 +2075,13 @@
         <CameraName>BodyCamera</CameraName>
         <MinSaturation>0.1</MinSaturation>
         <MaxSaturation>0.9</MaxSaturation>
-        <FlipState>2</FlipState>
+        <FlipState>1</FlipState>
         <Rotation>0</Rotation>
         <TriggeredCamerasStream>TriggeredCamerasStream</TriggeredCamerasStream>
       </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Extensions\CameraPreviewVisualizer.bonsai">
         <FrameSubject>Camera</FrameSubject>
-        <CameraName>BodyCamera</CameraName>
+        <CameraName>SideCamera</CameraName>
         <MinSaturation>0.1</MinSaturation>
         <MaxSaturation>0.9</MaxSaturation>
         <FlipState>2</FlipState>
@@ -2079,55 +2097,91 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:WithLatestFrom" />
       </Expression>
-      <Expression xsi:type="IncludeWorkflow" Path="Extensions\MetadataVisualizer.bonsai">
-        <FrameSubject>Metadata</FrameSubject>
-        <StartExperimentSubject>StartExperimentShortcut</StartExperimentSubject>
-        <UiHabituationTimeUpdate>UiHabituationTimeUpdate</UiHabituationTimeUpdate>
+      <Expression xsi:type="rx:Defer">
+        <Name>MetadataVisualizer</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="WorkflowInput">
+              <Name>Source1</Name>
+            </Expression>
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\MetadataVisualizer.bonsai">
+              <FrameSubject>Metadata</FrameSubject>
+              <StartExperimentSubject>StartExperimentShortcut</StartExperimentSubject>
+              <UiHabituationTimeUpdate>UiHabituationTimeUpdate</UiHabituationTimeUpdate>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="1" To="2" Label="Source1" />
+          </Edges>
+        </Workflow>
       </Expression>
-      <Expression xsi:type="IncludeWorkflow" Path="Extensions\PreSessionVisualizer.bonsai">
-        <FrameSubject>PreSession</FrameSubject>
-        <UiKeepLeftOpne>UiKeepLeftOpen</UiKeepLeftOpne>
-        <UiKeepRightOpen>UiKeepRightOpen</UiKeepRightOpen>
-        <UiKeepBothOpen>UiKeepBothOpen</UiKeepBothOpen>
-        <UiDrainLeft>UiDrainLeft</UiDrainLeft>
-        <UiDrainRight>UiDrainRight</UiDrainRight>
-        <UiDrainBoth>UiDrainBoth</UiDrainBoth>
-        <UiManipulatorLeft>UiManipulatorLeft</UiManipulatorLeft>
-        <UiManipulatorForwardLeft>UiManipulatorForwardLeft</UiManipulatorForwardLeft>
-        <UiManipulatorForwardRight>UiManipulatorForwardRight</UiManipulatorForwardRight>
-        <UiManipulatorUp>UiManipulatorUp</UiManipulatorUp>
-        <UiManipulatorRight>UiManipulatorRight</UiManipulatorRight>
-        <UiManipulatorBackLeft>UiManipulatorBackLeft</UiManipulatorBackLeft>
-        <UiManipulatorBackRight>UiManipulatorBackRight</UiManipulatorBackRight>
-        <UiManipulatorDown>UiManipulatorDown</UiManipulatorDown>
-        <UiManipulatorStop>UiManipulatorStop</UiManipulatorStop>
-        <UiManipulatorHome>UiManipulatorHome</UiManipulatorHome>
-        <UiControlManipulator>UiManipulatorInitialize</UiControlManipulator>
-        <DrainLeftComplete>DrainLeftComplete</DrainLeftComplete>
-        <DrainRightComplete>DrainRightComplete</DrainRightComplete>
+      <Expression xsi:type="rx:Defer">
+        <Name>PreSessionVisualizer</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\PreSessionVisualizer.bonsai">
+              <FrameSubject>PreSession</FrameSubject>
+              <UiKeepLeftOpne>UiKeepLeftOpen</UiKeepLeftOpne>
+              <UiKeepRightOpen>UiKeepRightOpen</UiKeepRightOpen>
+              <UiKeepBothOpen>UiKeepBothOpen</UiKeepBothOpen>
+              <UiDrainLeft>UiDrainLeft</UiDrainLeft>
+              <UiDrainRight>UiDrainRight</UiDrainRight>
+              <UiDrainBoth>UiDrainBoth</UiDrainBoth>
+              <UiManipulatorLeft>UiManipulatorLeft</UiManipulatorLeft>
+              <UiManipulatorForwardLeft>UiManipulatorForwardLeft</UiManipulatorForwardLeft>
+              <UiManipulatorForwardRight>UiManipulatorForwardRight</UiManipulatorForwardRight>
+              <UiManipulatorUp>UiManipulatorUp</UiManipulatorUp>
+              <UiManipulatorRight>UiManipulatorRight</UiManipulatorRight>
+              <UiManipulatorBackLeft>UiManipulatorBackLeft</UiManipulatorBackLeft>
+              <UiManipulatorBackRight>UiManipulatorBackRight</UiManipulatorBackRight>
+              <UiManipulatorDown>UiManipulatorDown</UiManipulatorDown>
+              <UiManipulatorStop>UiManipulatorStop</UiManipulatorStop>
+              <UiManipulatorHome>UiManipulatorHome</UiManipulatorHome>
+              <UiControlManipulator>UiManipulatorInitialize</UiControlManipulator>
+              <DrainLeftComplete>DrainLeftComplete</DrainLeftComplete>
+              <DrainRightComplete>DrainRightComplete</DrainRightComplete>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+          </Edges>
+        </Workflow>
       </Expression>
-      <Expression xsi:type="IncludeWorkflow" Path="Extensions\IntraSessionVisualizer.bonsai">
-        <FrameSubject>IntraSession</FrameSubject>
-        <UiGiveLeft>UiGiveLeft</UiGiveLeft>
-        <UiGiveRight>UiGiveRight</UiGiveRight>
-        <UiMoveLeft>UiMoveLeft</UiMoveLeft>
-        <UiMoveRight>UiMoveRight</UiMoveRight>
-        <StartExperimentSubject>StartExperiment</StartExperimentSubject>
-        <UiCueGiveLeft>UiCueGiveLeft</UiCueGiveLeft>
-        <UiCueGiveRight>UiCueGiveRight</UiCueGiveRight>
-        <SessionMetadataSubject>SessionMetadata</SessionMetadataSubject>
+      <Expression xsi:type="rx:Defer">
+        <Name>IntraSessionVisualizer</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\IntraSessionVisualizer.bonsai">
+              <FrameSubject>IntraSession</FrameSubject>
+              <UiGiveLeft>UiGiveLeft</UiGiveLeft>
+              <UiGiveRight>UiGiveRight</UiGiveRight>
+              <UiMoveLeft>UiMoveLeft</UiMoveLeft>
+              <UiMoveRight>UiMoveRight</UiMoveRight>
+              <StartExperimentSubject>StartExperiment</StartExperimentSubject>
+              <UiCueGiveLeft>UiCueGiveLeft</UiCueGiveLeft>
+              <UiCueGiveRight>UiCueGiveRight</UiCueGiveRight>
+              <SessionMetadataSubject>SessionMetadata</SessionMetadataSubject>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+          </Edges>
+        </Workflow>
       </Expression>
     </Nodes>
     <Edges>
-      <Edge From="6" To="7" Label="Source1" />
-      <Edge From="8" To="11" Label="Source1" />
-      <Edge From="9" To="10" Label="Source1" />
-      <Edge From="10" To="11" Label="Source2" />
-      <Edge From="12" To="13" Label="Source1" />
-      <Edge From="12" To="14" Label="Source1" />
-      <Edge From="15" To="17" Label="Source1" />
-      <Edge From="16" To="17" Label="Source2" />
-      <Edge From="17" To="18" Label="Source1" />
+      <Edge From="7" To="10" Label="Source1" />
+      <Edge From="8" To="9" Label="Source1" />
+      <Edge From="9" To="10" Label="Source2" />
+      <Edge From="11" To="12" Label="Source1" />
+      <Edge From="11" To="13" Label="Source1" />
+      <Edge From="14" To="16" Label="Source1" />
+      <Edge From="15" To="16" Label="Source2" />
+      <Edge From="16" To="17" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>
