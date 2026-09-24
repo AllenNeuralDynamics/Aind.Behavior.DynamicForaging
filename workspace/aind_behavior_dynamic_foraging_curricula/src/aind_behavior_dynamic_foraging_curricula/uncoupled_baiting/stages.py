@@ -218,12 +218,12 @@ def make_s_stage_2():
                         min_consecutive_stable_trials=5,
                     ),
                     reward_probability_parameters=RewardProbabilityParameters(
-                        base_reward_sum=0.6, reward_pairs=[[8, 1]]
+                        base_reward_sum=0.8, reward_pairs=[[8, 1]]
                     ),
                     block_length=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=0.1),
                         truncation_parameters=TruncationParameters(truncation_mode="clamp", min=0, max=40),
-                        scaling_parameters=ScalingParameters(offset=10),
+                        scaling_parameters=ScalingParameters(offset=20),
                     ),
                     inter_trial_interval_duration=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=1.0 / 3),
