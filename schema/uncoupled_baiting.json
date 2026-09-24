@@ -358,7 +358,7 @@
                                 },
                                 "scaling_parameters": {
                                     "scale": 1.0,
-                                    "offset": 10.0
+                                    "offset": 20.0
                                 }
                             },
                             "autowater_parameters": {
