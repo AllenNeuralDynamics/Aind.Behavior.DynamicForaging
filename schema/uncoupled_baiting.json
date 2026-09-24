@@ -380,7 +380,7 @@
                             },
                             "is_baiting": true,
                             "reward_probability_parameters": {
-                                "base_reward_sum": 0.6,
+                                "base_reward_sum": 0.8,
                                 "reward_pairs": [
                                     [
                                         8.0,

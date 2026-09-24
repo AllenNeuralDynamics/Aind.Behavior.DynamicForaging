@@ -218,7 +218,7 @@ def make_s_stage_2():
                         min_consecutive_stable_trials=5,
                     ),
                     reward_probability_parameters=RewardProbabilityParameters(
-                        base_reward_sum=0.6, reward_pairs=[[8, 1]]
+                        base_reward_sum=0.8, reward_pairs=[[8, 1]]
                     ),
                     block_length=ExponentialDistribution(
                         distribution_parameters=ExponentialDistributionParameters(rate=0.1),
