@@ -1,7 +1,7 @@
 {
     "pkg_location": "aind_behavior_dynamic_foraging_curricula.uncoupled",
     "name": "Uncoupled Without Baiting",
-    "version": "0.0.2-rc37",
+    "version": "0.0.3",
     "graph": {
         "nodes": {
             "0": {
@@ -184,7 +184,7 @@
                             }
                         }
                     },
-                    "version": "0.0.2-rc37",
+                    "version": "0.0.3",
                     "stage_name": "STAGE_1_WARMUP"
                 },
                 "graph": {
@@ -294,7 +294,7 @@
                             "kernel_size": 2
                         }
                     },
-                    "version": "0.0.2-rc37",
+                    "version": "0.0.3",
                     "stage_name": "STAGE_1"
                 },
                 "graph": {
@@ -404,7 +404,7 @@
                             "kernel_size": 2
                         }
                     },
-                    "version": "0.0.2-rc37",
+                    "version": "0.0.3",
                     "stage_name": "STAGE_2"
                 },
                 "graph": {
@@ -502,7 +502,7 @@
                             }
                         }
                     },
-                    "version": "0.0.2-rc37",
+                    "version": "0.0.3",
                     "stage_name": "STAGE_3"
                 },
                 "graph": {
@@ -596,7 +596,7 @@
                             }
                         }
                     },
-                    "version": "0.0.2-rc37",
+                    "version": "0.0.3",
                     "stage_name": "STAGE_FINAL"
                 },
                 "graph": {
@@ -690,7 +690,7 @@
                             }
                         }
                     },
-                    "version": "0.0.2-rc37",
+                    "version": "0.0.3",
                     "stage_name": "GRADUATED"
                 },
                 "graph": {
