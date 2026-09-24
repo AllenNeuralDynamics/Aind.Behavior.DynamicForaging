@@ -206,133 +206,133 @@ def make_dataset(
                                 name="TrialMetrics",
                                 description="An event emitted with the metrics of a trial.",
                                 reader_params=SoftwareEvents.make_params(
-                                    root_path / "behavior/SoftwareEvents/TrialMetrics.json"
+                                    root_path / "behavior/SoftwareEvents/TrialMetrics.jsonl"
                                 ),
                             ),
                             SoftwareEvents(
                                 name="FinalManipulatorPosition",
                                 description="An event emitted when the final manipulator position is recorded.",
                                 reader_params=SoftwareEvents.make_params(
-                                    root_path / "behavior/SoftwareEvents/FinalManipulatorPosition.json"
+                                    root_path / "behavior/SoftwareEvents/FinalManipulatorPosition.jsonl"
                                 ),
                             ),
                             SoftwareEvents(
                                 name="LeftManualAutoReward",
                                 description="An event emitted when the manual left auto reward is triggered. This manual reward is aligned with go cue.",
                                 reader_params=SoftwareEvents.make_params(
-                                    root_path / "behavior/SoftwareEvents/LeftManualAutoReward.json"
+                                    root_path / "behavior/SoftwareEvents/LeftManualAutoReward.jsonl"
                                 ),
                             ),
                             SoftwareEvents(
                                 name="RightManualAutoReward",
                                 description="An event emitted when the manual right auto reward is triggered. This manual reward is aligned with go cue.",
                                 reader_params=SoftwareEvents.make_params(
-                                    root_path / "behavior/SoftwareEvents/RightManualAutoReward.json"
+                                    root_path / "behavior/SoftwareEvents/RightManualAutoReward.jsonl"
                                 ),
                             ),
                             SoftwareEvents(
                                 name="RightManualWater",
                                 description="An event emitted when the right manual water is triggered.",
                                 reader_params=SoftwareEvents.make_params(
-                                    root_path / "behavior/SoftwareEvents/RightManualWater.json"
+                                    root_path / "behavior/SoftwareEvents/RightManualWater.jsonl"
                                 ),
                             ),
                             SoftwareEvents(
                                 name="LeftManualWater",
                                 description="An event emitted when the left manual water is triggered.",
                                 reader_params=SoftwareEvents.make_params(
-                                    root_path / "behavior/SoftwareEvents/LeftManualWater.json"
+                                    root_path / "behavior/SoftwareEvents/LeftManualWater.jsonl"
                                 ),
                             ),
                             SoftwareEvents(
                                 name="GiveManualWaterRight",
                                 description="An event emitted when manual water is given through visualizer. The value corresponds to whether water was delivered on the Right (True) or Left (False)",
                                 reader_params=SoftwareEvents.make_params(
-                                    root_path / "behavior/SoftwareEvents/GiveManualWaterRight.json"
+                                    root_path / "behavior/SoftwareEvents/GiveManualWaterRight.jsonl"
                                 ),
                             ),
                             SoftwareEvents(
                                 name="TrialGeneratorSpec",
                                 description="An event emitted with the specification for the trial generator.",
                                 reader_params=SoftwareEvents.make_params(
-                                    root_path / "behavior/SoftwareEvents/TrialGeneratorSpec.json"
+                                    root_path / "behavior/SoftwareEvents/TrialGeneratorSpec.jsonl"
                                 ),
                             ),
                             SoftwareEvents(
                                 name="QuiescentPeriod",
                                 description="An event emitted at the start of the quiescent period.",
                                 reader_params=SoftwareEvents.make_params(
-                                    root_path / "behavior/SoftwareEvents/QuiescentPeriod.json"
+                                    root_path / "behavior/SoftwareEvents/QuiescentPeriod.jsonl"
                                 ),
                             ),
                             SoftwareEvents(
                                 name="Response",
                                 description="An event emitted when a response is registered (timestamp, null = no choice, true = right, false = left).",
                                 reader_params=SoftwareEvents.make_params(
-                                    root_path / "behavior/SoftwareEvents/Response.json"
+                                    root_path / "behavior/SoftwareEvents/Response.jsonl"
                                 ),
                             ),
                             SoftwareEvents(
                                 name="ResponsePeriod",
                                 description="An event emitted at the start of the response period.",
                                 reader_params=SoftwareEvents.make_params(
-                                    root_path / "behavior/SoftwareEvents/ResponsePeriod.json"
+                                    root_path / "behavior/SoftwareEvents/ResponsePeriod.jsonl"
                                 ),
                             ),
                             SoftwareEvents(
                                 name="IsRightTriggerQuickRetract",
                                 description="An event emitted when the quick retract logic was triggered (true = right, false = left).",
                                 reader_params=SoftwareEvents.make_params(
-                                    root_path / "behavior/SoftwareEvents/IsRightTriggerQuickRetract.json"
+                                    root_path / "behavior/SoftwareEvents/IsRightTriggerQuickRetract.jsonl"
                                 ),
                             ),
                             SoftwareEvents(
                                 name="DeliverSecondaryReinforcer",
                                 description="An event emitted when a secondary reinforcer is triggered. It serializes the information about the secondary reinforcer.",
                                 reader_params=SoftwareEvents.make_params(
-                                    root_path / "behavior/SoftwareEvents/DeliverSecondaryReinforcer.json"
+                                    root_path / "behavior/SoftwareEvents/DeliverSecondaryReinforcer.jsonl"
                                 ),
                             ),
                             SoftwareEvents(
                                 name="RewardConsumptionPeriod",
                                 description="An event emitted at the start of the reward consumption period.",
                                 reader_params=SoftwareEvents.make_params(
-                                    root_path / "behavior/SoftwareEvents/RewardConsumptionPeriod.json"
+                                    root_path / "behavior/SoftwareEvents/RewardConsumptionPeriod.jsonl"
                                 ),
                             ),
                             SoftwareEvents(
                                 name="TrialOutcome",
                                 description="An event emitted with the outcome of the trial. It serializes the information about the outcome (reward, choice and trial specifications).",
                                 reader_params=SoftwareEvents.make_params(
-                                    root_path / "behavior/SoftwareEvents/TrialOutcome.json"
+                                    root_path / "behavior/SoftwareEvents/TrialOutcome.jsonl"
                                 ),
                             ),
                             SoftwareEvents(
                                 name="ItiPeriod",
                                 description="An event emitted at the start of the inter-trial interval.",
                                 reader_params=SoftwareEvents.make_params(
-                                    root_path / "behavior/SoftwareEvents/ItiPeriod.json"
+                                    root_path / "behavior/SoftwareEvents/ItiPeriod.jsonl"
                                 ),
                             ),
                             SoftwareEvents(
                                 name="RngSeed",
                                 description="An event emitted with the random seed used for trial generation.",
                                 reader_params=SoftwareEvents.make_params(
-                                    root_path / "behavior/SoftwareEvents/RngSeed.json"
+                                    root_path / "behavior/SoftwareEvents/RngSeed.jsonl"
                                 ),
                             ),
                             SoftwareEvents(
                                 name="InitialManipulatorPosition",
                                 description="An event emitted at the start of the experiment to indicate the initial manipulator position.",
                                 reader_params=SoftwareEvents.make_params(
-                                    root_path / "behavior/SoftwareEvents/InitialManipulatorPosition.json"
+                                    root_path / "behavior/SoftwareEvents/InitialManipulatorPosition.jsonl"
                                 ),
                             ),
                             SoftwareEvents(
                                 name="EndSession",
                                 description="An event emitted when the experiment ends.",
                                 reader_params=SoftwareEvents.make_params(
-                                    root_path / "behavior/SoftwareEvents/EndSession.json"
+                                    root_path / "behavior/SoftwareEvents/EndSession.jsonl"
                                 ),
                             ),
                         ],
