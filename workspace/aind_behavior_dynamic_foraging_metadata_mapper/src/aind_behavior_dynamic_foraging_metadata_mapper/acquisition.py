@@ -7,8 +7,8 @@ from pathlib import Path
 from typing import Optional
 
 import git
-from aind_behavior_dynamic_foraging import __semver__
 from aind_behavior_curriculum import TrainerState
+from aind_behavior_dynamic_foraging import __semver__
 from aind_behavior_dynamic_foraging.data_contract import dataset as df_foraging_dataset
 from aind_behavior_dynamic_foraging.data_contract.utils import calculate_consumed_water
 from aind_behavior_dynamic_foraging.rig import AindDynamicForagingRig
@@ -31,12 +31,13 @@ from aind_data_schema.core.acquisition import (
 )
 from aind_data_schema_models import units
 from aind_data_schema_models.modalities import Modality
+from clabe.apps import BonsaiApp
 from clabe.data_mapper import helpers as data_mapper_helpers
 from clabe.data_mapper.aind_data_schema import AindDataSchemaSessionDataMapper
-from clabe.apps import BonsaiApp
 from pydantic import ValidationError
 
 logger = logging.getLogger(__name__)
+
 
 class AindAcquisitionDataMapper(AindDataSchemaSessionDataMapper):
     def __init__(
@@ -115,7 +116,6 @@ class AindAcquisitionDataMapper(AindDataSchemaSessionDataMapper):
         session_model = Session.model_validate(input_schemas["Session"].data)
         rig_model = AindDynamicForagingRig.model_validate(input_schemas["Rig"].data)
         task_logic_model = AindDynamicForagingTaskLogic.model_validate(input_schemas["TaskLogic"].data)
-        repository = git.Repo(self.repository_path)
         trainer_state = TrainerState.model_validate(dataset["Behavior"]["TrainerState"].data)
 
         if self.session_end_time is None:
@@ -162,7 +162,7 @@ class AindAcquisitionDataMapper(AindDataSchemaSessionDataMapper):
         finished = sum(to["is_right_choice"] is not None for to in trial_outcomes)
         water = calculate_consumed_water(self.data_path)
         performance_metrics = PerformanceMetrics(
-            reward_consumed_during_epoch=None if not water else Decimal(str(water* 1000)),
+            reward_consumed_during_epoch=None if not water else Decimal(str(water * 1000)),
             reward_consumed_unit=units.VolumeUnit.UL,
             trials_total=trial_outcomes[:].shape[0],
             trials_finished=finished,
@@ -196,7 +196,7 @@ class AindAcquisitionDataMapper(AindDataSchemaSessionDataMapper):
             data_streams=data_streams,
             stimulus_epochs=[stimulus_epoch],
         )
-    
+
     def _get_bonsai_as_code(self) -> Code:
         bonsai_folder = Path(self.bonsai_app.executable).parent
         bonsai_env = data_mapper_helpers.snapshot_bonsai_environment(bonsai_folder / "bonsai.config")
