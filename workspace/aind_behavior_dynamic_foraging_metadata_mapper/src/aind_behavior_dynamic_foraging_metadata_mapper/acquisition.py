@@ -8,6 +8,7 @@ from typing import Optional
 
 import git
 from aind_behavior_curriculum import TrainerState
+from aind_behavior_dynamic_foraging import __semver__
 from aind_behavior_dynamic_foraging.data_contract import dataset as df_foraging_dataset
 from aind_behavior_dynamic_foraging.data_contract.utils import calculate_consumed_water
 from aind_behavior_dynamic_foraging.rig import AindDynamicForagingRig
@@ -30,6 +31,7 @@ from aind_data_schema.core.acquisition import (
 )
 from aind_data_schema_models import units
 from aind_data_schema_models.modalities import Modality
+from clabe.apps import BonsaiApp
 from clabe.data_mapper import helpers as data_mapper_helpers
 from clabe.data_mapper.aind_data_schema import AindDataSchemaSessionDataMapper
 from pydantic import ValidationError
@@ -59,9 +61,16 @@ class AindAcquisitionDataMapper(AindDataSchemaSessionDataMapper):
                     End time of acquisition. If None, current time will be used.
         """
 
-        self.data_path = data_path
-        self.repository_path = repository_path
+        self.data_path = Path(data_path)
+        self.repository_path = Path(repository_path)
         self.session_end_time = session_end_time
+
+        self.repository = git.Repo(self.repository_path)
+        assert self.repository.working_tree_dir is not None
+        self.bonsai_app = BonsaiApp(
+            executable=Path(self.repository.working_tree_dir) / ".bonsai" / "bonsai.exe",
+            workflow=Path(self.repository.working_tree_dir) / "src" / "main.bonsai",
+        )
 
         self.session_model = model_from_json_file(
             json_path=Path(self.data_path) / "behavior" / "Logs" / "session_output.json", model=Session
@@ -107,7 +116,6 @@ class AindAcquisitionDataMapper(AindDataSchemaSessionDataMapper):
         session_model = Session.model_validate(input_schemas["Session"].data)
         rig_model = AindDynamicForagingRig.model_validate(input_schemas["Rig"].data)
         task_logic_model = AindDynamicForagingTaskLogic.model_validate(input_schemas["TaskLogic"].data)
-        repository = git.Repo(self.repository_path)
         trainer_state = TrainerState.model_validate(dataset["Behavior"]["TrainerState"].data)
 
         if self.session_end_time is None:
@@ -116,12 +124,12 @@ class AindAcquisitionDataMapper(AindDataSchemaSessionDataMapper):
         else:
             acquisition_end_time = self.session_end_time
 
-        bonsai_code = _get_bonsai_as_code(repository)
-        python_code = _get_python_as_code(repository)
-        curriculum_code = _get_curriculum_as_code(repository, trainer_state)
+        bonsai_code = self._get_bonsai_as_code()
+        python_code = self._get_python_as_code()
+        curriculum_code = self._get_curriculum_as_code(trainer_state)
 
         cameras = data_mapper_helpers.get_cameras(rig_model, exclude_without_video_writer=True)
-        camera_configs = [_get_camera_config(k, v, repository) for k, v in cameras.items()]
+        camera_configs = [self._get_camera_config(k, v) for k, v in cameras.items()]
 
         # construct data stream
         modalities: list[Modality.ONE_OF] = [getattr(Modality, "BEHAVIOR")]
@@ -154,8 +162,8 @@ class AindAcquisitionDataMapper(AindDataSchemaSessionDataMapper):
         finished = sum(to["is_right_choice"] is not None for to in trial_outcomes)
         water = calculate_consumed_water(self.data_path)
         performance_metrics = PerformanceMetrics(
-            reward_consumed_during_epoch=None if not water else Decimal(str(water)),
-            reward_consumed_unit=units.VolumeUnit.ML,
+            reward_consumed_during_epoch=None if not water else Decimal(str(water * 1000)),
+            reward_consumed_unit=units.VolumeUnit.UL,
             trials_total=trial_outcomes[:].shape[0],
             trials_finished=finished,
             trials_rewarded=rewarded,
@@ -189,75 +197,78 @@ class AindAcquisitionDataMapper(AindDataSchemaSessionDataMapper):
             stimulus_epochs=[stimulus_epoch],
         )
 
+    def _get_bonsai_as_code(self) -> Code:
+        bonsai_folder = Path(self.bonsai_app.executable).parent
+        bonsai_env = data_mapper_helpers.snapshot_bonsai_environment(bonsai_folder / "bonsai.config")
+        bonsai_version = bonsai_env.get("Bonsai", "unknown")
+        assert isinstance(self.repository, git.Repo)
+
+        return Code(
+            url=self.repository.remote().url,
+            name="Aind.Behavior.DynamicForaging",
+            version=__semver__,
+            commit_hash=self.repository.head.commit.hexsha,
+            language="Bonsai",
+            language_version=bonsai_version,
+            run_script=Path(self.bonsai_app.workflow),
+        )
+
+    def _get_python_as_code(self) -> Code:
+        assert isinstance(self.repository, git.Repo)
+        v = sys.version_info
+        semver = f"{v.major}.{v.minor}.{v.micro}"
+        if v.releaselevel != "final":
+            semver += f"-{v.releaselevel}.{v.serial}"
+        return Code(
+            url=self.repository.remote().url,
+            name="aind-behavior-dynamic-foraging",
+            version=__semver__,
+            commit_hash=self.repository.head.commit.hexsha,
+            language="Python",
+            language_version=semver,
+        )
+
+    def _get_curriculum_as_code(self, trainer_state: TrainerState) -> Code:
+
+        if trainer_state.curriculum is None:
+            raise ValueError("Curriculum is not set in the trainer state.")
+        repository = git.Repo(self.repository_path)
+        return Code(
+            url=repository.remote().url,
+            commit_hash=repository.head.commit.hexsha,
+            name=trainer_state.curriculum.pkg_location,
+            version=trainer_state.curriculum.version,
+            language="aind-behavior-curriculum",
+        )
+
+    def _get_camera_config(self, name: str, camera: abs_camera.CameraTypes) -> DetectorConfig:
+
+        if isinstance(camera.video_writer, abs_camera.VideoWriterFfmpeg):
+            compression = Code(
+                url="https://ffmpeg.org/",
+                name="FFMPEG",
+                parameters=GenericModel.model_validate(camera.video_writer.model_dump()),
+            )
+        elif isinstance(camera.video_writer, abs_camera.VideoWriterOpenCv):
+            bonsai = self._get_bonsai_as_code()
+            bonsai.parameters = GenericModel.model_validate(camera.video_writer.model_dump())
+            compression = bonsai
+        else:
+            raise ValueError("Camera does not have a valid video writer configured.")
+
+        return DetectorConfig(
+            device_name=name,
+            exposure_time=getattr(camera, "exposure", -1),
+            exposure_time_unit=units.TimeUnit.US,
+            trigger_type=TriggerType.EXTERNAL,
+            compression=compression,
+        )
+
 
 def _get_subject_details(data_path: os.PathLike) -> AcquisitionSubjectDetails:
     water = calculate_consumed_water(data_path)
     return AcquisitionSubjectDetails(
         mouse_platform_name="mouse_tube_foraging",
-        reward_consumed_total=None if not water else Decimal(str(water)),
-        reward_consumed_unit=units.VolumeUnit.ML,
-    )
-
-
-def _get_camera_config(name: str, camera: abs_camera.CameraTypes, repository: git.Repo) -> DetectorConfig:
-
-    if isinstance(camera.video_writer, abs_camera.VideoWriterFfmpeg):
-        compression = Code(
-            url="https://ffmpeg.org/",
-            name="FFMPEG",
-            parameters=GenericModel.model_validate(camera.video_writer.model_dump()),
-        )
-    elif isinstance(camera.video_writer, abs_camera.VideoWriterOpenCv):
-        bonsai = _get_bonsai_as_code(repository)
-        bonsai.parameters = GenericModel.model_validate(camera.video_writer.model_dump())
-        compression = bonsai
-    else:
-        raise ValueError("Camera does not have a valid video writer configured.")
-
-    return DetectorConfig(
-        device_name=name,
-        exposure_time=getattr(camera, "exposure", -1),
-        exposure_time_unit=units.TimeUnit.US,
-        trigger_type=TriggerType.EXTERNAL,
-        compression=compression,
-    )
-
-
-def _get_curriculum_as_code(repository: git.Repo, trainer_state: TrainerState) -> Code:
-
-    return Code(
-        url=repository.remote().url,
-        commit_hash=repository.head.commit.hexsha,
-        name=trainer_state.curriculum.pkg_location,
-        version=trainer_state.curriculum.version,
-        language="aind-behavior-curriculum",
-    )
-
-
-def _get_bonsai_as_code(repository: git.Repo) -> Code:
-    bonsai_folder = Path(Path(repository.working_tree_dir) / ".bonsai" / "bonsai.exe").parent
-    bonsai_env = data_mapper_helpers.snapshot_bonsai_environment(bonsai_folder / "bonsai.config")
-    bonsai_version = bonsai_env.get("Bonsai", "unknown")
-    assert isinstance(repository, git.Repo)
-
-    return Code(
-        url=repository.remote().url,
-        name="Aind.Behavior.DynamicForaging",
-        version=repository.head.commit.hexsha,
-        language="Bonsai",
-        language_version=bonsai_version,
-    )
-
-
-def _get_python_as_code(repository: git.Repo) -> Code:
-    v = sys.version_info
-    semver = f"{v.major}.{v.minor}.{v.micro}"
-    if v.releaselevel != "final":
-        semver += f"-{v.releaselevel}.{v.serial}"
-    return Code(
-        url=repository.remote().url,
-        name="aind-behavior-dynamic-foraging",
-        version=repository.head.commit.hexsha,
-        language="Python",
-        language_version=semver,
+        reward_consumed_total=None if not water else Decimal(str(water * 1000)),
+        reward_consumed_unit=units.VolumeUnit.UL,
     )
