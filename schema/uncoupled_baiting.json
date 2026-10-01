@@ -354,7 +354,7 @@
                                 "truncation_parameters": {
                                     "truncation_mode": "clamp",
                                     "min": 0.0,
-                                    "max": 40.0
+                                    "max": 36.0
                                 },
                                 "scaling_parameters": {
                                     "scale": 1.0,
