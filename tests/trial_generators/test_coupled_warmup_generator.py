@@ -103,6 +103,36 @@ class TestCoupledWarmupGenerator(unittest.TestCase):
         self.assertEqual(coupled.reward_history, warmup.reward_history)
         self.assertEqual(coupled.start_time, warmup.start_time)
 
+    def test_baiting_state_transfer_from_warmup_to_coupled_generator(self):
+        trial = self.generator.next()
+        outcome = TrialOutcome(
+            trial=trial,
+            is_right_choice=np.random.choice([True, False, None]),
+            is_rewarded=np.random.choice([True, False]),
+        )
+
+        for i in range(50):
+            trial = self.generator.next()
+            self.generator.update(outcome)
+            outcome = simulate_response(
+                previous_reward=outcome.is_rewarded,
+                previous_choice=outcome.is_right_choice,
+                previous_left_bait=False,
+                previous_right_bait=False,
+                trial=trial,
+            )
+
+        warmup = self.generator.warmup_generator
+        warmup.is_left_baited = True
+        warmup.is_right_baited = False
+
+        next_trial = self.generator.next()
+
+        self.assertIsNotNone(next_trial)
+        self.assertIs(self.generator._active_generator, self.generator.coupled_generator)
+        self.assertEqual(self.generator.coupled_generator.is_left_baited, warmup.is_left_baited)
+        self.assertEqual(self.generator.coupled_generator.is_right_baited, warmup.is_right_baited)
+
 
 if __name__ == "__main__":
     unittest.main()
