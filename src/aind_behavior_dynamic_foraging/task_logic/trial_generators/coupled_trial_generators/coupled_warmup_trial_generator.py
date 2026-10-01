@@ -50,6 +50,8 @@ class CoupledWarmupTrialGenerator(ITrialGenerator):
             self.coupled_generator.is_right_choice_history = self.warmup_generator.is_right_choice_history.copy()
             self.coupled_generator.reward_history = self.warmup_generator.reward_history.copy()
             self.coupled_generator.start_time = self.warmup_generator.start_time
+            self.coupled_generator.is_left_baited = self.warmup_generator.is_left_baited
+            self.coupled_generator.is_right_baited = self.warmup_generator.is_right_baited
 
             self._active_generator = self.coupled_generator
             trial = self._active_generator.next()
