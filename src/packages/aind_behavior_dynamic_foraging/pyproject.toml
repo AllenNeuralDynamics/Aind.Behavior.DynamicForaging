@@ -8,7 +8,7 @@ description = "A library that defines AIND data schema for the Aind Behavior Dyn
 authors = [
     {name = "Micah Woodard", email = "micah.woodard@alleninstitute.org"},
     {name = "Bruno Cruz", email = "bruno.cruz@alleninstitute.org"}
-]
+    ]
 license = "MIT"
 requires-python = ">=3.11"
 classifiers = [
