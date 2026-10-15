@@ -38,7 +38,7 @@
               <ui:Visible>true</ui:Visible>
               <ui:Location xsi:nil="true" />
               <ui:Size xsi:nil="true" />
-              <ui:WindowState xsi:nil="true" />
+              <ui:WindowState>Maximized</ui:WindowState>
             </Expression>
           </Nodes>
           <Edges>
