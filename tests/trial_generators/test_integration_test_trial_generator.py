@@ -1,7 +1,7 @@
 import unittest
 
 from aind_behavior_dynamic_foraging.task_logic.trial_generators import IntegrationTestTrialGeneratorSpec
-from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial, TrialOutcome
+from aind_behavior_dynamic_foraging.task_logic.trial_models import Trial, TrialMetrics, TrialOutcome
 
 
 class TestIntegrationTestTrialGenerator(unittest.TestCase):
@@ -53,6 +53,17 @@ class TestIntegrationTestTrialGenerator(unittest.TestCase):
             trial = generator.next()
 
         self.assertEqual(trials_count, expected_count)
+
+    def test_get_metrics_returns_empty_metrics(self):
+        spec = IntegrationTestTrialGeneratorSpec()
+        generator = spec.create_generator()
+
+        metrics = generator.get_metrics()
+        self.assertIsInstance(metrics, TrialMetrics)
+        self.assertIsNone(metrics.bias)
+
+        generator.update(TrialOutcome(trial=generator.next(), is_right_choice=True, is_rewarded=True))
+        self.assertIsInstance(generator.get_metrics(), TrialMetrics)
 
 
 if __name__ == "__main__":

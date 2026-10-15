@@ -2,7 +2,7 @@ from typing import Literal
 
 from aind_behavior_services.task import distributions
 
-from ..trial_models import QuickRetractSettings, Trial, TrialOutcome
+from ..trial_models import QuickRetractSettings, Trial, TrialMetrics, TrialOutcome
 from ._base import BaseTrialGeneratorSpecModel, ITrialGenerator
 
 
@@ -82,3 +82,13 @@ class IntegrationTestTrialGenerator(ITrialGenerator):
 
     def update(self, outcome: TrialOutcome | str) -> None:
         self._idx += 1
+
+    def get_metrics(self) -> TrialMetrics:
+        """Return metrics at current state of the trial generator.
+
+        The integration test generator does not track bias, so the metrics are empty.
+        Without this override, the class inherits ITrialGenerator.get_metrics directly, 
+        which is an empty stub for now. 
+        Bonsai deserialised this into a null TrialMetrics and the visualizers throws.
+        """
+        return TrialMetrics()
