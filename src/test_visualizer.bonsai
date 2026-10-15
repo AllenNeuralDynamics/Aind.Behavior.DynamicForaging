@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<WorkflowBuilder Version="2.9.0"
+<WorkflowBuilder Version="2.9.1"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
@@ -1974,6 +1974,18 @@ it.Index as TrialIndex
                   <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Boolean">
                     <rx:Name>DrainRightComplete</rx:Name>
                   </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Boolean">
+                    <rx:Name>KeepLeftOpenComplete</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Boolean">
+                    <rx:Name>KeepRightOpenComplete</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Double">
+                    <rx:Name>DrainLeftCountdown</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Double">
+                    <rx:Name>DrainRightCountdown</rx:Name>
+                  </Expression>
                 </Nodes>
                 <Edges>
                   <Edge From="19" To="20" Label="Source1" />
@@ -1994,80 +2006,7 @@ it.Index as TrialIndex
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p7:SoftwareEventVisualizer">
                 <p7:Visible>true</p7:Visible>
-                <p7:SoftwareEvents>
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                  <p7:TimestampedOfSoftwareEvent />
-                </p7:SoftwareEvents>
+                <p7:SoftwareEvents />
                 <p7:TrialBreakEventName>Break</p7:TrialBreakEventName>
                 <p7:PlotHeight>200</p7:PlotHeight>
                 <p7:ShadedAreaPlotters>
@@ -2995,6 +2934,10 @@ it.Index as TrialIndex
               <UiControlManipulator>UiManipulatorInitialize</UiControlManipulator>
               <DrainLeftComplete>DrainLeftComplete</DrainLeftComplete>
               <DrainRightComplete>DrainRightComplete</DrainRightComplete>
+              <KeepLeftOpenComplete>KeepLeftOpenComplete</KeepLeftOpenComplete>
+              <KeepRightOpenComplete>KeepRightOpenComplete</KeepRightOpenComplete>
+              <DrainLeftCountdown>DrainLeftCountdown</DrainLeftCountdown>
+              <DrainRightCountdown>DrainRightCountdown</DrainRightCountdown>
             </Expression>
             <Expression xsi:type="IncludeWorkflow" Path="Extensions\IntraSessionVisualizer.bonsai">
               <FrameSubject>IntraSession</FrameSubject>
