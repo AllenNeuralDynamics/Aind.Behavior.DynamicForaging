@@ -1980,6 +1980,12 @@ it.Index as TrialIndex
                   <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Boolean">
                     <rx:Name>KeepRightOpenComplete</rx:Name>
                   </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Double">
+                    <rx:Name>DrainLeftCountdown</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Double">
+                    <rx:Name>DrainRightCountdown</rx:Name>
+                  </Expression>
                 </Nodes>
                 <Edges>
                   <Edge From="19" To="20" Label="Source1" />
@@ -2930,6 +2936,8 @@ it.Index as TrialIndex
               <DrainRightComplete>DrainRightComplete</DrainRightComplete>
               <KeepLeftOpenComplete>KeepLeftOpenComplete</KeepLeftOpenComplete>
               <KeepRightOpenComplete>KeepRightOpenComplete</KeepRightOpenComplete>
+              <DrainLeftCountdown>DrainLeftCountdown</DrainLeftCountdown>
+              <DrainRightCountdown>DrainRightCountdown</DrainRightCountdown>
             </Expression>
             <Expression xsi:type="IncludeWorkflow" Path="Extensions\IntraSessionVisualizer.bonsai">
               <FrameSubject>IntraSession</FrameSubject>
