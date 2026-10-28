@@ -57,7 +57,7 @@ jobs:
       - name: Run root python unit tests
         run: |
           uv run python -m unittest discover tests
-          uv run --directory .\workspace\aind_behavior_dynamic_foraging_curricula\ python -m unittest discover tests
+          uv run --package aind-behavior-dynamic-foraging-curricula python -m unittest discover src/packages/aind_behavior_dynamic_foraging_curricula/tests
 
       - name: Regenerate all schemas
         run: |

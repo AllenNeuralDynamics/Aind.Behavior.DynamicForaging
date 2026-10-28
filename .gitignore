@@ -2,7 +2,7 @@
 .vs
 bin
 obj
-Packages
+.bonsai/Packages
 Bonsai.exe.WebView2
 .bonsai/Settings/**
 *.bin

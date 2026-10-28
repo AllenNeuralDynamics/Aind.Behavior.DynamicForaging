@@ -49,7 +49,7 @@ namespace AindDynamicForagingDataSchema
     
         public AindDynamicForagingRig()
         {
-            _aindBehaviorServicesPkgVersion = "0.13.7";
+            _aindBehaviorServicesPkgVersion = "0.13.8";
             _version = "0.3.1-dev0";
             _triggeredCameraController = new CameraControllerSpinnakerCamera();
             _harpBehavior = new HarpBehavior();
@@ -588,7 +588,7 @@ namespace AindDynamicForagingDataSchema
     
         public AindDynamicForagingTaskParameters()
         {
-            _aindBehaviorServicesPkgVersion = "0.13.7";
+            _aindBehaviorServicesPkgVersion = "0.13.8";
             _trialGenerator = new TrialGeneratorSpec();
         }
     
@@ -4772,8 +4772,8 @@ namespace AindDynamicForagingDataSchema
     
         public Session()
         {
-            _aindBehaviorServicesPkgVersion = "0.13.7";
-            _version = "0.13.7";
+            _aindBehaviorServicesPkgVersion = "0.13.8";
+            _version = "0.13.8";
             _experimenter = new System.Collections.Generic.List<string>();
             _allowDirtyRepo = false;
             _skipHardwareValidation = false;

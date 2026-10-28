@@ -176,7 +176,7 @@ uv run dynamic-foraging data-qc <path-to-data-dir>
 
 ## 🔄 Regenerating schemas
 
-DSL schemas can be modified in `./src/aind_behavior_dynamic_foraging/rig.py` (or `(...)/task_logic`.py`).
+DSL schemas can be modified in `./src/packages/aind_behavior_dynamic_foraging/src/aind_behavior_dynamic_foraging/rig.py` (or `(...)/task_logic.py`).
 
 Once modified, changes to the DSL must be propagated to `json-schema` and `csharp` API. This can be done by running:
 

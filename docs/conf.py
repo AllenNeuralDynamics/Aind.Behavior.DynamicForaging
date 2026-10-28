@@ -5,13 +5,12 @@
 
 from __future__ import annotations
 
+import aind_behavior_dynamic_foraging
+import aind_behavior_dynamic_foraging.task_logic
 import erdantic as erd
 from pydantic import BaseModel
 
-import aind_behavior_dynamic_foraging
-import aind_behavior_dynamic_foraging.task_logic
-
-SOURCE_ROOT = "https://github.com/AllenNeuralDynamics/Aind.Behavior.DynamicForaging/tree/main/src/"
+SOURCE_ROOT = "https://github.com/AllenNeuralDynamics/Aind.Behavior.DynamicForaging/tree/main/src/packages/aind_behavior_dynamic_foraging/src"
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
@@ -96,10 +95,9 @@ with open(f"{_static_path}/dataset.html", "w", encoding="utf-8") as f:
 def setup(app):
     import typing
 
+    import aind_behavior_dynamic_foraging.task_logic.trial_generators.composite_trial_generator as _comp_mod
     from erdantic.plugins import register_plugin
     from erdantic.plugins.pydantic import get_fields_from_pydantic_model, is_pydantic_model
-
-    import aind_behavior_dynamic_foraging.task_logic.trial_generators.composite_trial_generator as _comp_mod
 
     _EXCLUDED_FIELDS = {"model_config"}
 
