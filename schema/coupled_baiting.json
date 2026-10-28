@@ -11,7 +11,7 @@
                     "description": "",
                     "task_parameters": {
                         "rng_seed": null,
-                        "aind_behavior_services_pkg_version": "0.13.7",
+                        "aind_behavior_services_pkg_version": "0.13.8",
                         "trial_generator": {
                             "type": "CoupledWarmupTrialGenerator",
                             "warmup_generator_spec": {
@@ -201,7 +201,7 @@
                     "description": "",
                     "task_parameters": {
                         "rng_seed": null,
-                        "aind_behavior_services_pkg_version": "0.13.7",
+                        "aind_behavior_services_pkg_version": "0.13.8",
                         "trial_generator": {
                             "type": "CoupledTrialGenerator",
                             "reward_size": {
@@ -311,7 +311,7 @@
                     "description": "",
                     "task_parameters": {
                         "rng_seed": null,
-                        "aind_behavior_services_pkg_version": "0.13.7",
+                        "aind_behavior_services_pkg_version": "0.13.8",
                         "trial_generator": {
                             "type": "CoupledTrialGenerator",
                             "reward_size": {
@@ -421,7 +421,7 @@
                     "description": "",
                     "task_parameters": {
                         "rng_seed": null,
-                        "aind_behavior_services_pkg_version": "0.13.7",
+                        "aind_behavior_services_pkg_version": "0.13.8",
                         "trial_generator": {
                             "type": "CoupledTrialGenerator",
                             "reward_size": {
@@ -531,7 +531,7 @@
                     "description": "",
                     "task_parameters": {
                         "rng_seed": null,
-                        "aind_behavior_services_pkg_version": "0.13.7",
+                        "aind_behavior_services_pkg_version": "0.13.8",
                         "trial_generator": {
                             "type": "CoupledTrialGenerator",
                             "reward_size": {
@@ -645,7 +645,7 @@
                     "description": "",
                     "task_parameters": {
                         "rng_seed": null,
-                        "aind_behavior_services_pkg_version": "0.13.7",
+                        "aind_behavior_services_pkg_version": "0.13.8",
                         "trial_generator": {
                             "type": "CoupledTrialGenerator",
                             "reward_size": {
