@@ -35,7 +35,7 @@ aind-behavior-dynamic-foraging = { workspace = true }
 [dependency-groups]
 
 dev = [
-    'ruff',
+    'ruff==0.15.20',
     'pytest',
     'pytest-cov',
     'codespell',
@@ -46,7 +46,7 @@ docs = [
     'mkdocs-material',
     'mkdocstrings[python]',
     'pymdown-extensions',
-    'ruff',
+    'ruff==0.15.20',
 ]
 
 [tool.uv]

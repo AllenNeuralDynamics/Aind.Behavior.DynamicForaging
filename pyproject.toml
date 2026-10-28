@@ -19,7 +19,7 @@ aind-behavior-dynamic-foraging-metadata-mapper = { workspace = true }
 [dependency-groups]
 
 dev = [
-    "ruff",
+    "ruff==0.15.20",
     "codespell",
     "pytest",
     "pytest-cov",
