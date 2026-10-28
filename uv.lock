@@ -27,7 +27,7 @@ dev = [
     { name = "codespell" },
     { name = "pytest" },
     { name = "pytest-cov" },
-    { name = "ruff", specifier = "<=0.15.20" },
+    { name = "ruff", specifier = "==0.15.20" },
 ]
 docs = [
     { name = "aind-behavior-dynamic-foraging", extras = ["data"], editable = "src/packages/aind_behavior_dynamic_foraging" },
