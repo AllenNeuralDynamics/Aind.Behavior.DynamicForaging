@@ -82,10 +82,10 @@ class Networking(BaseModel):
     """Network configuration settings for ZeroMQ communication."""
 
     zmq_publisher: ZmqConnection = Field(
-        default=ZmqConnection(connection_string="@tcp://localhost:5556", topic="fip"), validate_default=True
+        default=ZmqConnection(connection_string="@tcp://localhost:5556", topic="dynamic_foraging"), validate_default=True
     )
     zmq_subscriber: ZmqConnection = Field(
-        default=ZmqConnection(connection_string="@tcp://localhost:5557", topic="fip"), validate_default=True
+        default=ZmqConnection(connection_string="@tcp://localhost:5557", topic="dynamic_foraging"), validate_default=True
     )
 
 class AindDynamicForagingRig(rig.Rig):
