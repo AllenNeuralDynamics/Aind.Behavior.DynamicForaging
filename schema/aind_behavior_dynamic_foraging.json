@@ -119,11 +119,11 @@
           "default": {
             "zmq_publisher": {
               "connection_string": "@tcp://localhost:5556",
-              "topic": "fip"
+              "topic": "dynamic_foraging"
             },
             "zmq_subscriber": {
               "connection_string": "@tcp://localhost:5557",
-              "topic": "fip"
+              "topic": "dynamic_foraging"
             }
           },
           "description": "Networking settings"
@@ -2432,14 +2432,14 @@
           "$ref": "#/$defs/ZmqConnection",
           "default": {
             "connection_string": "@tcp://localhost:5556",
-            "topic": "fip"
+            "topic": "dynamic_foraging"
           }
         },
         "zmq_subscriber": {
           "$ref": "#/$defs/ZmqConnection",
           "default": {
             "connection_string": "@tcp://localhost:5557",
-            "topic": "fip"
+            "topic": "dynamic_foraging"
           }
         }
       },
