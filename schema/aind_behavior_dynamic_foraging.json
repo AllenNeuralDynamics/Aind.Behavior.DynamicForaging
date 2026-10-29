@@ -113,6 +113,20 @@
         "calibration": {
           "$ref": "#/$defs/RigCalibration",
           "description": "Calibration models"
+        },
+        "networking": {
+          "$ref": "#/$defs/Networking",
+          "default": {
+            "zmq_publisher": {
+              "connection_string": "@tcp://localhost:5556",
+              "topic": "fip"
+            },
+            "zmq_subscriber": {
+              "connection_string": "@tcp://localhost:5557",
+              "topic": "fip"
+            }
+          },
+          "description": "Networking settings"
         }
       },
       "required": [
@@ -2411,6 +2425,27 @@
       ],
       "x-sgen-typename": "AllenNeuralDynamics.AindManipulator.MotorOperationMode"
     },
+    "Networking": {
+      "description": "Network configuration settings for ZeroMQ communication.",
+      "properties": {
+        "zmq_publisher": {
+          "$ref": "#/$defs/ZmqConnection",
+          "default": {
+            "connection_string": "@tcp://localhost:5556",
+            "topic": "fip"
+          }
+        },
+        "zmq_subscriber": {
+          "$ref": "#/$defs/ZmqConnection",
+          "default": {
+            "connection_string": "@tcp://localhost:5557",
+            "topic": "fip"
+          }
+        }
+      },
+      "title": "Networking",
+      "type": "object"
+    },
     "NormalDistribution": {
       "description": "A normal (Gaussian) probability distribution.\n\nBell-shaped distribution symmetric around the mean, commonly used\nfor modeling naturally occurring random variables.",
       "properties": {
@@ -4491,6 +4526,24 @@
         }
       },
       "title": "WebCamera",
+      "type": "object"
+    },
+    "ZmqConnection": {
+      "description": "ZeroMQ connection settings.",
+      "properties": {
+        "connection_string": {
+          "default": "@tcp://localhost:5556",
+          "description": "The connection string for the ZMQ socket.",
+          "title": "Connection String",
+          "type": "string"
+        },
+        "topic": {
+          "default": "",
+          "title": "Topic",
+          "type": "string"
+        }
+      },
+      "title": "ZmqConnection",
       "type": "object"
     }
   }

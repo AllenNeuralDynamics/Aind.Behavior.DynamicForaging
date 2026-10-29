@@ -70,7 +70,23 @@ class DynamicForagingAindManipulator(aind_manipulator.AindManipulator):
         description="Offset of the subject position relative to the `initial_position` parameter",
         validate_default=True,
     )
+class ZmqConnection(BaseModel):
+    """ZeroMQ connection settings."""
 
+    connection_string: str = Field(
+        default="@tcp://localhost:5556", description="The connection string for the ZMQ socket."
+    )
+    topic: str = Field(default="")
+
+class Networking(BaseModel):
+    """Network configuration settings for ZeroMQ communication."""
+
+    zmq_publisher: ZmqConnection = Field(
+        default=ZmqConnection(connection_string="@tcp://localhost:5556", topic="fip"), validate_default=True
+    )
+    zmq_subscriber: ZmqConnection = Field(
+        default=ZmqConnection(connection_string="@tcp://localhost:5557", topic="fip"), validate_default=True
+    )
 
 class AindDynamicForagingRig(rig.Rig):
     version: Literal[__semver__] = __semver__
@@ -91,3 +107,4 @@ class AindDynamicForagingRig(rig.Rig):
     )
     manipulator: DynamicForagingAindManipulator = Field(description="Manipulator")
     calibration: RigCalibration = Field(description="Calibration models")
+    networking: Networking = Field(Networking(), title="Networking", description="Networking settings")
