@@ -12,7 +12,6 @@
                  xmlns:p4="clr-namespace:AllenNeuralDynamics.Core;assembly=AllenNeuralDynamics.Core"
                  xmlns:spk="clr-namespace:Bonsai.Spinnaker;assembly=Bonsai.Spinnaker"
                  xmlns:zmq="clr-namespace:Bonsai.ZeroMQ;assembly=Bonsai.ZeroMQ"
-                 xmlns:p5="clr-namespace:NetMQ;assembly=NetMQ"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
@@ -648,7 +647,7 @@
             <Expression xsi:type="rx:PublishSubject">
               <Name>SocketResponse</Name>
             </Expression>
-            <Expression xsi:type="rx:BehaviorSubject" TypeArguments="p5:NetMQMessage">
+            <Expression xsi:type="rx:BehaviorSubject" TypeArguments="sys:String">
               <rx:Name>SocketRequest</rx:Name>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
