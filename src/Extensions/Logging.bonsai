@@ -4,13 +4,14 @@
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
                  xmlns:p1="clr-namespace:AllenNeuralDynamics.Core;assembly=AllenNeuralDynamics.Core"
                  xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                 xmlns:p2="clr-namespace:AllenNeuralDynamics.LicketySplit;assembly=AllenNeuralDynamics.LicketySplit"
-                 xmlns:p3="clr-namespace:AllenNeuralDynamics.SniffDetector;assembly=AllenNeuralDynamics.SniffDetector"
-                 xmlns:p4="clr-namespace:AllenNeuralDynamics.WhiteRabbit;assembly=AllenNeuralDynamics.WhiteRabbit"
-                 xmlns:p5="clr-namespace:AllenNeuralDynamics.EnvironmentSensor;assembly=AllenNeuralDynamics.EnvironmentSensor"
+                 xmlns:p2="clr-namespace:Harp.StepperDriver;assembly=Harp.StepperDriver"
+                 xmlns:p3="clr-namespace:AllenNeuralDynamics.LicketySplit;assembly=AllenNeuralDynamics.LicketySplit"
+                 xmlns:p4="clr-namespace:AllenNeuralDynamics.SniffDetector;assembly=AllenNeuralDynamics.SniffDetector"
+                 xmlns:p5="clr-namespace:AllenNeuralDynamics.WhiteRabbit;assembly=AllenNeuralDynamics.WhiteRabbit"
+                 xmlns:p6="clr-namespace:AllenNeuralDynamics.EnvironmentSensor;assembly=AllenNeuralDynamics.EnvironmentSensor"
                  xmlns:harp="clr-namespace:Bonsai.Harp;assembly=Bonsai.Harp"
-                 xmlns:p6="clr-namespace:AllenNeuralDynamics.HarpUtils;assembly=AllenNeuralDynamics.HarpUtils"
-                 xmlns:p7="clr-namespace:AindDynamicForagingDataSchema;assembly=Extensions"
+                 xmlns:p7="clr-namespace:AllenNeuralDynamics.HarpUtils;assembly=AllenNeuralDynamics.HarpUtils"
+                 xmlns:p8="clr-namespace:AindDynamicForagingDataSchema;assembly=Extensions"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
@@ -101,7 +102,9 @@
                             <Property Name="Modality" />
                           </PropertyMappings>
                         </Expression>
-                        <Expression xsi:type="IncludeWorkflow" Path="Extensions\HarpStepperDriverGetMetadata.bonsai" />
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="p2:GetDeviceMetadata" />
+                        </Expression>
                         <Expression xsi:type="PropertyMapping">
                           <PropertyMappings>
                             <Property Name="DeviceMetadata" />
@@ -124,7 +127,7 @@
                           </PropertyMappings>
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="p2:GetMetadata" />
+                          <Combinator xsi:type="p3:GetMetadata" />
                         </Expression>
                         <Expression xsi:type="PropertyMapping">
                           <PropertyMappings>
@@ -158,7 +161,7 @@
                           </PropertyMappings>
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="p2:GetMetadata" />
+                          <Combinator xsi:type="p3:GetMetadata" />
                         </Expression>
                         <Expression xsi:type="PropertyMapping">
                           <PropertyMappings>
@@ -206,7 +209,7 @@
                           <Name>HarpSniffDetectorEvents</Name>
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="p3:GetMetadata" />
+                          <Combinator xsi:type="p4:GetMetadata" />
                         </Expression>
                         <Expression xsi:type="PropertyMapping">
                           <PropertyMappings>
@@ -240,7 +243,7 @@
                           <Name>HarpWhiteRabbitEvents</Name>
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="p4:GetMetadata" />
+                          <Combinator xsi:type="p5:GetMetadata" />
                         </Expression>
                         <Expression xsi:type="PropertyMapping">
                           <PropertyMappings>
@@ -264,7 +267,7 @@
                           <Name>HarpEnvironmentSensorEvents</Name>
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="p5:GetMetadata" />
+                          <Combinator xsi:type="p6:GetMetadata" />
                         </Expression>
                         <Expression xsi:type="PropertyMapping">
                           <PropertyMappings>
@@ -375,9 +378,9 @@
                           <Combinator xsi:type="rx:WithLatestFrom" />
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="p6:ModifyMessage">
-                            <p6:Address xsi:nil="true" />
-                            <p6:MessageTypeModified xsi:nil="true" />
+                          <Combinator xsi:type="p7:ModifyMessage">
+                            <p7:Address xsi:nil="true" />
+                            <p7:MessageTypeModified xsi:nil="true" />
                           </Combinator>
                         </Expression>
                         <Expression xsi:type="SubscribeSubject">
@@ -415,9 +418,9 @@
                           <Combinator xsi:type="rx:WithLatestFrom" />
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="p6:ModifyMessage">
-                            <p6:Address xsi:nil="true" />
-                            <p6:MessageTypeModified xsi:nil="true" />
+                          <Combinator xsi:type="p7:ModifyMessage">
+                            <p7:Address xsi:nil="true" />
+                            <p7:MessageTypeModified xsi:nil="true" />
                           </Combinator>
                         </Expression>
                         <Expression xsi:type="SubscribeSubject">
@@ -428,7 +431,9 @@
                             <Property Name="Modality" />
                           </PropertyMappings>
                         </Expression>
-                        <Expression xsi:type="IncludeWorkflow" Path="Extensions\HarpStepperDriverGetMetadata.bonsai" />
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="p2:GetDeviceMetadata" />
+                        </Expression>
                         <Expression xsi:type="PropertyMapping">
                           <PropertyMappings>
                             <Property Name="DeviceMetadata" />
@@ -455,9 +460,9 @@
                           <Combinator xsi:type="rx:WithLatestFrom" />
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="p6:ModifyMessage">
-                            <p6:Address xsi:nil="true" />
-                            <p6:MessageTypeModified xsi:nil="true" />
+                          <Combinator xsi:type="p7:ModifyMessage">
+                            <p7:Address xsi:nil="true" />
+                            <p7:MessageTypeModified xsi:nil="true" />
                           </Combinator>
                         </Expression>
                         <Expression xsi:type="SubscribeSubject">
@@ -469,7 +474,7 @@
                           </PropertyMappings>
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="p2:GetMetadata" />
+                          <Combinator xsi:type="p3:GetMetadata" />
                         </Expression>
                         <Expression xsi:type="PropertyMapping">
                           <PropertyMappings>
@@ -497,9 +502,9 @@
                           <Combinator xsi:type="rx:WithLatestFrom" />
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="p6:ModifyMessage">
-                            <p6:Address xsi:nil="true" />
-                            <p6:MessageTypeModified xsi:nil="true" />
+                          <Combinator xsi:type="p7:ModifyMessage">
+                            <p7:Address xsi:nil="true" />
+                            <p7:MessageTypeModified xsi:nil="true" />
                           </Combinator>
                         </Expression>
                         <Expression xsi:type="SubscribeSubject">
@@ -511,7 +516,7 @@
                           </PropertyMappings>
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="p2:GetMetadata" />
+                          <Combinator xsi:type="p3:GetMetadata" />
                         </Expression>
                         <Expression xsi:type="PropertyMapping">
                           <PropertyMappings>
@@ -539,9 +544,9 @@
                           <Combinator xsi:type="rx:WithLatestFrom" />
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="p6:ModifyMessage">
-                            <p6:Address xsi:nil="true" />
-                            <p6:MessageTypeModified xsi:nil="true" />
+                          <Combinator xsi:type="p7:ModifyMessage">
+                            <p7:Address xsi:nil="true" />
+                            <p7:MessageTypeModified xsi:nil="true" />
                           </Combinator>
                         </Expression>
                         <Expression xsi:type="SubscribeSubject">
@@ -553,7 +558,7 @@
                           </PropertyMappings>
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="p4:GetMetadata" />
+                          <Combinator xsi:type="p5:GetMetadata" />
                         </Expression>
                         <Expression xsi:type="PropertyMapping">
                           <PropertyMappings>
@@ -581,9 +586,9 @@
                           <Combinator xsi:type="rx:WithLatestFrom" />
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="p6:ModifyMessage">
-                            <p6:Address xsi:nil="true" />
-                            <p6:MessageTypeModified xsi:nil="true" />
+                          <Combinator xsi:type="p7:ModifyMessage">
+                            <p7:Address xsi:nil="true" />
+                            <p7:MessageTypeModified xsi:nil="true" />
                           </Combinator>
                         </Expression>
                         <Expression xsi:type="SubscribeSubject">
@@ -595,7 +600,7 @@
                           </PropertyMappings>
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="p3:GetMetadata" />
+                          <Combinator xsi:type="p4:GetMetadata" />
                         </Expression>
                         <Expression xsi:type="PropertyMapping">
                           <PropertyMappings>
@@ -633,9 +638,9 @@
                           <Combinator xsi:type="rx:WithLatestFrom" />
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="p6:ModifyMessage">
-                            <p6:Address xsi:nil="true" />
-                            <p6:MessageTypeModified xsi:nil="true" />
+                          <Combinator xsi:type="p7:ModifyMessage">
+                            <p7:Address xsi:nil="true" />
+                            <p7:MessageTypeModified xsi:nil="true" />
                           </Combinator>
                         </Expression>
                         <Expression xsi:type="SubscribeSubject">
@@ -647,7 +652,7 @@
                           </PropertyMappings>
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="p5:GetMetadata" />
+                          <Combinator xsi:type="p6:GetMetadata" />
                         </Expression>
                         <Expression xsi:type="PropertyMapping">
                           <PropertyMappings>
@@ -685,9 +690,9 @@
                           <Combinator xsi:type="rx:WithLatestFrom" />
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="p6:ModifyMessage">
-                            <p6:Address xsi:nil="true" />
-                            <p6:MessageTypeModified xsi:nil="true" />
+                          <Combinator xsi:type="p7:ModifyMessage">
+                            <p7:Address xsi:nil="true" />
+                            <p7:MessageTypeModified xsi:nil="true" />
                           </Combinator>
                         </Expression>
                         <Expression xsi:type="SubscribeSubject">
@@ -917,8 +922,8 @@
                                 <Name>SessionSchema</Name>
                               </Expression>
                               <Expression xsi:type="Combinator">
-                                <Combinator xsi:type="p7:SerializeToJson">
-                                  <p7:Formatting>None</p7:Formatting>
+                                <Combinator xsi:type="p8:SerializeToJson">
+                                  <p8:Formatting>None</p8:Formatting>
                                 </Combinator>
                               </Expression>
                               <Expression xsi:type="SubscribeSubject">
@@ -947,8 +952,8 @@
                                 <Name>TaskLogicSchema</Name>
                               </Expression>
                               <Expression xsi:type="Combinator">
-                                <Combinator xsi:type="p7:SerializeToJson">
-                                  <p7:Formatting>None</p7:Formatting>
+                                <Combinator xsi:type="p8:SerializeToJson">
+                                  <p8:Formatting>None</p8:Formatting>
                                 </Combinator>
                               </Expression>
                               <Expression xsi:type="SubscribeSubject">
@@ -977,8 +982,8 @@
                                 <Name>RigSchema</Name>
                               </Expression>
                               <Expression xsi:type="Combinator">
-                                <Combinator xsi:type="p7:SerializeToJson">
-                                  <p7:Formatting>None</p7:Formatting>
+                                <Combinator xsi:type="p8:SerializeToJson">
+                                  <p8:Formatting>None</p8:Formatting>
                                 </Combinator>
                               </Expression>
                               <Expression xsi:type="SubscribeSubject">
@@ -1166,8 +1171,8 @@
                     <Selector>Value.VideoWriter</Selector>
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:FilterNotNull.bonsai" />
-                  <Expression xsi:type="p7:MatchVideoWriter">
-                    <p7:Type xsi:type="TypeMapping" TypeArguments="p7:VideoWriterFfmpeg" />
+                  <Expression xsi:type="p8:MatchVideoWriter">
+                    <p8:Type xsi:type="TypeMapping" TypeArguments="p8:VideoWriterFfmpeg" />
                   </Expression>
                   <Expression xsi:type="MemberSelector">
                     <Selector>Key</Selector>
@@ -1332,8 +1337,8 @@
                     <Selector>Value.VideoWriter</Selector>
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="AllenNeuralDynamics.Core:FilterNotNull.bonsai" />
-                  <Expression xsi:type="p7:MatchVideoWriter">
-                    <p7:Type xsi:type="TypeMapping" TypeArguments="p7:VideoWriterOpenCv" />
+                  <Expression xsi:type="p8:MatchVideoWriter">
+                    <p8:Type xsi:type="TypeMapping" TypeArguments="p8:VideoWriterOpenCv" />
                   </Expression>
                   <Expression xsi:type="MemberSelector">
                     <Selector>Key</Selector>
