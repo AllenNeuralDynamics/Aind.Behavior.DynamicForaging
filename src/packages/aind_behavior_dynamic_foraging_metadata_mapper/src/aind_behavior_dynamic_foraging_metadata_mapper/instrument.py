@@ -3,6 +3,7 @@ import os
 from datetime import date
 from decimal import Decimal
 from pathlib import Path
+from platform import platform
 from typing import Literal, Optional
 
 from aind_behavior_dynamic_foraging.data_contract import dataset as df_foraging_dataset
@@ -17,6 +18,7 @@ from aind_data_schema.components.devices import (
     CameraAssembly,
     CameraChroma,
     CameraTarget,
+    Computer,
     Cooling,
     DataInterface,
     Device,
@@ -84,6 +86,15 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                     )
                 )
         return vol_cal
+
+    @staticmethod
+    def _get_computer(rig: AindDynamicForagingRig) -> Computer:
+        return Computer(
+            name="computer",
+            manufacturer=Organization.AIND,
+            operating_system=platform(),
+            serial_number=rig.computer_name,
+        )
 
     def rig_schema(self):
         return self.mapped
@@ -282,6 +293,9 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
                     core_version=self.compose_version(env_sen, "Core"),
                 )
             )
+        if rig.computer_name:
+            computer = self._get_computer(rig)
+            components.append(computer)
 
         # lick spout assembly
         components.append(
