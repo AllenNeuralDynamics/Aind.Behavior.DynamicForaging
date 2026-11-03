@@ -87,8 +87,8 @@ class IntegrationTestTrialGenerator(ITrialGenerator):
         """Return metrics at current state of the trial generator.
 
         The integration test generator does not track bias, so the metrics are empty.
-        Without this override, the class inherits ITrialGenerator.get_metrics directly, 
-        which is an empty stub for now. 
+        Without this override, the class inherits ITrialGenerator.get_metrics directly,
+        which is an empty stub for now.
         Bonsai deserialised this into a null TrialMetrics and the visualizers throws.
         """
         return TrialMetrics()
