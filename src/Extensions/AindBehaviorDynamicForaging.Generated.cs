@@ -47,6 +47,8 @@ namespace AindDynamicForagingDataSchema
     
         private RigCalibration _calibration;
     
+        private Networking _networking;
+    
         public AindDynamicForagingRig()
         {
             _aindBehaviorServicesPkgVersion = "0.13.8";
@@ -57,6 +59,7 @@ namespace AindDynamicForagingDataSchema
             _harpSoundCard = new DynamicForagingSoundCard();
             _manipulator = new DynamicForagingAindManipulator();
             _calibration = new RigCalibration();
+            _networking = new Networking();
         }
     
         protected AindDynamicForagingRig(AindDynamicForagingRig other)
@@ -77,6 +80,7 @@ namespace AindDynamicForagingDataSchema
             _harpEnvironmentSensor = other._harpEnvironmentSensor;
             _manipulator = other._manipulator;
             _calibration = other._calibration;
+            _networking = other._networking;
         }
     
         [Newtonsoft.Json.JsonPropertyAttribute("aind_behavior_services_pkg_version")]
@@ -354,6 +358,24 @@ namespace AindDynamicForagingDataSchema
             }
         }
     
+        /// <summary>
+        /// Networking settings
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("networking")]
+        [System.ComponentModel.DescriptionAttribute("Networking settings")]
+        public Networking Networking
+        {
+            get
+            {
+                return _networking;
+            }
+            set
+            {
+                _networking = value;
+            }
+        }
+    
         public System.IObservable<AindDynamicForagingRig> Generate()
         {
             return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new AindDynamicForagingRig(this)));
@@ -381,7 +403,8 @@ namespace AindDynamicForagingDataSchema
             stringBuilder.Append("HarpSniffDetector = " + _harpSniffDetector + ", ");
             stringBuilder.Append("HarpEnvironmentSensor = " + _harpEnvironmentSensor + ", ");
             stringBuilder.Append("Manipulator = " + _manipulator + ", ");
-            stringBuilder.Append("Calibration = " + _calibration);
+            stringBuilder.Append("Calibration = " + _calibration + ", ");
+            stringBuilder.Append("Networking = " + _networking);
             return true;
         }
     
@@ -4186,6 +4209,92 @@ namespace AindDynamicForagingDataSchema
         {
             stringBuilder.Append("ChoiceStreak = " + _choiceStreak + ", ");
             stringBuilder.Append("BlockExtension = " + _blockExtension);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    /// <summary>
+    /// Network configuration settings for ZeroMQ communication.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.ComponentModel.DescriptionAttribute("Network configuration settings for ZeroMQ communication.")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class Networking
+    {
+    
+        private ZmqConnection _zmqPublisher;
+    
+        private ZmqConnection _zmqSubscriber;
+    
+        public Networking()
+        {
+            _zmqPublisher = new ZmqConnection();
+            _zmqSubscriber = new ZmqConnection();
+        }
+    
+        protected Networking(Networking other)
+        {
+            _zmqPublisher = other._zmqPublisher;
+            _zmqSubscriber = other._zmqSubscriber;
+        }
+    
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("zmq_publisher")]
+        public ZmqConnection ZmqPublisher
+        {
+            get
+            {
+                return _zmqPublisher;
+            }
+            set
+            {
+                _zmqPublisher = value;
+            }
+        }
+    
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [Newtonsoft.Json.JsonPropertyAttribute("zmq_subscriber")]
+        public ZmqConnection ZmqSubscriber
+        {
+            get
+            {
+                return _zmqSubscriber;
+            }
+            set
+            {
+                _zmqSubscriber = value;
+            }
+        }
+    
+        public System.IObservable<Networking> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new Networking(this)));
+        }
+    
+        public System.IObservable<Networking> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new Networking(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("ZmqPublisher = " + _zmqPublisher + ", ");
+            stringBuilder.Append("ZmqSubscriber = " + _zmqSubscriber);
             return true;
         }
     
@@ -8293,6 +8402,94 @@ namespace AindDynamicForagingDataSchema
     }
 
 
+    /// <summary>
+    /// ZeroMQ connection settings.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
+    [System.ComponentModel.DescriptionAttribute("ZeroMQ connection settings.")]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    [Bonsai.CombinatorAttribute(MethodName="Generate")]
+    public partial class ZmqConnection
+    {
+    
+        private string _connectionString;
+    
+        private string _topic;
+    
+        public ZmqConnection()
+        {
+            _connectionString = "@tcp://localhost:5556";
+            _topic = "";
+        }
+    
+        protected ZmqConnection(ZmqConnection other)
+        {
+            _connectionString = other._connectionString;
+            _topic = other._topic;
+        }
+    
+        /// <summary>
+        /// The connection string for the ZMQ socket.
+        /// </summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("connection_string")]
+        [System.ComponentModel.DescriptionAttribute("The connection string for the ZMQ socket.")]
+        public string ConnectionString
+        {
+            get
+            {
+                return _connectionString;
+            }
+            set
+            {
+                _connectionString = value;
+            }
+        }
+    
+        [Newtonsoft.Json.JsonPropertyAttribute("topic")]
+        public string Topic
+        {
+            get
+            {
+                return _topic;
+            }
+            set
+            {
+                _topic = value;
+            }
+        }
+    
+        public System.IObservable<ZmqConnection> Generate()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new ZmqConnection(this)));
+        }
+    
+        public System.IObservable<ZmqConnection> Generate<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new ZmqConnection(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("ConnectionString = " + _connectionString + ", ");
+            stringBuilder.Append("Topic = " + _topic);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.9.0.0 (Newtonsoft.Json v13.0.0.0)")]
     [Newtonsoft.Json.JsonConverter(typeof(JsonInheritanceConverter), "type")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
@@ -8799,6 +8996,11 @@ namespace AindDynamicForagingDataSchema
             return Process<MinimumProbabilityPerseverationConditions>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<Networking> source)
+        {
+            return Process<Networking>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<QuickRetractSettings> source)
         {
             return Process<QuickRetractSettings>(source);
@@ -8914,6 +9116,11 @@ namespace AindDynamicForagingDataSchema
             return Process<WebCamera>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<ZmqConnection> source)
+        {
+            return Process<ZmqConnection>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<Anonymous> source)
         {
             return Process<Anonymous>(source);
@@ -8956,6 +9163,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Measurement>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Metadata>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<MinimumProbabilityPerseverationConditions>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Networking>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<QuickRetractSettings>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Rect>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<RewardProbabilityParameters>))]
@@ -8979,6 +9187,7 @@ namespace AindDynamicForagingDataSchema
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WaterValveCalibration>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Waveform>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<WebCamera>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<ZmqConnection>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<Anonymous>))]
     public partial class DeserializeFromJson : Bonsai.Expressions.SingleArgumentExpressionBuilder
     {
