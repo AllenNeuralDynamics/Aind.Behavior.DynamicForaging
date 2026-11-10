@@ -411,20 +411,22 @@ class AindInstrumentDataMapper(AindDataSchemaRigDataMapper):
             Connection(source_device="BehaviorBoard", target_device="Solenoid Right", source_port="SupplyPort1")
         )
 
+        coordinate_system = CoordinateSystem(
+            name="origin",
+            origin=Origin.BREGMA,
+            axis_unit=SizeUnit.MM,
+            axes=[
+                Axis(name=AxisName.X, direction=Direction.LR),
+                Axis(name=AxisName.Y, direction=Direction.AP),
+                Axis(name=AxisName.Z, direction=Direction.IS),
+            ],
+        )
+
         return Instrument(
             instrument_id=rig.rig_name,
             modification_date=date.today(),
             modalities=[Modality.BEHAVIOR, Modality.BEHAVIOR_VIDEOS],
-            coordinate_system=CoordinateSystem(
-                name="RigCoordinateSystem",
-                origin=Origin.ORIGIN,
-                axes=[
-                    Axis(name=AxisName.X, direction=Direction.LR),
-                    Axis(name=AxisName.Y, direction=Direction.FB),
-                    Axis(name=AxisName.Z, direction=Direction.DU),
-                ],
-                axis_unit=SizeUnit.MM,
-            ),
+            global_coordinate_system=coordinate_system,
             components=components,
             connections=connections,
             calibrations=self._get_water_calibration(rig),
