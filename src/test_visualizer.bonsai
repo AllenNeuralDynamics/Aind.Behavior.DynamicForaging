@@ -369,7 +369,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
-                      <rx:DueTime>PT2.103S</rx:DueTime>
+                      <rx:DueTime>PT1.574S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -421,7 +421,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
-                      <rx:DueTime>PT2.536S</rx:DueTime>
+                      <rx:DueTime>PT0.02S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -492,7 +492,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
-                      <rx:DueTime>PT2.679S</rx:DueTime>
+                      <rx:DueTime>PT1.936S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -1011,7 +1011,7 @@ it.Index as TrialIndex
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p4:TrialOutcome">
-                <p4:IsRightChoice>false</p4:IsRightChoice>
+                <p4:IsRightChoice xsi:nil="true" />
                 <p4:IsRewarded>true</p4:IsRewarded>
               </Combinator>
             </Expression>
@@ -1038,7 +1038,7 @@ it.Index as TrialIndex
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Delay">
-                      <rx:DueTime>PT0.872S</rx:DueTime>
+                      <rx:DueTime>PT0.371S</rx:DueTime>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
@@ -1097,7 +1097,7 @@ it.Index as TrialIndex
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p7:CreateNullableBoolean">
-                <p7:Value>false</p7:Value>
+                <p7:Value>true</p7:Value>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -1594,9 +1594,19 @@ it.Index as TrialIndex
                   <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Double">
                     <rx:Name>DrainRightCountdown</rx:Name>
                   </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Timer">
+                      <rx:DueTime>PT0S</rx:DueTime>
+                      <rx:Period>PT1S</rx:Period>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>DrainLeftCountdown</Name>
+                  </Expression>
                 </Nodes>
                 <Edges>
                   <Edge From="19" To="20" Label="Source1" />
+                  <Edge From="33" To="34" Label="Source1" />
                 </Edges>
               </Workflow>
             </Expression>
@@ -1615,6 +1625,13 @@ it.Index as TrialIndex
               <Combinator xsi:type="p7:SoftwareEventVisualizer">
                 <p7:Visible>true</p7:Visible>
                 <p7:SoftwareEvents>
+                  <p7:TimestampedOfSoftwareEvent />
+                  <p7:TimestampedOfSoftwareEvent />
+                  <p7:TimestampedOfSoftwareEvent />
+                  <p7:TimestampedOfSoftwareEvent />
+                  <p7:TimestampedOfSoftwareEvent />
+                  <p7:TimestampedOfSoftwareEvent />
+                  <p7:TimestampedOfSoftwareEvent />
                   <p7:TimestampedOfSoftwareEvent />
                   <p7:TimestampedOfSoftwareEvent />
                   <p7:TimestampedOfSoftwareEvent />

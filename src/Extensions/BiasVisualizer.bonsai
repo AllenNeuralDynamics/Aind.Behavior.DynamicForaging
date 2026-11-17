@@ -53,8 +53,8 @@
                   <p1:string>L</p1:string>
                   <p1:string>R</p1:string>
                 </p1:TickLabels>
-                <p1:ImPlotLocationFlags>East</p1:ImPlotLocationFlags>
-                <p1:ImPlotLegendFlags>Outside</p1:ImPlotLegendFlags>
+                <p1:ImPlotLocationFlags>West</p1:ImPlotLocationFlags>
+                <p1:ImPlotLegendFlags>None</p1:ImPlotLegendFlags>
                 <p1:YAxisMax>1.1</p1:YAxisMax>
                 <p1:YAxisMin>-1.1</p1:YAxisMin>
               </Combinator>
@@ -250,9 +250,9 @@
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="implot:PlotText">
                 <implot:Visible>true</implot:Visible>
-                <implot:Text>0.70</implot:Text>
-                <implot:X>9</implot:X>
-                <implot:Y>0.7</implot:Y>
+                <implot:Text>-0.20</implot:Text>
+                <implot:X>34</implot:X>
+                <implot:Y>-0.19965447210690687</implot:Y>
                 <implot:PixelOffset>
                   <implot:X>0</implot:X>
                   <implot:Y>-10</implot:Y>

@@ -92,8 +92,8 @@
                   <p1:string>R</p1:string>
                   <p1:string>L</p1:string>
                 </p1:TickLabels>
-                <p1:ImPlotLocationFlags>East</p1:ImPlotLocationFlags>
-                <p1:ImPlotLegendFlags>Outside</p1:ImPlotLegendFlags>
+                <p1:ImPlotLocationFlags>West</p1:ImPlotLocationFlags>
+                <p1:ImPlotLegendFlags>None</p1:ImPlotLegendFlags>
                 <p1:YAxisMax xsi:nil="true" />
                 <p1:YAxisMin xsi:nil="true" />
               </Combinator>
@@ -109,8 +109,8 @@
                   <p1:double>1</p1:double>
                 </p1:TickPositions>
                 <p1:TickLabels />
-                <p1:ImPlotLocationFlags>East</p1:ImPlotLocationFlags>
-                <p1:ImPlotLegendFlags>Outside</p1:ImPlotLegendFlags>
+                <p1:ImPlotLocationFlags>West</p1:ImPlotLocationFlags>
+                <p1:ImPlotLegendFlags>None</p1:ImPlotLegendFlags>
                 <p1:YAxisMax xsi:nil="true" />
                 <p1:YAxisMin xsi:nil="true" />
               </Combinator>
